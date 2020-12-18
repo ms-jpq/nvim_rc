@@ -1,0 +1,6 @@
+[submodule "submodules/std2"]
+	path = submodules/std2
+	url = git@github.com:ms-jpq/std2.git
+[submodule "submodules/forechan"]
+	path = submodules/forechan
+	url = git@github.com:ms-jpq/forechan.git
