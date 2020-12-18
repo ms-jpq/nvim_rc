@@ -33,9 +33,10 @@ def call(nvim: Nvim, fn: Callable[..., T], *args: Any, **kwargs: Any) -> Awaitab
 
     def cont() -> None:
         try:
-            ret = fn()
+            ret = fn(*args, **kwargs)
         except Exception as e:
-            fut.set_exception(e)
+            if not fut.cancelled():
+                fut.set_exception(e)
         else:
             if not fut.cancelled():
                 fut.set_result(ret)
