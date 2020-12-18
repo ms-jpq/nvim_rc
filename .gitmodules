@@ -1,3 +1,0 @@
-[submodule "submodules/submodules"]
-	path = submodules/submodules
-	url = git@github.com:ms-jpq/std2.git
