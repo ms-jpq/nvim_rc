@@ -8,5 +8,5 @@ def autocmd() -> None:
     pass
 
 
-def init(nvim: Nvim) -> None:
+async def finalize(nvim: Nvim) -> None:
     pass

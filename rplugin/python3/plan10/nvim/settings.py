@@ -34,3 +34,7 @@ class Settings:
 
 
 settings = Settings()
+
+
+async def finalize(nvim: Nvim) -> None:
+    pass
