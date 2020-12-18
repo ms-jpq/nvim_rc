@@ -68,7 +68,7 @@ async def buffer_lock(nvim: Nvim, b1: Optional[Buffer] = None) -> AsyncIterator[
 
 
 @asynccontextmanager
-async def window_lock(nvim: Nvim, w1: Optional[Window] = None) -> AsyncIterator[None]:
+async def window_lock(nvim: Nvim, w1: Optional[Window] = None) -> AsyncIterator[Window]:
     if w1 is None:
         w1 = await call(nvim, nvim.get_current_win)
     try:
