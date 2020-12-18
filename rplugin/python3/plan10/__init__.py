@@ -1,4 +1,7 @@
-from pynvim import Nvim, command, plugin
+from typing import Any, Sequence
+
+
+from pynvim import Nvim, command, function, plugin
 
 
 @plugin
@@ -8,4 +11,8 @@ class Main:
 
     @command("Plan10Start", nargs="*")
     def start(self) -> None:
+        pass
+
+    @function("_Plan10Comm")
+    def comm(self, args: Sequence[Any]) -> None:
         pass
