@@ -8,7 +8,7 @@ from .registery import finalize
 
 
 async def server(nvim: Nvim, ch: Chan[Tuple[str, Sequence[Any]]]) -> None:
-    async def poll(ch: Chan) -> None:
+    async def poll() -> None:
         for event in ch:
 
             def cont() -> None:
@@ -16,6 +16,6 @@ async def server(nvim: Nvim, ch: Chan[Tuple[str, Sequence[Any]]]) -> None:
 
             await async_call(nvim, cont)
 
-    await go(poll)
+    await go(poll())
 
     await finalize(nvim)
