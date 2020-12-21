@@ -3,14 +3,20 @@
 from asyncio import AbstractEventLoop, run_coroutine_threadsafe
 from queue import SimpleQueue
 from threading import Thread
-from typing import Awaitable
+from typing import Any, Awaitable
 
 from pynvim import Nvim, attach
 
+from python.nvim.lib import async_call
+
 
 async def uwu(nvim: Nvim) -> None:
-    nvim.api.out_write("uwu\n")
-    raise Exception("WWW")
+    def cont() -> None:
+        nvim.api.out_write("uwu\n")
+        nvim.api.out_write("uwu\n")
+        nvim.api.out_write("uwu\n")
+
+    await async_call(nvim, cont)
 
 
 def main() -> None:
@@ -35,15 +41,14 @@ def main() -> None:
 
             q.put(run)
 
-        def req_cb(*args, **kwds) -> None:
+        def on_req(*args: Any) -> None:
             pass
 
-        def notif_cb(*args, **kwds) -> None:
-            nvim.api.out_write(str(nvim.loop) + "\n")
+        def on_notif(*args: Any) -> None:
             submit(uwu(nvim))
 
         th.start()
-        nvim.run_loop(req_cb, notif_cb)
+        nvim.run_loop(request_cb=on_req, notification_cb=on_notif)
 
 
 main()

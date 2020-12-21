@@ -61,22 +61,7 @@ def window_lock(nvim: Nvim, w1: Optional[Window] = None) -> Iterator[Window]:
             raise LockBroken()
 
 
-def async_call(
+async def async_call(
     nvim: Nvim, fn: Callable[..., T], *args: Any, **kwargs: Any
 ) -> Awaitable[T]:
-    fut: Future = Future()
-
-    def cont() -> None:
-        try:
-            ret = fn(*args, **kwargs)
-        except LockBroken:
-            pass
-        except Exception as e:
-            if not fut.cancelled():
-                fut.set_exception(e)
-        else:
-            if not fut.cancelled():
-                fut.set_result(ret)
-
-    nvim.async_call(cont)
-    return fut
+    nvim.async_call(fn, *args, **kwargs)
