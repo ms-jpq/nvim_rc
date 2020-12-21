@@ -41,7 +41,7 @@ def main() -> None:
         def on_setup() -> None:
             submit(server(nvim, ch=ch))
 
-        def on_err(error: Exception) -> None:
+        def on_err(error: str) -> None:
             print(error, file=stderr)
 
         th.start()
