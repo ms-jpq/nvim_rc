@@ -1,18 +1,8 @@
 from asyncio import Future
 from contextlib import contextmanager
-from typing import (
-    Any,
-    Awaitable,
-    Callable,
-    Iterator,
-    Optional,
-    Sequence,
-    Tuple,
-    TypeVar,
-    cast,
-)
+from typing import Any, Callable, Iterator, Optional, Sequence, Tuple, TypeVar, cast
 
-from pynvim import Nvim
+from pynvim import Nvim, NvimError
 from pynvim.api import Buffer, Window
 
 T = TypeVar("T")
@@ -24,8 +14,8 @@ def atomic(nvim: Nvim, *instructions: AtomicInstruction) -> Sequence[Any]:
     inst = tuple((f"nvim_{instruction}", args) for instruction, args in instructions)
     out, err = nvim.api.call_atomic(inst)
     if err:
-        idx, err_type, err_msg = err
-        raise err_type(instructions[idx][0], err_msg)
+        idx, _, err_msg = err
+        raise NvimError(err_msg, instructions[idx])
     else:
         return cast(Sequence[Any], out)
 
@@ -61,7 +51,20 @@ def window_lock(nvim: Nvim, w1: Optional[Window] = None) -> Iterator[Window]:
             raise LockBroken()
 
 
-async def async_call(
-    nvim: Nvim, fn: Callable[..., T], *args: Any, **kwargs: Any
-) -> Awaitable[T]:
-    nvim.async_call(fn, *args, **kwargs)
+async def async_call(nvim: Nvim, fn: Callable[..., T], *args: Any, **kwargs: Any) -> T:
+    fut = Future[T]()
+
+    def cont() -> None:
+        try:
+            ret = fn(*args, **kwargs)
+        except LockBroken:
+            pass
+        except Exception as e:
+            if not fut.cancelled():
+                fut.set_exception(e)
+        else:
+            if not fut.cancelled():
+                fut.set_result(ret)
+
+    nvim.async_call(cont)
+    return await fut

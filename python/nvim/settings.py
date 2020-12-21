@@ -49,6 +49,9 @@ settings = Settings()
 async def finalize(nvim: Nvim) -> None:
     def instructions() -> Iterator[AtomicInstruction]:
         for key, (op, val) in settings._conf.items():
-            yield "nvim_command", (f"set {key}{op.value}{val}",)
+            yield "command", (f"set {key}{op.value}{val}",)
 
-    await async_call(nvim, atomic, *instructions())
+    def cont() -> None:
+        atomic(nvim, *instructions())
+
+    await async_call(nvim, cont)

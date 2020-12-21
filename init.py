@@ -3,26 +3,19 @@
 from asyncio import AbstractEventLoop, run_coroutine_threadsafe
 from queue import SimpleQueue
 from threading import Thread
-from typing import Any, Awaitable
+from typing import Any, Awaitable, Callable, Sequence, Tuple
 
-from pynvim import Nvim, attach
+from forechan import chan
+from pynvim import attach
 
-from python.nvim.lib import async_call
-
-
-async def uwu(nvim: Nvim) -> None:
-    def cont() -> None:
-        nvim.api.out_write("uwu\n")
-        nvim.api.out_write("uwu\n")
-        nvim.api.out_write("uwu\n")
-
-    await async_call(nvim, cont)
+from python.server import server
 
 
 def main() -> None:
-    q = SimpleQueue()
+    q = SimpleQueue[Callable[[], None]]()
+    ch = chan(Tuple[str, Sequence[Any]])
 
-    def poll():
+    def poll() -> None:
         while True:
             f = q.get()
             f()
@@ -41,14 +34,17 @@ def main() -> None:
 
             q.put(run)
 
-        def on_req(*args: Any) -> None:
-            pass
+        def on_req(event: str, *args: Any) -> None:
+            nvim.api.err_write("No Blocking Calls Allowed\n")
 
-        def on_notif(*args: Any) -> None:
-            submit(uwu(nvim))
+        def on_notif(event: str, *args: Any) -> None:
+            submit(ch.send((event, args)))
+
+        def on_setup() -> None:
+            submit(server(nvim))
 
         th.start()
-        nvim.run_loop(request_cb=on_req, notification_cb=on_notif)
+        nvim.run_loop(request_cb=on_req, notification_cb=on_notif, setup_cb=on_setup)
 
 
 main()
