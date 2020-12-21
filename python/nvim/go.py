@@ -1,7 +1,5 @@
 from asyncio.tasks import create_task
-from os import linesep
-from sys import stderr
-from traceback import format_exc
+from traceback import print_exc
 from typing import Awaitable, TypeVar
 
 T = TypeVar("T")
@@ -12,6 +10,6 @@ async def go(aw: Awaitable[T]) -> Awaitable[T]:
         try:
             return await aw
         except Exception:
-            print(format_exc(), sep=linesep, file=stderr)
+            print_exc()
 
     return create_task(wrapper())

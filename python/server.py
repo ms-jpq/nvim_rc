@@ -1,6 +1,7 @@
+from queue import SimpleQueue
 from typing import Any, Sequence, Tuple
 
-from forechan import Chan
+from forechan import Chan, chan
 from pynvim import Nvim
 
 from python.nvim.lib import async_call
@@ -8,12 +9,12 @@ from python.nvim.lib import async_call
 from .nvim.go import go
 from .registery import finalize
 
-RPC_CH = Chan[Tuple[str, Sequence[Any]]]
+RPC_Q = SimpleQueue[Tuple[str, Sequence[Any]]]
 
 
-async def server(nvim: Nvim, notif_ch: RPC_CH) -> None:
+async def server(nvim: Nvim, notif_q: RPC_Q, req_q: RPC_Q) -> None:
     async def poll() -> None:
-        async for event in notif_ch:
+        async for event in chan():
 
             def cont() -> None:
                 nvim.api.out_write(f"{event}\n")
