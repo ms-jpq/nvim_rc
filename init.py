@@ -2,6 +2,7 @@
 
 from asyncio import run
 from asyncio.events import new_event_loop, set_event_loop
+from concurrent.futures import Future
 from sys import stderr
 from threading import Thread
 from traceback import print_exc
@@ -9,11 +10,11 @@ from typing import Any
 
 from pynvim import attach
 
-from python.server import RPC_Q, server
+from python.server import NOTIF_Q, RPC_Q, server
 
 
 def main() -> None:
-    notif_q, req_q = RPC_Q(), RPC_Q()
+    notif_q, req_q = NOTIF_Q(), RPC_Q()
 
     with attach("stdio") as nvim:
 
@@ -27,8 +28,10 @@ def main() -> None:
 
         th = Thread(target=srv, daemon=True)
 
-        def on_notif(event: str, *args: Any) -> None:
-            notif_q.put((event, args))
+        def on_notif(event: str, *args: Any) -> Any:
+            fut = Future[Any]()
+            notif_q.put((fut, (event, args)))
+            return fut.result()
 
         def on_req(event: str, *args: Any) -> None:
             req_q.put((event, args))
