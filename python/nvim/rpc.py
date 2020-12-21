@@ -1,12 +1,21 @@
-from typing import Any, Awaitable, Callable, MutableMapping, Union
+from typing import Any, Callable, MutableMapping, Protocol, Union
 
 from pynvim import Nvim
 
-RPC_FN = Callable[[Nvim, *Any], None]
-RPC_AFN = Callable[[Nvim, *Any], Awaitable[None]]
+
+class RPC_FN(Protocol):
+    def __call__(self, nvim: Nvim, *args: Any) -> None:
+        ...
+
+
+class RPC_AFN(Protocol):
+    async def __call__(self, nvim: Nvim, *args: Any) -> None:
+        ...
+
+
 RpcFunction = Union[RPC_FN, RPC_AFN]
 
-_handlers: MutableMapping[RpcFunction] = []
+_handlers: MutableMapping[str, RpcFunction] = {}
 
 
 def rpc(uid: str) -> Callable[[RpcFunction], RpcFunction]:
