@@ -9,8 +9,18 @@ from traceback import print_exc
 from typing import Any
 
 from pynvim import attach
+from pynvim.api.nvim import Nvim
 
 from python.server import NOTIF_Q, RPC_Q, server
+
+
+def srv(nvim: Nvim, notif_q: NOTIF_Q, req_q: RPC_Q) -> None:
+    loop = new_event_loop()
+    set_event_loop(loop)
+    try:
+        run(server(nvim, notif_q=notif_q, req_q=req_q))
+    except Exception:
+        print_exc()
 
 
 def main() -> None:
@@ -18,15 +28,7 @@ def main() -> None:
 
     with attach("stdio") as nvim:
 
-        def srv() -> None:
-            loop = new_event_loop()
-            set_event_loop(loop)
-            try:
-                run(server(nvim, notif_q=notif_q, req_q=req_q))
-            except Exception:
-                print_exc()
-
-        th = Thread(target=srv, daemon=True)
+        th = Thread(target=srv, daemon=True, args=(nvim, notif_q, req_q))
 
         def on_notif(event: str, *args: Any) -> Any:
             fut = Future[Any]()
