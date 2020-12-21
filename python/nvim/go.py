@@ -11,5 +11,6 @@ async def go(aw: Awaitable[T]) -> Awaitable[T]:
             return await aw
         except Exception:
             print_exc()
+            raise
 
     return create_task(wrapper())

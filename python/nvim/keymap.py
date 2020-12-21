@@ -14,7 +14,9 @@ class KeyModes(Enum):
     t = "t"
 
 
-KeymapFunction = Callable[[Nvim], Union[Awaitable[None], None]]
+KMFunction = Callable[[Nvim], None]
+KMAFunction = Callable[[Nvim], Awaitable[None]]
+KeymapFunction = Union[KMFunction, KMAFunction]
 
 
 class KM:
@@ -31,12 +33,12 @@ class KM:
                 nvim.async_call(rhs, nvim)
 
             async def new_arhs(nvim: Nvim) -> None:
-                await cast(Callable[[Nvim], Awaitable[None]], rhs)(nvim)
+                await cast(KMAFunction, rhs)(nvim)
 
-            new = new_arhs if iscoroutinefunction(rhs) else new_rhs
+            kmf = new_arhs if iscoroutinefunction(rhs) else new_rhs
             for mode in self._modes:
-                self._parent._conf[(mode, lhs)] = new
-            return new
+                self._parent._conf[(mode, lhs)] = kmf
+            return kmf
 
         return decor
 
