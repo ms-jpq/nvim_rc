@@ -40,5 +40,4 @@ async def server(nvim: Nvim, notif_q: RPC_Q, req_q: RPC_Q) -> None:
             await async_call(nvim, cont)
 
     await go(poll())
-
     await finalize(nvim)
