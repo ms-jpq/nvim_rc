@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 from argparse import ArgumentParser, Namespace
-from typing import Any, Sequence
+from asyncio import run
 
 from pynvim import attach
+
+from python.server import server
 
 
 def parse_args() -> Namespace:
@@ -15,6 +17,7 @@ def parse_args() -> Namespace:
 def main() -> None:
     args = parse_args()
     nvim = attach("socket", path=args.socket_address)
+    run(server(nvim))
 
 
 main()

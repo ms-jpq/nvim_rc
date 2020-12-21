@@ -1,10 +1,10 @@
 from asyncio.futures import Future
-from contextlib import asynccontextmanager
+from contextlib import contextmanager
 from typing import (
     Any,
-    AsyncIterator,
     Awaitable,
     Callable,
+    Iterator,
     Optional,
     Sequence,
     Tuple,
@@ -28,12 +28,43 @@ def atomic(nvim: Nvim, *instructions: Tuple[str, Sequence[Any]]) -> Sequence[Any
         return out
 
 
+class LockBroken(Exception):
+    ...
+
+
+@contextmanager
+def buffer_lock(nvim: Nvim, b1: Optional[Buffer] = None) -> Iterator[Buffer]:
+    if b1 is None:
+        b1 = nvim.api.get_current_buf()
+    c1 = nvim.api.buf_get_var(b1, "changetick")
+    try:
+        yield b1
+    finally:
+        b2, c2 = atomic(nvim, ("get_current_buf",), ("buf_get_var", b1, "changetick"))
+        if not (b2 == b1 and c2 == c1):
+            raise LockBroken()
+
+
+@contextmanager
+def window_lock(nvim: Nvim, w1: Optional[Window] = None) -> Iterator[Window]:
+    if w1 is None:
+        w1 = nvim.get_current_win()
+    try:
+        yield cast(Window, w1)
+    finally:
+        w2: Window = nvim.get_current_win()
+        if w2 != w1:
+            raise LockBroken()
+
+
 def call(nvim: Nvim, fn: Callable[..., T], *args: Any, **kwargs: Any) -> Awaitable[T]:
     fut: Future = Future()
 
     def cont() -> None:
         try:
             ret = fn(*args, **kwargs)
+        except LockBroken:
+            pass
         except Exception as e:
             if not fut.cancelled():
                 fut.set_exception(e)
@@ -43,37 +74,3 @@ def call(nvim: Nvim, fn: Callable[..., T], *args: Any, **kwargs: Any) -> Awaitab
 
     nvim.async_call(cont)
     return fut
-
-
-class LockBroken(Exception):
-    ...
-
-
-@asynccontextmanager
-async def buffer_lock(nvim: Nvim, b1: Optional[Buffer] = None) -> AsyncIterator[Buffer]:
-    def cont() -> Tuple[Buffer, int]:
-        b = nvim.api.get_current_buf() if b1 is None else b1
-        c2 = nvim.api.buf_get_var(b, "changetick")
-        return b, c2
-
-    b1, c1 = await call(nvim, cont)
-    try:
-        yield b1
-    finally:
-        b2, c2 = await call(
-            nvim, atomic(nvim, ("get_current_buf",), ("buf_get_var", b1, "changetick"))
-        )
-        if not (b2 == b1 and c2 == c1):
-            raise LockBroken()
-
-
-@asynccontextmanager
-async def window_lock(nvim: Nvim, w1: Optional[Window] = None) -> AsyncIterator[Window]:
-    if w1 is None:
-        w1 = await call(nvim, nvim.get_current_win)
-    try:
-        yield cast(Window, w1)
-    finally:
-        w2: Window = await call(nvim, nvim.get_current_win)
-        if w2 != w1:
-            raise LockBroken()
