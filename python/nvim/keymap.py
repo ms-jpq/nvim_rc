@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from asyncio.coroutines import iscoroutinefunction
 from enum import Enum
-from typing import Awaitable, Callable, Iterable, Mapping, Union
+from typing import Awaitable, Callable, Iterable, Mapping, Tuple, Union
 
 from pynvim import Nvim
 
@@ -18,22 +18,12 @@ KeymapFunction = Callable[[Nvim], Union[Awaitable[None], None]]
 
 
 class KM:
-    def __init__(self, modes: Iterable[str], parent: KeyMap) -> None:
+    def __init__(self, modes: Iterable[KeyModes], parent: KeyMap) -> None:
         self._modes, self._parent = modes, parent
 
     def __setattr__(self, name: str, value: str) -> None:
-        ...
-
-
-class KeyMap:
-    _conf: Mapping[str, str] = {}
-
-    def __getattr__(self, keys: str) -> KM:
-        for key in keys:
-            if key not in KeyModes:
-                raise AttributeError()
-        else:
-            return KM(keys)
+        for mode in self._modes:
+            self._parent._conf[[mode, name]] = value
 
     def __call__(self, lhs: str) -> Callable[[KeymapFunction], KeymapFunction]:
         def decor(rhs: KeymapFunction) -> KeymapFunction:
@@ -43,14 +33,28 @@ class KeyMap:
             async def new_arhs(nvim: Nvim) -> None:
                 await rhs(nvim)
 
-            return new_arhs if iscoroutinefunction(rhs) else new_rhs
+            new = new_arhs if iscoroutinefunction(rhs) else new_rhs
+            for mode in self._modes:
+                self._parent._conf[[mode, lhs]] = new
+            return new
 
         return decor
+
+
+class KeyMap:
+    _conf: Mapping[Tuple[KeyModes, str], Union[str, KeymapFunction]] = {}
+
+    def __getattr__(self, modes: str) -> KM:
+        for mode in modes:
+            if mode not in KeyModes:
+                raise AttributeError()
+        else:
+            return KM(modes=tuple(map(KeyModes, modes)), parent=self)
 
 
 keymap = KeyMap()
 
 
 async def finalize(nvim: Nvim) -> None:
-    for key, val in keymap._conf.items():
+    for (mode, lhs), rhs in keymap._conf.items():
         pass
