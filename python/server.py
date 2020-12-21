@@ -1,15 +1,19 @@
-from python.nvim.lib import async_call
 from typing import Any, Sequence, Tuple
 
-from forechan import Chan, go
+from forechan import Chan
 from pynvim import Nvim
 
+from python.nvim.lib import async_call
+
+from .nvim.go import go
 from .registery import finalize
 
+RPC_CH = Chan[Tuple[str, Sequence[Any]]]
 
-async def server(nvim: Nvim, ch: Chan[Tuple[str, Sequence[Any]]]) -> None:
+
+async def server(nvim: Nvim, notif_ch: RPC_CH) -> None:
     async def poll() -> None:
-        for event in ch:
+        async for event in notif_ch:
 
             def cont() -> None:
                 nvim.api.out_write(f"{event}\n")

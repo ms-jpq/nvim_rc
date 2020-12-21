@@ -4,17 +4,17 @@ from asyncio import AbstractEventLoop, run_coroutine_threadsafe
 from queue import SimpleQueue
 from sys import stderr
 from threading import Thread
-from typing import Any, Awaitable, Callable, Sequence, Tuple
+from typing import Any, Awaitable, Callable
 
 from forechan import chan
 from pynvim import attach
 
-from python.server import server
+from python.server import RPC_CH, server
 
 
 def main() -> None:
     q = SimpleQueue[Callable[[], None]]()
-    ch = chan(Tuple[str, Sequence[Any]])
+    notif_ch = chan(RPC_CH)
 
     def poll() -> None:
         while True:
@@ -33,13 +33,13 @@ def main() -> None:
             q.put(run)
 
         def on_req(event: str, *args: Any) -> None:
-            nvim.api.err_write("No Blocking Calls Allowed\n")
+            raise Exception("No Blocking Calls Allowed")
 
         def on_notif(event: str, *args: Any) -> None:
-            submit(ch.send((event, args)))
+            submit(notif_ch.send((event, args)))
 
         def on_setup() -> None:
-            submit(server(nvim, ch=ch))
+            submit(server(nvim, notif_ch=notif_ch))
 
         def on_err(error: str) -> None:
             print(error, file=stderr)
