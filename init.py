@@ -2,6 +2,7 @@
 
 from argparse import ArgumentParser, Namespace
 from asyncio import run
+from threading import Thread
 
 from pynvim import attach
 
@@ -17,7 +18,13 @@ def parse_args() -> Namespace:
 def main() -> None:
     args = parse_args()
     nvim = attach("socket", path=args.socket_address)
-    run(server(nvim))
+
+    def srv() -> None:
+        run(server(nvim))
+
+    th = Thread(target=srv, daemon=True)
+    th.start()
+    th.join()
 
 
 main()
