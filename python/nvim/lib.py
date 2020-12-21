@@ -1,3 +1,4 @@
+from asyncio import Future
 from contextlib import contextmanager
 from typing import (
     Any,
@@ -16,8 +17,10 @@ from pynvim.api import Buffer, Window
 
 T = TypeVar("T")
 
+AtomicInstruction = Tuple[str, Sequence[Any]]
 
-def atomic(nvim: Nvim, *instructions: Tuple[str, Sequence[Any]]) -> Sequence[Any]:
+
+def atomic(nvim: Nvim, *instructions: AtomicInstruction) -> Sequence[Any]:
     inst = tuple((f"nvim_{instruction}", args) for instruction, args in instructions)
     out, err = nvim.api.call_atomic(inst)
     if err:
@@ -56,3 +59,24 @@ def window_lock(nvim: Nvim, w1: Optional[Window] = None) -> Iterator[Window]:
         w2: Window = nvim.get_current_win()
         if w2 != w1:
             raise LockBroken()
+
+
+def async_call(
+    nvim: Nvim, fn: Callable[..., T], *args: Any, **kwargs: Any
+) -> Awaitable[T]:
+    fut: Future = Future()
+
+    def cont() -> None:
+        try:
+            ret = fn(*args, **kwargs)
+        except LockBroken:
+            pass
+        except Exception as e:
+            if not fut.cancelled():
+                fut.set_exception(e)
+        else:
+            if not fut.cancelled():
+                fut.set_result(ret)
+
+    nvim.async_call(cont)
+    return fut

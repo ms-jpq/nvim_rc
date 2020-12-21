@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Iterable, MutableMapping, Tuple, Union, cast
-
+from typing import Iterable, Iterator, MutableMapping, Tuple, Union, cast
+from .lib import atomic, AtomicInstruction, async_call
 from pynvim import Nvim
 
 
@@ -32,15 +32,23 @@ class Settings:
     def __getitem__(self, key: str) -> Setting:
         return Setting(name=key, parent=self)
 
-    def __setitem__(self, key: str, val: Union[str, bool]) -> None:
-        self._conf[key] = (
-            (_OP.equals, cast(str, val)) if type(val) is str else (_OP.exact, "")
-        )
+    def __setitem__(self, key: str, val: Union[Setting, str, bool]) -> None:
+        if type(val) is Setting:
+            pass
+        elif type(val) is str:
+            self._conf[key] = (_OP.equals, cast(str, val))
+        elif type(val) is bool:
+            self._conf[key] = (_OP.exact, "")
+        else:
+            raise TypeError()
 
 
 settings = Settings()
 
 
 async def finalize(nvim: Nvim) -> None:
-    for key, (op, val) in settings._conf.items():
-        print("set " + key + op.value + val)
+    def instructions() -> Iterator[AtomicInstruction]:
+        for key, (op, val) in settings._conf.items():
+            yield "nvim_command", (f"set {key}{op.value}{val}",)
+
+    await async_call(nvim, atomic, *instructions())
