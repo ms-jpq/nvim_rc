@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
 
-from argparse import ArgumentParser, Namespace
-from os.path import dirname, join, realpath
-from time import sleep
+from asyncio import create_task
 
-from pynvim import Host, attach
-
-MAIN = join(dirname(realpath(__file__)), "python")
+from pynvim import Nvim, attach
 
 
-def parse_args() -> Namespace:
-    parser = ArgumentParser()
-    parser.add_argument("socket_address")
-    return parser.parse_args()
+async def test(nvim: Nvim):
+    ...
 
 
 def main() -> None:
-    args = parse_args()
-    with attach("socket", path=args.socket_address) as nvim:
-        host = Host(nvim)
-        host.start((MAIN,))
+    with attach("stdio") as nvim:
+
+        def req_cb(*args, **kwds) -> None:
+            pass
+
+        def notif_cb(*args, **kwds) -> None:
+            create_task(test())
+            nvim.api.out_write(str(nvim.loop) + "\n")
+
+        nvim.run_loop(req_cb, notif_cb)
 
 
 main()

@@ -2,8 +2,6 @@ local loop = require "loop"
 local vim_home = vim.env["XDG_CONFIG_HOME"] .. "/nvim"
 local py_main = vim_home .. "/init.py"
 
-local onexit = function (code)
-  error("EXITED - " .. code)
-end
 
-loop.spawn(py_main, {vim.v.servername}, onexit)
+local chan = vim.fn.jobstart({py_main}, { rpc = true })
+vim.rpcnotify(chan, "EVENT", {"ARG1", "ARG2", "ARG3"})
