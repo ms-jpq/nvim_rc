@@ -1,4 +1,3 @@
-from asyncio.futures import Future
 from contextlib import contextmanager
 from typing import (
     Any,
@@ -25,7 +24,7 @@ def atomic(nvim: Nvim, *instructions: Tuple[str, Sequence[Any]]) -> Sequence[Any
         idx, err_type, err_msg = err
         raise err_type(instructions[idx][0], err_msg)
     else:
-        return out
+        return cast(Sequence[Any], out)
 
 
 class LockBroken(Exception):
@@ -40,7 +39,9 @@ def buffer_lock(nvim: Nvim, b1: Optional[Buffer] = None) -> Iterator[Buffer]:
     try:
         yield b1
     finally:
-        b2, c2 = atomic(nvim, ("get_current_buf",), ("buf_get_var", b1, "changetick"))
+        b2, c2 = atomic(
+            nvim, ("get_current_buf", ()), ("buf_get_var", (b1, "changetick"))
+        )
         if not (b2 == b1 and c2 == c1):
             raise LockBroken()
 
