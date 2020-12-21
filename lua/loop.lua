@@ -15,7 +15,7 @@ local err_write = function (data)
 end
 
 
-local spawn = function (prog, args)
+local spawn = function (prog, args, cb)
 
   local stdin  = uv.new_pipe(false)
   local stdout = uv.new_pipe(false)
@@ -30,6 +30,7 @@ local spawn = function (prog, args)
     for _, handle in ipairs(handles) do
       uv.close(handle)
     end
+    cb(code)
   end)
   assert(process, pid)
 

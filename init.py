@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 from argparse import ArgumentParser, Namespace
-from asyncio import run
-from threading import Thread
+from os.path import dirname, join, realpath
+from time import sleep
 
-from pynvim import attach
+from pynvim import Host, attach
 
-from python.server import server
+MAIN = join(dirname(realpath(__file__)), "python")
 
 
 def parse_args() -> Namespace:
@@ -17,14 +17,9 @@ def parse_args() -> Namespace:
 
 def main() -> None:
     args = parse_args()
-    nvim = attach("socket", path=args.socket_address)
-
-    def srv() -> None:
-        run(server(nvim))
-
-    th = Thread(target=srv, daemon=True)
-    th.start()
-    th.join()
+    with attach("socket", path=args.socket_address) as nvim:
+        host = Host(nvim)
+        host.start((MAIN,))
 
 
 main()
