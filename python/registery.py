@@ -18,4 +18,4 @@ def drain(nvim: Nvim) -> Tuple[Sequence[AtomicInstruction], Sequence[RPC_SPEC]]:
     i2, s2 = keymap.drain(nvim.channel_id, None)
     s3 = rpc.drain()
     i4 = settings.drain(False)
-    return tuple((*i1, i2, i4)), tuple((*s1, *s2, *s3))
+    return tuple((*i1, *i2, *i4)), tuple((*s1, *s2, *s3))

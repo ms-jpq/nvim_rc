@@ -76,6 +76,7 @@ async def _invoke_handler(nvim: Nvim, hldr: RPC_FUNCTION[T_co], *args: Any) -> T
 
 
 async def rpc_agent(
+    nvim: Nvim,
     specs: AsyncIterable[RPC_SPEC[Any]],
     rpcs: AsyncIterable[RPC_MSG[Any]],
 ) -> None:
@@ -89,7 +90,7 @@ async def rpc_agent(
         async for fut, (name, args) in rpcs:
             hldr = handlers.get(name, _nil_handler(name))
             try:
-                ret = await _invoke_handler(hldr, *args)
+                ret = await _invoke_handler(nvim, hldr, *args)
             except Exception as e:
                 if fut and not fut.cancelled():
                     fut.set_exception(e)
