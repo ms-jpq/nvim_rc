@@ -17,7 +17,7 @@ from .rpc import RPC_MSG
 
 class Client(Protocol):
     @abstractmethod
-    async def __call__(self, nvim: Nvim, rpcs: AsyncIterable[RPC_MSG]) -> None:
+    async def __call__(self, nvim: Nvim, rpcs: AsyncIterable[RPC_MSG[Any]]) -> None:
         ...
 
 
@@ -32,7 +32,7 @@ def on_err(error: str) -> None:
 
 
 def run_client(nvim: Nvim, client: Client, log_level: int = WARN) -> None:
-    rpc_q = SimpleQueue[RPC_MSG]()
+    rpc_q = SimpleQueue[RPC_MSG[Any]]()
 
     def on_arpc(event: str, *args: Any) -> None:
         rpc_q.put((None, (event, args)))

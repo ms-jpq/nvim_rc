@@ -11,5 +11,5 @@ from .lib import (
     write,
 )
 from .logging import log, nvim_handler
-from .rpc import RPC, RPC_MSG
+from .rpc import RPC, RPC_FUNCTION, RPC_MSG, rpc_agent
 from .settings import Settings, SettingType

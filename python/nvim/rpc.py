@@ -11,6 +11,7 @@ from typing import (
     Protocol,
     Sequence,
     Tuple,
+    TypeVar,
     Union,
     cast,
 )
@@ -20,29 +21,31 @@ from pynvim import Nvim
 from .lib import async_call, create_task
 from .logging import log
 
-RPC_MSG = Tuple[Optional[Future[Any]], Tuple[str, Sequence[Any]]]
+T_co = TypeVar("T_co", covariant=True)
+
+RPC_MSG = Tuple[Optional[Future[T_co]], Tuple[str, Sequence[Any]]]
 
 
-class RPC_FN(Protocol):
-    def __call__(self, nvim: Nvim, *args: Any) -> None:
+class RPC_FN(Protocol[T_co]):
+    def __call__(self, nvim: Nvim, *args: Any) -> T_co:
         ...
 
 
-class RPC_AFN(Protocol):
-    async def __call__(self, nvim: Nvim, *args: Any) -> None:
+class RPC_AFN(Protocol[T_co]):
+    async def __call__(self, nvim: Nvim, *args: Any) -> T_co:
         ...
 
 
-RPC_FUNCTION = Union[RPC_FN, RPC_AFN]
-RPC_SPEC = Tuple[str, RPC_FUNCTION]
+RPC_FUNCTION = Union[RPC_FN[T_co], RPC_AFN[T_co]]
+RPC_SPEC = Tuple[str, RPC_FUNCTION[T_co]]
 
 
 class RPC:
     def __init__(self) -> None:
-        self._handlers: MutableMapping[str, RPC_FUNCTION] = {}
+        self._handlers: MutableMapping[str, RPC_FUNCTION[Any]] = {}
 
-    def __call__(self, name: str) -> Callable[[RPC_FUNCTION], RPC_FUNCTION]:
-        def decor(rpc_f: RPC_FUNCTION) -> RPC_FUNCTION:
+    def __call__(self, name: str) -> Callable[[RPC_FUNCTION[T_co]], RPC_FUNCTION[T_co]]:
+        def decor(rpc_f: RPC_FUNCTION[T_co]) -> RPC_FUNCTION[T_co]:
             self._handlers[name] = rpc_f
             return rpc_f
 
@@ -61,18 +64,18 @@ def _nil_handler(name: str) -> RPC_FN:
     return handler
 
 
-async def _invoke_handler(nvim: Nvim, hldr: RPC_FUNCTION, *args: Any) -> Any:
+async def _invoke_handler(nvim: Nvim, hldr: RPC_FUNCTION[T_co], *args: Any) -> T_co:
     if iscoroutinefunction(hldr):
-        return await cast(RPC_AFN, hldr)(nvim, *args)
+        return await cast(RPC_AFN[T_co], hldr)(nvim, *args)
     else:
-        return await async_call(nvim, hldr, nvim, *args)
+        return await async_call(nvim, cast(RPC_FN[T_co], hldr), nvim, *args)
 
 
 async def rpc_agent(
-    specs: AsyncIterable[RPC_SPEC],
-    rpcs: AsyncIterable[RPC_MSG],
+    specs: AsyncIterable[RPC_SPEC[Any]],
+    rpcs: AsyncIterable[RPC_MSG[Any]],
 ) -> None:
-    handlers: MutableMapping[str, RPC_FUNCTION] = {}
+    handlers: MutableMapping[str, RPC_FUNCTION[Any]] = {}
 
     async def poll_spec() -> None:
         async for name, hldr in specs:

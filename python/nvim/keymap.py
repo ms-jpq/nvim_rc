@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Callable, Iterable, MutableMapping, Tuple, Union
-
+from typing import Any, Callable, Iterable, MutableMapping, Tuple, TypeVar, Union
 
 from .rpc import RPC_FUNCTION
+
+T = TypeVar("T")
 
 
 class _KeyModes(Enum):
@@ -22,8 +23,8 @@ class _KM:
         for mode in self._modes:
             self._parent._mappings[(mode, name)] = value
 
-    def __call__(self, lhs: str) -> Callable[[RPC_FUNCTION], RPC_FUNCTION]:
-        def decor(rhs: RPC_FUNCTION) -> RPC_FUNCTION:
+    def __call__(self, lhs: str) -> Callable[[RPC_FUNCTION[T]], RPC_FUNCTION[T]]:
+        def decor(rhs: RPC_FUNCTION[T]) -> RPC_FUNCTION[T]:
             return rhs
 
         return decor
@@ -33,7 +34,7 @@ class KeyMap:
     def __init__(self) -> None:
         self._finalized = False
         self._mappings: MutableMapping[
-            Tuple[_KeyModes, str], Union[str, RPC_FUNCTION]
+            Tuple[_KeyModes, str], Union[str, RPC_FUNCTION[Any]]
         ] = {}
 
     def __getattr__(self, modes: str) -> _KM:
@@ -44,9 +45,5 @@ class KeyMap:
             return _KM(modes=tuple(map(_KeyModes, modes)), parent=self)
 
     def drain(self) -> None:
-        if self._finalized:
-            raise RuntimeError()
-        else:
-            self._finalized = True
-            for (mode, lhs), rhs in self._mappings.items():
-                pass
+        for (mode, lhs), rhs in self._mappings.items():
+            pass
