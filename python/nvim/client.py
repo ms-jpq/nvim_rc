@@ -1,22 +1,13 @@
 from abc import abstractmethod
 from asyncio import get_running_loop, run
-from asyncio.events import AbstractEventLoop
 from concurrent.futures import Future
 from queue import SimpleQueue
 from threading import Thread
-from typing import (
-    Any,
-    AsyncIterator,
-    Dict,
-    Protocol,
-    Sequence,
-    Tuple,
-    TypeVar,
-)
+from typing import Any, AsyncIterator, Protocol, Sequence, Tuple, TypeVar
 
 from pynvim import Nvim, attach
 
-from .logging import log, nvim_handler
+from .logging import log
 
 T = TypeVar("T")
 
@@ -38,20 +29,8 @@ async def _transq(simple: SimpleQueue[T]) -> AsyncIterator[T]:
         yield await loop.run_in_executor(None, simple.get)
 
 
-def _setup_logging(nvim: Nvim) -> Nvim:
-    log.addHandler(nvim_handler(nvim))
-
-    def handler(loop: AbstractEventLoop, ctx: Dict[str, Any]) -> None:
-        loop.default_exception_handler(ctx)
-        log.error("%s", ctx)
-
-    loop: AbstractEventLoop = nvim.loop
-    loop.set_exception_handler(handler)
-
-
 def run_client(client: Client) -> None:
     with attach("stdio") as nvim:
-        _setup_logging(nvim)
 
         arpc_q, rpc_q = SimpleQueue[ARPC_MSG](), SimpleQueue[RPC_MSG]()
         aw = client(nvim, arpcs=_transq(arpc_q), rpcs=_transq(rpc_q))
@@ -59,15 +38,15 @@ def run_client(client: Client) -> None:
         try:
             th = Thread(target=run, args=(aw,))
 
-            def on_notif(event: str, *args: Any) -> None:
+            def on_arpc(event: str, *args: Any) -> None:
                 arpc_q.put((event, args))
 
-            def on_req(event: str, *args: Any) -> Any:
+            def on_rpc(event: str, *args: Any) -> Any:
                 fut = Future[Any]()
                 rpc_q.put((fut, (event, args)))
                 return fut.result()
 
-            def on_setup() -> None:
+            def on_start() -> None:
                 th.start()
 
             def on_err(error: str) -> None:
@@ -75,9 +54,9 @@ def run_client(client: Client) -> None:
 
             nvim.run_loop(
                 err_cb=on_err,
-                setup_cb=on_setup,
-                notification_cb=on_notif,
-                request_cb=on_req,
+                setup_cb=on_start,
+                notification_cb=on_arpc,
+                request_cb=on_rpc,
             )
         finally:
             th.join()
