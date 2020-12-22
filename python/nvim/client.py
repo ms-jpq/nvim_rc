@@ -1,42 +1,68 @@
 from abc import abstractmethod
-from asyncio import new_event_loop, run, set_event_loop
+from asyncio import get_running_loop, new_event_loop, run, set_event_loop
+from asyncio.events import AbstractEventLoop
 from concurrent.futures import Future
 from queue import SimpleQueue
 from threading import Thread
-from typing import Any, Protocol, Sequence, Tuple
+from typing import (
+    Any,
+    AsyncIterator,
+    Awaitable,
+    Dict,
+    Protocol,
+    Sequence,
+    Tuple,
+    TypeVar,
+)
 
 from pynvim import Nvim, attach
 
 from .logging import log
 
-NOTIF_MSG = Tuple[str, Sequence[Any]]
-NOTIF_Q = SimpleQueue[NOTIF_MSG]
+T = TypeVar("T")
 
-RPC_MSG = Tuple[Future[Any], NOTIF_MSG]
-RPC_Q = SimpleQueue[RPC_MSG]
+ARPC_MSG = Tuple[str, Sequence[Any]]
+RPC_MSG = Tuple[Future[Any], ARPC_MSG]
 
 
 class Client(Protocol):
     @abstractmethod
-    async def __call__(self, nvim: Nvim, notif_q: NOTIF_Q, rpc_q: RPC_Q) -> None:
+    async def __call__(
+        self, nvim: Nvim, arpcs: AsyncIterator[ARPC_MSG], rpcs: AsyncIterator[RPC_MSG]
+    ) -> None:
         ...
 
 
+async def _transq(simple: SimpleQueue[T]) -> AsyncIterator[T]:
+    loop = get_running_loop()
+    while True:
+        msg = await loop.run_in_executor(None, simple.get)
+        yield msg
+
+
+def _loop2(aw: Awaitable[None]) -> None:
+    loop = new_event_loop()
+
+    def handler(loop: AbstractEventLoop, ctx: Dict[str, Any]) -> None:
+        loop.default_exception_handler(ctx)
+        log.error("%s", ctx)
+
+    loop.set_exception_handler(handler)
+    set_event_loop(loop)
+
+    run(aw)
+
+
 def run_client(client: Client) -> None:
-    notif_q, rpc_q = NOTIF_Q(), RPC_Q()
-
-    def loop2() -> None:
-        loop = new_event_loop()
-        loop.set_exception_handler()
-        set_event_loop(loop)
-        run(client(nvim, notif_q=notif_q, rpc_q=rpc_q))
-
     with attach("stdio") as nvim:
+        arpc_q, rpc_q = SimpleQueue[ARPC_MSG](), SimpleQueue[RPC_MSG]()
+        aw = client(nvim, arpcs=_transq(arpc_q), rpcs=_transq(rpc_q))
+
         try:
-            th = Thread(target=loop2)
+            th = Thread(target=_loop2, args=(aw,))
 
             def on_notif(event: str, *args: Any) -> None:
-                notif_q.put((event, args))
+                arpc_q.put((event, args))
 
             def on_req(event: str, *args: Any) -> Any:
                 fut = Future[Any]()

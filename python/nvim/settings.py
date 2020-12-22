@@ -5,10 +5,10 @@ from typing import Iterable, Iterator, MutableMapping, Tuple, Union, cast
 
 from pynvim import Nvim
 
-from .lib import AtomicInstruction, async_call, atomic
+from .lib import AtomicInstruction, atomic
 
 
-class _SettingType(Enum):
+class SettingType(Enum):
     system = "set"
     local = "setlocal"
 
@@ -34,7 +34,9 @@ class _Setting:
 
 
 class Settings:
-    def __init__(self) -> None:
+    def __init__(self, s_type: SettingType = SettingType.system) -> None:
+        self._finalized = False
+        self._type = s_type
         self._conf: MutableMapping[str, Tuple[_OP, str]] = {}
 
     def __getitem__(self, key: str) -> _Setting:
@@ -50,7 +52,7 @@ class Settings:
         else:
             raise TypeError()
 
-    async def finalize(self, nvim: Nvim) -> None:
+    def finalize(self, nvim: Nvim) -> None:
         if self._finalized:
             raise RuntimeError()
         else:
@@ -58,9 +60,6 @@ class Settings:
 
             def instructions() -> Iterator[AtomicInstruction]:
                 for key, (op, val) in self._conf.items():
-                    yield "command", (f"set {key}{op.value}{val}",)
+                    yield "command", (f"{self._type.value} {key}{op.value}{val}",)
 
-            def cont() -> None:
-                atomic(nvim, *instructions())
-
-            await async_call(nvim, cont)
+            atomic(nvim, *instructions())

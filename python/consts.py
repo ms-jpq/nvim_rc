@@ -1,10 +1,7 @@
-from functools import partial
-from os import environ, listdir
-from os.path import abspath, dirname, expanduser, join
+from os import environ
+from pathlib import Path
 
-TOP_LEVEL = dirname(dirname(dirname(dirname(abspath(__file__)))))
-_SUB_MODULES = join(TOP_LEVEL, "submodules")
-SUB_MODULES = tuple(map(partial(join, _SUB_MODULES), listdir(_SUB_MODULES)))
+TOP_LEVEL = Path(__file__).resolve().parent.parent
+SUB_MODULES = tuple((TOP_LEVEL / "submodules").iterdir())
 
-
-XDG_DATA_HOME = environ.get("XDG_DATA_HOME", join(expanduser("~"), ".local", "share"))
+XDG_DATA_HOME = environ.get("XDG_DATA_HOME", Path.home() / ".local" / "share")

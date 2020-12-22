@@ -18,8 +18,8 @@ RpcFunction = Union[RPC_FN, RPC_AFN]
 
 class RPC:
     def __init__(self) -> None:
+        self._finalized = False
         self._handlers: MutableMapping[str, RpcFunction] = {}
-        super().__init__()
 
     async def __call__(self, uid: str) -> Callable[[RpcFunction], RpcFunction]:
         def decor(rpc_f: RpcFunction) -> RpcFunction:
