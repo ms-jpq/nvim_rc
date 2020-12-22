@@ -1,4 +1,5 @@
-from asyncio import Future
+from asyncio.events import get_running_loop
+from concurrent.futures import Future
 from contextlib import contextmanager
 from os import linesep
 from typing import Any, Callable, Iterator, Optional, Sequence, Tuple, TypeVar, cast
@@ -53,13 +54,12 @@ def window_lock(nvim: Nvim, w1: Optional[Window] = None) -> Iterator[Window]:
 
 
 async def async_call(nvim: Nvim, fn: Callable[..., T], *args: Any, **kwargs: Any) -> T:
+    loop = get_running_loop()
     fut = Future[T]()
 
     def cont() -> None:
         try:
             ret = fn(*args, **kwargs)
-        except LockBroken:
-            pass
         except Exception as e:
             if not fut.cancelled():
                 fut.set_exception(e)
@@ -68,10 +68,10 @@ async def async_call(nvim: Nvim, fn: Callable[..., T], *args: Any, **kwargs: Any
                 fut.set_result(ret)
 
     nvim.async_call(cont)
-    return await fut
+    return await loop.run_in_executor(None, fut.result)
 
 
-async def print(
+async def write(
     nvim: Nvim, message: Any, error: bool = False, flush: bool = True
 ) -> None:
     write = nvim.api.err_write if error else nvim.api.out_write

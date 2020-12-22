@@ -7,8 +7,8 @@ from .lib import (
     async_call,
     atomic,
     buffer_lock,
-    print,
     window_lock,
+    write,
 )
 from .logging import log, nvim_handler
 from .rpc import RPC
