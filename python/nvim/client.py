@@ -3,6 +3,7 @@ from asyncio import get_running_loop, run
 from concurrent.futures import Future
 from logging import WARN
 from queue import SimpleQueue
+from sys import stderr
 from threading import Thread
 from typing import Any, AsyncIterator, Protocol, Sequence, Tuple, TypeVar
 
@@ -53,15 +54,15 @@ def run_client(client: Client, log_level: int = WARN) -> None:
                 await client(nvim, arpcs=_transq(arpc_q), rpcs=_transq(rpc_q))
             except Exception as e:
                 log.exception("%s", e)
-            else:
+            finally:
                 nvim.stop_loop()
 
+        th = Thread(target=run, args=(wrapper(),))
+
+        def on_start() -> None:
+            th.start()
+
         try:
-            th = Thread(target=run, args=(wrapper(),))
-
-            def on_start() -> None:
-                th.start()
-
             nvim.run_loop(
                 err_cb=on_err,
                 setup_cb=on_start,
@@ -70,3 +71,5 @@ def run_client(client: Client, log_level: int = WARN) -> None:
             )
         finally:
             th.join()
+
+        print("DONE DONE DONE", file=stderr)
