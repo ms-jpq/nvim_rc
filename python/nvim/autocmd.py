@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from python.nvim.lib import AtomicInstruction
 from typing import (
+    Any,
     Callable,
     Iterable,
     Iterator,
@@ -8,9 +8,9 @@ from typing import (
     Sequence,
     Tuple,
     TypeVar,
-    Any,
 )
 
+from .lib import AtomicInstruction
 from .rpc import RPC_FUNCTION, RPC_SPEC, lua_rpc_literal
 
 T = TypeVar("T")

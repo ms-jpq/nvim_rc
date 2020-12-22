@@ -1,9 +1,10 @@
-from python.nvim.lib import AtomicInstruction
 from typing import Sequence, Tuple
+
 from pynvim import Nvim
 
 from .nvim.autocmd import AutoCMD
 from .nvim.keymap import Keymap
+from .nvim.lib import AtomicInstruction
 from .nvim.rpc import RPC, RPC_SPEC
 from .nvim.settings import Settings
 

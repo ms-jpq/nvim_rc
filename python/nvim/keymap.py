@@ -16,8 +16,8 @@ from typing import (
 )
 
 from pynvim.api import Buffer
-from python.nvim.lib import AtomicInstruction
 
+from .lib import AtomicInstruction
 from .rpc import RPC_FUNCTION, RPC_SPEC, lua_rpc_literal
 
 T = TypeVar("T")
