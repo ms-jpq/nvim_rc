@@ -6,7 +6,7 @@ from queue import SimpleQueue
 from threading import Thread
 from typing import Any, AsyncIterator, Protocol, Sequence, Tuple, TypeVar
 
-from pynvim import Nvim, attach
+from pynvim import Nvim
 
 from .logging import log, nvim_handler
 
@@ -30,12 +30,8 @@ async def _transq(simple: SimpleQueue[T]) -> AsyncIterator[T]:
         yield await loop.run_in_executor(None, simple.get)
 
 
-def run_client(client: Client, log_level: int = WARN) -> None:
+def run_client(nvim: Nvim, client: Client, log_level: int = WARN) -> None:
     arpc_q, rpc_q = SimpleQueue[ARPC_MSG](), SimpleQueue[RPC_MSG]()
-    nvim = attach("stdio")
-
-    log.addHandler(nvim_handler(nvim))
-    log.setLevel(log_level)
 
     def on_err(error: str) -> None:
         log.error("%s", error)
@@ -48,13 +44,11 @@ def run_client(client: Client, log_level: int = WARN) -> None:
         rpc_q.put((fut, (event, args)))
         return fut.result()
 
-    async def wrapper() -> None:
+    async def main() -> None:
         try:
             await client(nvim, arpcs=_transq(arpc_q), rpcs=_transq(rpc_q))
         except Exception as e:
             log.exception("%s", e)
-
-    th1 = Thread(target=run, args=(wrapper(),))
 
     def forever() -> None:
         nvim.run_loop(
@@ -63,8 +57,11 @@ def run_client(client: Client, log_level: int = WARN) -> None:
             request_cb=on_rpc,
         )
 
+    th1 = Thread(target=run, args=(main(),))
     th2 = Thread(target=forever, daemon=True)
-    th2.start()
 
+    log.addHandler(nvim_handler(nvim))
+    log.setLevel(log_level)
+    th2.start()
     th1.start()
     th1.join()
