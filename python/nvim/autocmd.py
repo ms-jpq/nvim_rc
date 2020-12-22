@@ -38,15 +38,15 @@ class AutoCMD:
 
         return decor
 
-    def drain(self, chan_id: int) -> None:
+    def drain(self, chan: int) -> None:
         def instructions() -> Iterator[str]:
             for param, func in self._autocmds.items():
                 events = ",".join(param.events)
                 filters = " ".join(param.filters)
                 modifiers = " ".join(param.modifiers)
                 args = ", ".join(param.args)
-                group = f"augroup ch_{chan_id}_{param.name}"
+                group = f"augroup ch_{chan}_{param.name}"
                 cls = "autocmd!"
-                rpc_args = f"{chan_id}, {param.name}, {{{args}}}"
+                rpc_args = f"{chan}, {param.name}, {{{args}}}"
                 cmd = f"autocmd {events} {filters} {modifiers} lua vim.rpcnotify({rpc_args})"
                 group_end = "augroup END"

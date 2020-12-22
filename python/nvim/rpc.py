@@ -99,3 +99,9 @@ async def rpc_agent(
                     fut.set_result(ret)
 
     await gather(create_task(poll_spec()), create_task(poll_rpc()))
+
+
+def lua_rpc_literal(chan: int, blocking: bool, name: str, *args: str) -> str:
+    op = "request" if blocking else "notify"
+    _args = ", ".join(args)
+    return f"vim.rpc{op}({chan}, {name}, {{{_args}}})"

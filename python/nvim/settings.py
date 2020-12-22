@@ -1,14 +1,9 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Iterable, Iterator, MutableMapping, Tuple, Union, cast
+from typing import Iterable, Iterator, MutableMapping, Sequence, Tuple, Union, cast
 
 from .lib import AtomicInstruction
-
-
-class SettingType(Enum):
-    system = "set"
-    local = "setlocal"
 
 
 class _OP(Enum):
@@ -48,7 +43,11 @@ class Settings:
         else:
             raise TypeError()
 
-    def drain(self, typ: SettingType) -> Iterator[AtomicInstruction]:
-        while self._conf:
-            key, (op, val) = self._conf.popitem()
-            yield "command", (f"{typ.value} {key}{op.value}{val}",)
+    def drain(self, local: bool) -> Sequence[AtomicInstruction]:
+        def it() -> Iterator[AtomicInstruction]:
+            set_prefix = "setlocal" if local else "set"
+            while self._conf:
+                key, (op, val) = self._conf.popitem()
+                yield "command", (f"{set_prefix} {key}{op.value}{val}",)
+
+        return tuple(it())

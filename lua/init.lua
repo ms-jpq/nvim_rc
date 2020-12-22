@@ -7,7 +7,6 @@ local on_exit = function (_, code)
 end
 
 local on_stderr = function (_, msg)
-  -- vim.api.nvim_err_write(table.concat(msg, "\n"))
   vim.api.nvim_out_write(table.concat(msg, "\n"))
 end
 
@@ -17,13 +16,12 @@ local chan = vim.fn.jobstart(
 )
 
 
-lv = {}
-lv.notify = function (event, args)
-  vim.rpcnotify(chan, event, args)
+local notify = function (name, args)
+  vim.rpcnotify(chan, name, args)
 end
-lv.request = function (event, args)
-  return vim.rpcrequest(chan, evnt, args)
+local request = function (name, args)
+  return vim.rpcrequest(chan, name, args)
 end
 
 
-lv.notify("EVENT", {"ARG1", "ARG2", "ARG3"})
+notify("EVENT", {"ARG1", "ARG2", "ARG3"})
