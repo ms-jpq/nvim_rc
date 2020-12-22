@@ -1,12 +1,12 @@
 from asyncio.queues import Queue
-from asyncio.tasks import create_task, gather
+from asyncio.tasks import gather
 from typing import AsyncIterable, AsyncIterator, TypeVar
 
 from pynvim import Nvim
 
 from ._registery import __
 from .nvim.client import RPC_MSG
-from .nvim.lib import async_call, write
+from .nvim.lib import async_call, atomic, write
 from .nvim.rpc import RPC_SPEC, rpc_agent
 from .registery import drain
 
@@ -21,7 +21,10 @@ async def to_iter(queue: Queue[T]) -> AsyncIterator[T]:
 async def client(nvim: Nvim, rpcs: AsyncIterable[RPC_MSG]) -> None:
     spec_q = Queue[RPC_SPEC]()
     instructons, specs = drain(nvim)
+    await gather(
+        async_call(nvim, atomic, nvim, *instructons),
+        *(spec_q.put(spec) for spec in specs)
+    )
 
     await write(nvim, instructons)
-
     await rpc_agent(nvim, specs=to_iter(spec_q), rpcs=rpcs)
