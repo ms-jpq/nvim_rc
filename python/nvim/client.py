@@ -17,7 +17,7 @@ from typing import (
 
 from pynvim import Nvim, attach
 
-from .logging import log
+from .logging import log, nvim_handler
 
 T = TypeVar("T")
 
@@ -40,21 +40,27 @@ async def _transq(simple: SimpleQueue[T]) -> AsyncIterator[T]:
         yield msg
 
 
-def _loop2(aw: Awaitable[None]) -> None:
-    loop = new_event_loop()
+def _setup_logging(nvim: Nvim) -> Nvim:
+    loop: AbstractEventLoop = nvim.loop
+    log.addHandler(nvim_handler(nvim))
 
     def handler(loop: AbstractEventLoop, ctx: Dict[str, Any]) -> None:
         loop.default_exception_handler(ctx)
         log.error("%s", ctx)
 
     loop.set_exception_handler(handler)
-    set_event_loop(loop)
 
+
+def _loop2(aw: Awaitable[None]) -> None:
+    loop = new_event_loop()
+    set_event_loop(loop)
     run(aw)
 
 
 def run_client(client: Client) -> None:
     with attach("stdio") as nvim:
+        _setup_logging(nvim)
+
         arpc_q, rpc_q = SimpleQueue[ARPC_MSG](), SimpleQueue[RPC_MSG]()
         aw = client(nvim, arpcs=_transq(arpc_q), rpcs=_transq(rpc_q))
 
