@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from asyncio import get_running_loop, new_event_loop, run, set_event_loop
+from asyncio import get_running_loop, run
 from asyncio.events import AbstractEventLoop
 from concurrent.futures import Future
 from queue import SimpleQueue
@@ -7,7 +7,6 @@ from threading import Thread
 from typing import (
     Any,
     AsyncIterator,
-    Awaitable,
     Dict,
     Protocol,
     Sequence,
@@ -36,25 +35,18 @@ class Client(Protocol):
 async def _transq(simple: SimpleQueue[T]) -> AsyncIterator[T]:
     loop = get_running_loop()
     while True:
-        msg = await loop.run_in_executor(None, simple.get)
-        yield msg
+        yield await loop.run_in_executor(None, simple.get)
 
 
 def _setup_logging(nvim: Nvim) -> Nvim:
-    loop: AbstractEventLoop = nvim.loop
     log.addHandler(nvim_handler(nvim))
 
     def handler(loop: AbstractEventLoop, ctx: Dict[str, Any]) -> None:
         loop.default_exception_handler(ctx)
         log.error("%s", ctx)
 
+    loop: AbstractEventLoop = nvim.loop
     loop.set_exception_handler(handler)
-
-
-def _loop2(aw: Awaitable[None]) -> None:
-    loop = new_event_loop()
-    set_event_loop(loop)
-    run(aw)
 
 
 def run_client(client: Client) -> None:
@@ -65,7 +57,7 @@ def run_client(client: Client) -> None:
         aw = client(nvim, arpcs=_transq(arpc_q), rpcs=_transq(rpc_q))
 
         try:
-            th = Thread(target=_loop2, args=(aw,))
+            th = Thread(target=run, args=(aw,))
 
             def on_notif(event: str, *args: Any) -> None:
                 arpc_q.put((event, args))
