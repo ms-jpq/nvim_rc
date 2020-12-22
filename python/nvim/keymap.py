@@ -1,44 +1,30 @@
 from __future__ import annotations
 
-from asyncio.coroutines import iscoroutinefunction
 from enum import Enum
-from typing import Awaitable, Callable, Iterable, MutableMapping, Tuple, Union, cast
-
-from pynvim import Nvim
+from typing import Callable, Iterable, MutableMapping, Tuple, Union
 
 
-class KeyModes(Enum):
+from .rpc import RPC_FUNCTION
+
+
+class _KeyModes(Enum):
     n = "n"
     o = "o"
     v = "v"
     t = "t"
 
 
-KMFunction = Callable[[Nvim], None]
-KMAFunction = Callable[[Nvim], Awaitable[None]]
-KeymapFunction = Union[KMFunction, KMAFunction]
-
-
-class KM:
-    def __init__(self, modes: Iterable[KeyModes], parent: KeyMap) -> None:
+class _KM:
+    def __init__(self, modes: Iterable[_KeyModes], parent: KeyMap) -> None:
         self._modes, self._parent = modes, parent
 
     def __setattr__(self, name: str, value: str) -> None:
         for mode in self._modes:
             self._parent._mappings[(mode, name)] = value
 
-    def __call__(self, lhs: str) -> Callable[[KeymapFunction], KeymapFunction]:
-        def decor(rhs: KeymapFunction) -> KeymapFunction:
-            def new_rhs(nvim: Nvim) -> None:
-                nvim.async_call(rhs, nvim)
-
-            async def new_arhs(nvim: Nvim) -> None:
-                await cast(KMAFunction, rhs)(nvim)
-
-            kmf = new_arhs if iscoroutinefunction(rhs) else new_rhs
-            for mode in self._modes:
-                self._parent._mappings[(mode, lhs)] = kmf
-            return kmf
+    def __call__(self, lhs: str) -> Callable[[RPC_FUNCTION], RPC_FUNCTION]:
+        def decor(rhs: RPC_FUNCTION) -> RPC_FUNCTION:
+            return rhs
 
         return decor
 
@@ -47,17 +33,17 @@ class KeyMap:
     def __init__(self) -> None:
         self._finalized = False
         self._mappings: MutableMapping[
-            Tuple[KeyModes, str], Union[str, KeymapFunction]
+            Tuple[_KeyModes, str], Union[str, RPC_FUNCTION]
         ] = {}
 
-    def __getattr__(self, modes: str) -> KM:
+    def __getattr__(self, modes: str) -> _KM:
         for mode in modes:
-            if mode not in KeyModes:
+            if mode not in _KeyModes:
                 raise AttributeError()
         else:
-            return KM(modes=tuple(map(KeyModes, modes)), parent=self)
+            return _KM(modes=tuple(map(_KeyModes, modes)), parent=self)
 
-    def finalize(self, nvim: Nvim) -> None:
+    def drain(self) -> None:
         if self._finalized:
             raise RuntimeError()
         else:

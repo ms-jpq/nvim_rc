@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import AsyncIterator, Iterable, Iterator, MutableMapping, Tuple, Union, cast
+from typing import Iterable, Iterator, MutableMapping, Tuple, Union, cast
 
-from pynvim import Nvim
-
-from .lib import AtomicInstruction, atomic
+from .lib import AtomicInstruction
 
 
 class SettingType(Enum):

@@ -56,7 +56,7 @@ class RPC:
 
 def _nil_handler(name: str) -> RPC_FN:
     def handler(nvim: Nvim, *args: Any) -> None:
-        log.warn("%s - %s", name, args)
+        log.warn("MISSING RPC HANDLER FOR: %s - %s", name, args)
 
     return handler
 
@@ -84,6 +84,7 @@ async def rpc_agent(
             try:
                 ret = await _invoke_handler(hldr, *args)
             except Exception as e:
+                log.exception("ERROR IN RPC FOR: %s - %s", name, args)
                 if fut and not fut.cancelled():
                     fut.set_exception(e)
             else:

@@ -37,20 +37,20 @@ def run_client(nvim: Nvim, client: Client, log_level: int = WARN) -> None:
     def on_arpc(event: str, *args: Any) -> None:
         rpc_q.put((None, (event, args)))
 
-    def on_rpc(event: str, *args: Any) -> Any:
+    def on_rpc(name: str, *args: Any) -> Any:
         fut = Future[Any]()
-        rpc_q.put((fut, (event, args)))
+        rpc_q.put((fut, (name, args)))
         try:
             return fut.result()
-        except Exception as e:
-            log.exception("%s", e)
+        except Exception:
+            log.exception("ERROR IN RPC FOR: %s - %s", name, args)
             return None
 
     async def main() -> None:
         try:
             await client(nvim, rpcs=_transq(rpc_q))
-        except Exception as e:
-            log.exception("%s", e)
+        except Exception:
+            log.exception("")
 
     def forever() -> None:
         nvim.run_loop(
