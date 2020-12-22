@@ -1,12 +1,12 @@
 from pynvim import Nvim
 from typing import MutableSequence
 
-_autocmds: MutableSequence = []
+
+class AutoCMD:
+    def __init__(self) -> None:
+        self._autocmds: MutableSequence = []
+
+    async def finalize(nvim: Nvim) -> None:
+        pass
 
 
-def autocmd() -> None:
-    pass
-
-
-async def finalize(nvim: Nvim) -> None:
-    pass

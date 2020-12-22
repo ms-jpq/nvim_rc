@@ -2,11 +2,15 @@ from asyncio import gather
 
 from pynvim import Nvim
 
-from .nvim.autocmd import finalize as fa
-from .nvim.keymap import finalize as fk
-from .nvim.settings import finalize as fs
-from .workspace import wm
+from .nvim.autocmd import AutoCMD
+from .nvim.keymap import KeyMap
+from .nvim.settings import Settings
 
+autocmd = AutoCMD()
+
+keymap = KeyMap()
+settings = Settings()
 
 async def finalize(nvim: Nvim) -> None:
-    await gather(fk(nvim), fa(nvim), fs(nvim))
+    pass
+    # await gather(fk(nvim), fa(nvim), fs(nvim))

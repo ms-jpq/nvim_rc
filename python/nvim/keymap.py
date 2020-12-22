@@ -53,10 +53,7 @@ class KeyMap:
         else:
             return KM(modes=tuple(map(KeyModes, modes)), parent=self)
 
+    async def finalize(self, nvim: Nvim) -> None:
+        for (mode, lhs), rhs in self._conf.items():
+            pass
 
-keymap = KeyMap()
-
-
-async def finalize(nvim: Nvim) -> None:
-    for (mode, lhs), rhs in keymap._conf.items():
-        pass
