@@ -3,8 +3,12 @@ from pynvim.api.nvim import Nvim
 from pynvim.api.window import Window
 from ..registery import settings, keymap
 
+# hide background buffers
 settings["hidden"] = True
+# reuse buf
 settings["switchbuf"] += ("useopen", "usetab")
+
+# modern split direction
 settings["splitright"] = True
 settings["splitbelow"] = True
 
