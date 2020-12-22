@@ -46,8 +46,10 @@ class RPC:
     def __init__(self) -> None:
         self._handlers: MutableMapping[str, RPC_FUNCTION[Any]] = {}
 
-    def __call__(self, name: str) -> Callable[[RPC_FUNCTION[T_co]], RPC_FUNCTION[T_co]]:
-        def decor(rpc_f: RPC_FUNCTION[T_co]) -> RPC_FUNCTION[T_co]:
+    def __call__(
+        self, name: str
+    ) -> Callable[[Callable[..., T_co]], RPC_FUNCTION[T_co]]:
+        def decor(rpc_f: Callable[..., T_co]) -> RPC_FUNCTION[T_co]:
             self._handlers[name] = rpc_f
             return rpc_f
 

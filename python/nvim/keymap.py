@@ -52,7 +52,7 @@ class _K:
         for mode in self._modes:
             self._parent._mappings[(mode, self._lhs)] = (self._blk, self._opts, rhs)
 
-    def __call__(self, rhs: RPC_FUNCTION[T]) -> RPC_FUNCTION[T]:
+    def __call__(self, rhs: Callable[..., T]) -> RPC_FUNCTION[T]:
         for mode in self._modes:
             self._parent._mappings[(mode, self._lhs)] = (self._blk, self._opts, rhs)
         return rhs
@@ -71,7 +71,7 @@ class _KM:
         expr: bool = False,
         nowait: bool = False,
         unique: bool = False,
-    ) -> Callable[[RPC_FUNCTION[T]], RPC_FUNCTION[T]]:
+    ) -> Callable[[Callable[..., T]], RPC_FUNCTION[T]]:
         opts = _KeymapOpts(
             noremap=noremap,
             silent=silent,

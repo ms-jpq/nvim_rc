@@ -38,7 +38,7 @@ class AutoCMD:
         modifiers: Iterable[str] = (),
         args: Iterable[str] = (),
         blocking: bool = False,
-    ) -> Callable[[RPC_FUNCTION[T]], RPC_FUNCTION[T]]:
+    ) -> Callable[[Callable[..., T]], RPC_FUNCTION[T]]:
         param = _AuParams(
             blocking=blocking,
             events=events,
@@ -47,7 +47,7 @@ class AutoCMD:
             args=args,
         )
 
-        def decor(rpc_f: RPC_FUNCTION[T]) -> RPC_FUNCTION[T]:
+        def decor(rpc_f: Callable[..., T]) -> RPC_FUNCTION[T]:
             self._autocmds[name] = (param, rpc_f)
             return rpc_f
 
