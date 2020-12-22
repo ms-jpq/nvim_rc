@@ -15,16 +15,21 @@ class RPC_AFN(Protocol):
 
 RpcFunction = Union[RPC_FN, RPC_AFN]
 
-_handlers: MutableMapping[str, RpcFunction] = {}
 
+class RPC:
+    def __init__(self) -> None:
+        self._handlers: MutableMapping[str, RpcFunction] = {}
+        super().__init__()
 
-def rpc(uid: str) -> Callable[[RpcFunction], RpcFunction]:
-    def decor(rpc_f: RpcFunction) -> RpcFunction:
-        _handlers[uid] = rpc_f
-        return rpc_f
+    async def __call__(self, uid: str) -> Callable[[RpcFunction], RpcFunction]:
+        def decor(rpc_f: RpcFunction) -> RpcFunction:
+            self._handlers[uid] = rpc_f
+            return rpc_f
 
-    return decor
+        return decor
 
-
-async def finalize(nvim: Nvim) -> None:
-    pass
+    async def finalize(self, nvim: Nvim) -> None:
+        if self._finalized:
+            raise RuntimeError()
+        else:
+            self._finalized = True

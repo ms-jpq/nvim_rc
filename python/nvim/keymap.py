@@ -44,7 +44,11 @@ class KM:
 
 
 class KeyMap:
-    _conf: MutableMapping[Tuple[KeyModes, str], Union[str, KeymapFunction]] = {}
+    def __init__(self) -> None:
+        self._finalized = False
+        self._conf: MutableMapping[
+            Tuple[KeyModes, str], Union[str, KeymapFunction]
+        ] = {}
 
     def __getattr__(self, modes: str) -> KM:
         for mode in modes:
@@ -54,6 +58,9 @@ class KeyMap:
             return KM(modes=tuple(map(KeyModes, modes)), parent=self)
 
     async def finalize(self, nvim: Nvim) -> None:
-        for (mode, lhs), rhs in self._conf.items():
-            pass
-
+        if self._finalized:
+            raise RuntimeError()
+        else:
+            self._finalized = True
+            for (mode, lhs), rhs in self._conf.items():
+                pass

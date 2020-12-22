@@ -1,15 +1,28 @@
+from abc import abstractmethod
 from asyncio import new_event_loop, run, set_event_loop
 from concurrent.futures import Future
+from queue import SimpleQueue
 from threading import Thread
-from typing import Any
+from typing import Any, Protocol, Sequence, Tuple
 
-from pynvim import attach
+from pynvim import Nvim, attach
 
 from .logging import log
-from .types import NOTIF_Q, RPC_Q, Client
+
+NOTIF_MSG = Tuple[str, Sequence[Any]]
+NOTIF_Q = SimpleQueue[NOTIF_MSG]
+
+RPC_MSG = Tuple[Future[Any], NOTIF_MSG]
+RPC_Q = SimpleQueue[RPC_MSG]
 
 
-def srv(client: Client) -> None:
+class Client(Protocol):
+    @abstractmethod
+    async def __call__(self, nvim: Nvim, notif_q: NOTIF_Q, rpc_q: RPC_Q) -> None:
+        ...
+
+
+def run_client(client: Client) -> None:
     notif_q, rpc_q = NOTIF_Q(), RPC_Q()
 
     def loop2() -> None:

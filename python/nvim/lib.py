@@ -1,5 +1,6 @@
 from asyncio import Future
 from contextlib import contextmanager
+from os import linesep
 from typing import Any, Callable, Iterator, Optional, Sequence, Tuple, TypeVar, cast
 
 from pynvim import Nvim, NvimError
@@ -68,3 +69,15 @@ async def async_call(nvim: Nvim, fn: Callable[..., T], *args: Any, **kwargs: Any
 
     nvim.async_call(cont)
     return await fut
+
+
+async def print(
+    nvim: Nvim, message: Any, error: bool = False, flush: bool = True
+) -> None:
+    write = nvim.api.err_write if error else nvim.api.out_write
+
+    def cont() -> None:
+        msg = str(message) + (linesep if flush else "")
+        write(msg)
+
+    await async_call(nvim, cont)

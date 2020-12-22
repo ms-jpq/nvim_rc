@@ -51,11 +51,16 @@ class Settings:
             raise TypeError()
 
     async def finalize(self, nvim: Nvim) -> None:
-        def instructions() -> Iterator[AtomicInstruction]:
-            for key, (op, val) in self._conf.items():
-                yield "command", (f"set {key}{op.value}{val}",)
+        if self._finalized:
+            raise RuntimeError()
+        else:
+            self._finalized = True
 
-        def cont() -> None:
-            atomic(nvim, *instructions())
+            def instructions() -> Iterator[AtomicInstruction]:
+                for key, (op, val) in self._conf.items():
+                    yield "command", (f"set {key}{op.value}{val}",)
 
-        await async_call(nvim, cont)
+            def cont() -> None:
+                atomic(nvim, *instructions())
+
+            await async_call(nvim, cont)
