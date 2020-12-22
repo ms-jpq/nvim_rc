@@ -7,7 +7,7 @@ class AutoCMD:
         self._finalized = False
         self._autocmds: MutableSequence = []
 
-    async def finalize(self, nvim: Nvim) -> None:
+    def finalize(self, nvim: Nvim) -> None:
         if self._finalized:
             raise RuntimeError()
         else:

@@ -10,6 +10,6 @@ from .lib import (
     print,
     window_lock,
 )
-from .logging import log
+from .logging import log, nvim_handler
 from .rpc import RPC
 from .settings import Settings, SettingType

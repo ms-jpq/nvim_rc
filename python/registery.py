@@ -1,5 +1,3 @@
-from asyncio import gather
-
 from pynvim import Nvim
 
 from .nvim.autocmd import AutoCMD

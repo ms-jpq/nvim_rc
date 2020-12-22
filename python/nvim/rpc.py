@@ -21,14 +21,14 @@ class RPC:
         self._finalized = False
         self._handlers: MutableMapping[str, RpcFunction] = {}
 
-    async def __call__(self, uid: str) -> Callable[[RpcFunction], RpcFunction]:
+    def __call__(self, uid: str) -> Callable[[RpcFunction], RpcFunction]:
         def decor(rpc_f: RpcFunction) -> RpcFunction:
             self._handlers[uid] = rpc_f
             return rpc_f
 
         return decor
 
-    async def finalize(self, nvim: Nvim) -> None:
+    def finalize(self, nvim: Nvim) -> None:
         if self._finalized:
             raise RuntimeError()
         else:

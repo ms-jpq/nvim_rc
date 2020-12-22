@@ -57,7 +57,7 @@ class KeyMap:
         else:
             return KM(modes=tuple(map(KeyModes, modes)), parent=self)
 
-    async def finalize(self, nvim: Nvim) -> None:
+    def finalize(self, nvim: Nvim) -> None:
         if self._finalized:
             raise RuntimeError()
         else:

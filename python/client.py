@@ -6,12 +6,15 @@ from pynvim import Nvim
 from .lib.go import go
 from .nvim.client import ARPC_MSG, RPC_MSG
 from .nvim.lib import async_call
+from .nvim.logging import log, nvim_handler
 from .registery import finalize
 
 
 async def client(
     nvim: Nvim, arpcs: AsyncIterator[ARPC_MSG], rpcs: AsyncIterator[RPC_MSG]
 ) -> None:
+    log.addHandler(nvim_handler(nvim))
+
     async def poll_arpc() -> None:
         async for event, args in arpcs:
 
