@@ -133,5 +133,9 @@ class Keymap:
                 else:
                     assert False
 
-        instructions, specs = zip(*it())
+        try:
+            instructions, specs = zip(*it())
+        except ValueError:
+            instructions, specs = (), ()
+
         return instructions, tuple(s for s in specs if s)

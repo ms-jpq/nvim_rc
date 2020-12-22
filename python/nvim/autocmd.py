@@ -73,5 +73,9 @@ class AutoCMD:
                     ("command", ("augroup END",)),
                 ), (name, func)
 
-        instructions, specs = zip(*it())
+        try:
+            instructions, specs = zip(*it())
+        except ValueError:
+            instructions, specs = (), ()
+
         return instructions, specs
