@@ -27,11 +27,12 @@ T = TypeVar("T")
 class _KeymapOpts:
     noremap: bool
     silent: bool
+    expr: bool
     nowait: bool
     unique: bool
 
 
-_KEY_MODES = {"n", "o", "v", "t"}
+_KEY_MODES = {"n", "o", "v", "i", "c", "t"}
 
 
 class _K:
@@ -47,7 +48,7 @@ class _K:
         self._blk = blocking
         self._opts, self._parent = options, parent
 
-    def __lshift__(self, rhs: str) -> None:
+    def __lshift__(self, rhs: Optional[str]) -> None:
         for mode in self._modes:
             self._parent._mappings[(mode, self._lhs)] = (self._blk, self._opts, rhs)
 
@@ -67,12 +68,14 @@ class _KM:
         blocking: bool = False,
         noremap: bool = True,
         silent: bool = True,
+        expr: bool = False,
         nowait: bool = False,
         unique: bool = False,
     ) -> Callable[[RPC_FUNCTION[T]], RPC_FUNCTION[T]]:
         opts = _KeymapOpts(
             noremap=noremap,
             silent=silent,
+            expr=expr,
             nowait=nowait,
             unique=unique,
         )
@@ -90,7 +93,7 @@ class Keymap:
     def __init__(self) -> None:
         self._mappings: MutableMapping[
             Tuple[str, str],
-            Tuple[bool, _KeymapOpts, Union[str, RPC_FUNCTION[Any]]],
+            Tuple[bool, _KeymapOpts, Union[str, None, RPC_FUNCTION[Any]]],
         ] = {}
 
     def __getattr__(self, modes: str) -> _KM:
@@ -106,10 +109,10 @@ class Keymap:
         def it() -> Iterator[Tuple[AtomicInstruction, Optional[RPC_SPEC]]]:
             while self._mappings:
                 (mode, lhs), (blocking, opts, rhs) = self._mappings.popitem()
-                if type(rhs) is str and buf is None:
+                if (rhs is None or type(rhs) is str) and buf is None:
                     yield ("set_keymap", (mode, lhs, rhs, asdict(opts))), None
 
-                elif type(rhs) is str and buf is not None:
+                elif (rhs is None or type(rhs) is str) and buf is not None:
                     yield ("buf_set_keymap", (buf, mode, lhs, rhs, asdict(opts))), None
 
                 elif callable(rhs) and buf is None:
