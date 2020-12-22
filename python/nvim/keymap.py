@@ -25,7 +25,7 @@ class KM:
 
     def __setattr__(self, name: str, value: str) -> None:
         for mode in self._modes:
-            self._parent._conf[(mode, name)] = value
+            self._parent._mappings[(mode, name)] = value
 
     def __call__(self, lhs: str) -> Callable[[KeymapFunction], KeymapFunction]:
         def decor(rhs: KeymapFunction) -> KeymapFunction:
@@ -37,7 +37,7 @@ class KM:
 
             kmf = new_arhs if iscoroutinefunction(rhs) else new_rhs
             for mode in self._modes:
-                self._parent._conf[(mode, lhs)] = kmf
+                self._parent._mappings[(mode, lhs)] = kmf
             return kmf
 
         return decor
@@ -46,7 +46,7 @@ class KM:
 class KeyMap:
     def __init__(self) -> None:
         self._finalized = False
-        self._conf: MutableMapping[
+        self._mappings: MutableMapping[
             Tuple[KeyModes, str], Union[str, KeymapFunction]
         ] = {}
 
@@ -62,5 +62,5 @@ class KeyMap:
             raise RuntimeError()
         else:
             self._finalized = True
-            for (mode, lhs), rhs in self._conf.items():
+            for (mode, lhs), rhs in self._mappings.items():
                 pass

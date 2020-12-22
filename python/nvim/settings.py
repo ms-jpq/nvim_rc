@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Iterable, Iterator, MutableMapping, Tuple, Union, cast
+from typing import AsyncIterator, Iterable, Iterator, MutableMapping, Tuple, Union, cast
 
 from pynvim import Nvim
 
@@ -52,14 +52,7 @@ class Settings:
         else:
             raise TypeError()
 
-    def finalize(self, nvim: Nvim) -> None:
-        if self._finalized:
-            raise RuntimeError()
-        else:
-            self._finalized = True
-
-            def instructions() -> Iterator[AtomicInstruction]:
-                for key, (op, val) in self._conf.items():
-                    yield "command", (f"{self._type.value} {key}{op.value}{val}",)
-
-            atomic(nvim, *instructions())
+    def drain(self) -> Iterator[AtomicInstruction]:
+        while self._conf:
+            key, (op, val) = self._conf.popitem()
+            yield "command", (f"{self._type.value} {key}{op.value}{val}",)

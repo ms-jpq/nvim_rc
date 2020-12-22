@@ -1,15 +1,39 @@
 from asyncio.events import get_running_loop
+from asyncio.tasks import create_task
 from concurrent.futures import Future
 from contextlib import contextmanager
 from os import linesep
-from typing import Any, Callable, Iterator, Optional, Sequence, Tuple, TypeVar, cast
+from typing import (
+    Any,
+    Awaitable,
+    Callable,
+    Iterator,
+    Optional,
+    Sequence,
+    Tuple,
+    TypeVar,
+    cast,
+)
 
 from pynvim import Nvim, NvimError
 from pynvim.api import Buffer, Window
 
+from .logging import log
+
 T = TypeVar("T")
 
 AtomicInstruction = Tuple[str, Sequence[Any]]
+
+
+async def go(aw: Awaitable[T]) -> Awaitable[T]:
+    async def wrapper() -> None:
+        try:
+            await aw
+        except Exception as e:
+            log.exception("%s", e)
+            raise
+
+    return create_task(wrapper())
 
 
 def atomic(nvim: Nvim, *instructions: AtomicInstruction) -> Sequence[Any]:

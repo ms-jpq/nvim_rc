@@ -1,6 +1,19 @@
-from typing import Any, Callable, MutableMapping, Protocol, Union
+from concurrent.futures import Future
+from typing import (
+    Any,
+    Callable,
+    Iterable,
+    MutableMapping,
+    Protocol,
+    Sequence,
+    Tuple,
+    Union,
+)
 
 from pynvim import Nvim
+
+ARPC_MSG = Tuple[str, Sequence[Any]]
+RPC_MSG = Tuple[Future[Any], ARPC_MSG]
 
 
 class RPC_FN(Protocol):
@@ -13,23 +26,22 @@ class RPC_AFN(Protocol):
         ...
 
 
-RpcFunction = Union[RPC_FN, RPC_AFN]
+RPC_Function = Union[RPC_FN, RPC_AFN]
 
 
 class RPC:
     def __init__(self) -> None:
-        self._finalized = False
-        self._handlers: MutableMapping[str, RpcFunction] = {}
+        self._rpc_handlers: MutableMapping[str, Tuple[bool, RPC_Function]] = {}
 
-    def __call__(self, uid: str) -> Callable[[RpcFunction], RpcFunction]:
-        def decor(rpc_f: RpcFunction) -> RpcFunction:
-            self._handlers[uid] = rpc_f
+    def __call__(
+        self, name: str, blocking: bool = False
+    ) -> Callable[[RPC_Function], RPC_Function]:
+        def decor(rpc_f: RPC_Function) -> RPC_Function:
+            self._rpc_handlers[name] = rpc_f
             return rpc_f
 
         return decor
 
-    def finalize(self, nvim: Nvim) -> None:
-        if self._finalized:
-            raise RuntimeError()
-        else:
-            self._finalized = True
+    def drain(self) -> Iterable[str, Tuple[bool, RPC_Function]]:
+        while self._rpc_handlers:
+            yield self._rpc_handlers.popitem()

@@ -4,7 +4,7 @@ from concurrent.futures import Future
 from logging import WARN
 from queue import SimpleQueue
 from threading import Thread
-from typing import Any, AsyncIterator, Protocol, Sequence, Tuple, TypeVar
+from typing import Any, AsyncIterator, Protocol, TypeVar
 
 from pynvim import Nvim
 
@@ -12,8 +12,7 @@ from .logging import log, nvim_handler
 
 T = TypeVar("T")
 
-ARPC_MSG = Tuple[str, Sequence[Any]]
-RPC_MSG = Tuple[Future[Any], ARPC_MSG]
+from .rpc import ARPC_MSG, RPC_MSG
 
 
 class Client(Protocol):

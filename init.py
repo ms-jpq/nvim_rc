@@ -3,9 +3,12 @@
 from python.client import client
 from python.nvim.client import run_client
 
+from pynvim import attach
+
 
 def main() -> None:
-    run_client(client)
+    nvim = attach("stdio")
+    run_client(nvim, client=client)
 
 
 main()
