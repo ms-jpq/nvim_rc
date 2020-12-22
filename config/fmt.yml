@@ -8,6 +8,8 @@ fmt-json:
   install:
     pip:
       - sortd
+    npm:
+      - prettier
 
 fmt-py:
   type: stream
@@ -48,6 +50,9 @@ scfg:
   args: []
   filetypes:
     - cfg
+  install:
+    pip:
+      - sortd
 
 rustfmt:
   type: stream
