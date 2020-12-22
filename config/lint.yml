@@ -1,0 +1,15 @@
+---
+mypy:
+  type: fs
+  args:
+    - --
+    - "%"
+  install:
+    pip:
+      - mypy
+
+shellcheck:
+  type: fs
+  args:
+    - --
+    - "%"

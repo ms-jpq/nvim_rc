@@ -1,0 +1,62 @@
+---
+fmt-json:
+  type: stream
+  args:
+    - "%"
+  filetypes:
+    - json
+  install:
+    pip:
+      - sortd
+
+fmt-py:
+  type: stream
+  args: []
+  filetypes:
+    - python
+  install:
+    pip:
+      - isort
+      - black
+
+prettier:
+  type: stream
+  args:
+    - --stdin-filepath
+    - --
+    - "%"
+  filetypes:
+    - yaml
+    - xml
+    - css
+    - scss
+    - less
+    - html
+    - markdown
+    - javascript
+    - javascriptreact
+    - javascript.jsx
+    - typescript
+    - typescriptreact
+    - typescript.tsx
+  install:
+    npm:
+      - prettier
+
+scfg:
+  type: stream
+  args: []
+  filetypes:
+    - cfg
+
+rustfmt:
+  type: stream
+  args: []
+  filetypes:
+    - rust
+
+gofmt:
+  type: stream
+  args: []
+  filetypes:
+    - go

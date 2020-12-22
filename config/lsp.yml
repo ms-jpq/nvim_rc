@@ -1,0 +1,109 @@
+---
+bashls:
+  bin: bash-language-server
+  filetypes:
+    - sh
+    - zsh
+  install:
+    npm:
+      - bash-language-server
+
+cssls:
+  bin: css-languageserver
+  filetypes:
+    - css
+    - scss
+    - less
+  install:
+    npm:
+      - vscode-css-languageserver-bin
+
+dockerls:
+  bin: docker-langserver
+  filetypes:
+    - dockerfile
+  install:
+    npm:
+      - dockerfile-language-server-nodejs
+
+gopls:
+  bin: gopls
+  filetypes:
+    - go
+    - gomod
+
+html:
+  bin: html-languageserver
+  filetypes:
+    - html
+  install:
+    npm:
+      - vscode-html-languageserver-bin
+
+jsonls:
+  bin: vscode-json-languageserver
+  filetypes:
+    - json
+  install:
+    npm:
+      - vscode-json-languageserver
+
+pyright:
+  bin: pyright-langserver
+  filetypes:
+    - python
+  install:
+    npm:
+      - pyright
+
+r_language_server:
+  bin: R
+  filetypes:
+    - r
+    - rmd
+
+rust_analyzer:
+  bin: rust-analyzer
+  filetypes:
+    - rust
+
+sqlls:
+  bin: sql-language-server
+  args:
+    - up
+    - --method
+    - stdio
+  filetypes:
+    - sql
+  install:
+    npm:
+      - sql-language-server
+
+sourcekit:
+  bin: xcrun
+  filetypes:
+    - swift
+    - c
+    - cpp
+    - objective-c
+    - objective-cpp
+
+tsserver:
+  bin: typescript-language-server
+  filetypes:
+    - javascript
+    - javascriptreact
+    - javascript.jsx
+    - typescript
+    - typescriptreact
+    - typescript.tsx
+  install:
+    - typescript
+    - typescript-language-server
+
+yamlls:
+  bin: yaml-language-server
+  filetypes:
+    - yaml
+  install:
+    - yaml-language-server
