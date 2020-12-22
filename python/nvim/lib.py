@@ -68,11 +68,11 @@ def buffer_lock(nvim: Nvim, b1: Optional[Buffer] = None) -> Iterator[Buffer]:
 @contextmanager
 def window_lock(nvim: Nvim, w1: Optional[Window] = None) -> Iterator[Window]:
     if w1 is None:
-        w1 = nvim.get_current_win()
+        w1 = nvim.api.get_current_win()
     try:
         yield cast(Window, w1)
     finally:
-        w2: Window = nvim.get_current_win()
+        w2: Window = nvim.api.get_current_win()
         if w2 != w1:
             raise LockBroken()
 

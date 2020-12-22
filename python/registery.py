@@ -13,11 +13,6 @@ rpc = RPC()
 settings = Settings()
 
 
-@rpc("which_chan")
-def which_chan(nvim: Nvim) -> int:
-    return nvim.channel_id
-
-
 def drain(nvim: Nvim) -> Tuple[Sequence[AtomicInstruction], Sequence[RPC_SPEC]]:
     i1, s1 = autocmd.drain(nvim.channel_id)
     i2, s2 = keymap.drain(nvim.channel_id, None)

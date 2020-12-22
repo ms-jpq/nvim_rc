@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from enum import Enum
 from typing import (
     Any,
     Callable,
@@ -32,11 +31,7 @@ class _KeymapOpts:
     unique: bool
 
 
-class _KeyModes(Enum):
-    n = "n"
-    o = "o"
-    v = "v"
-    t = "t"
+_KEY_MODES = {"n", "o", "v", "t"}
 
 
 class _K:
@@ -44,7 +39,7 @@ class _K:
         self,
         lhs: str,
         blocking: bool,
-        modes: Iterable[_KeyModes],
+        modes: Iterable[str],
         options: _KeymapOpts,
         parent: Keymap,
     ) -> None:
@@ -63,7 +58,7 @@ class _K:
 
 
 class _KM:
-    def __init__(self, modes: Iterable[_KeyModes], parent: Keymap) -> None:
+    def __init__(self, modes: Iterable[str], parent: Keymap) -> None:
         self._modes, self._parent = modes, parent
 
     def __call__(
@@ -94,16 +89,16 @@ class _KM:
 class Keymap:
     def __init__(self) -> None:
         self._mappings: MutableMapping[
-            Tuple[_KeyModes, str],
+            Tuple[str, str],
             Tuple[bool, _KeymapOpts, Union[str, RPC_FUNCTION[Any]]],
         ] = {}
 
     def __getattr__(self, modes: str) -> _KM:
         for mode in modes:
-            if mode not in _KeyModes:
+            if mode not in _KEY_MODES:
                 raise AttributeError()
         else:
-            return _KM(modes=tuple(map(_KeyModes, modes)), parent=self)
+            return _KM(modes=modes, parent=self)
 
     def drain(
         self, chan: int, buf: Optional[Buffer]
@@ -120,12 +115,14 @@ class Keymap:
                 elif callable(rhs) and buf is None:
                     name = cast(Callable, rhs).__name__
                     lua = lua_rpc_literal(chan, blocking=blocking, name=name)
-                    yield ("set_keymap", (mode, lhs, lua, asdict(opts))), (name, rhs)
+                    call = f"<cmd>{lua}<cr>"
+                    yield ("set_keymap", (mode, lhs, call, asdict(opts))), (name, rhs)
 
                 elif callable(rhs) and buf is not None:
                     name = cast(Callable, rhs).__name__
                     lua = lua_rpc_literal(chan, blocking=blocking, name=name)
-                    yield ("buf_set_keymap", (buf, mode, lhs, lua, asdict(opts))), (
+                    call = f"<cmd>{lua}<cr>"
+                    yield ("buf_set_keymap", (buf, mode, lhs, call, asdict(opts))), (
                         name,
                         rhs,
                     )

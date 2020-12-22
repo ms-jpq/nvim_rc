@@ -108,4 +108,4 @@ def lua_rpc_literal(
 ) -> str:
     op = "request" if blocking else "notify"
     _args = ", ".join(args)
-    return f"vim.rpc{op}({chan}, {name}, {{{_args}}})"
+    return f"lua vim.rpc{op}({chan}, {name}, {{{_args}}})"
