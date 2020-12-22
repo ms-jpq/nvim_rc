@@ -5,7 +5,7 @@ from typing import (
     Any,
     AsyncIterable,
     Callable,
-    Iterable,
+    Iterator,
     MutableMapping,
     Optional,
     Protocol,
@@ -51,10 +51,13 @@ class RPC:
 
         return decor
 
-    def drain(self) -> Iterable[RPC_SPEC]:
-        while self._handlers:
-            name, hldr = self._handlers.popitem()
-            yield name, hldr
+    def drain(self) -> Sequence[RPC_SPEC]:
+        def it() -> Iterator[RPC_SPEC]:
+            while self._handlers:
+                name, hldr = self._handlers.popitem()
+                yield name, hldr
+
+        return tuple(it())
 
 
 def _nil_handler(name: str) -> RPC_FN:

@@ -1,6 +1,6 @@
 from .autocmd import AutoCMD
 from .client import Client, run_client
-from .keymap import KeyMap
+from .keymap import Keymap
 from .lib import (
     AtomicInstruction,
     LockBroken,

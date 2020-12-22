@@ -1,12 +1,12 @@
 from pynvim import Nvim
 
 from .nvim.autocmd import AutoCMD
-from .nvim.keymap import KeyMap
+from .nvim.keymap import Keymap
 from .nvim.rpc import RPC
 from .nvim.settings import Settings
 
 autocmd = AutoCMD()
-keymap = KeyMap()
+keymap = Keymap()
 rpc = RPC()
 settings = Settings()
 
