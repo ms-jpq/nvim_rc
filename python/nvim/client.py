@@ -35,10 +35,10 @@ def on_err(error: str) -> None:
 def run_client(nvim: Nvim, client: Client, log_level: int = WARN) -> None:
     rpc_q = SimpleQueue[RPC_MSG[Any]]()
 
-    def on_arpc(name: str, args: Sequence[Any]) -> None:
+    def on_arpc(name: str, args: Sequence[Sequence[Any]]) -> None:
         rpc_q.put((None, (name, args[0])))
 
-    def on_rpc(name: str, args: Sequence[Any]) -> Any:
+    def on_rpc(name: str, args: Sequence[Sequence[Any]]) -> Any:
         fut = Future[Any]()
         rpc_q.put((None, (name, args[0])))
         try:
