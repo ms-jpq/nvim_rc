@@ -1,13 +1,14 @@
 from abc import abstractmethod
 from asyncio import get_running_loop, run
 from concurrent.futures import Future
+from logging import WARN
 from queue import SimpleQueue
 from threading import Thread
 from typing import Any, AsyncIterator, Protocol, Sequence, Tuple, TypeVar
 
 from pynvim import Nvim, attach
 
-from .logging import log
+from .logging import log, nvim_handler
 
 T = TypeVar("T")
 
@@ -29,28 +30,37 @@ async def _transq(simple: SimpleQueue[T]) -> AsyncIterator[T]:
         yield await loop.run_in_executor(None, simple.get)
 
 
-def run_client(client: Client) -> None:
-    with attach("stdio") as nvim:
+def run_client(client: Client, log_level: int = WARN) -> None:
+    arpc_q, rpc_q = SimpleQueue[ARPC_MSG](), SimpleQueue[RPC_MSG]()
+    log.setLevel(log_level)
 
-        arpc_q, rpc_q = SimpleQueue[ARPC_MSG](), SimpleQueue[RPC_MSG]()
-        aw = client(nvim, arpcs=_transq(arpc_q), rpcs=_transq(rpc_q))
+    def on_err(error: str) -> None:
+        log.error("%s", error)
+
+    def on_arpc(event: str, *args: Any) -> None:
+        arpc_q.put((event, args))
+
+    def on_rpc(event: str, *args: Any) -> Any:
+        fut = Future[Any]()
+        rpc_q.put((fut, (event, args)))
+        return fut.result()
+
+    with attach("stdio") as nvim:
+        log.addHandler(nvim_handler(nvim))
+
+        async def wrapper() -> None:
+            try:
+                await client(nvim, arpcs=_transq(arpc_q), rpcs=_transq(rpc_q))
+            except Exception as e:
+                log.exception("%s", e)
+            else:
+                nvim.stop_loop()
 
         try:
-            th = Thread(target=run, args=(aw,))
-
-            def on_arpc(event: str, *args: Any) -> None:
-                arpc_q.put((event, args))
-
-            def on_rpc(event: str, *args: Any) -> Any:
-                fut = Future[Any]()
-                rpc_q.put((fut, (event, args)))
-                return fut.result()
+            th = Thread(target=run, args=(wrapper(),))
 
             def on_start() -> None:
                 th.start()
-
-            def on_err(error: str) -> None:
-                log.error("%s", error)
 
             nvim.run_loop(
                 err_cb=on_err,

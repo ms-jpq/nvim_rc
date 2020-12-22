@@ -1,20 +1,16 @@
-from asyncio.tasks import gather
+from asyncio.tasks import create_task, gather
 from typing import AsyncIterator
 
 from pynvim import Nvim
 
-from .lib.go import go
 from .nvim.client import ARPC_MSG, RPC_MSG
 from .nvim.lib import async_call
-from .nvim.logging import log, nvim_handler
 from .registery import finalize
 
 
 async def client(
     nvim: Nvim, arpcs: AsyncIterator[ARPC_MSG], rpcs: AsyncIterator[RPC_MSG]
 ) -> None:
-    log.addHandler(nvim_handler(nvim))
-
     async def poll_arpc() -> None:
         async for event, args in arpcs:
 
@@ -32,5 +28,6 @@ async def client(
             await async_call(nvim, cont)
             fut.set_result(None)
 
-    await gather(go(poll_arpc()), go(poll_rpc()))
     await finalize(nvim)
+
+    await gather(create_task(poll_arpc()), create_task(poll_rpc()))
