@@ -98,12 +98,22 @@ tsserver:
     - typescriptreact
     - typescript.tsx
   install:
-    - typescript
-    - typescript-language-server
+    npm:
+      - typescript
+      - typescript-language-server
+
+vimls:
+  bin: vim-language-server
+  filetypes:
+    - vim
+  install:
+    npm:
+      - vim-language-server
 
 yamlls:
   bin: yaml-language-server
   filetypes:
     - yaml
   install:
-    - yaml-language-server
+    npm:
+      - yaml-language-server
