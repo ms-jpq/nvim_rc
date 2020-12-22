@@ -7,8 +7,8 @@ local on_exit = function (_, code)
 end
 
 local on_stderr = function (_, msg)
-  -- vim.api.nvim_err_writeln(table.concat(msg, "\n"))
-  vim.api.nvim_out_write(table.concat(msg, "\n") .. "\n")
+  -- vim.api.nvim_err_write(table.concat(msg, "\n"))
+  vim.api.nvim_out_write(table.concat(msg, "\n"))
 end
 
 local chan = vim.fn.jobstart(
