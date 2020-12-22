@@ -1,14 +1,24 @@
 from dataclasses import dataclass
-from typing import Callable, Iterable, Iterator, MutableMapping, TypeVar, Any
+from python.nvim.lib import AtomicInstruction
+from typing import (
+    Callable,
+    Iterable,
+    Iterator,
+    MutableMapping,
+    Sequence,
+    Tuple,
+    TypeVar,
+    Any,
+)
 
-from .rpc import RPC_FUNCTION
+from .rpc import RPC_FUNCTION, RPC_SPEC, lua_rpc_literal
 
 T = TypeVar("T")
 
 
 @dataclass(frozen=True)
 class _AuParams:
-    name: str
+    blocking: bool
     events: Iterable[str]
     filters: Iterable[str]
     modifiers: Iterable[str]
@@ -17,7 +27,7 @@ class _AuParams:
 
 class AutoCMD:
     def __init__(self) -> None:
-        self._autocmds: MutableMapping[_AuParams, RPC_FUNCTION[Any]] = {}
+        self._autocmds: MutableMapping[str, Tuple[_AuParams, RPC_FUNCTION[Any]]] = {}
 
     def __call__(
         self,
@@ -27,26 +37,41 @@ class AutoCMD:
         filters: Iterable[str] = ("*",),
         modifiers: Iterable[str] = (),
         args: Iterable[str] = (),
+        blocking: bool = False,
     ) -> Callable[[RPC_FUNCTION[T]], RPC_FUNCTION[T]]:
         param = _AuParams(
-            name=name, events=events, filters=filters, modifiers=modifiers, args=args
+            blocking=blocking,
+            events=events,
+            filters=filters,
+            modifiers=modifiers,
+            args=args,
         )
 
         def decor(rpc_f: RPC_FUNCTION[T]) -> RPC_FUNCTION[T]:
-            self._autocmds[param] = rpc_f
+            self._autocmds[name] = (param, rpc_f)
             return rpc_f
 
         return decor
 
-    def drain(self, chan: int) -> None:
-        def instructions() -> Iterator[str]:
-            for param, func in self._autocmds.items():
+    def drain(
+        self, chan: int
+    ) -> Tuple[Sequence[AtomicInstruction], Sequence[RPC_SPEC]]:
+        def it() -> Iterator[Tuple[Sequence[AtomicInstruction], RPC_SPEC]]:
+            while self._autocmds:
+                name, (param, func) = self._autocmds.popitem()
                 events = ",".join(param.events)
                 filters = " ".join(param.filters)
                 modifiers = " ".join(param.modifiers)
-                args = ", ".join(param.args)
-                group = f"augroup ch_{chan}_{param.name}"
-                cls = "autocmd!"
-                rpc_args = f"{chan}, {param.name}, {{{args}}}"
-                cmd = f"autocmd {events} {filters} {modifiers} lua vim.rpcnotify({rpc_args})"
-                group_end = "augroup END"
+                lua = lua_rpc_literal(
+                    chan, blocking=param.blocking, name=name, args=param.args
+                )
+
+                yield (
+                    ("command", (f"augroup ch_{chan}_{name}",)),
+                    ("command", ("autocmd!",)),
+                    ("command", (f"autocmd {events} {filters} {modifiers} {lua}",)),
+                    ("command", ("augroup END",)),
+                ), (name, func)
+
+        instructions, specs = zip(*it())
+        return instructions, specs
