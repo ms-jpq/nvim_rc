@@ -87,9 +87,10 @@ async def rpc_agent(
             try:
                 ret = await _invoke_handler(hldr, *args)
             except Exception as e:
-                log.exception("ERROR IN RPC FOR: %s - %s", name, args)
                 if fut and not fut.cancelled():
                     fut.set_exception(e)
+                else:
+                    log.exception("ERROR IN RPC FOR: %s - %s", name, args)
             else:
                 if fut and not fut.cancelled():
                     fut.set_result(ret)

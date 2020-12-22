@@ -23,7 +23,9 @@ class _KM:
         for mode in self._modes:
             self._parent._mappings[(mode, name)] = value
 
-    def __call__(self, lhs: str) -> Callable[[RPC_FUNCTION[T]], RPC_FUNCTION[T]]:
+    def __call__(
+        self, lhs: str, blocking: bool = False, silent: bool = True
+    ) -> Callable[[RPC_FUNCTION[T]], RPC_FUNCTION[T]]:
         def decor(rhs: RPC_FUNCTION[T]) -> RPC_FUNCTION[T]:
             return rhs
 
@@ -32,7 +34,6 @@ class _KM:
 
 class KeyMap:
     def __init__(self) -> None:
-        self._finalized = False
         self._mappings: MutableMapping[
             Tuple[_KeyModes, str], Union[str, RPC_FUNCTION[Any]]
         ] = {}

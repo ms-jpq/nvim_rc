@@ -17,7 +17,6 @@ class _AuParams:
 
 class AutoCMD:
     def __init__(self) -> None:
-        self._finalized = False
         self._autocmds: MutableMapping[_AuParams, RPC_FUNCTION[Any]] = {}
 
     def __call__(

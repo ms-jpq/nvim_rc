@@ -32,9 +32,7 @@ class _Setting:
 
 
 class Settings:
-    def __init__(self, s_type: SettingType = SettingType.system) -> None:
-        self._finalized = False
-        self._type = s_type
+    def __init__(self) -> None:
         self._conf: MutableMapping[str, Tuple[_OP, str]] = {}
 
     def __getitem__(self, key: str) -> _Setting:
@@ -50,7 +48,7 @@ class Settings:
         else:
             raise TypeError()
 
-    def drain(self) -> Iterator[AtomicInstruction]:
+    def drain(self, typ: SettingType) -> Iterator[AtomicInstruction]:
         while self._conf:
             key, (op, val) = self._conf.popitem()
-            yield "command", (f"{self._type.value} {key}{op.value}{val}",)
+            yield "command", (f"{typ.value} {key}{op.value}{val}",)
