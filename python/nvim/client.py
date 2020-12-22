@@ -35,12 +35,12 @@ def on_err(error: str) -> None:
 def run_client(nvim: Nvim, client: Client, log_level: int = WARN) -> None:
     rpc_q = SimpleQueue[RPC_MSG[Any]]()
 
-    def on_arpc(event: str, args: Sequence[Any]) -> None:
-        rpc_q.put((None, (event, args)))
+    def on_arpc(name: str, args: Sequence[Any]) -> None:
+        rpc_q.put((None, (name, args[0])))
 
     def on_rpc(name: str, args: Sequence[Any]) -> Any:
         fut = Future[Any]()
-        rpc_q.put((fut, (name, args)))
+        rpc_q.put((None, (name, args[0])))
         try:
             return fut.result()
         except Exception as e:
