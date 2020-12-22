@@ -26,9 +26,9 @@ AtomicInstruction = Tuple[str, Sequence[Any]]
 
 
 async def go(aw: Awaitable[T]) -> Awaitable[T]:
-    async def wrapper() -> None:
+    async def wrapper() -> T:
         try:
-            await aw
+            return await aw
         except Exception as e:
             log.exception("%s", e)
             raise

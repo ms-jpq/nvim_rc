@@ -1,5 +1,5 @@
 from .autocmd import AutoCMD
-from .client import ARPC_MSG, RPC_MSG, Client, run_client
+from .client import Client, run_client
 from .keymap import KeyMap
 from .lib import (
     AtomicInstruction,
@@ -11,5 +11,5 @@ from .lib import (
     write,
 )
 from .logging import log, nvim_handler
-from .rpc import RPC
+from .rpc import RPC, RPC_MSG
 from .settings import Settings, SettingType

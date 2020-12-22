@@ -4,7 +4,7 @@ from concurrent.futures import Future
 from logging import WARN
 from queue import SimpleQueue
 from threading import Thread
-from typing import Any, AsyncIterator, Protocol, TypeVar
+from typing import Any, AsyncIterable, AsyncIterator, Protocol, TypeVar
 
 from pynvim import Nvim
 
@@ -12,14 +12,12 @@ from .logging import log, nvim_handler
 
 T = TypeVar("T")
 
-from .rpc import ARPC_MSG, RPC_MSG
+from .rpc import RPC_MSG
 
 
 class Client(Protocol):
     @abstractmethod
-    async def __call__(
-        self, nvim: Nvim, arpcs: AsyncIterator[ARPC_MSG], rpcs: AsyncIterator[RPC_MSG]
-    ) -> None:
+    async def __call__(self, nvim: Nvim, rpcs: AsyncIterable[RPC_MSG]) -> None:
         ...
 
 
@@ -29,23 +27,28 @@ async def _transq(simple: SimpleQueue[T]) -> AsyncIterator[T]:
         yield await loop.run_in_executor(None, simple.get)
 
 
-def run_client(nvim: Nvim, client: Client, log_level: int = WARN) -> None:
-    arpc_q, rpc_q = SimpleQueue[ARPC_MSG](), SimpleQueue[RPC_MSG]()
+def on_err(error: str) -> None:
+    log.error("%s", error)
 
-    def on_err(error: str) -> None:
-        log.error("%s", error)
+
+def run_client(nvim: Nvim, client: Client, log_level: int = WARN) -> None:
+    rpc_q = SimpleQueue[RPC_MSG]()
 
     def on_arpc(event: str, *args: Any) -> None:
-        arpc_q.put((event, args))
+        rpc_q.put((None, (event, args)))
 
     def on_rpc(event: str, *args: Any) -> Any:
         fut = Future[Any]()
         rpc_q.put((fut, (event, args)))
-        return fut.result()
+        try:
+            return fut.result()
+        except Exception as e:
+            log.exception("%s", e)
+            return None
 
     async def main() -> None:
         try:
-            await client(nvim, arpcs=_transq(arpc_q), rpcs=_transq(rpc_q))
+            await client(nvim, rpcs=_transq(rpc_q))
         except Exception as e:
             log.exception("%s", e)
 
