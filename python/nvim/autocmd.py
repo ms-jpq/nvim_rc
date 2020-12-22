@@ -78,4 +78,4 @@ class AutoCMD:
         except ValueError:
             instructions, specs = (), ()
 
-        return instructions, specs
+        return tuple(i for inst in instructions for i in inst), specs
