@@ -1,5 +1,4 @@
-from ..nvim.settings import settings
-
+from ..registery import settings
 
 settings["hidden"] = True
 settings["switchbuf"] += ("useopen", "usetab")

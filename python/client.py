@@ -9,7 +9,7 @@ from std2.asyncio import run_in_executor
 
 from python.nvim.lib import async_call
 
-from .nvim.go import go
+from .lib.go import go
 from .registery import finalize
 
 NOTIF_MSG = Tuple[str, Sequence[Any]]
@@ -36,7 +36,7 @@ async def transq(simple: SimpleQueue[T]) -> Chan[T]:
     return out
 
 
-async def server(nvim: Nvim, notif_q: NOTIF_Q, req_q: RPC_Q) -> None:
+async def client(nvim: Nvim, notif_q: NOTIF_Q, req_q: RPC_Q) -> None:
     async def poll_notif() -> None:
         async for event, args in await transq(notif_q):
 
