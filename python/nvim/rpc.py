@@ -1,6 +1,7 @@
 from asyncio import gather
 from asyncio.coroutines import iscoroutinefunction
 from concurrent.futures import Future
+from os import linesep
 from typing import (
     Any,
     AsyncIterable,
@@ -68,7 +69,9 @@ def _nil_handler(name: str) -> RPC_FN:
     return handler
 
 
-async def _invoke_handler(nvim: Nvim, hldr: RPC_FUNCTION[T_co], *args: Any) -> T_co:
+async def _invoke_handler(
+    nvim: Nvim, hldr: RPC_FUNCTION[T_co], args: Sequence[Any]
+) -> T_co:
     if iscoroutinefunction(hldr):
         return await cast(RPC_AFN[T_co], hldr)(nvim, *args)
     else:
@@ -90,12 +93,13 @@ async def rpc_agent(
         async for fut, (name, args) in rpcs:
             hldr = handlers.get(name, _nil_handler(name))
             try:
-                ret = await _invoke_handler(nvim, hldr, *args)
+                ret = await _invoke_handler(nvim, hldr, args)
             except Exception as e:
                 if fut and not fut.cancelled():
                     fut.set_exception(e)
                 else:
-                    log.exception("ERROR IN RPC FOR: %s - %s", name, args)
+                    fmt = f"ERROR IN RPC FOR: %s - %s{linesep}%s"
+                    log.exception(fmt, name, args, e)
             else:
                 if fut and not fut.cancelled():
                     fut.set_result(ret)
@@ -108,4 +112,4 @@ def lua_rpc_literal(
 ) -> str:
     op = "request" if blocking else "notify"
     _args = ", ".join(args)
-    return f"lua vim.rpc{op}({chan}, {name}, {{{_args}}})"
+    return f"lua vim.rpc{op}({chan}, '{name}', {{{_args}}})"

@@ -2,9 +2,10 @@ from abc import abstractmethod
 from asyncio import get_running_loop, run
 from concurrent.futures import Future
 from logging import WARN
+from os import linesep
 from queue import SimpleQueue
 from threading import Thread
-from typing import Any, AsyncIterable, AsyncIterator, Protocol, TypeVar
+from typing import Any, AsyncIterable, AsyncIterator, Protocol, Sequence, TypeVar
 
 from pynvim import Nvim
 
@@ -34,16 +35,17 @@ def on_err(error: str) -> None:
 def run_client(nvim: Nvim, client: Client, log_level: int = WARN) -> None:
     rpc_q = SimpleQueue[RPC_MSG[Any]]()
 
-    def on_arpc(event: str, *args: Any) -> None:
+    def on_arpc(event: str, args: Sequence[Any]) -> None:
         rpc_q.put((None, (event, args)))
 
-    def on_rpc(name: str, *args: Any) -> Any:
+    def on_rpc(name: str, args: Sequence[Any]) -> Any:
         fut = Future[Any]()
         rpc_q.put((fut, (name, args)))
         try:
             return fut.result()
-        except Exception:
-            log.exception("ERROR IN RPC FOR: %s - %s", name, args)
+        except Exception as e:
+            fmt = f"ERROR IN RPC FOR: %s - %s{linesep}%s"
+            log.exception(fmt, name, args, e)
             return None
 
     async def main() -> None:
