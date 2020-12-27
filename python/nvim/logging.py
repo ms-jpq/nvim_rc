@@ -1,4 +1,4 @@
-from logging import ERROR, WARN, Handler, LogRecord, StreamHandler, getLogger
+from logging import ERROR, Handler, LogRecord, getLogger
 from pathlib import Path
 
 from pynvim.api.nvim import Nvim

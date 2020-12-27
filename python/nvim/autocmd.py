@@ -3,15 +3,15 @@ from typing import (
     Any,
     Callable,
     Iterable,
-    Iterator,
     MutableMapping,
+    MutableSequence,
     Optional,
     Sequence,
     Tuple,
     TypeVar,
 )
 
-from .lib import AtomicInstruction
+from .atomic import Atomic
 from .rpc import RpcCallable, RpcSpec
 
 T = TypeVar("T")
@@ -55,29 +55,21 @@ class AutoCMD:
 
         return decor
 
-    def drain(
-        self, chan: int
-    ) -> Tuple[Sequence[AtomicInstruction], Sequence[RpcSpec]]:
-        def it() -> Iterator[Tuple[Sequence[AtomicInstruction], RpcSpec]]:
-            while self._autocmds:
-                name, (param, func) = self._autocmds.popitem()
-                events = ",".join(param.events)
-                filters = " ".join(param.filters)
-                modifiers = " ".join(param.modifiers)
-                call = func.call_line(*param.args, blocking=param.blocking).substitute(
-                    chan=chan
-                )
+    def drain(self, chan: int) -> Tuple[Atomic, Sequence[RpcSpec]]:
+        atomic = Atomic()
+        specs: MutableSequence[RpcSpec] = []
+        while self._autocmds:
+            name, (param, func) = self._autocmds.popitem()
+            events = ",".join(param.events)
+            filters = " ".join(param.filters)
+            modifiers = " ".join(param.modifiers)
+            call = func.call_line(*param.args, blocking=param.blocking).substitute(
+                chan=chan
+            )
+            atomic.command(f"augroup ch_{chan}.{name}")
+            atomic.command("autocmd!")
+            atomic.command(f"autocmd {events} {filters} {modifiers} {call}")
+            atomic.command("augroup END")
+            specs.append((name, func))
 
-                yield (
-                    ("command", (f"augroup ch_{chan}.{name}",)),
-                    ("command", ("autocmd!",)),
-                    ("command", (f"autocmd {events} {filters} {modifiers} {call}",)),
-                    ("command", ("augroup END",)),
-                ), (name, func)
-
-        try:
-            instructions, specs = zip(*it())
-        except ValueError:
-            instructions, specs = (), ()
-
-        return tuple(i for inst in instructions for i in inst), specs
+        return atomic, specs

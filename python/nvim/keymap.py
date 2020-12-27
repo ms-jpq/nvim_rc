@@ -15,7 +15,7 @@ from typing import (
 
 from pynvim.api import Buffer
 
-from .lib import AtomicInstruction
+from .atomic import Atomic
 
 T = TypeVar("T")
 
@@ -91,24 +91,24 @@ class Keymap:
         else:
             return _KM(modes=modes, parent=self)
 
-    def drain(self, chan: int, buf: Optional[Buffer]) -> Sequence[AtomicInstruction]:
-        def it() -> Iterator[AtomicInstruction]:
-            while self._mappings:
-                (mode, lhs), (opts, rhs) = self._mappings.popitem()
-                if type(rhs) is str and buf is None:
-                    yield ("set_keymap", (mode, lhs, rhs, asdict(opts)))
+    def drain(self, chan: int, buf: Optional[Buffer]) -> Atomic:
+        atomic = Atomic()
+        while self._mappings:
+            (mode, lhs), (opts, rhs) = self._mappings.popitem()
+            if type(rhs) is str and buf is None:
+                atomic.set_keymap(mode, lhs, rhs, asdict(opts))
 
-                elif type(rhs) is str and buf is not None:
-                    yield ("buf_set_keymap", (buf, mode, lhs, rhs, asdict(opts)))
+            elif type(rhs) is str and buf is not None:
+                atomic.buf_set_keymap(buf, mode, lhs, rhs, asdict(opts))
 
-                elif isinstance(rhs, Template) and buf is None:
-                    call = rhs.substitute(chan=chan)
-                    yield ("set_keymap", (mode, lhs, call, asdict(opts)))
+            elif isinstance(rhs, Template) and buf is None:
+                call = rhs.substitute(chan=chan)
+                atomic.set_keymap(mode, lhs, call, asdict(opts))
 
-                elif isinstance(rhs, Template) and buf is not None:
-                    call = rhs.substitute(chan=chan)
-                    yield ("buf_set_keymap", (buf, mode, lhs, call, asdict(opts)))
-                else:
-                    assert False
+            elif isinstance(rhs, Template) and buf is not None:
+                call = rhs.substitute(chan=chan)
+                atomic.buf_set_keymap(buf, mode, lhs, call, asdict(opts))
+            else:
+                assert False
 
-        return tuple(it())
+        return atomic

@@ -3,7 +3,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Iterable, Iterator, MutableMapping, Sequence, Tuple, Union, cast
 
-from .lib import AtomicInstruction
+from .atomic import Atomic
 
 
 class _OP(Enum):
@@ -49,11 +49,11 @@ class Settings:
         else:
             raise TypeError()
 
-    def drain(self, local: bool) -> Sequence[AtomicInstruction]:
-        def it() -> Iterator[AtomicInstruction]:
-            set_prefix = "setlocal" if local else "set"
-            while self._conf:
-                key, (op, val) = self._conf.popitem()
-                yield "command", (f"{set_prefix} {key}{op.value}{val}",)
+    def drain(self, local: bool) -> Atomic:
+        atomic = Atomic()
+        set_prefix = "setlocal" if local else "set"
+        while self._conf:
+            key, (op, val) = self._conf.popitem()
+            atomic.command(f"{set_prefix} {key}{op.value}{val}")
 
-        return tuple(it())
+        return atomic
