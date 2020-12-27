@@ -13,7 +13,7 @@ from .registery import drain
 T = TypeVar("T")
 
 
-async def to_iter(queue: Queue[T]) -> AsyncIterator[T]:
+async def _to_iter(queue: Queue[T]) -> AsyncIterator[T]:
     while True:
         yield await queue.get()
 
@@ -27,4 +27,4 @@ async def client(nvim: Nvim, rpcs: AsyncIterable[RpcMsg]) -> None:
     )
 
     await write(nvim, *instructons, sep="\n")
-    await rpc_agent(nvim, specs=to_iter(spec_q), rpcs=rpcs)
+    await rpc_agent(nvim, specs=_to_iter(spec_q), rpcs=rpcs)

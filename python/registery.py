@@ -14,7 +14,7 @@ rpc = RPC()
 settings = Settings()
 
 
-def map_leader() -> Iterator[AtomicInstruction]:
+def _map_leader() -> Iterator[AtomicInstruction]:
     yield "set_var", ("mapleader", " ")
     yield "set_var", ("maplocalleader", " ")
 
@@ -24,4 +24,4 @@ def drain(nvim: Nvim) -> Tuple[Sequence[AtomicInstruction], Sequence[RpcSpec]]:
     i2 = keymap.drain(nvim.channel_id, None)
     s2 = rpc.drain()
     i4 = settings.drain(False)
-    return tuple((*map_leader(), *i1, *i2, *i4)), tuple((*s1, *s2))
+    return tuple((*_map_leader(), *i1, *i2, *i4)), tuple((*s1, *s2))
