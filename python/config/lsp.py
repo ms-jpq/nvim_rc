@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Mapping, Sequence
 
-from python.config.packages import InstallSpec
+from .install import InstallSpec
 
 
 @dataclass(frozen=True)

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Mapping, Sequence
 
-from python.config.packages import InstallSpec
+from .install import InstallSpec
 
 
 class LinterType(Enum):
