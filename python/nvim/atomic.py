@@ -13,7 +13,7 @@ class _A:
 
     def __call__(self, *args: Any) -> int:
         self._parent._instructions.append((self._name, args))
-        return len(self._parent._instructions)
+        return len(self._parent._instructions) - 1
 
 
 class _NS:
@@ -21,7 +21,7 @@ class _NS:
         self._parent = parent
 
     def __getattr__(self, name: str) -> Any:
-        if self._parent._commited:
+        if not self._parent._commited:
             raise RuntimeError()
         else:
             if name in self._parent._ns_mapping:
@@ -30,7 +30,9 @@ class _NS:
                 raise AttributeError()
 
     def __setattr__(self, key: str, val: int) -> None:
-        if not self._parent._commited:
+        if key == "_parent":
+            super().__setattr__(key, val)
+        elif self._parent._commited:
             raise RuntimeError()
         else:
             self._parent._ns_mapping[key] = val
@@ -58,8 +60,8 @@ class Atomic:
         new._instructions.extend(other._instructions)
         return new
 
-    def __getattr__(self, fn_name: str) -> _A:
-        return _A(name=fn_name, parent=self)
+    def __getattr__(self, name: str) -> _A:
+        return _A(name=name, parent=self)
 
     def commit(self, nvim: Nvim) -> _NS:
         if self._commited:

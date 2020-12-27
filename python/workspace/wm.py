@@ -21,6 +21,7 @@ def new_window(nvim: Nvim, vertical: bool) -> None:
         a.command("vnew" if vertical else "new")
         ns.win = a.get_current_win()
         ns.buf = a.create_buf(False, True)
+    a.commit(nvim)
     nvim.api.win_set_buf(ns.win, ns.buf)
 
 
