@@ -1,6 +1,6 @@
 from abc import abstractmethod
-from asyncio import get_running_loop, run
-from concurrent.futures import Future
+from asyncio import AbstractEventLoop, get_running_loop, run
+from concurrent.futures import Future, ThreadPoolExecutor
 from logging import WARN
 from os import linesep
 from queue import SimpleQueue
@@ -34,6 +34,7 @@ def on_err(error: str) -> None:
 
 def run_client(nvim: Nvim, client: Client, log_level: int = WARN) -> None:
     rpc_q = SimpleQueue[RPC_MSG[Any]]()
+    exe = ThreadPoolExecutor()
 
     def on_arpc(name: str, args: Sequence[Sequence[Any]]) -> None:
         rpc_q.put((None, (name, args[0])))
@@ -49,12 +50,16 @@ def run_client(nvim: Nvim, client: Client, log_level: int = WARN) -> None:
             return None
 
     async def main() -> None:
+        loop = get_running_loop()
+        loop.set_default_executor(exe)
         try:
             await client(nvim, rpcs=_transq(rpc_q))
         except Exception:
             log.exception("")
 
     def forever() -> None:
+        loop: AbstractEventLoop = nvim.loop
+        loop.set_default_executor(exe)
         nvim.run_loop(
             err_cb=on_err,
             notification_cb=on_arpc,
