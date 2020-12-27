@@ -32,8 +32,8 @@ class AutoCMD:
 
     def __call__(
         self,
-        *,
-        events: Iterable[str],
+        event: str,
+        *events: str,
         name: Optional[str] = None,
         filters: Iterable[str] = ("*",),
         modifiers: Iterable[str] = (),
@@ -42,7 +42,7 @@ class AutoCMD:
     ) -> Callable[[Callable[..., T]], RPC_FUNCTION[T]]:
         param = _AuParams(
             blocking=blocking,
-            events=events,
+            events=tuple((event, *events)),
             filters=filters,
             modifiers=modifiers,
             args=args,
@@ -64,12 +64,14 @@ class AutoCMD:
                 events = ",".join(param.events)
                 filters = " ".join(param.filters)
                 modifiers = " ".join(param.modifiers)
-                lua = func.rpc(param.blocking, args=param.args).substitute(chan=chan)
+                call = func.rpc(*param.args, blocking=param.blocking).substitute(
+                    chan=chan
+                )
 
                 yield (
                     ("command", (f"augroup ch_{chan}_{name}",)),
                     ("command", ("autocmd!",)),
-                    ("command", (f"autocmd {events} {filters} {modifiers} {lua}",)),
+                    ("command", (f"autocmd {events} {filters} {modifiers} {call}",)),
                     ("command", ("augroup END",)),
                 ), (name, func)
 

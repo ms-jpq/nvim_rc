@@ -8,8 +8,9 @@ from string import Template
 from typing import (
     Any,
     AsyncIterable,
+    Awaitable,
     Callable,
-    Iterable,
+    Generic,
     Iterator,
     MutableMapping,
     Optional,
@@ -17,11 +18,12 @@ from typing import (
     Tuple,
     TypeVar,
     Union,
+    cast,
 )
 
 from pynvim import Nvim
 
-from .lib import T, async_call, create_task
+from .lib import async_call, create_task
 from .logging import log
 
 T = TypeVar("T")
@@ -32,30 +34,43 @@ RPC_MSG = Tuple[Optional[Future[T]], Tuple[str, Sequence[Any]]]
 class ComposableTemplate(Template):
     def __add__(self, other: Union[str, Template]) -> ComposableTemplate:
         return ComposableTemplate(
-            self.template + (other if type(other) is str else other.template)
+            self.template
+            + (
+                cast(str, other)
+                if type(other) is str
+                else cast(Template, other).template
+            )
         )
 
     def __radd__(self, other: Union[str, Template]) -> ComposableTemplate:
         return ComposableTemplate(
-            (other if type(other) is str else other.template) + self.template
+            (cast(str, other) if type(other) is str else cast(Template, other).template)
+            + self.template
         )
 
 
-class RPC_FUNCTION:
-    def __init__(self, name: Optional[str], handler: Callable[..., T]) -> None:
+class RPC_FUNCTION(Generic[T]):
+    def __init__(
+        self,
+        name: Optional[str],
+        handler: Union[Callable[..., T], Callable[..., Awaitable[T]]],
+    ) -> None:
         self.name = name if name else handler.__qualname__
         self._rpcf = handler
 
-    def rpc(self, blocking: bool, args: Iterable[str]) -> ComposableTemplate:
+    def rpc(self, *args: str, blocking: bool = False) -> ComposableTemplate:
         op = "request" if blocking else "notify"
         _args = ", ".join(args)
-        return Template(f"lua vim.rpc{op}($chan, '{self.name}', {{{_args}}})")
+        call = f"lua vim.rpc{op}($chan, '{self.name}', {{{_args}}})"
+        return ComposableTemplate(call)
 
     async def __call__(self, nvim: Nvim, *args: Any) -> T:
         if iscoroutinefunction(self._rpcf):
-            return await self._rpcf(nvim, *args)
+            return await cast(Callable[..., Awaitable[T]], self._rpcf)(nvim, *args)
         else:
-            return await async_call(nvim, self._rpcf, nvim, *args)
+            return await async_call(
+                nvim, cast(Callable[..., T], self._rpcf), nvim, *args
+            )
 
 
 RPC_SPEC = Tuple[str, RPC_FUNCTION[T]]
