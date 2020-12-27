@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from os import name
 from typing import Any, ContextManager, Iterator, MutableSequence, Sequence, Tuple, cast
 
 from pynvim import Nvim, NvimError
@@ -13,7 +12,7 @@ class _A:
         self._name, self._parent = name, parent
 
     def __call__(self, *args: Any) -> None:
-        self._parent._instructions.append((name, args))
+        self._parent._instructions.append((self._name, args))
 
 
 class Atomic(ContextManager["Atomic"]):
