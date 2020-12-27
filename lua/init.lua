@@ -11,8 +11,8 @@ local on_stderr = function (_, msg)
 end
 
 
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+-- vim.g.mapleader = " "
+-- vim.g.maplocalleader = " "
 
 
 local chan = vim.fn.jobstart(

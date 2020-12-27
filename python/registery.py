@@ -1,4 +1,4 @@
-from typing import Sequence, Tuple
+from typing import Iterator, Sequence, Tuple
 
 from pynvim import Nvim
 
@@ -14,9 +14,14 @@ rpc = RPC()
 settings = Settings()
 
 
+def map_leader() -> Iterator[AtomicInstruction]:
+    yield "set_var", ("mapleader", " ")
+    yield "set_var", ("maplocalleader", " ")
+
+
 def drain(nvim: Nvim) -> Tuple[Sequence[AtomicInstruction], Sequence[RPC_SPEC]]:
     i1, s1 = autocmd.drain(nvim.channel_id)
     i2, s2 = keymap.drain(nvim.channel_id, None)
     s3 = rpc.drain()
     i4 = settings.drain(False)
-    return tuple((*i1, *i2, *i4)), tuple((*s1, *s2, *s3))
+    return tuple((*map_leader(), *i1, *i2, *i4)), tuple((*s1, *s2, *s3))

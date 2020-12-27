@@ -37,5 +37,5 @@ keymap.i("<c-f>") << "<c-x><c-f>"
 # omnifunc
 keymap.i("<c-o>") << "<c-x><c-o>"
 # userfunc
-keymap.nv("<c-space>") << None
+keymap.nv("<c-space>") << ""
 keymap.i("<c-space>") << "<c-x><c-u>"
