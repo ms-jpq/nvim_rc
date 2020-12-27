@@ -2,6 +2,7 @@ from typing import Sequence
 
 from pynvim.api.nvim import Buffer, Nvim
 
+from ..nvim.highlight import HLgroup, highlight
 from ..registery import atomic, autocmd, settings
 
 # use 256 colours
@@ -22,6 +23,16 @@ settings["number"] = True
 settings["cursorline"] = True
 # constant cursor styling
 settings["guicursor"] = ""
+
+
+@autocmd("InsertEnter")
+def hl_cursor(nvim: Nvim) -> None:
+    highlight(HLgroup("CursorLine", guibg="#f2d9fa")).commit(nvim)
+
+
+@autocmd("InsertLeave")
+def dehl_cursor(nvim: Nvim) -> None:
+    highlight(HLgroup("CursorLine", guibg="#f1f4f6")).commit(nvim)
 
 
 # remove welcome message

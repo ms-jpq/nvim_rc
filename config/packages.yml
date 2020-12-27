@@ -7,6 +7,14 @@
 
 - uri: https://github.com/ms-jpq/kok-t9
 
+- uri: https://github.com/honza/vim-snippets
+
+- uri: https://github.com/Shougo/neosnippet-snippets
+
 - uri: https://github.com/neovim/nvim-lspconfig
 
 - uri: https://github.com/sainnhe/edge
+
+- uri: https://github.com/liuchengxu/vim-which-key
+
+- uri: https://github.com/sheerun/vim-polyglot

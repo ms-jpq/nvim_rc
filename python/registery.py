@@ -2,13 +2,13 @@ from typing import Sequence, Tuple
 
 from pynvim import Nvim
 
-from .lib.rtp import rtp_packages
 from .nvim.atomic import Atomic
 from .nvim.autocmd import AutoCMD
 from .nvim.keymap import Keymap
 from .nvim.rpc import RPC, RpcSpec
+from .nvim.rtp import rtp_packages
 from .nvim.settings import Settings
-from .packages.git_rtp import plugins
+from .packages.vim import plugins
 
 atomic = Atomic()
 autocmd = AutoCMD()
