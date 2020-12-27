@@ -26,5 +26,5 @@ async def client(nvim: Nvim, rpcs: AsyncIterable[RpcMsg]) -> None:
         *(spec_q.put(spec) for spec in specs)
     )
 
-    await write(nvim, instructons)
+    await write(nvim, *instructons, sep="\n")
     await rpc_agent(nvim, specs=to_iter(spec_q), rpcs=rpcs)
