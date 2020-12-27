@@ -1,5 +1,15 @@
-from pynvim import Nvim
+from dataclasses import dataclass
+from typing import Mapping, Sequence
+
+from python.config.packages import InstallSpec
 
 
-async def finalize(nvim: Nvim) -> None:
-    pass
+@dataclass(frozen=True)
+class LspAttrs:
+    bin: str
+    args: Sequence[str]
+    filetypes: Sequence[str]
+    install: InstallSpec
+
+
+LspSpec = Mapping[str, LspAttrs]

@@ -4,6 +4,8 @@ mypy:
   args:
     - --
     - "%"
+  filetypes:
+    - python
   install:
     pip:
       - mypy
@@ -13,3 +15,6 @@ shellcheck:
   args:
     - --
     - "%"
+  filetypes:
+    - sh
+    - zsh
