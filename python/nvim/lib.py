@@ -96,12 +96,13 @@ async def async_call(nvim: Nvim, fn: Callable[..., T], *args: Any, **kwargs: Any
 
 
 async def write(
-    nvim: Nvim, message: Any, error: bool = False, flush: bool = True
+    nvim: Nvim,
+    val: Any,
+    *vals: Any,
+    sep: str = " ",
+    end: str = linesep,
+    error: bool = False,
 ) -> None:
     write = nvim.api.err_write if error else nvim.api.out_write
-
-    def cont() -> None:
-        msg = str(message) + (linesep if flush else "")
-        write(msg)
-
-    await async_call(nvim, cont)
+    msg = sep.join(str(v) for v in (val, *vals)) + end
+    await async_call(write, msg)

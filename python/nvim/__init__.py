@@ -11,5 +11,5 @@ from .lib import (
     write,
 )
 from .logging import log
-from .rpc import RPC, RPC_MSG, rpc_agent
+from .rpc import RPC, RpcMsg, rpc_agent
 from .settings import Settings

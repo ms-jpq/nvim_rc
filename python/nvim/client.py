@@ -13,12 +13,12 @@ from .logging import log, nvim_handler
 
 T = TypeVar("T")
 
-from .rpc import RPC_MSG
+from .rpc import RpcMsg
 
 
 class Client(Protocol):
     @abstractmethod
-    async def __call__(self, nvim: Nvim, rpcs: AsyncIterable[RPC_MSG[Any]]) -> None:
+    async def __call__(self, nvim: Nvim, rpcs: AsyncIterable[RpcMsg[Any]]) -> None:
         ...
 
 
@@ -28,12 +28,12 @@ async def _transq(simple: SimpleQueue[T]) -> AsyncIterator[T]:
         yield await loop.run_in_executor(None, simple.get)
 
 
-def on_err(error: str) -> None:
+def _on_err(error: str) -> None:
     log.error("%s", error)
 
 
 def run_client(nvim: Nvim, client: Client, log_level: int = WARN) -> None:
-    rpc_q = SimpleQueue[RPC_MSG[Any]]()
+    rpc_q = SimpleQueue[RpcMsg[Any]]()
     exe = ThreadPoolExecutor()
 
     def on_arpc(name: str, args: Sequence[Sequence[Any]]) -> None:
@@ -61,7 +61,7 @@ def run_client(nvim: Nvim, client: Client, log_level: int = WARN) -> None:
         loop: AbstractEventLoop = nvim.loop
         loop.set_default_executor(exe)
         nvim.run_loop(
-            err_cb=on_err,
+            err_cb=_on_err,
             notification_cb=on_arpc,
             request_cb=on_rpc,
         )

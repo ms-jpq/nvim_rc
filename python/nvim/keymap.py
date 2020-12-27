@@ -3,7 +3,6 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from string import Template
 from typing import (
-    Callable,
     Iterable,
     Iterator,
     MutableMapping,
@@ -12,13 +11,11 @@ from typing import (
     Tuple,
     TypeVar,
     Union,
-    cast,
 )
 
 from pynvim.api import Buffer
 
 from .lib import AtomicInstruction
-from .rpc import RPC_SPEC
 
 T = TypeVar("T")
 
@@ -39,18 +36,16 @@ class _K:
     def __init__(
         self,
         lhs: str,
-        blocking: bool,
         modes: Iterable[str],
         options: _KeymapOpts,
         parent: Keymap,
     ) -> None:
         self._lhs, self._modes = lhs, modes
-        self._blk = blocking
         self._opts, self._parent = options, parent
 
     def __lshift__(self, rhs: Union[str, Template]) -> None:
         for mode in self._modes:
-            self._parent._mappings[(mode, self._lhs)] = (self._blk, self._opts, rhs)
+            self._parent._mappings[(mode, self._lhs)] = (self._opts, rhs)
 
 
 class _KM:
@@ -60,7 +55,6 @@ class _KM:
     def __call__(
         self,
         lhs: str,
-        blocking: bool = False,
         noremap: bool = True,
         silent: bool = True,
         expr: bool = False,
@@ -77,7 +71,6 @@ class _KM:
 
         return _K(
             lhs=lhs,
-            blocking=blocking,
             modes=self._modes,
             options=opts,
             parent=self._parent,
@@ -88,7 +81,7 @@ class Keymap:
     def __init__(self) -> None:
         self._mappings: MutableMapping[
             Tuple[str, str],
-            Tuple[bool, _KeymapOpts, Union[str, Template]],
+            Tuple[_KeymapOpts, Union[str, Template]],
         ] = {}
 
     def __getattr__(self, modes: str) -> _KM:
@@ -101,7 +94,7 @@ class Keymap:
     def drain(self, chan: int, buf: Optional[Buffer]) -> Sequence[AtomicInstruction]:
         def it() -> Iterator[AtomicInstruction]:
             while self._mappings:
-                (mode, lhs), (blocking, opts, rhs) = self._mappings.popitem()
+                (mode, lhs), (opts, rhs) = self._mappings.popitem()
                 if type(rhs) is str and buf is None:
                     yield ("set_keymap", (mode, lhs, rhs, asdict(opts)))
 

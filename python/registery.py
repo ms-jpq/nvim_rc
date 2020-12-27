@@ -5,7 +5,7 @@ from pynvim import Nvim
 from .nvim.autocmd import AutoCMD
 from .nvim.keymap import Keymap
 from .nvim.lib import AtomicInstruction
-from .nvim.rpc import RPC, RPC_SPEC
+from .nvim.rpc import RPC, RpcSpec
 from .nvim.settings import Settings
 
 autocmd = AutoCMD()
@@ -19,7 +19,7 @@ def map_leader() -> Iterator[AtomicInstruction]:
     yield "set_var", ("maplocalleader", " ")
 
 
-def drain(nvim: Nvim) -> Tuple[Sequence[AtomicInstruction], Sequence[RPC_SPEC]]:
+def drain(nvim: Nvim) -> Tuple[Sequence[AtomicInstruction], Sequence[RpcSpec]]:
     i1, s1 = autocmd.drain(nvim.channel_id)
     i2 = keymap.drain(nvim.channel_id, None)
     s2 = rpc.drain()

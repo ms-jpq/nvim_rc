@@ -12,7 +12,7 @@ from typing import (
 )
 
 from .lib import AtomicInstruction
-from .rpc import RPC_FUNCTION, RPC_SPEC
+from .rpc import RpcCallable, RpcSpec
 
 T = TypeVar("T")
 
@@ -28,7 +28,7 @@ class _AuParams:
 
 class AutoCMD:
     def __init__(self) -> None:
-        self._autocmds: MutableMapping[str, Tuple[_AuParams, RPC_FUNCTION[Any]]] = {}
+        self._autocmds: MutableMapping[str, Tuple[_AuParams, RpcCallable[Any]]] = {}
 
     def __call__(
         self,
@@ -39,7 +39,7 @@ class AutoCMD:
         modifiers: Iterable[str] = (),
         args: Iterable[str] = (),
         blocking: bool = False,
-    ) -> Callable[[Callable[..., T]], RPC_FUNCTION[T]]:
+    ) -> Callable[[Callable[..., T]], RpcCallable[T]]:
         param = _AuParams(
             blocking=blocking,
             events=tuple((event, *events)),
@@ -48,8 +48,8 @@ class AutoCMD:
             args=args,
         )
 
-        def decor(handler: Callable[..., T]) -> RPC_FUNCTION[T]:
-            wrapped = RPC_FUNCTION(name=name, handler=handler)
+        def decor(handler: Callable[..., T]) -> RpcCallable[T]:
+            wrapped = RpcCallable(name=name, handler=handler)
             self._autocmds[wrapped.name] = (param, wrapped)
             return wrapped
 
@@ -57,8 +57,8 @@ class AutoCMD:
 
     def drain(
         self, chan: int
-    ) -> Tuple[Sequence[AtomicInstruction], Sequence[RPC_SPEC]]:
-        def it() -> Iterator[Tuple[Sequence[AtomicInstruction], RPC_SPEC]]:
+    ) -> Tuple[Sequence[AtomicInstruction], Sequence[RpcSpec]]:
+        def it() -> Iterator[Tuple[Sequence[AtomicInstruction], RpcSpec]]:
             while self._autocmds:
                 name, (param, func) = self._autocmds.popitem()
                 events = ",".join(param.events)

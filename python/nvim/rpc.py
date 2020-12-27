@@ -28,7 +28,7 @@ from .logging import log
 
 T = TypeVar("T")
 
-RPC_MSG = Tuple[Optional[Future[T]], Tuple[str, Sequence[Any]]]
+RpcMsg = Tuple[Optional[Future[T]], Tuple[str, Sequence[Any]]]
 
 
 class ComposableTemplate(Template):
@@ -49,7 +49,7 @@ class ComposableTemplate(Template):
         )
 
 
-class RPC_FUNCTION(Generic[T]):
+class RpcCallable(Generic[T]):
     def __init__(
         self,
         name: Optional[str],
@@ -73,25 +73,25 @@ class RPC_FUNCTION(Generic[T]):
             )
 
 
-RPC_SPEC = Tuple[str, RPC_FUNCTION[T]]
+RpcSpec = Tuple[str, RpcCallable[T]]
 
 
 class RPC:
     def __init__(self) -> None:
-        self._handlers: MutableMapping[str, RPC_FUNCTION[Any]] = {}
+        self._handlers: MutableMapping[str, RpcCallable[Any]] = {}
 
     def __call__(
         self, name: Optional[str] = None
-    ) -> Callable[[Callable[..., T]], RPC_FUNCTION[T]]:
-        def decor(handler: Callable[..., T]) -> RPC_FUNCTION[T]:
-            wraped = RPC_FUNCTION(name=name, handler=handler)
+    ) -> Callable[[Callable[..., T]], RpcCallable[T]]:
+        def decor(handler: Callable[..., T]) -> RpcCallable[T]:
+            wraped = RpcCallable(name=name, handler=handler)
             self._handlers[wraped.name] = wraped
             return wraped
 
         return decor
 
-    def drain(self) -> Sequence[RPC_SPEC]:
-        def it() -> Iterator[RPC_SPEC]:
+    def drain(self) -> Sequence[RpcSpec]:
+        def it() -> Iterator[RpcSpec]:
             while self._handlers:
                 name, hldr = self._handlers.popitem()
                 yield name, hldr
@@ -99,19 +99,19 @@ class RPC:
         return tuple(it())
 
 
-def _nil_handler(name: str) -> RPC_FUNCTION:
+def _nil_handler(name: str) -> RpcCallable:
     def handler(nvim: Nvim, *args: Any) -> None:
         log.warn("MISSING RPC HANDLER FOR: %s - %s", name, args)
 
-    return RPC_FUNCTION(name=name, handler=handler)
+    return RpcCallable(name=name, handler=handler)
 
 
 async def rpc_agent(
     nvim: Nvim,
-    specs: AsyncIterable[RPC_SPEC[Any]],
-    rpcs: AsyncIterable[RPC_MSG[Any]],
+    specs: AsyncIterable[RpcSpec[Any]],
+    rpcs: AsyncIterable[RpcMsg[Any]],
 ) -> None:
-    handlers: MutableMapping[str, RPC_FUNCTION[Any]] = {}
+    handlers: MutableMapping[str, RpcCallable[Any]] = {}
 
     async def poll_spec() -> None:
         async for name, handler in specs:
