@@ -1,3 +1,2 @@
 ---
-edge:
-  uri: https://github.com/sainnhe/edge.git
+- uri: https://github.com/sainnhe/edge.git

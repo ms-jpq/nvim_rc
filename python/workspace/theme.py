@@ -22,4 +22,4 @@ settings["guicursor"] = ""
 
 # light theme
 settings["background"] = "light"
-atomic.command("colorscheme", "edge")
+atomic.command("colorscheme edge")
