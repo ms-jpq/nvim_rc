@@ -5,13 +5,14 @@ from typing import (
     Iterable,
     Iterator,
     MutableMapping,
+    Optional,
     Sequence,
     Tuple,
     TypeVar,
 )
 
 from .lib import AtomicInstruction
-from .rpc import RPC_FUNCTION, RPC_SPEC, lua_rpc_literal
+from .rpc import RPC_FUNCTION, RPC_SPEC
 
 T = TypeVar("T")
 
@@ -31,9 +32,9 @@ class AutoCMD:
 
     def __call__(
         self,
-        name: str,
         *,
         events: Iterable[str],
+        name: Optional[str] = None,
         filters: Iterable[str] = ("*",),
         modifiers: Iterable[str] = (),
         args: Iterable[str] = (),
@@ -47,9 +48,10 @@ class AutoCMD:
             args=args,
         )
 
-        def decor(rpc_f: Callable[..., T]) -> RPC_FUNCTION[T]:
-            self._autocmds[name] = (param, rpc_f)
-            return rpc_f
+        def decor(handler: Callable[..., T]) -> RPC_FUNCTION[T]:
+            wrapped = RPC_FUNCTION(name=name, handler=handler)
+            self._autocmds[wrapped.name] = (param, wrapped)
+            return wrapped
 
         return decor
 
@@ -62,9 +64,7 @@ class AutoCMD:
                 events = ",".join(param.events)
                 filters = " ".join(param.filters)
                 modifiers = " ".join(param.modifiers)
-                lua = lua_rpc_literal(
-                    chan, blocking=param.blocking, name=name, args=param.args
-                )
+                lua = func.rpc(param.blocking, args=param.args).substitute(chan=chan)
 
                 yield (
                     ("command", (f"augroup ch_{chan}_{name}",)),

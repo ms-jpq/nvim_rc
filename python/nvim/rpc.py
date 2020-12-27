@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 from asyncio import gather
 from asyncio.coroutines import iscoroutinefunction
 from concurrent.futures import Future
 from os import linesep
+from string import Template
 from typing import (
     Any,
     AsyncIterable,
@@ -10,36 +13,52 @@ from typing import (
     Iterator,
     MutableMapping,
     Optional,
-    Protocol,
     Sequence,
     Tuple,
     TypeVar,
     Union,
-    cast,
 )
 
 from pynvim import Nvim
 
-from .lib import async_call, create_task
+from .lib import T, async_call, create_task
 from .logging import log
 
-T_co = TypeVar("T_co", covariant=True)
+T = TypeVar("T")
 
-RPC_MSG = Tuple[Optional[Future[T_co]], Tuple[str, Sequence[Any]]]
-
-
-class RPC_FN(Protocol[T_co]):
-    def __call__(self, nvim: Nvim, *args: Any) -> T_co:
-        ...
+RPC_MSG = Tuple[Optional[Future[T]], Tuple[str, Sequence[Any]]]
 
 
-class RPC_AFN(Protocol[T_co]):
-    async def __call__(self, nvim: Nvim, *args: Any) -> T_co:
-        ...
+class ComposableTemplate(Template):
+    def __add__(self, other: Union[str, Template]) -> ComposableTemplate:
+        return ComposableTemplate(
+            self.template + (other if type(other) is str else other.template)
+        )
+
+    def __radd__(self, other: Union[str, Template]) -> ComposableTemplate:
+        return ComposableTemplate(
+            (other if type(other) is str else other.template) + self.template
+        )
 
 
-RPC_FUNCTION = Union[RPC_FN[T_co], RPC_AFN[T_co]]
-RPC_SPEC = Tuple[str, RPC_FUNCTION[T_co]]
+class RPC_FUNCTION:
+    def __init__(self, name: Optional[str], handler: Callable[..., T]) -> None:
+        self.name = name if name else handler.__qualname__
+        self._rpcf = handler
+
+    def rpc(self, blocking: bool, args: Iterable[str]) -> ComposableTemplate:
+        op = "request" if blocking else "notify"
+        _args = ", ".join(args)
+        return Template(f"lua vim.rpc{op}($chan, '{self.name}', {{{_args}}})")
+
+    async def __call__(self, nvim: Nvim, *args: Any) -> T:
+        if iscoroutinefunction(self._rpcf):
+            return await self._rpcf(nvim, *args)
+        else:
+            return await async_call(nvim, self._rpcf, nvim, *args)
+
+
+RPC_SPEC = Tuple[str, RPC_FUNCTION[T]]
 
 
 class RPC:
@@ -47,11 +66,12 @@ class RPC:
         self._handlers: MutableMapping[str, RPC_FUNCTION[Any]] = {}
 
     def __call__(
-        self, name: str
-    ) -> Callable[[Callable[..., T_co]], RPC_FUNCTION[T_co]]:
-        def decor(rpc_f: Callable[..., T_co]) -> RPC_FUNCTION[T_co]:
-            self._handlers[name] = rpc_f
-            return rpc_f
+        self, name: Optional[str] = None
+    ) -> Callable[[Callable[..., T]], RPC_FUNCTION[T]]:
+        def decor(handler: Callable[..., T]) -> RPC_FUNCTION[T]:
+            wraped = RPC_FUNCTION(name=name, handler=handler)
+            self._handlers[wraped.name] = wraped
+            return wraped
 
         return decor
 
@@ -64,20 +84,11 @@ class RPC:
         return tuple(it())
 
 
-def _nil_handler(name: str) -> RPC_FN:
+def _nil_handler(name: str) -> RPC_FUNCTION:
     def handler(nvim: Nvim, *args: Any) -> None:
         log.warn("MISSING RPC HANDLER FOR: %s - %s", name, args)
 
-    return handler
-
-
-async def _invoke_handler(
-    nvim: Nvim, hldr: RPC_FUNCTION[T_co], args: Sequence[Any]
-) -> T_co:
-    if iscoroutinefunction(hldr):
-        return await cast(RPC_AFN[T_co], hldr)(nvim, *args)
-    else:
-        return await async_call(nvim, cast(RPC_FN[T_co], hldr), nvim, *args)
+    return RPC_FUNCTION(name=name, handler=handler)
 
 
 async def rpc_agent(
@@ -88,14 +99,14 @@ async def rpc_agent(
     handlers: MutableMapping[str, RPC_FUNCTION[Any]] = {}
 
     async def poll_spec() -> None:
-        async for name, hldr in specs:
-            handlers[name] = hldr
+        async for name, handler in specs:
+            handlers[name] = handler
 
     async def poll_rpc() -> None:
         async for fut, (name, args) in rpcs:
-            hldr = handlers.get(name, _nil_handler(name))
+            handler = handlers.get(name, _nil_handler(name))
             try:
-                ret = await _invoke_handler(nvim, hldr, args)
+                ret = await handler(nvim, *args)
             except Exception as e:
                 if fut and not fut.cancelled():
                     fut.set_exception(e)
@@ -107,11 +118,3 @@ async def rpc_agent(
                     fut.set_result(ret)
 
     await gather(create_task(poll_spec()), create_task(poll_rpc()))
-
-
-def lua_rpc_literal(
-    chan: int, blocking: bool, name: str, args: Iterable[str] = ()
-) -> str:
-    op = "request" if blocking else "notify"
-    _args = ", ".join(args)
-    return f"lua vim.rpc{op}({chan}, '{name}', {{{_args}}})"
