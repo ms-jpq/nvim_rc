@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Any, Mapping, Sequence
 
 from pynvim.api.nvim import Buffer, Nvim
 
@@ -36,9 +36,9 @@ def dehl_cursor(nvim: Nvim) -> None:
 
 
 # highlight yank
-@autocmd("TextYankPost")
-def hl_yank(nvim: Nvim) -> None:
-    nvim.lua("require('vim/highlight').on_yank()")
+@autocmd("TextYankPost", args=("vim.v.event",))
+def hl_yank(nvim: Nvim, ev: Mapping[str, Any]) -> None:
+    nvim.lua.vim.highlight.on_yank({"event": ev})
 
 
 # remove welcome message

@@ -15,3 +15,5 @@ VARS_DIR = TOP_LEVEL / "vars"
 VIM_DIR = VARS_DIR / "vim_modules"
 PIP_DIR = VARS_DIR / "pip_modules"
 NPM_DIR = VARS_DIR / "node_modules"
+
+BINS = (TOP_LEVEL / "bin", PIP_DIR / "bin", NPM_DIR / ".bin")
