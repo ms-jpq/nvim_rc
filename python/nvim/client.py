@@ -47,7 +47,7 @@ def run_client(nvim: Nvim, client: Client, log_level: int = WARN) -> None:
         except Exception as e:
             fmt = f"ERROR IN RPC FOR: %s - %s{linesep}%s"
             log.exception(fmt, name, args, e)
-            return None
+            raise
 
     async def main() -> None:
         loop = get_running_loop()

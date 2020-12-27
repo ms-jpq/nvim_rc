@@ -21,5 +21,5 @@ def new_window(nvim: Nvim, vertical: bool) -> None:
     nvim.api.win_set_buf(win, buf)
 
 
-keymap.n("<leader>=", unique=True) << "<cmd>" + new_window.call_line("true", blocking=True) + "<cr>"
+keymap.n("<leader>=", unique=True) << "<cmd>" + new_window.call_line("true") + "<cr>"
 keymap.n("<leader>-", unique=True) << "<cmd>" + new_window.call_line("false") + "<cr>"
