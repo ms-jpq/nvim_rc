@@ -1,4 +1,4 @@
-from ..registery import settings
+from ..registery import atomic, settings
 
 # use 256 colours
 settings["termguicolors"] = True
@@ -18,3 +18,8 @@ settings["number"] = True
 settings["cursorline"] = True
 # constant cursor styling
 settings["guicursor"] = ""
+
+
+# light theme
+settings["background"] = "light"
+atomic.command("colorscheme", "edge")

@@ -18,8 +18,8 @@ keymap.n("X") << '"_X'
 
 keymap.nv("d") << '"_d'
 keymap.nv("D") << '"_D'
-keymap.nc("c") << '"_c'
-keymap.nc("C") << '"_C'
+keymap.nv("c") << '"_c'
+keymap.nv("C") << '"_C'
 
 
 # leave cursor 1 behind instead of before
