@@ -25,7 +25,7 @@ T = TypeVar("T")
 AtomicInstruction = Tuple[str, Sequence[Any]]
 
 
-async def go(aw: Awaitable[T]) -> Awaitable[T]:
+def go(aw: Awaitable[T]) -> Awaitable[T]:
     async def wrapper() -> T:
         try:
             return await aw
