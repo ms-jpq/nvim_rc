@@ -1,8 +1,8 @@
 from asyncio.events import get_running_loop
-from asyncio.tasks import Task, create_task
+from asyncio.tasks import create_task
 from concurrent.futures import Future
 from os import linesep
-from typing import Any, Awaitable, Callable, Optional, TypeVar
+from typing import Any, Awaitable, Callable, TypeVar
 
 from pynvim import Nvim
 
@@ -47,11 +47,7 @@ def write(
     sep: str = " ",
     end: str = linesep,
     error: bool = False,
-    sync: bool = True
-) -> Optional[Task[None]]:
+) -> None:
     write = nvim.api.err_write if error else nvim.api.out_write
     msg = sep.join(str(v) for v in (val, *vals)) + end
-    if sync:
-        write(msg)
-    else:
-        return go(async_call(nvim, write, msg))
+    go(async_call(nvim, write, msg))

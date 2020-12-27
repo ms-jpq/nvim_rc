@@ -4,7 +4,7 @@ from typing import AsyncIterable, AsyncIterator, TypeVar
 
 from pynvim import Nvim
 
-from ._registery import __
+from ._registery import ____
 from .nvim.client import RpcMsg
 from .nvim.lib import async_call, write
 from .nvim.rpc import RpcSpec, rpc_agent
@@ -20,7 +20,7 @@ async def _to_iter(queue: Queue[T]) -> AsyncIterator[T]:
 
 async def client(nvim: Nvim, rpcs: AsyncIterable[RpcMsg]) -> None:
     spec_q = Queue[RpcSpec]()
-    atomic, specs = drain(nvim)
+    atomic, specs = await async_call(nvim, drain, nvim)
     await gather(
         async_call(
             nvim,
@@ -30,5 +30,5 @@ async def client(nvim: Nvim, rpcs: AsyncIterable[RpcMsg]) -> None:
         *(spec_q.put(spec) for spec in specs)
     )
 
-    await write(nvim, *atomic, sep="\n")
+    write(nvim, *atomic, sep="\n")
     await rpc_agent(nvim, specs=_to_iter(spec_q), rpcs=rpcs)

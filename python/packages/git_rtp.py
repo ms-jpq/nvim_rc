@@ -7,13 +7,13 @@ from yaml import load
 
 from ..consts import CONF_PACKAGES, VIM_DIR
 from ..nvim.atomic import Atomic
-from pathlib import PurePath
+from pathlib import PurePath, Path
 from urllib.parse import urlparse
 
 
-def _p_name(uri: str) -> str:
+def _p_name(uri: str) -> Path:
     url = urlparse(uri).path
-    return PurePath(url).name
+    return VIM_DIR / PurePath(url).stem
 
 
 def packages(nvim: Nvim) -> Atomic:
@@ -22,10 +22,14 @@ def packages(nvim: Nvim) -> Atomic:
 
     atomic = Atomic()
     head, *tail = nvim.list_runtime_paths()
-    rtp = ",".join((head, *tail))
-    atomic.commit(f"set runtimepath={rtp}")
+    rtp = ",".join((head, *(map(str, plugins)), *tail))
+    atomic.command(f"set runtimepath={rtp}")
 
-    for plug in plugins:
-        path = VIM_DIR / plug
+    for path in plugins:
+        plug = path / "plugin"
+        if plug.exists():
+            for vim_script in walk(plug):
+                if vim_script.suffix == ".vim":
+                    atomic.command("source", str(vim_script))
 
     return atomic
