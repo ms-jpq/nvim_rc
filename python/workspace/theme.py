@@ -49,6 +49,4 @@ def welcome_screen(nvim: Nvim) -> None:
 
 # light theme
 settings["background"] = "light"
-atomic.set_var("edge_style", "neon")
-atomic.set_var("edge_menu_selection_background", "purple")
 atomic.command("colorscheme edge")

@@ -41,6 +41,5 @@ keymap.nv("<c-space>") << ""
 keymap.i("<c-space>") << "<c-x><c-u>"
 
 
-# KOK
-keymap.n("gz") << "<cmd>KoKstart<cr>"
+# TODO -- remove this
 settings["completefunc"] = "KoKomnifunc"

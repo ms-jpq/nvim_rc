@@ -1,11 +1,19 @@
 ---
 - uri: https://github.com/ms-jpq/chadtree
+  keys:
+    - modes: n
+      maps:
+        "<leader>v": "<cmd>CHADopen<cr>"
 
 - uri: https://github.com/ms-jpq/kok.nvim
 
 - uri: https://github.com/ms-jpq/kok-snippets
 
 - uri: https://github.com/ms-jpq/kok-t9
+  keys:
+    - modes: n
+      maps:
+        "gz": "<cmd>KoKstart<cr>"
 
 - uri: https://github.com/honza/vim-snippets
 
@@ -13,8 +21,51 @@
 
 - uri: https://github.com/neovim/nvim-lspconfig
 
+- uri: https://github.com/junegunn/fzf
+
+- uri: https://github.com/junegunn/fzf.vim
+  vals:
+    fzf_buffers_jump: True
+    fzf_preview_window: right:wrap
+    fzf_layout:
+      window:
+        width: 0.9
+        height: 0.9
+  keys:
+    - modes: n
+      maps:
+        "<c-p>": "<cmd>Commands<cr>"
+        "<c-n>": "<cmd>History:<cr>"
+        "<leader>p": "<cmd>Files<cr>"
+        "<leader>P": "<cmd>History<cr>"
+        "<leader>o": "<cmd>BLines<cr>"
+        "<leader>I": "<cmd>Buffers<cr>"
+    - modes: n
+      opts:
+        silent: False
+      maps:
+        "<leader>O": ":Rg "
+
 - uri: https://github.com/sainnhe/edge
+  vals:
+    edge_style: neon
+    edge_menu_selection_background: purple
+
+- uri: https://github.com/itchyny/lightline.vim
+  vals:
+    lightline:
+      colorscheme: edge
 
 - uri: https://github.com/liuchengxu/vim-which-key
+  keys:
+    - modes: n
+      maps:
+        "<leader>": "<cmd>WhichKey '<space>'<cr>"
+        "[": "<cmd>WhichKey '['<cr>"
+        "]": "<cmd>WhichKey ']'<cr>"
+
+- uri: https://github.com/tpope/vim-sleuth
+
+- uri: https://github.com/Raimondi/delimitMate
 
 - uri: https://github.com/sheerun/vim-polyglot

@@ -9,7 +9,7 @@ from .editor import (
     whitespace,
 )
 from .modes import command, normal, poly, terminal, visual
-from .workspace import help, input, navigation, theme, wm, misc
+from .workspace import input, navigation, theme, wm, misc
 from .version_control import git
 
 ____ = None
