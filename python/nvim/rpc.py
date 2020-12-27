@@ -31,9 +31,9 @@ T = TypeVar("T")
 RpcMsg = Tuple[Optional[Future[T]], Tuple[str, Sequence[Any]]]
 
 
-class ComposableTemplate(Template):
-    def __add__(self, other: Union[str, Template]) -> ComposableTemplate:
-        return ComposableTemplate(
+class _ComposableTemplate(Template):
+    def __add__(self, other: Union[str, Template]) -> _ComposableTemplate:
+        return _ComposableTemplate(
             self.template
             + (
                 cast(str, other)
@@ -42,8 +42,8 @@ class ComposableTemplate(Template):
             )
         )
 
-    def __radd__(self, other: Union[str, Template]) -> ComposableTemplate:
-        return ComposableTemplate(
+    def __radd__(self, other: Union[str, Template]) -> _ComposableTemplate:
+        return _ComposableTemplate(
             (cast(str, other) if type(other) is str else cast(Template, other).template)
             + self.template
         )
@@ -55,16 +55,14 @@ class RpcCallable(Generic[T]):
         name: Optional[str],
         handler: Union[Callable[..., T], Callable[..., Awaitable[T]]],
     ) -> None:
-        self.name = (
-            name if name else f"{handler.__module__}.{handler.__qualname__}"
-        )
+        self.name = name if name else f"{handler.__module__}.{handler.__qualname__}"
         self._rpcf = handler
 
-    def call_line(self, *args: str, blocking: bool = False) -> ComposableTemplate:
+    def call_line(self, *args: str, blocking: bool = False) -> _ComposableTemplate:
         op = "request" if blocking else "notify"
         _args = ", ".join(args)
         call = f"lua vim.rpc{op}($chan, '{self.name}', {{{_args}}})"
-        return ComposableTemplate(call)
+        return _ComposableTemplate(call)
 
     async def __call__(self, nvim: Nvim, *args: Any) -> T:
         if iscoroutinefunction(self._rpcf):
