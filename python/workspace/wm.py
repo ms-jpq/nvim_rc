@@ -16,20 +16,20 @@ settings["splitright"] = True
 settings["splitbelow"] = True
 
 # move between windows
-keymap.n("<c-left>", "<cmd>wincmd h<cr>")
-keymap.n("<c-right>", "<cmd>wincmd l<cr>")
-keymap.n("<c-up>", "<cmd>wincmd k<cr>")
-keymap.n("<c-down>", "<cmd>wincmd j<cr>")
+keymap.n("<c-left>") << "<cmd>wincmd h<cr>"
+keymap.n("<c-right>") << "<cmd>wincmd l<cr>"
+keymap.n("<c-up>") << "<cmd>wincmd k<cr>"
+keymap.n("<c-down>") << "<cmd>wincmd j<cr>"
 
 # swap windows
-keymap.n("<leader>'", "<cmd>wincmd r<cr>")
-keymap.n("<leader>;", "<cmd>wincmd R<cr>")
+keymap.n("<leader>'") << "<cmd>wincmd r<cr>"
+keymap.n("<leader>;") << "<cmd>wincmd R<cr>"
 
 # move windows
-keymap.n("<s-left>", "<cmd>wincmd H<cr>")
-keymap.n("<s-right>", "<cmd>wincmd L<cr>")
-keymap.n("<s-up>", "<cmd>wincmd K<cr>")
-keymap.n("<s-down>", "<cmd>wincmd J<cr>")
+keymap.n("<s-left>") << "<cmd>wincmd H<cr>"
+keymap.n("<s-right>") << "<cmd>wincmd L<cr>"
+keymap.n("<s-up>") << "<cmd>wincmd K<cr>"
+keymap.n("<s-down>") << "<cmd>wincmd J<cr>"
 
 
 @rpc()

@@ -35,6 +35,12 @@ def dehl_cursor(nvim: Nvim) -> None:
     highlight(HLgroup("CursorLine", guibg="#f1f4f6")).commit(nvim)
 
 
+# highlight yank
+@autocmd("TextYankPost")
+def hl_yank(nvim: Nvim) -> None:
+    nvim.lua("require('vim/highlight').on_yank()")
+
+
 # remove welcome message
 settings["shortmess"] += "I"
 # welcome screen
