@@ -18,12 +18,12 @@ def buffer_lock(nvim: Nvim, b1: Optional[Buffer] = None) -> Iterator[Buffer]:
     try:
         yield b1
     finally:
-        with Atomic() as a:
-            a.get_current_buf()
-            a.buf_get_var(b1, "changetick")
-        b2, c2 = a.execute(nvim)
+        with Atomic() as (a, ns):
+            ns.b2 = a.get_current_buf()
+            ns.c2 = a.buf_get_var(b1, "changetick")
+        a.commit(nvim)
 
-        if not (b2 == b1 and c2 == c1):
+        if not (ns.b2 == b1 and ns.c2 == c1):
             raise LockBroken()
 
 

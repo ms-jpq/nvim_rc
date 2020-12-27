@@ -24,7 +24,7 @@ async def client(nvim: Nvim, rpcs: AsyncIterable[RpcMsg]) -> None:
     await gather(
         async_call(
             nvim,
-            atomic.execute,
+            atomic.commit,
             nvim,
         ),
         *(spec_q.put(spec) for spec in specs)
