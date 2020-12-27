@@ -105,4 +105,4 @@ async def write(
 ) -> None:
     write = nvim.api.err_write if error else nvim.api.out_write
     msg = sep.join(str(v) for v in (val, *vals)) + end
-    await async_call(write, msg)
+    await async_call(nvim, write, msg)
