@@ -55,7 +55,9 @@ class RpcCallable(Generic[T]):
         name: Optional[str],
         handler: Union[Callable[..., T], Callable[..., Awaitable[T]]],
     ) -> None:
-        self.name = name if name else handler.__qualname__
+        self.name = (
+            name if name else f"{handler.__module__}.{handler.__qualname__}"
+        )
         self._rpcf = handler
 
     def call_line(self, *args: str, blocking: bool = False) -> ComposableTemplate:

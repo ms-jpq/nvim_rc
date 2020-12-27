@@ -69,7 +69,7 @@ class AutoCMD:
                 )
 
                 yield (
-                    ("command", (f"augroup ch_{chan}_{name}",)),
+                    ("command", (f"augroup ch_{chan}.{name}",)),
                     ("command", ("autocmd!",)),
                     ("command", (f"autocmd {events} {filters} {modifiers} {call}",)),
                     ("command", ("augroup END",)),
