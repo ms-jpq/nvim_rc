@@ -19,6 +19,6 @@ def rtp_packages(nvim: Nvim, plugins: Iterable[Path]) -> Atomic:
         if plug.exists():
             scripts = (str(s) for s in walk(plug) if s.suffix == ".vim")
             for script in sorted(scripts, key=strxfrm):
-                atomic.command("source", script)
+                atomic.command(f"source {script}")
 
     return atomic

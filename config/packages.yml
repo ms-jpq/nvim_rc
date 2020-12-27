@@ -1,2 +1,12 @@
 ---
-- uri: https://github.com/sainnhe/edge.git
+- uri: https://github.com/ms-jpq/chadtree
+
+- uri: https://github.com/ms-jpq/kok.nvim
+
+- uri: https://github.com/ms-jpq/kok-snippets
+
+- uri: https://github.com/ms-jpq/kok-t9
+
+- uri: https://github.com/neovim/nvim-lspconfig
+
+- uri: https://github.com/sainnhe/edge

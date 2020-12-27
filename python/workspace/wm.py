@@ -5,10 +5,15 @@ from python.nvim.atomic import Atomic
 
 from ..registery import keymap, rpc, settings
 
+# CHADTree
+keymap.n("<leader>v") << "<cmd>CHADopen<cr>"
+
+
 # hide background buffers
 settings["hidden"] = True
 # reuse buf
 settings["switchbuf"] += ("useopen", "usetab")
+
 
 # modern split direction
 settings["splitright"] = True
