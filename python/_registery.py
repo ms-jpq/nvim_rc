@@ -1,8 +1,6 @@
 from .editor import (
     auto_comp,
     auto_save,
-    linter,
-    lsp,
     prettier,
     search,
     syntax,
