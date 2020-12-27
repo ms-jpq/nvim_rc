@@ -21,7 +21,7 @@ def map_leader() -> Iterator[AtomicInstruction]:
 
 def drain(nvim: Nvim) -> Tuple[Sequence[AtomicInstruction], Sequence[RPC_SPEC]]:
     i1, s1 = autocmd.drain(nvim.channel_id)
-    i2, s2 = keymap.drain(nvim.channel_id, None)
-    s3 = rpc.drain()
+    i2 = keymap.drain(nvim.channel_id, None)
+    s2 = rpc.drain()
     i4 = settings.drain(False)
-    return tuple((*map_leader(), *i1, *i2, *i4)), tuple((*s1, *s2, *s3))
+    return tuple((*map_leader(), *i1, *i2, *i4)), tuple((*s1, *s2))

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+from string import Template
 from typing import (
-    Any,
     Callable,
     Iterable,
     Iterator,
@@ -18,7 +18,7 @@ from typing import (
 from pynvim.api import Buffer
 
 from .lib import AtomicInstruction
-from .rpc import RPC_FUNCTION, RPC_SPEC, lua_rpc_literal
+from .rpc import RPC_SPEC
 
 T = TypeVar("T")
 
@@ -48,14 +48,9 @@ class _K:
         self._blk = blocking
         self._opts, self._parent = options, parent
 
-    def __lshift__(self, rhs: Optional[str]) -> None:
+    def __lshift__(self, rhs: Union[str, Template]) -> None:
         for mode in self._modes:
             self._parent._mappings[(mode, self._lhs)] = (self._blk, self._opts, rhs)
-
-    def __call__(self, rhs: Callable[..., T]) -> RPC_FUNCTION[T]:
-        for mode in self._modes:
-            self._parent._mappings[(mode, self._lhs)] = (self._blk, self._opts, rhs)
-        return rhs
 
 
 class _KM:
@@ -71,7 +66,7 @@ class _KM:
         expr: bool = False,
         nowait: bool = False,
         unique: bool = False,
-    ) -> Callable[[Callable[..., T]], RPC_FUNCTION[T]]:
+    ) -> _K:
         opts = _KeymapOpts(
             noremap=noremap,
             silent=silent,
@@ -93,7 +88,7 @@ class Keymap:
     def __init__(self) -> None:
         self._mappings: MutableMapping[
             Tuple[str, str],
-            Tuple[bool, _KeymapOpts, Union[str, None, RPC_FUNCTION[Any]]],
+            Tuple[bool, _KeymapOpts, Union[str, Template]],
         ] = {}
 
     def __getattr__(self, modes: str) -> _KM:
@@ -103,39 +98,24 @@ class Keymap:
         else:
             return _KM(modes=modes, parent=self)
 
-    def drain(
-        self, chan: int, buf: Optional[Buffer]
-    ) -> Tuple[Sequence[AtomicInstruction], Sequence[RPC_SPEC]]:
-        def it() -> Iterator[Tuple[AtomicInstruction, Optional[RPC_SPEC]]]:
+    def drain(self, chan: int, buf: Optional[Buffer]) -> Sequence[AtomicInstruction]:
+        def it() -> Iterator[AtomicInstruction]:
             while self._mappings:
                 (mode, lhs), (blocking, opts, rhs) = self._mappings.popitem()
-                if (rhs is None or type(rhs) is str) and buf is None:
-                    yield ("set_keymap", (mode, lhs, rhs, asdict(opts))), None
+                if type(rhs) is str and buf is None:
+                    yield ("set_keymap", (mode, lhs, rhs, asdict(opts)))
 
-                elif (rhs is None or type(rhs) is str) and buf is not None:
-                    yield ("buf_set_keymap", (buf, mode, lhs, rhs, asdict(opts))), None
+                elif type(rhs) is str and buf is not None:
+                    yield ("buf_set_keymap", (buf, mode, lhs, rhs, asdict(opts)))
 
-                elif callable(rhs) and buf is None:
-                    name = cast(Callable, rhs).__name__
-                    lua = lua_rpc_literal(chan, blocking=blocking, name=name)
-                    call = f"<cmd>{lua}<cr>"
-                    yield ("set_keymap", (mode, lhs, call, asdict(opts))), (name, rhs)
+                elif isinstance(rhs, Template) and buf is None:
+                    call = rhs.substitute(chan=chan)
+                    yield ("set_keymap", (mode, lhs, call, asdict(opts)))
 
-                elif callable(rhs) and buf is not None:
-                    name = cast(Callable, rhs).__name__
-                    lua = lua_rpc_literal(chan, blocking=blocking, name=name)
-                    call = f"<cmd>{lua}<cr>"
-                    yield ("buf_set_keymap", (buf, mode, lhs, call, asdict(opts))), (
-                        name,
-                        rhs,
-                    )
-
+                elif isinstance(rhs, Template) and buf is not None:
+                    call = rhs.substitute(chan=chan)
+                    yield ("buf_set_keymap", (buf, mode, lhs, call, asdict(opts)))
                 else:
                     assert False
 
-        try:
-            instructions, specs = zip(*it())
-        except ValueError:
-            instructions, specs = (), ()
-
-        return instructions, tuple(s for s in specs if s)
+        return tuple(it())

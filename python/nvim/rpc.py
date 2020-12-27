@@ -58,7 +58,7 @@ class RPC_FUNCTION(Generic[T]):
         self.name = name if name else handler.__qualname__
         self._rpcf = handler
 
-    def rpc(self, *args: str, blocking: bool = False) -> ComposableTemplate:
+    def call_line(self, *args: str, blocking: bool = False) -> ComposableTemplate:
         op = "request" if blocking else "notify"
         _args = ", ".join(args)
         call = f"lua vim.rpc{op}($chan, '{self.name}', {{{_args}}})"

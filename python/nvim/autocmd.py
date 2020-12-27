@@ -64,7 +64,7 @@ class AutoCMD:
                 events = ",".join(param.events)
                 filters = " ".join(param.filters)
                 modifiers = " ".join(param.modifiers)
-                call = func.rpc(*param.args, blocking=param.blocking).substitute(
+                call = func.call_line(*param.args, blocking=param.blocking).substitute(
                     chan=chan
                 )
 

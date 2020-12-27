@@ -8,7 +8,7 @@ settings["autowrite"] = True
 settings["autowriteall"] = True
 
 
-@autocmd("reload_file", events=("FocusGained", "BufEnter"))
+@autocmd("FocusGained", "BufEnter")
 def reload_file(nvim: Nvim) -> None:
     nvim.command("checktime")
 
