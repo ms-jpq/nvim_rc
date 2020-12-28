@@ -3,13 +3,12 @@ from typing import Sequence, Tuple
 
 from pynvim import Nvim
 
-from .components.packages import plugins
+from .components.pkgs import inst
 from .consts import BINS
 from .nvim.atomic import Atomic
 from .nvim.autocmd import AutoCMD
 from .nvim.keymap import Keymap
 from .nvim.rpc import RPC, RpcSpec
-from .nvim.rtp import rtp_packages
 from .nvim.settings import Settings
 
 for bin in BINS:
@@ -24,14 +23,13 @@ rpc = RPC()
 settings = Settings()
 
 
-_atomic = Atomic()
-_atomic.call_function("setenv", ("PATH", environ["PATH"]))
-_atomic.set_var("mapleader", " ")
-_atomic.set_var("maplocalleader", " ")
-
-
 def drain(nvim: Nvim) -> Tuple[Atomic, Sequence[RpcSpec]]:
-    a0 = rtp_packages(nvim, plugins=plugins)
+    _atomic = Atomic()
+    _atomic.call_function("setenv", ("PATH", environ["PATH"]))
+    _atomic.set_var("mapleader", " ")
+    _atomic.set_var("maplocalleader", " ")
+
+    a0 = inst(nvim)
     a1, s1 = autocmd.drain(nvim.channel_id)
     a2 = keymap.drain(nvim.channel_id, None)
     s2 = rpc.drain()

@@ -1,6 +1,4 @@
-local vim_home = vim.env["XDG_CONFIG_HOME"] .. "/nvim"
-local py_main = vim_home .. "/init.py"
-
+local py_main = vim.api.nvim_list_runtime_paths()[1] .. "/init.py"
 
 local on_exit = function (_, code)
   vim.api.nvim_err_writeln("EXITED - " .. code)

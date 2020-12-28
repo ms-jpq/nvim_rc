@@ -1,7 +1,10 @@
-from ..registery import keymap, settings
+from ..registery import settings
+
+
+# join only add 1 space
+settings["nojoinspaces"] = True
 
 tabsize = 2
-
 # how big are tabs ?
 settings["tabstop"] = tabsize
 # spaces remove on deletion
