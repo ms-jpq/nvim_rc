@@ -12,4 +12,4 @@ class LspAttrs:
     install: InstallSpec
 
 
-LspSpec = Mapping[str, LspAttrs]
+LspSpecs = Mapping[str, LspAttrs]

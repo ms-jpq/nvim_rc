@@ -4,10 +4,8 @@ from dataclasses import asdict, dataclass
 from string import Template
 from typing import (
     Iterable,
-    Iterator,
     MutableMapping,
     Optional,
-    Sequence,
     Tuple,
     TypeVar,
     Union,
@@ -21,7 +19,7 @@ T = TypeVar("T")
 
 
 @dataclass(frozen=True)
-class _KeymapOpts:
+class KeymapOpts:
     noremap: bool
     silent: bool
     expr: bool
@@ -37,7 +35,7 @@ class _K:
         self,
         lhs: str,
         modes: Iterable[str],
-        options: _KeymapOpts,
+        options: KeymapOpts,
         parent: Keymap,
     ) -> None:
         self._lhs, self._modes = lhs, modes
@@ -61,7 +59,7 @@ class _KM:
         nowait: bool = False,
         unique: bool = False,
     ) -> _K:
-        opts = _KeymapOpts(
+        opts = KeymapOpts(
             noremap=noremap,
             silent=silent,
             expr=expr,
@@ -81,7 +79,7 @@ class Keymap:
     def __init__(self) -> None:
         self._mappings: MutableMapping[
             Tuple[str, str],
-            Tuple[_KeymapOpts, Union[str, Template]],
+            Tuple[KeymapOpts, Union[str, Template]],
         ] = {}
 
     def __getattr__(self, modes: str) -> _KM:

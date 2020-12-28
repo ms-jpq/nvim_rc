@@ -19,4 +19,4 @@ class FmtAttrs:
     install: InstallSpec
 
 
-FmtSpec = Mapping[str, FmtAttrs]
+FmtSpecs = Mapping[str, FmtAttrs]

@@ -18,4 +18,4 @@ class LinterAttrs:
     install: InstallSpec
 
 
-LinterSpec = Mapping[str, LinterAttrs]
+LinterSpecs = Mapping[str, LinterAttrs]

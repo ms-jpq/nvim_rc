@@ -1,4 +1,6 @@
-from ..registery import keymap, settings
+from os import environ
+
+from ..registery import atomic, keymap, settings
 
 # waiting time within a key sequence
 settings["timeoutlen"] = 500
@@ -28,5 +30,5 @@ keymap.nv("$") << "$<right>"
 
 # use system clipboard
 settings["clipboard"] = "unnamedplus"
-# -- fake DISPLAY for xclip TODO TODO TODO
-# env["DISPLAY"] = env["DISPLAY"] or "VIM_FAKE_DISPLAY"
+# fake DISPLAY for xclip
+atomic.call_function("setenv", ("DISPLAY", environ.get("DISPLAY", "VIM_FAKE_DISPLAY")))
