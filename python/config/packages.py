@@ -8,7 +8,7 @@ from ..nvim.keymap import KeymapOpts
 class KeymapSpec:
     mode: Set[str]
     map: Mapping[str, str]
-    opts: KeymapOpts = field(default_factory=KeymapOpts)
+    opts: KeymapOpts = field(default_factory=lambda: KeymapOpts())
 
 
 @dataclass(frozen=True)

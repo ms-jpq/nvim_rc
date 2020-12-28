@@ -20,11 +20,11 @@ T = TypeVar("T")
 
 @dataclass(frozen=True)
 class KeymapOpts:
-    noremap: bool
-    silent: bool
-    expr: bool
-    nowait: bool
-    unique: bool
+    noremap: bool = True
+    silent: bool = True
+    expr: bool = False
+    nowait: bool = False
+    unique: bool = False
 
 
 _KEY_MODES = {"n", "o", "v", "i", "c", "t"}

@@ -11,7 +11,7 @@ def hold_win_pos(nvim: Nvim, hold: bool) -> Iterator[None]:
     else:
         win = None
     try:
-        yield True
+        yield None
     finally:
         if win is not None:
             nvim.api.set_current_win(win)
