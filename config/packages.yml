@@ -6,6 +6,9 @@
         "<leader>v": "<cmd>CHADopen<cr>"
 
 - uri: https://github.com/ms-jpq/kok.nvim
+  settings:
+    completefunc:
+      val: KoKomnifunc
 
 - uri: https://github.com/ms-jpq/kok-snippets
 

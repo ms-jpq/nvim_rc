@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Iterable, Iterator, MutableMapping, Sequence, Tuple, Union, cast
+from typing import Iterable, MutableMapping, Sequence, Tuple, Union, cast
 
 from .atomic import Atomic
 

@@ -1,13 +1,6 @@
-from .editor import (
-    auto_comp,
-    auto_save,
-    prettier,
-    search,
-    syntax,
-    whitespace,
-)
+from .editor import auto_comp, auto_save, misc, prettier, search, syntax, whitespace
 from .modes import command, normal, poly, terminal, visual
-from .workspace import input, navigation, theme, wm, misc
 from .version_control import git
+from .workspace import input, misc, navigation, theme, wm
 
 ____ = None

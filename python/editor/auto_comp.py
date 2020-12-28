@@ -39,7 +39,3 @@ keymap.i("<c-o>") << "<c-x><c-o>"
 # userfunc
 keymap.nv("<c-space>") << ""
 keymap.i("<c-space>") << "<c-x><c-u>"
-
-
-# TODO -- remove this
-settings["completefunc"] = "KoKomnifunc"
