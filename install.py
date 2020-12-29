@@ -10,6 +10,7 @@ from argparse import ArgumentParser, Namespace
 from asyncio import run
 from asyncio.queues import Queue
 from asyncio.tasks import create_task, gather
+from os import linesep
 from sys import stderr
 from typing import AsyncIterable, Awaitable, Iterator, Sequence
 
@@ -65,9 +66,10 @@ async def git(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
 async def bash(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
     def it() -> Iterator[Awaitable[ProcReturn]]:
         for pkg in pkgs:
+            stdin = f"set -x{linesep}{pkg}".encode()
 
             async def cont() -> None:
-                p = await call("bash", stdin=pkg.encode())
+                p = await call("bash", stdin=stdin)
                 await queue.put(p)
 
             yield cont()
@@ -78,11 +80,11 @@ async def bash(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
 async def stdout(ait: AsyncIterable[ProcReturn]) -> None:
     async for proc in ait:
         if proc.code == 0:
-            print("Success |>", proc.prog, *proc.args)
+            print("😊 |>", proc.prog, *proc.args)
             print(proc.out.decode())
         else:
             print(
-                f"Failure - Exit Code {proc.code} |>",
+                f"😟 - {proc.code} |>",
                 proc.prog,
                 *proc.args,
                 file=stderr,
