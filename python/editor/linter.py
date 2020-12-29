@@ -48,7 +48,7 @@ async def _run(
             *args,
             stdin=body,
             cwd=cwd,
-            env={"PATH": pathsep.join(BIN_PATHS, environ["PATH"])},
+            env={"PATH": pathsep.join((BIN_PATHS, environ["PATH"]))},
             expected_code=attr.exit_code,
         )
     except CalledProcessError as e:

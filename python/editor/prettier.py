@@ -33,7 +33,7 @@ async def _run_stream(
         *args,
         stdin=body.encode(),
         cwd=cwd,
-        env={"PATH": pathsep.join(BIN_PATHS, environ["PATH"])},
+        env={"PATH": pathsep.join((BIN_PATHS, environ["PATH"]))},
         expected_code=attr.exit_code,
     )
     lines = proc.out.decode().splitlines()
@@ -57,7 +57,7 @@ async def _run_fs(
         bin,
         *args,
         cwd=cwd,
-        env={"PATH": pathsep.join(BIN_PATHS, environ["PATH"])},
+        env={"PATH": pathsep.join((BIN_PATHS, environ["PATH"]))},
         expected_code=attr.exit_code,
     )
     await async_call(nvim, nvim.command, "checktime")
@@ -103,7 +103,7 @@ async def run_fmt(nvim: Nvim) -> None:
                 await write(nvim, f"⁉️: 莫有 {bin}", error=True)
             break
     else:
-        await write(nvim, f"⁉️: 莫有 {filetype} 的 linter", error=True)
+        await write(nvim, f"⁉️: 莫有 {filetype} 的 prettier", error=True)
 
 
 keymap.n("gq", nowait=True) << "<cmd>" + run_fmt.call_line() + "<cr>"
