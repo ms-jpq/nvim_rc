@@ -50,7 +50,7 @@ async def npm(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
 
 
 async def git(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
-    def it() -> Iterator[Awaitable[ProcReturn]]:
+    def it() -> Iterator[Awaitable[None]]:
         for pkg in pkgs:
 
             async def cont(pkg: str) -> None:
@@ -67,7 +67,7 @@ async def git(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
 
 
 async def bash(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
-    def it() -> Iterator[Awaitable[ProcReturn]]:
+    def it() -> Iterator[Awaitable[None]]:
         for pkg in pkgs:
 
             async def cont(pkg: str) -> None:
