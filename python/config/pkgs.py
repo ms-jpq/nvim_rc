@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, Mapping, Sequence, Set
+from typing import Any, Mapping, Sequence
 
 from std2.pickle import decode
 from yaml import safe_load

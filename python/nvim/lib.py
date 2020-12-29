@@ -47,7 +47,7 @@ def write(
     sep: str = " ",
     end: str = linesep,
     error: bool = False,
-) -> None:
+) -> Awaitable[None]:
     write = nvim.api.err_write if error else nvim.api.out_write
     msg = sep.join(str(v) for v in (val, *vals)) + end
-    go(async_call(nvim, write, msg))
+    return go(async_call(nvim, write, msg))

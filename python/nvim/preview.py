@@ -1,6 +1,7 @@
+from typing import Sequence
+
 from pynvim import Nvim
 from pynvim.api import Buffer, Tabpage, Window
-from typing import Sequence
 
 
 def _open_preview(nvim: Nvim) -> Window:
@@ -13,9 +14,9 @@ def _open_preview(nvim: Nvim) -> Window:
             return win
     else:
         nvim.api.command("new")
-        win = nvim.api.get_current_win()
+        win: Window = nvim.api.get_current_win()
         nvim.api.win_set_option(win, "previewwindow", True)
-        height = nvim.options.previewheight
+        height = nvim.options["previewheight"]
         nvim.api.win_set_height(win, height)
         return win
 

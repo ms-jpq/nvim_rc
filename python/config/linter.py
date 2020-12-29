@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from enum import Enum
-from typing import Mapping, Optional, Sequence
+from enum import Enum, auto
+from typing import FrozenSet, Mapping, Optional, Sequence
 
 from std2.pickle import decode
 from yaml import safe_load
@@ -10,14 +10,14 @@ from .install import InstallSpec
 
 
 class LinterType(Enum):
-    stream = "stream"
-    fs = "fs"
+    stream = auto()
+    fs = auto()
 
 
 @dataclass(frozen=True)
 class LinterAttrs:
     type: LinterType
-    filetypes: Sequence[str]
+    filetypes: FrozenSet[str]
     args: Sequence[str] = ()
     exit_code: int = 0
     install: Optional[InstallSpec] = None

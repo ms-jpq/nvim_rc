@@ -14,13 +14,13 @@ class LockBroken(Exception):
 def buffer_lock(nvim: Nvim, b1: Optional[Buffer] = None) -> Iterator[Buffer]:
     if b1 is None:
         b1 = nvim.api.get_current_buf()
-    c1 = nvim.api.buf_get_var(b1, "changetick")
+    c1 = nvim.api.buf_get_changedtick(b1)
     try:
         yield b1
     finally:
         with Atomic() as (a, ns):
             ns.b2 = a.get_current_buf()
-            ns.c2 = a.buf_get_var(b1, "changetick")
+            ns.c2 = a.buf_get_changedtick(b1)
         a.commit(nvim)
 
         if not (ns.b2 == b1 and ns.c2 == c1):
