@@ -1,12 +1,14 @@
 local nvim_home = vim.api.nvim_list_runtime_paths()[1]
 local py_main = nvim_home .. "/init.py"
-local pip_home = nvim_home .. "vars/pip_modules"
 
 
-if vim.env["PYTHONPATH"] then
-  vim.env["PYTHONPATH"] =  pip_home .. ":" .. vim.env["PYTHONPATH"]
-else
-  vim.env["PYTHONPATH"] = pip_home
+local _env = function ()
+  local pip_home = nvim_home .. "/vars/requirements"
+  if vim.env["PYTHONPATH"] then
+    return { PYTHONPATH = pip_home .. ":" .. vim.env["PYTHONPATH"] }
+  else
+    return { PYTHONPATH = pip_home }
+  end
 end
 
 
@@ -22,8 +24,10 @@ end
 
 local chan = vim.fn.jobstart(
   {py_main},
-  { rpc = true, on_exit = on_exit, on_stderr = on_stderr }
-)
+  { rpc = true,
+    env = _env(),
+    on_exit = on_exit,
+    on_stderr = on_stderr })
 
 
 local request = function (name, args)
