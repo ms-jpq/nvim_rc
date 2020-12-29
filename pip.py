@@ -4,7 +4,7 @@ from subprocess import run
 from pathlib import Path
 
 WD = Path(__file__).resolve().parent
-PIP_HOME = str(WD / "vars" / "requirements")
+RUNTIME = str(WD / "vars" / "runtime")
 REQUIREMENTS = str(WD / "requirements.txt")
 
 
@@ -14,7 +14,7 @@ proc = run(
         "install",
         "--upgrade",
         "--target",
-        PIP_HOME,
+        RUNTIME,
         "--requirement",
         REQUIREMENTS,
     )

@@ -14,6 +14,7 @@ CONF_FMT = CONF_DIR / "fmt.yml"
 
 
 VARS_DIR = TOP_LEVEL / "vars"
+RT_DIR = VARS_DIR / "runtime"
 VIM_DIR = VARS_DIR / "vim_modules"
 PIP_DIR = VARS_DIR / "pip_modules"
 NPM_DIR = VARS_DIR / "node_modules"

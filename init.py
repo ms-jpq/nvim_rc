@@ -1,16 +1,10 @@
 #!/usr/bin/env python3
 
-from os import environ, pathsep
-from pathlib import Path
+from sys import path
 
-REQUIREMENTS = str(Path(__file__).resolve().parent / "vars" / "requirements")
-PYTHONPATH = pathsep.join(
-    path for path in environ["PYTHONPATH"].split(pathsep) if path != REQUIREMENTS
-)
-if PYTHONPATH:
-    environ["PYTHONPATH"] = PYTHONPATH
-else:
-    environ.pop("PYTHONPATH")
+from python.consts import RT_DIR
+
+path.append(str(RT_DIR))
 
 
 from pynvim import attach
