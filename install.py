@@ -12,9 +12,8 @@ from asyncio.queues import Queue
 from asyncio.tasks import create_task, gather
 from os import linesep
 from sys import stderr
-from typing import AsyncIterable, Awaitable, Iterator, Sequence
+from typing import Awaitable, Iterator, Sequence
 
-from std2.asyncio.queue import to_iter
 from std2.asyncio.subprocess import ProcReturn, call
 
 from python.components.pkgs import p_name
@@ -56,10 +55,21 @@ async def git(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
             async def cont(pkg: str) -> None:
                 location = VIM_DIR / p_name(pkg)
                 if location.is_dir():
-                    p = await call("git", "pull", cwd=str(location))
+                    p = await call(
+                        "git", "pull", "--recurse-submodules", cwd=str(location)
+                    )
+                    await queue.put(p)
                 else:
-                    p = await call("git", "clone", "--depth=1", pkg, str(location))
-                await queue.put(p)
+                    p = await call(
+                        "git",
+                        "clone",
+                        "--depth=1",
+                        "--recurse-submodules",
+                        "--shallow-submodules",
+                        pkg,
+                        str(location),
+                    )
+                    await queue.put(p)
 
             yield cont(pkg)
 
@@ -80,8 +90,9 @@ async def bash(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
     await gather(*it())
 
 
-async def stdout(ait: AsyncIterable[ProcReturn]) -> None:
-    async for proc in ait:
+async def stdout(queue: Queue[ProcReturn]) -> None:
+    while True:
+        proc = await queue.get()
         if proc.code == 0:
             print("✅ 👉", proc.prog, *proc.args)
             print(proc.out.decode())
@@ -93,6 +104,7 @@ async def stdout(ait: AsyncIterable[ProcReturn]) -> None:
                 file=stderr,
             )
             print(proc.err, file=stderr)
+        queue.task_done()
 
 
 async def main() -> None:
@@ -104,8 +116,9 @@ async def main() -> None:
         git(queue, pkgs=args.git),
         bash(queue, pkgs=args.bash),
     )
-    create_task(stdout(to_iter(queue)))
+    create_task(stdout(queue))
     await tasks
+    await queue.join()
 
 
 run(main())
