@@ -1,4 +1,4 @@
-from os import linesep
+from os import environ, linesep, pathsep
 from shutil import which
 from subprocess import CalledProcessError
 from typing import Tuple, cast
@@ -8,6 +8,7 @@ from pynvim.api.buffer import Buffer
 from std2.asyncio.subprocess import call
 
 from ..config.fmt import FmtAttrs, FmtType, fmt_specs
+from ..consts import BIN_PATHS
 from ..nvim.lib import async_call, write
 from ..nvim.preview import set_preview
 from ..registery import keymap, rpc
@@ -28,7 +29,12 @@ async def _run_stream(
     body = await async_call(nvim, c1)
     args = arg_subst(attr.args, filename=filename)
     proc = await call(
-        bin, *args, stdin=body.encode(), cwd=cwd, expected_code=attr.exit_code
+        bin,
+        *args,
+        stdin=body.encode(),
+        cwd=cwd,
+        env={"PATH": pathsep.join(BIN_PATHS, environ["PATH"])},
+        expected_code=attr.exit_code,
     )
     lines = proc.out.decode().splitlines()
 
@@ -47,7 +53,13 @@ async def _run_fs(
     cwd: str,
 ) -> None:
     args = arg_subst(attr.args, filename=filename)
-    await call(bin, *args, cwd=cwd, expected_code=attr.exit_code)
+    await call(
+        bin,
+        *args,
+        cwd=cwd,
+        env={"PATH": pathsep.join(BIN_PATHS, environ["PATH"])},
+        expected_code=attr.exit_code,
+    )
     await async_call(nvim, nvim.command, "checktime")
 
 
