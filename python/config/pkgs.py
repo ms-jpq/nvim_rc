@@ -10,16 +10,16 @@ from ..nvim.keymap import KeymapOpts
 
 @dataclass(frozen=True)
 class KeymapSpec:
-    mode: Set[str]
-    map: Mapping[str, str]
+    modes: Set[str]
+    maps: Mapping[str, str]
     opts: KeymapOpts = field(default_factory=lambda: KeymapOpts())
 
 
 @dataclass(frozen=True)
 class PkgAttrs:
     uri: str
-    keys: Sequence[KeymapSpec]
-    vals: Mapping[str, Any]
+    keys: Sequence[KeymapSpec] = ()
+    vals: Mapping[str, Any] = field(default_factory=dict)
 
 
 PkgSpecs = Sequence[PkgAttrs]

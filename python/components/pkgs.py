@@ -15,7 +15,9 @@ def _p_name(uri: str) -> Path:
 
 
 def inst(nvim: Nvim) -> Atomic:
-    plugins = (_p_name(spec.uri) for spec in pkg_specs)
+    plugins = (
+        path for path in (_p_name(spec.uri) for spec in pkg_specs) if path.exists()
+    )
     atomic = rtp_packages(nvim, plugins=plugins)
 
     return atomic
