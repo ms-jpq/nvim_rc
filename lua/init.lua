@@ -15,9 +15,6 @@ local chan = vim.fn.jobstart(
 )
 
 
-local notify = function (name, args)
-  vim.rpcnotify(chan, name, args)
-end
 local request = function (name, args)
   return vim.rpcrequest(chan, name, args)
 end

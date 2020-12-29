@@ -87,7 +87,7 @@
 
 - uri: https://github.com/junegunn/vim-easy-align
   keys:
-    - modes: n
+    - modes: nv
       opts:
         noremap: False
       maps:
