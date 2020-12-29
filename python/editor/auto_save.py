@@ -13,35 +13,20 @@ def reload_file(nvim: Nvim) -> None:
     nvim.command("checktime")
 
 
-# -- autosave
-# local autosave = function ()
+# auto backup
+settings["backup"] = True
 
-#   -- auto backup
-#   -- bindings.set("backup")
 
-#   local save = function ()
-#     local bufs = api.nvim_list_bufs()
-#     for _, buf in ipairs(bufs) do
-#       local modified = api.nvim_buf_get_option(buf, "modified")
-#       if modified ~= "nomodified" then
-#         bindings.exec("silent! wa")
-#         break
-#       end
-#     end
-#   end
+@autocmd("FocusLost", "VimLeavePre", modifiers=("nested",))
+def auto_save(nvim: Nvim) -> None:
+    nvim.command("silent! wa")
 
-#   local smol_save = decorators.debounce(500, save)
 
-#   registry.auto(
-#     {"CursorHold", "CursorHoldI", "TextChanged", "TextChangedI"},
-#     smol_save,
-#     "*",
-#     "nested")
-
-#   registry.auto({"FocusLost", "VimLeavePre"}, save, "*", "nested")
-
-# end
-# registry.defer(autosave)
+@autocmd(
+    "CursorHold", "CursorHoldI", "TextChanged", "TextChangedI", modifiers=("nested",)
+)
+def smol_save(nvim: Nvim) -> None:
+    auto_save(nvim)
 
 
 # persistent undo
