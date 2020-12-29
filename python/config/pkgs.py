@@ -10,7 +10,7 @@ from ..nvim.keymap import KeymapOpts
 
 @dataclass(frozen=True)
 class KeymapSpec:
-    modes: Set[str]
+    modes: str
     maps: Mapping[str, str]
     opts: KeymapOpts = field(default_factory=lambda: KeymapOpts())
 
@@ -20,6 +20,7 @@ class PkgAttrs:
     uri: str
     keys: Sequence[KeymapSpec] = ()
     vals: Mapping[str, Any] = field(default_factory=dict)
+    lua: str = ""
 
 
 PkgSpecs = Sequence[PkgAttrs]
