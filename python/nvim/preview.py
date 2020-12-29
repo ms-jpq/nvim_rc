@@ -14,7 +14,7 @@ def _open_preview(nvim: Nvim) -> Window:
             return win
     else:
         nvim.api.command("new")
-        win: Window = nvim.api.get_current_win()
+        win = nvim.api.get_current_win()
         nvim.api.win_set_option(win, "previewwindow", True)
         height = nvim.options["previewheight"]
         nvim.api.win_set_height(win, height)
