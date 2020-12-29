@@ -10,18 +10,6 @@
     completefunc:
       val: KoKomnifunc
 
-- uri: https://github.com/ms-jpq/kok-snippets
-
-- uri: https://github.com/ms-jpq/kok-t9
-  keys:
-    - modes: n
-      maps:
-        "gz": "<cmd>KoKstart<cr>"
-
-- uri: https://github.com/honza/vim-snippets
-
-- uri: https://github.com/Shougo/neosnippet-snippets
-
 - uri: https://github.com/neovim/nvim-lspconfig
   keys:
     - modes: n
@@ -40,6 +28,9 @@
         "gE": "<cmd>lua vim.lsp.buf.workspace_symbol()<cr>"
         "g[": "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>"
         "g]": "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>"
+  lua: |-
+    lv = lv or {}
+    lv.lsp = require "lspconfig"
 
 - uri: https://github.com/junegunn/fzf
 
@@ -109,3 +100,15 @@
 - uri: https://github.com/airblade/vim-gitgutter
 
 - uri: https://github.com/sheerun/vim-polyglot
+
+- uri: https://github.com/ms-jpq/kok-snippets
+
+- uri: https://github.com/ms-jpq/kok-t9
+  keys:
+    - modes: n
+      maps:
+        "gz": "<cmd>KoKstart<cr>"
+
+- uri: https://github.com/honza/vim-snippets
+
+- uri: https://github.com/Shougo/neosnippet-snippets

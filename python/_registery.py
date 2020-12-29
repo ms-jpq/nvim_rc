@@ -1,3 +1,4 @@
+from .components import fmt, linter, lsp
 from .editor import auto_comp, auto_save, prettier, search, syntax, whitespace
 from .modes import command, normal, poly, terminal, visual
 from .version_control import git

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Mapping, Sequence
+from typing import Mapping, Optional, Sequence
 
 from std2.pickle import decode
 from yaml import safe_load
@@ -18,10 +18,10 @@ class FmtType(Enum):
 @dataclass(frozen=True)
 class FmtAttrs:
     type: FmtType
-    args: Sequence[str]
     filetypes: Sequence[str]
-    install: InstallSpec
+    args: Sequence[str] = ()
+    install: Optional[InstallSpec] = None
 
 
 FmtSpecs = Mapping[str, FmtAttrs]
-fmt_specs = decode(FmtSpecs, safe_load(CONF_FMT.open()))
+fmt_specs: FmtSpecs = decode(FmtSpecs, safe_load(CONF_FMT.open()))
