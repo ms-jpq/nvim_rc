@@ -26,7 +26,7 @@ def auto_save(nvim: Nvim) -> None:
     "CursorHold", "CursorHoldI", "TextChanged", "TextChangedI", modifiers=("nested",)
 )
 def smol_save(nvim: Nvim) -> None:
-    auto_save(nvim)
+    nvim.command("silent! wa")
 
 
 # persistent undo
