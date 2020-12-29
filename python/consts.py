@@ -17,5 +17,5 @@ VARS_DIR = TOP_LEVEL / "vars"
 RT_DIR = str(VARS_DIR / "runtime")
 VIM_DIR = VARS_DIR / "vim_modules"
 PIP_DIR = VARS_DIR / "pip_modules"
-NPM_DIR = VARS_DIR / "node_modules"
+NPM_DIR = VARS_DIR
 BINS = (TOP_LEVEL / "bin", PIP_DIR / "bin", NPM_DIR / ".bin")
