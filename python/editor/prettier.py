@@ -22,6 +22,7 @@ async def _run_stream(
     bin: str,
     attr: FmtAttrs,
     cwd: str,
+    PATH: str,
 ) -> Nvim:
     def c1() -> str:
         return linesep.join(nvim.api.buf_get_lines(buf, 0, -1, True))
@@ -33,7 +34,7 @@ async def _run_stream(
         *args,
         stdin=body.encode(),
         cwd=cwd,
-        env={"PATH": pathsep.join((BIN_PATHS, environ["PATH"]))},
+        env={"PATH": PATH},
         expected_code=attr.exit_code,
     )
     lines = proc.out.decode().splitlines()
@@ -51,15 +52,10 @@ async def _run_fs(
     bin: str,
     attr: FmtAttrs,
     cwd: str,
+    PATH: str,
 ) -> None:
     args = arg_subst(attr.args, filename=filename)
-    await call(
-        bin,
-        *args,
-        cwd=cwd,
-        env={"PATH": pathsep.join((BIN_PATHS, environ["PATH"]))},
-        expected_code=attr.exit_code,
-    )
+    await call(bin, *args, cwd=cwd, env={"PATH": PATH}, expected_code=attr.exit_code)
     await async_call(nvim, nvim.command, "checktime")
 
 
@@ -68,6 +64,8 @@ _progs = {FmtType.stream: _run_stream, FmtType.fs: _run_fs}
 
 @rpc()
 async def run_fmt(nvim: Nvim) -> None:
+    PATH = pathsep.join((BIN_PATHS, environ["PATH"]))
+
     def cont() -> Tuple[str, Buffer, str, str]:
         cwd = nvim.funcs.getcwd()
         buf: Buffer = nvim.api.get_current_buf()
@@ -78,7 +76,7 @@ async def run_fmt(nvim: Nvim) -> None:
     cwd, buf, filename, filetype = await async_call(nvim, cont)
     for bin, attr in fmt_specs.items():
         if filetype in attr.filetypes:
-            if which(bin):
+            if which(bin, path=PATH):
                 run = _progs.get(attr.type)
                 if not run:
                     raise NotImplementedError()
@@ -91,6 +89,7 @@ async def run_fmt(nvim: Nvim) -> None:
                             bin=bin,
                             attr=attr,
                             cwd=cwd,
+                            PATH=PATH,
                         )
                     except CalledProcessError as e:
                         heading = f"⛔️ - {e.returncode} 👉 {bin} {' '.join(attr.args)}"

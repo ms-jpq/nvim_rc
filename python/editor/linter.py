@@ -24,12 +24,7 @@ def arg_subst(args: Iterable[str], filename: str) -> Iterator[str]:
             yield arg
 
 
-async def _run(
-    nvim: Nvim,
-    buf: Buffer,
-    bin: str,
-    attr: LinterAttrs,
-) -> None:
+async def _run(nvim: Nvim, buf: Buffer, bin: str, attr: LinterAttrs, PATH: str) -> None:
     def cont() -> Tuple[str, str, Optional[bytes]]:
         cwd = nvim.funcs.getcwd()
         filename: str = nvim.api.buf_get_name(buf)
@@ -48,7 +43,7 @@ async def _run(
             *args,
             stdin=body,
             cwd=cwd,
-            env={"PATH": pathsep.join((BIN_PATHS, environ["PATH"]))},
+            env={"PATH": PATH},
             expected_code=attr.exit_code,
         )
     except CalledProcessError as e:
@@ -62,6 +57,8 @@ async def _run(
 
 @rpc()
 async def run_linter(nvim: Nvim) -> None:
+    PATH = pathsep.join((BIN_PATHS, environ["PATH"]))
+
     def cont() -> Tuple[Buffer, str]:
         buf: Buffer = nvim.api.get_current_buf()
         filetype: str = nvim.api.buf_get_option(buf, "filetype")
@@ -70,7 +67,7 @@ async def run_linter(nvim: Nvim) -> None:
     buf, filetype = await async_call(nvim, cont)
     for bin, attr in linter_specs.items():
         if filetype in attr.filetypes:
-            if which(bin):
+            if which(bin, path=PATH):
                 await _run(nvim, buf=buf, bin=bin, attr=attr)
             else:
                 await write(nvim, f"⁉️: 莫有 {bin}", error=True)
