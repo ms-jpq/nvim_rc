@@ -1,6 +1,7 @@
 from os import linesep
 from shutil import which
-from typing import Iterable, Iterator, Optional, Tuple
+from subprocess import CalledProcessError
+from typing import Iterable, Iterator, Optional, Tuple, cast
 
 from pynvim import Nvim
 from pynvim.api.buffer import Buffer
@@ -40,11 +41,15 @@ async def _run(
 
     cwd, filename, body = await async_call(nvim, cont)
     args = arg_subst(attr.args, filename=filename)
-    proc = await call(bin, *args, stdin=body, cwd=cwd)
-    if proc.code == attr.exit_code:
-        await write(nvim, f"✅ 👉 {bin}")
+    try:
+        await call(bin, *args, stdin=body, cwd=cwd, expected_code=attr.exit_code)
+    except CalledProcessError as e:
+        heading = f"⛔️ - {e.returncode} 👉 {bin} {' '.join(attr.args)}"
+        stdout = cast(bytes, e.stdout).decode()
+        err_out = f"{heading}{linesep}{stdout}{linesep}{e.stderr}"
+        await async_call(nvim, set_preview, nvim, err_out)
     else:
-        await async_call(nvim, set_preview, nvim, proc.out.decode() + proc.err)
+        await write(nvim, f"✅ 👉 {bin}")
 
 
 @rpc()
