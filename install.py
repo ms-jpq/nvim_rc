@@ -39,18 +39,21 @@ async def pip(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
 
 
 async def npm(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
-    p1 = await call("npm", "init", "--yes", cwd=str(NPM_DIR))
-    await queue.put(p1)
-    if p1.code == 0 and pkgs:
-        p2 = await call("npm", "install", "--upgrade", "--", *pkgs, cwd=str(NPM_DIR))
-        await queue.put(p2)
+    if pkgs:
+        p1 = await call("npm", "init", "--yes", cwd=str(NPM_DIR))
+        await queue.put(p1)
+        if p1.code == 0:
+            p2 = await call(
+                "npm", "install", "--upgrade", "--", *pkgs, cwd=str(NPM_DIR)
+            )
+            await queue.put(p2)
 
 
 async def git(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
     def it() -> Iterator[Awaitable[ProcReturn]]:
         for pkg in pkgs:
 
-            async def cont() -> None:
+            async def cont(pkg: str) -> None:
                 location = VIM_DIR / p_name(pkg)
                 if location.is_dir():
                     p = await call("git", "pull", cwd=str(location))
@@ -58,7 +61,7 @@ async def git(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
                     p = await call("git", "clone", "--depth=1", pkg, str(location))
                 await queue.put(p)
 
-            yield cont()
+            yield cont(pkg)
 
     await gather(*it())
 
@@ -66,13 +69,13 @@ async def git(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
 async def bash(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
     def it() -> Iterator[Awaitable[ProcReturn]]:
         for pkg in pkgs:
-            stdin = f"set -x{linesep}{pkg}".encode()
 
-            async def cont() -> None:
+            async def cont(pkg: str) -> None:
+                stdin = f"set -x{linesep}{pkg}".encode()
                 p = await call("bash", stdin=stdin)
                 await queue.put(p)
 
-            yield cont()
+            yield cont(pkg)
 
     await gather(*it())
 
@@ -80,11 +83,11 @@ async def bash(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
 async def stdout(ait: AsyncIterable[ProcReturn]) -> None:
     async for proc in ait:
         if proc.code == 0:
-            print("😊 |>", proc.prog, *proc.args)
+            print("✅ |>", proc.prog, *proc.args)
             print(proc.out.decode())
         else:
             print(
-                f"😟 - {proc.code} |>",
+                f"⛔️ - {proc.code} |>",
                 proc.prog,
                 *proc.args,
                 file=stderr,
