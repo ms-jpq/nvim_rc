@@ -4,7 +4,7 @@ from sys import path
 
 from python.consts import RT_DIR
 
-path.append(str(RT_DIR))
+path.append(RT_DIR)
 
 from argparse import ArgumentParser, Namespace
 from asyncio import run
@@ -83,11 +83,11 @@ async def bash(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
 async def stdout(ait: AsyncIterable[ProcReturn]) -> None:
     async for proc in ait:
         if proc.code == 0:
-            print("✅ |>", proc.prog, *proc.args)
+            print("✅ 👉", proc.prog, *proc.args)
             print(proc.out.decode())
         else:
             print(
-                f"⛔️ - {proc.code} |>",
+                f"⛔️ - {proc.code} 👉",
                 proc.prog,
                 *proc.args,
                 file=stderr,

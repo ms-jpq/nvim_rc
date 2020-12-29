@@ -19,6 +19,7 @@ class LinterAttrs:
     type: LinterType
     filetypes: Sequence[str]
     args: Sequence[str] = ()
+    exit_code: int = 0
     install: Optional[InstallSpec] = None
 
 

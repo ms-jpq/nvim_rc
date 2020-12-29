@@ -20,6 +20,7 @@ class FmtAttrs:
     type: FmtType
     filetypes: Sequence[str]
     args: Sequence[str] = ()
+    exit_code: int = 0
     install: Optional[InstallSpec] = None
 
 
