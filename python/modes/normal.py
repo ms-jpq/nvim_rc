@@ -3,7 +3,7 @@ from ..registery import keymap, autocmd
 from uuid import uuid4
 
 # # normalize Y
-keymap.n("y") << "y$"
+keymap.n("Y") << "y$"
 
 # fix cursor pos moving 1 back
 BUF_VAR_NAME = f"buf_cursor_pos_{uuid4().hex}"
