@@ -32,7 +32,7 @@ async def _run(
         cwd = nvim.funcs.getcwd()
         filename: str = nvim.api.buf_get_name(buf)
         body = (
-            linesep.join(nvim.api.buf_get_lines(buf)).encode()
+            linesep.join(nvim.api.buf_get_lines(buf, 0, -1, True)).encode()
             if attr.type == LinterType.stream
             else None
         )
@@ -59,9 +59,9 @@ async def run_linter(nvim: Nvim) -> None:
         if filetype in attr.filetypes:
             if which(bin):
                 await _run(nvim, buf=buf, bin=bin, attr=attr)
-                break
             else:
                 await write(nvim, f"⁉️: 莫有 {bin}", error=True)
+            break
     else:
         await write(nvim, f"⁉️: 莫有 {filetype} 的 linter", error=True)
 
