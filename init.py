@@ -4,7 +4,7 @@ from sys import path
 
 from python.consts import RT_DIR
 
-path.append(str(RT_DIR))
+path.append(RT_DIR)
 
 
 from pynvim import attach

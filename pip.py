@@ -2,10 +2,10 @@
 
 from subprocess import run
 from pathlib import Path
+from python.consts import RT_DIR
 
-WD = Path(__file__).resolve().parent
-RUNTIME = str(WD / "vars" / "runtime")
-REQUIREMENTS = str(WD / "requirements.txt")
+
+REQUIREMENTS = str(Path(__file__).resolve().parent / "requirements.txt")
 
 
 proc = run(
@@ -14,9 +14,10 @@ proc = run(
         "install",
         "--upgrade",
         "--target",
-        RUNTIME,
+        RT_DIR,
         "--requirement",
         REQUIREMENTS,
-    )
+    ),
+    cwd=RT_DIR,
 )
 exit(proc.returncode)
