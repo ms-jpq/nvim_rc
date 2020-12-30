@@ -12,7 +12,7 @@ from ..nvim.keymap import KeymapOpts
 class KeymapSpec:
     modes: str
     maps: Mapping[str, str]
-    opts: KeymapOpts = field(default_factory=lambda: KeymapOpts())
+    opts: KeymapOpts = KeymapOpts()
 
 
 @dataclass(frozen=True)
