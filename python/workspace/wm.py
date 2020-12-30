@@ -25,10 +25,17 @@ keymap.n("<leader>'") << "<cmd>wincmd r<cr>"
 keymap.n("<leader>;") << "<cmd>wincmd R<cr>"
 
 # move windows
-keymap.n("<s-left>") << "<cmd>wincmd H<cr>"
-keymap.n("<s-right>") << "<cmd>wincmd L<cr>"
-keymap.n("<s-up>") << "<cmd>wincmd K<cr>"
-keymap.n("<s-down>") << "<cmd>wincmd J<cr>"
+keymap.n("<s-m-left>") << "<cmd>wincmd H<cr>"
+keymap.n("<s-m-right>") << "<cmd>wincmd L<cr>"
+keymap.n("<s-m-up>") << "<cmd>wincmd K<cr>"
+keymap.n("<s-m-down>") << "<cmd>wincmd J<cr>"
+
+# resize windows
+keymap.n("+") << "<cmd>wincmd =<cr>"
+keymap.n("<s-left>") << "<cmd>wincmd <<cr>"
+keymap.n("<s-right>") << "<cmd>wincmd ><cr>"
+keymap.n("<s-up>") << "<cmd>wincmd +<cr>"
+keymap.n("<s-down>") << "<cmd>wincmd -<cr>"
 
 
 @rpc()
