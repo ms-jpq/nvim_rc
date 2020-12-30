@@ -1,5 +1,5 @@
 ---
-bashls:
+- server: bashls
   bin: bash-language-server
   filetypes:
     - sh
@@ -8,7 +8,7 @@ bashls:
     npm:
       - bash-language-server
 
-cssls:
+- server: cssls
   bin: css-languageserver
   filetypes:
     - css
@@ -18,7 +18,7 @@ cssls:
     npm:
       - vscode-css-languageserver-bin
 
-dockerls:
+- server: dockerls
   bin: docker-langserver
   filetypes:
     - dockerfile
@@ -26,13 +26,13 @@ dockerls:
     npm:
       - dockerfile-language-server-nodejs
 
-gopls:
+- server: gopls
   bin: gopls
   filetypes:
     - go
     - gomod
 
-html:
+- server: html
   bin: html-languageserver
   filetypes:
     - html
@@ -40,7 +40,7 @@ html:
     npm:
       - vscode-html-languageserver-bin
 
-jsonls:
+- server: jsonls
   bin: vscode-json-languageserver
   filetypes:
     - json
@@ -48,7 +48,7 @@ jsonls:
     npm:
       - vscode-json-languageserver
 
-pyright:
+- server: pyright
   bin: pyright-langserver
   filetypes:
     - python
@@ -56,18 +56,18 @@ pyright:
     npm:
       - pyright
 
-r_language_server:
+- server: r_language_server
   bin: R
   filetypes:
     - r
     - rmd
 
-rust_analyzer:
+- server: rust_analyzer
   bin: rust-analyzer
   filetypes:
     - rust
 
-sqlls:
+- server: sqlls
   bin: sql-language-server
   args:
     - up
@@ -79,7 +79,7 @@ sqlls:
     npm:
       - sql-language-server
 
-sourcekit:
+- server: sourcekit
   bin: xcrun
   filetypes:
     - swift
@@ -88,7 +88,7 @@ sourcekit:
     - objective-c
     - objective-cpp
 
-tsserver:
+- server: tsserver
   bin: typescript-language-server
   filetypes:
     - javascript
@@ -102,7 +102,7 @@ tsserver:
       - typescript
       - typescript-language-server
 
-vimls:
+- server: vimls
   bin: vim-language-server
   filetypes:
     - vim
@@ -110,7 +110,7 @@ vimls:
     npm:
       - vim-language-server
 
-yamlls:
+- server: yamlls
   bin: yaml-language-server
   filetypes:
     - yaml

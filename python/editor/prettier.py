@@ -19,7 +19,6 @@ async def _run_stream(
     nvim: Nvim,
     buf: Buffer,
     filename: str,
-    bin: str,
     attr: FmtAttrs,
     cwd: str,
     PATH: str,
@@ -30,7 +29,7 @@ async def _run_stream(
     body = await async_call(nvim, c1)
     args = arg_subst(attr.args, filename=filename)
     proc = await call(
-        bin,
+        attr.bin,
         *args,
         stdin=body.encode(),
         cwd=cwd,
@@ -49,13 +48,14 @@ async def _run_fs(
     nvim: Nvim,
     buf: Buffer,
     filename: str,
-    bin: str,
     attr: FmtAttrs,
     cwd: str,
     PATH: str,
 ) -> None:
     args = arg_subst(attr.args, filename=filename)
-    await call(bin, *args, cwd=cwd, env={"PATH": PATH}, expected_code=attr.exit_code)
+    await call(
+        attr.bin, *args, cwd=cwd, env={"PATH": PATH}, expected_code=attr.exit_code
+    )
     await async_call(nvim, nvim.command, "checktime")
 
 
@@ -74,9 +74,9 @@ async def run_fmt(nvim: Nvim) -> None:
         return cwd, buf, filename, filetype
 
     cwd, buf, filename, filetype = await async_call(nvim, cont)
-    for bin, attr in fmt_specs.items():
+    for attr in fmt_specs:
         if filetype in attr.filetypes:
-            if which(bin, path=PATH):
+            if which(attr.bin, path=PATH):
                 run = _progs.get(attr.type)
                 if not run:
                     raise NotImplementedError()
@@ -86,20 +86,21 @@ async def run_fmt(nvim: Nvim) -> None:
                             nvim,
                             buf=buf,
                             filename=filename,
-                            bin=bin,
                             attr=attr,
                             cwd=cwd,
                             PATH=PATH,
                         )
                     except CalledProcessError as e:
-                        heading = f"⛔️ - {e.returncode} 👉 {bin} {' '.join(attr.args)}"
+                        heading = (
+                            f"⛔️ - {e.returncode} 👉 {attr.bin} {' '.join(attr.args)}"
+                        )
                         stdout = cast(bytes, e.stdout).decode()
                         err_out = f"{heading}{linesep}{stdout}{linesep}{e.stderr}"
                         await async_call(nvim, set_preview, nvim, err_out)
                     else:
-                        await write(nvim, f"✅ 👉 {bin}")
+                        await write(nvim, f"✅ 👉 {attr.bin}")
             else:
-                await write(nvim, f"⁉️: 莫有 {bin}", error=True)
+                await write(nvim, f"⁉️: 莫有 {attr.bin}", error=True)
             break
     else:
         await write(nvim, f"⁉️: 莫有 {filetype} 的 prettier", error=True)

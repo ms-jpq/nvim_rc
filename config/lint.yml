@@ -1,5 +1,5 @@
 ---
-mypy:
+- bin: mypy
   type: fs
   args:
     - --
@@ -10,7 +10,7 @@ mypy:
     pip:
       - mypy
 
-shellcheck:
+- bin: shellcheck
   type: fs
   args:
     - --

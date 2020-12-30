@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import FrozenSet, Mapping, Optional, Sequence
+from typing import FrozenSet, Optional, Sequence
 
 from std2.pickle import decode
 from yaml import safe_load
@@ -16,6 +16,7 @@ class LinterType(Enum):
 
 @dataclass(frozen=True)
 class LinterAttrs:
+    bin: str
     type: LinterType
     filetypes: FrozenSet[str]
     args: Sequence[str] = ()
@@ -23,5 +24,5 @@ class LinterAttrs:
     install: Optional[InstallSpec] = None
 
 
-LinterSpecs = Mapping[str, LinterAttrs]
+LinterSpecs = Sequence[LinterAttrs]
 linter_specs: LinterSpecs = decode(LinterSpecs, safe_load(CONF_LINT.open()))

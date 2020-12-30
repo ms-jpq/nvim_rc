@@ -24,7 +24,7 @@ def arg_subst(args: Iterable[str], filename: str) -> Iterator[str]:
             yield arg
 
 
-async def _run(nvim: Nvim, buf: Buffer, bin: str, attr: LinterAttrs, PATH: str) -> None:
+async def _run(nvim: Nvim, buf: Buffer, attr: LinterAttrs, PATH: str) -> None:
     def cont() -> Tuple[str, str, Optional[bytes]]:
         cwd = nvim.funcs.getcwd()
         filename: str = nvim.api.buf_get_name(buf)
@@ -39,7 +39,7 @@ async def _run(nvim: Nvim, buf: Buffer, bin: str, attr: LinterAttrs, PATH: str) 
     args = arg_subst(attr.args, filename=filename)
     try:
         await call(
-            bin,
+            attr.bin,
             *args,
             stdin=body,
             cwd=cwd,
@@ -47,12 +47,12 @@ async def _run(nvim: Nvim, buf: Buffer, bin: str, attr: LinterAttrs, PATH: str) 
             expected_code=attr.exit_code,
         )
     except CalledProcessError as e:
-        heading = f"⛔️ - {e.returncode} 👉 {bin} {' '.join(attr.args)}"
+        heading = f"⛔️ - {e.returncode} 👉 {attr.bin} {' '.join(attr.args)}"
         stdout = cast(bytes, e.stdout).decode()
         err_out = f"{heading}{linesep}{stdout}{linesep}{e.stderr}"
         await async_call(nvim, set_preview, nvim, err_out)
     else:
-        await write(nvim, f"✅ 👉 {bin}")
+        await write(nvim, f"✅ 👉 {attr.bin}")
 
 
 @rpc()
@@ -65,12 +65,12 @@ async def run_linter(nvim: Nvim) -> None:
         return buf, filetype
 
     buf, filetype = await async_call(nvim, cont)
-    for bin, attr in linter_specs.items():
+    for attr in linter_specs:
         if filetype in attr.filetypes:
-            if which(bin, path=PATH):
-                await _run(nvim, buf=buf, bin=bin, attr=attr)
+            if which(attr.bin, path=PATH):
+                await _run(nvim, buf=buf, attr=attr, PATH=PATH)
             else:
-                await write(nvim, f"⁉️: 莫有 {bin}", error=True)
+                await write(nvim, f"⁉️: 莫有 {attr.bin}", error=True)
             break
     else:
         await write(nvim, f"⁉️: 莫有 {filetype} 的 linter", error=True)

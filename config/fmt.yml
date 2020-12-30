@@ -1,8 +1,8 @@
 ---
-fmt-json:
-  type: stream
+- bin: fmt-json
   args:
     - "%"
+  type: stream
   filetypes:
     - json
   install:
@@ -11,9 +11,8 @@ fmt-json:
     npm:
       - prettier
 
-fmt-py:
+- bin: fmt-py
   type: stream
-  args: []
   filetypes:
     - python
   install:
@@ -21,12 +20,12 @@ fmt-py:
       - isort
       - black
 
-prettier:
-  type: stream
+- bin: prettier
   args:
     - --stdin-filepath
     - --
     - "%"
+  type: stream
   filetypes:
     - yaml
     - xml
@@ -45,23 +44,20 @@ prettier:
     npm:
       - prettier
 
-scfg:
+- bin: scfg
   type: stream
-  args: []
   filetypes:
     - cfg
   install:
     pip:
       - sortd
 
-rustfmt:
+- bin: rustfmt
   type: stream
-  args: []
   filetypes:
     - rust
 
-gofmt:
+- bin: gofmt
   type: stream
-  args: []
   filetypes:
     - go
