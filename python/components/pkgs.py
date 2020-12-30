@@ -34,5 +34,6 @@ def inst(nvim: Nvim) -> Atomic:
             atomic.set_var(lhs, rhs)
 
         atomic.exec_lua(spec.lua, ())
+        atomic.exec(spec.viml, False)
 
     return atomic + keymap.drain(nvim.channel_id, buf=None)

@@ -1,6 +1,5 @@
 from pynvim import Nvim
-from pynvim.api import Window, Buffer
-
+from pynvim.api import Buffer
 
 from ..registery import keymap, rpc
 
