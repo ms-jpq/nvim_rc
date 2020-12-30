@@ -13,8 +13,7 @@ from ..nvim.rtp import rtp_packages
 
 
 def p_name(uri: str) -> Path:
-    url = urlparse(uri).path
-    return VIM_DIR / PurePath(url).stem
+    return VIM_DIR / urlparse(uri).path
 
 
 def inst(nvim: Nvim) -> Atomic:
@@ -32,8 +31,9 @@ def inst(nvim: Nvim) -> Atomic:
 
         for lhs, rhs in spec.vals.items():
             atomic.set_var(lhs, rhs)
-
-        atomic.exec_lua(spec.lua, ())
-        atomic.exec(spec.viml, False)
+        if spec.lua:
+            atomic.exec_lua(spec.lua, ())
+        if spec.viml:
+            atomic.exec(spec.viml, False)
 
     return atomic + keymap.drain(nvim.channel_id, buf=None)
