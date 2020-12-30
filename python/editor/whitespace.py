@@ -41,7 +41,7 @@ def _strip_ending(string: str, nono: Set[str]) -> str:
 
 
 # remove trailing whitespace
-@autocmd("BufWritePre", blocking=True, modifiers=("*", "undojoin", "|"))
+# @autocmd("BufWritePre", blocking=True, modifiers=("*", "undojoin", "|"))
 def _trailing_ws(nvim: Nvim) -> None:
     win: Window = nvim.api.get_current_win()
     buf: Buffer = nvim.api.get_current_buf()
