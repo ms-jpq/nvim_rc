@@ -18,4 +18,4 @@ def _sort_lines(nvim: Nvim, visual_type: VisualTypes = None) -> None:
 
 
 keymap.n("gu") << f"<cmd>set opfunc=v:lua.{_sort_lines.lua_name}<cr>g@"
-keymap.n("gu") << f"<esc><cmd>lua {_sort_lines.lua_name}()<cr>"
+keymap.v("gu") << f"<esc><cmd>lua {_sort_lines.lua_name}()<cr>"
