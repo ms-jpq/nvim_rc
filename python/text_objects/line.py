@@ -1,29 +1,30 @@
-from typing import Iterable, Tuple
-from ..registery import keymap, rpc
 from string import whitespace
+from typing import Iterable, Tuple
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
+
+from ..registery import keymap, rpc
 
 
 def _p_inside(line: str) -> Tuple[int, int]:
     ws = {*whitespace}
     chars = tuple(enumerate(line, start=1))
 
-    def p(it: Iterable[Tuple[int, str]], default: int) -> int:
+    def p(it: Iterable[Tuple[int, str]]) -> int:
         for idx, char in it:
             if char in ws:
                 pass
             else:
                 return idx
         else:
-            return default
+            return 0
 
-    return p(chars, 0), p(reversed(chars), len(chars))
+    return p(chars), p(reversed(chars))
 
 
 def _p_around(line: str) -> Tuple[int, int]:
-    return 1, len(line)
+    return 1 if line else 0, len(line)
 
 
 @rpc(blocking=True)
