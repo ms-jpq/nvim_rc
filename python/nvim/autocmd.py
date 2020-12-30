@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from inspect import currentframe
-from typing import Iterable, MutableMapping, Optional, TypeVar
+from types import FrameType
+from typing import Iterable, MutableMapping, Optional, TypeVar, cast
 from uuid import uuid4
 
 from .atomic import Atomic
@@ -45,7 +46,9 @@ class AutoCMD:
         name: Optional[str] = None,
         modifiers: Iterable[str] = ("*",),
     ) -> _A:
-        parent_mod = currentframe().f_back.f_globals["__name__"]
+        cf = currentframe()
+        pf = cf.f_back if cf else None
+        parent_mod = pf.f_globals.get("__name__", "") if pf else ""
         qualname = f"{parent_mod}_{name or uuid4().hex}"
         return _A(
             name=qualname, events=(event, *events), modifiers=modifiers, parent=self
