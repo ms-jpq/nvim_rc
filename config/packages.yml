@@ -45,15 +45,15 @@
 - uri: https://github.com/sainnhe/edge
   vals:
     edge_style: neon
-    edge_menu_selection_background: purpleQ
+    edge_menu_selection_background: purple
+    lightline:
+      colorscheme: edge
   viml: |-
+    set termguicolors
     set background=light
     colorscheme edge
 
 - uri: https://github.com/itchyny/lightline.vim
-  vals:
-    lightline:
-      colorscheme: edge
 
 - uri: https://github.com/liuchengxu/vim-which-key
   keys:
