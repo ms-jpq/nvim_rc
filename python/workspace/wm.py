@@ -38,7 +38,7 @@ keymap.n("<s-up>") << "<cmd>wincmd +<cr>"
 keymap.n("<s-down>") << "<cmd>wincmd -<cr>"
 
 
-@rpc()
+@rpc(blocking=True)
 def new_window(nvim: Nvim, vertical: bool) -> None:
     nvim.command("vnew" if vertical else "new")
     win: Window = nvim.api.get_current_win()
@@ -56,7 +56,7 @@ keymap.n("<leader>x") << "<cmd>bwipeout!<cr>"
 keymap.n("<leader>w") << "<cmd>close<cr>"
 
 
-@rpc()
+@rpc(blocking=True)
 def close_others(nvim: Nvim) -> None:
     tab: Tabpage = nvim.api.get_current_tabpage()
     win: Window = nvim.api.get_current_win()
@@ -75,7 +75,7 @@ keymap.n("<leader>k") << "<cmd>wincmd T<cr>"
 # close tab
 keymap.n("<leader>q") << "<cmd>tabclose<cr>"
 # create new tab
-@rpc()
+@rpc(blocking=True)
 def new_tab(nvim: Nvim) -> None:
     nvim.command("tabnew")
     buf: Buffer = nvim.api.get_current_buf()
@@ -99,7 +99,7 @@ for i in range(1, 10):
 settings["previewheight"] = 11
 
 
-@rpc()
+@rpc(blocking=True)
 def toggle_preview(nvim: Nvim) -> None:
     tab: Tabpage = nvim.api.get_current_tabpage()
     wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)
@@ -125,7 +125,7 @@ keymap.n("<c-j>") << "<cmd>cprevious<cr>"
 keymap.n("<c-k>") << "<cmd>cnext<cr>"
 
 
-@rpc()
+@rpc(blocking=True)
 def toggle_qf(nvim: Nvim) -> None:
     tab: Tabpage = nvim.api.get_current_tabpage()
     wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)
@@ -143,7 +143,7 @@ def toggle_qf(nvim: Nvim) -> None:
         nvim.api.win_set_height(win, height)
 
 
-@rpc()
+@rpc(blocking=True)
 def clear_qf(nvim: Nvim) -> None:
     nvim.funcs.setqflist(())
     nvim.command("cclose")
@@ -153,7 +153,7 @@ keymap.n("<leader>l") << "<cmd>" + toggle_qf.call_line() + "<cr>"
 keymap.n("<leader>L") << "<cmd>" + clear_qf.call_line() + "<cr>"
 
 
-@rpc()
+@rpc(blocking=True)
 def resize_secondary(nvim: Nvim) -> None:
     tab: Tabpage = nvim.api.get_current_tabpage()
     wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)

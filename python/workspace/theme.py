@@ -25,18 +25,18 @@ settings["cursorline"] = True
 settings["guicursor"] = ""
 
 
-@autocmd("InsertEnter")
+@autocmd("InsertEnter", blocking=True)
 def hl_cursor(nvim: Nvim) -> None:
     highlight(HLgroup("CursorLine", guibg="#f2d9fa")).commit(nvim)
 
 
-@autocmd("InsertLeave")
+@autocmd("InsertLeave", blocking=True)
 def dehl_cursor(nvim: Nvim) -> None:
     highlight(HLgroup("CursorLine", guibg="#f1f4f6")).commit(nvim)
 
 
 # highlight yank
-@autocmd("TextYankPost", args=("vim.v.event",))
+@autocmd("TextYankPost", blocking=True, args=("vim.v.event",))
 def hl_yank(nvim: Nvim, ev: Mapping[str, Any]) -> None:
     nvim.lua.vim.highlight.on_yank({"event": ev})
 
@@ -44,7 +44,7 @@ def hl_yank(nvim: Nvim, ev: Mapping[str, Any]) -> None:
 # remove welcome message
 settings["shortmess"] += "I"
 # welcome screen
-@autocmd("VimEnter")
+@autocmd("VimEnter", blocking=True)
 def welcome_screen(nvim: Nvim) -> None:
     bufs: Sequence[Buffer] = nvim.api.list_bufs()
     for buf in bufs:

@@ -6,7 +6,7 @@ from ..registery import keymap, rpc
 keymap.t("<c-g>") << "<c-\><c-n>"
 
 
-@rpc()
+@rpc(blocking=True)
 def open_floating(nvim: Nvim, *args: str) -> None:
     pass
 

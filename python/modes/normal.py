@@ -9,7 +9,7 @@ keymap.n("Y") << "y$"
 BUF_VAR_NAME = f"buf_cursor_pos_{uuid4().hex}"
 
 
-@autocmd("InsertEnter", "CursorMovedI", "TextChangedP")
+@autocmd("InsertEnter", "CursorMovedI", "TextChangedP", blocking=True)
 def _record_pos(nvim: Nvim) -> None:
     win: Window = nvim.api.get_current_win()
     buf: Buffer = nvim.api.get_current_buf()
@@ -17,7 +17,7 @@ def _record_pos(nvim: Nvim) -> None:
     nvim.api.buf_set_var(buf, BUF_VAR_NAME, col)
 
 
-@autocmd("InsertLeave")
+@autocmd("InsertLeave", blocking=True)
 def _restore_pos(nvim: Nvim) -> None:
     win: Window = nvim.api.get_current_win()
     buf: Buffer = nvim.api.get_current_buf()

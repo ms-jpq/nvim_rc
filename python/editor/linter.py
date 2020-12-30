@@ -66,7 +66,7 @@ async def _run(nvim: Nvim, buf: Buffer, attr: LinterAttrs, PATH: str) -> None:
         await write(nvim, f"✅ 👉 {attr.bin} {' '.join(attr.args)}")
 
 
-@rpc()
+@rpc(blocking=False)
 async def _run_linter(nvim: Nvim) -> None:
     PATH = pathsep.join((BIN_PATHS, environ["PATH"]))
 

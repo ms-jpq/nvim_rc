@@ -62,7 +62,7 @@ async def _run_fs(
 _progs = {FmtType.stream: _run_stream, FmtType.fs: _run_fs}
 
 
-@rpc()
+@rpc(blocking=False)
 async def run_fmt(nvim: Nvim) -> None:
     PATH = pathsep.join((BIN_PATHS, environ["PATH"]))
 
