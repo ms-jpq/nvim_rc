@@ -68,11 +68,8 @@ def run_client(nvim: Nvim, client: Client, log_level: int = WARN) -> None:
             request_cb=on_rpc,
         )
 
-    th1 = Thread(target=main)
-    th2 = Thread(target=forever, daemon=True)
-
+    th = Thread(target=forever, daemon=True)
     log.addHandler(nvim_handler(nvim))
     log.setLevel(log_level)
-    th2.start()
-    th1.start()
-    th1.join()
+    th.start()
+    main()
