@@ -7,4 +7,4 @@ def open_floating(nvim: Nvim, *args: str) -> None:
     pass
 
 
-keymap.n("<leader>u") << "<cmd>" + open_floating.call_line() + "<cr>"
+keymap.n("<leader>u") << f"<cmd>lua {open_floating.lua_name}()<cr>"

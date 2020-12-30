@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Iterable, MutableMapping, TypeVar
+from typing import Iterable, MutableMapping, Optional, TypeVar
+from uuid import uuid4
 
 from .atomic import Atomic
 
@@ -40,10 +41,13 @@ class AutoCMD:
         self,
         event: str,
         *events: str,
-        name: str,
+        name: Optional[str] = None,
         modifiers: Iterable[str] = ("*",),
     ) -> _A:
-        return _A(name=name, events=(event, *events), modifiers=modifiers, parent=self)
+        cmd_name = name or uuid4().hex
+        return _A(
+            name=cmd_name, events=(event, *events), modifiers=modifiers, parent=self
+        )
 
     def drain(self, chan: int) -> Atomic:
         atomic = Atomic()

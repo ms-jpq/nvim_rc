@@ -17,5 +17,5 @@ def _sort_lines(nvim: Nvim, visual_type: VisualTypes) -> None:
     nvim.api.buf_set_lines(0, row1, row2, True, new_lines)
 
 
-keymap.n("gu") << "<cmd>set opfunc=" + "<cr>g@"
-keymap.n("gu") << "<esc><cmd>" + _sort_lines.call_line("nil") + "<cr>"
+keymap.n("gu") << f"<cmd>set opfunc=v:lua.{_sort_lines.lua_name}<cr>g@"
+keymap.n("gu") << f"<esc><cmd>lua {_sort_lines.lua_name}(nil)<cr>"

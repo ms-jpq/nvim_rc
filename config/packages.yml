@@ -47,6 +47,7 @@
     edge_style: neon
     edge_menu_selection_background: purpleQ
   viml: |-
+    set background=light
     colorscheme edge
 
 - uri: https://github.com/itchyny/lightline.vim

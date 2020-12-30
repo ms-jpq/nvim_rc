@@ -1,5 +1,5 @@
 from pynvim.api.nvim import Nvim, Window, Buffer
-from ..registery import keymap, autocmd
+from ..registery import keymap, autocmd, rpc
 from uuid import uuid4
 
 # # normalize Y
@@ -9,7 +9,7 @@ keymap.n("Y") << "y$"
 BUF_VAR_NAME = f"buf_cursor_pos_{uuid4().hex}"
 
 
-@autocmd("InsertEnter", "CursorMovedI", "TextChangedP", blocking=True)
+@rpc(blocking=True)
 def _record_pos(nvim: Nvim) -> None:
     win: Window = nvim.api.get_current_win()
     buf: Buffer = nvim.api.get_current_buf()
@@ -17,7 +17,12 @@ def _record_pos(nvim: Nvim) -> None:
     nvim.api.buf_set_var(buf, BUF_VAR_NAME, col)
 
 
-@autocmd("InsertLeave", blocking=True)
+autocmd(
+    "InsertEnter", "CursorMovedI", "TextChangedP"
+) << f"<cmd>lua {_record_pos.lua_name}()<cr>"
+
+
+@rpc(blocking=True)
 def _restore_pos(nvim: Nvim) -> None:
     win: Window = nvim.api.get_current_win()
     buf: Buffer = nvim.api.get_current_buf()
@@ -25,3 +30,6 @@ def _restore_pos(nvim: Nvim) -> None:
     pos = nvim.api.buf_get_var(buf, BUF_VAR_NAME)
     if col != pos:
         nvim.api.win_set_cursor(win, (row, pos))
+
+
+autocmd("InsertLeave") << f"<cmd>lua {_restore_pos.lua_name}()<cr>"

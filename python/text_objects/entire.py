@@ -14,7 +14,7 @@ def _entire(nvim: Nvim) -> None:
     nvim.command("norm! `<V`>")
 
 
-keymap.o("ie") << "<cmd>" + _entire.call_line() + "<cr>"
-keymap.o("ae") << "<cmd>" + _entire.call_line() + "<cr>"
-keymap.v("ie") << "<esc><cmd>" + _entire.call_line() + "<cr>"
-keymap.v("ae") << "<esc><cmd>" + _entire.call_line() + "<cr>"
+keymap.o("ie") << f"<cmd>lua {_entire.lua_name}()<cr>"
+keymap.o("ae") << f"<cmd>lua {_entire.lua_name}()<cr>"
+keymap.v("ie") << f"<esc><cmd>lua {_entire.lua_name}()<cr>"
+keymap.v("ae") << f"<esc><cmd>lua {_entire.lua_name}()<cr>"

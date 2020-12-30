@@ -106,4 +106,4 @@ async def run_fmt(nvim: Nvim) -> None:
         await write(nvim, f"⁉️: 莫有 {filetype} 的 prettier", error=True)
 
 
-keymap.n("gq", nowait=True) << "<cmd>" + run_fmt.call_line() + "<cr>"
+keymap.n("gq", nowait=True) << f"<cmd>lua {run_fmt.lua_name}()<cr>"

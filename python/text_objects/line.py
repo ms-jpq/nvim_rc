@@ -40,7 +40,7 @@ def _line(nvim: Nvim, is_inside: bool) -> None:
     nvim.command("norm! `<v`>")
 
 
-keymap.o("il") << "<cmd>" + _line.call_line("true") + "<cr>"
-keymap.o("al") << "<cmd>" + _line.call_line("false") + "<cr>"
-keymap.v("il") << "<esc><cmd>" + _line.call_line("true") + "<cr>"
-keymap.v("al") << "<esc><cmd>" + _line.call_line("false") + "<cr>"
+keymap.o("il") << f"<cmd>lua {_line.lua_name}(true)<cr>"
+keymap.o("al") << f"<cmd>lua {_line.lua_name}(false)<cr>"
+keymap.v("il") << f"<esc><cmd>lua {_line.lua_name}(true)<cr>"
+keymap.v("al") << f"<esc><cmd>lua {_line.lua_name}(false)<cr>"

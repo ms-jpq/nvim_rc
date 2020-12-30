@@ -4,7 +4,7 @@ from typing import Iterator, Sequence, Set
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
 
-from ..registery import autocmd, settings
+from ..registery import autocmd, rpc, settings
 
 # join only add 1 space
 settings["nojoinspaces"] = True
@@ -42,6 +42,7 @@ def _strip_ending(string: str, nono: Set[str]) -> str:
 
 # remove trailing whitespace
 # @autocmd("BufWritePre", blocking=True, modifiers=("*", "undojoin", "|"))
+@rpc(blocking=True)
 def _trailing_ws(nvim: Nvim) -> None:
     win: Window = nvim.api.get_current_win()
     buf: Buffer = nvim.api.get_current_buf()
