@@ -17,7 +17,12 @@ def _reload_file(nvim: Nvim) -> None:
 settings["backup"] = True
 
 
-@autocmd("FocusLost", "VimLeavePre", blocking=True, modifiers=("nested",))
+@autocmd(
+    "FocusLost",
+    "VimLeavePre",
+    blocking=True,
+    modifiers=("*", "nested"),
+)
 def _auto_save(nvim: Nvim) -> None:
     nvim.command("silent! wa")
 
@@ -28,7 +33,7 @@ def _auto_save(nvim: Nvim) -> None:
     "TextChanged",
     "TextChangedI",
     blocking=True,
-    modifiers=("nested",),
+    modifiers=("*", "nested"),
 )
 def _smol_save(nvim: Nvim) -> None:
     nvim.command("silent! wa")
