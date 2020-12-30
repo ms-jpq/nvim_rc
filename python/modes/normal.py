@@ -24,4 +24,4 @@ def _restore_pos(nvim: Nvim) -> None:
     row, col = nvim.api.win_get_cursor(win)
     pos = nvim.api.buf_get_var(buf, BUF_VAR_NAME)
     if col != pos:
-        nvim.api.win_set_cursor(0, (row, pos))
+        nvim.api.win_set_cursor(win, (row, pos))
