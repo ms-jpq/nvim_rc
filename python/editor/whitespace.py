@@ -10,29 +10,34 @@ from ..registery import autocmd, rpc, settings
 # join only add 1 space
 settings["nojoinspaces"] = True
 
-tabsize = 2
+tabsize_d = 2
 # how big are tabs ?
-settings["tabstop"] = tabsize
+settings["tabstop"] = tabsize_d
 # spaces remove on deletion
-settings["softtabstop"] = tabsize
+settings["softtabstop"] = tabsize_d
 # manual indentation width
-settings["shiftwidth"] = tabsize
+settings["shiftwidth"] = tabsize_d
 
 
 @rpc(blocking=True)
 def _detect_tabsize(nvim: Nvim) -> None:
     buf: Buffer = nvim.api.get_current_buf()
     count: int = nvim.api.buf_line_count(buf)
-    lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, min(count, 100), True)
+    rows = min(count, 100)
+    lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, rows, True)
 
-    def it() -> Tuple[int, int]:
+    def it() -> Iterator[Tuple[int, int]]:
         for tabsize in range(2, 9):
-            divibilty = sum(
-                p_indent(line, tabsize=tabsize) % tabsize == 0 for line in lines
-            )
-            yield divibilty, tabsize
+            indent_lvs = tuple(p_indent(line, tabsize=tabsize) for line in lines)
+            divibilty = sum(lv % tabsize == 0 for lv in indent_lvs if lv)
+            if divibilty:
+                yield divibilty, tabsize
 
-    _, tabsize = next(reversed(sorted(it())))
+    try:
+        _, tabsize = next(reversed(sorted(it())))
+    except StopIteration:
+        tabsize = tabsize_d
+
     nvim.options["tabstop"] = tabsize
     nvim.options["softtabstop"] = tabsize
     nvim.options["shiftwidth"] = tabsize
