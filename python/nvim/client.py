@@ -1,6 +1,5 @@
 from abc import abstractmethod
-from asyncio.coroutines import iscoroutine
-from asyncio.tasks import run_coroutine_threadsafe, sleep
+from asyncio.tasks import Task, run_coroutine_threadsafe, sleep
 from logging import WARN
 from math import inf
 from os import linesep
@@ -35,7 +34,7 @@ class DefaultClient(Client):
         name, args = msg
         handler = self._handlers.get(name, nil_handler(name))
         ret = handler(nvim, *args)
-        return None if iscoroutine(ret) else ret
+        return None if isinstance(ret, Task) else ret
 
     async def wait(self, nvim: Nvim) -> None:
         await sleep(inf)

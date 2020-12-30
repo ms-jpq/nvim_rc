@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from asyncio.coroutines import iscoroutinefunction
+from asyncio.tasks import Task
 from string import Template
 from typing import (
     Any,
@@ -18,7 +19,7 @@ from typing import (
 )
 
 from pynvim import Nvim
-from python.nvim.lib import async_call
+from python.nvim.lib import async_call, go
 
 from .logging import log
 
@@ -65,14 +66,16 @@ class RpcCallable(Generic[T]):
         call = f"lua vim.rpc{op}($chan, '{self.name}', {{{_args}}})"
         return _ComposableTemplate(call)
 
-    def __call__(self, nvim: Nvim, *args: Any) -> Union[T, Awaitable[T]]:
+    def __call__(self, nvim: Nvim, *args: Any) -> Union[T, Task[T]]:
         if iscoroutinefunction(self._handler):
-            return cast(Awaitable[T], self._handler(nvim, *args))
+            aw = cast(Awaitable[T], self._handler(nvim, *args))
+            return go(aw)
         elif self._blocking:
             return self._handler(nvim, *args)
         else:
             handler = cast(Callable[[Nvim, Any], T], self._handler)
-            return async_call(nvim, handler, nvim, *args)
+            aw = async_call(nvim, handler, nvim, *args)
+            return go(aw)
 
 
 RpcSpec = Tuple[str, RpcCallable[T]]
@@ -107,4 +110,4 @@ def nil_handler(name: str) -> RpcCallable:
     def handler(nvim: Nvim, *args: Any) -> None:
         log.warn("MISSING RPC HANDLER FOR: %s - %s", name, args)
 
-    return RpcCallable(name=name, blocking=False, handler=handler)
+    return RpcCallable(name=name, blocking=True, handler=handler)
