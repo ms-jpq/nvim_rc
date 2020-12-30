@@ -1,4 +1,6 @@
+from os import environ
 from typing import Sequence
+from urllib.parse import urlparse
 from uuid import uuid4
 
 from pynvim import Nvim
@@ -27,9 +29,19 @@ def _single_term_buf(nvim: Nvim) -> Buffer:
 
 
 @rpc(blocking=True)
+def on_exit(nvim: Nvim, *args: str) -> None:
+    raise Exception()
+
+
+@rpc(blocking=True)
 def open_floating(nvim: Nvim, *args: str) -> None:
     buf = _single_term_buf(nvim)
     fw = open_float_win(nvim, margin=0, relsize=0.95, buf=buf)
+    filename: str = nvim.api.buf_get_name(fw.buf)
+    if urlparse(filename).scheme != "term":
+        cmds = args or (environ["SHELL"],)
+        nvim.funcs.termopen(cmds, {"on_exit": f"v:lua.{on_exit.lua_name}"})
+    nvim.command("startinsert")
 
 
 keymap.n("<leader>u") << f"<cmd>lua {open_floating.lua_name}()<cr>"
