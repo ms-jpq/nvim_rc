@@ -5,12 +5,12 @@ from logging import WARN
 from math import inf
 from os import linesep
 from threading import Thread
-from typing import Any, Protocol, Sequence, TypeVar
+from typing import Any, MutableMapping, Protocol, Sequence, TypeVar
 
 from pynvim import Nvim
 
 from .logging import log, nvim_handler
-from .rpc import RpcSpec, nil_handler
+from .rpc import RpcCallable, nil_handler
 
 T = TypeVar("T")
 
@@ -28,8 +28,8 @@ class Client(Protocol):
 
 
 class DefaultClient(Client):
-    def __init__(self, *specs: RpcSpec[Any]) -> None:
-        self._handlers = {k: v for k, v in specs}
+    def __init__(self) -> None:
+        self._handlers: MutableMapping[str, RpcCallable] = {}
 
     def on_msg(self, nvim: Nvim, msg: RpcMsg) -> Any:
         name, args = msg

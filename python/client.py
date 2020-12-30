@@ -1,34 +1,17 @@
-from asyncio.queues import Queue
-from asyncio.tasks import gather
-from typing import AsyncIterable, AsyncIterator, TypeVar
-
 from pynvim import Nvim
 
 from ._registery import ____
-from .nvim.client import RpcMsg
+from .nvim.client import DefaultClient
 from .nvim.lib import async_call, write
-from .nvim.rpc import RpcSpec, rpc_agent
 from .registery import drain
 
-T = TypeVar("T")
 
+class Client(DefaultClient):
+    async def wait(self, nvim: Nvim) -> None:
+        def init() -> None:
+            atomic, specs = drain(nvim)
+            self._handlers = {k: v for k, v in specs}
+            atomic.commit(nvim)
 
-async def _to_iter(queue: Queue[T]) -> AsyncIterator[T]:
-    while True:
-        yield await queue.get()
-
-
-async def client(nvim: Nvim, rpcs: AsyncIterable[RpcMsg]) -> None:
-    spec_q = Queue[RpcSpec]()
-    atomic, specs = await async_call(nvim, drain, nvim)
-    await gather(
-        async_call(
-            nvim,
-            atomic.commit,
-            nvim,
-        ),
-        *(spec_q.put(spec) for spec in specs)
-    )
-
-    # write(nvim, *atomic, sep="\n")
-    await rpc_agent(nvim, specs=_to_iter(spec_q), rpcs=rpcs)
+        await async_call(nvim, init)
+        await super().wait(nvim)

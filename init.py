@@ -9,13 +9,13 @@ path.append(RT_DIR)
 
 from pynvim import attach
 
-from python.client import client
+from python.client import Client
 from python.nvim.client import run_client
 
 
 def main() -> None:
     nvim = attach("stdio")
-    run_client(nvim, client=client)
+    run_client(nvim, client=Client())
 
 
 main()
