@@ -20,3 +20,5 @@ vim.fn.jobstart(
   {   on_exit = on_exit,
     on_stdout = on_stdout,
     on_stderr = on_stderr })
+
+print(vim.inspect(vim.fn.serverlist()))
