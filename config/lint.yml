@@ -10,6 +10,14 @@
     pip:
       - mypy
 
+- bin: markdownlint
+  type: stream
+  args:
+    - --stdin
+  install:
+    npm:
+      - markdownlint-cli
+
 - bin: shellcheck
   type: fs
   args:
