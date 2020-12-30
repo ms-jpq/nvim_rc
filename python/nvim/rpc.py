@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 from asyncio.coroutines import iscoroutinefunction
-from asyncio.tasks import create_task
-from os import linesep
 from string import Template
 from typing import (
     Any,
@@ -20,6 +18,7 @@ from typing import (
 )
 
 from pynvim import Nvim
+from python.nvim.lib import async_call
 
 from .logging import log
 
@@ -50,31 +49,30 @@ class RpcCallable(Generic[T]):
     def __init__(
         self,
         name: Optional[str],
+        blocking: bool,
         handler: Union[Callable[..., T], Callable[..., Awaitable[T]]],
     ) -> None:
-        self.name = name if name else f"{handler.__module__}.{handler.__qualname__}"
-        self._rpcf = handler
+        if iscoroutinefunction(handler) and blocking:
+            raise ValueError()
+        else:
+            self.name = name if name else f"{handler.__module__}.{handler.__qualname__}"
+            self._blocking = blocking
+            self._handler = handler
 
-    def call_line(self, *args: str, blocking: bool = False) -> _ComposableTemplate:
-        op = "request" if blocking else "notify"
+    def call_line(self, *args: str) -> _ComposableTemplate:
+        op = "request" if self._blocking else "notify"
         _args = ", ".join(args)
         call = f"lua vim.rpc{op}($chan, '{self.name}', {{{_args}}})"
         return _ComposableTemplate(call)
 
     def __call__(self, nvim: Nvim, *args: Any) -> Union[T, Awaitable[T]]:
-        if iscoroutinefunction(self._rpcf):
-
-            async def wrapper() -> T:
-                try:
-                    return await cast(Awaitable[T], self._rpcf(nvim, *args))
-                except Exception as e:
-                    fmt = f"ERROR IN RPC FOR: %s - %s{linesep}%s"
-                    log.exception(fmt, self.name, args, e)
-                    raise
-
-            return create_task(wrapper())
+        if iscoroutinefunction(self._handler):
+            return cast(Awaitable[T], self._handler(nvim, *args))
+        elif self._blocking:
+            return self._handler(nvim, *args)
         else:
-            return self._rpcf(nvim, *args)
+            handler = cast(Callable[[Nvim, Any], T], self._handler)
+            return async_call(nvim, handler, nvim, *args)
 
 
 RpcSpec = Tuple[str, RpcCallable[T]]
@@ -85,10 +83,12 @@ class RPC:
         self._handlers: MutableMapping[str, RpcCallable[Any]] = {}
 
     def __call__(
-        self, name: Optional[str] = None
+        self,
+        blocking: bool,
+        name: Optional[str] = None,
     ) -> Callable[[Callable[..., T]], RpcCallable[T]]:
         def decor(handler: Callable[..., T]) -> RpcCallable[T]:
-            wraped = RpcCallable(name=name, handler=handler)
+            wraped = RpcCallable(name=name, blocking=blocking, handler=handler)
             self._handlers[wraped.name] = wraped
             return wraped
 
@@ -107,4 +107,4 @@ def nil_handler(name: str) -> RpcCallable:
     def handler(nvim: Nvim, *args: Any) -> None:
         log.warn("MISSING RPC HANDLER FOR: %s - %s", name, args)
 
-    return RpcCallable(name=name, handler=handler)
+    return RpcCallable(name=name, blocking=False, handler=handler)

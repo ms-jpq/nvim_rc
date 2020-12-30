@@ -19,7 +19,6 @@ T = TypeVar("T")
 
 @dataclass(frozen=True)
 class _AuParams:
-    blocking: bool
     events: Iterable[str]
     filters: Iterable[str]
     modifiers: Iterable[str]
@@ -34,14 +33,13 @@ class AutoCMD:
         self,
         event: str,
         *events: str,
+        blocking: bool,
         name: Optional[str] = None,
         filters: Iterable[str] = ("*",),
         modifiers: Iterable[str] = (),
         args: Iterable[str] = (),
-        blocking: bool = False,
     ) -> Callable[[Callable[..., T]], RpcCallable[T]]:
         param = _AuParams(
-            blocking=blocking,
             events=tuple((event, *events)),
             filters=filters,
             modifiers=modifiers,
@@ -49,7 +47,7 @@ class AutoCMD:
         )
 
         def decor(handler: Callable[..., T]) -> RpcCallable[T]:
-            wrapped = RpcCallable(name=name, handler=handler)
+            wrapped = RpcCallable(name=name, blocking=blocking, handler=handler)
             self._autocmds[wrapped.name] = (param, wrapped)
             return wrapped
 
@@ -63,9 +61,7 @@ class AutoCMD:
             events = ",".join(param.events)
             filters = " ".join(param.filters)
             modifiers = " ".join(param.modifiers)
-            call = func.call_line(*param.args, blocking=param.blocking).substitute(
-                chan=chan
-            )
+            call = func.call_line(*param.args).substitute(chan=chan)
             atomic.command(f"augroup ch_{chan}.{name}")
             atomic.command("autocmd!")
             atomic.command(f"autocmd {events} {filters} {modifiers} {call}")
