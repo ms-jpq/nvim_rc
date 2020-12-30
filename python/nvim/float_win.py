@@ -72,10 +72,10 @@ def open_float_win(nvim: Nvim, margin: int, relsize: float, buf: Buffer) -> Floa
     win = _open_float_win(
         nvim,
         buf=buf,
-        width=width - 1,
-        height=height - 1,
+        width=width - 2,
+        height=height - 2,
         pos=(row + 1, col + 1),
-        focusable=False,
+        focusable=True,
     )
 
     return FloatWin(border_win=border_win, border_buf=border_buf, win=win, buf=buf)
