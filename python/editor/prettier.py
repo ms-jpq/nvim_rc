@@ -98,7 +98,7 @@ async def run_fmt(nvim: Nvim) -> None:
                         err_out = f"{heading}{linesep}{stdout}{linesep}{e.stderr}"
                         await async_call(nvim, set_preview, nvim, err_out)
                     else:
-                        await write(nvim, f"✅ 👉 {attr.bin}")
+                        await write(nvim, f"✅ 👉 {attr.bin} {' '.join(attr.args)}")
             else:
                 await write(nvim, f"⁉️: 莫有 {attr.bin}", error=True)
             break
