@@ -26,7 +26,7 @@ class Client(Protocol):
         ...
 
 
-class DefaultClient(Client):
+class BasicClient(Client):
     def __init__(self) -> None:
         self._handlers: MutableMapping[str, RpcCallable] = {}
 

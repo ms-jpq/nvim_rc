@@ -5,6 +5,7 @@ from pynvim import Nvim
 from pynvim.api import Window
 
 
+@contextmanager
 def hold_win_pos(nvim: Nvim, hold: bool) -> Iterator[None]:
     if hold:
         win: Window = nvim.api.get_current_win()

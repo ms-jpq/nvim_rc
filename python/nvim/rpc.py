@@ -71,7 +71,7 @@ class RpcCallable(Generic[T]):
             aw = cast(Awaitable[T], self._handler(nvim, *args))
             return go(aw)
         elif self._blocking:
-            return self._handler(nvim, *args)
+            return cast(T, self._handler(nvim, *args))
         else:
             handler = cast(Callable[[Nvim, Any], T], self._handler)
             aw = async_call(nvim, handler, nvim, *args)

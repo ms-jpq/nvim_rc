@@ -1,5 +1,5 @@
 from asyncio.events import get_running_loop
-from asyncio.tasks import create_task
+from asyncio.tasks import Task, create_task
 from concurrent.futures import Future
 from os import linesep
 from typing import Any, Awaitable, Callable, TypeVar
@@ -11,7 +11,7 @@ from .logging import log
 T = TypeVar("T")
 
 
-def go(aw: Awaitable[T]) -> Awaitable[T]:
+def go(aw: Awaitable[T]) -> Task[T]:
     async def wrapper() -> T:
         try:
             return await aw

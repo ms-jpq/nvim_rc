@@ -1,12 +1,12 @@
 from pynvim import Nvim
 
 from ._registery import ____
-from .nvim.client import DefaultClient
+from .nvim.client import BasicClient
 from .nvim.lib import async_call, write
 from .registery import drain
 
 
-class Client(DefaultClient):
+class Client(BasicClient):
     async def wait(self, nvim: Nvim) -> None:
         def init() -> None:
             atomic, specs = drain(nvim)
