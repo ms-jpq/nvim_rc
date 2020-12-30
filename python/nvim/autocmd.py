@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from inspect import currentframe
 from typing import Iterable, MutableMapping, Optional, TypeVar
 from uuid import uuid4
 
@@ -44,9 +45,10 @@ class AutoCMD:
         name: Optional[str] = None,
         modifiers: Iterable[str] = ("*",),
     ) -> _A:
-        cmd_name = name or uuid4().hex
+        parent_mod = currentframe().f_back.f_globals["__name__"]
+        qualname = f"{parent_mod}_{name or uuid4().hex}"
         return _A(
-            name=cmd_name, events=(event, *events), modifiers=modifiers, parent=self
+            name=qualname, events=(event, *events), modifiers=modifiers, parent=self
         )
 
     def drain(self, chan: int) -> Atomic:
