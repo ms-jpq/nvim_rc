@@ -33,7 +33,7 @@ keymap.n("<s-down>") << "<cmd>wincmd J<cr>"
 
 @rpc()
 def new_window(nvim: Nvim, vertical: bool) -> None:
-    nvim.api.command("vnew" if vertical else "new")
+    nvim.command("vnew" if vertical else "new")
     win: Window = nvim.api.get_current_win()
     buf: Buffer = nvim.api.create_buf(False, True)
     nvim.api.win_set_buf(win, buf)
@@ -70,7 +70,7 @@ keymap.n("<leader>q") << "<cmd>tabclose<cr>"
 # create new tab
 @rpc()
 def new_tab(nvim: Nvim) -> None:
-    nvim.api.command("tabnew")
+    nvim.command("tabnew")
     buf: Buffer = nvim.api.get_current_buf()
     nvim.api.buf_set_var(buf, "buftype", "nofile")
 
@@ -86,3 +86,40 @@ keymap.n("<leader>]") << "<cmd>tabnext<cr>"
 keymap.n("<leader>0") << "g<tab>"
 for i in range(1, 10):
     keymap.n(f"<leader>{i}") << f"<cmd>tabnext {i}<cr>"
+
+
+# preview height
+settings["previewheight", 11]
+
+
+# quickfix
+keymap.n("<c-j>") << "<cmd>cprevious<cr>"
+keymap.n("<c-k>") << "<cmd>cnext<cr>"
+
+
+@rpc()
+def clear_qf(nvim: Nvim) -> None:
+    nvim.funcs.setqflist(())
+    nvim.command("cclose")
+
+
+@rpc()
+def toggle_qf(nvim: Nvim) -> None:
+    tab: Tabpage = nvim.api.get_current_tabpage()
+    wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)
+    closed = False
+    for win in wins:
+        buf: Buffer = nvim.api.win_get_buf(win)
+        ft = nvim.api.buf_get_option(buf, "filetype")
+        if ft == "qf":
+            nvim.api.win_close(win, True)
+            closed = True
+    if not closed:
+        nvim.command("copen")
+        win = nvim.api.get_current_win()
+        height = nvim.options["previewheight"]
+        nvim.api.win_set_height(win, height)
+
+
+keymap.n("<leader>l") << "<cmd>" + clear_qf.call_line() + "<cr>"
+keymap.n("<leader>L") << "<cmd>" + toggle_qf.call_line() + "<cr>"
