@@ -40,7 +40,7 @@ class RpcCallable(Generic[T]):
             raise ValueError()
         else:
             self.name = name if name else f"{handler.__module__}.{handler.__qualname__}"
-            self.lua_name = f"{name}_{uuid4().hex}"
+            self.lua_name = f"{self.name}_{uuid4().hex}".replace(".", "_")
             self.blocking = blocking
             self._handler = handler
 
@@ -61,8 +61,8 @@ RpcSpec = Tuple[str, RpcCallable[T]]
 
 def _new_lua_func(chan: int, handler: RpcCallable[T]) -> str:
     op = "request" if handler.blocking else "notify"
-    invoke = f"vim.rpc{op}({chan}, '{handler.name}', args)"
-    return f"{handler.lua_name} = function (args) {invoke} end"
+    invoke = f"vim.rpc{op}({chan}, '{handler.name}', {{...}})"
+    return f"{handler.lua_name} = function (...) {invoke} end"
 
 
 class RPC:
@@ -86,7 +86,7 @@ class RPC:
         specs: MutableSequence[RpcSpec] = []
         while self._handlers:
             name, handler = self._handlers.popitem()
-            atomic.exec_lua(_new_lua_func(chan, handler=handler))
+            atomic.exec_lua(_new_lua_func(chan, handler=handler), ())
             specs.append((name, handler))
 
         return atomic, specs

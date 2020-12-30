@@ -19,7 +19,7 @@ def _record_pos(nvim: Nvim) -> None:
 
 autocmd(
     "InsertEnter", "CursorMovedI", "TextChangedP"
-) << f"<cmd>lua {_record_pos.lua_name}()<cr>"
+) << f"lua {_record_pos.lua_name}()"
 
 
 @rpc(blocking=True)
@@ -32,4 +32,4 @@ def _restore_pos(nvim: Nvim) -> None:
         nvim.api.win_set_cursor(win, (row, pos))
 
 
-autocmd("InsertLeave") << f"<cmd>lua {_restore_pos.lua_name}()<cr>"
+autocmd("InsertLeave") << f"lua {_restore_pos.lua_name}()"

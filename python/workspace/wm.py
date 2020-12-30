@@ -154,7 +154,7 @@ keymap.n("<leader>L") << f"<cmd>lua {clear_qf.lua_name}()<cr>"
 
 
 @rpc(blocking=True)
-def resize_secondary(nvim: Nvim) -> None:
+def _resize_secondary(nvim: Nvim) -> None:
     tab: Tabpage = nvim.api.get_current_tabpage()
     wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)
     height = nvim.options["previewheight"]
@@ -167,4 +167,4 @@ def resize_secondary(nvim: Nvim) -> None:
             nvim.api.win_set_height(win, height)
 
 
-keymap.n("<leader>M") << f"<cmd>lua {resize_secondary.lua_name}()<cr>"
+keymap.n("<leader>M") << f"<cmd>lua {_resize_secondary.lua_name}()<cr>"
