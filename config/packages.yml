@@ -115,7 +115,7 @@
 
 - uri: https://github.com/norcalli/nvim-colorizer.lua
   lua: |-
-    local go, colourizer = unpack(pcall(require, "colorizer"))
+    local go, colourizer = pcall(require, "colorizer")
     if go then
       colourizer.setup()
     end
