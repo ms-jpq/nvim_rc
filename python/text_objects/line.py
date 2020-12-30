@@ -37,7 +37,7 @@ def _line(nvim: Nvim, is_inside: bool) -> None:
 
     nvim.funcs.setpos("'<", (buf.number, row, lhs, 0))
     nvim.funcs.setpos("'>", (buf.number, row, rhs, 0))
-    nvim.command("norm! `<V`>")
+    nvim.command("norm! `<v`>")
 
 
 keymap.o("il") << "<cmd>" + _line.call_line("true") + "<cr>"
