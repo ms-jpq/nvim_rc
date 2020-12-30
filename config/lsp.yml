@@ -17,7 +17,9 @@
 
 - server: diagnosticls
   bin: diagnostic-languageserver
-  filetypes: []
+  filetypes:
+    - sh
+    - markdown
   install:
     npm:
       - diagnostic-languageserver

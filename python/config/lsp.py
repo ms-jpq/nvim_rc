@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import FrozenSet, Optional, Sequence
+from typing import Any, FrozenSet, Optional, Sequence
 
 from std2.pickle import decode
 from yaml import safe_load
@@ -14,6 +14,7 @@ class LspAttrs:
     bin: str
     filetypes: FrozenSet[str]
     args: Sequence[str] = ()
+    settings: Optional[Any] = None
     install: Optional[InstallSpec] = None
 
 
