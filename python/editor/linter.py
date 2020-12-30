@@ -13,15 +13,26 @@ from ..nvim.lib import async_call, write
 from ..nvim.preview import set_preview
 from ..registery import keymap, rpc
 
+ESCAPE_CHAR = "%"
+
 
 def arg_subst(args: Iterable[str], filename: str) -> Iterator[str]:
     for arg in args:
-        if arg == "%":
-            yield filename
-        elif arg == "%%":
-            yield "%"
-        else:
-            yield arg
+
+        def it() -> Iterator[str]:
+            chars = iter(arg)
+            for char in chars:
+                if char == ESCAPE_CHAR:
+                    nchar = next(chars, "")
+                    if nchar == ESCAPE_CHAR:
+                        yield ESCAPE_CHAR
+                    else:
+                        yield filename
+                        yield nchar
+                else:
+                    yield char
+
+        yield "".join(it())
 
 
 async def _run(nvim: Nvim, buf: Buffer, attr: LinterAttrs, PATH: str) -> None:
