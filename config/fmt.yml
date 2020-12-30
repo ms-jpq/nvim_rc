@@ -20,6 +20,14 @@
       - isort
       - black
 
+- bin: scfg
+  type: stream
+  filetypes:
+    - cfg
+  install:
+    pip:
+      - sortd
+
 - bin: prettier
   args:
     - --stdin-filepath
@@ -43,14 +51,6 @@
   install:
     npm:
       - prettier
-
-- bin: scfg
-  type: stream
-  filetypes:
-    - cfg
-  install:
-    pip:
-      - sortd
 
 - bin: rustfmt
   type: stream

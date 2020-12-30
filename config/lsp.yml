@@ -1,4 +1,27 @@
 ---
+- server: jsonls
+  bin: vscode-json-languageserver
+  filetypes:
+    - json
+  install:
+    npm:
+      - vscode-json-languageserver
+
+- server: yamlls
+  bin: yaml-language-server
+  filetypes:
+    - yaml
+  install:
+    npm:
+      - yaml-language-server
+
+- server: diagnosticls
+  bin: diagnostic-languageserver
+  filetypes: []
+  install:
+    npm:
+      - diagnostic-languageserver
+
 - server: bashls
   bin: bash-language-server
   filetypes:
@@ -7,6 +30,22 @@
   install:
     npm:
       - bash-language-server
+
+- server: dockerls
+  bin: docker-langserver
+  filetypes:
+    - dockerfile
+  install:
+    npm:
+      - dockerfile-language-server-nodejs
+
+- server: html
+  bin: html-languageserver
+  filetypes:
+    - html
+  install:
+    npm:
+      - vscode-html-languageserver-bin
 
 - server: cssls
   bin: css-languageserver
@@ -18,36 +57,6 @@
     npm:
       - vscode-css-languageserver-bin
 
-- server: dockerls
-  bin: docker-langserver
-  filetypes:
-    - dockerfile
-  install:
-    npm:
-      - dockerfile-language-server-nodejs
-
-- server: gopls
-  bin: gopls
-  filetypes:
-    - go
-    - gomod
-
-- server: html
-  bin: html-languageserver
-  filetypes:
-    - html
-  install:
-    npm:
-      - vscode-html-languageserver-bin
-
-- server: jsonls
-  bin: vscode-json-languageserver
-  filetypes:
-    - json
-  install:
-    npm:
-      - vscode-json-languageserver
-
 - server: pyright
   bin: pyright-langserver
   filetypes:
@@ -56,16 +65,25 @@
     npm:
       - pyright
 
-- server: r_language_server
-  bin: R
-  filetypes:
-    - r
-    - rmd
-
 - server: rust_analyzer
   bin: rust-analyzer
   filetypes:
     - rust
+
+- server: gopls
+  bin: gopls
+  filetypes:
+    - go
+    - gomod
+
+- server: sourcekit
+  bin: xcrun
+  filetypes:
+    - swift
+    - c
+    - cpp
+    - objective-c
+    - objective-cpp
 
 - server: sqlls
   bin: sql-language-server
@@ -78,15 +96,6 @@
   install:
     npm:
       - sql-language-server
-
-- server: sourcekit
-  bin: xcrun
-  filetypes:
-    - swift
-    - c
-    - cpp
-    - objective-c
-    - objective-cpp
 
 - server: tsserver
   bin: typescript-language-server
@@ -102,6 +111,12 @@
       - typescript
       - typescript-language-server
 
+- server: r_language_server
+  bin: R
+  filetypes:
+    - r
+    - rmd
+
 - server: vimls
   bin: vim-language-server
   filetypes:
@@ -109,11 +124,3 @@
   install:
     npm:
       - vim-language-server
-
-- server: yamlls
-  bin: yaml-language-server
-  filetypes:
-    - yaml
-  install:
-    npm:
-      - yaml-language-server
