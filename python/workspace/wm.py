@@ -96,7 +96,7 @@ for i in range(1, 10):
 
 
 # preview height
-settings["previewheight", 11]
+settings["previewheight"] = 11
 
 
 @rpc()
@@ -151,3 +151,20 @@ def clear_qf(nvim: Nvim) -> None:
 
 keymap.n("<leader>l") << "<cmd>" + toggle_qf.call_line() + "<cr>"
 keymap.n("<leader>L") << "<cmd>" + clear_qf.call_line() + "<cr>"
+
+
+@rpc()
+def resize_secondary(nvim: Nvim) -> None:
+    tab: Tabpage = nvim.api.get_current_tabpage()
+    wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)
+    height = nvim.options["previewheight"]
+
+    for win in wins:
+        is_preview = nvim.api.win_get_option(win, "previewwindow")
+        buf: Buffer = nvim.api.win_get_buf(win)
+        ft = nvim.api.buf_get_option(buf, "filetype")
+        if is_preview or ft == "qf":
+            nvim.api.win_set_height(win, height)
+
+
+keymap.n("<leader>M") << "<cmd>" + resize_secondary.call_line() + "<cr>"

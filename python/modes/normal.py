@@ -10,7 +10,7 @@ BUF_VAR_NAME = f"buf_cursor_pos_{uuid4().hex}"
 
 
 @autocmd("InsertEnter", "CursorMovedI", "TextChangedP")
-def record_pos(nvim: Nvim) -> None:
+def _record_pos(nvim: Nvim) -> None:
     win: Window = nvim.api.get_current_win()
     buf: Buffer = nvim.api.get_current_buf()
     _, col = nvim.api.win_get_cursor(win)
@@ -18,7 +18,7 @@ def record_pos(nvim: Nvim) -> None:
 
 
 @autocmd("InsertLeave")
-def restore_pos(nvim: Nvim) -> None:
+def _restore_pos(nvim: Nvim) -> None:
     win: Window = nvim.api.get_current_win()
     buf: Buffer = nvim.api.get_current_buf()
     row, col = nvim.api.win_get_cursor(win)

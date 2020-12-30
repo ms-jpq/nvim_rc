@@ -67,7 +67,7 @@ async def _run(nvim: Nvim, buf: Buffer, attr: LinterAttrs, PATH: str) -> None:
 
 
 @rpc()
-async def run_linter(nvim: Nvim) -> None:
+async def _run_linter(nvim: Nvim) -> None:
     PATH = pathsep.join((BIN_PATHS, environ["PATH"]))
 
     def cont() -> Tuple[Buffer, str]:
@@ -87,4 +87,4 @@ async def run_linter(nvim: Nvim) -> None:
         await write(nvim, f"⁉️: 莫有 {filetype} 的 linter", error=True)
 
 
-keymap.n("M") << "<cmd>" + run_linter.call_line() + "<cr>"
+keymap.n("M") << "<cmd>" + _run_linter.call_line() + "<cr>"

@@ -9,7 +9,7 @@ settings["autowriteall"] = True
 
 
 @autocmd("FocusGained", "BufEnter")
-def reload_file(nvim: Nvim) -> None:
+def _reload_file(nvim: Nvim) -> None:
     nvim.command("checktime")
 
 
@@ -18,14 +18,14 @@ settings["backup"] = True
 
 
 @autocmd("FocusLost", "VimLeavePre", modifiers=("nested",))
-def auto_save(nvim: Nvim) -> None:
+def _auto_save(nvim: Nvim) -> None:
     nvim.command("silent! wa")
 
 
 @autocmd(
     "CursorHold", "CursorHoldI", "TextChanged", "TextChangedI", modifiers=("nested",)
 )
-def smol_save(nvim: Nvim) -> None:
+def _smol_save(nvim: Nvim) -> None:
     nvim.command("silent! wa")
 
 
