@@ -5,6 +5,7 @@ from pynvim import Nvim
 from pynvim.api import Buffer, Window
 
 from ..nvim.operators import p_indent
+from ..nvim.settings import Settings
 from ..registery import autocmd, rpc, settings
 
 # join only add 1 space
@@ -38,9 +39,11 @@ def _detect_tabsize(nvim: Nvim) -> None:
     except StopIteration:
         tabsize = tabsize_d
 
-    nvim.options["tabstop"] = tabsize
-    nvim.options["softtabstop"] = tabsize
-    nvim.options["shiftwidth"] = tabsize
+    settings = Settings()
+    settings["tabstop"] = tabsize
+    settings["softtabstop"] = tabsize
+    settings["shiftwidth"] = tabsize
+    settings.drain(True).commit(nvim)
 
 
 autocmd("FileType") << f"lua {_detect_tabsize.lua_name}()"
