@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from inspect import currentframe
-from types import FrameType
-from typing import Iterable, MutableMapping, Optional, TypeVar, cast
+from typing import Iterable, MutableMapping, Optional, TypeVar
 from uuid import uuid4
 
 from .atomic import Atomic
