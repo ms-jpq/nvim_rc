@@ -6,16 +6,17 @@ local on_exit = function (_, code)
   vim.api.nvim_err_writeln("EXITED - " .. code)
 end
 
-
-local on_stderr = function (_, msg)
+local on_stdout = function (_, msg)
   vim.api.nvim_out_write(table.concat(msg, "\n"))
 end
 
+local on_stderr = function (_, msg)
+  vim.api.nvim_err_write(table.concat(msg, "\n"))
+end
 
-local chan = vim.fn.jobstart(
-  {py_main},
-  { rpc = true,
-    on_exit = on_exit,
+
+vim.fn.jobstart(
+  { py_main, vim.v.servername },
+  {   on_exit = on_exit,
+    on_stdout = on_stdout,
     on_stderr = on_stderr })
-
--- vim.rpcrequest(chan, name, args)
