@@ -92,15 +92,30 @@ for i in range(1, 10):
 settings["previewheight", 11]
 
 
+@rpc()
+def toggle_preview(nvim: Nvim) -> None:
+    tab: Tabpage = nvim.api.get_current_tabpage()
+    wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)
+    closed = False
+    for win in wins:
+        is_preview = nvim.api.win_get_option(win, "previewwindow")
+        if is_preview:
+            nvim.api.win_close(win, True)
+            closed = True
+    if not closed:
+        nvim.command("new")
+        win = nvim.api.get_current_win()
+        nvim.api.win_set_option(win, "previewwindow", True)
+        height = nvim.options["previewheight"]
+        nvim.api.win_set_height(win, height)
+
+
+keymap.n("<leader>m") << "<cmd>" + toggle_preview.call_line() + "<cr>"
+
+
 # quickfix
 keymap.n("<c-j>") << "<cmd>cprevious<cr>"
 keymap.n("<c-k>") << "<cmd>cnext<cr>"
-
-
-@rpc()
-def clear_qf(nvim: Nvim) -> None:
-    nvim.funcs.setqflist(())
-    nvim.command("cclose")
 
 
 @rpc()
@@ -121,5 +136,11 @@ def toggle_qf(nvim: Nvim) -> None:
         nvim.api.win_set_height(win, height)
 
 
-keymap.n("<leader>l") << "<cmd>" + clear_qf.call_line() + "<cr>"
-keymap.n("<leader>L") << "<cmd>" + toggle_qf.call_line() + "<cr>"
+@rpc()
+def clear_qf(nvim: Nvim) -> None:
+    nvim.funcs.setqflist(())
+    nvim.command("cclose")
+
+
+keymap.n("<leader>l") << "<cmd>" + toggle_qf.call_line() + "<cr>"
+keymap.n("<leader>L") << "<cmd>" + clear_qf.call_line() + "<cr>"
