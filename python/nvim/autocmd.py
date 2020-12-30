@@ -1,18 +1,9 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import (
-    Any,
-    Callable,
-    Iterable,
-    MutableMapping,
-    MutableSequence,
-    Optional,
-    Sequence,
-    Tuple,
-    TypeVar,
-)
+from typing import Iterable, MutableMapping, TypeVar
 
 from .atomic import Atomic
-from .rpc import RpcCallable, RpcSpec
 
 T = TypeVar("T")
 
@@ -21,47 +12,48 @@ T = TypeVar("T")
 class _AuParams:
     events: Iterable[str]
     modifiers: Iterable[str]
-    args: Iterable[str]
+    rhs: str
+
+
+class _A:
+    def __init__(
+        self,
+        name: str,
+        events: Iterable[str],
+        modifiers: Iterable[str],
+        parent: AutoCMD,
+    ) -> None:
+        self._name, self._events, self._modifiers = name, events, modifiers
+        self._parent = parent
+
+    def __lshift__(self, rhs: str) -> None:
+        self._parent._autocmds[self._name] = _AuParams(
+            events=self._events, modifiers=self._modifiers, rhs=rhs
+        )
 
 
 class AutoCMD:
     def __init__(self) -> None:
-        self._autocmds: MutableMapping[str, Tuple[_AuParams, RpcCallable[Any]]] = {}
+        self._autocmds: MutableMapping[str, _AuParams] = {}
 
     def __call__(
         self,
         event: str,
         *events: str,
-        blocking: bool,
-        name: Optional[str] = None,
+        name: str,
         modifiers: Iterable[str] = ("*",),
-        args: Iterable[str] = (),
-    ) -> Callable[[Callable[..., T]], RpcCallable[T]]:
-        param = _AuParams(
-            events=tuple((event, *events)),
-            modifiers=modifiers,
-            args=args,
-        )
+    ) -> _A:
+        return _A(name=name, events=(event, *events), modifiers=modifiers, parent=self)
 
-        def decor(handler: Callable[..., T]) -> RpcCallable[T]:
-            wrapped = RpcCallable(name=name, blocking=blocking, handler=handler)
-            self._autocmds[wrapped.name] = (param, wrapped)
-            return wrapped
-
-        return decor
-
-    def drain(self, chan: int) -> Tuple[Atomic, Sequence[RpcSpec]]:
+    def drain(self, chan: int) -> Atomic:
         atomic = Atomic()
-        specs: MutableSequence[RpcSpec] = []
         while self._autocmds:
-            name, (param, func) = self._autocmds.popitem()
+            name, param = self._autocmds.popitem()
             events = ",".join(param.events)
             modifiers = " ".join(param.modifiers)
-            call = func.call_line(*param.args).substitute(chan=chan)
             atomic.command(f"augroup ch_{chan}.{name}")
             atomic.command("autocmd!")
-            atomic.command(f"autocmd {events} {modifiers} {call}")
+            atomic.command(f"autocmd {events} {modifiers} {param.rhs}")
             atomic.command("augroup END")
-            specs.append((name, func))
 
-        return atomic, specs
+        return atomic

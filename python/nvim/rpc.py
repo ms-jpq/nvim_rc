@@ -2,14 +2,13 @@ from __future__ import annotations
 
 from asyncio.coroutines import iscoroutinefunction
 from asyncio.tasks import Task
-from string import Template
 from typing import (
     Any,
     Awaitable,
     Callable,
     Generic,
-    Iterator,
     MutableMapping,
+    MutableSequence,
     Optional,
     Sequence,
     Tuple,
@@ -17,33 +16,17 @@ from typing import (
     Union,
     cast,
 )
+from uuid import uuid4
 
 from pynvim import Nvim
 from python.nvim.lib import async_call, go
 
+from .atomic import Atomic
 from .logging import log
 
 T = TypeVar("T")
 
 RpcMsg = Tuple[str, Sequence[Any]]
-
-
-class _ComposableTemplate(Template):
-    def __add__(self, other: Union[str, Template]) -> _ComposableTemplate:
-        return _ComposableTemplate(
-            self.template
-            + (
-                cast(str, other)
-                if type(other) is str
-                else cast(Template, other).template
-            )
-        )
-
-    def __radd__(self, other: Union[str, Template]) -> _ComposableTemplate:
-        return _ComposableTemplate(
-            (cast(str, other) if type(other) is str else cast(Template, other).template)
-            + self.template
-        )
 
 
 class RpcCallable(Generic[T]):
@@ -57,20 +40,15 @@ class RpcCallable(Generic[T]):
             raise ValueError()
         else:
             self.name = name if name else f"{handler.__module__}.{handler.__qualname__}"
-            self._blocking = blocking
+            self.lua_name = f"{name}_{uuid4().hex}"
+            self.blocking = blocking
             self._handler = handler
-
-    def call_line(self, *args: str) -> _ComposableTemplate:
-        op = "request" if self._blocking else "notify"
-        _args = ", ".join(args)
-        call = f"lua vim.rpc{op}($chan, '{self.name}', {{{_args}}})"
-        return _ComposableTemplate(call)
 
     def __call__(self, nvim: Nvim, *args: Any) -> Union[T, Task[T]]:
         if iscoroutinefunction(self._handler):
             aw = cast(Awaitable[T], self._handler(nvim, *args))
             return go(aw)
-        elif self._blocking:
+        elif self.blocking:
             return cast(T, self._handler(nvim, *args))
         else:
             handler = cast(Callable[[Nvim, Any], T], self._handler)
@@ -79,6 +57,12 @@ class RpcCallable(Generic[T]):
 
 
 RpcSpec = Tuple[str, RpcCallable[T]]
+
+
+def _new_lua_func(chan: int, handler: RpcCallable[T]) -> str:
+    op = "request" if handler.blocking else "notify"
+    invoke = f"vim.rpc{op}({chan}, '{handler.name}', args or {{}})"
+    return f"{handler.lua_name} = function (args) {invoke} end"
 
 
 class RPC:
@@ -97,13 +81,15 @@ class RPC:
 
         return decor
 
-    def drain(self) -> Sequence[RpcSpec]:
-        def it() -> Iterator[RpcSpec]:
-            while self._handlers:
-                name, hldr = self._handlers.popitem()
-                yield name, hldr
+    def drain(self, chan: int) -> Tuple[Atomic, Sequence[RpcSpec]]:
+        atomic = Atomic()
+        specs: MutableSequence[RpcSpec] = []
+        while self._handlers:
+            name, handler = self._handlers.popitem()
+            atomic.exec_lua(_new_lua_func(chan, handler=handler))
+            specs.append((name, handler))
 
-        return tuple(it())
+        return atomic, specs
 
 
 def nil_handler(name: str) -> RpcCallable:
