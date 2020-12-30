@@ -7,7 +7,7 @@ from ..registery import keymap, rpc
 
 
 @rpc(blocking=True)
-def _sort_lines(nvim: Nvim, visual_type: VisualTypes) -> None:
+def _sort_lines(nvim: Nvim, visual_type: VisualTypes = None) -> None:
     buf: Buffer = nvim.api.get_current_buf()
     (row1, _), (row2, _) = operator_marks(nvim, buf=buf, visual_type=visual_type)
     # mixed indexing
@@ -18,4 +18,4 @@ def _sort_lines(nvim: Nvim, visual_type: VisualTypes) -> None:
 
 
 keymap.n("gu") << f"<cmd>set opfunc=v:lua.{_sort_lines.lua_name}<cr>g@"
-keymap.n("gu") << f"<esc><cmd>lua {_sort_lines.lua_name}(nil)<cr>"
+keymap.n("gu") << f"<esc><cmd>lua {_sort_lines.lua_name}()<cr>"

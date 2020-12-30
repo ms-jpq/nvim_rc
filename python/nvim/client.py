@@ -1,6 +1,5 @@
 from abc import abstractmethod
 from asyncio.tasks import Task, run_coroutine_threadsafe, sleep
-from logging import Handler, StreamHandler
 from math import inf
 from os import linesep
 from threading import Thread
@@ -8,7 +7,7 @@ from typing import Any, Final, MutableMapping, Protocol, Sequence, TypeVar
 
 from pynvim import Nvim
 
-from .logging import log
+from .logging import log, nvim_handler
 from .rpc import RpcCallable, nil_handler
 
 T = TypeVar("T")
@@ -44,7 +43,7 @@ def _on_err(error: str) -> None:
     log.error("%s", error)
 
 
-def run_client(nvim: Nvim, client: Client, handler: Handler = StreamHandler()) -> None:
+def run_client(nvim: Nvim, client: Client) -> None:
     def on_rpc(name: str, evt_args: Sequence[Sequence[Any]]) -> Any:
         args, *_ = evt_args
         try:
@@ -68,6 +67,6 @@ def run_client(nvim: Nvim, client: Client, handler: Handler = StreamHandler()) -
             request_cb=on_rpc,
         )
 
-    log.addHandler(handler)
+    log.addHandler(nvim_handler(nvim))
     Thread(target=forever, daemon=True).start()
     main()
