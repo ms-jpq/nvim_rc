@@ -36,9 +36,9 @@ def dehl_cursor(nvim: Nvim) -> None:
 
 
 # highlight yank
-@autocmd("TextYankPost", blocking=True, args=("vim.v.event",))
-def hl_yank(nvim: Nvim, ev: Mapping[str, Any]) -> None:
-    nvim.lua.vim.highlight.on_yank({"event": ev})
+@autocmd("TextYankPost", blocking=True)
+def hl_yank(nvim: Nvim) -> None:
+    nvim.lua.vim.highlight.on_yank({})
 
 
 # remove welcome message
