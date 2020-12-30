@@ -1,9 +1,10 @@
 from string import whitespace
-from typing import Iterator, Sequence, Set
+from typing import Iterator, Sequence, Set, Tuple
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
 
+from ..nvim.operators import p_indent
 from ..registery import autocmd, rpc, settings
 
 # join only add 1 space
@@ -18,10 +19,30 @@ settings["softtabstop"] = tabsize
 settings["shiftwidth"] = tabsize
 
 
+@rpc(blocking=True)
+def _detect_tabsize(nvim: Nvim) -> None:
+    buf: Buffer = nvim.api.get_current_buf()
+    count: int = nvim.api.buf_line_count(buf)
+    lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, min(count, 100), True)
+
+    def it() -> Tuple[int, int]:
+        for tabsize in range(2, 9):
+            divibilty = sum(
+                p_indent(line, tabsize=tabsize) % tabsize == 0 for line in lines
+            )
+            yield divibilty, tabsize
+
+    _, tabsize = next(reversed(sorted(it())))
+    nvim.options["tabstop"] = tabsize
+    nvim.options["softtabstop"] = tabsize
+    nvim.options["shiftwidth"] = tabsize
+
+
+autocmd("FileType") << f"lua {_detect_tabsize.lua_name}()"
+
+
 # insert spaces instead of tabs
 settings["expandtab"] = True
-
-
 # smart indentation level
 settings["autoindent"] = True
 settings["smarttab"] = True
@@ -41,7 +62,7 @@ def _strip_ending(string: str, nono: Set[str]) -> str:
 
 
 # remove trailing whitespace
-# @autocmd("BufWritePre", blocking=True, modifiers=("*", "undojoin", "|"))
+# @autocmd("BufWritePre",  modifiers=("*", "undojoin", "|"))
 @rpc(blocking=True)
 def _trailing_ws(nvim: Nvim) -> None:
     win: Window = nvim.api.get_current_win()

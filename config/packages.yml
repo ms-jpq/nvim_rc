@@ -81,8 +81,6 @@
 
 - uri: https://github.com/Raimondi/delimitMate
 
-- uri: https://github.com/tpope/vim-sleuth
-
 - uri: https://github.com/airblade/vim-gitgutter
 
 - uri: https://github.com/sheerun/vim-polyglot
