@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-from asyncio import gather
 from asyncio.coroutines import iscoroutinefunction
-from concurrent.futures import Future
+from asyncio.tasks import create_task
 from os import linesep
 from string import Template
 from typing import (
     Any,
-    AsyncIterable,
     Awaitable,
     Callable,
     Generic,
@@ -23,12 +21,11 @@ from typing import (
 
 from pynvim import Nvim
 
-from .lib import async_call, create_task
 from .logging import log
 
 T = TypeVar("T")
 
-RpcMsg = Tuple[Optional[Future[T]], Tuple[str, Sequence[Any]]]
+RpcMsg = Tuple[str, Sequence[Any]]
 
 
 class _ComposableTemplate(Template):
@@ -64,13 +61,20 @@ class RpcCallable(Generic[T]):
         call = f"lua vim.rpc{op}($chan, '{self.name}', {{{_args}}})"
         return _ComposableTemplate(call)
 
-    async def __call__(self, nvim: Nvim, *args: Any) -> T:
+    def __call__(self, nvim: Nvim, *args: Any) -> Union[T, Awaitable[T]]:
         if iscoroutinefunction(self._rpcf):
-            return await cast(Callable[..., Awaitable[T]], self._rpcf)(nvim, *args)
+
+            async def wrapper() -> T:
+                try:
+                    return await cast(Awaitable[T], self._rpcf(nvim, *args))
+                except Exception as e:
+                    fmt = f"ERROR IN RPC FOR: %s - %s{linesep}%s"
+                    log.exception(fmt, self.name, args, e)
+                    raise
+
+            return create_task(wrapper())
         else:
-            return await async_call(
-                nvim, cast(Callable[..., T], self._rpcf), nvim, *args
-            )
+            return self._rpcf(nvim, *args)
 
 
 RpcSpec = Tuple[str, RpcCallable[T]]
@@ -99,37 +103,8 @@ class RPC:
         return tuple(it())
 
 
-def _nil_handler(name: str) -> RpcCallable:
+def nil_handler(name: str) -> RpcCallable:
     def handler(nvim: Nvim, *args: Any) -> None:
         log.warn("MISSING RPC HANDLER FOR: %s - %s", name, args)
 
     return RpcCallable(name=name, handler=handler)
-
-
-async def rpc_agent(
-    nvim: Nvim,
-    specs: AsyncIterable[RpcSpec[Any]],
-    rpcs: AsyncIterable[RpcMsg[Any]],
-) -> None:
-    handlers: MutableMapping[str, RpcCallable[Any]] = {}
-
-    async def poll_spec() -> None:
-        async for name, handler in specs:
-            handlers[name] = handler
-
-    async def poll_rpc() -> None:
-        async for fut, (name, args) in rpcs:
-            handler = handlers.get(name, _nil_handler(name))
-            try:
-                ret = await handler(nvim, *args)
-            except Exception as e:
-                if fut and not fut.cancelled():
-                    fut.set_exception(e)
-                else:
-                    fmt = f"ERROR IN RPC FOR: %s - %s{linesep}%s"
-                    log.exception(fmt, name, args, e)
-            else:
-                if fut and not fut.cancelled():
-                    fut.set_result(ret)
-
-    await gather(create_task(poll_spec()), create_task(poll_rpc()))
