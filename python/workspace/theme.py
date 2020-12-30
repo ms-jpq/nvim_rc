@@ -55,4 +55,4 @@ def welcome_screen(nvim: Nvim) -> None:
 
 # light theme
 settings["background"] = "light"
-atomic.command("colorscheme edge")
+

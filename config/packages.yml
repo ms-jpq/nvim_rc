@@ -11,23 +11,6 @@
       val: KoKomnifunc
 
 - uri: https://github.com/neovim/nvim-lspconfig
-  keys:
-    - modes: n
-      maps:
-        "H": "<cmd>lua vim.lsp.util.show_line_diagnostics()<cr>"
-        "K": "<cmd>lua vim.lsp.buf.hover()<cr>"
-        "L": "<cmd>lua vim.lsp.buf.code_action()<cr>"
-        "R": "<cmd>lua vim.lsp.buf.rename()<cr>"
-        "gp": "<cmd>lua vim.lsp.buf.definition()<cr>"
-        "gP": "<cmd>lua vim.lsp.buf.references()<cr>"
-        "gl": "<cmd>lua vim.lsp.buf.declaration()<cr>"
-        "gL": "<cmd>lua vim.lsp.buf.implementation()<cr>"
-        "go": "<cmd>lua vim.lsp.buf.signature_help()<cr>"
-        "gO": "<cmd>lua vim.lsp.buf.type_definition()<cr>"
-        "ge": "<cmd>lua vim.lsp.buf.document_symbol()<cr>"
-        "gE": "<cmd>lua vim.lsp.buf.workspace_symbol()<cr>"
-        "g[": "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>"
-        "g]": "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>"
   lua: |-
     lv = lv or {}
     lv.lsp = require "lspconfig"
@@ -62,7 +45,9 @@
 - uri: https://github.com/sainnhe/edge
   vals:
     edge_style: neon
-    edge_menu_selection_background: purple
+    edge_menu_selection_background: purpleQ
+  viml: |-
+    colorscheme edge
 
 - uri: https://github.com/itchyny/lightline.vim
   vals:
