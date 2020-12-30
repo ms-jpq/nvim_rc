@@ -1,6 +1,6 @@
 from dataclasses import asdict
 from operator import attrgetter
-from pathlib import Path, PurePath
+from pathlib import Path
 from urllib.parse import urlparse
 
 from pynvim.api.nvim import Nvim
@@ -13,18 +13,20 @@ from ..nvim.rtp import rtp_packages
 
 
 def p_name(uri: str) -> Path:
-    return VIM_DIR / urlparse(uri).path
+    return VIM_DIR / Path(urlparse(uri).path).name
 
 
 def inst(nvim: Nvim) -> Atomic:
-    plugins = (
-        path for path in (p_name(spec.uri) for spec in pkg_specs) if path.exists()
-    )
+    pkgs = {
+        path: spec
+        for path, spec in ((p_name(spec.uri), spec) for spec in pkg_specs)
+        if path.exists()
+    }
 
-    atomic = rtp_packages(nvim, plugins=plugins)
+    atomic = rtp_packages(nvim, plugins=pkgs)
     keymap = Keymap()
 
-    for spec in pkg_specs:
+    for spec in pkgs.values():
         for key in spec.keys:
             for lhs, rhs in key.maps.items():
                 attrgetter(key.modes)(keymap)(lhs, **asdict(key.opts)) << rhs
