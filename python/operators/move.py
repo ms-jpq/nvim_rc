@@ -44,8 +44,8 @@ def _normal_down(nvim: Nvim) -> None:
             nvim.api.win_set_cursor(win, (row, col))
 
 
-keymap.n("<m-up>") << f"<cmd>lua {_normal_up}()<cr>"
-keymap.n("<m-down>") << f"<cmd>lua {_normal_down}()<cr>"
+keymap.n("<m-up>") << f"<cmd>lua {_normal_up.remote_name}()<cr>"
+keymap.n("<m-down>") << f"<cmd>lua {_normal_down.remote_name}()<cr>"
 
 
 def _reselect_visual(nvim: Nvim) -> None:
@@ -91,5 +91,5 @@ def _visual_down(nvim: Nvim) -> None:
             _reselect_visual(nvim)
 
 
-keymap.v("<m-up>") << f"<esc><cmd>lua {_visual_up}()<cr>"
-keymap.v("<m-down>") << f"<esc><cmd>lua {_visual_down}()<cr>"
+keymap.v("<m-up>") << f"<esc><cmd>lua {_visual_up.remote_name}()<cr>"
+keymap.v("<m-down>") << f"<esc><cmd>lua {_visual_down.remote_name}()<cr>"
