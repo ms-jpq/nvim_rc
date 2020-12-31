@@ -12,9 +12,9 @@ environ["PATH"] = pathsep.join((*PATH_PREPEND, environ["PATH"]))
 from argparse import ArgumentParser, Namespace
 
 from pynvim import attach
+from pynvim_pp.client import run_client
 
 from python.client import Client
-from python.nvim.client import run_client
 
 
 def parse_args() -> Namespace:
