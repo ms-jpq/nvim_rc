@@ -16,7 +16,7 @@ end
 
 
 vim.fn.jobstart(
-  { py_main, vim.v.servername },
+  { py_main, "--server-socket", vim.v.servername },
   {   on_exit = on_exit,
     on_stdout = on_stdout,
     on_stderr = on_stderr })

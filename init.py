@@ -18,7 +18,7 @@ from python.nvim.client import run_client
 
 def parse_args() -> Namespace:
     parser = ArgumentParser()
-    parser.add_argument("--server_socket", default=None)
+    parser.add_argument("--server-socket", default=None)
     parser.add_argument("--headless", action="store_true", default=False)
     return parser.parse_args()
 
