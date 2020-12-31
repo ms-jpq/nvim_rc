@@ -11,13 +11,14 @@ from ..registery import autocmd, rpc, settings
 # join only add 1 space
 settings["nojoinspaces"] = True
 
-tabsize_d = 2
+
 # how big are tabs ?
-settings["tabstop"] = tabsize_d
 # spaces remove on deletion
-settings["softtabstop"] = tabsize_d
 # manual indentation width
-settings["shiftwidth"] = tabsize_d
+_TAB_OPTIONS = ("tabstop", "softtabstop", "shiftwidth")
+tabsize_d = 2
+for option in _TAB_OPTIONS:
+    settings[option] = tabsize_d
 
 
 @rpc(blocking=True)
@@ -39,7 +40,7 @@ def _detect_tabsize(nvim: Nvim) -> None:
     except StopIteration:
         tabsize = tabsize_d
 
-    for option in ("tabstop", "softtabstop", "shiftwidth"):
+    for option in _TAB_OPTIONS:
         nvim.api.buf_set_option(buf, option, tabsize)
 
 
