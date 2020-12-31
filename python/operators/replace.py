@@ -12,10 +12,9 @@ def _go_replace(nvim: Nvim, visual: VisualTypes = None) -> None:
     buf: Buffer = nvim.api.get_current_buf()
     (row1, col1), (row2, col2) = operator_marks(nvim, buf=buf, visual_type=visual)
     row1, row2 = row1 - 1, row2 - 1
-    col1, col2 = col1 + 1, col2 + 1
 
     lines: Sequence[str] = nvim.api.buf_get_lines(buf, row1, row2 + 1, True)
-    head = lines[0][: col1 - 1]
+    head = lines[0][:col1]
     body: str = nvim.funcs.getreg("*")
     tail = lines[-1][col2 + 1 :]
 
