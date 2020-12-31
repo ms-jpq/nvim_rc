@@ -49,11 +49,10 @@ class Settings:
         else:
             raise TypeError()
 
-    def drain(self, local: bool) -> Atomic:
+    def drain(self) -> Atomic:
         atomic = Atomic()
-        set_prefix = "setlocal" if local else "set"
         while self._conf:
             key, (op, val) = self._conf.popitem()
-            atomic.command(f"{set_prefix} {key}{op.value}{val}")
+            atomic.command(f"set {key}{op.value}{val}")
 
         return atomic

@@ -38,9 +38,6 @@ def _ensure_marked_buf(nvim: Nvim) -> Buffer:
 @rpc(blocking=True)
 def _on_exit(nvim: Nvim, args: Tuple[int, int, str]) -> None:
     job_id, code, event_type = args
-    if code == 0:
-        for buf in _list_marked_bufs(nvim):
-            nvim.command(f"bwipeout! {buf.number}")
 
 
 @rpc(blocking=True)
