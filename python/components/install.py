@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from os import linesep
 
 from pynvim.api.nvim import Nvim
 
@@ -11,6 +12,10 @@ from ..consts import CONFIG_LOG, INSTALL_PROG
 from ..workspace.terminal import toggle_floating
 
 
+def install(nvim: Nvim) -> None:
+    toggle_floating(nvim, INSTALL_PROG)
+
+
 def maybe_install(nvim: Nvim) -> None:
     before = (
         datetime.fromisoformat(CONFIG_LOG.read_text())
@@ -20,5 +25,7 @@ def maybe_install(nvim: Nvim) -> None:
     now = datetime.now(tz=timezone.utc)
     diff = now - before
     if diff.days > 7:
-        # nvim.funcs.ask()
-        now.isoformat()
+        ans = nvim.funcs.confirm("🤖「ゴゴゴゴ」？", f"&Yes{linesep}&No", 2)
+        if ans == 1:
+            install(nvim)
+            CONFIG_LOG.write_text(now.isoformat())
