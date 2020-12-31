@@ -64,7 +64,7 @@ def close_others(nvim: Nvim) -> None:
     wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)
     for w in wins:
         if w != win:
-            nvim.api.win_close(win, False)
+            nvim.api.win_close(win, True)
 
 
 keymap.n("<leader>W") << f"<cmd>lua {close_others.remote_name}()<cr>"

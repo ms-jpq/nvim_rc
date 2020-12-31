@@ -8,8 +8,8 @@ from pynvim.api.buffer import Buffer
 from pynvim.api.common import NvimError
 from pynvim.api.window import Window
 
-from ..nvim.float_win import FloatWin, open_float_win
-from ..registery import keymap, rpc, autocmd
+from ..nvim.float_win import list_floatwins, open_float_win
+from ..registery import autocmd, keymap, rpc
 
 BUF_VAR_NAME = f"terminal_buf_{uuid4().hex}"
 
@@ -44,7 +44,7 @@ def _on_exit(nvim: Nvim, args: Tuple[int, int, str]) -> None:
 
 
 @rpc(blocking=True)
-def _open_floating(nvim: Nvim, *args: str) -> FloatWin:
+def _open_floating(nvim: Nvim, *args: str) -> None:
     buf = _ensure_marked_buf(nvim)
     filename: str = nvim.api.buf_get_name(buf)
     is_term_buf = urlparse(filename).scheme == "term"
@@ -56,7 +56,13 @@ def _open_floating(nvim: Nvim, *args: str) -> FloatWin:
 
 @rpc(blocking=True)
 def toggle_floating(nvim: Nvim, *args: str) -> None:
-    pass
+    curr_win: Window = nvim.api.get_current_win()
+    float_wins = {*list_floatwins(nvim)}
+    if curr_win in float_wins:
+        for win in float_wins:
+            nvim.api.win_close(win, True)
+    else:
+        _open_floating(nvim, *args)
 
 
 keymap.n("<leader>u") << f"<cmd>lua {toggle_floating.remote_name}()<cr>"
@@ -67,4 +73,4 @@ def _kill_term_wins(nvim: Nvim, win_id: int) -> None:
     pass
 
 
-autocmd("WinClosed") << f"lua {_kill_term_wins.remote_name()}(vim.fn.expand('<afile>'))"
+autocmd("WinClosed") << f"lua {_kill_term_wins.remote_name}(vim.fn.expand('<afile>'))"
