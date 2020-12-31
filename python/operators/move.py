@@ -17,8 +17,8 @@ def _normal_up(nvim: Nvim) -> None:
             return
         else:
             row = row - 1
-            curr = nvim.api.buf_get_lines(0, row, row + 1, True)
-            nxt = nvim.api.buf_get_lines(0, row - 1, row, True)
+            curr = nvim.api.buf_get_lines(buf, row, row + 1, True)
+            nxt = nvim.api.buf_get_lines(buf, row - 1, row, True)
             new = tuple((*curr, *nxt))
             nvim.api.buf_set_lines(buf, row - 1, row + 1, True, new)
             nvim.api.win_set_cursor(win, (row, col))
@@ -37,8 +37,8 @@ def _normal_down(nvim: Nvim) -> None:
             return
         else:
             row = row - 1
-            curr = nvim.api.buf_get_lines(0, row, row + 1, True)
-            nxt = nvim.api.buf_get_lines(0, row + 1, row + 2, True)
+            curr = nvim.api.buf_get_lines(buf, row, row + 1, True)
+            nxt = nvim.api.buf_get_lines(buf, row + 1, row + 2, True)
             new = tuple((*nxt, *curr))
             nvim.api.buf_set_lines(buf, row, row + 2, True, new)
             nvim.api.win_set_cursor(win, (row + 2, col))
@@ -66,8 +66,10 @@ def _visual_up(nvim: Nvim) -> None:
             curr = nvim.api.buf_get_lines(0, row1, row2 + 1, True)
             nxt = nvim.api.buf_get_lines(0, row1 - 1, row1, True)
             new = tuple((*curr, *nxt))
-            nvim.api.buf_set_lines(0, row1 - 1, row2 + 1, True, new)
-            set_visual_selection(nvim, buf=buf, mark1=(row1, col1), mark2=(row2, col2))
+            nvim.api.buf_set_lines(buf, row1 - 1, row2 + 1, True, new)
+            set_visual_selection(
+                nvim, buf=buf, mark1=(row1 - 1, col1), mark2=(row2 + 1, col2)
+            )
             _reselect_visual(nvim)
 
 
@@ -83,11 +85,13 @@ def _visual_down(nvim: Nvim) -> None:
             _reselect_visual(nvim)
         else:
             row1, row2 = row1 - 1, row2 - 1
-            curr = nvim.api.buf_get_lines(0, row1, row2 + 1, True)
-            nxt = nvim.api.buf_get_lines(0, row2 + 1, row2 + 2, True)
+            curr = nvim.api.buf_get_lines(buf, row1, row2 + 1, True)
+            nxt = nvim.api.buf_get_lines(buf, row2 + 1, row2 + 2, True)
             new = tuple((*nxt, *curr))
-            nvim.api.buf_set_lines(0, row1, row2 + 2, True, new)
-            set_visual_selection(nvim, buf=buf, mark1=(row1, col1), mark2=(row2, col2))
+            nvim.api.buf_set_lines(buf, row1, row2 + 2, True, new)
+            set_visual_selection(
+                nvim, buf=buf, mark1=(row1 + 2, col1), mark2=(row2 + 2, col2)
+            )
             _reselect_visual(nvim)
 
 
