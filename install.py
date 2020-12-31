@@ -92,7 +92,8 @@ async def bash(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
                 p = await call("bash", stdin=stdin, cwd=str(TOP_LEVEL))
                 await queue.put(p)
 
-            yield cont(pkg)
+            if pkg:
+                yield cont(pkg)
 
     await gather(*it())
 
