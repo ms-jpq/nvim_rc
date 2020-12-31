@@ -1,13 +1,13 @@
 from typing import Sequence, Tuple
 
 from pynvim import Nvim
+from pynvim_pp.atomic import Atomic
+from pynvim_pp.autocmd import AutoCMD
+from pynvim_pp.keymap import Keymap
+from pynvim_pp.rpc import RPC, RpcSpec
+from pynvim_pp.settings import Settings
 
 from .components.pkgs import inst
-from .nvim.atomic import Atomic
-from .nvim.autocmd import AutoCMD
-from .nvim.keymap import Keymap
-from .nvim.rpc import RPC, RpcSpec
-from .nvim.settings import Settings
 
 atomic = Atomic()
 autocmd = AutoCMD()

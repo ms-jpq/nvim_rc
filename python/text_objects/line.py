@@ -3,8 +3,8 @@ from typing import Iterable, Tuple
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
+from pynvim_pp.operators import set_visual_selection
 
-from ..nvim.operators import set_visual_selection
 from ..registery import keymap, rpc
 
 

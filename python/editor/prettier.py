@@ -5,11 +5,11 @@ from typing import Tuple, cast
 
 from pynvim import Nvim
 from pynvim.api.buffer import Buffer
+from pynvim_pp.lib import async_call, write
+from pynvim_pp.preview import set_preview
 from std2.asyncio.subprocess import call
 
 from ..config.fmt import FmtAttrs, FmtType, fmt_specs
-from ..nvim.lib import async_call, write
-from ..nvim.preview import set_preview
 from ..registery import keymap, rpc
 from .linter import arg_subst
 

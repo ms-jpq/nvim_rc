@@ -3,8 +3,8 @@ from typing import Iterator, Sequence, Set, Tuple
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
+from pynvim_pp.operators import p_indent
 
-from ..nvim.operators import p_indent
 from ..registery import autocmd, rpc, settings
 
 # join only add 1 space

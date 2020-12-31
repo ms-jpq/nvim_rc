@@ -1,8 +1,8 @@
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
+from pynvim_pp.operators import set_visual_selection
+from pynvim_pp.text_object import gen_lhs_rhs
 
-from ..nvim.operators import set_visual_selection
-from ..nvim.text_object import gen_lhs_rhs
 from ..registery import keymap, rpc
 
 UNIFIYING_CHARS = {"_", "-"}

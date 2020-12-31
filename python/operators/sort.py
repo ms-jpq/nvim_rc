@@ -1,8 +1,8 @@
 from locale import strxfrm
 
 from pynvim.api import Buffer, Nvim
+from pynvim_pp.operators import VisualTypes, operator_marks
 
-from ..nvim.operators import VisualTypes, operator_marks
 from ..registery import keymap, rpc
 
 

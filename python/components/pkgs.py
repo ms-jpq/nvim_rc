@@ -4,12 +4,12 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from pynvim.api.nvim import Nvim
+from pynvim_pp.atomic import Atomic
+from pynvim_pp.keymap import Keymap
+from pynvim_pp.rtp import rtp_packages
 
 from ..config.pkgs import pkg_specs
 from ..consts import VIM_DIR
-from ..nvim.atomic import Atomic
-from ..nvim.keymap import Keymap
-from ..nvim.rtp import rtp_packages
 
 
 def p_name(uri: str) -> Path:

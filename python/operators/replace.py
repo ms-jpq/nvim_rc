@@ -2,8 +2,8 @@ from typing import Sequence
 
 from pynvim.api import Buffer, Window
 from pynvim.api.nvim import Nvim
+from pynvim_pp.operators import VisualTypes, operator_marks
 
-from ..nvim.operators import VisualTypes, operator_marks
 from ..registery import keymap, rpc
 
 

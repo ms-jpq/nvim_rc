@@ -2,9 +2,9 @@ from asyncio.events import Handle, get_running_loop
 from typing import Optional
 
 from pynvim.api.nvim import Nvim
+from pynvim_pp.lib import async_call, go
 
 from ..consts import BACKUP_DIR
-from ..nvim.lib import async_call, go
 from ..registery import autocmd, rpc, settings
 
 # auto load changes

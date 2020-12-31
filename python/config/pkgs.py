@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 from typing import Any, Mapping, Sequence
 
+from pynvim_pp.keymap import KeymapOpts
 from std2.pickle import decode
 from yaml import safe_load
 
 from ..consts import CONF_PKGS
-from ..nvim.keymap import KeymapOpts
 
 
 @dataclass(frozen=True)

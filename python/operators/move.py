@@ -1,7 +1,7 @@
 from pynvim.api import Buffer, Window
 from pynvim.api.nvim import Nvim
+from pynvim_pp.operators import operator_marks, set_visual_selection
 
-from ..nvim.operators import operator_marks, set_visual_selection
 from ..registery import keymap, rpc
 
 

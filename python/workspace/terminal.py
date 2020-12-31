@@ -7,8 +7,8 @@ from pynvim import Nvim
 from pynvim.api.buffer import Buffer
 from pynvim.api.common import NvimError
 from pynvim.api.window import Window
+from pynvim_pp.float_win import list_floatwins, open_float_win
 
-from ..nvim.float_win import list_floatwins, open_float_win
 from ..registery import autocmd, keymap, rpc
 
 BUF_VAR_NAME = f"terminal_buf_{uuid4().hex}"

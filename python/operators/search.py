@@ -1,7 +1,7 @@
 from pynvim.api.buffer import Buffer
 from pynvim.api.nvim import Nvim
+from pynvim_pp.operators import VisualTypes, escape, get_selected
 
-from ..nvim.operators import VisualTypes, escape, get_selected
 from ..registery import keymap, rpc
 
 
