@@ -52,6 +52,7 @@ def _open_floating(nvim: Nvim, *args: str) -> None:
     if not is_term_buf:
         cmds = args or (environ["SHELL"],)
         nvim.funcs.termopen(cmds, {"on_exit": _on_exit.remote_name})
+    nvim.command("startinsert")
 
 
 @rpc(blocking=True)
@@ -69,8 +70,12 @@ keymap.n("<leader>u") << f"<cmd>lua {toggle_floating.remote_name}()<cr>"
 
 
 @rpc(blocking=True)
-def _kill_term_wins(nvim: Nvim, win_id: int) -> None:
-    pass
+def _kill_term_wins(nvim: Nvim, win_id: str) -> None:
+    wins = tuple(list_floatwins(nvim))
+    fw_ids = {nvim.funcs.win_getid(win.number) for win in wins}
+    if int(win_id) in fw_ids:
+        for win in wins:
+            nvim.api.win_close(win, True)
 
 
 autocmd("WinClosed") << f"lua {_kill_term_wins.remote_name}(vim.fn.expand('<afile>'))"
