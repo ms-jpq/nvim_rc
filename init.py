@@ -27,7 +27,7 @@ def parse_args() -> Namespace:
 def main() -> None:
     args = parse_args()
     nvim = attach("socket", path=args.server_socket)
-    run_client(nvim, client=Client(headless=True))
-
+    code = run_client(nvim, client=Client(headless=args.headless))
+    exit(code)
 
 main()
