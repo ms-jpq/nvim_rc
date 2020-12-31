@@ -18,8 +18,8 @@
 - server: diagnosticls
   bin: diagnostic-languageserver
   filetypes:
-    - sh
     - markdown
+    - sh
   install:
     npm:
       - diagnostic-languageserver
@@ -53,8 +53,8 @@
   bin: css-languageserver
   filetypes:
     - css
-    - scss
     - less
+    - scss
   install:
     npm:
       - vscode-css-languageserver-bin
@@ -81,11 +81,11 @@
 - server: sourcekit
   bin: xcrun
   filetypes:
-    - swift
     - c
     - cpp
     - objective-c
     - objective-cpp
+    - swift
 
 - server: sqlls
   bin: sql-language-server
@@ -103,11 +103,11 @@
   bin: typescript-language-server
   filetypes:
     - javascript
-    - javascriptreact
     - javascript.jsx
+    - javascriptreact
     - typescript
-    - typescriptreact
     - typescript.tsx
+    - typescriptreact
   install:
     npm:
       - typescript

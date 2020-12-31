@@ -3,6 +3,7 @@ from typing import Optional
 
 from pynvim.api.nvim import Nvim
 
+from ..consts import BACKUP_DIR
 from ..nvim.lib import async_call, go
 from ..registery import autocmd, rpc, settings
 
@@ -17,8 +18,10 @@ autocmd("FocusGained", "BufEnter") << "checktime"
 
 
 # auto backup
+BACKUP_DIR.mkdir(parents=True, exist_ok=True)
 settings["backup"] = True
-
+settings["writebackup"] = True
+settings["backupdir"] = str(BACKUP_DIR)
 
 autocmd("FocusLost", "VimLeavePre", modifiers=("*", "nested")) << "silent! wa"
 

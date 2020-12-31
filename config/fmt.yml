@@ -35,19 +35,19 @@
     - "%"
   type: stream
   filetypes:
-    - yaml
-    - xml
     - css
-    - scss
-    - less
     - html
-    - markdown
     - javascript
-    - javascriptreact
     - javascript.jsx
+    - javascriptreact
+    - less
+    - markdown
+    - scss
     - typescript
-    - typescriptreact
     - typescript.tsx
+    - typescriptreact
+    - xml
+    - yaml
   install:
     npm:
       - prettier
