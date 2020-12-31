@@ -18,14 +18,24 @@ from python.nvim.client import run_client
 
 def parse_args() -> Namespace:
     parser = ArgumentParser()
-    parser.add_argument("server_socket")
+    parser.add_argument("--server_socket", default=None)
+    parser.add_argument("--headless", action="store_true", default=False)
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    nvim = attach("socket", path=args.server_socket)
-    run_client(nvim, client=Client())
+    nvim = None
+
+    if args.server_socket:
+        nvim = attach("socket", path=args.server_socket)
+    elif args.headless:
+        nvim = attach("child")
+
+    if nvim:
+        run_client(nvim, client=Client())
+    else:
+        exit(69)
 
 
 main()
