@@ -27,7 +27,7 @@ def _list_term_wins(nvim: Nvim) -> Iterator[Tuple[Window, Buffer]]:
 
 
 def _single_term_buf(nvim: Nvim) -> Buffer:
-    _, buf = next(_list_term_wins(nvim), Tuple[None, None])
+    _, buf = next(_list_term_wins(nvim), (None, None))
     if buf is not None:
         return buf
     else:

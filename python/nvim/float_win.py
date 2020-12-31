@@ -72,7 +72,7 @@ def _border_buf(nvim: Nvim, width: int, height: int) -> Buffer:
 
     buf = nvim.api.create_buf(False, True)
     top = "╭" + "".join(islice(repeat("─"), width - 2)) + "╮"
-    mid = "│" + "".join(islice(repeat("─"), width - 2)) + "│"
+    mid = "│" + "".join(islice(repeat("*"), width - 2)) + "│"
     btm = "╰" + "".join(islice(repeat("─"), width - 2)) + "╯"
 
     lines = tuple((top, *islice(repeat(mid), height - 2), btm))
