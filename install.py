@@ -17,14 +17,14 @@ from typing import Awaitable, Iterator, Sequence
 from std2.asyncio.subprocess import ProcReturn, call
 
 from python.components.pkgs import p_name
-from python.consts import NPM_DIR, PIP_DIR, VIM_DIR
+from python.consts import NPM_DIR, PIP_DIR, TOP_LEVEL, VIM_DIR
 
 
 def parse_args() -> Namespace:
     parser = ArgumentParser()
+    parser.add_argument("--git", nargs="*", default=())
     parser.add_argument("--pip", nargs="*", default=())
     parser.add_argument("--npm", nargs="*", default=())
-    parser.add_argument("--git", nargs="*", default=())
     parser.add_argument("--bash", nargs="*", default=())
     return parser.parse_args()
 
@@ -32,7 +32,14 @@ def parse_args() -> Namespace:
 async def pip(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
     if pkgs:
         p = await call(
-            "pip3", "install", "--upgrade", "--target", str(PIP_DIR), "--", *pkgs
+            "pip3",
+            "install",
+            "--upgrade",
+            "--target",
+            str(PIP_DIR),
+            "--",
+            *pkgs,
+            cwd=str(PIP_DIR),
         )
         await queue.put(p)
 
@@ -82,7 +89,7 @@ async def bash(queue: Queue[ProcReturn], pkgs: Sequence[str]) -> None:
 
             async def cont(pkg: str) -> None:
                 stdin = f"set -x{linesep}{pkg}".encode()
-                p = await call("bash", stdin=stdin)
+                p = await call("bash", stdin=stdin, cwd=str(TOP_LEVEL))
                 await queue.put(p)
 
             yield cont(pkg)
