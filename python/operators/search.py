@@ -52,6 +52,7 @@ keymap.v("gF") << f"<esc><cmd>lua {_op_rg.remote_name}()<cr>"
 
 # replace selection
 # no magic
+@rpc(blocking=True)
 def _op_sd(nvim: Nvim, visual: VisualTypes = None) -> None:
     buf: Buffer = nvim.api.get_current_buf()
     selected = get_selected(nvim, buf=buf, visual_type=visual)
