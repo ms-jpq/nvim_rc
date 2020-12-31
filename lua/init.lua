@@ -4,6 +4,10 @@ local py_main = nvim_home .. "/init.py"
 
 local on_exit = function (_, code)
   vim.api.nvim_err_writeln("EXITED - " .. code)
+  local uis = vim.api.nvim_list_uis()
+  if #uis == 0 then
+    os.exit(code)
+  end
 end
 
 local on_stdout = function (_, msg)

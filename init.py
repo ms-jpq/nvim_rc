@@ -30,4 +30,5 @@ def main() -> None:
     code = run_client(nvim, client=Client(headless=args.headless))
     exit(code)
 
+
 main()
