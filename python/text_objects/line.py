@@ -4,6 +4,7 @@ from typing import Iterable, Tuple
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
 
+from ..nvim.operators import set_visual_selection
 from ..registery import keymap, rpc
 
 
@@ -35,8 +36,7 @@ def _line(nvim: Nvim, is_inside: bool) -> None:
     line: str = nvim.api.get_current_line()
     lhs, rhs = (_p_inside if is_inside else _p_around)(line)
 
-    nvim.funcs.setpos("'<", (buf.number, row, lhs, 0))
-    nvim.funcs.setpos("'>", (buf.number, row, rhs, 0))
+    set_visual_selection(nvim, buf=buf, mark1=(row, lhs), mark2=(row, rhs))
     nvim.command("norm! `<v`>")
 
 
