@@ -1,56 +1,11 @@
-from typing import Tuple, Set
-
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
+
 from ..nvim.operators import set_visual_selection
+from ..nvim.text_object import gen_lhs_rhs
 from ..registery import keymap, rpc
 
-
 UNIFIYING_CHARS = {"_", "-"}
-
-
-def _is_word(c: str, unifying_chars: Set[str]) -> bool:
-    return c.isalnum() or c in unifying_chars
-
-
-def _gen_lhs_rhs(
-    line: str, col: int, unifying_chars: Set[str]
-) -> Tuple[Tuple[int, int], Tuple[int, int]]:
-    enumd = tuple(enumerate(line))
-    before, after = reversed(enumd[:col]), iter(enumd[col:])
-    (word_lhs, word_rhs), (sym_lhs, sym_rhs) = (-1, -1), (-1, -1)
-
-    encountered_sym = False
-    for idx, char in before:
-        is_w = _is_word(char, unifying_chars=unifying_chars)
-        if encountered_sym:
-            if is_w:
-                break
-            else:
-                sym_lhs = idx
-        else:
-            if is_w:
-                word_lhs = idx
-            else:
-                sym_lhs = idx
-                encountered_sym = True
-
-    encountered_sym = False
-    for idx, char in after:
-        is_w = _is_word(char, unifying_chars=unifying_chars)
-        if encountered_sym:
-            if is_w:
-                break
-            else:
-                sym_rhs = idx
-        else:
-            if is_w:
-                word_rhs = idx
-            else:
-                sym_rhs = idx
-                encountered_sym = True
-
-    return (word_lhs, word_rhs), (sym_lhs, sym_rhs)
 
 
 @rpc(blocking=True)
@@ -60,18 +15,21 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
     row, col = nvim.api.win_get_cursor(win)
     line: str = nvim.api.get_current_line()
 
-    # apperant position
+    # position under cursor
     col = col + 1
-    (word_lhs, word_rhs), (sym_lhs, sym_rhs) = _gen_lhs_rhs(
+    (words_lhs, words_rhs), (sym_lhs, sym_rhs) = gen_lhs_rhs(
         line, col=col, unifying_chars=UNIFIYING_CHARS
     )
+    if not (words_lhs + words_rhs):
+        words_lhs, words_rhs = sym_lhs, sym_rhs
+    lhs, rhs = col - len(words_lhs), col + len(words_rhs) - 1
 
     if is_inside:
-        mark1 = (row, word_lhs)
-        mark2 = (row, word_rhs)
+        mark1 = (row, lhs)
+        mark2 = (row, rhs)
     else:
-        mark1 = (row, sym_lhs)
-        mark2 = (row, sym_rhs)
+        mark1 = (row, lhs - 1)
+        mark2 = (row, rhs + 1)
 
     set_visual_selection(nvim, buf=buf, mark1=mark1, mark2=mark2)
     nvim.command("norm! `<v`>")
