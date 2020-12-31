@@ -1,15 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from string import Template
-from typing import (
-    Iterable,
-    MutableMapping,
-    Optional,
-    Tuple,
-    TypeVar,
-    Union,
-)
+from typing import Iterable, MutableMapping, Optional, Tuple, TypeVar
 
 from pynvim.api import Buffer
 
@@ -41,7 +33,7 @@ class _K:
         self._lhs, self._modes = lhs, modes
         self._opts, self._parent = options, parent
 
-    def __lshift__(self, rhs: Union[str, Template]) -> None:
+    def __lshift__(self, rhs: str) -> None:
         for mode in self._modes:
             self._parent._mappings[(mode, self._lhs)] = (self._opts, rhs)
 
@@ -79,7 +71,7 @@ class Keymap:
     def __init__(self) -> None:
         self._mappings: MutableMapping[
             Tuple[str, str],
-            Tuple[KeymapOpts, Union[str, Template]],
+            Tuple[KeymapOpts, str],
         ] = {}
 
     def __getattr__(self, modes: str) -> _KM:
@@ -89,24 +81,13 @@ class Keymap:
         else:
             return _KM(modes=modes, parent=self)
 
-    def drain(self, chan: int, buf: Optional[Buffer]) -> Atomic:
+    def drain(self, buf: Optional[Buffer]) -> Atomic:
         atomic = Atomic()
         while self._mappings:
             (mode, lhs), (opts, rhs) = self._mappings.popitem()
-            if type(rhs) is str and buf is None:
+            if buf is None:
                 atomic.set_keymap(mode, lhs, rhs, asdict(opts))
-
-            elif type(rhs) is str and buf is not None:
-                atomic.buf_set_keymap(buf, mode, lhs, rhs, asdict(opts))
-
-            elif isinstance(rhs, Template) and buf is None:
-                call = rhs.substitute(chan=chan)
-                atomic.set_keymap(mode, lhs, call, asdict(opts))
-
-            elif isinstance(rhs, Template) and buf is not None:
-                call = rhs.substitute(chan=chan)
-                atomic.buf_set_keymap(buf, mode, lhs, call, asdict(opts))
             else:
-                assert False
+                atomic.buf_set_keymap(buf, mode, lhs, rhs, asdict(opts))
 
         return atomic

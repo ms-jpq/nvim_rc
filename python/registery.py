@@ -22,8 +22,8 @@ def drain(nvim: Nvim) -> Tuple[Atomic, Sequence[RpcSpec]]:
     _atomic.set_var("maplocalleader", " ")
 
     a0 = inst(nvim)
-    a1 = autocmd.drain(nvim.channel_id)
-    a2 = keymap.drain(nvim.channel_id, None)
+    a1 = autocmd.drain()
+    a2 = keymap.drain(None)
     a3, s0 = rpc.drain(nvim.channel_id)
-    a4 = settings.drain(False)
+    a4 = settings.drain(local=False)
     return _atomic + a0 + a1 + a2 + a3 + a4 + atomic, s0

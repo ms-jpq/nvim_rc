@@ -38,4 +38,4 @@ def inst(nvim: Nvim) -> Atomic:
         if spec.viml:
             atomic.exec(spec.viml, False)
 
-    return atomic + keymap.drain(nvim.channel_id, buf=None)
+    return atomic + keymap.drain(buf=None)

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from itertools import islice, repeat
 from math import floor
-from typing import Iterator, Sequence, Tuple
+from typing import Iterator, Tuple
 from uuid import uuid4
 
 from pynvim import Nvim
@@ -9,6 +9,7 @@ from pynvim.api import Buffer, Window
 from pynvim.api.common import NvimError
 
 FLOATWIN_VAR_NAME = f"float_win_group_{uuid4().hex}"
+FLOATWIN_BORDER_BUF_VAR_NAME = f"float_win_border_buf_{uuid4().hex}"
 
 
 @dataclass(frozen=True)
@@ -20,26 +21,14 @@ class FloatWin:
     buf: Buffer
 
 
-def list_floatwin_assets(nvim: Nvim) -> Tuple[Sequence[Window], Sequence[Buffer]]:
-    def list_wins() -> Iterator[Window]:
-        for win in nvim.api.list_wins():
-            try:
-                nvim.api.win_get_var(win, FLOATWIN_VAR_NAME)
-            except NvimError:
-                pass
-            else:
-                yield win
-
-    def list_bufs() -> Iterator[Buffer]:
-        for buf in nvim.api.list_bufs():
-            try:
-                nvim.api.buf_get_var(buf, FLOATWIN_VAR_NAME)
-            except NvimError:
-                pass
-            else:
-                yield buf
-
-    return tuple(list_wins()), tuple(list_bufs())
+def list_floatwins(nvim: Nvim) -> Iterator[Window]:
+    for win in nvim.api.list_wins():
+        try:
+            nvim.api.win_get_var(win, FLOATWIN_VAR_NAME)
+        except NvimError:
+            pass
+        else:
+            yield win
 
 
 def _open_float_win(
@@ -77,6 +66,7 @@ def _border_buf(nvim: Nvim, width: int, height: int) -> Buffer:
 
     lines = tuple((top, *islice(repeat(mid), height - 2), btm))
     nvim.api.buf_set_option(buf, "bufhidden", "wipe")
+    nvim.api.buf_set_var(buf, FLOATWIN_BORDER_BUF_VAR_NAME, True)
     nvim.api.buf_set_lines(buf, 0, -1, True, lines)
     return buf
 

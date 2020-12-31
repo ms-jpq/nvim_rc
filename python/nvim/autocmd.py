@@ -28,10 +28,11 @@ class _A:
         self._name, self._events, self._modifiers = name, events, modifiers
         self._parent = parent
 
-    def __lshift__(self, rhs: str) -> None:
+    def __lshift__(self, rhs: str) -> str:
         self._parent._autocmds[self._name] = _AuParams(
             events=self._events, modifiers=self._modifiers, rhs=rhs
         )
+        return self._name
 
 
 class AutoCMD:
@@ -53,13 +54,13 @@ class AutoCMD:
             name=qualname, events=(event, *events), modifiers=modifiers, parent=self
         )
 
-    def drain(self, chan: int) -> Atomic:
+    def drain(self) -> Atomic:
         atomic = Atomic()
         while self._autocmds:
             name, param = self._autocmds.popitem()
             events = ",".join(param.events)
             modifiers = " ".join(param.modifiers)
-            atomic.command(f"augroup ch_{chan}.{name}")
+            atomic.command(f"augroup {name}")
             atomic.command("autocmd!")
             atomic.command(f"autocmd {events} {modifiers} {param.rhs}")
             atomic.command("augroup END")
