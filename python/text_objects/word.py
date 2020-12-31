@@ -60,6 +60,8 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
     row, col = nvim.api.win_get_cursor(win)
     line: str = nvim.api.get_current_line()
 
+    # apperant position
+    col = col + 1
     (word_lhs, word_rhs), (sym_lhs, sym_rhs) = _gen_lhs_rhs(
         line, col=col, unifying_chars=UNIFIYING_CHARS
     )
