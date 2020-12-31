@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, FrozenSet, Optional, Sequence
+from typing import FrozenSet, Sequence
 
 from std2.pickle import decode
 from yaml import safe_load
@@ -22,8 +22,7 @@ class LspAttrs:
     filetypes: FrozenSet[str]
     args: Sequence[str] = ()
     root: RootPattern = RootPattern()
-    settings: Optional[Any] = None
-    install: Optional[InstallSpec] = None
+    install: InstallSpec = InstallSpec()
 
 
 LspSpecs = Sequence[LspAttrs]

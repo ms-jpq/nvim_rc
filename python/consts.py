@@ -1,7 +1,4 @@
-from os import environ, pathsep
 from pathlib import Path
-
-XDG_DATA_HOME = environ.get("XDG_DATA_HOME", Path.home() / ".local" / "share")
 
 TOP_LEVEL = Path(__file__).resolve().parent.parent
 
@@ -18,10 +15,7 @@ RT_DIR = str(VARS_DIR / "runtime")
 VIM_DIR = VARS_DIR / "vim_modules"
 PIP_DIR = VARS_DIR / "pip_modules"
 NPM_DIR = VARS_DIR
-BIN_PATHS = pathsep.join(
-    map(str, (TOP_LEVEL / "bin", PIP_DIR / "bin", NPM_DIR / ".bin"))
-)
-
+PATH_PREPEND = tuple(map(str, (TOP_LEVEL / "bin", PIP_DIR / "bin", NPM_DIR / ".bin")))
 
 INSTALL_EXIT_CODE = 69
 INSTALL_PROG = str(TOP_LEVEL / "install.py")

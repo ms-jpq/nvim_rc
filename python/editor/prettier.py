@@ -8,7 +8,6 @@ from pynvim.api.buffer import Buffer
 from std2.asyncio.subprocess import call
 
 from ..config.fmt import FmtAttrs, FmtType, fmt_specs
-from ..consts import BIN_PATHS
 from ..nvim.lib import async_call, write
 from ..nvim.preview import set_preview
 from ..registery import keymap, rpc
@@ -16,12 +15,7 @@ from .linter import arg_subst
 
 
 async def _run_stream(
-    nvim: Nvim,
-    buf: Buffer,
-    filename: str,
-    attr: FmtAttrs,
-    cwd: str,
-    PATH: str,
+    nvim: Nvim, buf: Buffer, filename: str, attr: FmtAttrs, cwd: str
 ) -> Nvim:
     def c1() -> str:
         return linesep.join(nvim.api.buf_get_lines(buf, 0, -1, True))
@@ -29,12 +23,7 @@ async def _run_stream(
     body = await async_call(nvim, c1)
     args = arg_subst(attr.args, filename=filename)
     proc = await call(
-        attr.bin,
-        *args,
-        stdin=body.encode(),
-        cwd=cwd,
-        env={"PATH": PATH},
-        expected_code=attr.exit_code,
+        attr.bin, *args, stdin=body.encode(), cwd=cwd, expected_code=attr.exit_code
     )
     lines = proc.out.decode().splitlines()
 
@@ -45,17 +34,10 @@ async def _run_stream(
 
 
 async def _run_fs(
-    nvim: Nvim,
-    buf: Buffer,
-    filename: str,
-    attr: FmtAttrs,
-    cwd: str,
-    PATH: str,
+    nvim: Nvim, buf: Buffer, filename: str, attr: FmtAttrs, cwd: str
 ) -> None:
     args = arg_subst(attr.args, filename=filename)
-    await call(
-        attr.bin, *args, cwd=cwd, env={"PATH": PATH}, expected_code=attr.exit_code
-    )
+    await call(attr.bin, *args, cwd=cwd, expected_code=attr.exit_code)
     await async_call(nvim, nvim.command, "checktime")
 
 
@@ -64,8 +46,6 @@ _progs = {FmtType.stream: _run_stream, FmtType.fs: _run_fs}
 
 @rpc(blocking=False)
 async def run_fmt(nvim: Nvim) -> None:
-    PATH = pathsep.join((BIN_PATHS, environ["PATH"]))
-
     def cont() -> Tuple[str, Buffer, str, str]:
         cwd = nvim.funcs.getcwd()
         buf: Buffer = nvim.api.get_current_buf()
@@ -76,20 +56,13 @@ async def run_fmt(nvim: Nvim) -> None:
     cwd, buf, filename, filetype = await async_call(nvim, cont)
     for attr in fmt_specs:
         if filetype in attr.filetypes:
-            if which(attr.bin, path=PATH):
+            if which(attr.bin):
                 run = _progs.get(attr.type)
                 if not run:
                     raise NotImplementedError()
                 else:
                     try:
-                        await run(
-                            nvim,
-                            buf=buf,
-                            filename=filename,
-                            attr=attr,
-                            cwd=cwd,
-                            PATH=PATH,
-                        )
+                        await run(nvim, buf=buf, filename=filename, attr=attr, cwd=cwd)
                     except CalledProcessError as e:
                         heading = (
                             f"⛔️ - {e.returncode} 👉 {attr.bin} {' '.join(attr.args)}"

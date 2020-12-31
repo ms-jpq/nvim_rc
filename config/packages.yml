@@ -6,9 +6,8 @@
         "<leader>v": "<cmd>CHADopen<cr>"
 
 - uri: https://github.com/ms-jpq/kok.nvim
-  settings:
-    completefunc:
-      val: KoKomnifunc
+  lua: |-
+    -- vim.o.completefunc = "KoKomnifunc"
 
 - uri: https://github.com/neovim/nvim-lspconfig
   lua: |-

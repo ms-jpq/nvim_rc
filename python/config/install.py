@@ -1,9 +1,9 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Sequence
 
 
 @dataclass(frozen=True)
 class InstallSpec:
-    pip: Sequence[str] = field(default_factory=tuple)
-    npm: Sequence[str] = field(default_factory=tuple)
+    pip: Sequence[str] = ()
+    npm: Sequence[str] = ()
     bash: str = ""

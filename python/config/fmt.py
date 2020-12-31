@@ -22,7 +22,7 @@ class FmtAttrs:
     filetypes: FrozenSet[str]
     args: Sequence[str] = ()
     exit_code: int = 0
-    install: Optional[InstallSpec] = None
+    install: InstallSpec = InstallSpec()
 
 
 FmtSpecs = Sequence[FmtAttrs]

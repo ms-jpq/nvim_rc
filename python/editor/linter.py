@@ -8,7 +8,6 @@ from pynvim.api.buffer import Buffer
 from std2.asyncio.subprocess import call
 
 from ..config.linter import LinterAttrs, LinterType, linter_specs
-from ..consts import BIN_PATHS
 from ..nvim.lib import async_call, write
 from ..nvim.preview import set_preview
 from ..registery import keymap, rpc
@@ -35,7 +34,7 @@ def arg_subst(args: Iterable[str], filename: str) -> Iterator[str]:
         yield "".join(it())
 
 
-async def _run(nvim: Nvim, buf: Buffer, attr: LinterAttrs, PATH: str) -> None:
+async def _run(nvim: Nvim, buf: Buffer, attr: LinterAttrs) -> None:
     def cont() -> Tuple[str, str, Optional[bytes]]:
         cwd = nvim.funcs.getcwd()
         filename: str = nvim.api.buf_get_name(buf)
@@ -54,7 +53,6 @@ async def _run(nvim: Nvim, buf: Buffer, attr: LinterAttrs, PATH: str) -> None:
             *args,
             stdin=body,
             cwd=cwd,
-            env={"PATH": PATH},
             expected_code=attr.exit_code,
         )
     except CalledProcessError as e:
@@ -68,8 +66,6 @@ async def _run(nvim: Nvim, buf: Buffer, attr: LinterAttrs, PATH: str) -> None:
 
 @rpc(blocking=False)
 async def _run_linter(nvim: Nvim) -> None:
-    PATH = pathsep.join((BIN_PATHS, environ["PATH"]))
-
     def cont() -> Tuple[Buffer, str]:
         buf: Buffer = nvim.api.get_current_buf()
         filetype: str = nvim.api.buf_get_option(buf, "filetype")
@@ -78,8 +74,8 @@ async def _run_linter(nvim: Nvim) -> None:
     buf, filetype = await async_call(nvim, cont)
     for attr in linter_specs:
         if filetype in attr.filetypes:
-            if which(attr.bin, path=PATH):
-                await _run(nvim, buf=buf, attr=attr, PATH=PATH)
+            if which(attr.bin):
+                await _run(nvim, buf=buf, attr=attr)
             else:
                 await write(nvim, f"⁉️: 莫有 {attr.bin}", error=True)
             break
