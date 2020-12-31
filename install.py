@@ -118,6 +118,9 @@ async def stdout(queue: Queue[Tuple[str, ProcReturn]]) -> None:
 
 
 async def main() -> None:
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    exit(1)
+    
     args = parse_args()
     queue = Queue[Tuple[str, ProcReturn]]()
 

@@ -1,6 +1,7 @@
+from asyncio.subprocess import create_subprocess_exec
 from datetime import datetime, timezone
 from os import linesep
-from typing import Iterator
+from typing import Iterator, cast
 
 from pynvim.api.nvim import Nvim
 
@@ -8,9 +9,8 @@ from ..config.fmt import fmt_specs
 from ..config.linter import linter_specs
 from ..config.lsp import lsp_specs
 from ..config.pkgs import pkg_specs
-from ..consts import UPDATE_LOG, INSTALL_PROG
+from ..consts import INSTALL_PROG, UPDATE_LOG
 from ..workspace.terminal import toggle_floating
-from subprocess import run
 
 
 def _pip() -> Iterator[str]:
@@ -61,9 +61,10 @@ def _install_with_ui(nvim: Nvim) -> None:
     toggle_floating(nvim, *_install_args())
 
 
-def headless_install_and_quit() -> None:
-    p = run(tuple(_install_args()))
-    exit(p.returncode)
+async def headless_install_and_quit() -> int:
+    proc = await create_subprocess_exec(*_install_args())
+    await proc.communicate()
+    return cast(int, proc.returncode)
 
 
 def maybe_install(nvim: Nvim) -> None:

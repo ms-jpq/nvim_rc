@@ -14,7 +14,7 @@ class Client(BasicClient):
         super().__init__()
         self._headless = headless
 
-    async def wait(self, nvim: Nvim) -> None:
+    async def wait(self, nvim: Nvim) -> int:
         def init() -> None:
             atomic, specs = drain(nvim)
             self._handlers.update(specs)
@@ -24,6 +24,6 @@ class Client(BasicClient):
 
         await async_call(nvim, init)
         if self._headless:
-            headless_install_and_quit()
+            return await headless_install_and_quit()
         else:
-            await super().wait(nvim)
+            return await super().wait(nvim)
