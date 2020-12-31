@@ -17,7 +17,7 @@ from typing import Awaitable, Iterator, Sequence
 from std2.asyncio.subprocess import ProcReturn, call
 
 from python.components.pkgs import p_name
-from python.consts import NPM_DIR, PIP_DIR, VIM_DIR
+from python.consts import INSTALL_EXIT_CODE, NPM_DIR, PIP_DIR, VIM_DIR
 
 
 def parse_args() -> Namespace:
@@ -119,6 +119,7 @@ async def main() -> None:
     create_task(stdout(queue))
     await tasks
     await queue.join()
+    exit(INSTALL_EXIT_CODE)
 
 
 run(main())

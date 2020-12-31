@@ -23,4 +23,5 @@ BIN_PATHS = pathsep.join(
 )
 
 
+INSTALL_EXIT_CODE = 69
 INSTALL_PROG = str(TOP_LEVEL / "install.py")
