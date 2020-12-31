@@ -1,42 +1,48 @@
+from typing import Sequence
 
-# local go_replace = function ()
+from pynvim.api import Buffer, Window
+from pynvim.api.nvim import Nvim
 
-#   lv.op_go_replace = function (selec)
-#     local r1, c1, r2, c2 = bindings.p_op_marks(selec)
-#     r1, r2 = r1 - 1, r2 - 1
-#     c1, c2 = c1 + 1, c2 + 1
-#     local text = fn.getreg("*")
-#     local lines = api.nvim_buf_get_lines(0, r1, r2 + 1, true)
-#     local lst = r2 - r1 + 1
-#     local lst_len = #lines[lst]
-#     local pre = string.sub(lines[1], 1, c1 - 1)
-#     local post = string.sub(lines[lst], math.min(c2 + 1, lst_len + 1), lst_len)
-#     local replacement = pre .. text .. post
-#     local new_lines = vim.split(replacement, "\n", true)
-#     local len = #new_lines
-#     if new_lines[len] == "" then
-#       new_lines[len] = nil
-#     end
-#     api.nvim_buf_set_lines(0, r1, r2 + 1, true, new_lines)
-#   end
-
-#   bindings.map.normal("gr", "<cmd>set opfunc=v:lua.lv.op_go_replace<cr>g@")
-#   bindings.map.visual("gr", "<esc><cmd>lua lv.op_go_replace()<cr>")
+from ..nvim.operators import VisualTypes, operator_marks
+from ..registery import keymap, rpc
 
 
-#   lv.op_go_replace_line = function ()
-#     local r, _ = unpack(api.nvim_win_get_cursor(0))
-#     r = r - 1
-#     local replacement = fn.getreg("*")
-#     local new_lines = vim.split(replacement, "\n", true)
-#     local len = #new_lines
-#     if new_lines[len] == "" then
-#       new_lines[len] = nil
-#     end
-#     api.nvim_buf_set_lines(0, r, r + 1, true, new_lines)
-#   end
+@rpc(blocking=True)
+def _go_replace(nvim: Nvim, visual: VisualTypes = None) -> None:
+    buf: Buffer = nvim.api.get_current_buf()
+    (row1, col1), (row2, col2) = operator_marks(nvim, buf=buf, visual_type=visual)
+    row1, row2 = row1 - 1, row2 - 1
+    col1, col2 = col1 + 1, col2 + 1
 
-#   bindings.map.normal("grr", "<cmd>lua lv.op_go_replace_line()<cr>")
+    lines: Sequence[str] = nvim.api.buf_get_lines(buf, row1, row2 + 1, True)
+    head = lines[0][: col1 - 1]
+    body: str = nvim.funcs.getreg("*")
+    tail = lines[-1][col2 + 1 :]
 
-# end
-# registry.defer(go_replace)
+    new_lines = (head + body + tail).splitlines()
+    line = new_lines.pop()
+    if line:
+        new_lines.append(line)
+
+    nvim.api.buf_set_lines(buf, row1, row2 + 1, True, new_lines)
+
+
+keymap.n("gr") << f"<cmd>set opfunc={_go_replace.remote_name}<cr>g@"
+keymap.v("gr") << f"<esc><cmd>lua {_go_replace.remote_name}()<cr>"
+
+
+@rpc(blocking=True)
+def _go_replace_line(nvim: Nvim) -> None:
+    win: Window = nvim.api.get_current_win()
+    buf: Buffer = nvim.api.get_current_buf()
+    row, _ = nvim.api.win_get_cursor(win)
+    row = row - 1
+    body: str = nvim.funcs.getreg("*")
+    new_lines = body.splitlines()
+    line = new_lines.pop()
+    if line:
+        new_lines.append(line)
+    nvim.api.buf_set_lines(buf, row, row + 1, True, new_lines)
+
+
+keymap.n("grr") << f"<cmd>lua {_go_replace_line.remote_name}()<cr>"
