@@ -11,7 +11,7 @@ from pynvim.api.window import Window
 from ..nvim.float_win import FloatWin, open_float_win
 from ..registery import keymap, rpc
 
-BUF_VAR_NAME = f"buf_cursor_pos_{uuid4().hex}"
+BUF_VAR_NAME = f"terminal_buf_{uuid4().hex}"
 
 
 def _list_term_wins(nvim: Nvim) -> Iterator[Tuple[Window, Buffer]]:
@@ -31,8 +31,8 @@ def _single_term_buf(nvim: Nvim) -> Buffer:
     if buf is not None:
         return buf
     else:
-        nvim.api.create_buf(False, True)
-        nvim.api.buf_set_var(buf, BUF_VAR_NAME, BUF_VAR_NAME)
+        buf = nvim.api.create_buf(False, True)
+        nvim.api.buf_set_var(buf, BUF_VAR_NAME, True)
         return buf
 
 
