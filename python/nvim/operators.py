@@ -19,6 +19,14 @@ def operator_marks(
     return (row1, col1), (row2, col2)
 
 
+def set_visual_selection(
+    nvim: Nvim, buf: Buffer, mark1: Tuple[int, int], mark2: Tuple[int, int]
+) -> None:
+    (row1, col1), (row2, col2) = mark1, mark2
+    nvim.funcs.setpos("'<", {buf.number, row1, col1 + 1, 0})
+    nvim.funcs.setpos("'>", {buf.number, row2, col2 + 1, 0})
+
+
 def get_selected(nvim: Nvim, buf: Buffer, visual_type: VisualTypes) -> str:
     (row1, col1), (row2, col2) = operator_marks(nvim, buf=buf, visual_type=visual_type)
     # vim has mixed indexing

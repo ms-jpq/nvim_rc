@@ -1,110 +1,95 @@
-# local bindings = require "libs/bindings"
-# local registry = require "libs/registry"
-# local std = require "libs/std"
+from pynvim.api import Buffer, Window
+from pynvim.api.nvim import Nvim
+
+from ..nvim.operators import operator_marks, set_visual_selection
+from ..registery import keymap, rpc
 
 
-# --#################### Cursors Region ####################
-
-# local select_visual = function (r1, c1, r2, c2)
-#   fn.setpos("'<", {0, r1, c1 + 1, 0})
-#   fn.setpos("'>", {0, r2, c2 + 1, 0})
-# end
-
-
-# lv.move_up = function ()
-#   if not vim.bo.modifiable then
-#     return
-#   end
-
-#   local r, c = unpack(api.nvim_win_get_cursor(0))
-#   if r <= 1 then
-#     return
-#   end
-#   r = r - 1
-#   local curr = api.nvim_buf_get_lines(0, r, r + 1, true)
-#   local nxt  = api.nvim_buf_get_lines(0, r - 1, r, true)
-#   local new = std.concat{curr, nxt}
-#   api.nvim_buf_set_lines(0, r - 1, r + 1, true, new)
-#   api.nvim_win_set_cursor(0, {r, c})
-# end
+@rpc(blocking=True)
+def _normal_up(nvim: Nvim) -> None:
+    buf: Buffer = nvim.api.get_current_buf()
+    if not nvim.api.buf_get_option(buf, "modifiable"):
+        return
+    else:
+        win: Window = nvim.api.get_current_win()
+        row, col = nvim.api.win_get_cursor(win)
+        if row <= 1:
+            return
+        else:
+            row = row - 1
+            curr = nvim.api.buf_get_lines(0, row, row + 1, True)
+            nxt = nvim.api.buf_get_lines(0, row - 1, row, True)
+            new = tuple((*curr, *nxt))
+            nvim.api.buf_set_lines(buf, row - 1, row + 1, True, new)
+            nvim.api.win_set_cursor(win, (row, col))
 
 
-# lv.move_down = function ()
-#   if not vim.bo.modifiable then
-#     return
-#   end
-
-#   local r, c = unpack(api.nvim_win_get_cursor(0))
-#   if r >= api.nvim_buf_line_count(0) then
-#     return
-#   end
-#   r = r - 1
-#   local curr = api.nvim_buf_get_lines(0, r, r + 1, true)
-#   local nxt  = api.nvim_buf_get_lines(0, r + 1, r + 2, true)
-#   local new = std.concat{nxt, curr}
-#   api.nvim_buf_set_lines(0, r, r + 2, true, new)
-#   api.nvim_win_set_cursor(0, {r + 2, c})
-# end
-
-
-# local reselect_visual = function ()
-#   bindings.exec[[norm! gv]]
-# end
+@rpc(blocking=True)
+def _normal_down(nvim: Nvim) -> None:
+    buf: Buffer = nvim.api.get_current_buf()
+    if not nvim.api.buf_get_option(buf, "modifiable"):
+        return
+    else:
+        win: Window = nvim.api.get_current_win()
+        row, col = nvim.api.win_get_cursor(win)
+        count = nvim.api.buf_line_count(buf)
+        if row >= count:
+            return
+        else:
+            row = row - 1
+            curr = nvim.api.buf_get_lines(0, row, row + 1, True)
+            nxt = nvim.api.buf_get_lines(0, row + 1, row + 2, True)
+            new = tuple((*nxt, *curr))
+            nvim.api.buf_set_lines(buf, row, row + 2, True, new)
+            nvim.api.win_set_cursor(win, (row, col))
 
 
-# lv.move_v_up = function ()
-#   if not vim.bo.modifiable then
-#     return
-#   end
-
-#   local r1, c1, r2, c2 = bindings.p_op_marks()
-#   if r1 <= 1 then
-#     reselect_visual()
-#     return
-#   end
-#   r1, r2 = r1 - 1, r2 - 1
-
-#   local curr = api.nvim_buf_get_lines(0, r1, r2 + 1, true)
-#   local nxt  = api.nvim_buf_get_lines(0, r1 - 1, r1, true)
-#   local new = std.concat{curr, nxt}
-#   api.nvim_buf_set_lines(0, r1 - 1, r2 + 1, true, new)
-
-#   select_visual(r1, c1, r2, c2)
-#   reselect_visual()
-# end
+keymap.n("<m-up>") << f"<cmd>lua {_normal_up}()<cr>"
+keymap.n("<m-down>") << f"<cmd>lua {_normal_down}()<cr>"
 
 
-# lv.move_v_down = function ()
-#   if not vim.bo.modifiable then
-#     return
-#   end
-
-#   local r1, c1, r2, c2 = bindings.p_op_marks()
-#   if r2 >= api.nvim_buf_line_count(0) then
-#     reselect_visual()
-#     return
-#   end
-#   r1, r2 = r1 - 1, r2 - 1
-
-#   local curr = api.nvim_buf_get_lines(0, r1, r2 + 1, true)
-#   local nxt  = api.nvim_buf_get_lines(0, r2 + 1, r2 + 2, true)
-#   local new = std.concat{nxt, curr}
-#   api.nvim_buf_set_lines(0, r1, r2 + 2, true, new)
-
-#   select_visual(r1 + 2, c1, r2 + 2, c2)
-#   reselect_visual()
-# end
+def _reselect_visual(nvim: Nvim) -> None:
+    nvim.command("norm! gv")
 
 
-# -- drag regions around
-# local vim_move = function ()
+@rpc(blocking=True)
+def _visual_up(nvim: Nvim) -> None:
+    buf: Buffer = nvim.api.get_current_buf()
+    if not nvim.api.buf_get_option(buf, "modifiable"):
+        return
+    else:
+        (row1, col1), (row2, col2) = operator_marks(nvim, buf=buf, visual_type=None)
+        if row1 <= 1:
+            _reselect_visual(nvim)
+        else:
+            row1, row2 = row1 - 1, row2 - 1
+            curr = nvim.api.buf_get_lines(0, row1, row2 + 1, True)
+            nxt = nvim.api.buf_get_lines(0, row1 - 1, row1, True)
+            new = tuple((*curr, *nxt))
+            nvim.api.buf_set_lines(0, row1 - 1, row2 + 1, True, new)
+            set_visual_selection(nvim, buf=buf, mark1=(row1, col1), mark2=(row2, col2))
+            _reselect_visual(nvim)
 
-#   bindings.map.normal("<m-up>",   "<cmd>lua lv.move_up()<cr>")
-#   bindings.map.normal("<m-down>", "<cmd>lua lv.move_down()<cr>")
 
-#   bindings.map.visual("<m-up>",   "<esc><cmd>lua lv.move_v_up()<cr>")
-#   bindings.map.visual("<m-down>", "<esc><cmd>lua lv.move_v_down()<cr>")
+@rpc(blocking=True)
+def _visual_down(nvim: Nvim) -> None:
+    buf: Buffer = nvim.api.get_current_buf()
+    if not nvim.api.buf_get_option(buf, "modifiable"):
+        return
+    else:
+        (row1, col1), (row2, col2) = operator_marks(nvim, buf=buf, visual_type=None)
+        count = nvim.api.buf_line_count(buf)
+        if row2 >= count:
+            _reselect_visual(nvim)
+        else:
+            row1, row2 = row1 - 1, row2 - 1
+            curr = nvim.api.buf_get_lines(0, row1, row2 + 1, True)
+            nxt = nvim.api.buf_get_lines(0, row2 + 1, row2 + 2, True)
+            new = tuple((*nxt, *curr))
+            nvim.api.buf_set_lines(0, row1, row2 + 2, True, new)
+            set_visual_selection(nvim, buf=buf, mark1=(row1, col1), mark2=(row2, col2))
+            _reselect_visual(nvim)
 
-# end
-# registry.defer(vim_move)
 
+keymap.v("<m-up>") << f"<esc><cmd>lua {_visual_up}()<cr>"
+keymap.v("<m-down>") << f"<esc><cmd>lua {_visual_down}()<cr>"
