@@ -92,7 +92,7 @@ def _indent(nvim: Nvim) -> None:
     line: str = nvim.api.get_current_line()
 
 
-keymap.o("ii") << f"<cmd>lua {_indent.lua_name}()<cr>"
-keymap.o("ai") << f"<cmd>lua {_indent.lua_name}()<cr>"
-keymap.v("ii") << f"<esc><cmd>lua {_indent.lua_name}()<cr>"
-keymap.v("ai") << f"<esc><cmd>lua {_indent.lua_name}()<cr>"
+keymap.o("ii") << f"<cmd>lua {_indent.remote_name}()<cr>"
+keymap.o("ai") << f"<cmd>lua {_indent.remote_name}()<cr>"
+keymap.v("ii") << f"<esc><cmd>lua {_indent.remote_name}()<cr>"
+keymap.v("ai") << f"<esc><cmd>lua {_indent.remote_name}()<cr>"

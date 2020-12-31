@@ -40,8 +40,8 @@ def open_floating(nvim: Nvim, *args: str) -> None:
     filename: str = nvim.api.buf_get_name(fw.buf)
     if urlparse(filename).scheme != "term":
         cmds = args or (environ["SHELL"],)
-        nvim.funcs.termopen(cmds, {"on_exit": f"v:lua.{on_exit.lua_name}"})
+        nvim.funcs.termopen(cmds, {"on_exit": on_exit.remote_name})
     nvim.command("startinsert")
 
 
-keymap.n("<leader>u") << f"<cmd>lua {open_floating.lua_name}()<cr>"
+keymap.n("<leader>u") << f"<cmd>lua {open_floating.remote_name}()<cr>"

@@ -87,4 +87,4 @@ async def _run_linter(nvim: Nvim) -> None:
         await write(nvim, f"⁉️: 莫有 {filetype} 的 linter", error=True)
 
 
-keymap.n("M") << f"<cmd>lua {_run_linter.lua_name}()<cr>"
+keymap.n("M") << f"<cmd>lua {_run_linter.remote_name}()<cr>"

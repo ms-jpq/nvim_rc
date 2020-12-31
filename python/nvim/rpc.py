@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from asyncio.coroutines import iscoroutinefunction
 from asyncio.tasks import Task
+from os import linesep
 from typing import (
     Any,
     Awaitable,
@@ -40,7 +41,7 @@ class RpcCallable(Generic[T]):
             raise ValueError()
         else:
             self.name = name if name else f"{handler.__module__}.{handler.__qualname__}"
-            self.lua_name = f"{self.name}_{uuid4().hex}".replace(".", "_")
+            self.remote_name = f"{self.name}_{uuid4().hex}".replace(".", "_").capitalize()
             self.blocking = blocking
             self._handler = handler
 
@@ -62,7 +63,14 @@ RpcSpec = Tuple[str, RpcCallable[T]]
 def _new_lua_func(chan: int, handler: RpcCallable[T]) -> str:
     op = "request" if handler.blocking else "notify"
     invoke = f"vim.rpc{op}({chan}, '{handler.name}', {{...}})"
-    return f"{handler.lua_name} = function (...) {invoke} end"
+    return f"{handler.remote_name} = function (...) {invoke} end"
+
+
+def _new_viml_func(handler: RpcCallable[T]) -> str:
+    head = f"function! {handler.remote_name}(...)"
+    body = f"  call v:lua.{handler.remote_name}(a:000)"
+    tail = f"endfunction"
+    return linesep.join((head, body, tail))
 
 
 class RPC:
@@ -87,6 +95,7 @@ class RPC:
         while self._handlers:
             name, handler = self._handlers.popitem()
             atomic.exec_lua(_new_lua_func(chan, handler=handler), ())
+            atomic.exec(_new_viml_func(handler=handler), False)
             specs.append((name, handler))
 
         return atomic, specs

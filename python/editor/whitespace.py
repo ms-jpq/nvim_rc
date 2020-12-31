@@ -46,7 +46,7 @@ def _detect_tabsize(nvim: Nvim) -> None:
     settings.drain(True).commit(nvim)
 
 
-autocmd("FileType") << f"lua {_detect_tabsize.lua_name}()"
+autocmd("FileType") << f"lua {_detect_tabsize.remote_name}()"
 
 
 # insert spaces instead of tabs

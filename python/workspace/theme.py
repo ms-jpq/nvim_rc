@@ -35,8 +35,8 @@ def _dehl_cursor(nvim: Nvim) -> None:
     highlight(HLgroup("CursorLine", guibg="#f1f4f6")).commit(nvim)
 
 
-autocmd("InsertEnter") << f"lua {_hl_cursor.lua_name}()"
-autocmd("InsertLeave") << f"lua {_dehl_cursor.lua_name}()"
+autocmd("InsertEnter") << f"lua {_hl_cursor.remote_name}()"
+autocmd("InsertLeave") << f"lua {_dehl_cursor.remote_name}()"
 
 
 # highlight yank
@@ -45,7 +45,7 @@ def _hl_yank(nvim: Nvim) -> None:
     nvim.lua.vim.highlight.on_yank({})
 
 
-autocmd("TextYankPost") << f"lua {_hl_yank.lua_name}()"
+autocmd("TextYankPost") << f"lua {_hl_yank.remote_name}()"
 
 
 # remove welcome message
@@ -60,4 +60,4 @@ def _welcome_screen(nvim: Nvim) -> None:
             nvim.api.buf_set_option(name, "buftype", "nofile")
 
 
-autocmd("VimEnter") << f"lua {_welcome_screen.lua_name}()"
+autocmd("VimEnter") << f"lua {_welcome_screen.remote_name}()"
