@@ -9,25 +9,24 @@ from pynvim.api.common import NvimError
 from pynvim.api.window import Window
 
 from ..nvim.float_win import FloatWin, open_float_win
-from ..registery import keymap, rpc
+from ..registery import keymap, rpc, autocmd
 
 BUF_VAR_NAME = f"terminal_buf_{uuid4().hex}"
 
 
-def _list_term_wins(nvim: Nvim) -> Iterator[Tuple[Window, Buffer]]:
-    wins: Sequence[Window] = nvim.api.list_wins()
-    for win in wins:
-        buf: Buffer = nvim.api.win_get_buf(win)
+def _list_marked_bufs(nvim: Nvim) -> Iterator[Buffer]:
+    bufs: Sequence[Buffer] = nvim.api.list_bufs()
+    for buf in bufs:
         try:
             nvim.api.buf_get_var(buf, BUF_VAR_NAME)
         except NvimError:
             pass
         else:
-            yield win, buf
+            yield buf
 
 
-def _single_term_buf(nvim: Nvim) -> Buffer:
-    _, buf = next(_list_term_wins(nvim), (None, None))
+def _ensure_marked_buf(nvim: Nvim) -> Buffer:
+    buf = next(_list_marked_bufs(nvim), None)
     if buf is not None:
         return buf
     else:
@@ -40,19 +39,19 @@ def _single_term_buf(nvim: Nvim) -> Buffer:
 def _on_exit(nvim: Nvim, args: Tuple[int, int, str]) -> None:
     job_id, code, event_type = args
     if code == 0:
-        for _, buf in _list_term_wins(nvim):
+        for buf in _list_marked_bufs(nvim):
             nvim.command(f"bwipeout! {buf.number}")
 
 
 @rpc(blocking=True)
 def _open_floating(nvim: Nvim, *args: str) -> FloatWin:
-    buf = _single_term_buf(nvim)
-    fw = open_float_win(nvim, margin=0, relsize=0.95, buf=buf)
-    filename: str = nvim.api.buf_get_name(fw.buf)
-    if urlparse(filename).scheme != "term":
+    buf = _ensure_marked_buf(nvim)
+    filename: str = nvim.api.buf_get_name(buf)
+    is_term_buf = urlparse(filename).scheme == "term"
+    open_float_win(nvim, margin=0, relsize=0.95, buf=buf)
+    if not is_term_buf:
         cmds = args or (environ["SHELL"],)
         nvim.funcs.termopen(cmds, {"on_exit": _on_exit.remote_name})
-    return fw
 
 
 @rpc(blocking=True)
@@ -61,3 +60,11 @@ def toggle_floating(nvim: Nvim, *args: str) -> None:
 
 
 keymap.n("<leader>u") << f"<cmd>lua {toggle_floating.remote_name}()<cr>"
+
+
+@rpc(blocking=True)
+def _kill_term_wins(nvim: Nvim, win_id: int) -> None:
+    pass
+
+
+autocmd("WinClosed") << f"lua {_kill_term_wins.remote_name()}(vim.fn.expand('<afile>'))"
