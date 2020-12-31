@@ -17,5 +17,7 @@ PIP_DIR = VARS_DIR / "pip_modules"
 NPM_DIR = VARS_DIR
 PATH_PREPEND = tuple(map(str, (TOP_LEVEL / "bin", PIP_DIR / "bin", NPM_DIR / ".bin")))
 
-INSTALL_EXIT_CODE = 69
+LOGS_DIR = TOP_LEVEL / "logs"
+CONFIG_LOG = LOGS_DIR / "config.json"
+
 INSTALL_PROG = str(TOP_LEVEL / "install.py")
