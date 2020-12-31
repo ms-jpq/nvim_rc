@@ -41,7 +41,7 @@ def _normal_down(nvim: Nvim) -> None:
             nxt = nvim.api.buf_get_lines(0, row + 1, row + 2, True)
             new = tuple((*nxt, *curr))
             nvim.api.buf_set_lines(buf, row, row + 2, True, new)
-            nvim.api.win_set_cursor(win, (row, col))
+            nvim.api.win_set_cursor(win, (row + 2, col))
 
 
 keymap.n("<m-up>") << f"<cmd>lua {_normal_up.remote_name}()<cr>"
