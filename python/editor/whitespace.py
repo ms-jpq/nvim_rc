@@ -39,11 +39,8 @@ def _detect_tabsize(nvim: Nvim) -> None:
     except StopIteration:
         tabsize = tabsize_d
 
-    settings = Settings()
-    settings["tabstop"] = tabsize
-    settings["softtabstop"] = tabsize
-    settings["shiftwidth"] = tabsize
-    settings.drain(True).commit(nvim)
+    for option in ("tabstop", "softtabstop", "shiftwidth"):
+        nvim.api.buf_set_option(buf, option, tabsize)
 
 
 autocmd("FileType") << f"lua {_detect_tabsize.remote_name}()"
