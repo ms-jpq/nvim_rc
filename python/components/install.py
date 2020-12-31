@@ -10,6 +10,7 @@ from ..config.lsp import lsp_specs
 from ..config.pkgs import pkg_specs
 from ..consts import UPDATE_LOG, INSTALL_PROG
 from ..workspace.terminal import toggle_floating
+from subprocess import run
 
 
 def _pip() -> Iterator[str]:
@@ -44,19 +45,25 @@ def _git() -> Iterator[str]:
         yield spec.uri
 
 
-def install(nvim: Nvim) -> None:
-    toggle_floating(
-        nvim,
-        INSTALL_PROG,
-        "--git",
-        *_git(),
-        "--pip",
-        *_pip(),
-        "--npm",
-        *_npm(),
-        "--bash",
-        *_bash(),
-    )
+def _install_args() -> Iterator[str]:
+    yield INSTALL_PROG
+    yield "--git"
+    yield from _git()
+    yield "--pip"
+    yield from _pip()
+    yield "--npm"
+    yield from _npm()
+    yield "--bash"
+    yield from _bash()
+
+
+def _install_with_ui(nvim: Nvim) -> None:
+    toggle_floating(nvim, *_install_args())
+
+
+def headless_install_and_quit() -> None:
+    p = run(tuple(_install_args()))
+    exit(p.returncode)
 
 
 def maybe_install(nvim: Nvim) -> None:
@@ -70,5 +77,5 @@ def maybe_install(nvim: Nvim) -> None:
     if diff.days > 7:
         ans = nvim.funcs.confirm("🤖「ゴゴゴゴ」？", f"&Yes{linesep}&No", 2)
         if ans == 1:
-            install(nvim)
+            _install_with_ui(nvim)
             UPDATE_LOG.write_text(now.isoformat())

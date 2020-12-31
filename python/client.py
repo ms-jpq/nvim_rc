@@ -3,13 +3,17 @@ from os import linesep
 from pynvim import Nvim
 
 from ._registery import ____
-from .components.install import maybe_install
+from .components.install import headless_install_and_quit, maybe_install
 from .nvim.client import BasicClient
 from .nvim.lib import async_call, write
 from .registery import drain
 
 
 class Client(BasicClient):
+    def __init__(self, headless: bool) -> None:
+        super().__init__()
+        self._headless = headless
+
     async def wait(self, nvim: Nvim) -> None:
         def init() -> None:
             atomic, specs = drain(nvim)
@@ -19,4 +23,7 @@ class Client(BasicClient):
             maybe_install(nvim)
 
         await async_call(nvim, init)
-        await super().wait(nvim)
+        if self._headless:
+            headless_install_and_quit()
+        else:
+            await super().wait(nvim)

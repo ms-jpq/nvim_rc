@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-from sys import path
 from os import environ, pathsep
-from python.consts import RT_DIR, PATH_PREPEND
+from sys import path
+
+from python.consts import PATH_PREPEND, RT_DIR
 
 path.append(RT_DIR)
 environ["PATH"] = pathsep.join((*PATH_PREPEND, environ["PATH"]))
@@ -30,10 +31,10 @@ def main() -> None:
     if args.server_socket:
         nvim = attach("socket", path=args.server_socket)
     elif args.headless:
-        nvim = attach("child")
+        nvim = attach("child", argv=())
 
     if nvim:
-        run_client(nvim, client=Client())
+        run_client(nvim, client=Client(headless=args.headless))
     else:
         exit(69)
 
