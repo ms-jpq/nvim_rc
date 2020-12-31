@@ -43,6 +43,7 @@ def new_window(nvim: Nvim, vertical: bool) -> None:
     nvim.command("vnew" if vertical else "new")
     win: Window = nvim.api.get_current_win()
     buf: Buffer = nvim.api.create_buf(False, True)
+    nvim.api.buf_set_option(buf, "bufhidden", "wipe")
     nvim.api.win_set_buf(win, buf)
 
 
