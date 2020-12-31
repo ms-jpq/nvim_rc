@@ -21,7 +21,7 @@ class Client(Protocol):
         ...
 
     @abstractmethod
-    async def wait(self, nvim: Nvim) -> None:
+    async def wait(self, nvim: Nvim) -> int:
         ...
 
 
@@ -35,15 +35,15 @@ class BasicClient(Client):
         ret = handler(nvim, *args)
         return None if isinstance(ret, Task) else ret
 
-    async def wait(self, nvim: Nvim) -> None:
-        await sleep(inf)
+    async def wait(self, nvim: Nvim) -> int:
+        return await sleep(inf, 1)
 
 
 def _on_err(error: str) -> None:
     log.error("%s", error)
 
 
-def run_client(nvim: Nvim, client: Client) -> None:
+def run_client(nvim: Nvim, client: Client) -> int:
     def on_rpc(name: str, evt_args: Sequence[Sequence[Any]]) -> Any:
         args, *_ = evt_args
         try:
@@ -53,12 +53,13 @@ def run_client(nvim: Nvim, client: Client) -> None:
             log.exception(fmt, name, args, e)
             raise
 
-    def main() -> None:
+    def main() -> int:
         fut = run_coroutine_threadsafe(client.wait(nvim), loop=nvim.loop)
         try:
-            fut.result()
+            return fut.result()
         except Exception as e:
             log.exception(e)
+            raise
 
     def forever() -> None:
         nvim.run_loop(
@@ -69,4 +70,4 @@ def run_client(nvim: Nvim, client: Client) -> None:
 
     log.addHandler(nvim_handler(nvim))
     Thread(target=forever, daemon=True).start()
-    main()
+    return main()
