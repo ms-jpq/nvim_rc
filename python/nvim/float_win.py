@@ -1,17 +1,45 @@
-from typing import Tuple
-from pynvim import Nvim
-from pynvim.api import Window, Buffer
-from math import floor
-from itertools import repeat, islice
 from dataclasses import dataclass
+from itertools import islice, repeat
+from math import floor
+from typing import Iterator, Sequence, Tuple
+from uuid import uuid4
+
+from pynvim import Nvim
+from pynvim.api import Buffer, Window
+from pynvim.api.common import NvimError
+
+FLOATWIN_VAR_NAME = f"float_win_group_{uuid4().hex}"
 
 
 @dataclass(frozen=True)
 class FloatWin:
+    uid: str
     border_win: Window
     border_buf: Buffer
     win: Window
     buf: Buffer
+
+
+def list_floatwin_assets(nvim: Nvim) -> Tuple[Sequence[Window], Sequence[Buffer]]:
+    def list_wins() -> Iterator[Window]:
+        for win in nvim.api.list_wins():
+            try:
+                nvim.api.win_get_var(win, FLOATWIN_VAR_NAME)
+            except NvimError:
+                pass
+            else:
+                yield win
+
+    def list_bufs() -> Iterator[Buffer]:
+        for buf in nvim.api.list_bufs():
+            try:
+                nvim.api.buf_get_var(buf, FLOATWIN_VAR_NAME)
+            except NvimError:
+                pass
+            else:
+                yield buf
+
+    return tuple(list_wins()), tuple(list_bufs())
 
 
 def _open_float_win(
@@ -78,4 +106,12 @@ def open_float_win(nvim: Nvim, margin: int, relsize: float, buf: Buffer) -> Floa
         focusable=True,
     )
 
-    return FloatWin(border_win=border_win, border_buf=border_buf, win=win, buf=buf)
+    uid = uuid4().hex
+    nvim.api.win_set_var(border_win, FLOATWIN_VAR_NAME, uid)
+    nvim.api.win_set_var(win, FLOATWIN_VAR_NAME, uid)
+    nvim.api.buf_set_var(border_buf, FLOATWIN_VAR_NAME, uid)
+    nvim.api.buf_set_var(buf, FLOATWIN_VAR_NAME, uid)
+
+    return FloatWin(
+        uid=uid, border_win=border_win, border_buf=border_buf, win=win, buf=buf
+    )
