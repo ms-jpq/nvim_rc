@@ -119,6 +119,9 @@ async def stdout(queue: Queue[Tuple[str, ProcReturn]]) -> None:
 
 async def main() -> None:
     args = parse_args()
+    for path in (NPM_DIR, PIP_DIR, VIM_DIR):
+        path.mkdir(parents=True, exist_ok=True)
+
     queue = Queue[Tuple[str, ProcReturn]]()
     tasks = gather(
         pip(queue, pkgs=args.pip),
