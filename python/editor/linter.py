@@ -1,7 +1,7 @@
-from os import environ, linesep, pathsep
+from asyncio import gather
+from os import linesep
 from shutil import which
-from subprocess import CalledProcessError
-from typing import Iterable, Iterator, Optional, Tuple, cast
+from typing import Iterable, Iterator, Sequence, Tuple
 
 from pynvim import Nvim
 from pynvim.api.buffer import Buffer
@@ -9,7 +9,7 @@ from pynvim_pp.lib import async_call, write
 from pynvim_pp.preview import set_preview
 from std2.asyncio.subprocess import call
 
-from ..config.linter import LinterAttrs, LinterType, linter_specs
+from ..config.linter import LinterAttrs, linter_specs
 from ..registery import keymap, rpc
 
 ESCAPE_CHAR = "%"
@@ -34,35 +34,43 @@ def arg_subst(args: Iterable[str], filename: str) -> Iterator[str]:
         yield "".join(it())
 
 
-async def _run(nvim: Nvim, buf: Buffer, attr: LinterAttrs) -> None:
-    def cont() -> Tuple[str, str, Optional[bytes]]:
+async def _linter_output(
+    attr: LinterAttrs, cwd: str, filename: str, body: bytes
+) -> str:
+    args = arg_subst(attr.args, filename=filename)
+    if not which(attr.bin):
+        return f"⁉️: 莫有 {attr.bin}"
+    else:
+        proc = await call(attr.bin, *args, stdin=body, cwd=cwd)
+        arg_info = f"{attr.bin} {' '.join(attr.args)}"
+        if proc.code == attr.exit_code:
+            heading = f"✅ 👉 {arg_info}"
+        else:
+            heading = f"⛔️ - {proc.code} 👉 {arg_info}"
+        print_out = linesep.join((heading, proc.out.decode(), proc.err))
+        return print_out
+
+
+async def _run(nvim: Nvim, buf: Buffer, attrs: Iterable[LinterAttrs]) -> None:
+    def cont() -> Tuple[str, str, bytes]:
         cwd = nvim.funcs.getcwd()
         filename: str = nvim.api.buf_get_name(buf)
-        body = (
-            linesep.join(nvim.api.buf_get_lines(buf, 0, -1, True)).encode()
-            if attr.type == LinterType.stream
-            else None
-        )
+        lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, -1, True)
+        body = linesep.join(lines).encode()
         return cwd, filename, body
 
     cwd, filename, body = await async_call(nvim, cont)
-    args = arg_subst(attr.args, filename=filename)
-    try:
-        await call(
-            attr.bin,
-            *args,
-            stdin=body,
-            cwd=cwd,
-            expected_code=attr.exit_code,
-        )
-    except CalledProcessError as e:
-        heading = f"⛔️ - {e.returncode} 👉 {attr.bin} {' '.join(attr.args)}"
-        stdout = cast(bytes, e.stdout).decode()
-        err_out = f"{heading}{linesep}{stdout}{linesep}{e.stderr}"
-        await async_call(nvim, set_preview, nvim, err_out)
-    else:
-        msg = f"✅ 👉 {attr.bin} {' '.join(attr.args)}"
-        await async_call(nvim, set_preview, nvim, msg)
+    outputs = await gather(
+        *(_linter_output(attr, cwd=cwd, filename=filename, body=body) for attr in attrs)
+    )
+    preview = f"{linesep}{linesep}".join(outputs)
+    await async_call(nvim, set_preview, nvim, preview)
+
+
+def _linters_for(filetype: str) -> Iterator[LinterAttrs]:
+    for attr in linter_specs:
+        if filetype in attr.filetypes:
+            yield attr
 
 
 @rpc(blocking=False)
@@ -73,15 +81,11 @@ async def _run_linter(nvim: Nvim) -> None:
         return buf, filetype
 
     buf, filetype = await async_call(nvim, cont)
-    for attr in linter_specs:
-        if filetype in attr.filetypes:
-            if which(attr.bin):
-                await _run(nvim, buf=buf, attr=attr)
-            else:
-                await write(nvim, f"⁉️: 莫有 {attr.bin}", error=True)
-            break
-    else:
+    linters = tuple(_linters_for(filetype))
+    if not linters:
         await write(nvim, f"⁉️: 莫有 {filetype} 的 linter", error=True)
+    else:
+        await _run(nvim, buf=buf, attrs=linters)
 
 
 keymap.n("M") << f"<cmd>lua {_run_linter.remote_name}()<cr>"

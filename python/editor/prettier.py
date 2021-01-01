@@ -1,4 +1,4 @@
-from os import environ, linesep, pathsep
+from os import linesep
 from shutil import which
 from subprocess import CalledProcessError
 from typing import Tuple, cast
