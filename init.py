@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from argparse import ArgumentParser, Namespace
-from subprocess import run
 
 from python.consts import REQUIREMENTS, RT_DIR
 
@@ -18,6 +17,9 @@ args = parse_args()
 
 
 if args.install_runtime:
+
+    from subprocess import run
+
     proc = run(
         (
             "pip3",
@@ -41,10 +43,13 @@ path.append(RT_DIR)
 
 if args.install_packages:
 
-    from asyncio import run
+    from asyncio import run as arun
+
     from python.components.install import install
 
-    run(install())
+    code = arun(install())
+    if code:
+        exit(code)
 
 
 if args.socket:

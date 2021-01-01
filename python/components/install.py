@@ -117,15 +117,16 @@ def _bash() -> Iterator[Awaitable[SortOfMonoid]]:
             yield cont(pkg)
 
 
-async def install() -> None:
-    tasks = as_completed((*_git(), *_pip(), *_npm(), *_bash()))
-    for fut in tasks:
+async def install() -> int:
+    has_error = False
+    for fut in as_completed((*_git(), *_pip(), *_npm(), *_bash())):
         for debug, proc in await fut:
             if proc.code == 0:
                 print(debug)
                 print("✅ 👉", proc.prog, *proc.args)
                 print(proc.out.decode())
             else:
+                has_error = True
                 print(debug, file=stderr)
                 print(
                     f"⛔️ - {proc.code} 👉",
@@ -134,6 +135,8 @@ async def install() -> None:
                     file=stderr,
                 )
                 print(proc.err, file=stderr)
+
+    return has_error
 
 
 def maybe_install(nvim: Nvim) -> None:
