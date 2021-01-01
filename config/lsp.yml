@@ -12,7 +12,7 @@
           args:
             - --format
             - json
-            - -
+            - "-"
           debounce: 100
           parseJson:
             column: column
