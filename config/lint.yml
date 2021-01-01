@@ -1,5 +1,16 @@
 ---
-- bin: lint-py
+- bin: mypy
+  type: fs
+  args:
+    - --
+    - "%"
+  filetypes:
+    - python
+  install:
+    pip:
+      - mypy
+
+- bin: pylint
   type: fs
   args:
     - "%"
@@ -7,7 +18,6 @@
     - python
   install:
     pip:
-      - mypy
       - pylint
 
 - bin: shellcheck
@@ -30,7 +40,7 @@
       - markdownlint-cli
 
 - bin: write-good
-  type: stream
+  type: fs
   args:
     - "%"
   filetypes:
