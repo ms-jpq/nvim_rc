@@ -10,7 +10,7 @@ CONF_LINT = CONF_DIR / "lint.yml"
 CONF_FMT = CONF_DIR / "fmt.yml"
 
 
-_VARS_DIR = TOP_LEVEL / "vars"
+_VARS_DIR = TOP_LEVEL / ".vars"
 RT_DIR = str(_VARS_DIR / "runtime")
 
 _MODULES_DIR = _VARS_DIR / "modules"
