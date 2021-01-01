@@ -61,7 +61,8 @@ async def _run(nvim: Nvim, buf: Buffer, attr: LinterAttrs) -> None:
         err_out = f"{heading}{linesep}{stdout}{linesep}{e.stderr}"
         await async_call(nvim, set_preview, nvim, err_out)
     else:
-        await write(nvim, f"✅ 👉 {attr.bin} {' '.join(attr.args)}")
+        msg = f"✅ 👉 {attr.bin} {' '.join(attr.args)}"
+        await async_call(nvim, set_preview, nvim, msg)
 
 
 @rpc(blocking=False)
