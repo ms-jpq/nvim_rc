@@ -1,4 +1,22 @@
-from ..registery import keymap
+from string import Template
+
+from ..config.lsp import lsp_specs
+from ..registery import keymap, atomic
+
+_LSP_INIT = """
+local lsp = require "lspconfig"
+
+local setup = function (opts)
+  lsp.${SERVER}.setup(opts)
+end
+
+setup(...)
+"""
+_TEMPLATE = Template(_LSP_INIT)
+
+for spec in lsp_specs:
+    lua = _TEMPLATE.substitute(SERVER=spec.server)
+    atomic.exec_lua(lua, (spec.config,))
 
 
 keymap.n("H") << "<cmd>lua vim.lsp.util.show_line_diagnostics()<cr>"

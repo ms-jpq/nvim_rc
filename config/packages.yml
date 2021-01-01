@@ -10,9 +10,6 @@
     -- vim.o.completefunc = "KoKomnifunc"
 
 - uri: https://github.com/neovim/nvim-lspconfig
-  lua: |-
-    lv = lv or {}
-    lv.lsp = require "lspconfig"
 
 - uri: https://github.com/junegunn/fzf
 
