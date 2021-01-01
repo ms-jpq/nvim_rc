@@ -7,7 +7,7 @@ from pynvim_pp.keymap import Keymap
 from pynvim_pp.rpc import RPC, RpcSpec
 from pynvim_pp.settings import Settings
 
-from .components.pkgs import inst
+from .components.rtp import inst
 
 atomic = Atomic()
 autocmd = AutoCMD()
