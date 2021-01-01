@@ -10,16 +10,18 @@ CONF_LINT = CONF_DIR / "lint.yml"
 CONF_FMT = CONF_DIR / "fmt.yml"
 
 
-VARS_DIR = TOP_LEVEL / "vars"
-RT_DIR = str(VARS_DIR / "runtime")
-VIM_DIR = VARS_DIR / "vim_modules"
-PIP_DIR = VARS_DIR / "pip_modules"
-NPM_DIR = VARS_DIR
+_VARS_DIR = TOP_LEVEL / "vars"
+RT_DIR = str(_VARS_DIR / "runtime")
+
+_MODULES_DIR = _VARS_DIR / "modules"
+VIM_DIR = _MODULES_DIR / "vim_modules"
+PIP_DIR = _MODULES_DIR / "pip_modules"
+NPM_DIR = _MODULES_DIR
 PATH_PREPEND = tuple(map(str, (TOP_LEVEL / "bin", PIP_DIR / "bin", NPM_DIR / ".bin")))
 
-LOGS_DIR = TOP_LEVEL / "logs"
+LOGS_DIR = _VARS_DIR / "logs"
 UPDATE_LOG = LOGS_DIR / "last_update.txt"
 
 INSTALL_PROG = str(TOP_LEVEL / "install.py")
 
-BACKUP_DIR = TOP_LEVEL / "backup"
+BACKUP_DIR = str(_VARS_DIR / "backup")
