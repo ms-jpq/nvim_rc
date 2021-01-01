@@ -16,7 +16,7 @@ from typing import Awaitable, Iterator, Sequence, Tuple
 
 from std2.asyncio.subprocess import ProcReturn, call
 
-from python.components.pkgs import p_name
+from python.components.rtp import p_name
 from python.consts import NPM_DIR, PIP_DIR, TOP_LEVEL, VIM_DIR
 
 
