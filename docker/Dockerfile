@@ -10,7 +10,7 @@ RUN apt update && \
     git python3 python3-pip nodejs && \
     add-apt-repository ppa:neovim-ppa/stable && \
     apt update && \
-    apt install neovim
+    apt install -y neovim
 
 
 # INSTALL
