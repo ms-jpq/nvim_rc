@@ -20,6 +20,7 @@ if args.install_runtime:
 
     from subprocess import run
 
+    RT_DIR.mkdir(parents=True, exist_ok=True)
     proc = run(
         (
             "pip3",
@@ -30,7 +31,7 @@ if args.install_runtime:
             "--requirement",
             REQUIREMENTS,
         ),
-        cwd=(RT_DIR),
+        cwd=str(RT_DIR),
     )
     if proc.returncode:
         exit(proc.returncode)
@@ -38,7 +39,7 @@ if args.install_runtime:
 
 from sys import path
 
-path.append(RT_DIR)
+path.append(str(RT_DIR))
 
 
 if args.install_packages:

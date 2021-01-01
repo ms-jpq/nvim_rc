@@ -14,7 +14,7 @@ CONF_FMT = CONF_DIR / "fmt.yml"
 
 
 _VARS_DIR = TOP_LEVEL / ".vars"
-RT_DIR = str(_VARS_DIR / "runtime")
+RT_DIR = _VARS_DIR / "runtime"
 
 _MODULES_DIR = _VARS_DIR / "modules"
 VIM_DIR = _MODULES_DIR / "vim_modules"
