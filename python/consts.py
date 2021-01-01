@@ -17,7 +17,9 @@ _MODULES_DIR = _VARS_DIR / "modules"
 VIM_DIR = _MODULES_DIR / "vim_modules"
 PIP_DIR = _MODULES_DIR / "pip_modules"
 NPM_DIR = _MODULES_DIR
-PATH_PREPEND = tuple(map(str, (TOP_LEVEL / "bin", PIP_DIR / "bin", NPM_DIR / ".bin")))
+PATH_PREPEND = tuple(
+    map(str, (TOP_LEVEL / "bin", PIP_DIR / "bin", NPM_DIR / "node_modules" / ".bin"))
+)
 
 LOGS_DIR = _VARS_DIR / "logs"
 UPDATE_LOG = LOGS_DIR / "last_update.txt"
