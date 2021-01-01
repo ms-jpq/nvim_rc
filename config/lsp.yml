@@ -3,6 +3,34 @@
   bin: diagnostic-languageserver
   filetypes:
     - sh
+  settings:
+    initializationOptions:
+      linters:
+        shellcheck:
+          sourceName: shellcheck
+          command: shellcheck
+          args:
+            - --format
+            - json
+            - -
+          debounce: 100
+          parseJson:
+            column: column
+            endColumn: endColumn
+            endLine: endLine
+            line: line
+            message: ${message} [${code}]
+            security: level
+          securities:
+            error: error
+            info: info
+            style: hint
+            warning: warning
+
+      filetypes:
+        sh:
+          - shellcheck
+
   install:
     npm:
       - diagnostic-languageserver
