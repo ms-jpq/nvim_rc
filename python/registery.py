@@ -1,4 +1,4 @@
-from os import environ
+from os import environ, pathsep
 from typing import Sequence, Tuple
 
 from pynvim import Nvim
@@ -9,6 +9,7 @@ from pynvim_pp.rpc import RPC, RpcSpec
 from pynvim_pp.settings import Settings
 
 from .components.rtp import inst
+from .consts import PATH_PREPEND, PIP_DIR
 
 atomic = Atomic()
 autocmd = AutoCMD()
@@ -18,8 +19,16 @@ settings = Settings()
 
 
 def drain(nvim: Nvim) -> Tuple[Atomic, Sequence[RpcSpec]]:
+    PATH = environ["PATH"] = pathsep.join((*PATH_PREPEND, environ["PATH"]))
+    PYTHON_PATH = environ["PYTHON_PATH"] = (
+        pathsep.join((str(PIP_DIR), environ["PYTHON_PATH"]))
+        if "PYTHON_PATH" in environ
+        else str(PIP_DIR)
+    )
+
     _atomic = Atomic()
-    _atomic.call_function("setenv", ("PATH", environ["PATH"]))
+    _atomic.call_function("setenv", ("PATH", PATH))
+    _atomic.call_function("setenv", ("PYTHON_PATH", PYTHON_PATH))
     _atomic.set_var("mapleader", " ")
     _atomic.set_var("maplocalleader", " ")
 

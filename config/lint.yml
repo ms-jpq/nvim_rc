@@ -1,14 +1,23 @@
 ---
-- bin: mypy
+- bin: lint-py
   type: fs
   args:
-    - --
     - "%"
   filetypes:
     - python
   install:
     pip:
       - mypy
+      - pylint
+
+- bin: shellcheck
+  type: fs
+  args:
+    - --
+    - "%"
+  filetypes:
+    - sh
+    - zsh
 
 - bin: markdownlint
   type: stream
@@ -20,11 +29,12 @@
     npm:
       - markdownlint-cli
 
-- bin: shellcheck
-  type: fs
+- bin: write-good
+  type: stream
   args:
-    - --
     - "%"
   filetypes:
-    - sh
-    - zsh
+    - markdown
+  install:
+    npm:
+      - write-good

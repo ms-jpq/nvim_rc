@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 
-from os import environ, pathsep
 from sys import path
 
-from python.consts import PATH_PREPEND, RT_DIR
+from python.consts import RT_DIR
 
 path.append(RT_DIR)
-environ["PATH"] = pathsep.join((*PATH_PREPEND, environ["PATH"]))
 
 
 from argparse import ArgumentParser, Namespace

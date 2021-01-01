@@ -4,4 +4,4 @@ set -eu
 set -o pipefail
 
 
-sjson -i 0 | prettier --stdin-filepath 'json.json'
+sjson --indent 0 | prettier --stdin-filepath 'json.json'

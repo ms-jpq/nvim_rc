@@ -1,4 +1,12 @@
 ---
+- server: diagnosticls
+  bin: diagnostic-languageserver
+  filetypes:
+    - sh
+  install:
+    npm:
+      - diagnostic-languageserver
+
 - server: jsonls
   bin: vscode-json-languageserver
   filetypes:
