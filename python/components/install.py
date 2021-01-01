@@ -1,6 +1,7 @@
 from asyncio.tasks import as_completed
 from datetime import datetime, timezone
 from os import linesep
+from shutil import which
 from sys import stderr
 from typing import Awaitable, Iterator, Sequence, Tuple
 
@@ -53,6 +54,7 @@ SortOfMonoid = Sequence[Tuple[str, ProcReturn]]
 
 def _git() -> Iterator[Awaitable[SortOfMonoid]]:
     VIM_DIR.mkdir(parents=True, exist_ok=True)
+
     for pkg in _git_specs():
 
         async def cont(pkg: str) -> SortOfMonoid:
@@ -77,6 +79,7 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
 
 def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
     PIP_DIR.mkdir(parents=True, exist_ok=True)
+
     async def cont() -> SortOfMonoid:
         p = await call(
             "pip3",
@@ -95,6 +98,7 @@ def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
 
 def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
     NPM_DIR.mkdir(parents=True, exist_ok=True)
+
     async def cont() -> SortOfMonoid:
         p1 = await call("npm", "init", "--yes", cwd=str(NPM_DIR))
         if p1.code:
@@ -105,7 +109,8 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
             )
             return ("", p1), ("", p2)
 
-    yield cont()
+    if which("npm"):
+        yield cont()
 
 
 def _bash() -> Iterator[Awaitable[SortOfMonoid]]:
