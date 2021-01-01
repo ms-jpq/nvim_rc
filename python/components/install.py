@@ -148,11 +148,13 @@ async def install() -> int:
 
 
 def maybe_install(nvim: Nvim) -> None:
+    UPDATE_LOG.parent.mkdir(parents=True, exist_ok=True)
     before = (
         datetime.fromisoformat(UPDATE_LOG.read_text())
         if UPDATE_LOG.exists()
         else datetime(year=1949, month=9, day=21, tzinfo=timezone.utc)
     )
+
     now = datetime.now(tz=timezone.utc)
     diff = now - before
     if diff.days > 7:

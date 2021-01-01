@@ -28,4 +28,4 @@ LOGS_DIR = _VARS_DIR / "logs"
 UPDATE_LOG = LOGS_DIR / "last_update.txt"
 
 
-BACKUP_DIR = str(_VARS_DIR / "backup")
+BACKUP_DIR = _VARS_DIR / "backup"

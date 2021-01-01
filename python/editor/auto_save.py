@@ -18,10 +18,11 @@ autocmd("FocusGained", "BufEnter") << "checktime"
 
 
 # auto backup
+BACKUP_DIR.mkdir(parents=True, exist_ok=True)
 settings["backup"] = True
 settings["writebackup"] = True
 settings["backupskip"] = ""
-settings["backupdir"] = BACKUP_DIR
+settings["backupdir"] = str(BACKUP_DIR)
 settings["backupext"] = ".bak"
 
 autocmd("FocusLost", "VimLeavePre", modifiers=("*", "nested")) << "silent! wa"

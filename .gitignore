@@ -1,4 +1,5 @@
 /.venv/
-/temp/
 __pycache__/
+/.vars/
+/temp/
 /.vscode/
