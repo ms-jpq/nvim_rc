@@ -15,5 +15,5 @@ local on_stderr = function (_, msg)
 end
 
 
-local args = { py_main, vim.v.servername }
+local args = { py_main, "--socket", vim.v.servername }
 vim.fn.jobstart(args, { on_exit = on_exit, on_stdout = on_stdout, on_stderr = on_stderr })
