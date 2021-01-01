@@ -15,6 +15,8 @@ def parse_args() -> Namespace:
 
 
 args = parse_args()
+
+
 if args.install_runtime:
     proc = run(
         (
@@ -31,12 +33,18 @@ if args.install_runtime:
     if proc.returncode:
         exit(proc.returncode)
 
+
 from sys import path
 
 path.append(RT_DIR)
 
+
 if args.install_packages:
-    pass
+
+    from asyncio import run
+    from python.components.install import install
+
+    run(install())
 
 
 if args.socket:

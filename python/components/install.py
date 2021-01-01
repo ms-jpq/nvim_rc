@@ -1,19 +1,29 @@
-from asyncio.subprocess import create_subprocess_exec
+from asyncio import gather
+from asyncio.queues import Queue
+from asyncio.tasks import create_task
 from datetime import datetime, timezone
 from os import linesep
-from typing import Iterator, cast
+from sys import stderr
+from typing import Awaitable, Iterator, Tuple
 
 from pynvim.api.nvim import Nvim
+from std2.asyncio.subprocess import ProcReturn, call
 
 from ..config.fmt import fmt_specs
 from ..config.linter import linter_specs
 from ..config.lsp import lsp_specs
 from ..config.pkgs import pkg_specs
-from ..consts import INSTALL_PROG, UPDATE_LOG
+from ..consts import INSTALL_SCRIPT, NPM_DIR, PIP_DIR, TOP_LEVEL, UPDATE_LOG, VIM_DIR
 from ..workspace.terminal import toggle_floating
+from .rtp import p_name
 
 
-def _pip() -> Iterator[str]:
+def _git_specs() -> Iterator[str]:
+    for spec in pkg_specs:
+        yield spec.uri
+
+
+def _pip_specs() -> Iterator[str]:
     for l_spec in lsp_specs:
         yield from l_spec.install.pip
     for i_spec in linter_specs:
@@ -22,7 +32,7 @@ def _pip() -> Iterator[str]:
         yield from f_spec.install.pip
 
 
-def _npm() -> Iterator[str]:
+def _npm_specs() -> Iterator[str]:
     for l_spec in lsp_specs:
         yield from l_spec.install.npm
     for i_spec in linter_specs:
@@ -31,7 +41,7 @@ def _npm() -> Iterator[str]:
         yield from f_spec.install.npm
 
 
-def _bash() -> Iterator[str]:
+def _bash_specs() -> Iterator[str]:
     for l_spec in lsp_specs:
         yield l_spec.install.bash
     for i_spec in linter_specs:
@@ -40,31 +50,104 @@ def _bash() -> Iterator[str]:
         yield f_spec.install.bash
 
 
-def _git() -> Iterator[str]:
-    for spec in pkg_specs:
-        yield spec.uri
+async def _git(queue: Queue[Tuple[str, ProcReturn]]) -> None:
+    def it() -> Iterator[Awaitable[None]]:
+        for pkg in _git_specs():
+
+            async def cont(pkg: str) -> None:
+                location = VIM_DIR / p_name(pkg)
+                if location.is_dir():
+                    p = await call(
+                        "git", "pull", "--recurse-submodules", cwd=str(location)
+                    )
+                    await queue.put((pkg, p))
+                else:
+                    p = await call(
+                        "git",
+                        "clone",
+                        "--depth=1",
+                        "--recurse-submodules",
+                        "--shallow-submodules",
+                        pkg,
+                        str(location),
+                    )
+                    await queue.put((pkg, p))
+
+            yield cont(pkg)
+
+    await gather(*it())
 
 
-def _install_args() -> Iterator[str]:
-    yield INSTALL_PROG
-    yield "--git"
-    yield from _git()
-    yield "--pip"
-    yield from _pip()
-    yield "--npm"
-    yield from _npm()
-    yield "--bash"
-    yield from _bash()
+async def _pip(queue: Queue[Tuple[str, ProcReturn]]) -> None:
+    specs = tuple(_pip_specs())
+    if specs:
+        p = await call(
+            "pip3",
+            "install",
+            "--upgrade",
+            "--target",
+            str(PIP_DIR),
+            "--",
+            *specs,
+            cwd=str(PIP_DIR),
+        )
+        await queue.put(("", p))
 
 
-def _install_with_ui(nvim: Nvim) -> None:
-    toggle_floating(nvim, *_install_args())
+async def _npm(queue: Queue[Tuple[str, ProcReturn]]) -> None:
+    p1 = await call("npm", "init", "--yes", cwd=str(NPM_DIR))
+    await queue.put(("", p1))
+    if p1.code == 0:
+        p2 = await call(
+            "npm", "install", "--upgrade", "--", *_npm_specs(), cwd=str(NPM_DIR)
+        )
+        await queue.put(("", p2))
 
 
-async def headless_install_and_quit() -> int:
-    proc = await create_subprocess_exec(*_install_args())
-    await proc.communicate()
-    return cast(int, proc.returncode)
+async def _bash(queue: Queue[Tuple[str, ProcReturn]]) -> None:
+    def it() -> Iterator[Awaitable[None]]:
+        for pkg in _bash_specs():
+
+            async def cont(pkg: str) -> None:
+                stdin = f"set -x{linesep}{pkg}".encode()
+                p = await call("bash", stdin=stdin, cwd=str(TOP_LEVEL))
+                await queue.put((pkg, p))
+
+            if pkg:
+                yield cont(pkg)
+
+    await gather(*it())
+
+
+async def _stdout(queue: Queue[Tuple[str, ProcReturn]]) -> None:
+    while True:
+        debug, proc = await queue.get()
+        if proc.code == 0:
+            print(debug)
+            print("✅ 👉", proc.prog, *proc.args)
+            print(proc.out.decode())
+        else:
+            print(debug, file=stderr)
+            print(
+                f"⛔️ - {proc.code} 👉",
+                proc.prog,
+                *proc.args,
+                file=stderr,
+            )
+            print(proc.err, file=stderr)
+        queue.task_done()
+
+
+async def install() -> None:
+    queue = Queue[Tuple[str, ProcReturn]]()
+    create_task(_stdout(queue))
+    await gather(
+        _git(queue),
+        _pip(queue),
+        _npm(queue),
+        _bash(queue),
+    )
+    await queue.join()
 
 
 def maybe_install(nvim: Nvim) -> None:
@@ -78,5 +161,5 @@ def maybe_install(nvim: Nvim) -> None:
     if diff.days > 7:
         ans = nvim.funcs.confirm("🤖「ゴゴゴゴ」？", f"&Yes{linesep}&No", 2)
         if ans == 1:
-            _install_with_ui(nvim)
+            toggle_floating(nvim, INSTALL_SCRIPT, "--install-packages")
             UPDATE_LOG.write_text(now.isoformat())
