@@ -1,3 +1,4 @@
+from os import environ
 from typing import Sequence, Tuple
 
 from pynvim import Nvim
@@ -18,6 +19,7 @@ settings = Settings()
 
 def drain(nvim: Nvim) -> Tuple[Atomic, Sequence[RpcSpec]]:
     _atomic = Atomic()
+    _atomic.nvim_call_function("setenv", "PATH", environ["PATH"])
     _atomic.set_var("mapleader", " ")
     _atomic.set_var("maplocalleader", " ")
 

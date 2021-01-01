@@ -19,15 +19,22 @@ from python.client import Client
 
 def parse_args() -> Namespace:
     parser = ArgumentParser()
-    parser.add_argument("server_socket", default=None)
+    parser.add_argument("socket", default=None)
     parser.add_argument("--headless", action="store_true", default=False)
     return parser.parse_args()
 
 
+def run_headless() -> int:
+    return 1
+
+
 def main() -> None:
     args = parse_args()
-    nvim = attach("socket", path=args.server_socket)
-    code = run_client(nvim, client=Client(headless=args.headless))
+    if args.headless:
+        code = run_headless()
+    else:
+        nvim = attach("socket", path=args.socket)
+        code = run_client(nvim, client=Client(headless=False))
     exit(code)
 
 
