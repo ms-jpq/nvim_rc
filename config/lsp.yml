@@ -51,15 +51,6 @@
     npm:
       - yaml-language-server
 
-- server: diagnosticls
-  bin: diagnostic-languageserver
-  filetypes:
-    - markdown
-    - sh
-  install:
-    npm:
-      - diagnostic-languageserver
-
 - server: bashls
   bin: bash-language-server
   filetypes:
