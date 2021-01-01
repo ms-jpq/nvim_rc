@@ -1,10 +1,8 @@
-from asyncio import gather
-from asyncio.queues import Queue
-from asyncio.tasks import create_task
+from asyncio.tasks import as_completed
 from datetime import datetime, timezone
 from os import linesep
 from sys import stderr
-from typing import Awaitable, Iterator, Tuple
+from typing import Awaitable, Iterator, Sequence, Tuple
 
 from pynvim.api.nvim import Nvim
 from std2.asyncio.subprocess import ProcReturn, call
@@ -50,37 +48,34 @@ def _bash_specs() -> Iterator[str]:
         yield f_spec.install.bash
 
 
-async def _git(queue: Queue[Tuple[str, ProcReturn]]) -> None:
-    def it() -> Iterator[Awaitable[None]]:
-        for pkg in _git_specs():
-
-            async def cont(pkg: str) -> None:
-                location = VIM_DIR / p_name(pkg)
-                if location.is_dir():
-                    p = await call(
-                        "git", "pull", "--recurse-submodules", cwd=str(location)
-                    )
-                    await queue.put((pkg, p))
-                else:
-                    p = await call(
-                        "git",
-                        "clone",
-                        "--depth=1",
-                        "--recurse-submodules",
-                        "--shallow-submodules",
-                        pkg,
-                        str(location),
-                    )
-                    await queue.put((pkg, p))
-
-            yield cont(pkg)
-
-    await gather(*it())
+SortOfMonoid = Sequence[Tuple[str, ProcReturn]]
 
 
-async def _pip(queue: Queue[Tuple[str, ProcReturn]]) -> None:
-    specs = tuple(_pip_specs())
-    if specs:
+def _git() -> Iterator[Awaitable[SortOfMonoid]]:
+    for pkg in _git_specs():
+
+        async def cont(pkg: str) -> SortOfMonoid:
+            location = VIM_DIR / p_name(pkg)
+            if location.is_dir():
+                p = await call("git", "pull", "--recurse-submodules", cwd=str(location))
+                return ((pkg, p),)
+            else:
+                p = await call(
+                    "git",
+                    "clone",
+                    "--depth=1",
+                    "--recurse-submodules",
+                    "--shallow-submodules",
+                    pkg,
+                    str(location),
+                )
+                return ((pkg, p),)
+
+        yield cont(pkg)
+
+
+def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
+    async def cont() -> SortOfMonoid:
         p = await call(
             "pip3",
             "install",
@@ -88,66 +83,57 @@ async def _pip(queue: Queue[Tuple[str, ProcReturn]]) -> None:
             "--target",
             str(PIP_DIR),
             "--",
-            *specs,
+            *_pip_specs(),
             cwd=str(PIP_DIR),
         )
-        await queue.put(("", p))
+        return (("", p),)
+
+    yield cont()
 
 
-async def _npm(queue: Queue[Tuple[str, ProcReturn]]) -> None:
-    p1 = await call("npm", "init", "--yes", cwd=str(NPM_DIR))
-    await queue.put(("", p1))
-    if p1.code == 0:
-        p2 = await call(
-            "npm", "install", "--upgrade", "--", *_npm_specs(), cwd=str(NPM_DIR)
-        )
-        await queue.put(("", p2))
-
-
-async def _bash(queue: Queue[Tuple[str, ProcReturn]]) -> None:
-    def it() -> Iterator[Awaitable[None]]:
-        for pkg in _bash_specs():
-
-            async def cont(pkg: str) -> None:
-                stdin = f"set -x{linesep}{pkg}".encode()
-                p = await call("bash", stdin=stdin, cwd=str(TOP_LEVEL))
-                await queue.put((pkg, p))
-
-            if pkg:
-                yield cont(pkg)
-
-    await gather(*it())
-
-
-async def _stdout(queue: Queue[Tuple[str, ProcReturn]]) -> None:
-    while True:
-        debug, proc = await queue.get()
-        if proc.code == 0:
-            print(debug)
-            print("✅ 👉", proc.prog, *proc.args)
-            print(proc.out.decode())
+def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
+    async def cont() -> SortOfMonoid:
+        p1 = await call("npm", "init", "--yes", cwd=str(NPM_DIR))
+        if p1.code:
+            return (("", p1),)
         else:
-            print(debug, file=stderr)
-            print(
-                f"⛔️ - {proc.code} 👉",
-                proc.prog,
-                *proc.args,
-                file=stderr,
+            p2 = await call(
+                "npm", "install", "--upgrade", "--", *_npm_specs(), cwd=str(NPM_DIR)
             )
-            print(proc.err, file=stderr)
-        queue.task_done()
+            return ("", p1), ("", p2)
+
+    yield cont()
+
+
+def _bash() -> Iterator[Awaitable[SortOfMonoid]]:
+    for pkg in _bash_specs():
+
+        async def cont(pkg: str) -> SortOfMonoid:
+            stdin = f"set -x{linesep}{pkg}".encode()
+            p = await call("bash", stdin=stdin, cwd=str(TOP_LEVEL))
+            return ((pkg, p),)
+
+        if pkg:
+            yield cont(pkg)
 
 
 async def install() -> None:
-    queue = Queue[Tuple[str, ProcReturn]]()
-    create_task(_stdout(queue))
-    await gather(
-        _git(queue),
-        _pip(queue),
-        _npm(queue),
-        _bash(queue),
-    )
-    await queue.join()
+    tasks = as_completed((*_git(), *_pip(), *_npm(), *_bash()))
+    for fut in tasks:
+        for debug, proc in await fut:
+            if proc.code == 0:
+                print(debug)
+                print("✅ 👉", proc.prog, *proc.args)
+                print(proc.out.decode())
+            else:
+                print(debug, file=stderr)
+                print(
+                    f"⛔️ - {proc.code} 👉",
+                    proc.prog,
+                    *proc.args,
+                    file=stderr,
+                )
+                print(proc.err, file=stderr)
 
 
 def maybe_install(nvim: Nvim) -> None:
