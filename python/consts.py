@@ -2,6 +2,9 @@ from pathlib import Path
 
 TOP_LEVEL = Path(__file__).resolve().parent.parent
 
+INSTALL_SCRIPT = str(TOP_LEVEL / "init.py")
+REQUIREMENTS = str(TOP_LEVEL / "requirements.txt")
+
 
 CONF_DIR = TOP_LEVEL / "config"
 CONF_PKGS = CONF_DIR / "packages.yml"
@@ -24,6 +27,5 @@ PATH_PREPEND = tuple(
 LOGS_DIR = _VARS_DIR / "logs"
 UPDATE_LOG = LOGS_DIR / "last_update.txt"
 
-INSTALL_PROG = str(TOP_LEVEL / "install.py")
 
 BACKUP_DIR = str(_VARS_DIR / "backup")
