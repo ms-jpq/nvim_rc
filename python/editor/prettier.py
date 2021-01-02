@@ -3,7 +3,7 @@ from itertools import repeat
 from os import linesep
 from pathlib import Path
 from shutil import which
-from typing import Iterable, Iterator, Optional
+from typing import Iterable, Iterator
 from uuid import uuid4
 
 from pynvim import Nvim
@@ -63,10 +63,12 @@ async def _run(
         if errors:
             await set_preview_content(nvim, text=errors)
         else:
+            nice = f"✅ 美化成功 👉 {' -> '.join(attr.bin for attr in attrs)}{linesep}"
             lines = temp.read_text().splitlines()
 
             def cont() -> None:
                 nvim.api.buf_set_lines(ctx.buf, 0, -1, True, lines)
+                nvim.out_write(nice)
 
             await async_call(nvim, cont)
 

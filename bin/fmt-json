@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-set -eu
-set -o pipefail
-
-
-sjson --indent 0 | prettier --stdin-filepath 'json.json'

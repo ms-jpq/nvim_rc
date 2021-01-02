@@ -1,23 +1,44 @@
 ---
-- bin: fmt-json
+- bin: sjson
   args:
-    - "%"
+    - --indent
+    - "0"
   type: stream
   filetypes:
     - json
   install:
     pip:
       - sortd
+
+- bin: prettier
+  args:
+    - --stdin-filepath
+    - "%"
+  type: stream
+  filetypes:
+    - json
+  install:
     npm:
       - prettier
 
-- bin: fmt-py
+- bin: isort
   type: stream
+  args:
+    - "-"
   filetypes:
     - python
   install:
     pip:
       - isort
+
+- bin: black
+  type: stream
+  args:
+    - "-"
+  filetypes:
+    - python
+  install:
+    pip:
       - black
 
 - bin: scfg
