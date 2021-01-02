@@ -49,7 +49,7 @@ async def _fmt_output(attr: FmtAttrs, cwd: str, temp: Path) -> str:
 async def _run(
     nvim: Nvim, ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: str
 ) -> None:
-    body = "".join(ctx.lines).encode()
+    body = linesep.join(ctx.lines).encode()
     path = Path(ctx.filename)
     with _mktemp(path) as temp:
         temp.write_bytes(body)
