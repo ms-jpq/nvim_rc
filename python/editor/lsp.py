@@ -6,8 +6,8 @@ from ..registery import keymap, atomic
 _LSP_INIT = """
 local lsp = require "lspconfig"
 
-local setup = function (opts)
-  lsp.${SERVER}.setup(opts)
+local setup = function (cfg)
+  lsp.${SERVER}.setup(cfg)
 end
 
 setup(...)
