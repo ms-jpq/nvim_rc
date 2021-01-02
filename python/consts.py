@@ -1,5 +1,7 @@
 from pathlib import Path
 
+DATE_FMT = "%Y-%m-%d %H:%M:%S"
+
 TOP_LEVEL = Path(__file__).resolve().parent.parent
 
 INSTALL_SCRIPT = str(TOP_LEVEL / "init.py")

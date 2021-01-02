@@ -1,4 +1,6 @@
 from asyncio import gather
+from datetime import datetime, timezone
+from itertools import repeat
 from os import linesep
 from shutil import which
 from typing import Iterable, Iterator, Sequence, Tuple
@@ -10,6 +12,7 @@ from pynvim_pp.preview import set_preview
 from std2.asyncio.subprocess import call
 
 from ..config.linter import LinterAttrs, linter_specs
+from ..consts import DATE_FMT
 from ..registery import keymap, rpc
 
 ESCAPE_CHAR = "%"
@@ -63,7 +66,8 @@ async def _run(nvim: Nvim, buf: Buffer, attrs: Iterable[LinterAttrs]) -> None:
     outputs = await gather(
         *(_linter_output(attr, cwd=cwd, filename=filename, body=body) for attr in attrs)
     )
-    preview = f"{linesep}{linesep}".join(outputs)
+    now = datetime.now(tz=timezone.utc).strftime(DATE_FMT)
+    preview = f"".join(repeat(linesep, times=2)).join((now, *outputs))
     await async_call(nvim, set_preview, nvim, preview)
 
 
