@@ -3,6 +3,8 @@
   bin: diagnostic-languageserver
   filetypes:
     - sh
+    - markdown
+
   config:
     init_options:
       linters:
@@ -27,7 +29,23 @@
             style: hint
             warning: warning
 
-        write-good:
+        markdownlint:
+          sourceName: markdownlint
+          command: markdownlint
+          args:
+            - --stdin
+          debounce: 100
+          formatLines: 1
+          formatPattern:
+            - ^.*?:\s+(\d+):\s+(.*)(\r|\n)*$
+            - column: -1
+              line: 1
+              message: 2
+          isStderr: true
+          offsetColumn: 0
+          offsetLine: 0
+
+        write_good:
           sourceName: write-good
           command: write-good
           args:
@@ -46,10 +64,14 @@
       filetypes:
         sh:
           - shellcheck
+        markdown:
+          - markdownlint
+          - write_good
 
   install:
     npm:
       - diagnostic-languageserver
+      - write-good
 
 - server: jsonls
   bin: vscode-json-languageserver

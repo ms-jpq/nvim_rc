@@ -1,0 +1,2 @@
+# Pure Python Neovim Configuration
+
