@@ -12,7 +12,15 @@ from ..config.fmt import fmt_specs
 from ..config.linter import linter_specs
 from ..config.lsp import lsp_specs
 from ..config.pkgs import pkg_specs
-from ..consts import INSTALL_SCRIPT, NPM_DIR, PIP_DIR, TOP_LEVEL, UPDATE_LOG, VIM_DIR
+from ..consts import (
+    BIN_DIR,
+    INSTALL_SCRIPT,
+    NPM_DIR,
+    PIP_DIR,
+    UPDATE_LOG,
+    VARS_DIR,
+    VIM_DIR,
+)
 from ..workspace.terminal import toggle_floating
 from .rtp import p_name
 
@@ -114,11 +122,13 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
 
 
 def _bash() -> Iterator[Awaitable[SortOfMonoid]]:
+    BIN_DIR.mkdir(parents=True, exist_ok=True)
+
     for pkg in _bash_specs():
 
         async def cont(pkg: str) -> SortOfMonoid:
             stdin = f"set -x{linesep}{pkg}".encode()
-            p = await call("bash", stdin=stdin, cwd=str(TOP_LEVEL))
+            p = await call("bash", stdin=stdin, cwd=str(VARS_DIR))
             return ((pkg, p),)
 
         if pkg:

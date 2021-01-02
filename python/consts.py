@@ -15,19 +15,20 @@ CONF_LINT = CONF_DIR / "lint.yml"
 CONF_FMT = CONF_DIR / "fmt.yml"
 
 
-_VARS_DIR = TOP_LEVEL / ".vars"
-RT_DIR = _VARS_DIR / "runtime"
+VARS_DIR = TOP_LEVEL / ".vars"
+RT_DIR = VARS_DIR / "runtime"
+BIN_DIR = VARS_DIR / "bin"
 
-_MODULES_DIR = _VARS_DIR / "modules"
+_MODULES_DIR = VARS_DIR / "modules"
 VIM_DIR = _MODULES_DIR / "vim_modules"
 PIP_DIR = _MODULES_DIR / "pip_modules"
 NPM_DIR = _MODULES_DIR
 PATH_PREPEND = tuple(
-    map(str, (TOP_LEVEL / "bin", PIP_DIR / "bin", NPM_DIR / "node_modules" / ".bin"))
+    map(str, (BIN_DIR, PIP_DIR / "bin", NPM_DIR / "node_modules" / ".bin"))
 )
 
-LOGS_DIR = _VARS_DIR / "logs"
+LOGS_DIR = VARS_DIR / "logs"
 UPDATE_LOG = LOGS_DIR / "last_update.txt"
 
 
-BACKUP_DIR = _VARS_DIR / "backup"
+BACKUP_DIR = VARS_DIR / "backup"
