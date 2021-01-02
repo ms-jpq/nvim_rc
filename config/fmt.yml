@@ -10,17 +10,6 @@
     pip:
       - sortd
 
-- bin: prettier
-  args:
-    - --stdin-filepath
-    - "%"
-  type: stream
-  filetypes:
-    - json
-  install:
-    npm:
-      - prettier
-
 - bin: isort
   type: stream
   args:
@@ -60,6 +49,7 @@
     - html
     - javascript
     - javascript.jsx
+    - json
     - javascriptreact
     - less
     - markdown
