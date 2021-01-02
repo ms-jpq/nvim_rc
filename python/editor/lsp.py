@@ -1,12 +1,21 @@
 from string import Template
 
-from ..config.lsp import lsp_specs
-from ..registery import keymap, atomic
+from pynvim import Nvim
+from std2.pickle import encode
+
+from ..config.lsp import RootPattern, lsp_specs
+from ..registery import atomic, keymap, rpc
+
+
+@rpc(blocking=True)
+def _find_root(nvim: Nvim, cfg: RootPattern, bufnr: int, filename: str) -> str:
+    return ""
+
 
 _LSP_INIT = """
 local lsp = require "lspconfig"
 
-local setup = function (cfg)
+local setup = function (cfg, root_cfg)
   lsp.${SERVER}.setup(cfg)
 end
 
@@ -16,7 +25,7 @@ _TEMPLATE = Template(_LSP_INIT)
 
 for spec in lsp_specs:
     lua = _TEMPLATE.substitute(SERVER=spec.server)
-    atomic.exec_lua(lua, (spec.config,))
+    atomic.exec_lua(lua, (spec.config, encode(spec.root)))
 
 
 keymap.n("H") << "<cmd>lua vim.lsp.util.show_line_diagnostics()<cr>"
