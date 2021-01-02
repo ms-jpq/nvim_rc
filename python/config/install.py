@@ -3,7 +3,8 @@ from typing import Mapping, Sequence
 
 
 @dataclass(frozen=True)
-class BashSpec:
+class ScriptSpec:
+    interpreter: str = "bash"
     env: Mapping[str, str] = field(default_factory=dict)
     script: str = ""
 
@@ -12,4 +13,4 @@ class BashSpec:
 class InstallSpec:
     pip: Sequence[str] = ()
     npm: Sequence[str] = ()
-    bash: BashSpec = BashSpec()
+    script: ScriptSpec = ScriptSpec()

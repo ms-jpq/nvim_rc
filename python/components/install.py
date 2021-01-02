@@ -9,7 +9,7 @@ from pynvim.api.nvim import Nvim
 from std2.asyncio.subprocess import ProcReturn, call
 
 from ..config.fmt import fmt_specs
-from ..config.install import BashSpec
+from ..config.install import ScriptSpec
 from ..config.linter import linter_specs
 from ..config.lsp import lsp_specs
 from ..config.pkgs import pkg_specs
@@ -49,13 +49,13 @@ def _npm_specs() -> Iterator[str]:
         yield from f_spec.install.npm
 
 
-def _bash_specs() -> Iterator[BashSpec]:
+def _script_specs() -> Iterator[ScriptSpec]:
     for l_spec in lsp_specs:
-        yield l_spec.install.bash
+        yield l_spec.install.script
     for i_spec in linter_specs:
-        yield i_spec.install.bash
+        yield i_spec.install.script
     for f_spec in fmt_specs:
-        yield f_spec.install.bash
+        yield f_spec.install.script
 
 
 SortOfMonoid = Sequence[Tuple[str, ProcReturn]]
@@ -122,14 +122,14 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
         yield cont()
 
 
-def _bash() -> Iterator[Awaitable[SortOfMonoid]]:
+def _script() -> Iterator[Awaitable[SortOfMonoid]]:
     BIN_DIR.mkdir(parents=True, exist_ok=True)
 
-    for pkg in _bash_specs():
+    for pkg in _script_specs():
 
-        async def cont(pkg: BashSpec) -> SortOfMonoid:
-            stdin = f"set -x{linesep}{pkg.script}".encode()
-            p = await call("bash", stdin=stdin, env=pkg.env, cwd=str(VARS_DIR))
+        async def cont(pkg: ScriptSpec) -> SortOfMonoid:
+            stdin = pkg.script.encode()
+            p = await call(pkg.interpreter, stdin=stdin, env=pkg.env, cwd=str(VARS_DIR))
             return ((pkg.script, p),)
 
         if pkg.script:
@@ -138,7 +138,7 @@ def _bash() -> Iterator[Awaitable[SortOfMonoid]]:
 
 async def install() -> int:
     has_error = False
-    for fut in as_completed((*_git(), *_pip(), *_npm(), *_bash())):
+    for fut in as_completed((*_git(), *_pip(), *_npm(), *_script())):
         for debug, proc in await fut:
             if proc.code == 0:
                 print(debug)
