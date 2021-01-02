@@ -43,7 +43,6 @@
 - bin: write-good
   type: fs
   args:
-    - --
     - "%"
   filetypes:
     - markdown

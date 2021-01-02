@@ -27,6 +27,22 @@
             style: hint
             warning: warning
 
+        write-good:
+          sourceName: write-good
+          command: write-good
+          args:
+            - --text=%text
+          debounce: 100
+          formatLines: 1
+          formatPattern:
+            - >-
+              (.*)\s+on\s+line\s+(\d+)\s+at\s+column\s+(\d+)\s*$
+            - column: 3
+              line: 2
+              message: 1
+          offsetColumn: 1
+          offsetLine: 0
+
       filetypes:
         sh:
           - shellcheck

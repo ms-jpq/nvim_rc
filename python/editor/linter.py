@@ -84,7 +84,7 @@ async def _linter_output(
 async def _run(
     nvim: Nvim, ctx: BufContext, attrs: Iterable[LinterAttrs], cwd: str
 ) -> None:
-    body = "".join(ctx.lines).encode()
+    body = linesep.join(ctx.lines).encode()
     outputs = await gather(
         *(
             _linter_output(attr, cwd=cwd, filename=ctx.filename, body=body)
