@@ -58,6 +58,7 @@ async def _run(
             async for err in aiterify(
                 _fmt_output(attr, cwd=cwd, temp=temp) for attr in attrs
             )
+            if err
         ]
         errors = "".join(repeat(linesep, times=2)).join(errs)
         if errors:
