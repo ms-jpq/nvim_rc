@@ -98,6 +98,29 @@
   bin: rust-analyzer
   filetypes:
     - rust
+  install:
+    bash:
+      env:
+        URI_ROOT: https://github.com/rust-analyzer/rust-analyzer/releases/download/
+        MAC_OS: 2020-12-28/rust-analyzer-mac
+        LINUX: 2020-12-28/rust-analyzer-linux
+      script: |-
+        set -eu
+
+        BIN="bin/rls"
+        if [[ -x "$BIN" ]]
+        then
+          exit
+        else
+          if [[ "$(uname)" == "Darwin" ]]
+          then
+            END="$MAC_OS"
+          else
+            END="$LINUX"
+          fi
+          wget "${URI_ROOT}${END}" --output-document "$BIN"
+          chmod +x "$BIN"
+        fi
 
 - server: gopls
   bin: gopls

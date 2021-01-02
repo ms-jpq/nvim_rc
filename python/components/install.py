@@ -9,6 +9,7 @@ from pynvim.api.nvim import Nvim
 from std2.asyncio.subprocess import ProcReturn, call
 
 from ..config.fmt import fmt_specs
+from ..config.install import BashSpec
 from ..config.linter import linter_specs
 from ..config.lsp import lsp_specs
 from ..config.pkgs import pkg_specs
@@ -48,7 +49,7 @@ def _npm_specs() -> Iterator[str]:
         yield from f_spec.install.npm
 
 
-def _bash_specs() -> Iterator[str]:
+def _bash_specs() -> Iterator[BashSpec]:
     for l_spec in lsp_specs:
         yield l_spec.install.bash
     for i_spec in linter_specs:
@@ -126,12 +127,12 @@ def _bash() -> Iterator[Awaitable[SortOfMonoid]]:
 
     for pkg in _bash_specs():
 
-        async def cont(pkg: str) -> SortOfMonoid:
-            stdin = f"set -x{linesep}{pkg}".encode()
-            p = await call("bash", stdin=stdin, cwd=str(VARS_DIR))
-            return ((pkg, p),)
+        async def cont(pkg: BashSpec) -> SortOfMonoid:
+            stdin = f"set -x{linesep}{pkg.script}".encode()
+            p = await call("bash", stdin=stdin, env=pkg.env, cwd=str(VARS_DIR))
+            return ((pkg.script, p),)
 
-        if pkg:
+        if pkg.script:
             yield cont(pkg)
 
 
