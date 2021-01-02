@@ -1,5 +1,5 @@
 from asyncio import gather
-from datetime import datetime, timezone
+from datetime import datetime
 from itertools import repeat
 from os import linesep
 from shutil import which
@@ -7,6 +7,7 @@ from typing import Iterable, Iterator, Sequence, Tuple
 
 from pynvim import Nvim
 from pynvim.api.buffer import Buffer
+from pynvim_pp.hold import hold_win_pos
 from pynvim_pp.lib import async_call, write
 from pynvim_pp.preview import set_preview
 from std2.asyncio.subprocess import call
@@ -35,6 +36,14 @@ def arg_subst(args: Iterable[str], filename: str) -> Iterator[str]:
                     yield char
 
         yield "".join(it())
+
+
+async def set_preview_content(nvim: Nvim, text: str) -> None:
+    def cont() -> None:
+        with hold_win_pos(nvim):
+            set_preview(nvim, preview=text)
+
+    await async_call(nvim, cont)
 
 
 async def _linter_output(
@@ -66,9 +75,9 @@ async def _run(nvim: Nvim, buf: Buffer, attrs: Iterable[LinterAttrs]) -> None:
     outputs = await gather(
         *(_linter_output(attr, cwd=cwd, filename=filename, body=body) for attr in attrs)
     )
-    now = datetime.now(tz=timezone.utc).strftime(DATE_FMT)
+    now = datetime.now().strftime(DATE_FMT)
     preview = f"".join(repeat(linesep, times=2)).join((now, *outputs))
-    await async_call(nvim, set_preview, nvim, preview)
+    await set_preview_content(nvim, text=preview)
 
 
 def _linters_for(filetype: str) -> Iterator[LinterAttrs]:
