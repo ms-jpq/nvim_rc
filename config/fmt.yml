@@ -1,11 +1,19 @@
 ---
-- bin: sjson
+- bin: sortd
   args:
     - --indent
     - "0"
   type: stream
   filetypes:
     - json
+  install:
+    pip:
+      - sortd
+
+- bin: scfg
+  type: stream
+  filetypes:
+    - cfg
   install:
     pip:
       - sortd
@@ -29,14 +37,6 @@
   install:
     pip:
       - black
-
-- bin: scfg
-  type: stream
-  filetypes:
-    - cfg
-  install:
-    pip:
-      - sortd
 
 - bin: prettier
   args:
