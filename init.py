@@ -54,7 +54,6 @@ if args.install_packages:
 
 
 if args.socket:
-
     from pynvim import attach
     from pynvim_pp.client import run_client
 
@@ -62,3 +61,4 @@ if args.socket:
 
     nvim = attach("socket", path=args.socket)
     code = run_client(nvim, client=Client())
+    exit(code)
