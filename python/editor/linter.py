@@ -1,4 +1,5 @@
 from asyncio import gather
+from dataclasses import dataclass
 from datetime import datetime
 from itertools import repeat
 from os import linesep
@@ -17,6 +18,23 @@ from ..consts import DATE_FMT
 from ..registery import keymap, rpc
 
 ESCAPE_CHAR = "%"
+
+
+@dataclass(frozen=True)
+class BufContext:
+    buf: Buffer
+    filename: str
+    filetype: str
+    lines: Sequence[str]
+
+
+def current_ctx(nvim: Nvim) -> Tuple[str, BufContext]:
+    cwd = nvim.funcs.getcwd()
+    buf: Buffer = nvim.api.get_current_buf()
+    filename: str = nvim.api.buf_get_name(buf)
+    filetype: str = nvim.api.buf_get_option(buf, "filetype")
+    lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, -1, True)
+    return cwd, BufContext(buf=buf, filename=filename, filetype=filetype, lines=lines)
 
 
 def arg_subst(args: Iterable[str], filename: str) -> Iterator[str]:
@@ -63,17 +81,15 @@ async def _linter_output(
         return print_out
 
 
-async def _run(nvim: Nvim, buf: Buffer, attrs: Iterable[LinterAttrs]) -> None:
-    def cont() -> Tuple[str, str, bytes]:
-        cwd = nvim.funcs.getcwd()
-        filename: str = nvim.api.buf_get_name(buf)
-        lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, -1, True)
-        body = linesep.join(lines).encode()
-        return cwd, filename, body
-
-    cwd, filename, body = await async_call(nvim, cont)
+async def _run(
+    nvim: Nvim, ctx: BufContext, attrs: Iterable[LinterAttrs], cwd: str
+) -> None:
+    body = "".join(ctx.lines).encode()
     outputs = await gather(
-        *(_linter_output(attr, cwd=cwd, filename=filename, body=body) for attr in attrs)
+        *(
+            _linter_output(attr, cwd=cwd, filename=ctx.filename, body=body)
+            for attr in attrs
+        )
     )
     now = datetime.now().strftime(DATE_FMT)
     preview = f"".join(repeat(linesep, times=2)).join((now, *outputs))
@@ -88,17 +104,12 @@ def _linters_for(filetype: str) -> Iterator[LinterAttrs]:
 
 @rpc(blocking=False)
 async def _run_linter(nvim: Nvim) -> None:
-    def cont() -> Tuple[Buffer, str]:
-        buf: Buffer = nvim.api.get_current_buf()
-        filetype: str = nvim.api.buf_get_option(buf, "filetype")
-        return buf, filetype
-
-    buf, filetype = await async_call(nvim, cont)
-    linters = tuple(_linters_for(filetype))
+    cwd, ctx = await async_call(nvim, current_ctx, nvim)
+    linters = tuple(_linters_for(ctx.filetype))
     if not linters:
-        await write(nvim, f"⁉️: 莫有 {filetype} 的 linter", error=True)
+        await write(nvim, f"⁉️: 莫有 {ctx.filetype} 的 linter", error=True)
     else:
-        await _run(nvim, buf=buf, attrs=linters)
+        await _run(nvim, ctx=ctx, attrs=linters, cwd=cwd)
 
 
 keymap.n("M") << f"<cmd>lua {_run_linter.remote_name}()<cr>"

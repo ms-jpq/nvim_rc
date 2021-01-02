@@ -1,82 +1,91 @@
+from contextlib import contextmanager
+from itertools import repeat
 from os import linesep
+from pathlib import Path
 from shutil import which
-from subprocess import CalledProcessError
-from typing import Tuple, cast
+from typing import Iterable, Iterator, Optional
+from uuid import uuid4
 
 from pynvim import Nvim
-from pynvim.api.buffer import Buffer
 from pynvim_pp.lib import async_call, write
-from pynvim_pp.preview import set_preview
+from std2.aitertools import aiterify
 from std2.asyncio.subprocess import call
 
 from ..config.fmt import FmtAttrs, FmtType, fmt_specs
 from ..registery import keymap, rpc
-from .linter import arg_subst
+from .linter import BufContext, arg_subst, current_ctx, set_preview_content
 
 
-async def _run_stream(
-    nvim: Nvim, buf: Buffer, filename: str, attr: FmtAttrs, cwd: str
-) -> Nvim:
-    def c1() -> str:
-        return linesep.join(nvim.api.buf_get_lines(buf, 0, -1, True))
-
-    body = await async_call(nvim, c1)
-    args = arg_subst(attr.args, filename=filename)
-    proc = await call(
-        attr.bin, *args, stdin=body.encode(), cwd=cwd, expected_code=attr.exit_code
-    )
-    lines = proc.out.decode().splitlines()
-
-    def c2() -> None:
-        nvim.api.buf_set_lines(buf, 0, -1, True, lines)
-
-    await async_call(nvim, c2)
+@contextmanager
+def _mktemp(path: Path) -> Iterator[Path]:
+    new_name = lambda: path.with_name(f"{uuid4().hex}_{path.name}")
+    new_path = next(name for name in iter(new_name, None) if not name.exists())
+    new_path.touch()
+    try:
+        yield new_path
+    finally:
+        new_path.unlink(missing_ok=True)
 
 
-async def _run_fs(
-    nvim: Nvim, buf: Buffer, filename: str, attr: FmtAttrs, cwd: str
+async def _fmt_output(attr: FmtAttrs, cwd: str, temp: Path) -> str:
+    args = arg_subst(attr.args, filename=str(temp))
+    if not which(attr.bin):
+        return f"⁉️: 莫有 {attr.bin}"
+    else:
+        stdin = temp.read_bytes() if attr.type == FmtType.stream else None
+        proc = await call(attr.bin, *args, stdin=stdin, cwd=cwd)
+        if attr.type == FmtType.stream:
+            temp.write_bytes(proc.out)
+
+        if proc.code == attr.exit_code:
+            return ""
+        else:
+            arg_info = f"{attr.bin} {' '.join(attr.args)}"
+            heading = f"⛔️ - {proc.code} 👉 {arg_info}"
+            print_out = linesep.join((heading, proc.err))
+            return print_out
+
+
+async def _run(
+    nvim: Nvim, ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: str
 ) -> None:
-    args = arg_subst(attr.args, filename=filename)
-    await call(attr.bin, *args, cwd=cwd, expected_code=attr.exit_code)
-    await async_call(nvim, nvim.command, "checktime")
+    body = "".join(ctx.lines).encode()
+    path = Path(ctx.filename)
+    with _mktemp(path) as temp:
+        temp.write_bytes(body)
+        errs = [
+            err
+            async for err in aiterify(
+                _fmt_output(attr, cwd=cwd, temp=temp) for attr in attrs
+            )
+        ]
+        errors = "".join(repeat(linesep, times=2)).join(errs)
+        if errors:
+            await set_preview_content(nvim, text=errors)
+        else:
+            lines = temp.read_text().splitlines()
+
+            def cont() -> None:
+                nvim.api.buf_set_lines(ctx.buf, 0, -1, True, lines)
+
+            await async_call(nvim, cont)
 
 
-_progs = {FmtType.stream: _run_stream, FmtType.fs: _run_fs}
+def _fmts_for(filetype: str) -> Iterator[FmtAttrs]:
+    for attr in fmt_specs:
+        if filetype in attr.filetypes:
+            yield attr
 
 
 @rpc(blocking=False)
 async def run_fmt(nvim: Nvim) -> None:
-    def cont() -> Tuple[str, Buffer, str, str]:
-        cwd = nvim.funcs.getcwd()
-        buf: Buffer = nvim.api.get_current_buf()
-        filename: str = nvim.api.buf_get_name(buf)
-        filetype: str = nvim.api.buf_get_option(buf, "filetype")
-        return cwd, buf, filename, filetype
+    cwd, ctx = await async_call(nvim, current_ctx, nvim)
 
-    cwd, buf, filename, filetype = await async_call(nvim, cont)
-    for attr in fmt_specs:
-        if filetype in attr.filetypes:
-            if which(attr.bin):
-                run = _progs.get(attr.type)
-                if not run:
-                    raise NotImplementedError()
-                else:
-                    try:
-                        await run(nvim, buf=buf, filename=filename, attr=attr, cwd=cwd)
-                    except CalledProcessError as e:
-                        heading = (
-                            f"⛔️ - {e.returncode} 👉 {attr.bin} {' '.join(attr.args)}"
-                        )
-                        stdout = cast(bytes, e.stdout).decode()
-                        err_out = f"{heading}{linesep}{stdout}{linesep}{e.stderr}"
-                        await async_call(nvim, set_preview, nvim, err_out)
-                    else:
-                        await write(nvim, f"✅ 👉 {attr.bin} {' '.join(attr.args)}")
-            else:
-                await write(nvim, f"⁉️: 莫有 {attr.bin}", error=True)
-            break
+    linters = tuple(_fmts_for(ctx.filetype))
+    if not linters:
+        await write(nvim, f"⁉️: 莫有 {ctx.filetype} 的 linter", error=True)
     else:
-        await write(nvim, f"⁉️: 莫有 {filetype} 的 prettier", error=True)
+        await _run(nvim, ctx=ctx, attrs=linters, cwd=cwd)
 
 
 keymap.n("gq", nowait=True) << f"<cmd>lua {run_fmt.remote_name}()<cr>"
