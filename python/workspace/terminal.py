@@ -45,7 +45,6 @@ class TermOpts(TypedDict, total=False):
 
 @rpc(blocking=True)
 def _term_open(nvim: Nvim, *args: str, opts: TermOpts = {}) -> None:
-
     buf = _ensure_marked_buf(nvim)
     filename: str = nvim.api.buf_get_name(buf)
     is_term_buf = urlparse(filename).scheme == "term"
