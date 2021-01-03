@@ -20,15 +20,15 @@ settings = Settings()
 
 def drain(nvim: Nvim) -> Tuple[Atomic, Sequence[RpcSpec]]:
     PATH = environ["PATH"] = pathsep.join((*PATH_PREPEND, environ["PATH"]))
-    PYTHON_PATH = environ["PYTHON_PATH"] = (
-        pathsep.join((str(PIP_DIR), environ["PYTHON_PATH"]))
-        if "PYTHON_PATH" in environ
+    PYTHONPATH = environ["PYTHONPATH"] = (
+        pathsep.join((str(PIP_DIR), environ["PYTHONPATH"]))
+        if "PYTHONPATH" in environ
         else str(PIP_DIR)
     )
 
     _atomic = Atomic()
     _atomic.call_function("setenv", ("PATH", PATH))
-    _atomic.call_function("setenv", ("PYTHON_PATH", PYTHON_PATH))
+    _atomic.call_function("setenv", ("PYTHONPATH", PYTHONPATH))
     _atomic.set_var("mapleader", " ")
     _atomic.set_var("maplocalleader", " ")
 
