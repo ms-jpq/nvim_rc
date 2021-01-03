@@ -1,5 +1,5 @@
 from os import environ
-from typing import Iterator, Optional, Sequence, Tuple
+from typing import Iterator, MutableMapping, Optional, Sequence, Tuple
 from urllib.parse import urlparse
 from uuid import uuid4
 
@@ -37,16 +37,20 @@ def _ensure_marked_buf(nvim: Nvim) -> Buffer:
 
 
 @rpc(blocking=True)
-def _on_exit(nvim: Nvim, args: Tuple[int, int, str]) -> None:
-    job_id, code, event_type = args
-
-
-@rpc(blocking=True)
 def _open_floating(
-    nvim: Nvim, *args: str, on_exit: Optional[RpcCallable] = None
+    nvim: Nvim,
+    *args: str,
+    on_exit: Optional[RpcCallable] = None,
+    on_out: Optional[RpcCallable] = None,
+    on_err: Optional[RpcCallable] = None,
 ) -> None:
-    if on_exit is None:
-        on_exit = _on_exit
+    handlers: MutableMapping[str, str] = {}
+    if on_exit:
+        handlers["on_exit"] = on_exit.remote_name
+    if on_out:
+        handlers["on_stdout"] = on_out.remote_name
+    if on_err:
+        handlers["on_stderr"] = on_err.remote_name
 
     buf = _ensure_marked_buf(nvim)
     filename: str = nvim.api.buf_get_name(buf)
@@ -54,17 +58,26 @@ def _open_floating(
     open_float_win(nvim, margin=0, relsize=0.95, buf=buf)
     if not is_term_buf:
         cmds = args or (environ["SHELL"],)
-        nvim.funcs.termopen(cmds, {"on_exit": on_exit.remote_name})
+        nvim.funcs.termopen(cmds, handlers)
     nvim.command("startinsert")
+
+
+def close_term(nvim: Nvim) -> None:
+    for win in list_floatwins(nvim):
+        nvim.api.win_close(win, True)
 
 
 @rpc(blocking=True)
 def open_term(
-    nvim: Nvim, prog: str, *args: str, on_exit: Optional[RpcCallable] = None
+    nvim: Nvim,
+    prog: str,
+    *args: str,
+    on_exit: Optional[RpcCallable] = None,
+    on_out: Optional[RpcCallable] = None,
+    on_err: Optional[RpcCallable] = None,
 ) -> None:
-    for win in list_floatwins(nvim):
-        nvim.api.win_close(win, True)
-    _open_floating(nvim, prog, *args, on_exit=on_exit)
+    close_term(nvim)
+    _open_floating(nvim, prog, *args, on_exit=on_exit, on_out=on_out, on_err=on_err)
 
 
 @rpc(blocking=True)
