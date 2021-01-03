@@ -1,3 +1,4 @@
+from pathlib import Path
 from shlex import join
 from tempfile import NamedTemporaryFile
 from typing import Callable, Iterable, MutableMapping, Tuple
@@ -29,21 +30,21 @@ keymap.n("[b") << "<cmd>bprevious<cr>"
 keymap.n("]b") << "<cmd>bnext<cr>"
 
 
-_tmps: MutableMapping[int, Callable[..., None]]
+_jobs: MutableMapping[int, Callable[..., None]]
 
 
 @rpc(blocking=True)
 def _on_exit(nvim: Nvim, args: Tuple[int, int, str]) -> None:
     job_id, code, event_type = args
-    post = _tmps.pop(job_id)
+    post = _jobs.pop(job_id)
     if code in {0, 130}:
         close_term(nvim)
         post()
 
 
 @rpc(blocking=True)
-def fzf(nvim: Nvim, args: Iterable[str], input: Iterable[str]) -> int:
-    env = {"FZF_DEFAULT_COMMAND": join(input)}
+def fzf(nvim: Nvim, args: Iterable[str], source: Iterable[str]) -> int:
+    env = {"FZF_DEFAULT_COMMAND": join(source)}
     opts = {"on_exit": _on_exit.remote_name, "env": env}
 
     buf: Buffer = nvim.api.create_buf(False, True)
@@ -57,11 +58,11 @@ def fzf(nvim: Nvim, args: Iterable[str], input: Iterable[str]) -> int:
 
 @rpc(blocking=True)
 def fzf_files(nvim: Nvim) -> None:
-    with NamedTemporaryFile() as f:
-        exc = f"abort+execute:mv {{f}} {f.name}"
+    with NamedTemporaryFile() as tmp:
+        exc = f"abort+execute:mv {{f}} {tmp.name}"
 
     args = (
-        "--read0",
+        # "--read0",
         "--print0",
         "--preview",
         "preview {}",
@@ -70,9 +71,9 @@ def fzf_files(nvim: Nvim) -> None:
         "--bind",
         f"double-click:{exc}",
     )
-    input = (
+    source = (
         "fd",
-        "--print0",
+        # "--print0",
         "--hidden",
         "--follow",
         "--type",
@@ -81,7 +82,12 @@ def fzf_files(nvim: Nvim) -> None:
         "symlink",
     )
 
-    fzf(nvim, args, input)
+    job = fzf(nvim, args, source)
+
+    def cont() -> None:
+        line = Path(tmp.name).read_text()
+
+    _jobs[job] = cont
 
 
 keymap.n("<leader>p") << f"<cmd>lua {fzf_files.remote_name}()<cr>"
