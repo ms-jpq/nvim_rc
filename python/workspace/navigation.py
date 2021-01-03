@@ -1,11 +1,10 @@
 from pathlib import Path
 from shlex import join
 from tempfile import NamedTemporaryFile
-from typing import Callable, Iterable, MutableMapping, Sequence, Tuple, cast
+from typing import Callable, Iterable, Iterator, MutableMapping, Sequence, Tuple, cast
 
-from pynvim.api import Buffer, Nvim, Tabpage, Window
+from pynvim.api import Buffer, Nvim, Window
 from pynvim_pp.float_win import open_float_win
-from pynvim_pp.lib import write
 
 from ..registery import keymap, rpc, settings
 from .terminal import close_term
@@ -56,29 +55,21 @@ def fzf(nvim: Nvim, args: Iterable[str], source: Iterable[str]) -> int:
     return job
 
 
-def _switch_to_path(nvim: Nvim, path: str) -> None:
-    wins: Sequence[Window] = nvim.api.list_wins()
-    for win in wins:
-        buf: Buffer = nvim.api.win_get_buf(win)
-        filename: str = nvim.api.buf_get_name(buf)
-        if filename == path:
-            nvim.api.set_current_win(win)
-            break
+def _find_buffer_with_file(nvim: Nvim, file: str) -> Iterator[Buffer]:
+    buffers: Sequence[Buffer] = nvim.api.list_bufs()
+    for buffer in buffers:
+        name = nvim.api.buf_get_name(buffer)
+        if name == file:
+            yield buffer
+
+
+def _switch_to_file(nvim: Nvim, file: str) -> None:
+    buf = next(_find_buffer_with_file(nvim, file=file), None)
+    if buf is not None:
+        win: Window = nvim.api.get_current_win()
+        nvim.api.win_set_buf(win, buf)
     else:
-        tab: Tabpage = nvim.api.get_current_tabpage()
-        win = nvim.api.get_current_win()
-        wins = nvim.api.tabpage_list_wins(tab)
-        for win in (win, *wins):
-            buf = nvim.api.win_get_buf(win)
-            filename: str = nvim.api.buf_get_name(buf)
-            if Path(filename).exists():
-                nvim.api.win_set_buf(win, buf)
-                nvim.api.set_current_win(win)
-                break
-            else:
-                nvim.command("vnew")
-                win = nvim.api.get_current_win()
-                nvim.api.win_set_buf(win, buf)
+        nvim.command(f"edit {file}")
 
 
 @rpc(blocking=True)
@@ -113,7 +104,7 @@ def fzf_files(nvim: Nvim) -> None:
         path = Path(tmp.name)
         if path.exists():
             line = path.read_text()
-            _switch_to_path(nvim, path=line)
+            _switch_to_file(nvim, file=line)
 
     _jobs[job] = cont
 
