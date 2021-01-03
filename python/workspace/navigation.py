@@ -1,7 +1,7 @@
 from pathlib import Path
 from shlex import join
 from tempfile import NamedTemporaryFile
-from typing import Callable, Iterable, MutableMapping, Tuple
+from typing import Callable, Iterable, MutableMapping, Tuple, cast
 
 from pynvim.api import Buffer, Nvim
 from pynvim_pp.float_win import open_float_win
@@ -30,7 +30,7 @@ keymap.n("[b") << "<cmd>bprevious<cr>"
 keymap.n("]b") << "<cmd>bnext<cr>"
 
 
-_jobs: MutableMapping[int, Callable[..., None]]
+_jobs: MutableMapping[int, Callable[[], None]] = {}
 
 
 @rpc(blocking=True)
@@ -82,7 +82,7 @@ def fzf_files(nvim: Nvim) -> None:
         "symlink",
     )
 
-    job = fzf(nvim, args, source)
+    job = cast(int,fzf(nvim, args, source))
 
     def cont() -> None:
         line = Path(tmp.name).read_text()
