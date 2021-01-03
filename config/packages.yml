@@ -11,6 +11,30 @@
 
 - uri: https://github.com/neovim/nvim-lspconfig
 
+- uri: https://github.com/junegunn/fzf
+
+- uri: https://github.com/junegunn/fzf.vim
+  vals:
+    fzf_buffers_jump: True
+    fzf_preview_window: right:wrap
+    fzf_layout:
+      window:
+        width: 0.9
+        height: 0.9
+  keys:
+    - modes: n
+      maps:
+        "<leader>o": "<cmd>BLines<cr>"
+        "<leader>p": "<cmd>Buffers<cr>"
+        "<leader>P": "<cmd>Files<cr>"
+    - modes: n
+      opts:
+        silent: False
+      maps:
+        "<leader>O": ":Rg "
+  lua: |-
+    vim.env["FZF_DEFAULT_OPTS"] = vim.env["FZF_DEFAULT_OPTS"] .. " --no-border"
+
 - uri: https://github.com/sainnhe/edge
   vals:
     edge_style: neon
@@ -49,6 +73,10 @@
         "ga": "<plug>(EasyAlign)"
 
 - uri: https://github.com/Raimondi/delimitMate
+
+- uri: https://github.com/tpope/vim-unimpaired
+
+- uri: https://github.com/michaeljsmith/vim-indent-object
 
 - uri: https://github.com/airblade/vim-gitgutter
 
