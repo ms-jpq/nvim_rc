@@ -1,10 +1,13 @@
-from typing import Tuple
+from shlex import join
+from tempfile import NamedTemporaryFile
+from typing import Callable, Iterable, MutableMapping, Tuple
 
-from pynvim.api.nvim import Nvim
+from pynvim.api import Buffer, Nvim
+from pynvim_pp.float_win import open_float_win
 from pynvim_pp.lib import write
 
 from ..registery import keymap, rpc, settings
-from .terminal import close_term, open_term
+from .terminal import close_term
 
 # ui for cmd auto complete
 settings["wildmenu"] = True
@@ -26,35 +29,64 @@ keymap.n("[b") << "<cmd>bprevious<cr>"
 keymap.n("]b") << "<cmd>bnext<cr>"
 
 
+_tmps: MutableMapping[int, Callable[..., None]]
+
+
 @rpc(blocking=True)
 def _on_exit(nvim: Nvim, args: Tuple[int, int, str]) -> None:
     job_id, code, event_type = args
+    post = _tmps.pop(job_id)
     if code in {0, 130}:
         close_term(nvim)
+        post()
 
 
 @rpc(blocking=True)
-def fzf(nvim: Nvim, *args: str) -> None:
-    open_term(nvim, "fzf", *args, on_exit=_on_exit)
+def fzf(nvim: Nvim, args: Iterable[str], input: Iterable[str]) -> int:
+    env = {"FZF_DEFAULT_COMMAND": join(input)}
+    opts = {"on_exit": _on_exit.remote_name, "env": env}
+
+    buf: Buffer = nvim.api.create_buf(False, True)
+    nvim.api.buf_set_option(buf, "bufhidden", "wipe")
+    open_float_win(nvim, margin=0, relsize=0.95, buf=buf)
+
+    job: int = nvim.funcs.termopen(tuple(("fzf", *args)), opts)
+    nvim.command("startinsert")
+    return job
 
 
 @rpc(blocking=True)
 def fzf_files(nvim: Nvim) -> None:
-    fzf(nvim, "--preview", "preview {}")
+    with NamedTemporaryFile() as f:
+        exc = f"abort+execute:mv {{f}} {f.name}"
+
+    args = (
+        "--read0",
+        "--print0",
+        "--preview",
+        "preview {}",
+        "--bind",
+        f"enter:{exc}",
+        "--bind",
+        f"double-click:{exc}",
+    )
+    input = (
+        "fd",
+        "--print0",
+        "--hidden",
+        "--follow",
+        "--type",
+        "file",
+        "--type",
+        "symlink",
+    )
+
+    fzf(nvim, args, input)
 
 
 keymap.n("<leader>p") << f"<cmd>lua {fzf_files.remote_name}()<cr>"
 
-# - uri: https://github.com/junegunn/fzf
 
-# - uri: https://github.com/junegunn/fzf.vim
-#   vals:
-#     fzf_buffers_jump: True
-#     fzf_preview_window: right:wrap
-#     fzf_layout:
-#       window:
-#         width: 0.9
-#         height: 0.9
 #   keys:
 #     - modes: n
 #       maps:
