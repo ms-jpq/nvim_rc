@@ -22,7 +22,7 @@ from ..consts import (
     VARS_DIR,
     VIM_DIR,
 )
-from ..workspace.terminal import toggle_floating
+from ..workspace.terminal import open_term
 from .rtp import p_name
 
 
@@ -171,5 +171,5 @@ def maybe_install(nvim: Nvim) -> None:
     if diff.days > 7:
         ans = nvim.funcs.confirm("🤖「ゴゴゴゴ」？", f"&Yes{linesep}&No", 2)
         if ans == 1:
-            toggle_floating(nvim, "python3", INSTALL_SCRIPT, "--install-packages")
+            open_term(nvim, "python3", INSTALL_SCRIPT, "--install-packages")
             UPDATE_LOG.write_text(now.isoformat())

@@ -1,5 +1,5 @@
 from os import environ
-from typing import Iterator, Sequence, Tuple
+from typing import Iterator, Optional, Sequence, Tuple
 from urllib.parse import urlparse
 from uuid import uuid4
 
@@ -8,6 +8,7 @@ from pynvim.api.buffer import Buffer
 from pynvim.api.common import NvimError
 from pynvim.api.window import Window
 from pynvim_pp.float_win import list_floatwins, open_float_win
+from pynvim_pp.rpc import RpcCallable
 
 from ..registery import autocmd, keymap, rpc
 
@@ -41,15 +42,29 @@ def _on_exit(nvim: Nvim, args: Tuple[int, int, str]) -> None:
 
 
 @rpc(blocking=True)
-def _open_floating(nvim: Nvim, *args: str) -> None:
+def _open_floating(
+    nvim: Nvim, *args: str, on_exit: Optional[RpcCallable] = None
+) -> None:
+    if on_exit is None:
+        on_exit = _on_exit
+
     buf = _ensure_marked_buf(nvim)
     filename: str = nvim.api.buf_get_name(buf)
     is_term_buf = urlparse(filename).scheme == "term"
     open_float_win(nvim, margin=0, relsize=0.95, buf=buf)
     if not is_term_buf:
         cmds = args or (environ["SHELL"],)
-        nvim.funcs.termopen(cmds, {"on_exit": _on_exit.remote_name})
+        nvim.funcs.termopen(cmds, {"on_exit": on_exit.remote_name})
     nvim.command("startinsert")
+
+
+@rpc(blocking=True)
+def open_term(
+    nvim: Nvim, prog: str, *args: str, on_exit: Optional[RpcCallable] = None
+) -> None:
+    for win in list_floatwins(nvim):
+        nvim.api.win_close(win, True)
+    _open_floating(nvim, prog, *args, on_exit=on_exit)
 
 
 @rpc(blocking=True)
