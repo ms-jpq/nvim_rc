@@ -1,5 +1,5 @@
 from os import environ
-from typing import Iterator, MutableMapping, Optional, Sequence, Tuple
+from typing import Iterator, Mapping, Optional, Sequence, TypedDict
 from urllib.parse import urlparse
 from uuid import uuid4
 
@@ -36,21 +36,15 @@ def _ensure_marked_buf(nvim: Nvim) -> Buffer:
         return buf
 
 
+class TermOpts(TypedDict, total=False):
+    env: Optional[Mapping[str, str]]
+    on_exit: Optional[RpcCallable[None]]
+    on_stdout: Optional[RpcCallable[None]]
+    on_stderr: Optional[RpcCallable[None]]
+
+
 @rpc(blocking=True)
-def _open_floating(
-    nvim: Nvim,
-    *args: str,
-    on_exit: Optional[RpcCallable] = None,
-    on_out: Optional[RpcCallable] = None,
-    on_err: Optional[RpcCallable] = None,
-) -> None:
-    handlers: MutableMapping[str, str] = {}
-    if on_exit:
-        handlers["on_exit"] = on_exit.remote_name
-    if on_out:
-        handlers["on_stdout"] = on_out.remote_name
-    if on_err:
-        handlers["on_stderr"] = on_err.remote_name
+def _term_open(nvim: Nvim, *args: str, opts: TermOpts = {}) -> None:
 
     buf = _ensure_marked_buf(nvim)
     filename: str = nvim.api.buf_get_name(buf)
@@ -58,7 +52,7 @@ def _open_floating(
     open_float_win(nvim, margin=0, relsize=0.95, buf=buf)
     if not is_term_buf:
         cmds = args or (environ["SHELL"],)
-        nvim.funcs.termopen(cmds, handlers)
+        nvim.funcs.termopen(cmds, opts)
     nvim.command("startinsert")
 
 
@@ -68,16 +62,9 @@ def close_term(nvim: Nvim) -> None:
 
 
 @rpc(blocking=True)
-def open_term(
-    nvim: Nvim,
-    prog: str,
-    *args: str,
-    on_exit: Optional[RpcCallable] = None,
-    on_out: Optional[RpcCallable] = None,
-    on_err: Optional[RpcCallable] = None,
-) -> None:
+def open_term(nvim: Nvim, prog: str, *args: str, opts: TermOpts = {}) -> None:
     close_term(nvim)
-    _open_floating(nvim, prog, *args, on_exit=on_exit, on_out=on_out, on_err=on_err)
+    _term_open(nvim, prog, *args, opts=opts)
 
 
 @rpc(blocking=True)
@@ -88,7 +75,7 @@ def toggle_floating(nvim: Nvim, *args: str) -> None:
         for win in float_wins:
             nvim.api.win_close(win, True)
     else:
-        _open_floating(nvim, *args)
+        _term_open(nvim, *args)
 
 
 keymap.n("<leader>u") << f"<cmd>lua {toggle_floating.remote_name}()<cr>"
