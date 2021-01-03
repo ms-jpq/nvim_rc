@@ -43,7 +43,7 @@ def _on_exit(nvim: Nvim, args: Tuple[int, int, str]) -> None:
 
 @rpc(blocking=True)
 def fzf(nvim: Nvim, args: Iterable[str], source: Iterable[str]) -> int:
-    env = {"FZF_DEFAULT_COMMAND": join(source)}
+    env = {"SHELL": "bash", "FZF_DEFAULT_COMMAND": join(source)}
     opts = {"on_exit": _on_exit.remote_name, "env": env}
 
     buf: Buffer = nvim.api.create_buf(False, True)
