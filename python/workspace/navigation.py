@@ -1,9 +1,9 @@
 from pathlib import Path
 from shlex import join
 from tempfile import NamedTemporaryFile
-from typing import Callable, Iterable, MutableMapping, Tuple, cast
+from typing import Callable, Iterable, MutableMapping, Sequence, Tuple, cast
 
-from pynvim.api import Buffer, Nvim
+from pynvim.api import Buffer, Nvim, Tabpage, Window
 from pynvim_pp.float_win import open_float_win
 from pynvim_pp.lib import write
 
@@ -56,6 +56,31 @@ def fzf(nvim: Nvim, args: Iterable[str], source: Iterable[str]) -> int:
     return job
 
 
+def _switch_to_path(nvim: Nvim, path: str) -> None:
+    wins: Sequence[Window] = nvim.api.list_wins()
+    for win in wins:
+        buf: Buffer = nvim.api.win_get_buf(win)
+        filename: str = nvim.api.buf_get_name(buf)
+        if filename == path:
+            nvim.api.set_current_win(win)
+            break
+    else:
+        tab: Tabpage = nvim.api.get_current_tabpage()
+        win = nvim.api.get_current_win()
+        wins = nvim.api.tabpage_list_wins(tab)
+        for win in (win, *wins):
+            buf = nvim.api.win_get_buf(win)
+            filename: str = nvim.api.buf_get_name(buf)
+            if Path(filename).exists():
+                nvim.api.win_set_buf(win, buf)
+                nvim.api.set_current_win(win)
+                break
+            else:
+                nvim.command("vnew")
+                win = nvim.api.get_current_win()
+                nvim.api.win_set_buf(win, buf)
+
+
 @rpc(blocking=True)
 def fzf_files(nvim: Nvim) -> None:
     with NamedTemporaryFile() as tmp:
@@ -82,10 +107,13 @@ def fzf_files(nvim: Nvim) -> None:
         "symlink",
     )
 
-    job = cast(int,fzf(nvim, args, source))
+    job = cast(int, fzf(nvim, args, source))
 
     def cont() -> None:
-        line = Path(tmp.name).read_text()
+        path = Path(tmp.name)
+        if path.exists():
+            line = path.read_text()
+            _switch_to_path(nvim, path=line)
 
     _jobs[job] = cont
 
