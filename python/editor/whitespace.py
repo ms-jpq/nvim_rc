@@ -1,5 +1,5 @@
 from string import whitespace
-from typing import Iterator, Sequence, Set, Tuple
+from typing import Iterable, Iterator, Sequence, Set, Tuple
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
@@ -19,14 +19,11 @@ tabsize_d = 2
 for option in _TAB_OPTIONS:
     settings[option] = tabsize_d
 
+# insert spaces instead of tabs
+settings["expandtab"] = True
 
-@rpc(blocking=True)
-def _detect_tabsize(nvim: Nvim) -> None:
-    buf: Buffer = nvim.api.get_current_buf()
-    count: int = nvim.api.buf_line_count(buf)
-    rows = min(count, 100)
-    lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, rows, True)
 
+def _set_tabsize(nvim: Nvim, buf: Buffer, lines: Iterable[str]) -> None:
     def it() -> Iterator[Tuple[int, int]]:
         for tabsize in range(2, 9):
             indent_lvs = tuple(p_indent(line, tabsize=tabsize) for line in lines)
@@ -43,11 +40,25 @@ def _detect_tabsize(nvim: Nvim) -> None:
         nvim.api.buf_set_option(buf, option, tabsize)
 
 
-autocmd("FileType") << f"lua {_detect_tabsize.remote_name}()"
+def _set_usetab(nvim: Nvim, buf: Buffer, lines: Iterable[str]) -> None:
+    first_chars = tuple(next(iter(line), "") for line in lines)
+    if first_chars.count("\t") > first_chars.count(" "):
+        nvim.api.buf_set_option(buf, "expandtab", False)
 
 
-# insert spaces instead of tabs
-settings["expandtab"] = True
+@rpc(blocking=True)
+def _detect_tabs(nvim: Nvim) -> None:
+    buf: Buffer = nvim.api.get_current_buf()
+    count: int = nvim.api.buf_line_count(buf)
+    rows = min(count, 100)
+    lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, rows, True)
+    _set_tabsize(nvim, buf=buf, lines=lines)
+    _set_usetab(nvim, buf=buf, lines=lines)
+
+
+autocmd("FileType") << f"lua {_detect_tabs.remote_name}()"
+
+
 # smart indentation level
 settings["autoindent"] = True
 settings["smarttab"] = True
