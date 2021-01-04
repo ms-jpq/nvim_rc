@@ -18,10 +18,11 @@ def _find_root(nvim: Nvim, pattern: RootPattern, filename: str, bufnr: int) -> s
                 return str(parent)
             else:
                 for glob in pattern.globs:
-                    if fnmatch(member, glob):
+                    if fnmatch(str(member), glob):
                         return str(parent)
     else:
-        return nvim.funcs.getcwd()
+        cwd: str = nvim.funcs.getcwd()
+        return cwd
 
 
 _LSP_INIT = """
