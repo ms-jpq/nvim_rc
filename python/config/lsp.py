@@ -10,9 +10,8 @@ from .install import InstallSpec
 
 @dataclass(frozen=True)
 class RootPattern:
-    exact: Sequence[str] = ()
+    exact: FrozenSet[str] = frozenset()
     globs: Sequence[str] = ()
-    version_control: bool = True
 
 
 @dataclass(frozen=True)

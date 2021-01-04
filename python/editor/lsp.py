@@ -1,3 +1,5 @@
+from fnmatch import fnmatch
+from pathlib import Path
 from string import Template
 
 from pynvim import Nvim
@@ -8,8 +10,18 @@ from ..registery import atomic, keymap, rpc
 
 
 @rpc(blocking=True)
-def _find_root(nvim: Nvim, cfg: RootPattern, filename: str, bufnr: int) -> str:
-    return ""
+def _find_root(nvim: Nvim, pattern: RootPattern, filename: str, bufnr: int) -> str:
+    path = Path(filename)
+    for parent in path.parents:
+        for member in parent.iterdir():
+            if member in pattern.exact:
+                return str(parent)
+            else:
+                for glob in pattern.globs:
+                    if fnmatch(member, glob):
+                        return str(parent)
+    else:
+        return nvim.funcs.getcwd()
 
 
 _LSP_INIT = """
