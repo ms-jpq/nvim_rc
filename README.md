@@ -85,26 +85,26 @@ And many setting changes akin to `emacs`' `CUA` mode.
 
 #### Linters and Prettiers
 
-* Not only install dependencies for you
+- Not only install dependencies for you
 
-* Runs multiple linters in parallel on the same file.
+- Runs multiple linters in parallel on the same file.
 
-* Runs multiple prettiers in sequence on the same file
+- Runs multiple prettiers in sequence on the same file
 
 #### Text Objects and Operators
 
-* A `word` text object that works for lisps and in help docs.
+- A `word` text object that works for lisps and in help docs.
 
-* Locale aware!
+- Locale aware!
 
-* and some more basic ones like `move`, `replace`, `search`, `entire`
+- and some more basic ones like `move`, `replace`, `search`, `entire`
 
 #### Misc
 
-* Built-in float term
+- Built-in float term
 
-* Built-in tab detection
+- Built-in tab detection
 
-* Debounced auto save
+- Debounced auto save
 
-* ...
+- ...
