@@ -60,7 +60,7 @@ async def _run(
             )
             if err
         ]
-        errors = "".join(repeat(linesep, times=2)).join(errs)
+        errors = (linesep * 2).join(errs)
         if errors:
             await set_preview_content(nvim, text=errors)
         else:

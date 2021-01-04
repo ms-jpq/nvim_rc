@@ -1,5 +1,4 @@
-from string import whitespace
-from typing import Iterable, Iterator, Sequence, Set, Tuple
+from typing import Iterable, Iterator, Sequence, Tuple
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
@@ -62,21 +61,7 @@ settings["autoindent"] = True
 settings["smarttab"] = True
 
 
-def _strip_ending(string: str, nono: Set[str]) -> str:
-    def it() -> Iterator[str]:
-        before_seen = True
-        for c in reversed(string):
-            if before_seen and c in nono:
-                pass
-            else:
-                before_seen = False
-                yield c
-
-    return "".join(it())
-
-
 # remove trailing whitespace
-# @autocmd("BufWritePre",  modifiers=("*", "undojoin", "|"))
 @rpc(blocking=True)
 def _trailing_ws(nvim: Nvim) -> None:
     win: Window = nvim.api.get_current_win()
@@ -85,16 +70,21 @@ def _trailing_ws(nvim: Nvim) -> None:
     lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, -1, True)
 
     def it() -> Iterator[str]:
-        ws = {*whitespace}
         trimmable = True
-        new_line = ""
         for r, line in reversed(tuple(enumerate(lines, 1))):
-            trimmable = trimmable and r > row
-            if trimmable:
-                new_line = _strip_ending(line, nono=ws)
-                trimmable = trimmable and not new_line
-            if trimmable:
-                yield new_line if trimmable else line
+            new_line = line.rstrip()
+            trimmable = trimmable and (not new_line) and r > row
+
+            if r == row:
+                yield new_line + (" " * (col - len(new_line)))
+            else:
+                if not trimmable:
+                    yield new_line
 
     nvim.api.buf_set_lines(buf, 0, -1, True, tuple(it()))
     nvim.api.win_set_cursor(win, (row, col))
+
+
+autocmd(
+    "BufWritePre", modifiers=("*", "undojoin", "|")
+) << f"lua {_trailing_ws.remote_name}()"

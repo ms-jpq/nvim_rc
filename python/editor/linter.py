@@ -92,7 +92,7 @@ async def _run(
         )
     )
     now = datetime.now().strftime(DATE_FMT)
-    preview = f"".join(repeat(linesep, times=2)).join((now, *outputs))
+    preview = (linesep * 2).join((now, *outputs))
     await set_preview_content(nvim, text=preview)
 
 
