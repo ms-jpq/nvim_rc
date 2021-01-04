@@ -79,7 +79,8 @@ def _trailing_ws(nvim: Nvim) -> None:
             elif not trimmable:
                 yield line
 
-    nvim.api.buf_set_lines(buf, 0, -1, True, tuple(it()))
+    trimmed = tuple(reversed(tuple(it())))
+    nvim.api.buf_set_lines(buf, 0, -1, True, trimmed)
     nvim.api.win_set_cursor(win, (row, col))
 
 
