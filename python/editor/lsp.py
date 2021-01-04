@@ -14,11 +14,12 @@ def _find_root(nvim: Nvim, pattern: RootPattern, filename: str, bufnr: int) -> s
     path = Path(filename)
     for parent in path.parents:
         for member in parent.iterdir():
-            if member in pattern.exact:
+            name = member.name
+            if name in pattern.exact:
                 return str(parent)
             else:
                 for glob in pattern.globs:
-                    if fnmatch(str(member), glob):
+                    if fnmatch(name, glob):
                         return str(parent)
     else:
         cwd: str = nvim.funcs.getcwd()
