@@ -43,7 +43,7 @@ local root_dir = function (root_cfg)
 end
 
 local setup = function (cfg, root_cfg)
-  if root_cfg then
+  if root_cfg ~= vim.NIL then
     cfg.root_dir = root_dir(root_cfg)
   end
   lsp.${SERVER}.setup(cfg)
