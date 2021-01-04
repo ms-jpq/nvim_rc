@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from enum import Enum, auto
 from typing import Any, FrozenSet, Mapping, Optional, Sequence
 
 from std2.pickle import decode
@@ -8,8 +9,15 @@ from ..consts import CONF_LSP
 from .install import InstallSpec
 
 
+class RPFallback(Enum):
+    cwd = auto()
+    home = auto()
+    parent = auto()
+
+
 @dataclass(frozen=True)
 class RootPattern:
+    fallback: RPFallback = RPFallback.cwd
     exact: FrozenSet[str] = frozenset()
     glob: Sequence[str] = ()
 

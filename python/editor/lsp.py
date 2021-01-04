@@ -5,7 +5,7 @@ from string import Template
 from pynvim import Nvim
 from std2.pickle import encode
 
-from ..config.lsp import RootPattern, lsp_specs
+from ..config.lsp import RootPattern, RPFallback, lsp_specs
 from ..registery import atomic, keymap, rpc
 
 
@@ -22,8 +22,15 @@ def _find_root(nvim: Nvim, pattern: RootPattern, filename: str, bufnr: int) -> s
                     if fnmatch(name, glob):
                         return str(parent)
     else:
-        cwd: str = nvim.funcs.getcwd()
-        return cwd
+        if pattern.fallback == RPFallback.cwd:
+            cwd: str = nvim.funcs.getcwd()
+            return cwd
+        elif pattern.fallback == RPFallback.home:
+            return str(Path.home())
+        elif pattern.fallback == RPFallback.parent:
+            return str(path.parent)
+        else:
+            assert False
 
 
 _LSP_INIT = """
