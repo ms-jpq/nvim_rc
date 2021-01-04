@@ -76,7 +76,7 @@
     - --interactive
     - --
     - darold.net/pgformatter
-    - -
+    - "-"
   filetypes:
     - sql
 
