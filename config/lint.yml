@@ -1,4 +1,15 @@
 ---
+- bin: yamllint
+  type: fs
+  args:
+    - --
+    - "%"
+  filetypes:
+    - yaml
+  install:
+    pip:
+      - yamllint
+
 - bin: mypy
   type: fs
   args:
