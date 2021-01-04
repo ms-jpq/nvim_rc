@@ -69,17 +69,18 @@ def _trailing_ws(nvim: Nvim) -> None:
     row, col = nvim.api.win_get_cursor(win)
     lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, -1, True)
     new_lines = [
-        line.rstrip() + (" " * (col - len(line))) if r == row else line.rstrip()
+        line.rstrip().ljust(col) if r == row else line.rstrip()
         for r, line in enumerate(lines, start=1)
     ]
 
     while new_lines:
         line = new_lines.pop()
-        if line:
+        if line or len(new_lines) <= row:
             new_lines.append(line)
             break
 
     nvim.api.buf_set_lines(buf, 0, -1, True, new_lines)
+    nvim.api.win_set_cursor(win, (row, col))
 
 
 autocmd(
