@@ -149,7 +149,7 @@ Now compare this to the following naive algorithm
 
 3. For each line in sample, from `i` in `[2..8]`, expand tabs with `i` spaces
 
-4. Calculate `indent_level` for each line in step #3 and `divisibility` of `indent_level / i` if `indent_level > 0`
+4. Calculate `indent_level` for each line in *3)* and output `divisibility` as `indent_level % i == 0` if `indent_level > 0`
 
 5. Reverse sort by `divisibility, i` in lexicographic order, the foremost `i` is the indent level
 
