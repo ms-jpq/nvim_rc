@@ -34,7 +34,7 @@ def _set_tabsize(nvim: Nvim, buf: Buffer, lines: Iterable[str]) -> None:
                 yield divibilty, tabsize
 
     try:
-        _, tabsize = next(reversed(sorted(it())))
+        _, tabsize = next(sorted(it(), reverse=True))
     except StopIteration:
         tabsize = tabsize_d
 
