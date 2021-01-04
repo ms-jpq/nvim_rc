@@ -61,7 +61,7 @@ Runtime validation of configuration. You can't make typos, or type errors!
 
 Will install NPM & PIP & git packages for you in their **private** namespace.
 
-Only accessible from inside `neovim`, under `.vars`.
+Only accessible from inside `neovim`.
 
 ```sh
 init.py --install-packages
