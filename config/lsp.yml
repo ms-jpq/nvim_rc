@@ -145,7 +145,7 @@
       script: |-
         set -eu
 
-        BIN="bin/rls"
+        BIN="bin/rust-analyzer"
         if [[ -x "$BIN" ]]
         then
           exit
@@ -186,6 +186,19 @@
   install:
     npm:
       - sql-language-server
+
+- server: rome
+  bin: rome
+  filetypes:
+    - javascript
+    - javascript.jsx
+    - javascriptreact
+    - typescript
+    - typescript.tsx
+    - typescriptreact
+  install:
+    npm:
+      - rome
 
 - server: tsserver
   bin: typescript-language-server
