@@ -33,11 +33,7 @@ def _set_tabsize(nvim: Nvim, buf: Buffer, lines: Iterable[str]) -> None:
             if divibilty:
                 yield divibilty, tabsize
 
-    try:
-        _, tabsize = next(sorted(it(), reverse=True))
-    except StopIteration:
-        tabsize = tabsize_d
-
+    _, tabsize = next(iter(sorted(it(), reverse=True)), (-1, tabsize_d))
     for option in _TAB_OPTIONS:
         nvim.api.buf_set_option(buf, option, tabsize)
 
