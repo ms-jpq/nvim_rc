@@ -1,6 +1,8 @@
 # Pure Python Neovim Configuration
 
-My goal is to eventually bring neovim to VScode level of experience.
+Author of [CHADTree](https://github.com/ms-jpq/chadtree) here.
+
+My goal is to eventually bring neovim to VSCode level of experience.
 
 I cannot do this in lua, it is too painful to use for this type of work.
 
@@ -8,7 +10,7 @@ I cannot do this in lua, it is too painful to use for this type of work.
 
 All of my stuff here are private, including the dependencies.
 
-If you want to use my config, please fork it.
+If you want to use my config, please fork it, because I will tinker with stuff all the time.
 
 ### Configuration DSL
 
@@ -87,9 +89,9 @@ And many setting changes akin to `emacs`' `CUA` mode.
 
 - Not only install dependencies for you
 
-- Runs multiple linters in parallel on the same file
+- Able to run multiple linters in parallel on the same file
 
-- Runs multiple prettiers in sequence on the same file
+- Able to run multiple prettiers in sequence on the same file
 
 #### Text Objects and Operators
 
