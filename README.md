@@ -30,6 +30,8 @@ autocmd("FocusLost", "VimLeavePre", modifiers=("*", "nested")) << "silent! wa"
 
 Runtime validation of configuration. You can't make typos, or type errors!
 
+You can even configure LSPs from YAML!
+
 ```yaml
 - bin: mypy
   type: fs
