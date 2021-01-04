@@ -11,7 +11,7 @@ from .install import InstallSpec
 @dataclass(frozen=True)
 class RootPattern:
     exact: FrozenSet[str] = frozenset()
-    globs: Sequence[str] = ()
+    glob: Sequence[str] = ()
 
 
 @dataclass(frozen=True)

@@ -18,7 +18,7 @@ def _find_root(nvim: Nvim, pattern: RootPattern, filename: str, bufnr: int) -> s
             if name in pattern.exact:
                 return str(parent)
             else:
-                for glob in pattern.globs:
+                for glob in pattern.glob:
                     if fnmatch(name, glob):
                         return str(parent)
     else:
