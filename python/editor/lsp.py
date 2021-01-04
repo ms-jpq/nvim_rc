@@ -8,14 +8,23 @@ from ..registery import atomic, keymap, rpc
 
 
 @rpc(blocking=True)
-def _find_root(nvim: Nvim, cfg: RootPattern, bufnr: int, filename: str) -> str:
+def _find_root(nvim: Nvim, cfg: RootPattern, filename: str, bufnr: int) -> str:
     return ""
 
 
 _LSP_INIT = """
 local lsp = require "lspconfig"
 
+local root_dir = function (root_cfg)
+  return function (filename, bufnr)
+    return ${FIND_ROOT}(root_cfg, filename, bufnr)
+  end
+end
+
 local setup = function (cfg, root_cfg)
+  if root_cfg then
+    cfg.root_dir = root_dir(root_cfg)
+  end
   lsp.${SERVER}.setup(cfg)
 end
 
@@ -24,7 +33,7 @@ setup(...)
 _TEMPLATE = Template(_LSP_INIT)
 
 for spec in lsp_specs:
-    lua = _TEMPLATE.substitute(SERVER=spec.server)
+    lua = _TEMPLATE.substitute(SERVER=spec.server, FIND_ROOT=_find_root.remote_name)
     atomic.exec_lua(lua, (spec.config, encode(spec.root)))
 
 

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, FrozenSet, Mapping, Sequence
+from typing import Any, FrozenSet, Mapping, Optional, Sequence
 
 from std2.pickle import decode
 from yaml import safe_load
@@ -22,7 +22,7 @@ class LspAttrs:
     filetypes: FrozenSet[str]
     args: Sequence[str] = ()
     config: Mapping[str, Any] = field(default_factory=dict)
-    root: RootPattern = RootPattern()
+    root: Optional[RootPattern] = None
     install: InstallSpec = InstallSpec()
 
 
