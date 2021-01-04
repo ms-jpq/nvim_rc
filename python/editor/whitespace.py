@@ -26,8 +26,8 @@ settings["expandtab"] = True
 def _set_tabsize(nvim: Nvim, buf: Buffer, lines: Iterable[str]) -> None:
     def it() -> Iterator[Tuple[int, int]]:
         for tabsize in range(2, 9):
-            indent_lvs = tuple(p_indent(line, tabsize=tabsize) for line in lines)
-            divibilty = sum(lv % tabsize == 0 for lv in indent_lvs if lv)
+            indent_lvs = tuple(p_indent(line, tabsize=tabsize) for line in lines if line)
+            divibilty = sum(lv % tabsize == 0 for lv in indent_lvs)
             if divibilty:
                 yield divibilty, tabsize
 
