@@ -68,18 +68,16 @@ def _trailing_ws(nvim: Nvim) -> None:
     buf: Buffer = nvim.api.get_current_buf()
     row, col = nvim.api.win_get_cursor(win)
     lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, -1, True)
+    new_lines = enumerate((line.rstrip() for line in lines), start=1)
 
     def it() -> Iterator[str]:
         trimmable = True
-        for r, line in reversed(tuple(enumerate(lines, 1))):
-            new_line = line.rstrip()
-            trimmable = trimmable and (not new_line) and r > row
-
+        for r, line in reversed(tuple(new_lines)):
+            trimmable = trimmable and (not line) and r > row
             if r == row:
-                yield new_line + (" " * (col - len(new_line)))
-            else:
-                if not trimmable:
-                    yield new_line
+                yield line + (" " * (col - len(line)))
+            elif not trimmable:
+                yield line
 
     nvim.api.buf_set_lines(buf, 0, -1, True, tuple(it()))
     nvim.api.win_set_cursor(win, (row, col))
