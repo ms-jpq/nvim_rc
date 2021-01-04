@@ -87,13 +87,13 @@ And many setting changes akin to `emacs`' `CUA` mode.
 
 - Not only install dependencies for you
 
-- Runs multiple linters in parallel on the same file.
+- Runs multiple linters in parallel on the same file
 
 - Runs multiple prettiers in sequence on the same file
 
 #### Text Objects and Operators
 
-- A `word` text object that works for lisps and in help docs.
+- A `word` text object that works for lisps and in help docs
 
 - Locale aware!
 
@@ -108,3 +108,53 @@ And many setting changes akin to `emacs`' `CUA` mode.
 - Debounced auto save
 
 - ...
+
+### Comparion between Vim style thinking and a saner approach with a saner language
+
+Prefix: I am not ragging on any of the other plugin authors. In fact I use alot of the plugins written in a VimL style. However, I do think the old way of doing things is a bit insane, as you will see in my comparison.
+
+Due to the well known limitations of VimL there is this tendency for things written in VimL to use alot of built-in functions, especially regex, which is in my opinion is counter productive because they introduce much accidental complexity.
+
+Take the example of `tab detection`.
+
+We have two essential problems:
+
+1. Should I use tab or space for this file?
+
+2. What is the predominate tab size?
+
+#### VimL Style
+
+Look at how a popular Vim plugin [solves this](https://github.com/tpope/vim-sleuth/blob/master/plugin/sleuth.vim):
+
+From a glance we can know that:
+
+- It is language specific
+
+- It tries to detect comments
+
+- It has some fairly "intricate" regex beyond just "tell me where whitespaces are"
+
+Now something like this is not only very difficult to read, but also even harder to generalize onto all filetypes, and ensure there are no werid corner cases.
+
+#### Sane Style
+
+Now compare this to the following naive algorithm
+
+1. Sample some lines from the file deterministically
+
+2. If the lines start with more tabs than spaces, indent with `tabs`, else with `spaces`
+
+3. For each line in sample, from `i` in `[2..8]`, expand tabs with `i` spaces
+
+4. Calculate `indent_level` for each line in step #3 and `divisibility` of `indent_level / i` if `indent_level > 0`
+
+5. Reverse sort by `divisibility, i` in lexicographic order, the foremost `i` is the indent level
+
+Now this is not only easy to implement, it is also very easy to understand.
+
+We only do `[2..8]` because no sane person would use `> 8` levels of indent.
+
+The indent level with the greatest `divisibility` implies that most lines are indented at that level.
+
+To solve the issue of common divisors, we sort by highest `i`
