@@ -35,7 +35,7 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
     nvim.command("norm! `<v`>")
 
 
-keymap.o("iw") << f"<cmd>lua {_word.remote_name}(true)<cr>"
-keymap.o("aw") << f"<cmd>lua {_word.remote_name}(false)<cr>"
-keymap.v("iw") << f"<esc><cmd>lua {_word.remote_name}(true)<cr>"
-keymap.v("aw") << f"<esc><cmd>lua {_word.remote_name}(false)<cr>"
+keymap.o("iw") << f"<cmd>lua {_word.name}(true)<cr>"
+keymap.o("aw") << f"<cmd>lua {_word.name}(false)<cr>"
+keymap.v("iw") << f"<esc><cmd>lua {_word.name}(true)<cr>"
+keymap.v("aw") << f"<esc><cmd>lua {_word.name}(false)<cr>"

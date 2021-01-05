@@ -40,14 +40,14 @@ def _op_rg(nvim: Nvim, visual: VisualTypes = None) -> None:
     nvim.command(f"Rg {text}")
 
 
-keymap.n("gs") << f"<cmd>set opfunc={_op_search.remote_name}<cr>g@"
-keymap.v("gs") << f"<esc><cmd>lua {_op_search.remote_name}()<cr>"
+keymap.n("gs") << f"<cmd>set opfunc={_op_search.name}<cr>g@"
+keymap.v("gs") << f"<esc><cmd>lua {_op_search.name}()<cr>"
 
-keymap.n("gf") << f"<cmd>set opfunc={_op_fzf.remote_name}<cr>g@"
-keymap.v("gf") << f"<esc><cmd>lua {_op_fzf.remote_name}()<cr>"
+keymap.n("gf") << f"<cmd>set opfunc={_op_fzf.name}<cr>g@"
+keymap.v("gf") << f"<esc><cmd>lua {_op_fzf.name}()<cr>"
 
-keymap.n("gF") << f"<cmd>set opfunc={_op_rg.remote_name}<cr>g@"
-keymap.v("gF") << f"<esc><cmd>lua {_op_rg.remote_name}()<cr>"
+keymap.n("gF") << f"<cmd>set opfunc={_op_rg.name}<cr>g@"
+keymap.v("gF") << f"<esc><cmd>lua {_op_rg.name}()<cr>"
 
 
 # replace selection
@@ -61,8 +61,8 @@ def _op_sd(nvim: Nvim, visual: VisualTypes = None) -> None:
     nvim.api.input(instruction)
 
 
-keymap.n("gt") << f"<cmd>set opfunc={_op_sd.remote_name}<cr>g@"
-keymap.v("gt") << f"<esc><cmd>lua {_op_sd.remote_name}()<cr>"
+keymap.n("gt") << f"<cmd>set opfunc={_op_sd.name}<cr>g@"
+keymap.v("gt") << f"<esc><cmd>lua {_op_sd.name}()<cr>"
 
 # very magic
 keymap.n("gT", silent=False) << ":%s/\\v//g<left><left><left>"

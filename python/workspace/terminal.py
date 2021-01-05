@@ -77,7 +77,7 @@ def toggle_floating(nvim: Nvim, *args: str) -> None:
         _term_open(nvim, *args)
 
 
-keymap.n("<leader>u") << f"<cmd>lua {toggle_floating.remote_name}()<cr>"
+keymap.n("<leader>u") << f"<cmd>lua {toggle_floating.name}()<cr>"
 
 
 @rpc(blocking=True)
@@ -89,4 +89,4 @@ def _kill_term_wins(nvim: Nvim, win_id: str) -> None:
             nvim.api.win_close(win, True)
 
 
-autocmd("WinClosed") << f"lua {_kill_term_wins.remote_name}(vim.fn.expand('<afile>'))"
+autocmd("WinClosed") << f"lua {_kill_term_wins.name}(vim.fn.expand('<afile>'))"

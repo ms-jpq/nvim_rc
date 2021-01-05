@@ -91,4 +91,4 @@ async def run_fmt(nvim: Nvim) -> None:
         await _run(nvim, ctx=ctx, attrs=linters, cwd=cwd)
 
 
-keymap.n("gq", nowait=True) << f"<cmd>lua {run_fmt.remote_name}()<cr>"
+keymap.n("gq", nowait=True) << f"<cmd>lua {run_fmt.name}()<cr>"

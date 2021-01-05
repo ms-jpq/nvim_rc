@@ -113,4 +113,4 @@ async def _run_linter(nvim: Nvim) -> None:
         await _run(nvim, ctx=ctx, attrs=linters, cwd=cwd)
 
 
-keymap.n("M") << f"<cmd>lua {_run_linter.remote_name}()<cr>"
+keymap.n("M") << f"<cmd>lua {_run_linter.name}()<cr>"

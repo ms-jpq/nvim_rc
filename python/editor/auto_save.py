@@ -50,7 +50,7 @@ autocmd(
     "TextChanged",
     "TextChangedI",
     modifiers=("*", "nested"),
-) << f"lua {_smol_save.remote_name}()"
+) << f"lua {_smol_save.name}()"
 
 
 # persistent undo

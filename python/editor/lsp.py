@@ -55,7 +55,7 @@ setup(...)
 _TEMPLATE = Template(_LSP_INIT)
 
 for spec in lsp_specs:
-    lua = _TEMPLATE.substitute(SERVER=spec.server, FIND_ROOT=_find_root.remote_name)
+    lua = _TEMPLATE.substitute(SERVER=spec.server, FIND_ROOT=_find_root.name)
     atomic.exec_lua(lua, (spec.config, encode(spec.root)))
 
 

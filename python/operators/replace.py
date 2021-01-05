@@ -29,8 +29,8 @@ def _go_replace(nvim: Nvim, visual: VisualTypes = None) -> None:
         nvim.api.buf_set_lines(buf, row1, row2 + 1, True, new_lines)
 
 
-keymap.n("gr") << f"<cmd>set opfunc={_go_replace.remote_name}<cr>g@"
-keymap.v("gr") << f"<esc><cmd>lua {_go_replace.remote_name}()<cr>"
+keymap.n("gr") << f"<cmd>set opfunc={_go_replace.name}<cr>g@"
+keymap.v("gr") << f"<esc><cmd>lua {_go_replace.name}()<cr>"
 
 
 @rpc(blocking=True)
@@ -50,4 +50,4 @@ def _go_replace_line(nvim: Nvim) -> None:
         nvim.api.buf_set_lines(buf, row, row + 1, True, new_lines)
 
 
-keymap.n("grr") << f"<cmd>lua {_go_replace_line.remote_name}()<cr>"
+keymap.n("grr") << f"<cmd>lua {_go_replace_line.name}()<cr>"

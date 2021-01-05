@@ -55,7 +55,7 @@ def _detect_tabs(nvim: Nvim) -> None:
     _set_usetab(nvim, buf=buf, lines=lines)
 
 
-autocmd("FileType") << f"lua {_detect_tabs.remote_name}()"
+autocmd("FileType") << f"lua {_detect_tabs.name}()"
 
 
 # smart indentation level
@@ -106,4 +106,4 @@ def _trailing_ws(nvim: Nvim) -> None:
 
 # autocmd(
 #     "CursorHold", modifiers=("*", "undojoin", "|")
-# ) << f"lua {_trailing_ws.remote_name}()"
+# ) << f"lua {_trailing_ws.name}()"

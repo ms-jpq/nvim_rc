@@ -47,8 +47,8 @@ def new_window(nvim: Nvim, vertical: bool) -> None:
     nvim.api.win_set_buf(win, buf)
 
 
-keymap.n("<leader>=", unique=True) << f"<cmd>lua {new_window.remote_name}(true)<cr>"
-keymap.n("<leader>-", unique=True) << f"<cmd>lua {new_window.remote_name}(false)<cr>"
+keymap.n("<leader>=", unique=True) << f"<cmd>lua {new_window.name}(true)<cr>"
+keymap.n("<leader>-", unique=True) << f"<cmd>lua {new_window.name}(false)<cr>"
 
 
 # kill current buf
@@ -67,7 +67,7 @@ def close_others(nvim: Nvim) -> None:
             nvim.api.win_close(w, True)
 
 
-keymap.n("<leader>W") << f"<cmd>lua {close_others.remote_name}()<cr>"
+keymap.n("<leader>W") << f"<cmd>lua {close_others.name}()<cr>"
 
 
 # break window into tab
@@ -83,8 +83,8 @@ def new_tab(nvim: Nvim) -> None:
     nvim.api.buf_set_var(buf, "buftype", "nofile")
 
 
-keymap.n("<leader>t") << f"<cmd>lua {new_tab.remote_name}()<cr>"
-keymap.n("<leader>n") << f"<cmd>lua {new_tab.remote_name}()<cr>"
+keymap.n("<leader>t") << f"<cmd>lua {new_tab.name}()<cr>"
+keymap.n("<leader>n") << f"<cmd>lua {new_tab.name}()<cr>"
 
 
 # cycle between tabs
@@ -118,7 +118,7 @@ def toggle_preview(nvim: Nvim) -> None:
         nvim.api.win_set_height(win, height)
 
 
-keymap.n("<leader>m") << f"<cmd>lua {toggle_preview.remote_name}()<cr>"
+keymap.n("<leader>m") << f"<cmd>lua {toggle_preview.name}()<cr>"
 
 
 # quickfix
@@ -150,8 +150,8 @@ def clear_qf(nvim: Nvim) -> None:
     nvim.command("cclose")
 
 
-keymap.n("<leader>l") << f"<cmd>lua {toggle_qf.remote_name}()<cr>"
-keymap.n("<leader>L") << f"<cmd>lua {clear_qf.remote_name}()<cr>"
+keymap.n("<leader>l") << f"<cmd>lua {toggle_qf.name}()<cr>"
+keymap.n("<leader>L") << f"<cmd>lua {clear_qf.name}()<cr>"
 
 
 @rpc(blocking=True)
@@ -168,4 +168,4 @@ def _resize_secondary(nvim: Nvim) -> None:
             nvim.api.win_set_height(win, height)
 
 
-keymap.n("<leader>M") << f"<cmd>lua {_resize_secondary.remote_name}()<cr>"
+keymap.n("<leader>M") << f"<cmd>lua {_resize_secondary.name}()<cr>"
