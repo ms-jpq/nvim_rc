@@ -1,8 +1,10 @@
 from typing import Iterable, Iterator, Sequence, Tuple
+from uuid import uuid4
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
-from pynvim_pp.operators import p_indent
+from pynvim.api.common import NvimError
+from pynvim_pp.operators import p_indent, writable
 
 from ..registery import autocmd, rpc, settings
 
@@ -62,10 +64,11 @@ settings["smarttab"] = True
 
 
 # remove trailing whitespace
-@rpc(blocking=True)
-def _trailing_ws(nvim: Nvim) -> None:
+BUF_VAR_NAME = f"buf_last_trimmed_{uuid4().hex}"
+
+
+def _set_trimmed(nvim: Nvim, buf: Buffer) -> None:
     win: Window = nvim.api.get_current_win()
-    buf: Buffer = nvim.api.get_current_buf()
     row, col = nvim.api.win_get_cursor(win)
     lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, -1, True)
     new_lines = [
@@ -82,6 +85,23 @@ def _trailing_ws(nvim: Nvim) -> None:
     if new_lines != lines:
         nvim.api.buf_set_lines(buf, 0, -1, True, new_lines)
         nvim.api.win_set_cursor(win, (row, col))
+
+
+@rpc(blocking=True)
+def _trailing_ws(nvim: Nvim) -> None:
+    buf: Buffer = nvim.api.get_current_buf()
+    if not writable(nvim, buf=buf):
+        return
+    else:
+        try:
+            prev = nvim.api.buf_get_var(buf, BUF_VAR_NAME)
+        except NvimError:
+            pass
+        else:
+            tick = nvim.api.buf_get_changedtick(buf)
+            if tick > prev:
+                _set_trimmed(nvim, buf=buf)
+                nvim.api.buf_set_var(buf, BUF_VAR_NAME, tick)
 
 
 autocmd(
