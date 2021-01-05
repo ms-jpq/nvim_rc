@@ -4,6 +4,7 @@ from string import Template
 
 from pynvim import Nvim
 from std2.pickle import encode
+from std2.types import never
 
 from ..config.lsp import RootPattern, RPFallback, lsp_specs
 from ..registery import atomic, keymap, rpc
@@ -30,7 +31,7 @@ def _find_root(nvim: Nvim, pattern: RootPattern, filename: str, bufnr: int) -> s
         elif pattern.fallback == RPFallback.parent:
             return str(path.parent)
         else:
-            assert False
+            never()
 
 
 _LSP_INIT = """
