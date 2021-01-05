@@ -23,15 +23,15 @@ def _find_root(nvim: Nvim, pattern: RootPattern, filename: str, bufnr: int) -> s
                     if fnmatch(name, glob):
                         return str(parent)
     else:
-        if pattern.fallback == RPFallback.cwd:
+        if pattern.fallback is RPFallback.cwd:
             cwd: str = nvim.funcs.getcwd()
             return cwd
-        elif pattern.fallback == RPFallback.home:
+        elif pattern.fallback is RPFallback.home:
             return str(Path.home())
-        elif pattern.fallback == RPFallback.parent:
+        elif pattern.fallback is RPFallback.parent:
             return str(path.parent)
         else:
-            never()
+            never(pattern)
 
 
 _LSP_INIT = """
