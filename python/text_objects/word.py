@@ -5,7 +5,7 @@ from pynvim_pp.text_object import gen_lhs_rhs
 
 from ..registery import keymap, rpc
 
-UNIFIYING_CHARS = {"_", "-"}
+UNIFIYING_CHARS = frozenset(("_", "-"))
 
 
 @rpc(blocking=True)
