@@ -1,5 +1,5 @@
 ---
-- bin: sortd
+- bin: sjson
   args:
     - --indent
     - "0"
