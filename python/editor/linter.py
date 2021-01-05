@@ -13,7 +13,7 @@ from pynvim_pp.lib import async_call, write
 from pynvim_pp.preview import set_preview
 from std2.asyncio.subprocess import call
 
-from ..config.linter import LinterAttrs, linter_specs
+from ..config.linter import LinterAttrs, LinterType, linter_specs
 from ..consts import DATE_FMT
 from ..registery import keymap, rpc
 
@@ -71,7 +71,8 @@ async def _linter_output(
     if not which(attr.bin):
         return f"⁉️: 莫有 {attr.bin}"
     else:
-        proc = await call(attr.bin, *args, stdin=body, cwd=cwd)
+        stdin = body if attr.type is LinterType.stream else None
+        proc = await call(attr.bin, *args, stdin=stdin, cwd=cwd)
         arg_info = f"{attr.bin} {' '.join(attr.args)}"
         if proc.code == attr.exit_code:
             heading = f"✅ 👉 {arg_info}"
