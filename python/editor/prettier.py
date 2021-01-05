@@ -32,9 +32,9 @@ async def _fmt_output(attr: FmtAttrs, cwd: str, temp: Path) -> str:
     if not which(attr.bin):
         return f"⁉️: 莫有 {attr.bin}"
     else:
-        stdin = temp.read_bytes() if attr.type == FmtType.stream else None
+        stdin = temp.read_bytes() if attr.type is FmtType.stream else None
         proc = await call(attr.bin, *args, stdin=stdin, cwd=cwd)
-        if attr.type == FmtType.stream:
+        if attr.type is FmtType.stream:
             temp.write_bytes(proc.out)
 
         if proc.code == attr.exit_code:
