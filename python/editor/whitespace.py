@@ -69,20 +69,21 @@ def _trailing_ws(nvim: Nvim) -> None:
     row, col = nvim.api.win_get_cursor(win)
     lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, -1, True)
     new_lines = [
-        line.rstrip().ljust(col) if r == row else line.rstrip()
+        line[:col] + line[col:].rstrip() if r == row else line.rstrip()
         for r, line in enumerate(lines, start=1)
     ]
 
     while new_lines:
         line = new_lines.pop()
-        if line or len(new_lines) <= row:
+        if line or len(new_lines) < row:
             new_lines.append(line)
             break
 
-    nvim.api.buf_set_lines(buf, 0, -1, True, new_lines)
-    nvim.api.win_set_cursor(win, (row, col))
+    if new_lines != lines:
+        nvim.api.buf_set_lines(buf, 0, -1, True, new_lines)
+        nvim.api.win_set_cursor(win, (row, col))
 
 
 autocmd(
-    "BufWritePre", modifiers=("*", "undojoin", "|")
+    "CursorHold", modifiers=("*", "undojoin", "|")
 ) << f"lua {_trailing_ws.remote_name}()"
