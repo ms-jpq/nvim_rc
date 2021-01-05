@@ -1,6 +1,6 @@
 from pynvim.api import Buffer, Window
 from pynvim.api.nvim import Nvim
-from pynvim_pp.operators import operator_marks, set_visual_selection
+from pynvim_pp.operators import operator_marks, set_visual_selection, writable
 
 from ..registery import keymap, rpc
 
@@ -8,7 +8,7 @@ from ..registery import keymap, rpc
 @rpc(blocking=True)
 def _normal_up(nvim: Nvim) -> None:
     buf: Buffer = nvim.api.get_current_buf()
-    if not nvim.api.buf_get_option(buf, "modifiable"):
+    if not writable(nvim, buf=buf):
         return
     else:
         win: Window = nvim.api.get_current_win()
@@ -27,7 +27,7 @@ def _normal_up(nvim: Nvim) -> None:
 @rpc(blocking=True)
 def _normal_down(nvim: Nvim) -> None:
     buf: Buffer = nvim.api.get_current_buf()
-    if not nvim.api.buf_get_option(buf, "modifiable"):
+    if not writable(nvim, buf=buf):
         return
     else:
         win: Window = nvim.api.get_current_win()
@@ -55,7 +55,7 @@ def _reselect_visual(nvim: Nvim) -> None:
 @rpc(blocking=True)
 def _visual_up(nvim: Nvim) -> None:
     buf: Buffer = nvim.api.get_current_buf()
-    if not nvim.api.buf_get_option(buf, "modifiable"):
+    if not writable(nvim, buf=buf):
         return
     else:
         (row1, col1), (row2, col2) = operator_marks(nvim, buf=buf, visual_type=None)
@@ -76,7 +76,7 @@ def _visual_up(nvim: Nvim) -> None:
 @rpc(blocking=True)
 def _visual_down(nvim: Nvim) -> None:
     buf: Buffer = nvim.api.get_current_buf()
-    if not nvim.api.buf_get_option(buf, "modifiable"):
+    if not writable(nvim, buf=buf):
         return
     else:
         (row1, col1), (row2, col2) = operator_marks(nvim, buf=buf, visual_type=None)

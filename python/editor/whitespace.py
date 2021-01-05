@@ -104,6 +104,6 @@ def _trailing_ws(nvim: Nvim) -> None:
                 nvim.api.buf_set_var(buf, BUF_VAR_NAME, tick)
 
 
-autocmd(
-    "CursorHold", modifiers=("*", "undojoin", "|")
-) << f"lua {_trailing_ws.remote_name}()"
+# autocmd(
+#     "CursorHold", modifiers=("*", "undojoin", "|")
+# ) << f"lua {_trailing_ws.remote_name}()"
