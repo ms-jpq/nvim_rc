@@ -50,13 +50,13 @@ def _npm_specs() -> Iterator[str]:
         yield from f_spec.install.npm
 
 
-def _script_specs() -> Iterator[ScriptSpec]:
+def _script_specs() -> Iterator[Tuple[str, ScriptSpec]]:
     for l_spec in lsp_specs:
-        yield l_spec.install.script
+        yield l_spec.bin, l_spec.install.script
     for i_spec in linter_specs:
-        yield i_spec.install.script
+        yield i_spec.bin, i_spec.install.script
     for f_spec in fmt_specs:
-        yield f_spec.install.script
+        yield f_spec.bin, f_spec.install.script
 
 
 SortOfMonoid = Sequence[Tuple[str, ProcReturn]]
@@ -134,16 +134,17 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
 
 
 def _script() -> Iterator[Awaitable[SortOfMonoid]]:
-    env = {"LIB_DIR": str(LIB_DIR), "BIN_DIR": str(BIN_DIR)}
     for path in (LIB_DIR, BIN_DIR):
         path.mkdir(parents=True, exist_ok=True)
 
-    for pkg in _script_specs():
+    env = {"LIB_DIR": str(LIB_DIR), "BIN_DIR": str(BIN_DIR)}
+    for bin, pkg in _script_specs():
 
         async def cont(pkg: ScriptSpec) -> SortOfMonoid:
+            pkg_env = {"BIN_NAME": bin, "$BIN_PATH": str(BIN_DIR / bin)}
             stdin = pkg.body.encode()
             p = await call(
-                pkg.interpreter, stdin=stdin, env={**env, **pkg.env}, cwd=str(VARS_DIR)
+                pkg.interpreter, stdin=stdin, env={**env, **pkg_env, **pkg.env}, cwd=str(VARS_DIR)
             )
             return ((pkg.body, p),)
 
