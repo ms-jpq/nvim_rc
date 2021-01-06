@@ -63,18 +63,6 @@
     npm:
       - prettier
 
-# - bin: docker
-#   type: stream
-#   args:
-#     - run
-#     - --rm
-#     - --interactive
-#     - --
-#     - darold.net/pgformatter
-#     - "-"
-#   filetypes:
-#     - sql
-
 - bin: pg_format
   type: stream
   filetypes:
@@ -87,24 +75,27 @@
         set -eu
         set -o pipefail
 
-        URI="https://github.com/darold/pgFormatter/archive/v4.4.tar.gz"
-        BIN='bin/pg_format'
-        if [[ -x "$BIN" ]]
+        NAME='pg_format'
+        EXT='.tar.gz'
+
+        BIN='bin'
+        LIB='lib'
+        TMP='tmp'
+
+        EXEC="$BIN/$NAME"
+        WGET_DEST="${TMP}/${NAME}${EXT}"
+        TAR_DEST="$LIB/$NAME"
+
+
+        if [[ -x "$EXEC" ]]
         then
           exit
         else
-          TMP="tmp"
-          DIR="$TMP/pg_format"
-          FILE="$DIR.zip"
-          mkdir -p "$TMP" "$DIR"
-          wget "$URI" --output-document "$FILE"
-          tar -xJvf "$FILE" --strip-components 1 --directory "$DIR"
-
-          cd "$DIR" || exit 1
-          perl 'Makefile.PL' 'DESTDIR=.'
-          make install
+          mkdir -p "$TMP" "$BIN" "$LIB""$TAR_DEST"
+          wget "$URI" --output-document "$WGET_DEST"
+          tar -xJvf "$WGET_DEST" --strip-components 1 --directory "$TAR_DEST"
+          ln -s "../$TAR_DEST/$NAME" "$EXEC"
         fi
-
 
 - bin: rustfmt
   type: stream

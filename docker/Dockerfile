@@ -14,7 +14,7 @@ RUN apt update && \
 
 
 # Dependencies
-RUN apt install -y perl make
+RUN apt install -y perl
 
 
 # INSTALL
