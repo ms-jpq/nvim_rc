@@ -139,22 +139,22 @@
   install:
     script:
       env:
-        URI_ROOT: https://github.com/rust-analyzer/rust-analyzer/releases/download/
-        MAC_OS: 2020-12-28/rust-analyzer-mac
-        LINUX: 2020-12-28/rust-analyzer-linux
+        URI_ROOT: https://github.com/rust-analyzer/rust-analyzer/releases/download
+        MAC_OS: rust-analyzer-mac
+        LINUX: rust-analyzer-linux
+        RELEASE: "2020-12-28"
       body: |-
         set -eu
         set -o pipefail
 
-        BIN="$BIN_DIR/rust-analyzer"
         if [[ "$(uname)" == 'Darwin' ]]
         then
-          END="$MAC_OS"
+          ARCH="$MAC_OS"
         else
-          END="$LINUX"
+          ARCH="$LINUX"
         fi
-        wget "${URI_ROOT}${END}" --output-document "$BIN"
-        chmod +x "$BIN"
+        wget "${URI_ROOT}/${RELEASE}/${ARCH}" --output-document "$BIN_PATH"
+        chmod +x "$BIN_PATH"
 
 - server: gopls
   bin: gopls

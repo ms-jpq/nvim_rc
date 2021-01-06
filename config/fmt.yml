@@ -82,10 +82,7 @@
         set -eu
         set -o pipefail
 
-        NAME='pg_format'
-        BIN="$BIN_DIR/$NAME"
-        LIB="$LIB_DIR/$NAME"
-
+        LIB="$LIB_DIR/$BIN_NAME"
         if [[ -d "$LIB" ]]
         then
           cd "$LIB" || exit 1
@@ -93,7 +90,7 @@
         else
           git clone --depth=1 --recurse-submodules --shallow-submodules "$URI" "$LIB"
         fi
-        ln --symbolic --force "$LIB_DIR/$NAME/$NAME" "$BIN"
+        ln --symbolic --force "$LIB/$BIN_NAME" "$BIN_PATH"
 
 - bin: rustfmt
   type: stream
