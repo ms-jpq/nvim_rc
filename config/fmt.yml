@@ -65,38 +65,35 @@
 
 - bin: pg_format
   type: stream
+  args:
+    - --no-rcfile
+    - --spaces
+    - "2"
+    - --comma-start
+    - --comma-end
+    - --comma-break
   filetypes:
     - sql
   install:
     script:
       env:
-        URI: https://github.com/darold/pgFormatter/archive/v4.4.tar.gz
+        URI: https://github.com/darold/pgFormatter
       body: |-
         set -eu
         set -o pipefail
 
         NAME='pg_format'
-        EXT='.tar.gz'
+        BIN="$BIN_DIR/$NAME"
+        LIB="$LIB_DIR/$NAME"
 
-        BIN='bin'
-        LIB='lib'
-        TMP='tmp'
-
-        EXEC="$BIN/$NAME"
-        WGET_DEST="${TMP}/${NAME}${EXT}"
-        TAR_DEST="$LIB/$NAME"
-
-
-        if [[ -x "$EXEC" ]]
+        if [[ -d "$LIB" ]]
         then
-          exit
+          cd "$LIB" || exit 1
+          git pull --recurse-submodules
         else
-          mkdir -p "$TMP" "$BIN" "$LIB" "$TAR_DEST"
-          wget "$URI" --output-document "$WGET_DEST"
-          tar -xJvf "$WGET_DEST" --strip-components 1 --directory "$TAR_DEST"
-          cat "$TAR_DEST"
-          ln -s "../$TAR_DEST/$NAME" "$EXEC"
+          git clone --depth=1 --recurse-submodules --shallow-submodules "$URI" "$LIB"
         fi
+        ln -s "../$LIB_DIR/$NAME/$NAME" "$BIN"
 
 - bin: rustfmt
   type: stream

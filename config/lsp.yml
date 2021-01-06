@@ -146,20 +146,15 @@
         set -eu
         set -o pipefail
 
-        BIN='bin/rust-analyzer'
-        if [[ -x "$BIN" ]]
+        BIN="$BIN_DIR/rust-analyzer"
+        if [[ "$(uname)" == 'Darwin' ]]
         then
-          exit
+          END="$MAC_OS"
         else
-          if [[ "$(uname)" == 'Darwin' ]]
-          then
-            END="$MAC_OS"
-          else
-            END="$LINUX"
-          fi
-          wget "${URI_ROOT}${END}" --output-document "$BIN"
-          chmod +x "$BIN"
+          END="$LINUX"
         fi
+        wget "${URI_ROOT}${END}" --output-document "$BIN"
+        chmod +x "$BIN"
 
 - server: gopls
   bin: gopls

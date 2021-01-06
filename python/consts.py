@@ -17,8 +17,10 @@ CONF_FMT = CONF_DIR / "fmt.yml"
 
 VARS_DIR = TOP_LEVEL / ".vars"
 RT_DIR = VARS_DIR / "runtime"
-BIN_DIR = VARS_DIR / "bin"
 
+
+BIN_DIR = VARS_DIR / "bin"
+LIB_DIR = VARS_DIR / "lib"
 _MODULES_DIR = VARS_DIR / "modules"
 VIM_DIR = _MODULES_DIR / "vim_modules"
 PIP_DIR = _MODULES_DIR / "pip_modules"

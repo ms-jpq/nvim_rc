@@ -16,6 +16,7 @@ from ..config.pkgs import pkg_specs
 from ..consts import (
     BIN_DIR,
     INSTALL_SCRIPT,
+    LIB_DIR,
     NPM_DIR,
     PIP_DIR,
     UPDATE_LOG,
@@ -133,13 +134,17 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
 
 
 def _script() -> Iterator[Awaitable[SortOfMonoid]]:
-    BIN_DIR.mkdir(parents=True, exist_ok=True)
+    env = {"LIB_DIR": str(LIB_DIR), "BIN_DIR": str(BIN_DIR)}
+    for path in (LIB_DIR, BIN_DIR):
+        path.mkdir(parents=True, exist_ok=True)
 
     for pkg in _script_specs():
 
         async def cont(pkg: ScriptSpec) -> SortOfMonoid:
             stdin = pkg.body.encode()
-            p = await call(pkg.interpreter, stdin=stdin, env=pkg.env, cwd=str(VARS_DIR))
+            p = await call(
+                pkg.interpreter, stdin=stdin, env={**env, **pkg.env}, cwd=str(VARS_DIR)
+            )
             return ((pkg.body, p),)
 
         if which(pkg.interpreter) and pkg.body:
