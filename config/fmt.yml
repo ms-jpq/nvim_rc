@@ -83,9 +83,9 @@
         set -eu
         set -o pipefail
 
-        if [[ -d "$LIB" ]]
+        if [[ -d "$LIB_PATH" ]]
         then
-          rm -rf "$LIB"
+          rm -rf "$LIB_PATH"
         fi
         OPTS=(--depth=1 --recurse-submodules --shallow-submodules)
         git clone "${OPTS[@]}" --branch "$RELEASE" "$URI" "$LIB_PATH"
