@@ -68,18 +68,6 @@
   filetypes:
     - dockerfile
 
-- bin: docker
-  type: stream
-  args:
-    - run
-    - --rm
-    - --interactive
-    - --
-    - darold.net/pgformatter
-    - "-"
-  filetypes:
-    - sql
-
 - bin: markdownlint
   type: stream
   args:

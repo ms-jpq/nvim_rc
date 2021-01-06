@@ -63,62 +63,72 @@ SortOfMonoid = Sequence[Tuple[str, ProcReturn]]
 
 def _git() -> Iterator[Awaitable[SortOfMonoid]]:
     VIM_DIR.mkdir(parents=True, exist_ok=True)
+    cmd = "git"
 
-    for pkg in _git_specs():
+    if which(cmd):
+        for pkg in _git_specs():
 
-        async def cont(pkg: str) -> SortOfMonoid:
-            location = VIM_DIR / p_name(pkg)
-            if location.is_dir():
-                p = await call("git", "pull", "--recurse-submodules", cwd=str(location))
-                return ((pkg, p),)
-            else:
-                p = await call(
-                    "git",
-                    "clone",
-                    "--depth=1",
-                    "--recurse-submodules",
-                    "--shallow-submodules",
-                    pkg,
-                    str(location),
-                )
-                return ((pkg, p),)
+            async def cont(pkg: str) -> SortOfMonoid:
+                location = VIM_DIR / p_name(pkg)
+                if location.is_dir():
+                    p = await call(
+                        cmd, "pull", "--recurse-submodules", cwd=str(location)
+                    )
+                    return ((pkg, p),)
+                else:
+                    p = await call(
+                        cmd,
+                        "clone",
+                        "--depth=1",
+                        "--recurse-submodules",
+                        "--shallow-submodules",
+                        pkg,
+                        str(location),
+                    )
+                    return ((pkg, p),)
 
-        yield cont(pkg)
+            yield cont(pkg)
 
 
 def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
     PIP_DIR.mkdir(parents=True, exist_ok=True)
+    cmd = "pip3"
+    specs = tuple(_pip_specs())
 
-    async def cont() -> SortOfMonoid:
-        p = await call(
-            "pip3",
-            "install",
-            "--upgrade",
-            "--target",
-            str(PIP_DIR),
-            "--",
-            *_pip_specs(),
-            cwd=str(PIP_DIR),
-        )
-        return (("", p),)
+    if which(cmd) and specs:
 
-    yield cont()
+        async def cont() -> SortOfMonoid:
+            p = await call(
+                cmd,
+                "install",
+                "--upgrade",
+                "--target",
+                str(PIP_DIR),
+                "--",
+                *specs,
+                cwd=str(PIP_DIR),
+            )
+            return (("", p),)
+
+        yield cont()
 
 
 def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
     NPM_DIR.mkdir(parents=True, exist_ok=True)
+    cmd = "npm"
 
-    async def cont() -> SortOfMonoid:
-        p1 = await call("npm", "init", "--yes", cwd=str(NPM_DIR))
-        if p1.code:
-            return (("", p1),)
-        else:
-            p2 = await call(
-                "npm", "install", "--upgrade", "--", *_npm_specs(), cwd=str(NPM_DIR)
-            )
-            return ("", p1), ("", p2)
+    if which(cmd):
 
-    if which("npm"):
+        async def cont() -> SortOfMonoid:
+            p1 = await call(cmd, "init", "--yes", cwd=str(NPM_DIR))
+            if p1.code:
+                return (("", p1),)
+            else:
+                p2 = await call(
+                    cmd, "install", "--upgrade", "--", *_npm_specs(), cwd=str(NPM_DIR)
+                )
+                return ("", p1), ("", p2)
+
         yield cont()
 
 
@@ -128,11 +138,11 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
     for pkg in _script_specs():
 
         async def cont(pkg: ScriptSpec) -> SortOfMonoid:
-            stdin = pkg.script.encode()
+            stdin = pkg.body.encode()
             p = await call(pkg.interpreter, stdin=stdin, env=pkg.env, cwd=str(VARS_DIR))
-            return ((pkg.script, p),)
+            return ((pkg.body, p),)
 
-        if pkg.script:
+        if which(pkg.interpreter) and pkg.body:
             yield cont(pkg)
 
 

@@ -6,7 +6,7 @@ from typing import Mapping, Sequence
 class ScriptSpec:
     interpreter: str = "bash"
     env: Mapping[str, str] = field(default_factory=dict)
-    script: str = ""
+    body: str = ""
 
 
 @dataclass(frozen=True)
