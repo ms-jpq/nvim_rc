@@ -146,12 +146,12 @@
         set -eu
         set -o pipefail
 
-        BIN="bin/rust-analyzer"
+        BIN='bin/rust-analyzer'
         if [[ -x "$BIN" ]]
         then
           exit
         else
-          if [[ "$(uname)" == "Darwin" ]]
+          if [[ "$(uname)" == 'Darwin' ]]
           then
             END="$MAC_OS"
           else

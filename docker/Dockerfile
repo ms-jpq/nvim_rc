@@ -13,6 +13,10 @@ RUN apt update && \
     apt install -y neovim
 
 
+# Dependencies
+RUN apt install -y perl make
+
+
 # INSTALL
 COPY . /root/.config/nvim
 ENV TERM=xterm-256color
