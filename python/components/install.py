@@ -137,16 +137,19 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
     for path in (LIB_DIR, BIN_DIR):
         path.mkdir(parents=True, exist_ok=True)
 
-    env = {"LIB_DIR": str(LIB_DIR)}
     for bin, pkg in _script_specs():
 
         async def cont(bin: str, pkg: ScriptSpec) -> SortOfMonoid:
-            pkg_env = {"BIN_NAME": bin, "BIN_PATH": str(BIN_DIR / bin)}
+            env = {
+                "BIN_NAME": bin,
+                "BIN_PATH": str(BIN_DIR / bin),
+                "LIB_PATH": str(LIB_DIR / bin),
+            }
             stdin = pkg.body.encode()
             p = await call(
                 pkg.interpreter,
                 stdin=stdin,
-                env={**env, **pkg_env, **pkg.env},
+                env={**env, **pkg.env},
                 cwd=str(VARS_DIR),
             )
             return ((pkg.body, p),)

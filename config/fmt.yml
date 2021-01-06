@@ -83,13 +83,13 @@
         set -eu
         set -o pipefail
 
-        LIB="$LIB_DIR/$BIN_NAME"
         if [[ -d "$LIB" ]]
         then
           rm -rf "$LIB"
         fi
-        git clone --depth=1 --recurse-submodules --shallow-submodules --branch "$RELEASE" "$URI" "$LIB"
-        ln --symbolic --force "$LIB/$BIN_NAME" "$BIN_PATH"
+        OPTS=(--depth=1 --recurse-submodules --shallow-submodules)
+        git clone "${OPTS[@]}" --branch "$RELEASE" "$URI" "$LIB_PATH"
+        ln --symbolic --force "$LIB_PATH/$BIN_NAME" "$BIN_PATH"
 
 - bin: rustfmt
   type: stream
