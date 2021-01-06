@@ -93,7 +93,7 @@
         else
           git clone --depth=1 --recurse-submodules --shallow-submodules "$URI" "$LIB"
         fi
-        ln -s "../$LIB_DIR/$NAME/$NAME" "$BIN"
+        ln --symbolic --force "$LIB_DIR/$NAME/$NAME" "$BIN"
 
 - bin: rustfmt
   type: stream
