@@ -78,6 +78,7 @@
     script:
       env:
         URI: https://github.com/darold/pgFormatter
+        RELEASE: "v4.4"
       body: |-
         set -eu
         set -o pipefail
@@ -85,11 +86,9 @@
         LIB="$LIB_DIR/$BIN_NAME"
         if [[ -d "$LIB" ]]
         then
-          cd "$LIB" || exit 1
-          git pull --recurse-submodules
-        else
-          git clone --depth=1 --recurse-submodules --shallow-submodules "$URI" "$LIB"
+          rm -rf "$LIB"
         fi
+        git clone --depth=1 --recurse-submodules --shallow-submodules --branch "$RELEASE" "$URI" "$LIB"
         ln --symbolic --force "$LIB/$BIN_NAME" "$BIN_PATH"
 
 - bin: rustfmt
