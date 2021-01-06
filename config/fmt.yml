@@ -98,7 +98,7 @@
           FILE="$DIR.zip"
           mkdir -p "$TMP" "$DIR"
           wget "$URI" --output-document "$FILE"
-          tar xJvf "$FILE" --strip-components 1 --directory "$DIR"
+          tar -xJvf "$FILE" --strip-components 1 --directory "$DIR"
 
           cd "$DIR" || exit 1
           perl 'Makefile.PL' 'DESTDIR=.'
