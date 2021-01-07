@@ -21,17 +21,6 @@
     pip:
       - sortd
 
-- bin: prettydiff
-  type: stream
-  args:
-    - beautify
-    - source:%
-  filetypes:
-    - csv
-  install:
-    npm:
-      - prettydiff
-
 - bin: isort
   type: stream
   args:
