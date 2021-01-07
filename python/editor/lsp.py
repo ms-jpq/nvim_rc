@@ -1,7 +1,6 @@
 from fnmatch import fnmatch
 from pathlib import Path
 from shutil import which
-from string import Template
 
 from pynvim import Nvim
 from std2.pickle import encode
@@ -36,38 +35,32 @@ def _find_root(nvim: Nvim, pattern: RootPattern, filename: str, bufnr: int) -> s
 
 
 _LSP_INIT = """
-local lsp = require "lspconfig"
-local configs = require "lspconfig/configs"
+(function (root_fn, server, cfg, root_cfg)
+  local lsp = require "lspconfig"
+  local configs = require "lspconfig/configs"
 
-local root_dir = function (root_cfg)
-  return function (filename, bufnr)
-    return ${FIND_ROOT}(root_cfg, filename, bufnr)
-  end
-end
-
-local setup = function (cfg, root_cfg)
   if root_cfg ~= vim.NIL then
-    cfg.root_dir = root_dir(root_cfg)
+    cfg.root_dir = function (filename, bufnr)
+        return _G[root_fn](root_cfg, filename, bufnr)
+    end
   end
 
-  if not lsp.${SERVER} then
-    configs.${SERVER} = { default_config = cfg }
+  if not lsp[server] then
+    configs[server] = { default_config = cfg }
   end
 
-  lsp.${SERVER}.setup(cfg)
-end
-
-setup(...)
+  lsp[server].setup(cfg)
+end)(...)
 """
-_TEMPLATE = Template(_LSP_INIT)
 
 for spec in lsp_specs:
     if which(spec.bin):
-        lua = _TEMPLATE.substitute(SERVER=spec.server, FIND_ROOT=_find_root.name)
         config = spec.config
         if spec.args:
             config["cmd"] = tuple((spec.bin, *spec.args))
-        atomic.exec_lua(lua, (config, encode(spec.root)))
+
+        args = (_find_root.name, spec.server, config, encode(spec.root))
+        atomic.exec_lua(_LSP_INIT, args)
 
 
 keymap.n("H") << "<cmd>lua vim.lsp.util.show_line_diagnostics()<cr>"
