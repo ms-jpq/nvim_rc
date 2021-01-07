@@ -56,7 +56,7 @@ end)(...)
 
 for spec in lsp_specs:
     if which(spec.bin):
-        config = spec.config
+        config = {**spec.config}
         if spec.args:
             config["cmd"] = tuple((spec.bin, *spec.args))
 
