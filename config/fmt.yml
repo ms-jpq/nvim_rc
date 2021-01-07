@@ -2,8 +2,7 @@
 - bin: sortd
   args:
     - json
-    - --indent
-    - "0"
+    - --indent=0
   type: stream
   filetypes:
     - json
@@ -45,7 +44,7 @@
   args:
     - --stdin-filepath
     - --
-    - "%"
+    - ${filename}
   type: stream
   filetypes:
     - css
@@ -70,8 +69,7 @@
   type: stream
   args:
     - --no-rcfile
-    - --spaces
-    - "2"
+    - --spaces=${tabsize}
     - --comma-start
     - --comma-end
     - --comma-break

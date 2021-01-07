@@ -37,7 +37,7 @@ You can even configure LSPs from YAML!
   type: fs
   args:
     - --
-    - "%"
+    - ${filename}
   filetypes:
     - python
   install:

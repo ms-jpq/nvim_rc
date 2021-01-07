@@ -60,7 +60,7 @@ def arg_subst(args: Iterable[str], ctx: BufContext) -> Iterator[str]:
                             elif name == "filetype":
                                 yield ctx.filetype
                             elif name == "tabsize":
-                                yield ctx.tabsize
+                                yield str(ctx.tabsize)
                             else:
                                 raise ParseError(arg)
                             break

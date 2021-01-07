@@ -3,7 +3,7 @@
   type: fs
   args:
     - --
-    - "%"
+    - ${filename}
   filetypes:
     - yaml
   install:
@@ -14,7 +14,7 @@
   type: fs
   args:
     - --
-    - "%"
+    - ${filename}
   filetypes:
     - python
   install:
@@ -25,7 +25,7 @@
   type: fs
   args:
     - --
-    - "%"
+    - ${filename}
   filetypes:
     - python
   install:
@@ -36,7 +36,7 @@
   type: fs
   args:
     - --
-    - "%"
+    - ${filename}
   filetypes:
     - javascript
     - javascript.jsx
@@ -52,7 +52,7 @@
   type: fs
   args:
     - --
-    - "%"
+    - ${filename}
   filetypes:
     - sh
     - zsh
@@ -82,7 +82,7 @@
   type: fs
   args:
     - --
-    - "%"
+    - ${filename}
   filetypes:
     - markdown
   install:
@@ -93,7 +93,7 @@
   type: fs
   args:
     - --
-    - "%"
+    - ${filename}
   filetypes:
     - markdown
   install:
@@ -103,7 +103,7 @@
 - bin: write-good
   type: fs
   args:
-    - "%"
+    - ${filename}
   filetypes:
     - markdown
   install:
