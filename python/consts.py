@@ -1,3 +1,4 @@
+from os import environ, pathsep
 from pathlib import Path
 
 DATE_FMT = "%Y-%m-%d %H:%M:%S"
@@ -28,6 +29,15 @@ NPM_DIR = _MODULES_DIR
 PATH_PREPEND = tuple(
     map(str, (BIN_DIR, PIP_DIR / "bin", NPM_DIR / "node_modules" / ".bin"))
 )
+
+
+PATH = environ["PATH"] = pathsep.join((*PATH_PREPEND, environ["PATH"]))
+PYTHONPATH = environ["PYTHONPATH"] = (
+    pathsep.join((str(PIP_DIR), environ["PYTHONPATH"]))
+    if "PYTHONPATH" in environ
+    else str(PIP_DIR)
+)
+
 
 LOGS_DIR = VARS_DIR / "logs"
 UPDATE_LOG = LOGS_DIR / "last_update.txt"
