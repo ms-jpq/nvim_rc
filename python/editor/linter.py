@@ -41,7 +41,7 @@ def current_ctx(nvim: Nvim) -> Tuple[str, BufContext]:
     )
 
 
-def arg_subst(args: Iterable[str], filename: str) -> Iterator[str]:
+def arg_subst(args: Iterable[str], ctx: BufContext) -> Iterator[str]:
     for arg in args:
 
         def it() -> Iterator[str]:
@@ -52,7 +52,7 @@ def arg_subst(args: Iterable[str], filename: str) -> Iterator[str]:
                     if nchar == ESCAPE_CHAR:
                         yield ESCAPE_CHAR
                     else:
-                        yield filename
+                        yield ctx.filename
                         yield nchar
                 else:
                     yield char
@@ -69,9 +69,9 @@ async def set_preview_content(nvim: Nvim, text: str) -> None:
 
 
 async def _linter_output(
-    attr: LinterAttrs, cwd: str, filename: str, body: bytes
+    attr: LinterAttrs, ctx: BufContext, cwd: str, body: bytes
 ) -> str:
-    args = arg_subst(attr.args, filename=filename)
+    args = arg_subst(attr.args, ctx=ctx)
     if not which(attr.bin):
         return f"⁉️: 莫有 {attr.bin}"
     else:
@@ -91,10 +91,7 @@ async def _run(
 ) -> None:
     body = linesep.join(ctx.lines).encode()
     outputs = await gather(
-        *(
-            _linter_output(attr, cwd=cwd, filename=ctx.filename, body=body)
-            for attr in attrs
-        )
+        *(_linter_output(attr, ctx=ctx, cwd=cwd, body=body) for attr in attrs)
     )
     now = datetime.now().strftime(DATE_FMT)
     preview = (linesep * 2).join((now, *outputs))

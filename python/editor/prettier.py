@@ -27,8 +27,8 @@ def _mktemp(path: Path) -> Iterator[Path]:
         new_path.unlink(missing_ok=True)
 
 
-async def _fmt_output(attr: FmtAttrs, cwd: str, temp: Path) -> str:
-    args = arg_subst(attr.args, filename=str(temp))
+async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> str:
+    args = arg_subst(attr.args, ctx=ctx)
     if not which(attr.bin):
         return f"⁉️: 莫有 {attr.bin}"
     else:
@@ -56,7 +56,7 @@ async def _run(
         errs = [
             err
             async for err in aiterify(
-                _fmt_output(attr, cwd=cwd, temp=temp) for attr in attrs
+                _fmt_output(attr, ctx=ctx, cwd=cwd, temp=temp) for attr in attrs
             )
             if err
         ]
