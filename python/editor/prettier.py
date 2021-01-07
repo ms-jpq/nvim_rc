@@ -1,9 +1,10 @@
 from asyncio import gather
-from os import linesep
+from contextlib import contextmanager
+from os import close, linesep
 from pathlib import Path
 from shutil import which
-from tempfile import NamedTemporaryFile
-from typing import IO, Iterable, Iterator
+from tempfile import mkstemp
+from typing import Iterable, Iterator
 
 from pynvim import Nvim
 from pynvim_pp.lib import async_call, write
@@ -15,26 +16,32 @@ from ..registery import keymap, rpc
 from .linter import BufContext, ParseError, arg_subst, current_ctx, set_preview_content
 
 
-async def _fmt_output(
-    attr: FmtAttrs, ctx: BufContext, cwd: str, temp: IO[bytes]
-) -> str:
+@contextmanager
+def _mktemp(path: Path) -> Iterator[Path]:
+    fd, temp = mkstemp(prefix=path.stem, suffix=path.suffix, dir=path.parent)
+    close(fd)
+    new_path = Path(temp)
+    try:
+        yield new_path
+    finally:
+        new_path.unlink(missing_ok=True)
+
+
+async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> str:
     arg_info = f"{attr.bin} {' '.join(attr.args)}"
 
     try:
-        args = arg_subst(attr.args, ctx=ctx, filename=temp.name)
+        args = arg_subst(attr.args, ctx=ctx, filename=str(temp))
     except ParseError:
         return f"⛔️ 语法错误 👉 {arg_info}"
     else:
         if not which(attr.bin):
             return f"⁉️: 莫有 {attr.bin}"
         else:
-            temp.seek(0)
-            stdin = temp.read() if attr.type is FmtType.stream else None
+            stdin = temp.read_bytes() if attr.type is FmtType.stream else None
             proc = await call(attr.bin, *args, stdin=stdin, cwd=cwd)
             if attr.type is FmtType.stream:
-                temp.seek(0)
-                temp.write(proc.out)
-                temp.flush()
+                temp.write_bytes(proc.out)
 
             if proc.code == attr.exit_code:
                 return ""
@@ -47,10 +54,10 @@ async def _fmt_output(
 async def _run(
     nvim: Nvim, ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: str
 ) -> None:
+    body = linesep.join(ctx.lines).encode()
     path = Path(ctx.filename)
-    with NamedTemporaryFile(dir=str(path.parent), suffix=path.suffix) as temp:
-        temp.writelines(b.encode() for line in ctx.lines for b in (line, linesep))
-        temp.flush()
+    with _mktemp(path) as temp:
+        temp.write_bytes(body)
         errs = [
             err
             async for err in aiterify(
@@ -58,15 +65,13 @@ async def _run(
             )
             if err
         ]
-
         errors = (linesep * 2).join(errs)
         if errors:
             await gather(write(nvim, "⛔️ 美化失败"), set_preview_content(nvim, text=errors))
         else:
 
             def cont() -> None:
-                temp.seek(0)
-                lines = temp.read().decode().splitlines()
+                lines = temp.read_text().splitlines()
                 nvim.api.buf_set_lines(ctx.buf, 0, -1, True, lines)
 
             nice = f"✅ 美化成功 👉 {' -> '.join(attr.bin for attr in attrs)}"
