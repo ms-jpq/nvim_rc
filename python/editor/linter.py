@@ -136,7 +136,9 @@ async def _run_linter(nvim: Nvim) -> None:
     if not linters:
         await write(nvim, f"⁉️: 莫有 {ctx.filetype} 的 linter", error=True)
     else:
+        await write(nvim, "⏳⌛⏳…")
         await _run(nvim, ctx=ctx, attrs=linters, cwd=cwd)
+        await write(nvim, "")
 
 
 keymap.n("M") << f"<cmd>lua {_run_linter.name}()<cr>"

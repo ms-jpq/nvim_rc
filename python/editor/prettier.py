@@ -1,3 +1,4 @@
+from asyncio import gather
 from contextlib import contextmanager
 from os import linesep
 from pathlib import Path
@@ -66,7 +67,7 @@ async def _run(
         ]
         errors = (linesep * 2).join(errs)
         if errors:
-            await set_preview_content(nvim, text=errors)
+            await gather(write(nvim, "⛔️ 美化失败"), set_preview_content(nvim, text=errors))
         else:
             nice = f"✅ 美化成功 👉 {' -> '.join(attr.bin for attr in attrs)}{linesep}"
             lines = temp.read_text().splitlines()
@@ -92,6 +93,7 @@ async def run_fmt(nvim: Nvim) -> None:
     if not linters:
         await write(nvim, f"⁉️: 莫有 {ctx.filetype} 的 linter", error=True)
     else:
+        await write(nvim, "⏳⌛⏳…")
         await _run(nvim, ctx=ctx, attrs=linters, cwd=cwd)
 
 
