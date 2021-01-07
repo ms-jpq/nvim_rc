@@ -41,7 +41,8 @@ _LSP_INIT = """
 
   if root_cfg ~= vim.NIL then
     cfg.root_dir = function (filename, bufnr)
-        return _G[root_fn](root_cfg, filename, bufnr)
+        local root = _G[root_fn](root_cfg, filename, bufnr)
+        return root ~= vim.NIL and root or nil
     end
   end
 
