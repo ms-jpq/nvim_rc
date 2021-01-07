@@ -22,13 +22,10 @@
       - sortd
 
 - bin: prettydiff
-  type: fs
+  type: stream
   args:
-    - mode:"beautify"
-    - lang:"csv"
-    - readmethod:"filescreen"
-    - endquietly:"quiet"
-    - source:"%:p"
+    - beautify
+    - source:%
   filetypes:
     - csv
   install:
