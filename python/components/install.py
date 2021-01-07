@@ -163,18 +163,18 @@ async def install() -> int:
     for fut in as_completed((*_git(), *_pip(), *_npm(), *_script())):
         for debug, proc in await fut:
             if proc.code == 0:
-                print(debug)
                 print("✅ 👉", proc.prog, *proc.args)
+                print(debug)
                 print(proc.out.decode())
             else:
                 has_error = True
-                print(debug, file=stderr)
                 print(
                     f"⛔️ - {proc.code} 👉",
                     proc.prog,
                     *proc.args,
                     file=stderr,
                 )
+                print(debug, file=stderr)
                 print(proc.err, file=stderr)
 
     return has_error
