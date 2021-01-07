@@ -25,6 +25,7 @@ class BufContext:
     buf: Buffer
     filename: str
     filetype: str
+    tabsize: int
     lines: Sequence[str]
 
 
@@ -33,8 +34,11 @@ def current_ctx(nvim: Nvim) -> Tuple[str, BufContext]:
     buf: Buffer = nvim.api.get_current_buf()
     filename: str = nvim.api.buf_get_name(buf)
     filetype: str = nvim.api.buf_get_option(buf, "filetype")
+    tabsize: int = nvim.api.buf_get_option(buf, "tabstop")
     lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, -1, True)
-    return cwd, BufContext(buf=buf, filename=filename, filetype=filetype, lines=lines)
+    return cwd, BufContext(
+        buf=buf, filename=filename, filetype=filetype, tabsize=tabsize, lines=lines
+    )
 
 
 def arg_subst(args: Iterable[str], filename: str) -> Iterator[str]:
