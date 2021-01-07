@@ -1,10 +1,9 @@
 from asyncio import gather
 from dataclasses import dataclass
 from datetime import datetime
-from itertools import repeat
 from os import linesep
 from shutil import which
-from typing import Iterable, Iterator, Sequence, Tuple
+from typing import Iterable, Iterator, MutableSequence, Sequence, Tuple
 
 from pynvim import Nvim
 from pynvim.api.buffer import Buffer
@@ -16,8 +15,6 @@ from std2.asyncio.subprocess import call
 from ..config.linter import LinterAttrs, LinterType, linter_specs
 from ..consts import DATE_FMT
 from ..registery import keymap, rpc
-
-ESCAPE_CHAR = "%"
 
 
 @dataclass(frozen=True)
@@ -41,23 +38,43 @@ def current_ctx(nvim: Nvim) -> Tuple[str, BufContext]:
     )
 
 
+class ParseError(Exception):
+    ...
+
+
 def arg_subst(args: Iterable[str], ctx: BufContext) -> Iterator[str]:
-    for arg in args:
-
-        def it() -> Iterator[str]:
-            chars = iter(arg)
-            for char in chars:
-                if char == ESCAPE_CHAR:
-                    nchar = next(chars, "")
-                    if nchar == ESCAPE_CHAR:
-                        yield ESCAPE_CHAR
+    def subst(arg: str) -> Iterator[str]:
+        it = iter(arg)
+        for c in it:
+            if c == "$":
+                nc = next(it, "")
+                if nc == "$":
+                    yield nc
+                elif nc == "{":
+                    chars: MutableSequence[str] = []
+                    for c in it:
+                        if c == "}":
+                            name = "".join(chars)
+                            if name == "filename":
+                                yield ctx.filename
+                            elif name == "filetype":
+                                yield ctx.filetype
+                            elif name == "tabsize":
+                                yield ctx.tabsize
+                            else:
+                                raise ParseError(arg)
+                            break
+                        else:
+                            chars.append(c)
                     else:
-                        yield ctx.filename
-                        yield nchar
+                        raise ParseError(arg)
                 else:
-                    yield char
+                    raise ParseError(arg)
+            else:
+                yield c
 
-        yield "".join(it())
+    for arg in args:
+        yield "".join(subst(arg))
 
 
 async def set_preview_content(nvim: Nvim, text: str) -> None:
