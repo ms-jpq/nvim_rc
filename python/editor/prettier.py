@@ -69,14 +69,13 @@ async def _run(
         if errors:
             await gather(write(nvim, "⛔️ 美化失败"), set_preview_content(nvim, text=errors))
         else:
-            nice = f"✅ 美化成功 👉 {' -> '.join(attr.bin for attr in attrs)}{linesep}"
-            lines = temp.read_text().splitlines()
 
             def cont() -> None:
+                lines = temp.read_text().splitlines()
                 nvim.api.buf_set_lines(ctx.buf, 0, -1, True, lines)
-                nvim.out_write(nice)
 
-            await async_call(nvim, cont)
+            nice = f"✅ 美化成功 👉 {' -> '.join(attr.bin for attr in attrs)}"
+            await gather(write(nvim, nice), async_call(nvim, cont))
 
 
 def _fmts_for(filetype: str) -> Iterator[FmtAttrs]:
