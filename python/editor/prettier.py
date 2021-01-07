@@ -28,10 +28,13 @@ async def _fmt_output(
         if not which(attr.bin):
             return f"⁉️: 莫有 {attr.bin}"
         else:
+            temp.seek(0)
             stdin = temp.read() if attr.type is FmtType.stream else None
             proc = await call(attr.bin, *args, stdin=stdin, cwd=cwd)
             if attr.type is FmtType.stream:
+                temp.seek(0)
                 temp.write(proc.out)
+                temp.flush()
 
             if proc.code == attr.exit_code:
                 return ""
@@ -46,7 +49,8 @@ async def _run(
 ) -> None:
     path = Path(ctx.filename)
     with NamedTemporaryFile(dir=str(path.parent), suffix=path.suffix) as temp:
-        temp.writelines(line.encode() for line in ctx.lines)
+        temp.writelines(b.encode() for line in ctx.lines for b in (line, linesep))
+        temp.flush()
         errs = [
             err
             async for err in aiterify(
@@ -55,17 +59,18 @@ async def _run(
             if err
         ]
 
-    errors = (linesep * 2).join(errs)
-    if errors:
-        await gather(write(nvim, "⛔️ 美化失败"), set_preview_content(nvim, text=errors))
-    else:
+        errors = (linesep * 2).join(errs)
+        if errors:
+            await gather(write(nvim, "⛔️ 美化失败"), set_preview_content(nvim, text=errors))
+        else:
 
-        def cont() -> None:
-            lines = tuple(line.decode() for line in temp.readlines())
-            nvim.api.buf_set_lines(ctx.buf, 0, -1, True, lines)
+            def cont() -> None:
+                temp.seek(0)
+                lines = temp.read().decode().splitlines()
+                nvim.api.buf_set_lines(ctx.buf, 0, -1, True, lines)
 
-        nice = f"✅ 美化成功 👉 {' -> '.join(attr.bin for attr in attrs)}"
-        await gather(write(nvim, nice), async_call(nvim, cont))
+            nice = f"✅ 美化成功 👉 {' -> '.join(attr.bin for attr in attrs)}"
+            await gather(write(nvim, nice), async_call(nvim, cont))
 
 
 def _fmts_for(filetype: str) -> Iterator[FmtAttrs]:
