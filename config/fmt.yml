@@ -1,6 +1,7 @@
 ---
-- bin: sjson
+- bin: sortd
   args:
+    - json
     - --indent
     - "0"
   type: stream
@@ -10,13 +11,29 @@
     pip:
       - sortd
 
-- bin: scfg
+- bin: sortd
   type: stream
+  args:
+    - cfg
   filetypes:
     - cfg
   install:
     pip:
       - sortd
+
+- bin: prettydiff
+  type: fs
+  args:
+    - mode:"beautify"
+    - lang:"csv"
+    - readmethod:"filescreen"
+    - endquietly:"quiet"
+    - source:"%:p"
+  filetypes:
+    - csv
+  install:
+    npm:
+      - prettydiff
 
 - bin: isort
   type: stream
