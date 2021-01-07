@@ -45,11 +45,11 @@ class ParseError(Exception):
 def arg_subst(args: Iterable[str], ctx: BufContext) -> Iterator[str]:
     def var_sub(arg: str, name: str) -> str:
         if name == "filename":
-            yield ctx.filename
+            return ctx.filename
         elif name == "filetype":
-            yield ctx.filetype
+            return ctx.filetype
         elif name == "tabsize":
-            yield str(ctx.tabsize)
+            return str(ctx.tabsize)
         else:
             raise ParseError(arg)
 
