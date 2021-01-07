@@ -1,5 +1,6 @@
 from fnmatch import fnmatch
 from pathlib import Path
+from shutil import which
 from string import Template
 
 from pynvim import Nvim
@@ -61,8 +62,12 @@ setup(...)
 _TEMPLATE = Template(_LSP_INIT)
 
 for spec in lsp_specs:
-    lua = _TEMPLATE.substitute(SERVER=spec.server, FIND_ROOT=_find_root.name)
-    atomic.exec_lua(lua, (spec.config, encode(spec.root)))
+    if which(spec.bin):
+        lua = _TEMPLATE.substitute(SERVER=spec.server, FIND_ROOT=_find_root.name)
+        config = spec.config
+        if spec.args:
+            config["cmd"] = tuple((spec.bin, *spec.args))
+        atomic.exec_lua(lua, (config, encode(spec.root)))
 
 
 keymap.n("H") << "<cmd>lua vim.lsp.util.show_line_diagnostics()<cr>"
