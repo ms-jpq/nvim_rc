@@ -43,6 +43,16 @@ class ParseError(Exception):
 
 
 def arg_subst(args: Iterable[str], ctx: BufContext) -> Iterator[str]:
+    def var_sub(arg: str, name: str) -> str:
+        if name == "filename":
+            yield ctx.filename
+        elif name == "filetype":
+            yield ctx.filetype
+        elif name == "tabsize":
+            yield str(ctx.tabsize)
+        else:
+            raise ParseError(arg)
+
     def subst(arg: str) -> Iterator[str]:
         it = iter(arg)
         for c in it:
@@ -55,14 +65,7 @@ def arg_subst(args: Iterable[str], ctx: BufContext) -> Iterator[str]:
                     for c in it:
                         if c == "}":
                             name = "".join(chars)
-                            if name == "filename":
-                                yield ctx.filename
-                            elif name == "filetype":
-                                yield ctx.filetype
-                            elif name == "tabsize":
-                                yield str(ctx.tabsize)
-                            else:
-                                raise ParseError(arg)
+                            yield var_sub(arg, name=name)
                             break
                         else:
                             chars.append(c)
