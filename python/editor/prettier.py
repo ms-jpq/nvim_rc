@@ -13,7 +13,7 @@ from std2.asyncio.subprocess import call
 
 from ..config.fmt import FmtAttrs, FmtType, fmt_specs
 from ..registery import keymap, rpc
-from .linter import BufContext, arg_subst, current_ctx, set_preview_content
+from .linter import BufContext, ParseError, arg_subst, current_ctx, set_preview_content
 
 
 @contextmanager
@@ -28,22 +28,27 @@ def _mktemp(path: Path) -> Iterator[Path]:
 
 
 async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> str:
-    args = arg_subst(attr.args, ctx=ctx)
-    if not which(attr.bin):
-        return f"⁉️: 莫有 {attr.bin}"
-    else:
-        stdin = temp.read_bytes() if attr.type is FmtType.stream else None
-        proc = await call(attr.bin, *args, stdin=stdin, cwd=cwd)
-        if attr.type is FmtType.stream:
-            temp.write_bytes(proc.out)
+    arg_info = f"{attr.bin} {' '.join(attr.args)}"
 
-        if proc.code == attr.exit_code:
-            return ""
+    try:
+        args = arg_subst(attr.args, ctx=ctx)
+    except ParseError:
+        return f"⛔️ 语法错误 👉 {arg_info}"
+    else:
+        if not which(attr.bin):
+            return f"⁉️: 莫有 {attr.bin}"
         else:
-            arg_info = f"{attr.bin} {' '.join(attr.args)}"
-            heading = f"⛔️ - {proc.code} 👉 {arg_info}"
-            print_out = linesep.join((heading, proc.err))
-            return print_out
+            stdin = temp.read_bytes() if attr.type is FmtType.stream else None
+            proc = await call(attr.bin, *args, stdin=stdin, cwd=cwd)
+            if attr.type is FmtType.stream:
+                temp.write_bytes(proc.out)
+
+            if proc.code == attr.exit_code:
+                return ""
+            else:
+                heading = f"⛔️ - {proc.code} 👉 {arg_info}"
+                print_out = linesep.join((heading, proc.err))
+                return print_out
 
 
 async def _run(

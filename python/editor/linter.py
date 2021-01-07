@@ -91,19 +91,24 @@ async def set_preview_content(nvim: Nvim, text: str) -> None:
 async def _linter_output(
     attr: LinterAttrs, ctx: BufContext, cwd: str, body: bytes
 ) -> str:
-    args = arg_subst(attr.args, ctx=ctx)
-    if not which(attr.bin):
-        return f"⁉️: 莫有 {attr.bin}"
+    arg_info = f"{attr.bin} {' '.join(attr.args)}"
+
+    try:
+        args = arg_subst(attr.args, ctx=ctx)
+    except ParseError:
+        return f"⛔️ 语法错误 👉 {arg_info}"
     else:
-        stdin = body if attr.type is LinterType.stream else None
-        proc = await call(attr.bin, *args, stdin=stdin, cwd=cwd)
-        arg_info = f"{attr.bin} {' '.join(attr.args)}"
-        if proc.code == attr.exit_code:
-            heading = f"✅ 👉 {arg_info}"
+        if not which(attr.bin):
+            return f"⁉️: 莫有 {attr.bin}"
         else:
-            heading = f"⛔️ - {proc.code} 👉 {arg_info}"
-        print_out = linesep.join((heading, proc.out.decode(), proc.err))
-        return print_out
+            stdin = body if attr.type is LinterType.stream else None
+            proc = await call(attr.bin, *args, stdin=stdin, cwd=cwd)
+            if proc.code == attr.exit_code:
+                heading = f"✅ 👉 {arg_info}"
+            else:
+                heading = f"⛔️ - {proc.code} 👉 {arg_info}"
+            print_out = linesep.join((heading, proc.out.decode(), proc.err))
+            return print_out
 
 
 async def _run(
