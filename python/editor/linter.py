@@ -42,10 +42,10 @@ class ParseError(Exception):
     ...
 
 
-def arg_subst(args: Iterable[str], ctx: BufContext) -> Iterator[str]:
+def arg_subst(args: Iterable[str], ctx: BufContext, filename: str) -> Iterator[str]:
     def var_sub(arg: str, name: str) -> str:
         if name == "filename":
-            return ctx.filename
+            return filename
         elif name == "filetype":
             return ctx.filetype
         elif name == "tabsize":
@@ -94,7 +94,7 @@ async def _linter_output(
     arg_info = f"{attr.bin} {' '.join(attr.args)}"
 
     try:
-        args = arg_subst(attr.args, ctx=ctx)
+        args = arg_subst(attr.args, ctx=ctx, filename=ctx.filename)
     except ParseError:
         return f"⛔️ 语法错误 👉 {arg_info}"
     else:
