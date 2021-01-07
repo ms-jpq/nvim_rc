@@ -1,20 +1,10 @@
 ---
 - bin: sortd
   args:
-    - json
-    - --indent=0
+    - ${filetype}
   type: stream
   filetypes:
     - json
-  install:
-    pip:
-      - sortd
-
-- bin: sortd
-  type: stream
-  args:
-    - cfg
-  filetypes:
     - cfg
   install:
     pip:
