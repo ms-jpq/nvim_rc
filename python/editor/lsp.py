@@ -36,6 +36,7 @@ def _find_root(nvim: Nvim, pattern: RootPattern, filename: str, bufnr: int) -> s
 
 _LSP_INIT = """
 local lsp = require "lspconfig"
+local configs = require "lspconfig/configs"
 
 local root_dir = function (root_cfg)
   return function (filename, bufnr)
@@ -47,6 +48,11 @@ local setup = function (cfg, root_cfg)
   if root_cfg ~= vim.NIL then
     cfg.root_dir = root_dir(root_cfg)
   end
+
+  if not lsp.${SERVER} then
+    configs.${SERVER} = { default_config = cfg }
+  end
+
   lsp.${SERVER}.setup(cfg)
 end
 
