@@ -1,13 +1,13 @@
 from ..registery import keymap, settings
 
 # highlight search results
-settings["hlsearch"] = True
+# settings["hlsearch"] = True
 # find result during search
 settings["incsearch"] = True
 # search results shown on side
 settings["inccommand"] = "nosplit"
 # use ripgrep
-settings["grepprg"] = "rg\ --vimgrep"
+settings["grepprg"] = r"rg\ --vimgrep"
 
 
 # clear hlsearch result
@@ -25,5 +25,5 @@ keymap.n("N") << "Nzz"
 
 
 # use no magic
-keymap.nv("/", silent=False) << "/\V"
-keymap.nv("?", silent=False) << "?\V"
+keymap.nv("/", silent=False) << r"/\V"
+keymap.nv("?", silent=False) << r"?\V"
