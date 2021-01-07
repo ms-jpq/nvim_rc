@@ -1,5 +1,4 @@
 from contextlib import contextmanager
-from itertools import repeat
 from os import linesep
 from pathlib import Path
 from shutil import which
