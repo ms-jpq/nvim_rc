@@ -54,20 +54,9 @@ keymap.n("<leader>-", unique=True) << f"<cmd>lua {new_window.name}(false)<cr>"
 # kill current buf
 keymap.n("<leader>x") << "<cmd>bwipeout!<cr>"
 # kill current win
-keymap.n("<leader>w") << "<cmd>close<cr>"
-
-
-@rpc(blocking=True)
-def close_others(nvim: Nvim) -> None:
-    tab: Tabpage = nvim.api.get_current_tabpage()
-    win: Window = nvim.api.get_current_win()
-    wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)
-    for w in wins:
-        if w != win:
-            nvim.api.win_close(w, True)
-
-
-keymap.n("<leader>W") << f"<cmd>lua {close_others.name}()<cr>"
+keymap.n("<leader>w") << "<cmd>wincmd q<cr>"
+# kill other win
+keymap.n("<leader>W") << "<cmd>wincmd o<cr>"
 
 
 # break window into tab
