@@ -63,7 +63,7 @@ You can even configure LSPs from YAML!
 
 ### Multiple Package Management
 
-Will install NPM & PIP & git packages for you in their **private** namespace.
+Will install NPM & PIP & go & git packages for you in their **private** namespace.
 
 Only accessible from inside `neovim`.
 
