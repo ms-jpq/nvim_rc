@@ -6,7 +6,7 @@
     - markdown
 
   config:
-    init_options:
+    initialize:
       linters:
         shellcheck:
           sourceName: shellcheck
