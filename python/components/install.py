@@ -15,6 +15,7 @@ from ..config.lsp import lsp_specs
 from ..config.pkgs import pkg_specs
 from ..consts import (
     BIN_DIR,
+    GO_DIR,
     INSTALL_SCRIPT,
     LIB_DIR,
     NPM_DIR,
@@ -48,6 +49,15 @@ def _npm_specs() -> Iterator[str]:
         yield from i_spec.install.npm
     for f_spec in fmt_specs:
         yield from f_spec.install.npm
+
+
+def _go_specs() -> Iterator[str]:
+    for l_spec in lsp_specs:
+        yield from l_spec.install.go
+    for i_spec in linter_specs:
+        yield from i_spec.install.go
+    for f_spec in fmt_specs:
+        yield from f_spec.install.go
 
 
 def _script_specs() -> Iterator[Tuple[str, ScriptSpec]]:
@@ -133,6 +143,26 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
         yield cont()
 
 
+def _go() -> Iterator[Awaitable[SortOfMonoid]]:
+    GO_DIR.mkdir(parents=True, exist_ok=True)
+    cmd = "go"
+
+    if which(cmd):
+
+        async def cont() -> SortOfMonoid:
+            p = await call(
+                cmd,
+                "get",
+                "--",
+                *_go_specs(),
+                env={"GOPATH": str(GO_DIR)},
+                cwd=str(GO_DIR),
+            )
+            return (("", p),)
+
+        yield cont()
+
+
 def _script() -> Iterator[Awaitable[SortOfMonoid]]:
     for path in (LIB_DIR, BIN_DIR):
         path.mkdir(parents=True, exist_ok=True)
@@ -160,7 +190,7 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
 
 async def install() -> int:
     has_error = False
-    for fut in as_completed((*_git(), *_pip(), *_npm(), *_script())):
+    for fut in as_completed((*_git(), *_pip(), *_npm(), *_go(), *_script())):
         for debug, proc in await fut:
             if proc.code == 0:
                 print("✅ 👉", proc.prog, *proc.args)

@@ -13,4 +13,5 @@ class ScriptSpec:
 class InstallSpec:
     pip: Sequence[str] = ()
     npm: Sequence[str] = ()
+    go: Sequence[str] = ()
     script: ScriptSpec = ScriptSpec()
