@@ -14,7 +14,7 @@ RUN apt update && \
 
 
 # Dependencies
-RUN apt install -y wget perl go
+RUN apt install -y wget perl golang-go
 
 
 # INSTALL
