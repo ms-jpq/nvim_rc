@@ -54,7 +54,7 @@ keymap.n("<leader>-", unique=True) << f"<cmd>lua {new_window.name}(false)<cr>"
 # kill current buf
 keymap.n("<leader>x") << "<cmd>bwipeout!<cr>"
 # kill current win
-keymap.n("<leader>w") << "<cmd>wincmd w<cr>"
+keymap.n("<leader>w") << "<cmd>close<cr>"
 
 
 @rpc(blocking=True)
