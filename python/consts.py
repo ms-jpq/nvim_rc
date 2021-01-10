@@ -28,7 +28,10 @@ PIP_DIR = _MODULES_DIR / "pip_modules"
 NPM_DIR = _MODULES_DIR
 GO_DIR = _MODULES_DIR / "go_modules"
 PATH_PREPEND = tuple(
-    map(str, (BIN_DIR, PIP_DIR / "bin", NPM_DIR / "node_modules" / ".bin"))
+    map(
+        str,
+        (BIN_DIR, PIP_DIR / "bin", NPM_DIR / "node_modules" / ".bin", GO_DIR / "bin"),
+    )
 )
 
 
