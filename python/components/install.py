@@ -155,7 +155,7 @@ def _go() -> Iterator[Awaitable[SortOfMonoid]]:
                 "get",
                 "--",
                 *_go_specs(),
-                env={"GOPATH": str(VARS_DIR)},
+                env={"GO111MODULE": "on", "GOPATH": str(VARS_DIR)},
                 cwd=str(GO_DIR),
             )
             return (("", p),)
