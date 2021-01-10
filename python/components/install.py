@@ -184,7 +184,7 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
             )
             return ((pkg.body, p),)
 
-        if which(pkg.interpreter) and pkg.body:
+        if which(pkg.interpreter) and all(map(which, pkg.required)) and pkg.body:
             yield cont(bin, pkg)
 
 

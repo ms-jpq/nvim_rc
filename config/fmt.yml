@@ -67,6 +67,9 @@
     - sql
   install:
     script:
+      required:
+          - git
+          - perl
       env:
         URI: https://github.com/darold/pgFormatter
         RELEASE: "v4.4"
