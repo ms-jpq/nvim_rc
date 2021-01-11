@@ -1,7 +1,6 @@
 from typing import Sequence
 
 from pynvim.api.nvim import Buffer, Nvim, Tabpage, Window
-from pynvim_pp.float_win import list_floatwins
 
 from ..registery import keymap, rpc, settings
 

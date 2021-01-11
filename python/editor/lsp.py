@@ -63,6 +63,8 @@ for spec in lsp_specs:
         args = (_find_root.name, spec.server, config, encode(spec.root))
         atomic.exec_lua(_LSP_INIT, args)
 
+atomic.command("doautoall Filetype")
+
 
 keymap.n("H") << "<cmd>lua vim.lsp.util.show_line_diagnostics()<cr>"
 keymap.n("K") << "<cmd>lua vim.lsp.buf.hover()<cr>"
