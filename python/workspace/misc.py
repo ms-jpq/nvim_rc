@@ -1,6 +1,8 @@
-from ..registery import settings, atomic
+from typing import Sequence
 
-atomic.command("filetype on")
+from pynvim.api import Buffer, Nvim
+
+from ..registery import atomic, rpc, settings
 
 # do not exec arbitrary code
 settings["nomodeline"] = True
@@ -25,3 +27,15 @@ settings["wrap"] = True
 
 # line wrap follow indent
 settings["breakindent"] = True
+
+# open with scratch buffer, like emacs
+@rpc(blocking=True)
+def _scratch_buffer(nvim: Nvim) -> None:
+    bufs: Sequence[Buffer] = nvim.api.list_bufs()
+    for buf in bufs:
+        name = nvim.api.buf_get_name(buf)
+        if not name:
+            nvim.api.buf_set_option(buf, "buftype", "nofile")
+
+
+atomic.exec_lua(f"{_scratch_buffer.name}()", ())

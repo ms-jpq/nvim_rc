@@ -1,4 +1,6 @@
 ---
+- uri: https://github.com/neovim/nvim-lspconfig
+
 - uri: https://github.com/ms-jpq/chadtree
   keys:
     - modes: n
@@ -8,8 +10,6 @@
 - uri: https://github.com/ms-jpq/kok.nvim
   lua: |-
     -- vim.o.completefunc = "KoKomnifunc"
-
-- uri: https://github.com/neovim/nvim-lspconfig
 
 - uri: https://github.com/junegunn/fzf
 
@@ -42,7 +42,6 @@
     lightline:
       colorscheme: edge
   viml: |-
-    set termguicolors
     set background=light
     colorscheme edge
 

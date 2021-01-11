@@ -7,6 +7,8 @@ from ..registery import autocmd, rpc, settings
 
 # use 256 colours
 settings["termguicolors"] = True
+# remove welcome message
+settings["shortmess"] += "I"
 # always show status line
 settings["laststatus"] = 2
 # always show issues column
@@ -46,18 +48,3 @@ def _hl_yank(nvim: Nvim) -> None:
 
 
 autocmd("TextYankPost") << f"lua {_hl_yank.name}()"
-
-
-# remove welcome message
-settings["shortmess"] += "I"
-# welcome screen
-@rpc(blocking=True)
-def _welcome_screen(nvim: Nvim) -> None:
-    bufs: Sequence[Buffer] = nvim.api.list_bufs()
-    for buf in bufs:
-        name = nvim.api.buf_get_name(buf)
-        if not name:
-            nvim.api.buf_set_option(name, "buftype", "nofile")
-
-
-autocmd("VimEnter") << f"lua {_welcome_screen.name}()"
