@@ -27,20 +27,23 @@ VIM_DIR = _MODULES_DIR / "vim_modules"
 PIP_DIR = _MODULES_DIR / "pip_modules"
 NPM_DIR = _MODULES_DIR
 GO_DIR = _MODULES_DIR / "go_modules"
+
+
 PATH_PREPEND = tuple(
     map(
         str,
         (BIN_DIR, PIP_DIR / "bin", NPM_DIR / "node_modules" / ".bin", GO_DIR / "bin"),
     )
 )
-
-
 PATH = environ["PATH"] = pathsep.join((*PATH_PREPEND, environ["PATH"]))
 PYTHONPATH = environ["PYTHONPATH"] = (
     pathsep.join((str(PIP_DIR), environ["PYTHONPATH"]))
     if "PYTHONPATH" in environ
     else str(PIP_DIR)
 )
+
+
+TMP_DIR = VARS_DIR / "tmp"
 
 
 LOGS_DIR = VARS_DIR / "logs"

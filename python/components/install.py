@@ -20,6 +20,7 @@ from ..consts import (
     LIB_DIR,
     NPM_DIR,
     PIP_DIR,
+    TMP_DIR,
     UPDATE_LOG,
     VARS_DIR,
     VIM_DIR,
@@ -164,7 +165,7 @@ def _go() -> Iterator[Awaitable[SortOfMonoid]]:
 
 
 def _script() -> Iterator[Awaitable[SortOfMonoid]]:
-    for path in (LIB_DIR, BIN_DIR):
+    for path in (BIN_DIR, LIB_DIR, TMP_DIR):
         path.mkdir(parents=True, exist_ok=True)
 
     for bin, pkg in _script_specs():
@@ -174,6 +175,7 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
                 "BIN_NAME": bin,
                 "BIN_PATH": str(BIN_DIR / bin),
                 "LIB_PATH": str(LIB_DIR / bin),
+                "TMP_DIR": str(TMP_DIR),
             }
             stdin = pkg.body.encode()
             p = await call(
