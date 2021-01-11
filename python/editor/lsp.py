@@ -1,14 +1,35 @@
 from fnmatch import fnmatch
 from pathlib import Path
 from shutil import which
+from typing import Any, Mapping, MutableMapping
 
 from pynvim import Nvim
 from pynvim_pp.lib import write
 from std2.pickle import encode
 from std2.types import never
 
-from ..config.lsp import RootPattern, RPFallback, lsp_specs
+from ..config.lsp import LspAttrs, RootPattern, RPFallback, lsp_specs
 from ..registery import atomic, keymap, rpc
+
+keymap.n("H") << "<cmd>lua vim.lsp.util.show_line_diagnostics()<cr>"
+keymap.n("K") << "<cmd>lua vim.lsp.buf.hover()<cr>"
+keymap.n("L") << "<cmd>lua vim.lsp.buf.code_action()<cr>"
+keymap.n("R") << "<cmd>lua vim.lsp.buf.rename()<cr>"
+
+keymap.n("gp") << "<cmd>lua vim.lsp.buf.definition()<cr>"
+keymap.n("gP") << "<cmd>lua vim.lsp.buf.references()<cr>"
+
+keymap.n("gl") << "<cmd>lua vim.lsp.buf.declaration()<cr>"
+keymap.n("gL") << "<cmd>lua vim.lsp.buf.implementation()<cr>"
+
+keymap.n("go") << "<cmd>lua vim.lsp.buf.signature_help()<cr>"
+keymap.n("gO") << "<cmd>lua vim.lsp.buf.type_definition()<cr>"
+
+keymap.n("ge") << "<cmd>lua vim.lsp.buf.document_symbol()<cr>"
+keymap.n("gE") << "<cmd>lua vim.lsp.buf.workspace_symbol()<cr>"
+
+keymap.n("g[") << "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>"
+keymap.n("g]") << "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>"
 
 
 @rpc(blocking=True)
@@ -64,14 +85,24 @@ _LSP_INIT = """
 end)(...)
 """
 
+
+def _encode_spec(spec: LspAttrs) -> Mapping[str, Any]:
+    config: MutableMapping[str, Any] = {}
+    if spec.args:
+        config["cmd"] = tuple((spec.bin, *spec.args))
+    if spec.filetypes:
+        config["filetypes"] = spec.filetypes
+    if spec.init_options:
+        config["init_options"] = spec.init_options
+    if spec.settings:
+        config["settings"] = spec.settings
+
+    return config
+
+
 for spec in lsp_specs:
     if which(spec.bin):
-        config = {**spec.config}
-        if spec.filetypes:
-            config["filetypes"] = spec.filetypes
-        if spec.args:
-            config["cmd"] = tuple((spec.bin, *spec.args))
-
+        config = _encode_spec(spec)
         args = (
             _find_root.name,
             _on_attach.name,
@@ -82,24 +113,3 @@ for spec in lsp_specs:
         atomic.exec_lua(_LSP_INIT, args)
 
 atomic.command("doautoall Filetype")
-
-
-keymap.n("H") << "<cmd>lua vim.lsp.util.show_line_diagnostics()<cr>"
-keymap.n("K") << "<cmd>lua vim.lsp.buf.hover()<cr>"
-keymap.n("L") << "<cmd>lua vim.lsp.buf.code_action()<cr>"
-keymap.n("R") << "<cmd>lua vim.lsp.buf.rename()<cr>"
-
-keymap.n("gp") << "<cmd>lua vim.lsp.buf.definition()<cr>"
-keymap.n("gP") << "<cmd>lua vim.lsp.buf.references()<cr>"
-
-keymap.n("gl") << "<cmd>lua vim.lsp.buf.declaration()<cr>"
-keymap.n("gL") << "<cmd>lua vim.lsp.buf.implementation()<cr>"
-
-keymap.n("go") << "<cmd>lua vim.lsp.buf.signature_help()<cr>"
-keymap.n("gO") << "<cmd>lua vim.lsp.buf.type_definition()<cr>"
-
-keymap.n("ge") << "<cmd>lua vim.lsp.buf.document_symbol()<cr>"
-keymap.n("gE") << "<cmd>lua vim.lsp.buf.workspace_symbol()<cr>"
-
-keymap.n("g[") << "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>"
-keymap.n("g]") << "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>"

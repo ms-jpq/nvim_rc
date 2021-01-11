@@ -5,52 +5,32 @@
     - sh
     - markdown
 
-  config:
-    initialize:
-      linters:
-        shellcheck:
-          sourceName: shellcheck
-          command: shellcheck
-          args:
-            - --format
-            - json
-            - "-"
-          debounce: 100
-          parseJson:
-            column: column
-            endColumn: endColumn
-            endLine: endLine
-            line: line
-            message: ${message} [${code}]
-            security: level
-          securities:
-            error: error
-            info: info
-            style: hint
-            warning: warning
+  init_options:
+    linters:
+      shellcheck:
+        sourceName: shellcheck
+        command: shellcheck
+        args:
+          - --format
+          - json
+          - "-"
+        debounce: 100
+        parseJson:
+          column: column
+          endColumn: endColumn
+          endLine: endLine
+          line: line
+          message: ${message} [${code}]
+          security: level
+        securities:
+          error: error
+          info: info
+          style: hint
+          warning: warning
 
-        markdownlint:
-          sourceName: markdownlint
-          command: markdownlint
-          args:
-            - --stdin
-          debounce: 100
-          formatLines: 1
-          formatPattern:
-            - ^.*?:\s+(\d+):\s+(.*)(\r|\n)*$
-            - column: -1
-              line: 1
-              message: 2
-          isStderr: true
-          offsetColumn: 0
-          offsetLine: 0
-
-      filetypes:
-        sh:
-          - shellcheck
-        markdown:
-          - markdownlint
-          - write_good
+    filetypes:
+      sh:
+        - shellcheck
 
   install:
     npm:

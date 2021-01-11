@@ -29,7 +29,8 @@ class LspAttrs:
     args: Sequence[str] = ()
     filetypes: FrozenSet[str] = frozenset()
     root: Optional[RootPattern] = None
-    config: Mapping[str, Any] = field(default_factory=dict)
+    init_options: Mapping[str, Any] = field(default_factory=dict)
+    settings: Mapping[str, Any] = field(default_factory=dict)
     install: InstallSpec = InstallSpec()
 
 
