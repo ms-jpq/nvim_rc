@@ -89,4 +89,4 @@ def _kill_term_wins(nvim: Nvim, win_id: str) -> None:
             nvim.api.win_close(win, True)
 
 
-# autocmd("WinClosed") << f"lua {_kill_term_wins.name}(vim.fn.expand('<afile>'))"
+autocmd("WinClosed") << f"lua {_kill_term_wins.name}(vim.fn.expand('<afile>'))"

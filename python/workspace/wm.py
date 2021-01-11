@@ -54,33 +54,10 @@ keymap.n("<leader>-") << f"<cmd>lua {_new_window.name}(false)<cr>"
 
 # kill current buf
 keymap.n("<leader>x") << "<cmd>bwipeout!<cr>"
-
-
-@rpc(blocking=True)
-def _close_self(nvim: Nvim) -> None:
-    fws = tuple(list_floatwins(nvim))
-    from pynvim_pp.lib import s_write
-    s_write(nvim, fws)
-    if fws:
-        for win in fws:
-            nvim.api.win_close(win, True)
-    else:
-        win: Window = nvim.api.get_current_win()
-        nvim.api.win_close(win, True)
-
-
-@rpc(blocking=True)
-def _close_others(nvim: Nvim) -> None:
-    tab: Tabpage = nvim.api.get_current_tabpage()
-    win: Window = nvim.api.get_current_win()
-    wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)
-    for w in wins:
-        if w != win:
-            nvim.api.win_close(w, True)
-
-
-keymap.n("<leader>w") << f"<cmd>lua {_close_self.name}()<cr>"
-keymap.n("<leader>W") << f"<cmd>lua {_close_others.name}()<cr>"
+# close self
+keymap.n("<leader>w") << f"<cmd>close<cr>"
+# close others
+keymap.n("<leader>W") << f"<cmd>wincmd o<cr>"
 
 
 # break window into tab

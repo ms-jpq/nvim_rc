@@ -25,7 +25,7 @@ settings["backupskip"] = ""
 settings["backupdir"] = str(BACKUP_DIR)
 settings["backupext"] = ".bak"
 
-autocmd("FocusLost", "VimLeavePre", modifiers=("*", "nested")) << "silent! wa"
+autocmd("FocusLost", "VimLeavePre", modifiers=("*", "++nested")) << "silent! wa"
 
 
 _handle: Optional[Handle] = None
@@ -49,7 +49,7 @@ autocmd(
     "CursorHoldI",
     "TextChanged",
     "TextChangedI",
-    modifiers=("*", "nested"),
+    modifiers=("*", "++nested"),
 ) << f"lua {_smol_save.name}()"
 
 
