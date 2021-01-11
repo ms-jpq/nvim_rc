@@ -68,8 +68,8 @@
   install:
     script:
       required:
-          - git
-          - perl
+        - git
+        - perl
       env:
         URI: https://github.com/darold/pgFormatter
         RELEASE: "v4.4"
@@ -94,3 +94,13 @@
   type: stream
   filetypes:
     - go
+
+- bin: luafmt
+  type: stream
+  args:
+    - --stdin
+  filetypes:
+    - lua
+  install:
+    npm:
+      - lua-fmt
