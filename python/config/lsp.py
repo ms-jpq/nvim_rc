@@ -26,10 +26,10 @@ class RootPattern:
 class LspAttrs:
     server: str
     bin: str
-    filetypes: FrozenSet[str]
     args: Sequence[str] = ()
-    config: Mapping[str, Any] = field(default_factory=dict)
+    filetypes: FrozenSet[str] = frozenset()
     root: Optional[RootPattern] = None
+    config: Mapping[str, Any] = field(default_factory=dict)
     install: InstallSpec = InstallSpec()
 
 

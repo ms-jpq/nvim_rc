@@ -67,6 +67,8 @@ end)(...)
 for spec in lsp_specs:
     if which(spec.bin):
         config = {**spec.config}
+        if spec.filetypes:
+            config["filetypes"] = spec.filetypes
         if spec.args:
             config["cmd"] = tuple((spec.bin, *spec.args))
 
@@ -74,7 +76,7 @@ for spec in lsp_specs:
             _find_root.name,
             _on_attach.name,
             spec.server,
-            config,
+            encode(config),
             encode(spec.root),
         )
         atomic.exec_lua(_LSP_INIT, args)

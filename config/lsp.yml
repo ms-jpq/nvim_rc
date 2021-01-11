@@ -1,129 +1,110 @@
 ---
-# - server: diagnosticls
-#   bin: diagnostic-languageserver
-#   filetypes:
-#     - sh
-#     - markdown
+- server: diagnosticls
+  bin: diagnostic-languageserver
+  filetypes:
+    - sh
+    - markdown
 
-#   config:
-#     initialize:
-#       linters:
-#         shellcheck:
-#           sourceName: shellcheck
-#           command: shellcheck
-#           args:
-#             - --format
-#             - json
-#             - "-"
-#           debounce: 100
-#           parseJson:
-#             column: column
-#             endColumn: endColumn
-#             endLine: endLine
-#             line: line
-#             message: ${message} [${code}]
-#             security: level
-#           securities:
-#             error: error
-#             info: info
-#             style: hint
-#             warning: warning
+  config:
+    initialize:
+      linters:
+        shellcheck:
+          sourceName: shellcheck
+          command: shellcheck
+          args:
+            - --format
+            - json
+            - "-"
+          debounce: 100
+          parseJson:
+            column: column
+            endColumn: endColumn
+            endLine: endLine
+            line: line
+            message: ${message} [${code}]
+            security: level
+          securities:
+            error: error
+            info: info
+            style: hint
+            warning: warning
 
-#         markdownlint:
-#           sourceName: markdownlint
-#           command: markdownlint
-#           args:
-#             - --stdin
-#           debounce: 100
-#           formatLines: 1
-#           formatPattern:
-#             - ^.*?:\s+(\d+):\s+(.*)(\r|\n)*$
-#             - column: -1
-#               line: 1
-#               message: 2
-#           isStderr: true
-#           offsetColumn: 0
-#           offsetLine: 0
+        markdownlint:
+          sourceName: markdownlint
+          command: markdownlint
+          args:
+            - --stdin
+          debounce: 100
+          formatLines: 1
+          formatPattern:
+            - ^.*?:\s+(\d+):\s+(.*)(\r|\n)*$
+            - column: -1
+              line: 1
+              message: 2
+          isStderr: true
+          offsetColumn: 0
+          offsetLine: 0
 
-#       filetypes:
-#         sh:
-#           - shellcheck
-#         markdown:
-#           - markdownlint
-#           - write_good
+      filetypes:
+        sh:
+          - shellcheck
+        markdown:
+          - markdownlint
+          - write_good
 
-#   install:
-#     npm:
-#       - diagnostic-languageserver
-#       - write-good
+  install:
+    npm:
+      - diagnostic-languageserver
+      - write-good
 
 - server: jsonls
   bin: vscode-json-languageserver
-  filetypes:
-    - json
   install:
     npm:
       - vscode-json-languageserver
 
 - server: yamlls
   bin: yaml-language-server
-  filetypes:
-    - yaml
   install:
     npm:
       - yaml-language-server
 
 - server: bashls
   bin: bash-language-server
-  filetypes:
-    - sh
-    - zsh
   install:
     npm:
       - bash-language-server
 
 - server: dockerls
   bin: docker-langserver
-  filetypes:
-    - dockerfile
   install:
     npm:
       - dockerfile-language-server-nodejs
 
 - server: html
   bin: html-languageserver
-  filetypes:
-    - html
   install:
     npm:
       - vscode-html-languageserver-bin
 
 - server: cssls
   bin: css-languageserver
-  filetypes:
-    - css
-    - less
-    - scss
   install:
     npm:
       - vscode-css-languageserver-bin
 
 - server: pyright
   bin: pyright-langserver
-  filetypes:
-    - python
   install:
     npm:
       - pyright
 
 - server: rust_analyzer
   bin: rust-analyzer
-  filetypes:
-    - rust
   install:
     script:
       required:
-          - wget
+        - wget
       env:
         URI_ROOT: https://github.com/rust-analyzer/rust-analyzer/releases/download
         MAC_OS: rust-analyzer-mac
@@ -144,21 +125,12 @@
 
 - server: gopls
   bin: gopls
-  filetypes:
-    - go
-    - gomod
   install:
     go:
       - golang.org/x/tools/gopls@latest
 
 - server: sourcekit
   bin: xcrun
-  filetypes:
-    - c
-    - cpp
-    - objective-c
-    - objective-cpp
-    - swift
 
 - server: sqlls
   bin: sql-language-server
@@ -166,34 +138,18 @@
     - up
     - --method
     - stdio
-  filetypes:
-    - sql
   install:
     npm:
       - sql-language-server
 
 - server: rome
   bin: rome
-  filetypes:
-    - javascript
-    - javascript.jsx
-    - javascriptreact
-    - typescript
-    - typescript.tsx
-    - typescriptreact
   install:
     npm:
       - rome
 
 - server: tsserver
   bin: typescript-language-server
-  filetypes:
-    - javascript
-    - javascript.jsx
-    - javascriptreact
-    - typescript
-    - typescript.tsx
-    - typescriptreact
   install:
     npm:
       - typescript
@@ -201,14 +157,9 @@
 
 - server: r_language_server
   bin: R
-  filetypes:
-    - r
-    - rmd
 
 - server: vimls
   bin: vim-language-server
-  filetypes:
-    - vim
   install:
     npm:
       - vim-language-server
