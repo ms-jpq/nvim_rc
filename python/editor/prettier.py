@@ -7,7 +7,7 @@ from tempfile import mkstemp
 from typing import Iterable, Iterator
 
 from pynvim import Nvim
-from pynvim_pp.lib import async_call, write
+from pynvim_pp.lib import async_call, awrite
 from std2.aitertools import aiterify
 from std2.asyncio.subprocess import call
 
@@ -67,7 +67,7 @@ async def _run(
         ]
         errors = (linesep * 2).join(errs)
         if errors:
-            await gather(write(nvim, "⛔️ 美化失败"), set_preview_content(nvim, text=errors))
+            await gather(awrite(nvim, "⛔️ 美化失败"), set_preview_content(nvim, text=errors))
         else:
 
             def cont() -> None:
@@ -75,7 +75,7 @@ async def _run(
                 nvim.api.buf_set_lines(ctx.buf, 0, -1, True, lines)
 
             nice = f"✅ 美化成功 👉 {' -> '.join(attr.bin for attr in attrs)}"
-            await gather(write(nvim, nice), async_call(nvim, cont))
+            await gather(awrite(nvim, nice), async_call(nvim, cont))
 
 
 def _fmts_for(filetype: str) -> Iterator[FmtAttrs]:
@@ -90,9 +90,9 @@ async def run_fmt(nvim: Nvim) -> None:
 
     linters = tuple(_fmts_for(ctx.filetype))
     if not linters:
-        await write(nvim, f"⁉️: 莫有 {ctx.filetype} 的 linter", error=True)
+        await awrite(nvim, f"⁉️: 莫有 {ctx.filetype} 的 linter", error=True)
     else:
-        await write(nvim, "⏳⌛⏳…")
+        await awrite(nvim, "⏳⌛⏳…")
         await _run(nvim, ctx=ctx, attrs=linters, cwd=cwd)
 
 

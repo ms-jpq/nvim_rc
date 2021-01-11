@@ -3,6 +3,7 @@ from pathlib import Path
 from shutil import which
 
 from pynvim import Nvim
+from pynvim_pp.lib import write
 from std2.pickle import encode
 from std2.types import never
 
@@ -34,10 +35,19 @@ def _find_root(nvim: Nvim, pattern: RootPattern, filename: str, bufnr: int) -> s
             never(pattern)
 
 
+@rpc(blocking=True)
+def _on_attach(nvim: Nvim, server: str) -> None:
+    write(nvim, f"LSP: {server} 已加载")
+
+
 _LSP_INIT = """
-(function (root_fn, server, cfg, root_cfg)
+(function (root_fn, attach_fn, server, cfg, root_cfg)
   local lsp = require "lspconfig"
   local configs = require "lspconfig/configs"
+
+  cfg.on_attach = function (client, bufnr)
+    _G[attach_fn](server)
+  end
 
   if root_cfg ~= vim.NIL then
     cfg.root_dir = function (filename, bufnr)
@@ -60,7 +70,13 @@ for spec in lsp_specs:
         if spec.args:
             config["cmd"] = tuple((spec.bin, *spec.args))
 
-        args = (_find_root.name, spec.server, config, encode(spec.root))
+        args = (
+            _find_root.name,
+            _on_attach.name,
+            spec.server,
+            config,
+            encode(spec.root),
+        )
         atomic.exec_lua(_LSP_INIT, args)
 
 atomic.command("doautoall Filetype")

@@ -8,7 +8,7 @@ from typing import Iterable, Iterator, MutableSequence, Sequence, Tuple
 from pynvim import Nvim
 from pynvim.api.buffer import Buffer
 from pynvim_pp.hold import hold_win_pos
-from pynvim_pp.lib import async_call, write
+from pynvim_pp.lib import async_call, awrite
 from pynvim_pp.preview import set_preview
 from std2.asyncio.subprocess import call
 
@@ -134,11 +134,11 @@ async def _run_linter(nvim: Nvim) -> None:
     cwd, ctx = await async_call(nvim, current_ctx, nvim)
     linters = tuple(_linters_for(ctx.filetype))
     if not linters:
-        await write(nvim, f"⁉️: 莫有 {ctx.filetype} 的 linter", error=True)
+        await awrite(nvim, f"⁉️: 莫有 {ctx.filetype} 的 linter", error=True)
     else:
-        await write(nvim, "⏳⌛⏳…")
+        await awrite(nvim, "⏳⌛⏳…")
         await _run(nvim, ctx=ctx, attrs=linters, cwd=cwd)
-        await write(nvim, "")
+        await awrite(nvim, "")
 
 
 keymap.n("M") << f"<cmd>lua {_run_linter.name}()<cr>"
