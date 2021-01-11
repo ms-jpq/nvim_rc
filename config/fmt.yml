@@ -99,6 +99,8 @@
   type: stream
   args:
     - --stdin
+    - --line-width=80
+    - --indent-count=${tabsize}
   filetypes:
     - lua
   install:
