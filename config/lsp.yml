@@ -92,7 +92,7 @@
         set -eu
         set -o pipefail
 
-        if [[ "$(uname)" == 'Darwin' ]]
+        if [[ "$OS" == 'Darwin' ]]
         then
           ARCH="$MAC_OS"
         else

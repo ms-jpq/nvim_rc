@@ -68,7 +68,7 @@
         set -o pipefail
 
         FILE="$TMP_DIR/${BIN_NAME}.tar.xz"
-        if [[ "$(uname)" == 'Darwin' ]]
+        if [[ "$OS" == 'Darwin' ]]
         then
           ARCH="$MAC_OS"
         else
