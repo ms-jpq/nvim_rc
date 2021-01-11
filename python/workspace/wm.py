@@ -1,6 +1,7 @@
 from typing import Sequence
 
 from pynvim.api.nvim import Buffer, Nvim, Tabpage, Window
+from pynvim_pp.float_win import list_floatwins
 
 from ..registery import keymap, rpc, settings
 
@@ -39,7 +40,7 @@ keymap.n("<s-down>") << "<cmd>wincmd -<cr>"
 
 
 @rpc(blocking=True)
-def new_window(nvim: Nvim, vertical: bool) -> None:
+def _new_window(nvim: Nvim, vertical: bool) -> None:
     nvim.command("vnew" if vertical else "new")
     win: Window = nvim.api.get_current_win()
     buf: Buffer = nvim.api.create_buf(False, True)
@@ -47,16 +48,39 @@ def new_window(nvim: Nvim, vertical: bool) -> None:
     nvim.api.win_set_buf(win, buf)
 
 
-keymap.n("<leader>=", unique=True) << f"<cmd>lua {new_window.name}(true)<cr>"
-keymap.n("<leader>-", unique=True) << f"<cmd>lua {new_window.name}(false)<cr>"
+keymap.n("<leader>=") << f"<cmd>lua {_new_window.name}(true)<cr>"
+keymap.n("<leader>-") << f"<cmd>lua {_new_window.name}(false)<cr>"
 
 
 # kill current buf
 keymap.n("<leader>x") << "<cmd>bwipeout!<cr>"
-# kill current win
-keymap.n("<leader>w") << "<cmd>wincmd q<cr>"
-# kill other win
-keymap.n("<leader>W") << "<cmd>wincmd o<cr>"
+
+
+@rpc(blocking=True)
+def _close_self(nvim: Nvim) -> None:
+    fws = tuple(list_floatwins(nvim))
+    from pynvim_pp.lib import s_write
+    s_write(nvim, fws)
+    if fws:
+        for win in fws:
+            nvim.api.win_close(win, True)
+    else:
+        win: Window = nvim.api.get_current_win()
+        nvim.api.win_close(win, True)
+
+
+@rpc(blocking=True)
+def _close_others(nvim: Nvim) -> None:
+    tab: Tabpage = nvim.api.get_current_tabpage()
+    win: Window = nvim.api.get_current_win()
+    wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)
+    for w in wins:
+        if w != win:
+            nvim.api.win_close(w, True)
+
+
+keymap.n("<leader>w") << f"<cmd>lua {_close_self.name}()<cr>"
+keymap.n("<leader>W") << f"<cmd>lua {_close_others.name}()<cr>"
 
 
 # break window into tab
@@ -66,14 +90,14 @@ keymap.n("<leader>k") << "<cmd>wincmd T<cr>"
 keymap.n("<leader>q") << "<cmd>tabclose<cr>"
 # create new tab
 @rpc(blocking=True)
-def new_tab(nvim: Nvim) -> None:
+def _new_tab(nvim: Nvim) -> None:
     nvim.command("tabnew")
     buf: Buffer = nvim.api.get_current_buf()
     nvim.api.buf_set_var(buf, "buftype", "nofile")
 
 
-keymap.n("<leader>t") << f"<cmd>lua {new_tab.name}()<cr>"
-keymap.n("<leader>n") << f"<cmd>lua {new_tab.name}()<cr>"
+keymap.n("<leader>t") << f"<cmd>lua {_new_tab.name}()<cr>"
+keymap.n("<leader>n") << f"<cmd>lua {_new_tab.name}()<cr>"
 
 
 # cycle between tabs
@@ -90,7 +114,7 @@ settings["previewheight"] = 11
 
 
 @rpc(blocking=True)
-def toggle_preview(nvim: Nvim) -> None:
+def _toggle_preview(nvim: Nvim) -> None:
     tab: Tabpage = nvim.api.get_current_tabpage()
     wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)
     closed = False
@@ -107,7 +131,7 @@ def toggle_preview(nvim: Nvim) -> None:
         nvim.api.win_set_height(win, height)
 
 
-keymap.n("<leader>m") << f"<cmd>lua {toggle_preview.name}()<cr>"
+keymap.n("<leader>m") << f"<cmd>lua {_toggle_preview.name}()<cr>"
 
 
 # quickfix
@@ -116,7 +140,7 @@ keymap.n("<c-k>") << "<cmd>cnext<cr>"
 
 
 @rpc(blocking=True)
-def toggle_qf(nvim: Nvim) -> None:
+def _toggle_qf(nvim: Nvim) -> None:
     tab: Tabpage = nvim.api.get_current_tabpage()
     wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)
     closed = False
@@ -134,13 +158,13 @@ def toggle_qf(nvim: Nvim) -> None:
 
 
 @rpc(blocking=True)
-def clear_qf(nvim: Nvim) -> None:
+def _clear_qf(nvim: Nvim) -> None:
     nvim.funcs.setqflist(())
     nvim.command("cclose")
 
 
-keymap.n("<leader>l") << f"<cmd>lua {toggle_qf.name}()<cr>"
-keymap.n("<leader>L") << f"<cmd>lua {clear_qf.name}()<cr>"
+keymap.n("<leader>l") << f"<cmd>lua {_toggle_qf.name}()<cr>"
+keymap.n("<leader>L") << f"<cmd>lua {_clear_qf.name}()<cr>"
 
 
 @rpc(blocking=True)
