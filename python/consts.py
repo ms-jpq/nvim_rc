@@ -28,7 +28,7 @@ PIP_DIR = _MODULES_DIR / "pip_modules"
 NPM_DIR = _MODULES_DIR
 GO_DIR = _MODULES_DIR / "go_modules"
 
-INSTALL_BIN_DIR = str(TOP_LEVEL / "python" / "bin")
+INSTALL_BIN_DIR = str(TOP_LEVEL / "python" / "components" / "bin")
 PATH_PREPEND = tuple(
     map(
         str,
