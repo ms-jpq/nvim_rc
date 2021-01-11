@@ -58,9 +58,6 @@
     - zsh
   install:
     script:
-      required:
-        - wget
-        - tar
       env:
         URI_ROOT: https://github.com/koalaman/shellcheck/releases/download
         MAC_OS: v0.7.1/shellcheck-v0.7.1.darwin.x86_64.tar.xz
@@ -77,8 +74,8 @@
         else
           ARCH="$LINUX"
         fi
-        wget "${URI_ROOT}/${ARCH}" --output-document "$FILE"
-        tar -xJvf "$FILE" --directory "$TMP_DIR"
+        get "${URI_ROOT}/${ARCH}" --dest "$FILE"
+        unpack "$FILE" --dest "$TMP_DIR"
         mv "$TMP_DIR/$ARCHIVED" $BIN_PATH
         chmod +x "$BIN_PATH"
 

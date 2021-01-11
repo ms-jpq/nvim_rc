@@ -83,8 +83,6 @@
   bin: rust-analyzer
   install:
     script:
-      required:
-        - wget
       env:
         URI_ROOT: https://github.com/rust-analyzer/rust-analyzer/releases/download
         MAC_OS: rust-analyzer-mac
@@ -100,7 +98,7 @@
         else
           ARCH="$LINUX"
         fi
-        wget "${URI_ROOT}/${RELEASE}/${ARCH}" --output-document "$BIN_PATH"
+        get "${URI_ROOT}/${RELEASE}/${ARCH}" --dest "$BIN_PATH"
         chmod +x "$BIN_PATH"
 
 - server: gopls

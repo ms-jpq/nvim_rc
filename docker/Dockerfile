@@ -7,14 +7,14 @@ RUN apt update && \
     apt upgrade -y && \
     apt install -y \
     software-properties-common \
-    git python3 python3-pip nodejs npm && \
+    git python3 python3-pip && \
     add-apt-repository ppa:neovim-ppa/stable && \
     apt update && \
     apt install -y neovim
 
 
 # Dependencies
-RUN apt install -y wget perl golang-go
+RUN apt install -y nodejs npm golang-go perl
 
 
 # INSTALL

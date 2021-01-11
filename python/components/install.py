@@ -1,6 +1,6 @@
 from asyncio.tasks import as_completed
 from datetime import datetime, timezone
-from os import linesep
+from os import environ, linesep, pathsep, uname
 from shutil import which
 from sys import stderr
 from typing import Awaitable, Iterator, Sequence, Tuple
@@ -16,6 +16,7 @@ from ..config.pkgs import pkg_specs
 from ..consts import (
     BIN_DIR,
     GO_DIR,
+    INSTALL_BIN_DIR,
     INSTALL_SCRIPT,
     LIB_DIR,
     NPM_DIR,
@@ -168,10 +169,14 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
     for path in (BIN_DIR, LIB_DIR, TMP_DIR):
         path.mkdir(parents=True, exist_ok=True)
 
+    sys = uname()
     for bin, pkg in _script_specs():
 
         async def cont(bin: str, pkg: ScriptSpec) -> SortOfMonoid:
             env = {
+                "PATH": pathsep.join((INSTALL_BIN_DIR, environ["PATH"])),
+                "ARCH": sys.machine,
+                "OS": sys.sysname,
                 "BIN_NAME": bin,
                 "BIN_PATH": str(BIN_DIR / bin),
                 "LIB_PATH": str(LIB_DIR / bin),
