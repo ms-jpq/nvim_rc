@@ -10,6 +10,7 @@ from .install import InstallSpec
 
 
 class RPFallback(Enum):
+    none = auto()
     cwd = auto()
     home = auto()
     parent = auto()

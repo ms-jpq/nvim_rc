@@ -47,7 +47,9 @@ def _find_root(nvim: Nvim, _pattern: Any, filename: str, bufnr: int) -> str:
                     if fnmatch(name, glob):
                         return str(parent)
     else:
-        if pattern.fallback is RPFallback.cwd:
+        if pattern.fallback is RPFallback.none:
+            return None
+        elif pattern.fallback is RPFallback.cwd:
             cwd: str = nvim.funcs.getcwd()
             return cwd
         elif pattern.fallback is RPFallback.home:

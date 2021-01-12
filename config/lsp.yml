@@ -161,8 +161,17 @@
   filetypes:
     - graphql
   root:
+    fallback: none
     exact:
-      - .git
+      - .graphqlrc
+      - .graphqlrc.js
+      - .graphqlrc.json
+      - .graphqlrc.yaml
+      - .graphqlrc.yml
+      - graphql.config.js
+      - graphql.config.json
+      - graphql.config.yaml
+      - graphql.config.yml
   install:
     npm:
       - graphql-language-service-cli
