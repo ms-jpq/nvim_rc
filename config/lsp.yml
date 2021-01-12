@@ -135,6 +135,11 @@
   bin: graphql-lsp
   args:
     - server
+  filetypes:
+    - graphql
+  root:
+    exact:
+      - ".git"
   install:
     npm:
       - graphql-language-service-cli
