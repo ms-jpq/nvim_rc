@@ -46,8 +46,6 @@
           style: hint
           warning: warning
 
-
-
     filetypes:
       dockerfile:
         - hadolint
