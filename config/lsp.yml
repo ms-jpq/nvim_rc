@@ -3,7 +3,6 @@
   bin: diagnostic-languageserver
   filetypes:
     - sh
-    - markdown
 
   init_options:
     linters:
@@ -132,6 +131,14 @@
     npm:
       - typescript
       - typescript-language-server
+
+- server: graphqlls
+  bin: graphql-lsp
+  args:
+    - server
+  install:
+    npm:
+      - graphql-language-service-cli
 
 - server: r_language_server
   bin: R
