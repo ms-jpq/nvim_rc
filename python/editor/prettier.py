@@ -12,7 +12,7 @@ from std2.aitertools import aiterify
 from std2.asyncio.subprocess import call
 
 from ..config.fmt import FmtAttrs, FmtType, fmt_specs
-from ..registery import keymap, rpc
+from ..registery import LANG, keymap, rpc
 from .linter import BufContext, ParseError, arg_subst, current_ctx, set_preview_content
 
 
@@ -33,10 +33,10 @@ async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> 
     try:
         args = arg_subst(attr.args, ctx=ctx, filename=str(temp))
     except ParseError:
-        return f"⛔️ 语法错误 👉 {arg_info}"
+        return LANG("grammar error", text=arg_info)
     else:
         if not which(attr.bin):
-            return f"⁉️: 莫有 {attr.bin}"
+            return LANG("missing", thing=attr.bin)
         else:
             stdin = temp.read_bytes() if attr.type is FmtType.stream else None
             proc = await call(attr.bin, *args, stdin=stdin, cwd=cwd)
@@ -46,7 +46,7 @@ async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> 
             if proc.code == attr.exit_code:
                 return ""
             else:
-                heading = f"⛔️ - {proc.code} 👉 {arg_info}"
+                heading = LANG("proc failed", code=proc.code, args=arg_info)
                 print_out = linesep.join((heading, proc.err))
                 return print_out
 
@@ -67,14 +67,18 @@ async def _run(
         ]
         errors = (linesep * 2).join(errs)
         if errors:
-            await gather(awrite(nvim, "⛔️ 美化失败"), set_preview_content(nvim, text=errors))
+            await gather(
+                awrite(nvim, LANG("prettier failed")),
+                set_preview_content(nvim, text=errors),
+            )
         else:
 
             def cont() -> None:
                 lines = temp.read_text().splitlines()
                 nvim.api.buf_set_lines(ctx.buf, 0, -1, True, lines)
 
-            nice = f"✅ 美化成功 👉 {' -> '.join(attr.bin for attr in attrs)}"
+            prettiers = " -> ".join(attr.bin for attr in attrs)
+            nice = LANG("prettier succeeded", prettiers=prettiers)
             await gather(awrite(nvim, nice), async_call(nvim, cont))
 
 
@@ -88,12 +92,12 @@ def _fmts_for(filetype: str) -> Iterator[FmtAttrs]:
 async def run_fmt(nvim: Nvim) -> None:
     cwd, ctx = await async_call(nvim, current_ctx, nvim)
 
-    linters = tuple(_fmts_for(ctx.filetype))
-    if not linters:
-        await awrite(nvim, f"⁉️: 莫有 {ctx.filetype} 的 linter", error=True)
+    prettiers = tuple(_fmts_for(ctx.filetype))
+    if not prettiers:
+        await awrite(nvim, LANG("missing prettier", filetype=ctx.filetype), error=True)
     else:
-        await awrite(nvim, "⏳⌛⏳…")
-        await _run(nvim, ctx=ctx, attrs=linters, cwd=cwd)
+        await awrite(nvim, LANG("loading..."))
+        await _run(nvim, ctx=ctx, attrs=prettiers, cwd=cwd)
 
 
 keymap.n("gq", nowait=True) << f"<cmd>lua {run_fmt.name}()<cr>"

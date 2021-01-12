@@ -2,8 +2,32 @@
 "loading...": |-
   "⏳⌛⏳…"
 
+"join seq": |-
+  " -> "
+
 "lsp loaded": |-
   LSP: ${server} 已加载
 
+"grammar error": |-
+  ⛔️ 语法错误 👉 ${text}
+
+"proc failed": |-
+  ⛔️ - ${code} 👉 ${args}
+
+"proc succeeded": |-
+  ✅ 👉 ${args}
+
+"missing": |-
+  ⁉️: 莫有 ${thing}
+
 "missing_linter": |-
   ⁉️: 莫有 ${filetype} 的 linter
+
+"missing prettier": |-
+  ⁉️: 莫有 ${filetype} 的 prettier
+
+"prettier failed": |-
+  ⛔️ 美化失败
+
+"prettier succeeded": |-
+  ✅ 美化成功 👉 ${prettier}

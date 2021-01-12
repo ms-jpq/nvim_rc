@@ -96,17 +96,17 @@ async def _linter_output(
     try:
         args = arg_subst(attr.args, ctx=ctx, filename=ctx.filename)
     except ParseError:
-        return f"⛔️ 语法错误 👉 {arg_info}"
+        return LANG("grammar error", text=arg_info)
     else:
         if not which(attr.bin):
-            return f"⁉️: 莫有 {attr.bin}"
+            return LANG("missing", thing=attr.bin)
         else:
             stdin = body if attr.type is LinterType.stream else None
             proc = await call(attr.bin, *args, stdin=stdin, cwd=cwd)
             if proc.code == attr.exit_code:
-                heading = f"✅ 👉 {arg_info}"
+                heading = LANG("proc succeeded", args=arg_info)
             else:
-                heading = f"⛔️ - {proc.code} 👉 {arg_info}"
+                heading = LANG("proc failed", code=proc.code, args=arg_info)
             print_out = linesep.join((heading, proc.out.decode(), proc.err))
             return print_out
 

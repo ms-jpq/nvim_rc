@@ -1,6 +1,6 @@
 from locale import getdefaultlocale
 from string import Template
-from typing import Mapping, MutableMapping, Optional
+from typing import Mapping, MutableMapping, Optional, Union
 
 from std2.pickle.decode import decode
 from yaml import safe_load
@@ -24,7 +24,7 @@ class Lang:
         self._specs: MutableMapping[str, str] = {}
         self._specs.update(specs)
 
-    def __call__(self, key: str, **kwds: str) -> str:
+    def __call__(self, key: str, **kwds: Union[str, int, float]) -> str:
         spec = self._specs[key]
         return Template(spec).substitute(kwds)
 
