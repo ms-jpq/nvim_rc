@@ -169,6 +169,7 @@ def _go() -> Iterator[Awaitable[SortOfMonoid]]:
 
 
 def _script() -> Iterator[Awaitable[SortOfMonoid]]:
+    TMP_DIR.unlink(missing_ok=True)
     for path in (BIN_DIR, LIB_DIR, TMP_DIR):
         path.mkdir(parents=True, exist_ok=True)
 
