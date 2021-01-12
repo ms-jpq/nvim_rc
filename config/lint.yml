@@ -62,7 +62,6 @@
         URI_ROOT: https://github.com/koalaman/shellcheck/releases/download
         MAC_OS: v0.7.1/shellcheck-v0.7.1.darwin.x86_64.tar.xz
         LINUX: v0.7.1/shellcheck-v0.7.1.linux.x86_64.tar.xz
-        ARCHIVED: shellcheck-v0.7.1/shellcheck
       body: |-
         set -eu
         set -o pipefail
@@ -76,7 +75,7 @@
         fi
         get --cd "$TMP_DIR" --print-dest "$TMP" "${URI_ROOT}/${PLATFORM}"
         unpack "$(<"$TMP")" "$TMP_DIR"
-        mv "${TMP_DIR}/${ARCHIVED}" $BIN_PATH
+        mv "${TMP_DIR}/${BIN_NAME}"*"/${BIN_NAME}" "$BIN_PATH"
         chmod +x "$BIN_PATH"
 
 - bin: hadolint
@@ -89,7 +88,6 @@
     script:
       env:
         MAC_OS: https://homebrew.bintray.com/bottles/hadolint-1.19.0.big_sur.bottle.tar.gz
-        MAC_OS_EXC: hadolint/1.19.0/bin/hadolint
         LINUX: https://github.com/hadolint/hadolint/releases/download/v1.19.0/hadolint-Linux-x86_64
       body: |-
         set -eu
@@ -100,7 +98,7 @@
           TMP="$(mktemp)"
           get --cd "$TMP_DIR" --print-dest "$TMP" "$MAC_OS"
           unpack "$(<"$TMP")" "$TMP_DIR"
-          mv "${TMP_DIR}/${MAC_OS_EXC}" "$BIN_PATH"
+          mv "${TMP_DIR}/${BIN_NAME}/"*"/bin/${BIN_NAME}" "$BIN_PATH"
         else
           get "$LINUX" --dest "$BIN_PATH"
           chmod +x "$BIN_PATH"

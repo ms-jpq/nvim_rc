@@ -86,6 +86,7 @@
           OPTS=(--depth=1 --recurse-submodules --shallow-submodules)
           git clone "${OPTS[@]}" --branch "$TAG" "$URI" "$LIB_PATH"
         fi
+
         ln --symbolic --force "$LIB_PATH/$BIN_NAME" "$BIN_PATH"
 
 - bin: rustfmt
