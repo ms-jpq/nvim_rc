@@ -79,16 +79,25 @@
         mv "$TMP_DIR/$ARCHIVED" $BIN_PATH
         chmod +x "$BIN_PATH"
 
-- bin: docker
+- bin: hadolint
   type: stream
-  args:
-    - run
-    - --rm
-    - --interactive
-    - --
-    - hadolint/hadolint
   filetypes:
     - dockerfile
+  install:
+    script:
+      env:
+        URI_ROOT: https://github.com/hadolint/hadolint/releases/download
+        MAC_OS: v1.19.0/hadolint-Darwin-x86_64
+        LINUX: v1.19.0/hadolint-Linux-x86_64
+      body: |-
+        if [[ "$OS" == 'Darwin' ]]
+        then
+          ARCH="$MAC_OS"
+        else
+          ARCH="$LINUX"
+        fi
+        get "$URI_ROOT/$ARCH" "$BIN_PATH"
+        chmod +x "$BIN_PATH"
 
 - bin: markdownlint
   type: stream

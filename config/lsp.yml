@@ -27,6 +27,24 @@
           info: info
           style: hint
           warning: warning
+
+      hadolint:
+        sourceName: hadolint
+        command: hadolint
+        args:
+          - --format=json
+          - "-"
+        parseJson:
+          column: column
+          line: line
+          message: ${message} [${code}]
+          security: level
+        securities:
+          error: error
+          info: info
+          style: hint
+          warning: warning
+
       mypy:
         sourceName: mypy
         command: mypy
@@ -48,6 +66,8 @@
           error: error
 
     filetypes:
+      dockerfile:
+        - hadolint
       python:
         - mypy
       sh:
