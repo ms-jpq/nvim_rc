@@ -74,7 +74,7 @@
         else
           PLATFORM="$LINUX"
         fi
-        get "${URI_ROOT}/${PLATFORM}" --print-dest "$TMP"
+        get --cd "$TMP_DIR" --print-dest "$TMP" "${URI_ROOT}/${PLATFORM}"
         unpack "$(<"$TMP")" "$TMP_DIR"
         mv "${TMP_DIR}/${ARCHIVED}" $BIN_PATH
         chmod +x "$BIN_PATH"
@@ -98,7 +98,7 @@
         if [[ "$OS" == 'Darwin' ]]
         then
           TMP="$(mktemp)"
-          get "$MAC_OS" --print-dest "$TMP"
+          get --cd "$TMP_DIR" --print-dest "$TMP" "$MAC_OS"
           unpack "$(<"$TMP")" "$TMP_DIR"
           mv "${TMP_DIR}/${MAC_OS_EXC}" "$BIN_PATH"
         else
