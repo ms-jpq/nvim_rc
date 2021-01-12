@@ -26,6 +26,7 @@ from ..consts import (
     VARS_DIR,
     VIM_DIR,
 )
+from ..registery import LANG
 from ..workspace.terminal import open_term
 from .rtp import p_name
 
@@ -199,18 +200,16 @@ async def install() -> int:
     has_error = False
     for fut in as_completed((*_git(), *_pip(), *_npm(), *_go(), *_script())):
         for debug, proc in await fut:
+            args = " ".join((proc.prog, *proc.args))
             if proc.code == 0:
-                print("✅ 👉", proc.prog, *proc.args)
+                msg = LANG("proc succeeded", args=args)
+                print(msg)
                 print(debug)
                 print(proc.out.decode())
             else:
                 has_error = True
-                print(
-                    f"⛔️ - {proc.code} 👉",
-                    proc.prog,
-                    *proc.args,
-                    file=stderr,
-                )
+                msg = LANG("proc failed", code=proc.code, args=args)
+                print(msg, file=stderr)
                 print(debug, file=stderr)
                 print(proc.err, file=stderr)
 
