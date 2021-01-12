@@ -1,4 +1,11 @@
 ---
+"ask yes/no": |-
+  &Yes
+  &No
+
+"update?": |-
+  "要升级吗？"
+
 "loading...": |-
   "⏳⌛⏳…"
 

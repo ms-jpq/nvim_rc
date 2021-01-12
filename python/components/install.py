@@ -1,6 +1,6 @@
 from asyncio.tasks import as_completed
 from datetime import datetime, timezone
-from os import environ, linesep, pathsep, uname
+from os import environ, pathsep, uname
 from shutil import which
 from sys import stderr
 from typing import Awaitable, Iterator, Sequence, Tuple
@@ -227,7 +227,7 @@ def maybe_install(nvim: Nvim) -> None:
     now = datetime.now(tz=timezone.utc)
     diff = now - before
     if diff.days > 7:
-        ans = nvim.funcs.confirm("🤖「ゴゴゴゴ」？", f"&Yes{linesep}&No", 2)
+        ans = nvim.funcs.confirm(LANG("update?"), LANG("ask yes/no"), 2)
         if ans == 1:
             open_term(nvim, "python3", INSTALL_SCRIPT, "--install-packages")
             UPDATE_LOG.write_text(now.isoformat())
