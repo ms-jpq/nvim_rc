@@ -70,19 +70,17 @@ _LSP_INIT = """
     _G[attach_fn](server)
   end
 
-  local root_dir = function (filename, bufnr)
-    local root = _G[root_fn](root_cfg, filename, bufnr)
-    return root ~= vim.NIL and root or nil
-  end
-
-  if root_cfg ~= vim.NIL then
-    cfg.root_dir = root_dir
-  end
-
   local go, _ = pcall(function () return lsp[server] end)
+
   if not go then
-    cfg.root_dir = root_dir
     configs[server] = { default_config = cfg }
+  end
+
+  if root_cfg ~= vim.NIL or not go then
+    cfg.root_dir = function (filename, bufnr)
+        local root = _G[root_fn](root_cfg, filename, bufnr)
+        return root ~= vim.NIL and root or nil
+    end
   end
 
   lsp[server].setup(cfg)
