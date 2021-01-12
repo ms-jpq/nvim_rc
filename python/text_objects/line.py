@@ -1,33 +1,31 @@
-from operator import sub
 from string import whitespace
-from typing import Callable, Iterable, Tuple
+from typing import Iterable, Tuple
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
 from pynvim_pp.operators import set_visual_selection
-from std2.functools import identity
 
 from ..registery import keymap, rpc
 
 
 def _p_inside(line: str) -> Tuple[int, int]:
     ws = {*whitespace}
-    chars = tuple(enumerate(line, start=1))
+    chars = tuple(enumerate(line))
 
-    def p(it: Iterable[Tuple[int, str]], direction: Callable[[int, int], int]) -> int:
+    def p(it: Iterable[Tuple[int, str]]) -> int:
         for idx, char in it:
             if char in ws:
                 pass
             else:
-                return direction(idx, 1)
+                return idx
         else:
             return 0
 
-    return p(chars, direction=sub), p(reversed(chars), direction=identity)
+    return p(chars), p(reversed(chars))
 
 
 def _p_around(line: str) -> Tuple[int, int]:
-    return 1 if line else 0, len(line)
+    return 0 if line else 0, len(line) - 1
 
 
 @rpc(blocking=True)
