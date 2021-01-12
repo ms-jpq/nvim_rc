@@ -11,7 +11,7 @@ from ..registery import keymap, rpc
 def _p_inside(init_lv: int, tabsize: int, lines: Iterable[str]) -> int:
     for n, line in enumerate(lines):
         lv = p_indent(line, tabsize=tabsize)
-        if lv > init_lv:
+        if line and lv < init_lv:
             return n
     else:
         return 0
@@ -21,7 +21,7 @@ def _p_around(init_lv: int, tabsize: int, lines: Iterable[str]) -> int:
     new_lv: Optional[int] = None
     for n, line in enumerate(lines):
         lv = p_indent(line, tabsize=tabsize)
-        if lv > init_lv:
+        if line and lv < init_lv:
             return n
     else:
         return 0
@@ -42,8 +42,8 @@ def _indent(nvim: Nvim, is_inside: bool) -> None:
         top = row - _p_inside(init_lv, tabsize=tabsize, lines=reversed(before))
         btm = row + _p_inside(init_lv, tabsize=tabsize, lines=after)
     else:
-        top = row - _p_inside(init_lv, tabsize=tabsize, lines=reversed(before))
-        btm = row + _p_inside(init_lv, tabsize=tabsize, lines=after)
+        top = row - _p_around(init_lv, tabsize=tabsize, lines=reversed(before))
+        btm = row + _p_around(init_lv, tabsize=tabsize, lines=after)
 
     write(nvim, top, btm)
 
