@@ -76,7 +76,7 @@
         fi
         get "${URI_ROOT}/${PLATFORM}" --dest "$FILE"
         unpack "$FILE" --dest "$TMP_DIR"
-        mv "$TMP_DIR/$ARCHIVED" $BIN_PATH
+        mv "${TMP_DIR}/${ARCHIVED}" $BIN_PATH
         chmod +x "$BIN_PATH"
 
 - bin: hadolint
@@ -98,7 +98,7 @@
           FILE="${TMP_DIR}/${BIN_NAME}.tar.xz"
           get "$MAC_OS" --dest "$FILE"
           unpack "$FILE" --dest "$TMP_DIR"
-          mv "$MAC_OS_EXC" "$BIN_PATH"
+          mv "${TMP_DIR}/${MAC_OS_EXC}" "$BIN_PATH"
         else
           get "$LINUX" --dest "$BIN_PATH"
           chmod +x "$BIN_PATH"
