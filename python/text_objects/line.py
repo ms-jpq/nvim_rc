@@ -25,7 +25,7 @@ def _p_inside(line: str) -> Tuple[int, int]:
 
 
 def _p_around(line: str) -> Tuple[int, int]:
-    return 0 if line else 0, len(line) - 1
+    return 0 if line else 0, len(line)
 
 
 @rpc(blocking=True)
