@@ -31,7 +31,12 @@ class Lang:
 
 def load(code: Optional[str]) -> Lang:
     lang = _get_lang(code, fallback=DEFAULT_LANG)
-    path = LANG_ROOT / lang if (LANG_ROOT / lang).exists() else LANG_ROOT / DEFAULT_LANG
-    yml = path.with_suffix(".yml")
-    specs: Mapping[str, str] = decode(Mapping[str, str], safe_load(yml.open()))
+    lang_path = (LANG_ROOT / lang).with_suffix(".yml")
+    yml_path = (
+        lang_path
+        if lang_path.exists()
+        else (LANG_ROOT / DEFAULT_LANG).with_suffix(".yml")
+    )
+
+    specs: Mapping[str, str] = decode(Mapping[str, str], safe_load(yml_path.open()))
     return Lang(specs=specs)
