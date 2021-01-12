@@ -90,6 +90,9 @@
         MAC_OS: v1.19.0/hadolint-Darwin-x86_64
         LINUX: v1.19.0/hadolint-Linux-x86_64
       body: |-
+        set -eu
+        set -o pipefail
+
         if [[ "$OS" == 'Darwin' ]]
         then
           PLATFORM="$MAC_OS"
