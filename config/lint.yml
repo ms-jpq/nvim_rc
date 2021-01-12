@@ -81,6 +81,8 @@
 
 - bin: hadolint
   type: stream
+  args:
+    - "-"
   filetypes:
     - dockerfile
   install:
