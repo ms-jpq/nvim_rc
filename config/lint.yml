@@ -67,7 +67,7 @@
         set -eu
         set -o pipefail
 
-        FILE="$TMP_DIR/${BIN_NAME}.tar.xz"
+        FILE="${TMP_DIR}/${BIN_NAME}.tar.xz"
         if [[ "$OS" == 'Darwin' ]]
         then
           PLATFORM="$MAC_OS"
@@ -86,21 +86,21 @@
   install:
     script:
       env:
-        URI_ROOT: https://github.com/hadolint/hadolint/releases/download
-        MAC_OS: v1.19.0/hadolint-Darwin-x86_64
-        LINUX: v1.19.0/hadolint-Linux-x86_64
+        MAC_OS: https://homebrew.bintray.com/bottles/hadolint-1.19.0.big_sur.bottle.tar.gz
+        LINUX: https://github.com/hadolint/hadolint/releases/download/v1.19.0/hadolint-Linux-x86_64
       body: |-
         set -eu
         set -o pipefail
 
         if [[ "$OS" == 'Darwin' ]]
         then
-          PLATFORM="$MAC_OS"
+          FILE="${TMP_DIR}/${BIN_NAME}.tar.xz"
+          get "$MAC_OS" --dest "$FILE"
+          unpack "$FILE" --dest "$TMP_DIR"
         else
-          PLATFORM="$LINUX"
+          get "$LINUX" --dest "$BIN_PATH"
+          chmod +x "$BIN_PATH"
         fi
-        get "${URI_ROOT}/${PLATFORM}" --dest "$BIN_PATH"
-        chmod +x "$BIN_PATH"
 
 - bin: markdownlint
   type: stream
