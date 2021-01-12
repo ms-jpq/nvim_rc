@@ -2,6 +2,7 @@
 - server: diagnosticls
   bin: diagnostic-languageserver
   filetypes:
+    - python
     - sh
 
   init_options:
@@ -26,8 +27,29 @@
           info: info
           style: hint
           warning: warning
+      mypy:
+        sourceName: mypy
+        command: mypy
+        args:
+          - --no-color-output
+          - --no-error-summary
+          - --show-column-numbers
+          - --follow-imports=silent
+          - --
+          - "%file"
+        debounce: 100
+        formatPattern:
+          - '^.*:(\d+?):(\d+?): ([a-z]+?): (.*)$'
+          - column: 2
+            line: 1
+            message: 4
+            security: 3
+        securities:
+          error: error
 
     filetypes:
+      python:
+        - mypy
       sh:
         - shellcheck
 
@@ -139,7 +161,7 @@
     - graphql
   root:
     exact:
-      - ".git"
+      - .git
   install:
     npm:
       - graphql-language-service-cli
