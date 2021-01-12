@@ -230,7 +230,9 @@ def maybe_install(nvim: Nvim) -> None:
     diff = now - before
     if diff.days > 7:
         ans = nvim.funcs.confirm(LANG("update?"), LANG("ask yes/no"), 2)
-        if ans == 1:
-            open_term(nvim, "python3", INSTALL_SCRIPT, "--install-packages")
+        if ans in {1, 2}:
             coded = encode(now, encoders=(datetime_str_encoder,))
             UPDATE_LOG.write_text(coded)
+
+        if ans == 1:
+            open_term(nvim, "python3", INSTALL_SCRIPT, "--install-packages")
