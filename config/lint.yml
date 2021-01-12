@@ -87,6 +87,7 @@
     script:
       env:
         MAC_OS: https://homebrew.bintray.com/bottles/hadolint-1.19.0.big_sur.bottle.tar.gz
+        MAC_OS_EXC: hadolint/1.19.0/bin/hadolint
         LINUX: https://github.com/hadolint/hadolint/releases/download/v1.19.0/hadolint-Linux-x86_64
       body: |-
         set -eu
@@ -97,6 +98,7 @@
           FILE="${TMP_DIR}/${BIN_NAME}.tar.xz"
           get "$MAC_OS" --dest "$FILE"
           unpack "$FILE" --dest "$TMP_DIR"
+          mv "$MAC_OS_EXC" "$BIN_PATH"
         else
           get "$LINUX" --dest "$BIN_PATH"
           chmod +x "$BIN_PATH"
