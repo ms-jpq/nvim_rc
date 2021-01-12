@@ -222,7 +222,7 @@ def maybe_install(nvim: Nvim) -> None:
     UPDATE_LOG.parent.mkdir(parents=True, exist_ok=True)
     try:
         coded = UPDATE_LOG.read_text()
-        before: datetime = decode(datetime, decoders=(datetime_str_decoder,))
+        before: datetime = decode(datetime, coded, decoders=(datetime_str_decoder,))
     except (FileNotFoundError, DecodeError):
         before = datetime(year=1949, month=9, day=21, tzinfo=timezone.utc)
 
