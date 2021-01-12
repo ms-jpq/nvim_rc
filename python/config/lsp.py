@@ -26,7 +26,7 @@ class RootPattern:
 class LspAttrs:
     server: str
     bin: str
-    args: Sequence[str] = ()
+    args: Optional[Sequence[str]] = None
     filetypes: FrozenSet[str] = frozenset()
     root: Optional[RootPattern] = None
     init_options: Mapping[str, Any] = field(default_factory=dict)
