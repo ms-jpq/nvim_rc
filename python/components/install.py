@@ -1,7 +1,7 @@
 from asyncio.tasks import as_completed
 from datetime import datetime, timezone
 from os import environ, pathsep, uname
-from shutil import which
+from shutil import rmtree, which
 from sys import stderr
 from typing import Awaitable, Iterator, Sequence, Tuple
 
@@ -169,7 +169,9 @@ def _go() -> Iterator[Awaitable[SortOfMonoid]]:
 
 
 def _script() -> Iterator[Awaitable[SortOfMonoid]]:
-    TMP_DIR.unlink(missing_ok=True)
+    if TMP_DIR.exists():
+        rmtree(TMP_DIR)
+
     for path in (BIN_DIR, LIB_DIR, TMP_DIR):
         path.mkdir(parents=True, exist_ok=True)
 
