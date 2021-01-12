@@ -1,10 +1,11 @@
-from operator import add, sub
+from operator import sub
 from string import whitespace
 from typing import Callable, Iterable, Tuple
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
 from pynvim_pp.operators import set_visual_selection
+from std2.functools import identity
 
 from ..registery import keymap, rpc
 
@@ -13,7 +14,7 @@ def _p_inside(line: str) -> Tuple[int, int]:
     ws = {*whitespace}
     chars = tuple(enumerate(line, start=1))
 
-    def p(it: Iterable[Tuple[int, str]], direction: Callable[[int], int]) -> int:
+    def p(it: Iterable[Tuple[int, str]], direction: Callable[[int, int], int]) -> int:
         for idx, char in it:
             if char in ws:
                 pass
@@ -22,7 +23,7 @@ def _p_inside(line: str) -> Tuple[int, int]:
         else:
             return 0
 
-    return p(chars, direction=sub), p(reversed(chars), direction=add)
+    return p(chars, direction=sub), p(reversed(chars), direction=identity)
 
 
 def _p_around(line: str) -> Tuple[int, int]:
