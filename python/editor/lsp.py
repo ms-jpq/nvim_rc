@@ -9,7 +9,7 @@ from std2.pickle import encode
 from std2.types import never
 
 from ..config.lsp import LspAttrs, RootPattern, RPFallback, lsp_specs
-from ..registery import atomic, keymap, rpc
+from ..registery import LANG, atomic, keymap, rpc
 
 keymap.n("H") << "<cmd>lua vim.lsp.util.show_line_diagnostics()<cr>"
 keymap.n("K") << "<cmd>lua vim.lsp.buf.hover()<cr>"
@@ -58,7 +58,7 @@ def _find_root(nvim: Nvim, pattern: RootPattern, filename: str, bufnr: int) -> s
 
 @rpc(blocking=True)
 def _on_attach(nvim: Nvim, server: str) -> None:
-    write(nvim, f"LSP: {server} 已加载")
+    write(nvim, LANG("lsp loaded", server=server))
 
 
 _LSP_INIT = """

@@ -1,0 +1,9 @@
+---
+"loading...": |-
+  "⏳⌛⏳…"
+
+"lsp loaded": |-
+  LSP: ${server} 已加载
+
+"missing_linter": |-
+  ⁉️: 莫有 ${filetype} 的 linter

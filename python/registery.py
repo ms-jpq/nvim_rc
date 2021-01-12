@@ -7,9 +7,11 @@ from pynvim_pp.keymap import Keymap
 from pynvim_pp.rpc import RPC, RpcSpec
 from pynvim_pp.settings import Settings
 
+from .components.localization import load
 from .components.rtp import inst
 from .consts import PATH, PYTHONPATH
 
+LANG = load(code=None)
 atomic = Atomic()
 autocmd = AutoCMD()
 keymap = Keymap()

@@ -14,7 +14,7 @@ from std2.asyncio.subprocess import call
 
 from ..config.linter import LinterAttrs, LinterType, linter_specs
 from ..consts import DATE_FMT
-from ..registery import keymap, rpc
+from ..registery import LANG, keymap, rpc
 
 
 @dataclass(frozen=True)
@@ -134,9 +134,9 @@ async def _run_linter(nvim: Nvim) -> None:
     cwd, ctx = await async_call(nvim, current_ctx, nvim)
     linters = tuple(_linters_for(ctx.filetype))
     if not linters:
-        await awrite(nvim, f"⁉️: 莫有 {ctx.filetype} 的 linter", error=True)
+        await awrite(nvim, LANG("missing_linter", filetype=ctx.filetype), error=True)
     else:
-        await awrite(nvim, "⏳⌛⏳…")
+        await awrite(nvim, LANG("loading..."))
         await _run(nvim, ctx=ctx, attrs=linters, cwd=cwd)
         await awrite(nvim, "")
 

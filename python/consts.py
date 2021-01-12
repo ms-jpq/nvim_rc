@@ -7,6 +7,8 @@ TOP_LEVEL = Path(__file__).resolve().parent.parent
 
 INSTALL_SCRIPT = str(TOP_LEVEL / "init.py")
 REQUIREMENTS = str(TOP_LEVEL / "requirements.txt")
+LANG_ROOT = TOP_LEVEL / "locale"
+DEFAULT_LANG = "c"
 
 
 CONF_DIR = TOP_LEVEL / "config"
