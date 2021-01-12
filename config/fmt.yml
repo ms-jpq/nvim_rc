@@ -72,17 +72,20 @@
         - perl
       env:
         URI: https://github.com/darold/pgFormatter
-        RELEASE: "v4.4"
+        TAG: "v4.4"
       body: |-
         set -eu
         set -o pipefail
 
         if [[ -d "$LIB_PATH" ]]
         then
-          rm -rf "$LIB_PATH"
+          cd "$LIB_PATH" || exit 1
+          OPTS=(--recurse-submodules)
+          git pull "${OPTS[@]}" "refs/tags/${TAG}:refs/tags/${TAG}"
+        else
+          OPTS=(--depth=1 --recurse-submodules --shallow-submodules)
+          git clone "${OPTS[@]}" --branch "$TAG" "$URI" "$LIB_PATH"
         fi
-        OPTS=(--depth=1 --recurse-submodules --shallow-submodules)
-        git clone "${OPTS[@]}" --branch "$RELEASE" "$URI" "$LIB_PATH"
         ln --symbolic --force "$LIB_PATH/$BIN_NAME" "$BIN_PATH"
 
 - bin: rustfmt
