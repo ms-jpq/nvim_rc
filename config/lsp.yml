@@ -122,11 +122,11 @@
 
         if [[ "$OS" == 'Darwin' ]]
         then
-          ARCH="$MAC_OS"
+          PLATFORM="$MAC_OS"
         else
-          ARCH="$LINUX"
+          PLATFORM="$LINUX"
         fi
-        get "${URI_ROOT}/${RELEASE}/${ARCH}" --dest "$BIN_PATH"
+        get "${URI_ROOT}/${RELEASE}/${PLATFORM}" --dest "$BIN_PATH"
         chmod +x "$BIN_PATH"
 
 - server: gopls

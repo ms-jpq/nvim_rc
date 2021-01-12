@@ -70,11 +70,11 @@
         FILE="$TMP_DIR/${BIN_NAME}.tar.xz"
         if [[ "$OS" == 'Darwin' ]]
         then
-          ARCH="$MAC_OS"
+          PLATFORM="$MAC_OS"
         else
-          ARCH="$LINUX"
+          PLATFORM="$LINUX"
         fi
-        get "${URI_ROOT}/${ARCH}" --dest "$FILE"
+        get "${URI_ROOT}/${PLATFORM}" --dest "$FILE"
         unpack "$FILE" --dest "$TMP_DIR"
         mv "$TMP_DIR/$ARCHIVED" $BIN_PATH
         chmod +x "$BIN_PATH"
@@ -92,11 +92,11 @@
       body: |-
         if [[ "$OS" == 'Darwin' ]]
         then
-          ARCH="$MAC_OS"
+          PLATFORM="$MAC_OS"
         else
-          ARCH="$LINUX"
+          PLATFORM="$LINUX"
         fi
-        get "$URI_ROOT/$ARCH" "$BIN_PATH"
+        get "${URI_ROOT}/${PLATFORM}" --dest "$BIN_PATH"
         chmod +x "$BIN_PATH"
 
 - bin: markdownlint
