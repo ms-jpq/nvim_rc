@@ -6,7 +6,7 @@
   " -> "
 
 "lsp loaded": |-
-  LSP: ${server} 已加载
+  LSP 加载：${server}
 
 "grammar error": |-
   ⛔️ 语法错误 👉 ${text}
@@ -18,13 +18,13 @@
   ✅ 👉 ${args}
 
 "missing": |-
-  ⁉️: 莫有 ${thing}
+  ⁉️ 找不到 ${thing}
 
 "missing_linter": |-
-  ⁉️: 莫有 ${filetype} 的 linter
+  ⁉️ 找不到 ${filetype} 的 linter
 
 "missing prettier": |-
-  ⁉️: 莫有 ${filetype} 的 prettier
+  ⁉️ 找不到 ${filetype} 的 prettier
 
 "prettier failed": |-
   ⛔️ 美化失败

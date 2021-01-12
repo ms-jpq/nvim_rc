@@ -18,13 +18,13 @@
   ✅ 👉 ${args}
 
 "missing": |-
-  ⁉️: Missing ${thing}
+  ⁉️ Missing ${thing}
 
 "missing_linter": |-
-  ⁉️: Unable to find linter for ${filetype}
+  ⁉️ Unable to find linter for ${filetype}
 
 "missing prettier": |-
-  ⁉️: Unable to find prettier for ${filetype}
+  ⁉️ Unable to find prettier for ${filetype}
 
 "prettier failed": |-
   ⛔️ Prettier Failed
