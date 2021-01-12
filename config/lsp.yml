@@ -10,8 +10,7 @@
         sourceName: shellcheck
         command: shellcheck
         args:
-          - --format
-          - json
+          - --format=json
           - "-"
         debounce: 100
         parseJson:
