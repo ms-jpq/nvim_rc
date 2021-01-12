@@ -35,7 +35,7 @@ def main() -> None:
     src: str = args.src
     parsed = urlparse(src)
     name = basename(parsed.path)
-    dest = Path(args.dest if args.dest else name)
+    dest = Path(args.dest if args.dest else name).resolve()
     print_dest: Optional[Path] = args.print_dest
 
     payload = fetch(src, timeout=args.timeout)
