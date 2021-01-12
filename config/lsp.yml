@@ -2,6 +2,7 @@
 - server: diagnosticls
   bin: diagnostic-languageserver
   filetypes:
+    - dockerfile
     - python
     - sh
 
