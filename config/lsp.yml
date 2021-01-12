@@ -11,6 +11,7 @@
         command: shellcheck
         args:
           - --format=json
+          - --exclude=SC1090
           - "-"
         debounce: 100
         parseJson:
