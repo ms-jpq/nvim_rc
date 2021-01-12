@@ -5,7 +5,7 @@ from typing import Any, Mapping, MutableMapping
 
 from pynvim import Nvim
 from pynvim_pp.lib import write
-from std2.pickle import encode
+from std2.pickle import decode, encode
 from std2.types import never
 
 from ..config.lsp import LspAttrs, RootPattern, RPFallback, lsp_specs
@@ -33,8 +33,10 @@ keymap.n("g]") << "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>"
 
 
 @rpc(blocking=True)
-def _find_root(nvim: Nvim, pattern: RootPattern, filename: str, bufnr: int) -> str:
+def _find_root(nvim: Nvim, _pattern: Any, filename: str, bufnr: int) -> str:
+    pattern: RootPattern = decode(RootPattern, _pattern)
     path = Path(filename)
+
     for parent in path.parents:
         for member in parent.iterdir():
             name = member.name

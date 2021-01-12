@@ -3,8 +3,9 @@
   bin: diagnostic-languageserver
   filetypes:
     - dockerfile
-    - python
     - sh
+  root:
+    fallback: cwd
 
   init_options:
     linters:
@@ -15,7 +16,6 @@
           - --format=json
           - --exclude=SC1090
           - "-"
-        debounce: 100
         parseJson:
           column: column
           endColumn: endColumn
@@ -46,31 +46,11 @@
           style: hint
           warning: warning
 
-      mypy:
-        sourceName: mypy
-        command: mypy
-        args:
-          - --no-color-output
-          - --no-error-summary
-          - --show-column-numbers
-          - --follow-imports=silent
-          - --
-          - "%file"
-        debounce: 100
-        formatPattern:
-          - '^.*:(\d+?):(\d+?): ([a-z]+?): (.*)$'
-          - column: 2
-            line: 1
-            message: 4
-            security: 3
-        securities:
-          error: error
+
 
     filetypes:
       dockerfile:
         - hadolint
-      python:
-        - mypy
       sh:
         - shellcheck
 
