@@ -33,7 +33,6 @@
   install:
     npm:
       - diagnostic-languageserver
-      - write-good
 
 - server: jsonls
   bin: vscode-json-languageserver
