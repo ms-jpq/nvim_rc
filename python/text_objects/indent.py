@@ -1,9 +1,10 @@
-from typing import Iterable, Optional, Sequence, Tuple
+from typing import Iterable, Optional, Sequence
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
-from pynvim_pp.operators import set_visual_selection, p_indent
 from pynvim_pp.lib import write
+from pynvim_pp.operators import p_indent, set_visual_selection
+
 from ..registery import keymap, rpc
 
 
@@ -38,11 +39,11 @@ def _indent(nvim: Nvim, is_inside: bool) -> None:
     init_lv = p_indent(curr, tabsize=tabsize)
 
     if is_inside:
-        top = _p_inside(init_lv, tabsize=tabsize, lines=reversed(before))
-        btm = _p_inside(init_lv, tabsize=tabsize, lines=after)
+        top = row - _p_inside(init_lv, tabsize=tabsize, lines=reversed(before))
+        btm = row + _p_inside(init_lv, tabsize=tabsize, lines=after)
     else:
-        top = _p_inside(init_lv, tabsize=tabsize, lines=reversed(before))
-        btm = _p_inside(init_lv, tabsize=tabsize, lines=after)
+        top = row - _p_inside(init_lv, tabsize=tabsize, lines=reversed(before))
+        btm = row + _p_inside(init_lv, tabsize=tabsize, lines=after)
 
     write(nvim, top, btm)
 
