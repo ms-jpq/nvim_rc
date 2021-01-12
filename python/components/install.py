@@ -7,6 +7,8 @@ from typing import Awaitable, Iterator, Sequence, Tuple
 
 from pynvim.api.nvim import Nvim
 from std2.asyncio.subprocess import ProcReturn, call
+from std2.pickle import DecodeError, decode, encode
+from std2.pickle.coders import datetime_str_decoder, datetime_str_encoder
 
 from ..config.fmt import fmt_specs
 from ..config.install import ScriptSpec
@@ -218,11 +220,11 @@ async def install() -> int:
 
 def maybe_install(nvim: Nvim) -> None:
     UPDATE_LOG.parent.mkdir(parents=True, exist_ok=True)
-    before = (
-        datetime.fromisoformat(UPDATE_LOG.read_text())
-        if UPDATE_LOG.exists()
-        else datetime(year=1949, month=9, day=21, tzinfo=timezone.utc)
-    )
+    try:
+        coded = UPDATE_LOG.read_text()
+        before: datetime = decode(datetime, decoders=(datetime_str_decoder,))
+    except (FileNotFoundError, DecodeError):
+        before = datetime(year=1949, month=9, day=21, tzinfo=timezone.utc)
 
     now = datetime.now(tz=timezone.utc)
     diff = now - before
@@ -230,4 +232,5 @@ def maybe_install(nvim: Nvim) -> None:
         ans = nvim.funcs.confirm(LANG("update?"), LANG("ask yes/no"), 2)
         if ans == 1:
             open_term(nvim, "python3", INSTALL_SCRIPT, "--install-packages")
-            UPDATE_LOG.write_text(now.isoformat())
+            coded = encode(now, encoders=(datetime_str_encoder,))
+            UPDATE_LOG.write_text(coded)
