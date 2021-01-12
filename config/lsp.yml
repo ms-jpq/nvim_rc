@@ -35,6 +35,8 @@
         args:
           - --format=json
           - "-"
+        rootPatterns:
+          - .hadolint.yaml
         parseJson:
           column: column
           line: line

@@ -10,13 +10,14 @@ RUN apt-get update && \
     add-apt-repository ppa:neovim-ppa/stable && \
     apt-get update && \
     apt-get install -y --no-install-recommends neovim && \
-    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 
 # Dependencies
-RUN apt-get install -y --no-install-recommends \
-    nodejs npm golang-go perl
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    nodejs npm golang-go perl && \
+    rm -rf /var/lib/apt/lists/*
 
 
 # INSTALL
@@ -27,4 +28,6 @@ RUN ./.config/nvim/init.py --install-runtime --install-packages
 
 
 # Cleanup
-RUN apt-get autoremove -y
+RUN apt-get autoremove -y && \  
+    apt-get clean
+
