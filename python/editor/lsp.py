@@ -1,7 +1,7 @@
 from fnmatch import fnmatch
 from pathlib import Path
 from shutil import which
-from typing import Any, Mapping, MutableMapping
+from typing import Any, Mapping, MutableMapping, Optional
 
 from pynvim import Nvim
 from pynvim_pp.lib import write
@@ -33,7 +33,7 @@ keymap.n("g]") << "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>"
 
 
 @rpc(blocking=True)
-def _find_root(nvim: Nvim, _pattern: Any, filename: str, bufnr: int) -> str:
+def _find_root(nvim: Nvim, _pattern: Any, filename: str, bufnr: int) -> Optional[str]:
     pattern: RootPattern = decode(RootPattern, _pattern)
     path = Path(filename)
 
