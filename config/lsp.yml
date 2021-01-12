@@ -16,6 +16,9 @@
           - --format=json
           - --exclude=SC1090
           - "-"
+        rootPatterns:
+          - .shellcheckrc
+          - shellcheckrc
         parseJson:
           column: column
           endColumn: endColumn
@@ -160,6 +163,12 @@
     - server
   filetypes:
     - graphql
+    - javascript
+    - javascript.jsx
+    - javascriptreact
+    - typescript
+    - typescript.tsx
+    - typescriptreact
   root:
     fallback: none
     exact:

@@ -58,7 +58,6 @@
 - bin: pg_format
   type: stream
   args:
-    - --no-rcfile
     - --spaces=${tabsize}
     - --comma-start
     - --comma-end
