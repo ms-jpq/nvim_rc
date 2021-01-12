@@ -3,7 +3,8 @@
 from argparse import ArgumentParser, Namespace
 from http.client import HTTPResponse
 from os.path import basename
-from typing import cast
+from pathlib import Path
+from typing import Optional, cast
 from urllib.parse import urlparse
 from urllib.request import build_opener
 
@@ -18,6 +19,7 @@ def parse_args() -> Namespace:
     parser = ArgumentParser()
     parser.add_argument("src")
     parser.add_argument("-d", "--dest", default=None)
+    parser.add_argument("-p", "--print-dest", type=Path, default=None)
     parser.add_argument("-t", "--timeout", type=int, default=60)
     return parser.parse_args()
 
@@ -28,11 +30,14 @@ def main() -> None:
     src: str = args.src
     parsed = urlparse(src)
     name = basename(parsed.path)
-    dest: str = args.dest if args.dest else name
+    dest = Path(args.dest if args.dest else name)
+    print_dest: Optional[Path] = args.print_dest
 
     payload = fetch(src, timeout=args.timeout)
-    with open(dest, "wb") as fd:
-        fd.write(payload)
+    dest.write_bytes(payload)
+
+    if print_dest:
+        print_dest.write_text(str(dest))
 
 
 main()
