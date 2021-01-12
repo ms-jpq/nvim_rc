@@ -75,8 +75,6 @@
 
 - uri: https://github.com/tpope/vim-unimpaired
 
-- uri: https://github.com/michaeljsmith/vim-indent-object
-
 - uri: https://github.com/airblade/vim-gitgutter
 
 - uri: https://github.com/sheerun/vim-polyglot
