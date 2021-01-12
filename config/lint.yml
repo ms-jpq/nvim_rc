@@ -67,7 +67,7 @@
         set -eu
         set -o pipefail
 
-        TMP="$(mkstemp)"
+        TMP="$(mktemp)"
         if [[ "$OS" == 'Darwin' ]]
         then
           PLATFORM="$MAC_OS"
@@ -97,7 +97,7 @@
 
         if [[ "$OS" == 'Darwin' ]]
         then
-          TMP="$(mkstemp)"
+          TMP="$(mktemp)"
           get "$MAC_OS" --print-dest "$TMP"
           unpack "$(<"$TMP")" "$TMP_DIR"
           mv "${TMP_DIR}/${MAC_OS_EXC}" "$BIN_PATH"
