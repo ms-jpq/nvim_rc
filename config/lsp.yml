@@ -58,18 +58,6 @@
     npm:
       - dockerfile-language-server-nodejs
 
-- server: html
-  bin: html-languageserver
-  install:
-    npm:
-      - vscode-html-languageserver-bin
-
-- server: cssls
-  bin: css-languageserver
-  install:
-    npm:
-      - vscode-css-languageserver-bin
-
 - server: pyright
   bin: pyright-langserver
   install:
@@ -129,6 +117,18 @@
     npm:
       - typescript
       - typescript-language-server
+
+- server: html
+  bin: html-languageserver
+  install:
+    npm:
+      - vscode-html-languageserver-bin
+
+- server: cssls
+  bin: css-languageserver
+  install:
+    npm:
+      - vscode-css-languageserver-bin
 
 - server: graphqlls
   bin: graphql-lsp
