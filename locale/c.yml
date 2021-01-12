@@ -6,10 +6,10 @@
   " -> "
 
 "lsp loaded": |-
-  LSP: ${server} 已加载
+  LSP Loaded: ${server}
 
 "grammar error": |-
-  ⛔️ 语法错误 👉 ${text}
+  ⛔️ Grammar Error 👉 ${text}
 
 "proc failed": |-
   ⛔️ - ${code} 👉 ${args}
@@ -18,16 +18,16 @@
   ✅ 👉 ${args}
 
 "missing": |-
-  ⁉️: 莫有 ${thing}
+  ⁉️: Missing ${thing}
 
 "missing_linter": |-
-  ⁉️: 莫有 ${filetype} 的 linter
+  ⁉️: Unable to find linter for ${filetype}
 
 "missing prettier": |-
-  ⁉️: 莫有 ${filetype} 的 prettier
+  ⁉️: Unable to find prettier for ${filetype}
 
 "prettier failed": |-
-  ⛔️ 美化失败
+  ⛔️ Prettier Failed
 
 "prettier succeeded": |-
-  ✅ 美化成功 👉 ${prettier}
+  ✅ Prettier Succeeded 👉 ${prettier}

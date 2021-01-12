@@ -77,7 +77,7 @@ async def _run(
                 lines = temp.read_text().splitlines()
                 nvim.api.buf_set_lines(ctx.buf, 0, -1, True, lines)
 
-            prettiers = " -> ".join(attr.bin for attr in attrs)
+            prettiers = LANG("step join sep").join(attr.bin for attr in attrs)
             nice = LANG("prettier succeeded", prettiers=prettiers)
             await gather(awrite(nvim, nice), async_call(nvim, cont))
 
