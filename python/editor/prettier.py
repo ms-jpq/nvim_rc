@@ -1,9 +1,7 @@
 from asyncio import gather
-from contextlib import contextmanager
-from os import close, linesep
+from os import linesep
 from pathlib import Path
 from shutil import which
-from tempfile import mkstemp
 from typing import Iterable, Iterator
 
 from pynvim import Nvim
@@ -13,18 +11,14 @@ from std2.asyncio.subprocess import call
 
 from ..config.fmt import FmtAttrs, FmtType, fmt_specs
 from ..registery import LANG, keymap, rpc
-from .linter import BufContext, ParseError, arg_subst, current_ctx, set_preview_content
-
-
-@contextmanager
-def _mktemp(path: Path) -> Iterator[Path]:
-    fd, temp = mkstemp(prefix=path.stem, suffix=path.suffix, dir=path.parent)
-    close(fd)
-    new_path = Path(temp)
-    try:
-        yield new_path
-    finally:
-        new_path.unlink(missing_ok=True)
+from .linter import (
+    BufContext,
+    ParseError,
+    arg_subst,
+    current_ctx,
+    make_temp,
+    set_preview_content,
+)
 
 
 async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> str:
@@ -56,7 +50,7 @@ async def _run(
 ) -> None:
     body = linesep.join(ctx.lines).encode()
     path = Path(ctx.filename)
-    with _mktemp(path) as temp:
+    with make_temp(path) as temp:
         temp.write_bytes(body)
         errs = [
             err

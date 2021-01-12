@@ -1,8 +1,11 @@
 from asyncio import gather
+from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime
-from os import linesep
+from os import close, linesep
+from pathlib import Path
 from shutil import which
+from tempfile import mkstemp
 from typing import Iterable, Iterator, MutableSequence, Sequence, Tuple
 
 from pynvim import Nvim
@@ -80,6 +83,17 @@ def arg_subst(args: Iterable[str], ctx: BufContext, filename: str) -> Iterator[s
         yield "".join(subst(arg))
 
 
+@contextmanager
+def make_temp(path: Path) -> Iterator[Path]:
+    fd, temp = mkstemp(prefix=path.stem, suffix=path.suffix, dir=path.parent)
+    close(fd)
+    new_path = Path(temp)
+    try:
+        yield new_path
+    finally:
+        new_path.unlink(missing_ok=True)
+
+
 async def set_preview_content(nvim: Nvim, text: str) -> None:
     def cont() -> None:
         with hold_win_pos(nvim):
@@ -89,12 +103,12 @@ async def set_preview_content(nvim: Nvim, text: str) -> None:
 
 
 async def _linter_output(
-    attr: LinterAttrs, ctx: BufContext, cwd: str, body: bytes
+    attr: LinterAttrs, ctx: BufContext, cwd: str, body: bytes, temp: Path
 ) -> str:
     arg_info = f"{attr.bin} {' '.join(attr.args)}"
 
     try:
-        args = arg_subst(attr.args, ctx=ctx, filename=ctx.filename)
+        args = arg_subst(attr.args, ctx=ctx, filename=str(temp))
     except ParseError:
         return LANG("grammar error", text=arg_info)
     else:
@@ -115,9 +129,16 @@ async def _run(
     nvim: Nvim, ctx: BufContext, attrs: Iterable[LinterAttrs], cwd: str
 ) -> None:
     body = linesep.join(ctx.lines).encode()
-    outputs = await gather(
-        *(_linter_output(attr, ctx=ctx, cwd=cwd, body=body) for attr in attrs)
-    )
+    path = Path(ctx.filename)
+    with make_temp(path) as temp:
+        temp.write_bytes(body)
+        outputs = await gather(
+            *(
+                _linter_output(attr, ctx=ctx, cwd=cwd, body=body, temp=temp)
+                for attr in attrs
+            )
+        )
+
     now = datetime.now().strftime(DATE_FMT)
     preview = (linesep * 2).join((now, *outputs))
     await set_preview_content(nvim, text=preview)
