@@ -1,5 +1,6 @@
+from operator import add, sub
 from string import whitespace
-from typing import Iterable, Tuple
+from typing import Callable, Iterable, Tuple
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
@@ -12,16 +13,16 @@ def _p_inside(line: str) -> Tuple[int, int]:
     ws = {*whitespace}
     chars = tuple(enumerate(line, start=1))
 
-    def p(it: Iterable[Tuple[int, str]]) -> int:
+    def p(it: Iterable[Tuple[int, str]], direction: Callable[[int], int]) -> int:
         for idx, char in it:
             if char in ws:
                 pass
             else:
-                return idx
+                return direction(idx, 1)
         else:
             return 0
 
-    return p(chars), p(reversed(chars))
+    return p(chars, direction=sub), p(reversed(chars), direction=add)
 
 
 def _p_around(line: str) -> Tuple[int, int]:
