@@ -37,4 +37,4 @@
   ⛔️ 美化失败
 
 "prettier succeeded": |-
-  ✅ 美化成功 👉 ${prettier}
+  ✅ 美化成功 👉 ${prettiers}

@@ -37,4 +37,4 @@
   ⛔️ Prettier Failed
 
 "prettier succeeded": |-
-  ✅ Prettier Succeeded 👉 ${prettier}
+  ✅ Prettier Succeeded 👉 ${prettiers}
