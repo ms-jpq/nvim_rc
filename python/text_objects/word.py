@@ -34,15 +34,15 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
     else:
         words_lhs, words_rhs = ctx.word_lhs, ctx.word_rhs
 
-    lhs = c + offset - len(words_lhs.encode())
-    rhs = c + offset + len(words_rhs.encode()) - 1
+    c_lhs = c + offset - len(words_lhs.encode())
+    c_rhs = c + offset + len(words_rhs.encode()) - 1
 
     if is_inside:
-        mark1 = (row, lhs)
-        mark2 = (row, rhs)
+        mark1 = (row, c_lhs)
+        mark2 = (row, c_rhs)
     else:
-        mark1 = (row, lhs - 1)
-        mark2 = (row, rhs + 1)
+        mark1 = (row, c_lhs - 1)
+        mark2 = (row, c_rhs + 1)
 
     set_visual_selection(nvim, buf=buf, mark1=mark1, mark2=mark2)
     nvim.command("norm! `<v`>")
