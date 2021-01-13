@@ -2,7 +2,6 @@ from pynvim import Nvim
 from pynvim_pp.api import (
     buf_get_lines,
     cur_window,
-    str_col_pos,
     win_get_buf,
     win_get_cursor,
 )
@@ -23,9 +22,8 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
     lines = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
     line = next(iter(lines))
 
-    col = str_col_pos(nvim, buf=buf, row=row, col=c)
     # position under cursor
-    col = col + 1
+    col = len(line.encode()[:c].decode()) + 1
     lhs, rhs = line[:col], line[col:]
     # undo col + 1
     offset = len(next(reversed(lhs), "").encode())
