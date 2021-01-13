@@ -8,14 +8,13 @@ from ..registery import keymap, rpc
 
 
 def _p_inside(line: str) -> Tuple[int, int]:
-    encoded = line.encode()
-    lhs = len(encoded) - len(encoded.lstrip())
-    rhs = len(encoded.rstrip()) - 1
+    lhs = len(line.encode()) - len(line.lstrip().encode())
+    rhs = len(line.rstrip().encode()) - 1
     return lhs, rhs
 
 
 def _p_around(line: str) -> Tuple[int, int]:
-    return 0, len(line.encode()) - 1
+    return 0, len(line.encode())
 
 
 @rpc(blocking=True)
