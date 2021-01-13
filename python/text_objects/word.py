@@ -20,27 +20,23 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
     buf = win_get_buf(nvim, win=win)
 
     row, c = win_get_cursor(nvim, win=win)
-    # position under cursor
-    # c = c + 1
-    col = str_col_pos(nvim, buf=buf, row=row, col=c)
-
     lines = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
     line = next(iter(lines))
 
-    (words_lhs, words_rhs), (sym_lhs, sym_rhs) = gen_lhs_rhs(
-        line, col=col, unifying_chars=UNIFIYING_CHARS
-    )
-    if not (words_lhs + words_rhs):
-        words_lhs, words_rhs = sym_lhs, sym_rhs
+    col = str_col_pos(nvim, buf=buf, row=row, col=c)
+    # position under cursor
+    col = col + 1
 
-    offset = 0 #len(line[col-1]) if col -1 in range(len(line)) else 0
+    ctx = gen_lhs_rhs(line, col=col, unifying_chars=UNIFIYING_CHARS)
+    if not (ctx.word_lhs + ctx.word_rhs):
+        words_lhs, words_rhs = ctx.syms_lhs, ctx.syms_rhs
+    else:
+        words_lhs, words_rhs = ctx.word_lhs, ctx.word_rhs
+
+    # undo col + 1
+    offset = len(next(reversed(ctx.lhs), "").encode())
     lhs = c + offset - len(words_lhs.encode())
     rhs = c + offset + len(words_rhs.encode()) - 1
-
-    # from sys import stderr
-    # print(line[:col], "|", line[col:], sep="", file=stderr)
-    # print("|", words_lhs, "|", words_rhs, "|", sep="", file=stderr)
-    # print(c,  c-len(words_lhs.encode()), c+len(words_rhs.encode())-1, file=stderr)
 
     if is_inside:
         mark1 = (row, lhs)
