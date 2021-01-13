@@ -3,9 +3,10 @@ from typing import Optional
 
 from pynvim.api.nvim import Nvim
 from pynvim_pp.lib import async_call, go
+from std2.sched import ticker
 
 from ..consts import BACKUP_DIR
-from ..registery import autocmd, rpc, settings
+from ..registery import atomic, autocmd, rpc, settings
 
 # auto load changes
 settings["autoread"] = True
@@ -14,7 +15,18 @@ settings["autowrite"] = True
 settings["autowriteall"] = True
 
 
-autocmd("FocusGained", "BufEnter") << "checktime"
+@rpc(blocking=True)
+def _check_time(nvim: Nvim) -> None:
+    check = lambda: nvim.command("checktime")
+
+    async def cont() -> None:
+        async for _ in ticker(3, immediately=False):
+            go(async_call(nvim, check))
+
+    go(cont())
+
+
+atomic.exec_lua(f"{_check_time.name}()", ())
 
 
 # auto backup
