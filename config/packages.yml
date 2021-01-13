@@ -41,9 +41,31 @@
     edge_menu_selection_background: purple
     lightline:
       colorscheme: edge
+      component_function:
+        tabsize: LightLineTabSize
+      active:
+        right:
+          - - lineinfo
+          - - percent
+          - - filetype
+            - tabsize
+
+  lua: |-
+    lv = lv or {}
+    lv.LightLineTabSize = function ()
+      if not vim.bo.expandtab then
+        return "Tabs " .. vim.bo.tabstop
+      else
+        return "Spaces " .. vim.bo.tabstop
+      end
+    end
+
   viml: |-
     set background=light
     colorscheme edge
+    function LightLineTabSize()
+      return v:lua.lv.LightLineTabSize()
+    endfunction
 
 - uri: https://github.com/itchyny/lightline.vim
 
