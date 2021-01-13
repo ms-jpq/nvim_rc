@@ -7,7 +7,7 @@ from pynvim_pp.api import (
     win_get_cursor,
 )
 from pynvim_pp.operators import set_visual_selection
-from pynvim_pp.text_object import gen_lhs_rhs
+from pynvim_pp.text_object import gen_split
 
 from ..registery import keymap, rpc
 
@@ -26,15 +26,16 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
     col = str_col_pos(nvim, buf=buf, row=row, col=c)
     # position under cursor
     col = col + 1
+    lhs, rhs = line[:col], line[col:]
+    # undo col + 1
+    offset = len(next(reversed(lhs), "").encode())
 
-    ctx = gen_lhs_rhs(line, col=col, unifying_chars=UNIFIYING_CHARS)
+    ctx = gen_split(lhs, rhs, unifying_chars=UNIFIYING_CHARS)
     if not (ctx.word_lhs + ctx.word_rhs):
         words_lhs, words_rhs = ctx.syms_lhs, ctx.syms_rhs
     else:
         words_lhs, words_rhs = ctx.word_lhs, ctx.word_rhs
 
-    # undo col + 1
-    offset = len(next(reversed(ctx.lhs), "").encode())
     lhs = c + offset - len(words_lhs.encode())
     rhs = c + offset + len(words_rhs.encode()) - 1
 
