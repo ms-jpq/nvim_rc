@@ -20,7 +20,7 @@ def _go_replace(nvim: Nvim, visual: VisualTypes = None) -> None:
     else:
         (row1, c1), (row2, c2) = operator_marks(nvim, buf=buf, visual_type=visual)
         col1 = str_col_pos(nvim, buf=buf, row=row1, col=c1)
-        col2 = str_col_pos(nvim, buf=buf, row=row1, col=c2)
+        col2 = str_col_pos(nvim, buf=buf, row=row2, col=c2)
 
         lines = buf_get_lines(nvim, buf=buf, lo=row1, hi=row2 + 1)
         head = lines[0][:col1]
