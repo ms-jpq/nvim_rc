@@ -1,4 +1,5 @@
 from collections import Counter
+from typing import cast
 
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import (
@@ -29,7 +30,7 @@ def _surround(nvim: Nvim) -> None:
 
         def cont() -> None:
             new_col = col + len(lhs.encode())
-            nvim.api.set_vvar("char", lhs + rhs)
+            nvim.api.set_vvar("char", lhs + cast(str, rhs))
             set_cur = lambda: win_set_cursor(nvim, win=win, row=row, col=new_col)
             go(async_call(nvim, set_cur))
 
