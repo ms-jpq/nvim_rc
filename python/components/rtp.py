@@ -23,7 +23,7 @@ def inst(nvim: Nvim) -> Atomic:
         if path.exists()
     }
 
-    atomic = rtp_packages(nvim, plugins=pkgs)
+    atomic1 = Atomic()
     keymap = Keymap()
 
     for spec in pkgs.values():
@@ -32,10 +32,14 @@ def inst(nvim: Nvim) -> Atomic:
                 attrgetter(key.modes)(keymap)(lhs, **asdict(key.opts)) << rhs
 
         for lhs, rhs in spec.vals.items():
-            atomic.set_var(lhs, rhs)
-        if spec.lua:
-            atomic.exec_lua(spec.lua, ())
-        if spec.viml:
-            atomic.exec(spec.viml, False)
+            atomic1.set_var(lhs, rhs)
 
-    return atomic + keymap.drain(buf=None)
+    atomic2 = rtp_packages(nvim, plugins=pkgs)
+
+    for spec in pkgs.values():
+        if spec.lua:
+            atomic2.exec_lua(spec.lua, ())
+        if spec.viml:
+            atomic2.exec(spec.viml, False)
+
+    return atomic1 + keymap.drain(buf=None) + atomic2

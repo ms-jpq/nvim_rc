@@ -39,6 +39,14 @@
   vals:
     edge_style: neon
     edge_menu_selection_background: purple
+  viml: |-
+    set background=light
+    colorscheme edge
+
+- uri: https://github.com/itchyny/lightline.vim
+  vals:
+    edge_style: neon
+    edge_menu_selection_background: purple
     lightline:
       colorscheme: edge
       component_function:
@@ -49,7 +57,6 @@
           - - percent
           - - filetype
             - tabsize
-
   lua: |-
     lv = lv or {}
     lv.LightLineTabSize = function ()
@@ -59,15 +66,10 @@
         return "Spaces " .. vim.bo.tabstop
       end
     end
-
   viml: |-
-    set background=light
-    colorscheme edge
     function LightLineTabSize()
       return v:lua.lv.LightLineTabSize()
     endfunction
-
-- uri: https://github.com/itchyny/lightline.vim
 
 - uri: https://github.com/liuchengxu/vim-which-key
   keys:
