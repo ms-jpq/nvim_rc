@@ -34,7 +34,7 @@ def _indent(nvim: Nvim, is_inside: bool) -> None:
     tabsize: int = buf_get_option(nvim, buf=buf, key="tabstop")
 
     lines = buf_get_lines(nvim, buf=buf, lo=0, hi=-1)
-    before, curr, after = lines[: row - 1], lines[row], lines[row + 1 :]
+    before, curr, after = lines[:row], lines[row], lines[row + 1 :]
     init_lv = p_indent(curr, tabsize=tabsize)
 
     if is_inside:
