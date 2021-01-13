@@ -1,7 +1,7 @@
 from typing import Iterable, Iterator, Tuple
 
 from pynvim import Nvim
-from pynvim.api import Buffer, Window
+from pynvim.api import Buffer, NvimError, Window
 from pynvim_pp.api import (
     buf_get_lines,
     buf_line_count,
@@ -103,6 +103,12 @@ def _trailing_ws(nvim: Nvim) -> None:
         _set_trimmed(nvim, win=win, buf=buf)
 
 
-autocmd(
-    "CursorHold", modifiers=("*", "undojoin", "|")
-) << f"silent! lua {_trailing_ws.name}()"
+@rpc(blocking=True)
+def _trailing_ws_thunk(nvim: Nvim) -> None:
+    try:
+        nvim.command(f"undojoin | lua {_trailing_ws.name}()")
+    except NvimError:
+        pass
+
+
+autocmd("CursorHold") << f"lua {_trailing_ws_thunk.name}()"
