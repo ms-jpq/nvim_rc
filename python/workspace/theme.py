@@ -1,6 +1,4 @@
-from typing import Sequence
-
-from pynvim.api.nvim import Buffer, Nvim
+from pynvim.api.nvim import Nvim
 from pynvim_pp.highlight import HLgroup, highlight
 
 from ..registery import autocmd, rpc, settings

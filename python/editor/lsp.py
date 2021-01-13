@@ -4,6 +4,7 @@ from shutil import which
 from typing import Any, Mapping, MutableMapping, Optional
 
 from pynvim import Nvim
+from pynvim_pp.api import get_cwd
 from pynvim_pp.lib import write
 from std2.pickle import decode, encode
 from std2.types import never
@@ -50,8 +51,7 @@ def _find_root(nvim: Nvim, _pattern: Any, filename: str, bufnr: int) -> Optional
         if pattern.fallback is RPFallback.none:
             return None
         elif pattern.fallback is RPFallback.cwd:
-            cwd: str = nvim.funcs.getcwd()
-            return cwd
+            return get_cwd(nvim)
         elif pattern.fallback is RPFallback.home:
             return str(Path.home())
         elif pattern.fallback is RPFallback.parent:

@@ -1,5 +1,5 @@
-from pynvim.api.buffer import Buffer
 from pynvim.api.nvim import Nvim
+from pynvim_pp.api import cur_buf
 from pynvim_pp.operators import VisualTypes, escape, get_selected
 
 from ..registery import keymap, rpc
@@ -17,7 +17,7 @@ def _hl_text(nvim: Nvim, text: str) -> None:
 
 
 def _hl_selected(nvim: Nvim, visual: VisualTypes) -> str:
-    buf: Buffer = nvim.api.get_current_buf()
+    buf = cur_buf(nvim)
     selected = get_selected(nvim, buf=buf, visual_type=visual)
     _hl_text(nvim, text=selected)
     return selected
@@ -54,7 +54,7 @@ keymap.v("gF") << f"<esc><cmd>lua {_op_rg.name}()<cr>"
 # no magic
 @rpc(blocking=True)
 def _op_sd(nvim: Nvim, visual: VisualTypes = None) -> None:
-    buf: Buffer = nvim.api.get_current_buf()
+    buf = cur_buf(nvim)
     selected = get_selected(nvim, buf=buf, visual_type=visual)
     escaped = _magic_escape(selected)
     instruction = f":%s/{escaped}//g<left><left>"

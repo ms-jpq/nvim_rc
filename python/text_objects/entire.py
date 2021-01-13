@@ -1,5 +1,5 @@
 from pynvim import Nvim
-from pynvim.api import Buffer
+from pynvim_pp.api import buf_get_lines, buf_line_count, cur_buf
 from pynvim_pp.operators import set_visual_selection
 
 from ..registery import keymap, rpc
@@ -7,10 +7,12 @@ from ..registery import keymap, rpc
 
 @rpc(blocking=True)
 def _entire(nvim: Nvim) -> None:
-    buf: Buffer = nvim.api.get_current_buf()
-    count: int = nvim.api.buf_line_count(buf)
-    last_line, *_ = nvim.api.buf_get_lines(buf, -2, -1, True)
-    set_visual_selection(nvim, buf=buf, mark1=(1, 1), mark2=(count, len(last_line)))
+    buf = cur_buf(nvim)
+    count = buf_line_count(nvim, buf=buf)
+    last_line, *_ = buf_get_lines(nvim, buf=buf, lo=-2, hi=-1)
+    mark1 = (0, 0)
+    mark2 = (count - 1, len(last_line.encode()))
+    set_visual_selection(nvim, buf=buf, mark1=mark1, mark2=mark2)
     nvim.command("norm! `<V`>")
 
 

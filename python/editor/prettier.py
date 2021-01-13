@@ -19,6 +19,7 @@ from .linter import (
     make_temp,
     set_preview_content,
 )
+from pynvim_pp.api import buf_set_lines
 
 
 async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> str:
@@ -69,7 +70,7 @@ async def _run(
 
             def cont() -> None:
                 lines = temp.read_text().splitlines()
-                nvim.api.buf_set_lines(ctx.buf, 0, -1, True, lines)
+                buf_set_lines(nvim, buf=ctx.buf, lo=0, hi=-1, lines=lines)
 
             prettiers = LANG("step join sep").join(attr.bin for attr in attrs)
             nice = LANG("prettier succeeded", prettiers=prettiers)

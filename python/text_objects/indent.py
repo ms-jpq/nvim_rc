@@ -1,9 +1,10 @@
-from typing import Iterable, Optional, Sequence
+from typing import Iterable,  Sequence
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
 from pynvim_pp.lib import write
 from pynvim_pp.operators import p_indent, set_visual_selection
+from pynvim_pp.api import cur_window
 
 from ..registery import keymap, rpc
 
@@ -23,7 +24,7 @@ def _p_around(init_lv: int, tabsize: int, lines: Iterable[str]) -> int:
 
 @rpc(blocking=True)
 def _indent(nvim: Nvim, is_inside: bool) -> None:
-    win: Window = nvim.api.get_current_win()
+    win = cur_window(nvim)
     buf: Buffer = nvim.api.get_current_buf()
     row, _ = nvim.api.win_get_cursor(win)
     tabsize: int = nvim.api.buf_get_option(buf, "tabstop")

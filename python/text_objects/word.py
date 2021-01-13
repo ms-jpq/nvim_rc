@@ -1,5 +1,11 @@
 from pynvim import Nvim
-from pynvim.api import Buffer, Window
+from pynvim_pp.api import (
+    buf_get_lines,
+    cur_window,
+    str_col_pos,
+    win_get_buf,
+    win_get_cursor,
+)
 from pynvim_pp.operators import set_visual_selection
 from pynvim_pp.text_object import gen_lhs_rhs
 
@@ -10,10 +16,12 @@ UNIFIYING_CHARS = frozenset(("_", "-"))
 
 @rpc(blocking=True)
 def _word(nvim: Nvim, is_inside: bool) -> None:
-    win: Window = nvim.api.get_current_win()
-    buf: Buffer = nvim.api.get_current_buf()
-    row, col = nvim.api.win_get_cursor(win)
-    line: str = nvim.api.get_current_line()
+    win = cur_window(nvim)
+    buf = win_get_buf(nvim, win=win)
+    row, c = win_get_cursor(nvim, win=win)
+    col = str_col_pos(nvim, buf=buf, row=row, col=c)
+    lines = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
+    line = next(iter(lines))
 
     # position under cursor
     col = col + 1

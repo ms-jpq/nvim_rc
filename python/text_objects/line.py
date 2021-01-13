@@ -1,28 +1,30 @@
 from typing import Tuple
 
 from pynvim import Nvim
-from pynvim.api import Buffer, Window
+from pynvim_pp.api import buf_get_lines, cur_window, win_get_buf, win_get_cursor
 from pynvim_pp.operators import set_visual_selection
 
 from ..registery import keymap, rpc
 
 
 def _p_inside(line: str) -> Tuple[int, int]:
-    lhs = len(line) - len(line.lstrip())
-    rhs = len(line.rstrip()) - 1
+    encoded = line.encode()
+    lhs = len(encoded) - len(encoded.lstrip())
+    rhs = len(encoded.rstrip()) - 1
     return lhs, rhs
 
 
 def _p_around(line: str) -> Tuple[int, int]:
-    return 0, len(line)
+    return 0, len(line.encode()) - 1
 
 
 @rpc(blocking=True)
 def _line(nvim: Nvim, is_inside: bool) -> None:
-    win: Window = nvim.api.get_current_win()
-    buf: Buffer = nvim.api.get_current_buf()
-    row, _ = nvim.api.win_get_cursor(win)
-    line: str = nvim.api.get_current_line()
+    win = cur_window(nvim)
+    buf = win_get_buf(nvim, win=win)
+    row, _ = win_get_cursor(nvim, win=win)
+    lines = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
+    line = next(iter(lines))
     lhs, rhs = (_p_inside if is_inside else _p_around)(line)
 
     set_visual_selection(nvim, buf=buf, mark1=(row, lhs), mark2=(row, rhs))

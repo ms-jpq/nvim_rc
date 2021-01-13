@@ -1,9 +1,19 @@
 from typing import Iterable, Iterator, Sequence, Tuple
-from uuid import uuid4
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
-from pynvim.api.common import NvimError
+from pynvim_pp.api import (
+    buf_get_lines,
+    buf_line_count,
+    buf_set_lines,
+    buf_set_option,
+    cur_buf,
+    cur_window,
+    str_col_pos,
+    win_get_buf,
+    win_get_cursor,
+    win_set_cursor,
+)
 from pynvim_pp.operators import p_indent, writable
 
 from ..registery import autocmd, rpc, settings
@@ -36,21 +46,21 @@ def _set_tabsize(nvim: Nvim, buf: Buffer, lines: Iterable[str]) -> None:
 
     _, tabsize = next(iter(sorted(it(), reverse=True)), (-1, tabsize_d))
     for option in _TAB_OPTIONS:
-        nvim.api.buf_set_option(buf, option, tabsize)
+        buf_set_option(nvim, buf=buf, key=option, val=tabsize)
 
 
 def _set_usetab(nvim: Nvim, buf: Buffer, lines: Iterable[str]) -> None:
     first_chars = tuple(next(iter(line), "") for line in lines if lines)
     if first_chars.count("\t") > first_chars.count(" "):
-        nvim.api.buf_set_option(buf, "expandtab", False)
+        buf_set_option(nvim, buf=buf, key="expandtab", val=False)
 
 
 @rpc(blocking=True)
 def _detect_tabs(nvim: Nvim) -> None:
-    buf: Buffer = nvim.api.get_current_buf()
-    count: int = nvim.api.buf_line_count(buf)
+    buf = cur_buf(nvim)
+    count = buf_line_count(nvim, buf=buf)
     rows = min(count, 100)
-    lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, rows, True)
+    lines = buf_get_lines(nvim, buf=buf, lo=0, hi=rows)
     _set_tabsize(nvim, buf=buf, lines=lines)
     _set_usetab(nvim, buf=buf, lines=lines)
 
@@ -63,14 +73,10 @@ settings["autoindent"] = True
 settings["smarttab"] = True
 
 
-# remove trailing whitespace
-BUF_VAR_NAME = f"buf_last_trimmed_{uuid4().hex}"
-
-
-def _set_trimmed(nvim: Nvim, buf: Buffer) -> None:
-    win: Window = nvim.api.get_current_win()
-    row, col = nvim.api.win_get_cursor(win)
-    lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, -1, True)
+def _set_trimmed(nvim: Nvim, win: Window, buf: Buffer) -> None:
+    row, c = win_get_cursor(nvim, win=win)
+    col = str_col_pos(nvim, buf=buf, row=row, col=c)
+    lines = buf_get_lines(nvim, buf=buf, lo=0, hi=-1)
     new_lines = [
         line[:col] + line[col:].rstrip() if r == row else line.rstrip()
         for r, line in enumerate(lines, start=1)
@@ -83,25 +89,18 @@ def _set_trimmed(nvim: Nvim, buf: Buffer) -> None:
             break
 
     if new_lines != lines:
-        nvim.api.buf_set_lines(buf, 0, -1, True, new_lines)
-        nvim.api.win_set_cursor(win, (row, col))
+        buf_set_lines(nvim, buf=buf, lo=0, hi=-1, lines=new_lines)
+        win_set_cursor(nvim, win=win, row=row, col=col)
 
 
 @rpc(blocking=True)
 def _trailing_ws(nvim: Nvim) -> None:
-    buf: Buffer = nvim.api.get_current_buf()
+    win = cur_window(nvim)
+    buf = win_get_buf(nvim, win=win)
     if not writable(nvim, buf=buf):
         return
     else:
-        try:
-            prev = nvim.api.buf_get_var(buf, BUF_VAR_NAME)
-        except NvimError:
-            pass
-        else:
-            tick = nvim.api.buf_get_changedtick(buf)
-            if tick > prev:
-                _set_trimmed(nvim, buf=buf)
-                nvim.api.buf_set_var(buf, BUF_VAR_NAME, tick)
+        _set_trimmed(nvim, win=win, buf=buf)
 
 
 # autocmd(

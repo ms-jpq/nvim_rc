@@ -1,6 +1,19 @@
-from typing import Sequence
-
-from pynvim.api.nvim import Buffer, Nvim, Tabpage, Window
+from pynvim.api.nvim import Nvim
+from pynvim_pp.api import (
+    buf_filetype,
+    buf_get_option,
+    buf_set_var,
+    create_buf,
+    cur_buf,
+    cur_tab,
+    cur_window,
+    tab_list_wins,
+    win_close,
+    win_get_buf,
+    win_get_option,
+    win_set_buf,
+    win_set_option,
+)
 
 from ..registery import keymap, rpc, settings
 
@@ -41,10 +54,9 @@ keymap.n("<s-down>") << "<cmd>wincmd -<cr>"
 @rpc(blocking=True)
 def _new_window(nvim: Nvim, vertical: bool) -> None:
     nvim.command("vnew" if vertical else "new")
-    win: Window = nvim.api.get_current_win()
-    buf: Buffer = nvim.api.create_buf(False, True)
-    nvim.api.buf_set_option(buf, "bufhidden", "wipe")
-    nvim.api.win_set_buf(win, buf)
+    win = cur_window(nvim)
+    buf = create_buf(nvim, listed=False, scratch=True, wipe=True, nofile=True)
+    win_set_buf(nvim, win=win, buf=buf)
 
 
 keymap.n("<leader>=") << f"<cmd>lua {_new_window.name}(true)<cr>"
@@ -68,8 +80,8 @@ keymap.n("<leader>q") << "<cmd>tabclose<cr>"
 @rpc(blocking=True)
 def _new_tab(nvim: Nvim) -> None:
     nvim.command("tabnew")
-    buf: Buffer = nvim.api.get_current_buf()
-    nvim.api.buf_set_var(buf, "buftype", "nofile")
+    buf = cur_buf(nvim)
+    buf_set_var(nvim, buf=buf, key="buftype", val="nofile")
 
 
 keymap.n("<leader>t") << f"<cmd>lua {_new_tab.name}()<cr>"
@@ -91,18 +103,18 @@ settings["previewheight"] = 11
 
 @rpc(blocking=True)
 def _toggle_preview(nvim: Nvim) -> None:
-    tab: Tabpage = nvim.api.get_current_tabpage()
-    wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)
+    tab = cur_tab(nvim)
+    wins = tab_list_wins(nvim, tab=tab)
     closed = False
     for win in wins:
-        is_preview = nvim.api.win_get_option(win, "previewwindow")
+        is_preview: bool = win_get_option(nvim, win=win, key="previewwindow")
         if is_preview:
-            nvim.api.win_close(win, True)
+            win_close(nvim, win=win)
             closed = True
     if not closed:
         nvim.command("new")
-        win = nvim.api.get_current_win()
-        nvim.api.win_set_option(win, "previewwindow", True)
+        win = cur_window(nvim)
+        win_set_option(nvim, win=win, key="previewwindow", val=True)
         height = nvim.options["previewheight"]
         nvim.api.win_set_height(win, height)
 
@@ -117,18 +129,18 @@ keymap.n("<c-k>") << "<cmd>cnext<cr>"
 
 @rpc(blocking=True)
 def _toggle_qf(nvim: Nvim) -> None:
-    tab: Tabpage = nvim.api.get_current_tabpage()
-    wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)
+    tab = cur_tab(nvim)
+    wins = tab_list_wins(nvim, tab=tab)
     closed = False
     for win in wins:
-        buf: Buffer = nvim.api.win_get_buf(win)
-        ft = nvim.api.buf_get_option(buf, "filetype")
+        buf = win_get_buf(nvim, win=win)
+        ft = buf_filetype(nvim, buf=buf)
         if ft == "qf":
-            nvim.api.win_close(win, True)
+            win_close(nvim, win=win)
             closed = True
     if not closed:
         nvim.command("copen")
-        win = nvim.api.get_current_win()
+        win = cur_window(nvim)
         height = nvim.options["previewheight"]
         nvim.api.win_set_height(win, height)
 
@@ -145,14 +157,14 @@ keymap.n("<leader>L") << f"<cmd>lua {_clear_qf.name}()<cr>"
 
 @rpc(blocking=True)
 def _resize_secondary(nvim: Nvim) -> None:
-    tab: Tabpage = nvim.api.get_current_tabpage()
-    wins: Sequence[Window] = nvim.api.tabpage_list_wins(tab)
+    tab = cur_tab(nvim)
+    wins = tab_list_wins(nvim, tab=tab)
     height = nvim.options["previewheight"]
 
     for win in wins:
-        is_preview = nvim.api.win_get_option(win, "previewwindow")
-        buf: Buffer = nvim.api.win_get_buf(win)
-        ft = nvim.api.buf_get_option(buf, "filetype")
+        is_preview: bool = win_get_option(nvim, win=win, key="previewwindow")
+        buf = win_get_buf(nvim, win=win)
+        ft = buf_filetype(nvim, buf=buf)
         if is_preview or ft == "qf":
             nvim.api.win_set_height(win, height)
 

@@ -1,15 +1,15 @@
 from typing import Sequence
 
-from pynvim.api import Buffer, Window
 from pynvim.api.nvim import Nvim
 from pynvim_pp.operators import VisualTypes, operator_marks, writable
-
+from pynvim_pp.api import cur_window, cur_buf
 from ..registery import keymap, rpc
+
 
 
 @rpc(blocking=True)
 def _go_replace(nvim: Nvim, visual: VisualTypes = None) -> None:
-    buf: Buffer = nvim.api.get_current_buf()
+    buf = cur_buf(nvim)
     if not writable(nvim, buf=buf):
         return
     else:
@@ -35,11 +35,11 @@ keymap.v("gr") << f"<esc><cmd>lua {_go_replace.name}()<cr>"
 
 @rpc(blocking=True)
 def _go_replace_line(nvim: Nvim) -> None:
-    buf: Buffer = nvim.api.get_current_buf()
+    buf = cur_buf(nvim)
     if not writable(nvim, buf=buf):
         return
     else:
-        win: Window = nvim.api.get_current_win()
+        win = cur_window(nvim)
         row, _ = nvim.api.win_get_cursor(win)
         row = row - 1
         body: str = nvim.funcs.getreg("*")

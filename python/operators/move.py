@@ -1,5 +1,14 @@
-from pynvim.api import Buffer, Window
+from pynvim.api import Buffer
 from pynvim.api.nvim import Nvim
+from pynvim_pp.api import (
+    buf_get_lines,
+    buf_line_count,
+    buf_set_lines,
+    cur_buf,
+    cur_window,
+    win_get_cursor,
+    win_set_cursor,
+)
 from pynvim_pp.operators import operator_marks, set_visual_selection, writable
 
 from ..registery import keymap, rpc
@@ -7,41 +16,39 @@ from ..registery import keymap, rpc
 
 @rpc(blocking=True)
 def _normal_up(nvim: Nvim) -> None:
-    buf: Buffer = nvim.api.get_current_buf()
+    buf = cur_buf(nvim)
     if not writable(nvim, buf=buf):
         return
     else:
-        win: Window = nvim.api.get_current_win()
-        row, col = nvim.api.win_get_cursor(win)
-        if row <= 1:
+        win = cur_window(nvim)
+        row, col = win_get_cursor(nvim, win=win)
+        if row <= 0:
             return
         else:
-            row = row - 1
-            curr = nvim.api.buf_get_lines(buf, row, row + 1, True)
-            nxt = nvim.api.buf_get_lines(buf, row - 1, row, True)
+            curr = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
+            nxt = buf_get_lines(nvim, buf=buf, lo=row - 1, hi=row)
             new = tuple((*curr, *nxt))
-            nvim.api.buf_set_lines(buf, row - 1, row + 1, True, new)
-            nvim.api.win_set_cursor(win, (row, col))
+            buf_set_lines(nvim, buf=buf, lo=row - 1, hi=row + 1, lines=new)
+            win_set_cursor(nvim, win=win, row=row - 1, col=col)
 
 
 @rpc(blocking=True)
 def _normal_down(nvim: Nvim) -> None:
-    buf: Buffer = nvim.api.get_current_buf()
+    buf = cur_buf(nvim)
     if not writable(nvim, buf=buf):
         return
     else:
-        win: Window = nvim.api.get_current_win()
-        row, col = nvim.api.win_get_cursor(win)
-        count = nvim.api.buf_line_count(buf)
-        if row >= count:
+        win = cur_window(nvim)
+        row, col = win_get_cursor(nvim, win=win)
+        count = buf_line_count(nvim, buf=buf)
+        if row >= count - 1:
             return
         else:
-            row = row - 1
-            curr = nvim.api.buf_get_lines(buf, row, row + 1, True)
-            nxt = nvim.api.buf_get_lines(buf, row + 1, row + 2, True)
+            curr = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
+            nxt = buf_get_lines(nvim, buf=buf, lo=row + 1, hi=row + 2)
             new = tuple((*nxt, *curr))
-            nvim.api.buf_set_lines(buf, row, row + 2, True, new)
-            nvim.api.win_set_cursor(win, (row + 2, col))
+            buf_set_lines(nvim, buf=buf, lo=row, hi=row + 2, lines=new)
+            win_set_cursor(nvim, win=win, row=row + 1, col=col)
 
 
 keymap.n("<m-up>") << f"<cmd>lua {_normal_up.name}()<cr>"
@@ -54,7 +61,7 @@ def _reselect_visual(nvim: Nvim) -> None:
 
 @rpc(blocking=True)
 def _visual_up(nvim: Nvim) -> None:
-    buf: Buffer = nvim.api.get_current_buf()
+    buf = cur_buf(nvim)
     if not writable(nvim, buf=buf):
         return
     else:
@@ -75,7 +82,7 @@ def _visual_up(nvim: Nvim) -> None:
 
 @rpc(blocking=True)
 def _visual_down(nvim: Nvim) -> None:
-    buf: Buffer = nvim.api.get_current_buf()
+    buf = cur_buf(nvim)
     if not writable(nvim, buf=buf):
         return
     else:

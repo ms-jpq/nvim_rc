@@ -10,6 +10,7 @@ from typing import Iterable, Iterator, MutableSequence, Sequence, Tuple
 
 from pynvim import Nvim
 from pynvim.api.buffer import Buffer
+from pynvim_pp.api import buf_filetype, buf_get_lines, buf_get_option, buf_name, cur_buf, get_cwd
 from pynvim_pp.hold import hold_win_pos
 from pynvim_pp.lib import async_call, awrite
 from pynvim_pp.preview import set_preview
@@ -30,12 +31,12 @@ class BufContext:
 
 
 def current_ctx(nvim: Nvim) -> Tuple[str, BufContext]:
-    cwd = nvim.funcs.getcwd()
-    buf: Buffer = nvim.api.get_current_buf()
-    filename: str = nvim.api.buf_get_name(buf)
-    filetype: str = nvim.api.buf_get_option(buf, "filetype")
-    tabsize: int = nvim.api.buf_get_option(buf, "tabstop")
-    lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, -1, True)
+    cwd = get_cwd(nvim)
+    buf = cur_buf(nvim)
+    filename = buf_name(nvim, buf=buf)
+    filetype = buf_filetype(nvim, buf=buf)
+    tabsize: int = buf_get_option(nvim, buf=buf, key="tabstop")
+    lines: Sequence[str] = buf_get_lines(nvim, buf=buf, lo=0, hi=-1)
     return cwd, BufContext(
         buf=buf, filename=filename, filetype=filetype, tabsize=tabsize, lines=lines
     )

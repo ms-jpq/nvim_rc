@@ -1,12 +1,18 @@
 from os import environ
-from typing import Iterator, Mapping, Optional, Sequence, TypedDict
-from urllib.parse import urlparse
+from typing import Iterator, Mapping, Optional, TypedDict
 from uuid import uuid4
 
 from pynvim import Nvim
 from pynvim.api.buffer import Buffer
-from pynvim.api.common import NvimError
 from pynvim.api.window import Window
+from pynvim_pp.api import (
+    buf_get_option,
+    buf_get_var,
+    buf_set_var,
+    create_buf, cur_window,
+    list_bufs,
+    win_close,
+)
 from pynvim_pp.float_win import list_floatwins, open_float_win
 from pynvim_pp.rpc import RpcCallable
 
@@ -16,13 +22,9 @@ BUF_VAR_NAME = f"terminal_buf_{uuid4().hex}"
 
 
 def _list_marked_bufs(nvim: Nvim) -> Iterator[Buffer]:
-    bufs: Sequence[Buffer] = nvim.api.list_bufs()
-    for buf in bufs:
-        try:
-            nvim.api.buf_get_var(buf, BUF_VAR_NAME)
-        except NvimError:
-            pass
-        else:
+    for buf in list_bufs(nvim):
+        flag: Optional[bool] = buf_get_var(nvim, buf=buf, key=BUF_VAR_NAME)
+        if flag:
             yield buf
 
 
@@ -31,8 +33,8 @@ def _ensure_marked_buf(nvim: Nvim) -> Buffer:
     if buf is not None:
         return buf
     else:
-        buf = nvim.api.create_buf(False, True)
-        nvim.api.buf_set_var(buf, BUF_VAR_NAME, True)
+        buf = create_buf(nvim, listed=True, scratch=True, wipe=False, nofile=False)
+        buf_set_var(nvim, buf=buf, key=BUF_VAR_NAME, val=True)
         return buf
 
 
@@ -46,8 +48,8 @@ class TermOpts(TypedDict, total=False):
 @rpc(blocking=True)
 def _term_open(nvim: Nvim, *args: str, opts: TermOpts = {}) -> None:
     buf = _ensure_marked_buf(nvim)
-    filename: str = nvim.api.buf_get_name(buf)
-    is_term_buf = urlparse(filename).scheme == "term"
+    buf_type: str = buf_get_option(nvim, buf=buf, key="buftype")
+    is_term_buf = buf_type == "terminal"
     open_float_win(nvim, margin=0, relsize=0.95, buf=buf)
     if not is_term_buf:
         cmds = args or (environ["SHELL"],)
@@ -57,7 +59,7 @@ def _term_open(nvim: Nvim, *args: str, opts: TermOpts = {}) -> None:
 
 def close_term(nvim: Nvim) -> None:
     for win in list_floatwins(nvim):
-        nvim.api.win_close(win, True)
+        win_close(nvim, win=win)
 
 
 @rpc(blocking=True)
@@ -68,11 +70,11 @@ def open_term(nvim: Nvim, prog: str, *args: str, opts: TermOpts = {}) -> None:
 
 @rpc(blocking=True)
 def toggle_floating(nvim: Nvim, *args: str) -> None:
-    curr_win: Window = nvim.api.get_current_win()
-    float_wins = {*list_floatwins(nvim)}
+    curr_win = cur_window(nvim)
+    float_wins = frozenset(list_floatwins(nvim))
     if curr_win in float_wins:
         for win in float_wins:
-            nvim.api.win_close(win, True)
+            win_close(nvim, win=win)
     else:
         _term_open(nvim, *args)
 
@@ -86,7 +88,7 @@ def _kill_term_wins(nvim: Nvim, win_id: str) -> None:
     fw_ids = frozenset(nvim.funcs.win_getid(win.number) for win in wins)
     if int(win_id) in fw_ids:
         for win in wins:
-            nvim.api.win_close(win, True)
+            win_close(nvim, win=win)
 
 
 autocmd("WinClosed") << f"lua {_kill_term_wins.name}(vim.fn.expand('<afile>'))"
