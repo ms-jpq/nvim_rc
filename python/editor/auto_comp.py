@@ -1,10 +1,21 @@
-from ..registery import settings, keymap
+from pynvim.api.nvim import Nvim
 
+from ..registery import atomic, autocmd, keymap, rpc, settings
 
-# dont show too many opts
-settings["pumheight"] = 15  # TODO make this dynamic
 # transparency
 settings["pumblend"] = 5
+
+
+@rpc(blocking=True)
+def _update_pumheight(nvim: Nvim) -> None:
+    lines: int = nvim.options["lines"]
+    nvim.options["pumheight"] = max(round(lines * 0.3), 15)
+
+
+atomic.exec_lua(f"{_update_pumheight.name}()", ())
+autocmd("VimResized") << f"lua {_update_pumheight.name}()"
+
+
 # dont spam suggestions menu
 settings["shortmess"] += "c"
 # dont follow tags
