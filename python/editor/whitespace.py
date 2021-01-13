@@ -84,7 +84,7 @@ def _set_trimmed(nvim: Nvim, win: Window, buf: Buffer) -> None:
 
     while new_lines:
         line = new_lines.pop()
-        if line or len(new_lines) - 1 < row:
+        if line or len(new_lines) - 1 <= row:
             new_lines.append(line)
             break
 
