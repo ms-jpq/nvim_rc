@@ -71,8 +71,6 @@
       maps:
         "ga": "<plug>(EasyAlign)"
 
-- uri: https://github.com/Raimondi/delimitMate
-
 - uri: https://github.com/tpope/vim-unimpaired
 
 - uri: https://github.com/airblade/vim-gitgutter
