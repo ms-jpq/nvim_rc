@@ -35,8 +35,8 @@ def _surround(nvim: Nvim) -> None:
             go(async_call(nvim, set_cur))
 
         if rhs == lhs:
-            odd_one_out = line.count(lhs) % 2 == 0
-            if odd_one_out:
+            is_even = line.count(lhs) % 2 == 0
+            if is_even:
                 cont()
         else:
             counts = Counter(line)
