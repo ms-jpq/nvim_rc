@@ -4,6 +4,7 @@ from uuid import uuid4
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
 from pynvim.api.common import NvimError
+from pynvim_pp.grapheme import break_into, join
 from pynvim_pp.operators import p_indent, writable
 
 from ..registery import autocmd, rpc, settings
@@ -72,8 +73,10 @@ def _set_trimmed(nvim: Nvim, buf: Buffer) -> None:
     row, col = nvim.api.win_get_cursor(win)
     lines: Sequence[str] = nvim.api.buf_get_lines(buf, 0, -1, True)
     new_lines = [
-        line[:col] + line[col:].rstrip() if r == row else line.rstrip()
-        for r, line in enumerate(lines, start=1)
+        join(line[:col]) + join(line[col:]).rstrip()
+        if r == row
+        else join(line).rstrip()
+        for r, line in enumerate(map(break_into, lines), start=1)
     ]
 
     while new_lines:
