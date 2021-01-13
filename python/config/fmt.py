@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import FrozenSet, Optional, Sequence
+from typing import FrozenSet, Sequence
 
 from std2.pickle import decode
 from yaml import safe_load

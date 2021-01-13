@@ -1,4 +1,4 @@
-from typing import Iterable, Iterator, Sequence, Tuple
+from typing import Iterable, Iterator, Tuple
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
