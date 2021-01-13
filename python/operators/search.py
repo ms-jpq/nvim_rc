@@ -1,5 +1,6 @@
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import cur_buf
+from pynvim_pp.lib import async_call, go
 from pynvim_pp.operators import VisualTypes, escape, get_selected
 
 from ..registery import keymap, rpc
@@ -13,7 +14,11 @@ def _magic_escape(text: str) -> str:
 
 def _hl_text(nvim: Nvim, text: str) -> None:
     nvim.funcs.setreg("/", _magic_escape(text))
-    nvim.command("set hlsearch")
+
+    def cont() -> None:
+        nvim.options["hlsearch"] = True
+
+    go(async_call(nvim, cont))
 
 
 def _hl_selected(nvim: Nvim, visual: VisualTypes) -> str:
