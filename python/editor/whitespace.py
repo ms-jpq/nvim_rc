@@ -104,5 +104,5 @@ def _trailing_ws(nvim: Nvim) -> None:
 
 
 autocmd(
-    "CursorHold", modifiers=("*", "undojoin", "|")
+    "BufWritePre", modifiers=("*", "undojoin", "|")
 ) << f"silent! lua {_trailing_ws.name}()"
