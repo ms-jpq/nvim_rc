@@ -4,7 +4,6 @@ from uuid import uuid4
 
 from pynvim import Nvim
 from pynvim.api.buffer import Buffer
-from pynvim.api.window import Window
 from pynvim_pp.api import (
     buf_get_option,
     buf_get_var,
