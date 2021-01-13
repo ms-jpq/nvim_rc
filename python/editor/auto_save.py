@@ -17,7 +17,7 @@ settings["autowriteall"] = True
 
 @rpc(blocking=True)
 def _check_time(nvim: Nvim) -> None:
-    check = lambda: nvim.command("checktime")
+    check = lambda: nvim.command("silent! checktime")
 
     async def cont() -> None:
         async for _ in ticker(3, immediately=False):
