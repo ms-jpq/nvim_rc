@@ -1,7 +1,6 @@
 from ..registery import keymap, settings
 
-# highlight search results
-# settings["hlsearch"] = True
+
 # find result during search
 settings["incsearch"] = True
 # search results shown on side
