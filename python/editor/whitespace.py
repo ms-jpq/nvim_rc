@@ -9,7 +9,6 @@ from pynvim_pp.api import (
     buf_set_option,
     cur_buf,
     cur_window,
-    str_col_pos,
     win_get_buf,
     win_get_cursor,
     win_set_cursor,
@@ -74,17 +73,18 @@ settings["smarttab"] = True
 
 
 def _set_trimmed(nvim: Nvim, win: Window, buf: Buffer) -> None:
-    row, c = win_get_cursor(nvim, win=win)
-    col = str_col_pos(nvim, buf=buf, row=row, col=c)
+    row, col = win_get_cursor(nvim, win=win)
     lines = buf_get_lines(nvim, buf=buf, lo=0, hi=-1)
     new_lines = [
-        line[:col] + line[col:].rstrip() if r == row else line.rstrip()
-        for r, line in enumerate(lines, start=1)
+        line.encode()[:col].decode() + line.encode()[col:].decode().rstrip()
+        if r == row
+        else line.rstrip()
+        for r, line in enumerate(lines)
     ]
 
     while new_lines:
         line = new_lines.pop()
-        if line or len(new_lines) < row:
+        if line or len(new_lines) - 1 < row:
             new_lines.append(line)
             break
 
@@ -103,6 +103,6 @@ def _trailing_ws(nvim: Nvim) -> None:
         _set_trimmed(nvim, win=win, buf=buf)
 
 
-# autocmd(
-#     "CursorHold", modifiers=("*", "undojoin", "|")
-# ) << f"lua {_trailing_ws.name}()"
+autocmd(
+    "CursorHold", modifiers=("*", "undojoin", "|")
+) << f"silent! lua {_trailing_ws.name}()"
