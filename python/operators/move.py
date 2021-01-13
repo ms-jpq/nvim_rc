@@ -1,4 +1,3 @@
-from pynvim.api import Buffer
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import (
     buf_get_lines,
@@ -66,17 +65,17 @@ def _visual_up(nvim: Nvim) -> None:
         return
     else:
         (row1, col1), (row2, col2) = operator_marks(nvim, buf=buf, visual_type=None)
-        if row1 <= 1:
+        if row1 <= 0:
             _reselect_visual(nvim)
         else:
-            row1, row2 = row1 - 1, row2 - 1
-
-            curr = nvim.api.buf_get_lines(buf, row1, row2 + 1, True)
-            nxt = nvim.api.buf_get_lines(buf, row1 - 1, row1, True)
+            curr = buf_get_lines(nvim, buf=buf, lo=row1, hi=row2 + 1)
+            nxt = buf_get_lines(nvim, buf=buf, lo=row1 - 1, hi=row1)
             new = tuple((*curr, *nxt))
-            nvim.api.buf_set_lines(buf, row1 - 1, row2 + 1, True, new)
+            buf_set_lines(nvim, buf=buf, lo=row1 - 1, hi=row2 + 1, lines=new)
 
-            set_visual_selection(nvim, buf=buf, mark1=(row1, col1), mark2=(row2, col2))
+            set_visual_selection(
+                nvim, buf=buf, mark1=(row1 - 1, col1), mark2=(row2 - 1, col2)
+            )
             _reselect_visual(nvim)
 
 
@@ -87,19 +86,17 @@ def _visual_down(nvim: Nvim) -> None:
         return
     else:
         (row1, col1), (row2, col2) = operator_marks(nvim, buf=buf, visual_type=None)
-        count = nvim.api.buf_line_count(buf)
-        if row2 >= count:
+        count = buf_line_count(nvim, buf=buf)
+        if row2 >= count - 1:
             _reselect_visual(nvim)
         else:
-            row1, row2 = row1 - 1, row2 - 1
-
-            curr = nvim.api.buf_get_lines(buf, row1, row2 + 1, True)
-            nxt = nvim.api.buf_get_lines(buf, row2 + 1, row2 + 2, True)
+            curr = buf_get_lines(nvim, buf=buf, lo=row1, hi=row2 + 1)
+            nxt = buf_get_lines(nvim, buf=buf, lo=row2 + 1, hi=row2 + 2)
             new = tuple((*nxt, *curr))
-            nvim.api.buf_set_lines(buf, row1, row2 + 2, True, new)
+            buf_set_lines(nvim, buf=buf, lo=row1, hi=row2 + 2, lines=new)
 
             set_visual_selection(
-                nvim, buf=buf, mark1=(row1 + 2, col1), mark2=(row2 + 2, col2)
+                nvim, buf=buf, mark1=(row1 + 1, col1), mark2=(row2 + 1, col2)
             )
             _reselect_visual(nvim)
 
