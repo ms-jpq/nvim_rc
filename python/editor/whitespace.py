@@ -8,7 +8,7 @@ from pynvim_pp.api import (
     buf_set_lines,
     buf_set_option,
     cur_buf,
-    cur_window,
+    cur_win,
     win_get_buf,
     win_get_cursor,
     win_set_cursor,
@@ -95,7 +95,7 @@ def _set_trimmed(nvim: Nvim, win: Window, buf: Buffer) -> None:
 
 @rpc(blocking=True)
 def _trailing_ws(nvim: Nvim) -> None:
-    win = cur_window(nvim)
+    win = cur_win(nvim)
     buf = win_get_buf(nvim, win=win)
     if not writable(nvim, buf=buf):
         return

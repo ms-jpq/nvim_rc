@@ -1,7 +1,7 @@
 from pynvim import Nvim
 from pynvim_pp.api import (
     buf_get_lines,
-    cur_window,
+    cur_win,
     win_get_buf,
     win_get_cursor,
 )
@@ -15,7 +15,7 @@ UNIFIYING_CHARS = frozenset(("_", "-"))
 
 @rpc(blocking=True)
 def _word(nvim: Nvim, is_inside: bool) -> None:
-    win = cur_window(nvim)
+    win = cur_win(nvim)
     buf = win_get_buf(nvim, win=win)
 
     row, c = win_get_cursor(nvim, win=win)

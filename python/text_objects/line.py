@@ -1,7 +1,7 @@
 from typing import Tuple
 
 from pynvim import Nvim
-from pynvim_pp.api import buf_get_lines, cur_window, win_get_buf, win_get_cursor
+from pynvim_pp.api import buf_get_lines, cur_win, win_get_buf, win_get_cursor
 from pynvim_pp.operators import set_visual_selection
 
 from ..registery import keymap, rpc
@@ -19,7 +19,7 @@ def _p_around(line: str) -> Tuple[int, int]:
 
 @rpc(blocking=True)
 def _line(nvim: Nvim, is_inside: bool) -> None:
-    win = cur_window(nvim)
+    win = cur_win(nvim)
     buf = win_get_buf(nvim, win=win)
     row, _ = win_get_cursor(nvim, win=win)
     lines = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)

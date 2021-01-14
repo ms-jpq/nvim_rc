@@ -3,7 +3,7 @@ from pynvim_pp.api import (
     buf_get_lines,
     buf_set_lines,
     cur_buf,
-    cur_window,
+    cur_win,
     win_get_cursor,
 )
 from pynvim_pp.operators import VisualTypes, operator_marks, writable
@@ -42,7 +42,7 @@ def _go_replace_line(nvim: Nvim) -> None:
     if not writable(nvim, buf=buf):
         return
     else:
-        win = cur_window(nvim)
+        win = cur_win(nvim)
         row, _ = win_get_cursor(nvim, win=win)
         body: str = nvim.funcs.getreg("*")
         new_lines = body.splitlines()

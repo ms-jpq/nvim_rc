@@ -4,7 +4,7 @@ from typing import cast
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import (
     buf_get_lines,
-    cur_window,
+    cur_win,
     win_get_buf,
     win_get_cursor,
     win_set_cursor,
@@ -22,7 +22,7 @@ def _surround(nvim: Nvim) -> None:
     rhs = _CHAR_PAIRS.get(lhs)
 
     if rhs:
-        win = cur_window(nvim)
+        win = cur_win(nvim)
         buf = win_get_buf(nvim, win=win)
         row, col = win_get_cursor(nvim, win=win)
         lines = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)

@@ -4,7 +4,7 @@ from pynvim_pp.api import (
     buf_line_count,
     buf_set_lines,
     cur_buf,
-    cur_window,
+    cur_win,
     win_get_cursor,
     win_set_cursor,
 )
@@ -19,7 +19,7 @@ def _normal_up(nvim: Nvim) -> None:
     if not writable(nvim, buf=buf):
         return
     else:
-        win = cur_window(nvim)
+        win = cur_win(nvim)
         row, col = win_get_cursor(nvim, win=win)
         if row <= 0:
             return
@@ -37,7 +37,7 @@ def _normal_down(nvim: Nvim) -> None:
     if not writable(nvim, buf=buf):
         return
     else:
-        win = cur_window(nvim)
+        win = cur_win(nvim)
         row, col = win_get_cursor(nvim, win=win)
         count = buf_line_count(nvim, buf=buf)
         if row >= count - 1:

@@ -1,12 +1,11 @@
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import (
     buf_filetype,
-    buf_get_option,
     buf_set_var,
     create_buf,
     cur_buf,
     cur_tab,
-    cur_window,
+    cur_win,
     tab_list_wins,
     win_close,
     win_get_buf,
@@ -54,7 +53,7 @@ keymap.n("<s-down>") << "<cmd>wincmd -<cr>"
 @rpc(blocking=True)
 def _new_window(nvim: Nvim, vertical: bool) -> None:
     nvim.command("vnew" if vertical else "new")
-    win = cur_window(nvim)
+    win = cur_win(nvim)
     buf = create_buf(nvim, listed=False, scratch=True, wipe=True, nofile=True)
     win_set_buf(nvim, win=win, buf=buf)
 
@@ -113,7 +112,7 @@ def _toggle_preview(nvim: Nvim) -> None:
             closed = True
     if not closed:
         nvim.command("new")
-        win = cur_window(nvim)
+        win = cur_win(nvim)
         win_set_option(nvim, win=win, key="previewwindow", val=True)
         height = nvim.options["previewheight"]
         nvim.api.win_set_height(win, height)
@@ -140,7 +139,7 @@ def _toggle_qf(nvim: Nvim) -> None:
             closed = True
     if not closed:
         nvim.command("copen")
-        win = cur_window(nvim)
+        win = cur_win(nvim)
         height = nvim.options["previewheight"]
         nvim.api.win_set_height(win, height)
 

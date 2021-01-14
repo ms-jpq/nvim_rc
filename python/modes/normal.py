@@ -5,7 +5,7 @@ from pynvim.api.nvim import Nvim
 from pynvim_pp.api import (
     buf_get_var,
     buf_set_var,
-    cur_window,
+    cur_win,
     win_get_buf,
     win_get_cursor,
     win_set_cursor,
@@ -22,7 +22,7 @@ BUF_VAR_NAME = f"buf_cursor_pos_{uuid4().hex}"
 
 @rpc(blocking=True)
 def _record_pos(nvim: Nvim) -> None:
-    win = cur_window(nvim)
+    win = cur_win(nvim)
     buf = win_get_buf(nvim, win=win)
     _, col = win_get_cursor(nvim, win=win)
     buf_set_var(nvim, buf=buf, key=BUF_VAR_NAME, val=col)
@@ -33,7 +33,7 @@ autocmd("InsertEnter", "CursorMovedI", "TextChangedP") << f"lua {_record_pos.nam
 
 @rpc(blocking=True)
 def _restore_pos(nvim: Nvim) -> None:
-    win = cur_window(nvim)
+    win = cur_win(nvim)
     buf = win_get_buf(nvim, win=win)
     row, _ = win_get_cursor(nvim, win=win)
     pos: Optional[int] = buf_get_var(nvim, buf=buf, key=BUF_VAR_NAME)

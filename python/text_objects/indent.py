@@ -4,7 +4,7 @@ from pynvim import Nvim
 from pynvim_pp.api import (
     buf_get_lines,
     buf_get_option,
-    cur_window,
+    cur_win,
     win_get_buf,
     win_get_cursor,
 )
@@ -25,7 +25,7 @@ def _p_inside(init_lv: int, tabsize: int, lines: Iterable[str]) -> int:
 
 @rpc(blocking=True)
 def _indent(nvim: Nvim) -> None:
-    win = cur_window(nvim)
+    win = cur_win(nvim)
     buf = win_get_buf(nvim, win)
     row, _ = win_get_cursor(nvim, win)
     tabsize: int = buf_get_option(nvim, buf=buf, key="tabstop")

@@ -8,7 +8,8 @@ from pynvim_pp.api import (
     buf_get_option,
     buf_get_var,
     buf_set_var,
-    create_buf, cur_window,
+    create_buf,
+    cur_win,
     list_bufs,
     win_close,
 )
@@ -69,7 +70,7 @@ def open_term(nvim: Nvim, prog: str, *args: str, opts: TermOpts = {}) -> None:
 
 @rpc(blocking=True)
 def toggle_floating(nvim: Nvim, *args: str) -> None:
-    curr_win = cur_window(nvim)
+    curr_win = cur_win(nvim)
     float_wins = frozenset(list_floatwins(nvim))
     if curr_win in float_wins:
         for win in float_wins:
