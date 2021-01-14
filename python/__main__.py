@@ -41,7 +41,7 @@ if command == "deps":
                 "--requirement",
                 REQUIREMENTS,
             ),
-            cwd=str(RT_DIR),
+            cwd=RT_DIR,
         )
         if proc.returncode:
             exit(proc.returncode)

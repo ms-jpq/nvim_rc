@@ -122,7 +122,7 @@ def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
                 str(PIP_DIR),
                 "--",
                 *specs,
-                cwd=str(PIP_DIR),
+                cwd=PIP_DIR,
             )
             return (("", p),)
 
@@ -136,12 +136,12 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
     if which(cmd):
 
         async def cont() -> SortOfMonoid:
-            p1 = await call(cmd, "init", "--yes", cwd=str(NPM_DIR))
+            p1 = await call(cmd, "init", "--yes", cwd=NPM_DIR)
             if p1.code:
                 return (("", p1),)
             else:
                 p2 = await call(
-                    cmd, "install", "--upgrade", "--", *_npm_specs(), cwd=str(NPM_DIR)
+                    cmd, "install", "--upgrade", "--", *_npm_specs(), cwd=NPM_DIR
                 )
                 return ("", p1), ("", p2)
 
@@ -161,7 +161,7 @@ def _go() -> Iterator[Awaitable[SortOfMonoid]]:
                 "--",
                 *_go_specs(),
                 env={"GO111MODULE": "on", "GOPATH": str(GO_DIR)},
-                cwd=str(VARS_DIR),
+                cwd=VARS_DIR,
             )
             return (("", p),)
 
@@ -193,7 +193,7 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
                 pkg.interpreter,
                 stdin=stdin,
                 env={**env, **pkg.env},
-                cwd=str(VARS_DIR),
+                cwd=VARS_DIR,
             )
             return ((pkg.body, p),)
 
