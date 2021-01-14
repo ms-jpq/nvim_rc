@@ -24,10 +24,9 @@ RUN apt-get update && \
 COPY . /root/.config/nvim
 ENV TERM=xterm-256color
 WORKDIR "/root"
-RUN ./.config/nvim/init.py --install-runtime --install-packages
+RUN ./.config/nvim/init.py deps
 
 
 # Cleanup
-RUN apt-get autoremove -y && \  
+RUN apt-get autoremove -y && \
     apt-get clean
-

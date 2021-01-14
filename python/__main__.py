@@ -1,5 +1,6 @@
 from argparse import ArgumentParser, Namespace
 from sys import path
+from typing import Literal, Union
 
 from python.consts import REQUIREMENTS, RT_DIR
 
@@ -10,51 +11,53 @@ path.append(str(RT_DIR))
 def parse_args() -> Namespace:
     parser = ArgumentParser()
 
-    run = parser.add_mutually_exclusive_group()
-    run.add_argument("--socket", default=None)
+    sub_parsers = parser.add_subparsers(dest="command", required=True)
 
-    deps = parser.add_mutually_exclusive_group()
-    deps.add_argument("--install-runtime", action="store_true", default=False)
-    deps.add_argument("--install-packages", action="store_true", default=False)
+    s_run = sub_parsers.add_parser("run")
+    s_run.add_argument("--socket", required=True)
+
+    s_deps = sub_parsers.add_parser("deps")
+    s_deps.add_argument("deps", nargs="*", default=())
 
     return parser.parse_args()
 
 
 args = parse_args()
+command: Union[Literal["deps"], Literal["run"]] = args.command
 
+if command == "deps":
+    from typing import Sequence
 
-if args.install_runtime:
+    deps: Sequence[str] = args.deps
 
-    from subprocess import run
+    if not deps or "runtime" in deps:
+        from subprocess import run
 
-    proc = run(
-        (
-            "pip3",
-            "install",
-            "--upgrade",
-            "--target",
-            str(RT_DIR),
-            "--requirement",
-            REQUIREMENTS,
-        ),
-        cwd=str(RT_DIR),
-    )
-    if proc.returncode:
-        exit(proc.returncode)
+        proc = run(
+            (
+                "pip3",
+                "install",
+                "--upgrade",
+                "--target",
+                str(RT_DIR),
+                "--requirement",
+                REQUIREMENTS,
+            ),
+            cwd=str(RT_DIR),
+        )
+        if proc.returncode:
+            exit(proc.returncode)
 
+    if not deps or "packages" in deps:
+        from asyncio import run as arun
 
-if args.install_packages:
+        from python.components.install import install
 
-    from asyncio import run as arun
+        code = arun(install())
+        if code:
+            exit(code)
 
-    from python.components.install import install
-
-    code = arun(install())
-    if code:
-        exit(code)
-
-
-if args.socket:
+elif command == "run":
     from pynvim import attach
     from pynvim_pp.client import run_client
 
@@ -63,3 +66,6 @@ if args.socket:
     nvim = attach("socket", path=args.socket)
     code = run_client(nvim, client=Client())
     exit(code)
+
+else:
+    assert False

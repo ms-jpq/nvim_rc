@@ -13,7 +13,7 @@ local on_stderr = function(_, msg)
   vim.api.nvim_err_write(table.concat(msg, "\n"))
 end
 
-local args = {"python3", "-m", py_main, "--socket", vim.v.servername}
+local args = {"python3", "-m", py_main, "run", "--socket", vim.v.servername}
 local params = {
   cwd = nvim_home,
   on_exit = on_exit,
