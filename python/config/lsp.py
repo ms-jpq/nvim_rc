@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, FrozenSet, Mapping, Optional, Sequence
+from typing import Any, AbstractSet, Mapping, Optional, Sequence
 
 from std2.pickle import decode
 from yaml import safe_load
@@ -19,7 +19,7 @@ class RPFallback(Enum):
 @dataclass(frozen=True)
 class RootPattern:
     fallback: RPFallback = RPFallback.cwd
-    exact: FrozenSet[str] = frozenset()
+    exact: AbstractSet[str] = frozenset()
     glob: Sequence[str] = ()
 
 
@@ -28,7 +28,7 @@ class LspAttrs:
     server: str
     bin: str
     args: Optional[Sequence[str]] = None
-    filetypes: FrozenSet[str] = frozenset()
+    filetypes: AbstractSet[str] = frozenset()
     root: Optional[RootPattern] = None
     init_options: Mapping[str, Any] = field(default_factory=dict)
     settings: Mapping[str, Any] = field(default_factory=dict)

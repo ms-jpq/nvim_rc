@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import FrozenSet, Sequence
+from typing import AbstractSet, Sequence
 
 from std2.pickle import decode
 from yaml import safe_load
@@ -19,7 +19,7 @@ class FmtType(Enum):
 class FmtAttrs:
     bin: str
     type: FmtType
-    filetypes: FrozenSet[str]
+    filetypes: AbstractSet[str]
     args: Sequence[str] = ()
     exit_code: int = 0
     install: InstallSpec = InstallSpec()
