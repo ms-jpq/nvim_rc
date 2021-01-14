@@ -1,8 +1,10 @@
 from argparse import ArgumentParser, Namespace
+from asyncio import run as arun
+from subprocess import run
 from sys import path
-from typing import Literal, Union
+from typing import Literal, Sequence, Union
 
-from python.consts import REQUIREMENTS, RT_DIR
+from .consts import REQUIREMENTS, RT_DIR
 
 RT_DIR.mkdir(parents=True, exist_ok=True)
 path.append(str(RT_DIR))
@@ -26,13 +28,9 @@ args = parse_args()
 command: Union[Literal["deps"], Literal["run"]] = args.command
 
 if command == "deps":
-    from typing import Sequence
-
     deps: Sequence[str] = args.deps
 
     if not deps or "runtime" in deps:
-        from subprocess import run
-
         proc = run(
             (
                 "pip3",
@@ -49,9 +47,8 @@ if command == "deps":
             exit(proc.returncode)
 
     if not deps or "packages" in deps:
-        from asyncio import run as arun
 
-        from python.components.install import install
+        from .components.install import install
 
         code = arun(install())
         if code:
@@ -61,7 +58,7 @@ elif command == "run":
     from pynvim import attach
     from pynvim_pp.client import run_client
 
-    from python.client import Client
+    from .client import Client
 
     nvim = attach("socket", path=args.socket)
     code = run_client(nvim, client=Client())
