@@ -1,7 +1,7 @@
 from asyncio.tasks import as_completed
 from datetime import datetime, timezone
 from os import environ, pathsep, uname
-from shutil import rmtree, which
+from shutil import rmtree, which, get_terminal_size
 from sys import stderr
 from typing import Awaitable, Iterator, Sequence, Tuple
 
@@ -217,18 +217,22 @@ async def install() -> int:
     has_error = False
     for fut in as_completed((*_git(), *_pip(), *_npm(), *_go(), *_script())):
         for debug, proc in await fut:
+            cols, _ = get_terminal_size((80, 40))
+            sep = cols * "="
             args = " ".join((proc.prog, *proc.args))
             if proc.code == 0:
                 msg = LANG("proc succeeded", args=args)
                 print(msg)
                 print(debug)
                 print(proc.out.decode())
+                print(sep)
             else:
                 has_error = True
                 msg = LANG("proc failed", code=proc.code, args=args)
                 print(msg, file=stderr)
                 print(debug, file=stderr)
                 print(proc.err, file=stderr)
+                print(sep, file=stderr)
 
     return has_error
 
