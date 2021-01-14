@@ -1,19 +1,27 @@
 ---
-- uri: https://github.com/neovim/nvim-lspconfig
+- git:
+    uri: https://github.com/neovim/nvim-lspconfig
 
-- uri: https://github.com/ms-jpq/chadtree
+- git:
+    uri: https://github.com/ms-jpq/chadtree
+    script:
+      body: |-
+        python3 -m chadtree deps
   keys:
     - modes: n
       maps:
         "<leader>v": "<cmd>CHADopen<cr>"
 
-- uri: https://github.com/ms-jpq/kok.nvim
+- git:
+    uri: https://github.com/ms-jpq/kok.nvim
   lua: |-
     -- vim.o.completefunc = "KoKomnifunc"
 
-- uri: https://github.com/junegunn/fzf
+- git:
+    uri: https://github.com/junegunn/fzf
 
-- uri: https://github.com/junegunn/fzf.vim
+- git:
+    uri: https://github.com/junegunn/fzf.vim
   vals:
     fzf_buffers_jump: True
     fzf_preview_window: right:wrap
@@ -35,7 +43,8 @@
   lua: |-
     vim.env["FZF_DEFAULT_OPTS"] = vim.env["FZF_DEFAULT_OPTS"] .. " --no-border"
 
-- uri: https://github.com/sainnhe/edge
+- git:
+    uri: https://github.com/sainnhe/edge
   vals:
     edge_style: neon
     edge_menu_selection_background: purple
@@ -43,7 +52,8 @@
     set background=light
     colorscheme edge
 
-- uri: https://github.com/itchyny/lightline.vim
+- git:
+    uri: https://github.com/itchyny/lightline.vim
   vals:
     edge_style: neon
     edge_menu_selection_background: purple
@@ -71,7 +81,8 @@
       return v:lua.lv.LightLineTabSize()
     endfunction
 
-- uri: https://github.com/liuchengxu/vim-which-key
+- git:
+    uri: https://github.com/liuchengxu/vim-which-key
   keys:
     - modes: n
       maps:
@@ -79,15 +90,20 @@
         "[": "<cmd>WhichKey '['<cr>"
         "]": "<cmd>WhichKey ']'<cr>"
 
-- uri: https://github.com/wellle/targets.vim
+- git:
+    uri: https://github.com/wellle/targets.vim
 
-- uri: https://github.com/tpope/vim-repeat
+- git:
+    uri: https://github.com/tpope/vim-repeat
 
-- uri: https://github.com/tpope/vim-surround
+- git:
+    uri: https://github.com/tpope/vim-surround
 
-- uri: https://github.com/tpope/vim-commentary
+- git:
+    uri: https://github.com/tpope/vim-commentary
 
-- uri: https://github.com/junegunn/vim-easy-align
+- git:
+    uri: https://github.com/junegunn/vim-easy-align
   keys:
     - modes: nv
       opts:
@@ -95,25 +111,33 @@
       maps:
         "ga": "<plug>(EasyAlign)"
 
-- uri: https://github.com/tpope/vim-unimpaired
+- git:
+    uri: https://github.com/tpope/vim-unimpaired
 
-- uri: https://github.com/airblade/vim-gitgutter
+- git:
+    uri: https://github.com/airblade/vim-gitgutter
 
-- uri: https://github.com/sheerun/vim-polyglot
+- git:
+    uri: https://github.com/sheerun/vim-polyglot
 
-- uri: https://github.com/ms-jpq/kok-snippets
+- git:
+    uri: https://github.com/ms-jpq/kok-snippets
 
-- uri: https://github.com/ms-jpq/kok-t9
+- git:
+    uri: https://github.com/ms-jpq/kok-t9
   keys:
     - modes: n
       maps:
         "gz": "<cmd>KoKstart<cr>"
 
-- uri: https://github.com/honza/vim-snippets
+- git:
+    uri: https://github.com/honza/vim-snippets
 
-- uri: https://github.com/Shougo/neosnippet-snippets
+- git:
+    uri: https://github.com/Shougo/neosnippet-snippets
 
-- uri: https://github.com/norcalli/nvim-colorizer.lua
+- git:
+    uri: https://github.com/norcalli/nvim-colorizer.lua
   lua: |-
     local go, colourizer = pcall(require, "colorizer")
     if go then

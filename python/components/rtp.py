@@ -19,7 +19,7 @@ def p_name(uri: str) -> Path:
 def inst(nvim: Nvim) -> Atomic:
     pkgs = {
         path: spec
-        for path, spec in ((p_name(spec.uri), spec) for spec in pkg_specs)
+        for path, spec in ((p_name(spec.git.uri), spec) for spec in pkg_specs)
         if path.exists()
     }
 

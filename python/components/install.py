@@ -14,7 +14,7 @@ from ..config.fmt import fmt_specs
 from ..config.install import ScriptSpec
 from ..config.linter import linter_specs
 from ..config.lsp import lsp_specs
-from ..config.pkgs import pkg_specs
+from ..config.pkgs import GitPkgSpec, pkg_specs
 from ..consts import (
     BIN_DIR,
     GO_DIR,
@@ -31,11 +31,6 @@ from ..consts import (
 from ..registery import LANG
 from ..workspace.terminal import open_term
 from .rtp import p_name
-
-
-def _git_specs() -> Iterator[str]:
-    for spec in pkg_specs:
-        yield spec.uri
 
 
 def _pip_specs() -> Iterator[str]:
@@ -74,6 +69,14 @@ def _script_specs() -> Iterator[Tuple[str, ScriptSpec]]:
         yield f_spec.bin, f_spec.install.script
 
 
+def _installable(script_spec: ScriptSpec) -> bool:
+    return bool(
+        which(script_spec.interpreter)
+        and all(map(which, script_spec.required))
+        and script_spec.body
+    )
+
+
 SortOfMonoid = Sequence[Tuple[str, ProcReturn]]
 
 
@@ -82,28 +85,37 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
     cmd = "git"
 
     if which(cmd):
-        for pkg in _git_specs():
+        for spec in pkg_specs:
 
-            async def cont(pkg: str) -> SortOfMonoid:
-                location = VIM_DIR / p_name(pkg)
+            async def cont(spec: GitPkgSpec) -> SortOfMonoid:
+                location = VIM_DIR / p_name(spec.uri)
                 if location.is_dir():
-                    p = await call(
-                        cmd, "pull", "--recurse-submodules", cwd=str(location)
-                    )
-                    return ((pkg, p),)
+                    p1 = await call(cmd, "pull", "--recurse-submodules", cwd=location)
                 else:
-                    p = await call(
+                    p1 = await call(
                         cmd,
                         "clone",
                         "--depth=1",
                         "--recurse-submodules",
                         "--shallow-submodules",
-                        pkg,
+                        spec.uri,
                         str(location),
                     )
-                    return ((pkg, p),)
 
-            yield cont(pkg)
+                pkg = spec.script
+                if not p1.code and _installable(pkg):
+                    stdin = pkg.body.encode()
+                    p2 = await call(
+                        pkg.interpreter,
+                        stdin=stdin,
+                        env=pkg.env,
+                        cwd=location,
+                    )
+                    return (spec.uri, p1), (pkg.body, p2)
+                else:
+                    return ((spec.uri, p1),)
+
+            yield cont(spec.git)
 
 
 def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
@@ -197,7 +209,7 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
             )
             return ((pkg.body, p),)
 
-        if which(pkg.interpreter) and all(map(which, pkg.required)) and pkg.body:
+        if _installable(pkg):
             yield cont(bin, pkg)
 
 
