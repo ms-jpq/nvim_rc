@@ -22,7 +22,7 @@ def parse_args() -> Namespace:
     parser.add_argument("-d", "--dest", default=None)
     parser.add_argument("-p", "--print-dest", type=Path, default=None)
     parser.add_argument("--cd", type=Path, default=None)
-    parser.add_argument("-t", "--timeout", type=int, default=60)
+    parser.add_argument("-t", "--timeout", type=float, default=60.0)
     return parser.parse_args()
 
 
