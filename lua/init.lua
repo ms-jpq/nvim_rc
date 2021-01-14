@@ -2,7 +2,7 @@ local nvim_home = vim.api.nvim_list_runtime_paths()[1]
 local py_main = "python"
 
 local on_exit = function(_, code)
-  vim.api.nvim_err_writeln("EXITED - " .. code)
+  vim.api.nvim_err_writeln(" | EXITED - " .. code)
 end
 
 local on_stdout = function(_, msg)
