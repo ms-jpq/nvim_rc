@@ -3,7 +3,7 @@ from typing import Optional
 
 from pynvim.api.nvim import Nvim
 from pynvim_pp.lib import async_call, go
-from std2.sched import ticker
+from std2.sched import aticker
 
 from ..consts import BACKUP_DIR
 from ..registery import atomic, autocmd, rpc, settings
@@ -20,7 +20,7 @@ def _check_time(nvim: Nvim) -> None:
     check = lambda: nvim.command("silent! checktime")
 
     async def cont() -> None:
-        async for _ in ticker(3, immediately=False):
+        async for _ in aticker(3, immediately=False):
             go(async_call(nvim, check))
 
     go(cont())
