@@ -1,7 +1,8 @@
 from asyncio.tasks import as_completed
 from datetime import datetime, timezone
+from itertools import chain
 from os import environ, pathsep, uname
-from shutil import rmtree, which, get_terminal_size
+from shutil import get_terminal_size, rmtree, which
 from sys import stderr
 from typing import Awaitable, Iterator, Sequence, Tuple
 
@@ -215,11 +216,11 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
 
 async def install() -> int:
     has_error = False
-    for fut in as_completed((*_git(), *_pip(), *_npm(), *_go(), *_script())):
+    for fut in as_completed(chain(_git(), _pip(), _npm(), _go(), _script())):
         for debug, proc in await fut:
             cols, _ = get_terminal_size((80, 40))
             sep = cols * "="
-            args = " ".join((proc.prog, *proc.args))
+            args = " ".join(chain((proc.prog,), proc.args))
             if proc.code == 0:
                 msg = LANG("proc succeeded", args=args)
                 print(msg)

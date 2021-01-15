@@ -2,6 +2,7 @@ from asyncio import gather
 from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime
+from itertools import chain
 from os import close, linesep
 from pathlib import Path
 from shutil import which
@@ -141,7 +142,7 @@ async def _run(
         )
 
     now = datetime.now().strftime(DATE_FMT)
-    preview = (linesep * 2).join((now, *outputs))
+    preview = (linesep * 2).join(chain((now,), outputs))
     await set_preview_content(nvim, text=preview)
 
 

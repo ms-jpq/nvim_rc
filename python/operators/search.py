@@ -1,3 +1,4 @@
+from itertools import chain
 from os import linesep
 
 from pynvim.api import Buffer
@@ -34,7 +35,7 @@ def _get_selected(nvim: Nvim, buf: Buffer, visual_type: VisualTypes) -> str:
         head = lines[0].encode()[col1:].decode()
         body = lines[1:-1]
         tail = lines[-1].encode()[: col2 + 1].decode()
-        return linesep.join((head, *body, tail))
+        return linesep.join(chain((head,), body, (tail,)))
 
 
 def _hl_selected(nvim: Nvim, visual: VisualTypes) -> str:

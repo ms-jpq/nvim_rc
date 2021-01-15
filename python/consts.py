@@ -1,3 +1,4 @@
+from itertools import chain
 from os import environ, pathsep
 from pathlib import Path
 
@@ -37,7 +38,7 @@ PATH_PREPEND = tuple(
         (BIN_DIR, PIP_DIR / "bin", NPM_DIR / "node_modules" / ".bin", GO_DIR / "bin"),
     )
 )
-PATH = environ["PATH"] = pathsep.join((*PATH_PREPEND, environ["PATH"]))
+PATH = environ["PATH"] = pathsep.join(chain(PATH_PREPEND, (environ["PATH"],)))
 PYTHONPATH = environ["PYTHONPATH"] = (
     pathsep.join((str(PIP_DIR), environ["PYTHONPATH"]))
     if "PYTHONPATH" in environ

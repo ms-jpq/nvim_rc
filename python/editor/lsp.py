@@ -95,7 +95,7 @@ end)(...)
 def _encode_spec(spec: LspAttrs) -> Mapping[str, Any]:
     config: MutableMapping[str, Any] = {}
     if spec.args is not None:
-        config["cmd"] = tuple((spec.bin, *spec.args))
+        config["cmd"] = (spec.bin, *spec.args)
     if spec.filetypes:
         config["filetypes"] = spec.filetypes
     if spec.init_options:
