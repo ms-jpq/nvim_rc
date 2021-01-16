@@ -44,4 +44,4 @@ def _surround(nvim: Nvim) -> None:
                 cont()
 
 
-autocmd("InsertCharPre") << f"lua {_surround.name}()"
+# autocmd("InsertCharPre") << f"lua {_surround.name}()"
