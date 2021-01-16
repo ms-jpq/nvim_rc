@@ -1,5 +1,3 @@
-from os import linesep
-
 from pynvim import Nvim
 from pynvim_pp.client import BasicClient
 from pynvim_pp.lib import threadsafe_call
@@ -7,7 +5,6 @@ from pynvim_pp.lib import threadsafe_call
 from ._registery import ____
 from .components.install import maybe_install
 from .registery import drain
-
 
 
 class Client(BasicClient):
