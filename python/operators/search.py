@@ -53,13 +53,15 @@ def _op_search(nvim: Nvim, visual: VisualTypes = None) -> None:
 @rpc(blocking=True)
 def _op_fzf(nvim: Nvim, visual: VisualTypes = None) -> None:
     text = _hl_selected(nvim, visual=visual)
-    nvim.command(f"BLines {text}")
+    cont = lambda: nvim.command(f"BLines {text}")
+    go(async_call(nvim, cont))
 
 
 @rpc(blocking=True)
 def _op_rg(nvim: Nvim, visual: VisualTypes = None) -> None:
     text = _hl_selected(nvim, visual=visual)
-    nvim.command(f"Rg {text}")
+    cont = lambda: nvim.command(f"Rg {text}")
+    go(async_call(nvim, cont))
 
 
 keymap.n("gs") << f"<cmd>set opfunc={_op_search.name}<cr>g@"
