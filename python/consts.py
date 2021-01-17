@@ -17,7 +17,7 @@ CONF_PKGS = CONF_DIR / "packages.yml"
 CONF_LSP = CONF_DIR / "lsp.yml"
 CONF_LINT = CONF_DIR / "lint.yml"
 CONF_FMT = CONF_DIR / "fmt.yml"
-
+CONF_TOOL = CONF_DIR / "tools.yml"
 
 VARS_DIR = TOP_LEVEL / ".vars"
 RT_DIR = VARS_DIR / "runtime"

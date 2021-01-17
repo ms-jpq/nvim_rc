@@ -16,6 +16,7 @@ from ..config.install import ScriptSpec
 from ..config.linter import linter_specs
 from ..config.lsp import lsp_specs
 from ..config.pkgs import GitPkgSpec, pkg_specs
+from ..config.tools import tool_specs
 from ..consts import (
     BIN_DIR,
     GO_DIR,
@@ -41,6 +42,8 @@ def _pip_specs() -> Iterator[str]:
         yield from i_spec.install.pip
     for f_spec in fmt_specs:
         yield from f_spec.install.pip
+    for t_spec in tool_specs:
+        yield from t_spec.pip
 
 
 def _npm_specs() -> Iterator[str]:
@@ -50,6 +53,8 @@ def _npm_specs() -> Iterator[str]:
         yield from i_spec.install.npm
     for f_spec in fmt_specs:
         yield from f_spec.install.npm
+    for t_spec in tool_specs:
+        yield from t_spec.npm
 
 
 def _go_specs() -> Iterator[str]:
@@ -59,6 +64,8 @@ def _go_specs() -> Iterator[str]:
         yield from i_spec.install.go
     for f_spec in fmt_specs:
         yield from f_spec.install.go
+    for t_spec in tool_specs:
+        yield from t_spec.go
 
 
 def _script_specs() -> Iterator[Tuple[str, ScriptSpec]]:

@@ -1,7 +1,7 @@
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
 from subprocess import run
-from sys import path
+from sys import path, stderr
 from typing import Literal, Sequence, Union
 
 from .consts import REQUIREMENTS, RT_DIR
@@ -57,12 +57,17 @@ if command == "deps":
 elif command == "run":
     from pynvim import attach
     from pynvim_pp.client import run_client
+    from std2.pickle import DecodeError
 
-    from .client import Client
-
-    nvim = attach("socket", path=args.socket)
-    code = run_client(nvim, client=Client())
-    exit(code)
+    try:
+        from .client import Client
+    except DecodeError as e:
+        print(e, file=stderr)
+        exit(1)
+    else:
+        nvim = attach("socket", path=args.socket)
+        code = run_client(nvim, client=Client())
+        exit(code)
 
 else:
     assert False
