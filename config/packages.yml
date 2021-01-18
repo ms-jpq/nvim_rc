@@ -65,8 +65,8 @@
         right:
           - - lineinfo
           - - percent
-          - - filetype
-            - tabsize
+          - - tabsize
+            - filetype
   lua: |-
     lv = lv or {}
     lv.LightLineTabSize = function ()
