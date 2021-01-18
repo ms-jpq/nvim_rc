@@ -7,11 +7,6 @@
     script:
       body: |-
         python3 -m chadtree deps
-  vals:
-    chadtree_settings:
-      view:
-        highlights:
-          directory: Text
   keys:
     - modes: n
       maps:
@@ -76,9 +71,9 @@
     lv = lv or {}
     lv.LightLineTabSize = function ()
       if not vim.bo.expandtab then
-        return "Tabs " .. vim.bo.tabstop
+        return "tabs " .. vim.bo.tabstop
       else
-        return "Spaces " .. vim.bo.tabstop
+        return "spaces " .. vim.bo.tabstop
       end
     end
   viml: |-
