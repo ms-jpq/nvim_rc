@@ -7,6 +7,11 @@
     script:
       body: |-
         python3 -m chadtree deps
+  vals:
+    chadtree_settings:
+      view:
+        highlights:
+          directory: Text
   keys:
     - modes: n
       maps:
