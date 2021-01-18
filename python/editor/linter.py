@@ -51,10 +51,9 @@ def current_ctx(nvim: Nvim) -> Tuple[str, BufContext]:
     )
 
 
-def arg_subst(args: Iterable[str], ctx: BufContext, filename: str) -> Iterator[str]:
+def arg_subst(args: Iterable[str], ctx: BufContext, filename: str) -> Sequence[str]:
     env = {"filename": filename, "filetype": ctx.filetype, "tabsize": str(ctx.tabsize)}
-    for arg in args:
-        yield envsubst(arg, env=env)
+    return tuple(envsubst(arg, env=env) for arg in args)
 
 
 @contextmanager
