@@ -15,7 +15,7 @@
 - git:
     uri: https://github.com/ms-jpq/kok.nvim
   lua: |-
-    -- vim.o.completefunc = "KoKomnifunc"
+    vim.o.completefunc = "KoKomnifunc"
 
 - git:
     uri: https://github.com/junegunn/fzf
