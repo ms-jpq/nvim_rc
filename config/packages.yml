@@ -125,6 +125,11 @@
 
 - git:
     uri: https://github.com/ms-jpq/kok-t9
+  vals:
+    kok_settings:
+      sources:
+        lsp:
+          enabled: True
   keys:
     - modes: n
       maps:
