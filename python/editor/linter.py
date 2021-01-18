@@ -7,15 +7,23 @@ from os import close, linesep
 from pathlib import Path
 from shutil import which
 from tempfile import mkstemp
-from typing import Iterable, Iterator, MutableSequence, Sequence, Tuple
+from typing import Iterable, Iterator, Sequence, Tuple
 
 from pynvim import Nvim
 from pynvim.api.buffer import Buffer
-from pynvim_pp.api import buf_filetype, buf_get_lines, buf_get_option, buf_name, cur_buf, get_cwd
+from pynvim_pp.api import (
+    buf_filetype,
+    buf_get_lines,
+    buf_get_option,
+    buf_name,
+    cur_buf,
+    get_cwd,
+)
 from pynvim_pp.hold import hold_win_pos
 from pynvim_pp.lib import async_call, awrite
 from pynvim_pp.preview import set_preview
 from std2.asyncio.subprocess import call
+from std2.lex import ParseError, envsubst
 
 from ..config.linter import LinterAttrs, LinterType, linter_specs
 from ..consts import DATE_FMT
@@ -43,46 +51,10 @@ def current_ctx(nvim: Nvim) -> Tuple[str, BufContext]:
     )
 
 
-class ParseError(Exception):
-    ...
-
-
 def arg_subst(args: Iterable[str], ctx: BufContext, filename: str) -> Iterator[str]:
-    def var_sub(arg: str, name: str) -> str:
-        if name == "filename":
-            return filename
-        elif name == "filetype":
-            return ctx.filetype
-        elif name == "tabsize":
-            return str(ctx.tabsize)
-        else:
-            raise ParseError(arg)
-
-    def subst(arg: str) -> Iterator[str]:
-        it = iter(arg)
-        for c in it:
-            if c == "$":
-                nc = next(it, "")
-                if nc == "$":
-                    yield nc
-                elif nc == "{":
-                    chars: MutableSequence[str] = []
-                    for c in it:
-                        if c == "}":
-                            name = "".join(chars)
-                            yield var_sub(arg, name=name)
-                            break
-                        else:
-                            chars.append(c)
-                    else:
-                        raise ParseError(arg)
-                else:
-                    raise ParseError(arg)
-            else:
-                yield c
-
+    env = {"filename": filename, "filetype": ctx.filetype, "tabsize": str(ctx.tabsize)}
     for arg in args:
-        yield "".join(subst(arg))
+        yield envsubst(arg, env=env)
 
 
 @contextmanager
