@@ -9,4 +9,4 @@ set secure
 set termguicolors
 set shortmess+=I
 
-lua require "init"
+lua require 'init'
