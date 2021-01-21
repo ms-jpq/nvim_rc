@@ -14,8 +14,14 @@
 
 - git:
     uri: https://github.com/ms-jpq/kok.nvim
+  vals:
+    kok_settings:
+      sources:
+        lsp:
+          enabled: true
   lua: |-
     vim.o.completefunc = "KoKomnifunc"
+
 
 - git:
     uri: https://github.com/junegunn/fzf
