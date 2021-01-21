@@ -157,34 +157,34 @@
     npm:
       - vscode-css-languageserver-bin
 
-- server: graphqlls
-  bin: graphql-lsp
-  args:
-    - server
-  filetypes:
-    - graphql
-    - javascript
-    - javascript.jsx
-    - javascriptreact
-    - typescript
-    - typescript.tsx
-    - typescriptreact
-  root:
-    fallback: none
-    exact:
-      - .graphqlrc
-      - .graphqlrc.js
-      - .graphqlrc.json
-      - .graphqlrc.yaml
-      - .graphqlrc.yml
-      - graphql.config.js
-      - graphql.config.json
-      - graphql.config.yaml
-      - graphql.config.yml
-  settings: {}
-  install:
-    npm:
-      - graphql-language-service-cli
+# - server: graphqlls
+#   bin: graphql-lsp
+#   args:
+#     - server
+#   filetypes:
+#     - graphql
+#     - javascript
+#     - javascript.jsx
+#     - javascriptreact
+#     - typescript
+#     - typescript.tsx
+#     - typescriptreact
+#   root:
+#     fallback: none
+#     exact:
+#       - .graphqlrc
+#       - .graphqlrc.js
+#       - .graphqlrc.json
+#       - .graphqlrc.yaml
+#       - .graphqlrc.yml
+#       - graphql.config.js
+#       - graphql.config.json
+#       - graphql.config.yaml
+#       - graphql.config.yml
+#   settings: {}
+#   install:
+#     npm:
+#       - graphql-language-service-cli
 
 - server: r_language_server
   bin: R
