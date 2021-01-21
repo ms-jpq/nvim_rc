@@ -29,10 +29,10 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
     offset = len(next(reversed(lhs), "").encode())
 
     ctx = gen_split(lhs, rhs, unifying_chars=UNIFIYING_CHARS)
-    if not (ctx.word_lhs + ctx.word_rhs):
-        words_lhs, words_rhs = ctx.syms_lhs, ctx.syms_rhs
-    else:
-        words_lhs, words_rhs = ctx.word_lhs, ctx.word_rhs
+    # if not (ctx.word_lhs + ctx.word_rhs):
+    #     words_lhs, words_rhs = ctx.syms_lhs, ctx.syms_rhs
+    # else:
+    words_lhs, words_rhs = ctx.word_lhs, ctx.word_rhs
 
     c_lhs = c + offset - len(words_lhs.encode())
     c_rhs = c + offset + len(words_rhs.encode()) - 1
