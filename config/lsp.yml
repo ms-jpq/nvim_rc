@@ -181,6 +181,7 @@
       - graphql.config.json
       - graphql.config.yaml
       - graphql.config.yml
+  settings: {}
   install:
     npm:
       - graphql-language-service-cli
