@@ -31,7 +31,6 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
 
     c_lhs = c + offset - len(words_lhs.encode())
     c_rhs = c + offset + len(words_rhs.encode()) - 1
-    print(words_lhs, words_rhs, flush=True)
 
     if is_inside:
         mark1 = (row, c_lhs)
