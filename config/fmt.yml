@@ -59,7 +59,6 @@
   type: stream
   args:
     - --spaces=${tabsize}
-    - --comma-start
     - --comma-break
     - --nogrouping
     - --function-case=0
