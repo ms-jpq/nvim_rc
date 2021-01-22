@@ -62,6 +62,7 @@
     - --comma-start
     - --comma-break
     - --nogrouping
+    - --function-case=0
   filetypes:
     - sql
   install:
