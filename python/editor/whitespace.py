@@ -111,4 +111,4 @@ def _trailing_ws_thunk(nvim: Nvim) -> None:
         pass
 
 
-# autocmd("CursorHold") << f"lua {_trailing_ws_thunk.name}()"
+autocmd("CursorHold") << f"lua {_trailing_ws_thunk.name}()"
