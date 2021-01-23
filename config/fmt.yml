@@ -30,6 +30,22 @@
     pip:
       - black
 
+- bin: import-sort
+  args:
+    - --write
+    - --
+    - ${filename}
+  type: fs
+  filetypes:
+    - javascript
+    - javascript.jsx
+    - typescript
+    - typescript.tsx
+    - typescriptreact
+  install:
+    npm:
+      - import-sort-cli
+
 - bin: prettier
   args:
     - --stdin-filepath
