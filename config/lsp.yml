@@ -73,6 +73,31 @@
     npm:
       - yaml-language-server
 
+
+- server: texlab
+  bin: tetlab
+  install:
+    script:
+      env:
+        MAC_URI: https://github.com/latex-lsp/texlab/releases/download/v2.2.2/texlab-x86_64-macos.tar.gz
+        LINUX_URI: https://github.com/latex-lsp/texlab/releases/download/v2.2.2/texlab-x86_64-linux.tar.gz
+      body: |-
+        set -eu
+        set -o pipefail
+
+        if [[ "$OS" == 'Darwin' ]]
+        then
+          URI="$MAC_URI"
+        else
+          URI="$LINUX_URI"
+        fi
+
+        TMP="$(mktemp)"
+        get --print-dest "$TMP" "$URI"
+        unpack "$(<"$TMP")" "$TMP_DIR"
+        mv "${TMP_DIR}/${BIN_NAME}" "$BIN_PATH"
+        chmod +x "$BIN_PATH"
+
 - server: bashls
   bin: bash-language-server
   install:
