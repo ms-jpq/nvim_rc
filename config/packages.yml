@@ -154,3 +154,10 @@
         colourizer.setup()
       end
     end)()
+
+
+- git:
+    uri: https://github.com/machakann/vim-highlightedyank.git
+  viml: |-
+    highlight HighlightedyankRegion cterm=reverse gui=reverse
+    let g:highlightedyank_highlight_duration = 200
