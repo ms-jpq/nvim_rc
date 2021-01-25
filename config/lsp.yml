@@ -75,7 +75,7 @@
 
 
 - server: texlab
-  bin: tetlab
+  bin: texlab
   install:
     script:
       env:
