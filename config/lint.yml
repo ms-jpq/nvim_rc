@@ -93,7 +93,7 @@
 
         if [[ "$OS" == 'Darwin' ]]
         then
-          get "$MAC_OS" "$(mktemp)" | unpack - "$TMP_DIR"
+          get "$MAC_OS" --cd "$TMP_DIR" | unpack - "$TMP_DIR"
           mv "${TMP_DIR}/${BIN_NAME}/"*"/bin/${BIN_NAME}" "$BIN_PATH"
         else
           get "$LINUX" "$BIN_PATH"

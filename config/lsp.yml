@@ -84,6 +84,7 @@
       env:
         MAC_URI: https://github.com/latex-lsp/texlab/releases/download/v2.2.2/texlab-x86_64-macos.tar.gz
         LINUX_URI: https://github.com/latex-lsp/texlab/releases/download/v2.2.2/texlab-x86_64-linux.tar.gz
+        MAC_TECTONIC_URI: https://homebrew.bintray.com/bottles/tectonic-0.4.1.big_sur.bottle.tar.gz
       body: |-
         set -eu
         set -o pipefail
@@ -91,6 +92,8 @@
         if [[ "$OS" == 'Darwin' ]]
         then
           URI="$MAC_URI"
+          get "$MAC_TECTONIC_URI" --cd "$TMP_DIR" | unpack - "$TMP_DIR"
+          mv "${TMP_DIR}/tectonic/"*"/bin/tectonic" bin/tectonic
         else
           URI="$LINUX_URI"
         fi
