@@ -1,7 +1,7 @@
 from pynvim.api.nvim import Nvim
 from pynvim_pp.highlight import HLgroup, highlight
 
-from ..registery import autocmd, rpc, settings
+from ..registery import atomic, autocmd, rpc, settings
 
 # use 256 colours
 settings["termguicolors"] = True
@@ -46,4 +46,6 @@ def _hl_yank(nvim: Nvim) -> None:
     # nvim.lua.vim.highlight.on_yank({})
     pass
 
+
+atomic.command("highlight HighlightedyankRegion cterm=reverse gui=reverse")
 autocmd("TextYankPost") << f"lua {_hl_yank.name}()"
