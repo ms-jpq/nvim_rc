@@ -76,6 +76,9 @@
 
 - server: texlab
   bin: texlab
+  filetypes:
+    - tex
+    - plaintex
   install:
     script:
       env:
