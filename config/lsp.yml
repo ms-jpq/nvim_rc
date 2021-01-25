@@ -84,7 +84,6 @@
         executable: tectonic
         args:
           - "%f"
-          - --synctex
           - --keep-logs
           - --keep-intermediates
           - --outdir=tex_build

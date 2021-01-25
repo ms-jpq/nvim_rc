@@ -38,8 +38,8 @@ def inst(nvim: Nvim) -> Atomic:
 
     for spec in pkgs.values():
         if spec.lua:
-            atomic2.exec_lua(spec.lua, ())
+            atomic2.call_function("luaeval", (spec.lua, ()))
         if spec.viml:
-            atomic2.exec(spec.viml, False)
+            atomic2.command(spec.viml)
 
     return atomic1 + keymap.drain(buf=None) + atomic2

@@ -116,6 +116,7 @@ for spec in lsp_specs:
             encode(config),
             encode(spec.root),
         )
-        atomic.exec_lua(_LSP_INIT, args)
+        # TODO wait until 0.5 is stable
+        # atomic.exec_lua(_LSP_INIT, args)
 
 atomic.command("doautoall Filetype")

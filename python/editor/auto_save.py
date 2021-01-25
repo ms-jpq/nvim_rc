@@ -26,7 +26,7 @@ def _check_time(nvim: Nvim) -> None:
     go(cont())
 
 
-atomic.exec_lua(f"{_check_time.name}()", ())
+atomic.call_function("luaeval", (f"{_check_time.name}()", ()))
 
 
 # auto backup

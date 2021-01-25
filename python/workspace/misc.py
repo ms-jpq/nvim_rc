@@ -37,4 +37,4 @@ def _scratch_buffer(nvim: Nvim) -> None:
             buf_set_option(nvim, buf=buf, key="buftype", val="nofile")
 
 
-atomic.exec_lua(f"{_scratch_buffer.name}()", ())
+atomic.call_function("luaeval", (f"{_scratch_buffer.name}()", ()))

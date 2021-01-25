@@ -83,12 +83,11 @@ keymap.n("<leader>u") << f"<cmd>lua {toggle_floating.name}()<cr>"
 
 
 @rpc(blocking=True)
-def _kill_term_wins(nvim: Nvim, win_id: str) -> None:
+def _kill_term_wins(nvim: Nvim) -> None:
     wins = tuple(list_floatwins(nvim))
-    fw_ids = frozenset(nvim.funcs.win_getid(win.number) for win in wins)
-    if int(win_id) in fw_ids:
+    if len(wins) != 2:
         for win in wins:
             win_close(nvim, win=win)
 
-
-autocmd("WinClosed") << f"lua {_kill_term_wins.name}(vim.fn.expand('<afile>'))"
+# TODO -- use WinClosed for 0.5
+autocmd("WinEnter") << f"lua {_kill_term_wins.name}()"

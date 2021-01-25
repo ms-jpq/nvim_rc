@@ -1,6 +1,6 @@
 ---
-- git:
-    uri: https://github.com/neovim/nvim-lspconfig
+# - git:
+#     uri: https://github.com/neovim/nvim-lspconfig
 
 - git:
     uri: https://github.com/ms-jpq/chadtree
@@ -12,16 +12,15 @@
       maps:
         "<leader>v": "<cmd>CHADopen<cr>"
 
-- git:
-    uri: https://github.com/ms-jpq/kok.nvim
-  vals:
-    kok_settings:
-      sources:
-        lsp:
-          enabled: true
-  lua: |-
-    vim.o.completefunc = "KoKomnifunc"
-
+# - git:
+#     uri: https://github.com/ms-jpq/kok.nvim
+#   vals:
+#     kok_settings:
+#       sources:
+#         lsp:
+#           enabled: true
+#   lua: |-
+#     -- vim.o.completefunc = "KoKomnifunc"
 
 - git:
     uri: https://github.com/junegunn/fzf
@@ -47,7 +46,11 @@
       maps:
         "<leader>O": ":Rg "
   lua: |-
-    vim.env["FZF_DEFAULT_OPTS"] = (vim.env["FZF_DEFAULT_OPTS"] or "") .. " --no-border"
+    (function ()
+      local fzf_opts = vim.api.nvim_call_function("getenv", {"FZF_DEFAULT_OPTS"})
+      local new_opts = (fzf_opts or "") .. " --no-border"
+      vim.api.nvim_call_function("setenv", {"FZF_DEFAULT_OPTS", new_opts})
+    end)()
 
 - git:
     uri: https://github.com/sainnhe/edge
@@ -73,18 +76,13 @@
           - - percent
           - - tabsize
             - filetype
-  lua: |-
-    lv = lv or {}
-    lv.LightLineTabSize = function ()
-      if not vim.bo.expandtab then
-        return "tabs " .. vim.bo.tabstop
-      else
-        return "spaces " .. vim.bo.tabstop
-      end
-    end
   viml: |-
     function LightLineTabSize()
-      return v:lua.lv.LightLineTabSize()
+      if &expandtab
+        return 'tabs ' . &tabstop
+      else
+        return 'spaces ' . &tabstop
+      endif
     endfunction
 
 - git:
@@ -126,20 +124,20 @@
 - git:
     uri: https://github.com/sheerun/vim-polyglot
 
-- git:
-    uri: https://github.com/ms-jpq/kok-snippets
+# - git:
+#     uri: https://github.com/ms-jpq/kok-snippets
 
-- git:
-    uri: https://github.com/ms-jpq/kok-t9
-  vals:
-    kok_settings:
-      sources:
-        lsp:
-          enabled: True
-  keys:
-    - modes: n
-      maps:
-        "gz": "<cmd>KoKstart<cr>"
+# - git:
+#     uri: https://github.com/ms-jpq/kok-t9
+#   vals:
+#     kok_settings:
+#       sources:
+#         lsp:
+#           enabled: True
+#   keys:
+#     - modes: n
+#       maps:
+#         "gz": "<cmd>KoKstart<cr>"
 
 - git:
     uri: https://github.com/honza/vim-snippets
@@ -150,7 +148,9 @@
 - git:
     uri: https://github.com/norcalli/nvim-colorizer.lua
   lua: |-
-    local go, colourizer = pcall(require, "colorizer")
-    if go then
-      colourizer.setup()
-    end
+    (function ()
+      local go, colourizer = pcall(require, "colorizer")
+      if go then
+        colourizer.setup()
+      end
+    end)()
