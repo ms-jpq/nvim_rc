@@ -89,6 +89,7 @@
           - --keep-intermediates
           - --outdir=tex_build
         outputDirectory: tex_build
+        onSave: True
 
   install:
     script:
