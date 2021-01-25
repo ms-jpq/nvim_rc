@@ -70,9 +70,9 @@ _LSP_INIT = """
   local lsp = require "lspconfig"
   local configs = require "lspconfig/configs"
 
-  -- cfg.on_attach = function (client, bufnr)
-  --  _G[attach_fn](server)
-  -- end
+  cfg.on_attach = function (client, bufnr)
+    _G[attach_fn](server)
+  end
 
   local go, _ = pcall(function () return lsp[server] end)
 
