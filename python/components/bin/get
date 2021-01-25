@@ -4,30 +4,29 @@ from argparse import ArgumentParser, Namespace
 from http.client import HTTPResponse
 from os import chdir
 from os.path import basename
-from pathlib import Path
+from pathlib import Path, PurePath
 from typing import Optional, cast
 from urllib.parse import urlparse
 from urllib.request import build_opener
 
 
-def fetch(uri: str, timeout: float) -> bytes:
+def _fetch(uri: str, timeout: float) -> bytes:
     opener = build_opener()
     with opener.open(uri, timeout=timeout) as resp:
         return cast(HTTPResponse, resp).read()
 
 
-def parse_args() -> Namespace:
+def _parse_args() -> Namespace:
     parser = ArgumentParser()
     parser.add_argument("src")
-    parser.add_argument("-d", "--dest", default=None)
-    parser.add_argument("-p", "--print-dest", type=Path, default=None)
+    parser.add_argument("dest", nargs="?", default=None)
     parser.add_argument("--cd", type=Path, default=None)
     parser.add_argument("-t", "--timeout", type=float, default=60.0)
     return parser.parse_args()
 
 
 def main() -> None:
-    args = parse_args()
+    args = _parse_args()
     cd: Optional[Path] = args.cd
     if cd:
         chdir(cd)
@@ -35,14 +34,12 @@ def main() -> None:
     src: str = args.src
     parsed = urlparse(src)
     name = basename(parsed.path)
-    dest = Path(args.dest if args.dest else name).resolve()
-    print_dest: Optional[Path] = args.print_dest
+    suffix = "".join(PurePath(name).suffixes)
+    dest = Path(args.dest if args.dest else name).with_suffix(suffix).resolve()
 
-    payload = fetch(src, timeout=args.timeout)
+    payload = _fetch(src, timeout=args.timeout)
     dest.write_bytes(payload)
-
-    if print_dest:
-        print_dest.write_text(str(dest))
+    print(dest, end="")
 
 
 main()
