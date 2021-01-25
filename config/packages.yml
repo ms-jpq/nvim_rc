@@ -47,7 +47,7 @@
       maps:
         "<leader>O": ":Rg "
   lua: |-
-    vim.env["FZF_DEFAULT_OPTS"] = vim.env["FZF_DEFAULT_OPTS"] .. " --no-border"
+    vim.env["FZF_DEFAULT_OPTS"] = (vim.env["FZF_DEFAULT_OPTS"] or "") .. " --no-border"
 
 - git:
     uri: https://github.com/sainnhe/edge
