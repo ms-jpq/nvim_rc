@@ -73,12 +73,23 @@
     npm:
       - yaml-language-server
 
-
 - server: texlab
   bin: texlab
   filetypes:
     - tex
     - plaintex
+  settings:
+    latex:
+      build:
+        executable: tectonic
+        args:
+          - "%f"
+          - --synctex
+          - --keep-logs
+          - --keep-intermediates
+          - --outdir=tex_build
+        outputDirectory: tex_build
+
   install:
     script:
       env:
