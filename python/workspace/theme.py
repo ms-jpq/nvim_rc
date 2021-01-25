@@ -42,7 +42,8 @@ autocmd("InsertLeave") << f"lua {_dehl_cursor.name}()"
 # highlight yank
 @rpc(blocking=True)
 def _hl_yank(nvim: Nvim) -> None:
-    nvim.lua.vim.highlight.on_yank({})
+    # TODO: enable this at 0.5
+    # nvim.lua.vim.highlight.on_yank({})
 
 
 autocmd("TextYankPost") << f"lua {_hl_yank.name}()"
