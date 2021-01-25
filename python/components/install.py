@@ -4,7 +4,7 @@ from itertools import chain
 from os import environ, pathsep, uname
 from shutil import get_terminal_size, rmtree, which
 from sys import stderr
-from typing import Awaitable, Iterator, Sequence, Tuple
+from typing import AsyncIterator, Awaitable, Iterator, Sequence, Tuple
 
 from pynvim.api.nvim import Nvim
 from std2.asyncio.subprocess import ProcReturn, call
@@ -96,32 +96,36 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
         for spec in pkg_specs:
 
             async def cont(spec: GitPkgSpec) -> SortOfMonoid:
-                location = VIM_DIR / p_name(spec.uri)
-                if location.is_dir():
-                    p1 = await call(cmd, "pull", "--recurse-submodules", cwd=location)
-                else:
-                    p1 = await call(
-                        cmd,
-                        "clone",
-                        "--depth=1",
-                        "--recurse-submodules",
-                        "--shallow-submodules",
-                        spec.uri,
-                        str(location),
-                    )
+                async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
+                    location = VIM_DIR / p_name(spec.uri)
+                    if location.is_dir():
+                        p1 = await call(
+                            cmd, "pull", "--recurse-submodules", cwd=location
+                        )
+                    else:
+                        p1 = await call(
+                            cmd,
+                            "clone",
+                            "--depth=1",
+                            "--recurse-submodules",
+                            "--shallow-submodules",
+                            spec.uri,
+                            str(location),
+                        )
+                    yield spec.uri, p1
 
-                pkg = spec.script
-                if not p1.code and _installable(pkg):
-                    stdin = pkg.body.encode()
-                    p2 = await call(
-                        pkg.interpreter,
-                        stdin=stdin,
-                        env=pkg.env,
-                        cwd=location,
-                    )
-                    return (spec.uri, p1), (pkg.body, p2)
-                else:
-                    return ((spec.uri, p1),)
+                    pkg = spec.script
+                    if not p1.code and _installable(pkg):
+                        stdin = pkg.body.encode()
+                        p2 = await call(
+                            pkg.interpreter,
+                            stdin=stdin,
+                            env=pkg.env,
+                            cwd=location,
+                        )
+                        yield pkg.body, p2
+
+                return [rt async for rt in cont()]
 
             yield cont(spec.git)
 
@@ -150,22 +154,40 @@ def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
 
 
 def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
-    NPM_DIR.mkdir(parents=True, exist_ok=True)
-    cmd = "npm"
+    _npx_dir = NPM_DIR / "npx"
+    _npx_dir.mkdir(parents=True, exist_ok=True)
 
-    if which(cmd):
+    async def cont() -> SortOfMonoid:
+        async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
+            cmd, cmd2 = "npm", "npx"
+            if which(cmd):
+                p1 = await call(cmd, "init", "--yes", cwd=NPM_DIR)
+                yield "", p1
 
-        async def cont() -> SortOfMonoid:
-            p1 = await call(cmd, "init", "--yes", cwd=NPM_DIR)
-            if p1.code:
-                return (("", p1),)
-            else:
-                p2 = await call(
-                    cmd, "install", "--upgrade", "--", *_npm_specs(), cwd=NPM_DIR
-                )
-                return ("", p1), ("", p2)
+                if not p1.code:
+                    if which(cmd2):
+                        p1_1 = await call(
+                            cmd2,
+                            "--cache",
+                            str(_npx_dir),
+                            "--",
+                            "npm-check-updates",
+                            cwd=NPM_DIR,
+                        )
+                        yield ("", p1_1)
 
-        yield cont()
+                        if not p1_1.code:
+                            p1_2 = await call("ncu", "--upgrade", cwd=NPM_DIR)
+                            yield ("", p1_2)
+
+                    p2 = await call(
+                        cmd, "install", "--upgrade", "--", *_npm_specs(), cwd=NPM_DIR
+                    )
+                    yield ("", p2)
+
+        return [rt async for rt in cont()]
+
+    yield cont()
 
 
 def _go() -> Iterator[Awaitable[SortOfMonoid]]:
