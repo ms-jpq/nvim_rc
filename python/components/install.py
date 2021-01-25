@@ -47,6 +47,7 @@ def _pip_specs() -> Iterator[str]:
 
 
 def _npm_specs() -> Iterator[str]:
+    yield "npm-check-updates"
     for l_spec in lsp_specs:
         yield from l_spec.install.npm
     for i_spec in linter_specs:
@@ -154,31 +155,20 @@ def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
 
 
 def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
-    _npx_dir = NPM_DIR / "npx"
-    _npx_dir.mkdir(parents=True, exist_ok=True)
+    NPM_DIR.mkdir(parents=True, exist_ok=True)
 
     async def cont() -> SortOfMonoid:
         async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
-            cmd, cmd2 = "npm", "npx"
+            cmd = "npm"
             if which(cmd):
                 p1 = await call(cmd, "init", "--yes", cwd=NPM_DIR)
                 yield "", p1
 
                 if not p1.code:
-                    if which(cmd2):
-                        p1_1 = await call(
-                            cmd2,
-                            "--cache",
-                            str(_npx_dir),
-                            "--",
-                            "npm-check-updates",
-                            cwd=NPM_DIR,
-                        )
+                    ncu = NPM_DIR / "node_modules" / ".bin" / "ncu"
+                    if ncu.exists():
+                        p1_1 = await call(str(ncu), "--upgrade", cwd=NPM_DIR)
                         yield ("", p1_1)
-
-                        if not p1_1.code:
-                            p1_2 = await call("ncu", "--upgrade", cwd=NPM_DIR)
-                            yield ("", p1_2)
 
                     p2 = await call(
                         cmd, "install", "--upgrade", "--", *_npm_specs(), cwd=NPM_DIR
