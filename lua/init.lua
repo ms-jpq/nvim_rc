@@ -93,7 +93,7 @@ return function(args)
       end
     )
   end
-  handlers = {on_exit = on_exit, on_stdout = on_stdout, on_stderr = on_stderr}
+  local handlers = {on_exit = on_exit, on_stdout = on_stdout, on_stderr = on_stderr}
 
   --
   --
