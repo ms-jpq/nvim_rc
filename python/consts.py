@@ -7,6 +7,7 @@ DATE_FMT = "%Y-%m-%d %H:%M:%S"
 TOP_LEVEL = Path(__file__).resolve().parent.parent
 
 RT_DIR = TOP_LEVEL / ".vars" / "runtime"
+RT_BIN = str(RT_DIR / "bin")
 REQUIREMENTS = str(TOP_LEVEL / "requirements.txt")
 INSTALL_SCRIPT = str(TOP_LEVEL / "init.py")
 
@@ -39,7 +40,12 @@ PATH_PREPEND = tuple(
         (BIN_DIR, PIP_DIR / "bin", NPM_DIR / "node_modules" / ".bin", GO_DIR / "bin"),
     )
 )
-PATH = environ["PATH"] = pathsep.join(chain(PATH_PREPEND, (environ["PATH"],)))
+PATH = environ["PATH"] = pathsep.join(
+    chain(
+        PATH_PREPEND,
+        (path for path in environ["PATH"].split(pathsep) if path != RT_BIN),
+    )
+)
 PYTHONPATH = environ["PYTHONPATH"] = (
     pathsep.join((str(PIP_DIR), environ["PYTHONPATH"]))
     if "PYTHONPATH" in environ

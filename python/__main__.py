@@ -6,7 +6,7 @@ from sys import stderr
 from typing import Literal, Sequence, Union
 from venv import EnvBuilder
 
-from .consts import REQUIREMENTS, RT_DIR
+from .consts import REQUIREMENTS, RT_BIN, RT_DIR
 
 
 def parse_args() -> Namespace:
@@ -37,7 +37,7 @@ if command == "deps":
             symlinks=True,
             clear=True,
         ).create(RT_DIR)
-        env = {"PATH": pathsep.join((str(RT_DIR / "bin"), environ["PATH"]))}
+        env = {"PATH": pathsep.join((RT_BIN, environ["PATH"]))}
         check_call(
             ("python3", "-m", "pip", "install", "--upgrade", "--", "setuptools"),
             env=env,
