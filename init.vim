@@ -21,4 +21,5 @@ function LVon_stderr(_, msg, __)
 endfunction
 
 
-lua require 'init'
+let s:top_level = resolve(expand('<sfile>:p:h'))
+call luaeval('require("init")(...)', [s:top_level])
