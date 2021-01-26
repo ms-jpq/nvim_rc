@@ -1,7 +1,7 @@
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
 from subprocess import run
-from sys import path, stderr
+from sys import executable, path, stderr
 from typing import Literal, Sequence, Union
 
 from .consts import REQUIREMENTS, RT_DIR
@@ -33,7 +33,9 @@ if command == "deps":
     if not deps or "runtime" in deps:
         proc = run(
             (
-                "pip3",
+                executable,
+                "-m",
+                "pip",
                 "install",
                 "--upgrade",
                 "--target",
