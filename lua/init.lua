@@ -35,7 +35,7 @@ return function(args)
         assert(not err, err)
         if data then
           (handlers.on_stdout or function()
-            end)(code)
+            end)(data)
         end
       end
     )
@@ -46,7 +46,7 @@ return function(args)
         assert(not err, err)
         if data then
           (handlers.on_stderr or function()
-            end)(code)
+            end)(data)
         end
       end
     )
