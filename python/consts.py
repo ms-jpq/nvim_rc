@@ -1,5 +1,3 @@
-from itertools import chain
-from os import environ, pathsep
 from pathlib import Path
 
 DATE_FMT = "%Y-%m-%d %H:%M:%S"
@@ -40,21 +38,8 @@ PATH_PREPEND = tuple(
         (BIN_DIR, PIP_DIR / "bin", NPM_DIR / "node_modules" / ".bin", GO_DIR / "bin"),
     )
 )
-PATH = environ["PATH"] = pathsep.join(
-    chain(
-        PATH_PREPEND,
-        (path for path in environ["PATH"].split(pathsep) if path != RT_BIN),
-    )
-)
-PYTHONPATH = environ["PYTHONPATH"] = (
-    pathsep.join((str(PIP_DIR), environ["PYTHONPATH"]))
-    if "PYTHONPATH" in environ
-    else str(PIP_DIR)
-)
-
 
 TMP_DIR = VARS_DIR / "tmp"
-
 
 LOGS_DIR = VARS_DIR / "logs"
 UPDATE_LOG = LOGS_DIR / "last_update.txt"
