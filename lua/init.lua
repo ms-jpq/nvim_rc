@@ -34,8 +34,8 @@ return function(args)
     local opts = {
       stdio = {stdin, stdout, stderr},
       args = args,
-      cwd = cwd
-      -- env = _env
+      cwd = cwd,
+      env = _env
     }
 
     local process, pid = nil, nil
