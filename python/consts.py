@@ -20,7 +20,6 @@ CONF_FMT = CONF_DIR / "fmt.yml"
 CONF_TOOL = CONF_DIR / "tools.yml"
 
 VARS_DIR = TOP_LEVEL / ".vars"
-RT_DIR = VARS_DIR / "runtime"
 
 
 BIN_DIR = VARS_DIR / "bin"

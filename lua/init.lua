@@ -107,11 +107,9 @@ return function(args)
   local env = {PATH = PATH, VIRTUAL_ENV = VENV}
 
   local args = {
-    "-m",
-    "python",
     "run",
     "--socket",
     vim.api.nvim_get_vvar("servername")
   }
-  spawn("python3", args, nil, cwd, env, {})
+  spawn("./init.sh", args, nil, cwd, env, {})
 end

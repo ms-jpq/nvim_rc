@@ -1,13 +1,10 @@
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
 from subprocess import run
-from sys import executable, path, stderr
+from sys import executable, stderr
 from typing import Literal, Sequence, Union
 
-from .consts import REQUIREMENTS, RT_DIR
-
-RT_DIR.mkdir(parents=True, exist_ok=True)
-path.append(str(RT_DIR))
+from .consts import REQUIREMENTS
 
 
 def parse_args() -> Namespace:
@@ -38,12 +35,9 @@ if command == "deps":
                 "pip",
                 "install",
                 "--upgrade",
-                "--target",
-                str(RT_DIR),
                 "--requirement",
                 REQUIREMENTS,
             ),
-            cwd=RT_DIR,
         )
         if proc.returncode:
             exit(proc.returncode)
