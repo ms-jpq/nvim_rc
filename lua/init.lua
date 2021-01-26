@@ -70,12 +70,6 @@ return function(args)
     return pid
   end
 
-  --
-  --
-  -- DOMAIN CODE
-  --
-  --
-
   local on_exit = function(code)
     vim.schedule(
       function()
@@ -99,6 +93,14 @@ return function(args)
       end
     )
   end
+  handlers = {on_exit = on_exit, on_stdout = on_stdout, on_stderr = on_stderr}
+
+  --
+  --
+  --
+  -- DOMAIN CODE
+  --
+  --
 
   local VENV = cwd .. "/.vars/runtime"
   local PATH = VENV .. "/bin:" .. vim.api.nvim_call_function("getenv", {"PATH"})
@@ -111,5 +113,5 @@ return function(args)
     "--socket",
     vim.api.nvim_get_vvar("servername")
   }
-  spawn("python3", args, nil, cwd, env)
+  spawn("python3", args, nil, cwd, env, handlers)
 end
