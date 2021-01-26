@@ -7,6 +7,7 @@ from sys import stderr
 from typing import AsyncIterator, Awaitable, Iterator, Sequence, Tuple
 
 from pynvim.api.nvim import Nvim
+from pynvim_pp.api import ask_mc
 from std2.asyncio.subprocess import ProcReturn, call
 from std2.pickle import DecodeError, decode, encode
 from std2.pickle.coders import datetime_str_decoder, datetime_str_encoder
@@ -268,8 +269,13 @@ def maybe_install(nvim: Nvim) -> None:
     now = datetime.now(tz=timezone.utc)
     diff = now - before
     if diff.days > 7:
-        ans = nvim.funcs.confirm(LANG("update?"), LANG("ask yes/no"), 2)
-        if ans in {1, 2}:
+        ans = ask_mc(
+            nvim,
+            question=LANG("update?"),
+            answers=LANG("ask yes/no"),
+            answer_key={1: 1, 2: 2},
+        )
+        if ans:
             coded = encode(now, encoders=(datetime_str_encoder,))
             UPDATE_LOG.write_text(coded)
 
