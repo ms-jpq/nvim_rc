@@ -1,10 +1,12 @@
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
-from subprocess import run
-from sys import executable, stderr
+from os import environ, pathsep
+from subprocess import check_call
+from sys import stderr
 from typing import Literal, Sequence, Union
+from venv import EnvBuilder
 
-from .consts import REQUIREMENTS
+from .consts import REQUIREMENTS, RT_DIR
 
 
 def parse_args() -> Namespace:
@@ -28,9 +30,21 @@ if command == "deps":
     deps: Sequence[str] = args.deps
 
     if not deps or "runtime" in deps:
-        proc = run(
+        EnvBuilder(
+            system_site_packages=False,
+            with_pip=True,
+            upgrade=True,
+            symlinks=True,
+            clear=True,
+        ).create(RT_DIR)
+        env = {"PATH": pathsep.join((str(RT_DIR / "bin"), environ["PATH"]))}
+        check_call(
+            ("python3", "-m", "pip", "install", "--upgrade", "--", "setuptools"),
+            env=env,
+        )
+        check_call(
             (
-                executable,
+                "python3",
                 "-m",
                 "pip",
                 "install",
@@ -38,9 +52,8 @@ if command == "deps":
                 "--requirement",
                 REQUIREMENTS,
             ),
+            env=env,
         )
-        if proc.returncode:
-            exit(proc.returncode)
 
     if not deps or "packages" in deps:
 

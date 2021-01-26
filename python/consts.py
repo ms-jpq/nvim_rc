@@ -6,8 +6,10 @@ DATE_FMT = "%Y-%m-%d %H:%M:%S"
 
 TOP_LEVEL = Path(__file__).resolve().parent.parent
 
-INSTALL_SCRIPT = str(TOP_LEVEL / "init.py")
+RT_DIR = TOP_LEVEL / ".vars" / "runtime"
 REQUIREMENTS = str(TOP_LEVEL / "requirements.txt")
+INSTALL_SCRIPT = str(TOP_LEVEL / "init.py")
+
 LANG_ROOT = TOP_LEVEL / "locale"
 DEFAULT_LANG = "c"
 

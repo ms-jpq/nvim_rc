@@ -103,7 +103,7 @@ return function(args)
   --
 
   local OLD_PATH = vim.api.nvim_call_function("getenv", {"PATH"})
-  local PATH = cwd .. "/.vars/runtime/bin:" .. OLD_PATH
+  local NEW_PATH = cwd .. "/.vars/runtime/bin:" .. OLD_PATH
 
   local args = {
     "-m",
@@ -112,7 +112,7 @@ return function(args)
     "--socket",
     vim.api.nvim_get_vvar("servername")
   }
-  vim.api.nvim_call_function("setenv", {"PATH", PATH})
+  vim.api.nvim_call_function("setenv", {"PATH", NEW_PATH})
   spawn("python3", args, nil, cwd, {}, {})
   vim.api.nvim_call_function("setenv", {"PATH", OLD_PATH})
 end
