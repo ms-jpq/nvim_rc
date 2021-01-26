@@ -26,7 +26,10 @@ return function(args)
   local spawn = function(prog, args, input, cwd, env, handlers)
     local _env = {}
     for key, val in pairs(vim.api.nvim_call_function("environ", {})) do
-      table.insert(_env, {key, val})
+      table.insert(_env, key .. "=" .. val)
+    end
+    for key, val in pairs(env) do
+      table.insert(_env, key .. "=" .. val)
     end
     local stdin = uv.new_pipe(false)
     local stdout = uv.new_pipe(false)
@@ -58,7 +61,7 @@ return function(args)
       function(err, data)
         assert(not err, err)
         if data then
-          (handlers.on_stdout or on_stderr)(data)
+          (handlers.on_stdout or on_stdout)(data)
         end
       end
     )
@@ -68,7 +71,7 @@ return function(args)
       function(err, data)
         assert(not err, err)
         if data then
-          (handlers.on_stderr or on_stdout)(data)
+          (handlers.on_stderr or on_stderr)(data)
         end
       end
     )
