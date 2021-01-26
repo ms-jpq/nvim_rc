@@ -92,12 +92,6 @@ return function(args)
     return pid
   end
 
-  local handlers = {
-    on_exit = on_exit,
-    on_stdout = on_stdout,
-    on_stderr = on_stderr
-  }
-
   --
   --
   --
@@ -116,5 +110,5 @@ return function(args)
     "--socket",
     vim.api.nvim_get_vvar("servername")
   }
-  spawn("python3", args, nil, cwd, env, handlers)
+  spawn("python3", args, nil, cwd, env, {})
 end
