@@ -63,6 +63,8 @@ if command == "deps":
                 exit(code)
 
 elif command == "run":
+    assert executable == RT_PY
+
     from pynvim import attach
     from pynvim_pp.client import run_client
     from std2.pickle import DecodeError
