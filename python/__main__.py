@@ -44,18 +44,6 @@ if command == "deps":
                 "pip",
                 "install",
                 "--upgrade",
-                "--",
-                "setuptools",
-                "wheel",
-            )
-        )
-        check_call(
-            (
-                RT_PY,
-                "-m",
-                "pip",
-                "install",
-                "--upgrade",
                 "--requirement",
                 REQUIREMENTS,
             )
