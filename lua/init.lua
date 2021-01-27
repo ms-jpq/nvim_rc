@@ -18,7 +18,7 @@ return function(args)
   end
 
   local args = {
-    "./venv.sh",
+    cwd .. "/venv.sh",
     "python3",
     "-m",
     "python",
@@ -27,7 +27,6 @@ return function(args)
     vim.api.nvim_get_vvar("servername")
   }
   local params = {
-    cwd = cwd,
     on_exit = "LVon_exit",
     on_stdout = "LVon_stdout",
     on_stderr = "LVon_stderr"
