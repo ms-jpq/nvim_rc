@@ -5,7 +5,9 @@ DATE_FMT = "%Y-%m-%d %H:%M:%S"
 TOP_LEVEL = Path(__file__).resolve().parent.parent
 
 RT_DIR = TOP_LEVEL / ".vars" / "runtime"
-RT_BIN = str(RT_DIR / "bin")
+RT_BIN = RT_DIR / "bin"
+RT_PY = str(RT_BIN / "python3")
+
 REQUIREMENTS = str(TOP_LEVEL / "requirements.txt")
 INSTALL_SCRIPT = str(TOP_LEVEL / "init.py")
 

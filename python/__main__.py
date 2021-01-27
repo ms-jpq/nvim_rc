@@ -1,11 +1,11 @@
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
 from subprocess import check_call
-from sys import stderr
+from sys import executable, stderr
 from typing import Literal, Sequence, Union
 from venv import EnvBuilder
 
-from .consts import REQUIREMENTS, RT_DIR
+from .consts import REQUIREMENTS, RT_DIR, RT_PY
 
 
 def parse_args() -> Namespace:
@@ -36,10 +36,10 @@ if command == "deps":
             symlinks=True,
             clear=True,
         ).create(RT_DIR)
-        check_call(("python3", "-m", "pip", "install", "--upgrade", "--", "setuptools"))
+        check_call((RT_PY, "-m", "pip", "install", "--upgrade", "--", "setuptools"))
         check_call(
             (
-                "python3",
+                RT_PY,
                 "-m",
                 "pip",
                 "install",
@@ -50,12 +50,17 @@ if command == "deps":
         )
 
     if not deps or "packages" in deps:
-
-        from .components.install import install
-
-        code = arun(install())
-        if code:
+        if executable != RT_PY:
+            code = check_call(
+                (RT_PY, "-m", "python", "deps", "packages"),
+            )
             exit(code)
+        else:
+            from .components.install import install
+
+            code = arun(install())
+            if code:
+                exit(code)
 
 elif command == "run":
     from pynvim import attach

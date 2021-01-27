@@ -23,7 +23,7 @@ settings = Settings()
 
 def drain(nvim: Nvim) -> Tuple[Atomic, Sequence[RpcSpec]]:
     paths = environ["PATH"] = pathsep.join(chain(PATH_PREPEND, (environ["PATH"],)))
-    PATH = pathsep.join(path for path in paths if path != RT_BIN)
+    PATH = pathsep.join(path for path in paths.split(pathsep) if path != str(RT_BIN))
     PYTHONPATH = environ["PYTHONPATH"] = (
         pathsep.join((str(PIP_DIR), environ["PYTHONPATH"]))
         if "PYTHONPATH" in environ
