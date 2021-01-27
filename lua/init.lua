@@ -1,117 +1,36 @@
 return function(args)
   local cwd = unpack(args)
 
-  local uv = vim.loop
-  local on_exit = function(code)
-    vim.schedule(
-      function()
-        vim.api.nvim_err_writeln(" | EXITED - " .. code)
-      end
-    )
-  end
-  local on_stdout = function(data)
-    vim.schedule(
-      function()
-        vim.api.nvim_out_write(data)
-      end
-    )
-  end
-  local on_stderr = function(data)
-    vim.schedule(
-      function()
-        vim.api.nvim_err_write(data)
-      end
-    )
-  end
-  local spawn = function(prog, args, input, cwd, env, handlers)
-    local _env = {}
-    for key, val in pairs(vim.api.nvim_call_function("environ", {})) do
-      table.insert(_env, key .. "=" .. val)
-    end
-    for key, val in pairs(env) do
-      table.insert(_env, key .. "=" .. val)
-    end
-    local stdin = uv.new_pipe(false)
-    local stdout = uv.new_pipe(false)
-    local stderr = uv.new_pipe(false)
-    local opts = {
-      stdio = {stdin, stdout, stderr},
-      args = args,
-      cwd = cwd,
-      env = _env
-    }
-
-    local process, pid = nil, nil
-    process, pid =
-      uv.spawn(
-      prog,
-      opts,
-      function(code, signal)
-        local handles = {stdin, stdout, stderr, process}
-        for _, handle in ipairs(handles) do
-          uv.close(handle)
-        end
-        (handlers.on_exit or on_exit)(code)
-      end
-    )
-    assert(process, pid)
-
-    uv.read_start(
-      stdout,
-      function(err, data)
-        assert(not err, err)
-        if data then
-          (handlers.on_stdout or on_stdout)(data)
-        end
-      end
-    )
-
-    uv.read_start(
-      stderr,
-      function(err, data)
-        assert(not err, err)
-        if data then
-          (handlers.on_stderr or on_stderr)(data)
-        end
-      end
-    )
-
-    if input then
-      uv.write(
-        stdin,
-        input,
-        function(err)
-          assert(not err, err)
-          uv.shutdown(
-            stdin,
-            function(err)
-              assert(not err, err)
-            end
-          )
-        end
-      )
-    end
-
-    return pid
+  lv = lv or {}
+  lv.on_exit = function(args)
+    local code = unpack(args)
+    vim.api.nvim_err_writeln(" | EXITED - " .. code)
   end
 
-  --
-  --
-  --
-  -- DOMAIN CODE
-  --
-  --
+  lv.on_stdout = function(args)
+    local msg = unpack(args)
+    vim.api.nvim_out_write(table.concat(msg, "\n"))
+  end
 
-  local go, _py3 = pcall(vim.api.nvim_get_var, "python3_host_prog")
-  local py3 = go and _py3 or "python3"
+  lv.on_stderr = function(args)
+    local msg = unpack(args)
+    vim.api.nvim_err_write(table.concat(msg, "\n"))
+  end
 
   local args = {
-    py3,
+    "./venv.sh",
+    "python3",
     "-m",
     "python",
     "run",
     "--socket",
     vim.api.nvim_get_vvar("servername")
   }
-  spawn("./venv.sh", args, nil, cwd, {}, {})
+  local params = {
+    cwd = cwd,
+    on_exit = "LVon_exit",
+    on_stdout = "LVon_stdout",
+    on_stderr = "LVon_stderr"
+  }
+  vim.api.nvim_call_function("jobstart", {args, params})
 end
