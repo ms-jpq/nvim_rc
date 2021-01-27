@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from itertools import chain
 from os import environ, pathsep, uname
 from shutil import get_terminal_size, rmtree, which
-from sys import stderr
+from sys import executable, stderr
 from typing import AsyncIterator, Awaitable, Iterator, Sequence, Tuple
 
 from pynvim.api.nvim import Nvim
@@ -280,4 +280,4 @@ def maybe_install(nvim: Nvim) -> None:
             UPDATE_LOG.write_text(coded)
 
         if ans == 1:
-            open_term(nvim, "python3", INSTALL_SCRIPT, "--install-packages")
+            open_term(nvim, executable, INSTALL_SCRIPT, "deps", "packages")
