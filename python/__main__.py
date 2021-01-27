@@ -3,8 +3,9 @@ from asyncio import run as arun
 from subprocess import check_call
 from sys import executable, stderr
 from typing import Literal, Sequence, Union
+from venv import EnvBuilder
 
-from .consts import REQUIREMENTS, RT_DIR, RT_PY
+from .consts import REQUIREMENTS, RT_DIR, RT_PY, TOP_LEVEL
 
 
 def parse_args() -> Namespace:
@@ -28,7 +29,26 @@ if command == "deps":
     deps: Sequence[str] = args.deps
 
     if not deps or "runtime" in deps:
-        check_call((executable, "-m", "venv", str(RT_DIR)))
+        builder = EnvBuilder(
+            system_site_packages=False,
+            with_pip=True,
+            upgrade=True,
+            symlinks=True,
+            clear=True,
+        )
+        builder.create(RT_DIR)
+        check_call(
+            (
+                RT_PY,
+                "-m",
+                "pip",
+                "install",
+                "--upgrade",
+                "--",
+                "setuptools",
+                "wheel",
+            )
+        )
         check_call(
             (
                 RT_PY,
@@ -44,7 +64,7 @@ if command == "deps":
     if not deps or "packages" in deps:
         if executable != RT_PY:
             code = check_call(
-                (RT_PY, "-m", "python", "deps", "packages"),
+                (RT_PY, "-m", "python", "deps", "packages"), cwd=TOP_LEVEL
             )
             exit(code)
         else:

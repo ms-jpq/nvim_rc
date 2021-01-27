@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -y \
     software-properties-common \
-    git python3 python3-venv && \
+    git python3 python3-venv python3-pip && \
     add-apt-repository ppa:neovim-ppa/stable && \
     apt-get update && \
     apt-get install -y neovim && \
