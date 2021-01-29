@@ -49,7 +49,7 @@ _WAIT_TIME = 0.5
 def _smol_save(nvim: Nvim) -> None:
     async def cont() -> None:
         _go, _, _ = await race(create_task(_EV.wait()), sleep(_WAIT_TIME, False))
-        if _go.result():
+        if _go.result() and _EV.is_set():
             _EV.clear()
             await gather(
                 async_call(nvim, nvim.command, "silent! wa"), sleep(_WAIT_TIME)
