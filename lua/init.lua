@@ -17,9 +17,17 @@ return function(args)
     vim.api.nvim_err_write(table.concat(msg, "\n"))
   end
 
+  local main = function ()
+    local vpy = cwd .. "/.vars/runtime/bin/python3"
+    if vim.api.nvim_call_function("filereadable", {vpy}) == 1 then
+      return vpy
+    else
+      return "python3"
+    end
+  end
+
   local args = {
-    cwd .. "/venv.sh",
-    "python3",
+    main(),
     "-m",
     "python",
     "run",
@@ -27,6 +35,7 @@ return function(args)
     vim.api.nvim_get_vvar("servername")
   }
   local params = {
+    cwd = cwd,
     on_exit = "LVon_exit",
     on_stdout = "LVon_stdout",
     on_stderr = "LVon_stderr"
