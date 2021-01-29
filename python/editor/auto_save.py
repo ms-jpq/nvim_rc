@@ -48,7 +48,7 @@ _EV.set()
 def _smol_save(nvim: Nvim) -> None:
     async def cont() -> None:
         _go, _, _ = await race(create_task(_EV.wait()), sleep(0.5, False))
-        go = await _go
+        go = _go.result()
         if go:
             _EV.clear()
             await async_call(nvim, nvim.command, "silent! wa")
