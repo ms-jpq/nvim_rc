@@ -1,9 +1,8 @@
-from asyncio.locks import Event
-from asyncio.tasks import create_task, gather, sleep
+from asyncio.events import Handle, get_running_loop
+from typing import Optional
 
 from pynvim.api.nvim import Nvim
 from pynvim_pp.lib import async_call, go
-from std2.asyncio import race
 from std2.sched import aticker
 
 from ..consts import BACKUP_DIR
@@ -40,23 +39,21 @@ settings["backupext"] = ".bak"
 
 autocmd("FocusLost", "VimLeavePre", modifiers=("*", "++nested")) << "silent! wa"
 
-_EV = Event()
-_EV.set()
-_WAIT_TIME = 0.5
+
+_handle: Optional[Handle] = None
 
 
 @rpc(blocking=True)
 def _smol_save(nvim: Nvim) -> None:
-    async def cont() -> None:
-        _go, _, _ = await race(create_task(_EV.wait()), sleep(_WAIT_TIME, False))
-        if _go.result() and _EV.is_set():
-            _EV.clear()
-            await gather(
-                async_call(nvim, nvim.command, "silent! wa"), sleep(_WAIT_TIME)
-            )
-            _EV.set()
+    global _handle
+    if _handle:
+        _handle.cancel()
 
-    go(cont())
+    def cont() -> None:
+        go(async_call(nvim, nvim.command, "silent! wa"))
+
+    loop = get_running_loop()
+    _handle = loop.call_later(0.5, cont)
 
 
 autocmd(
