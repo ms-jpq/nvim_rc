@@ -29,7 +29,7 @@ BIN_DIR = VARS_DIR / "bin"
 LIB_DIR = VARS_DIR / "lib"
 _MODULES_DIR = VARS_DIR / "modules"
 VIM_DIR = _MODULES_DIR / "vim_modules"
-PIP_DIR = _MODULES_DIR / "pip_modules"
+VENV_DIR = _MODULES_DIR / "py_modules"
 NPM_DIR = _MODULES_DIR
 GO_DIR = _MODULES_DIR / "go_modules"
 
@@ -37,7 +37,7 @@ INSTALL_BIN_DIR = str(TOP_LEVEL / "python" / "components" / "bin")
 PATH_PREPEND = tuple(
     map(
         str,
-        (BIN_DIR, PIP_DIR / "bin", NPM_DIR / "node_modules" / ".bin", GO_DIR / "bin"),
+        (BIN_DIR, VENV_DIR / "bin", NPM_DIR / "node_modules" / ".bin", GO_DIR / "bin"),
     )
 )
 
