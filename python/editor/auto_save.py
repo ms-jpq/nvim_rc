@@ -1,5 +1,5 @@
 from asyncio.locks import Event
-from asyncio.tasks import create_task, sleep
+from asyncio.tasks import create_task, gather, sleep
 
 from pynvim.api.nvim import Nvim
 from pynvim_pp.lib import async_call, go
@@ -51,8 +51,9 @@ def _smol_save(nvim: Nvim) -> None:
         _go, _, _ = await race(create_task(_EV.wait()), sleep(_WAIT_TIME, False))
         if _go.result():
             _EV.clear()
-            await async_call(nvim, nvim.command, "silent! wa")
-            await sleep(_WAIT_TIME)
+            await gather(
+                async_call(nvim, nvim.command, "silent! wa"), sleep(_WAIT_TIME)
+            )
             _EV.set()
 
     go(cont())
