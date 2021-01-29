@@ -42,16 +42,17 @@ autocmd("FocusLost", "VimLeavePre", modifiers=("*", "++nested")) << "silent! wa"
 
 _EV = Event()
 _EV.set()
+_WAIT_TIME = 0.5
 
 
 @rpc(blocking=True)
 def _smol_save(nvim: Nvim) -> None:
     async def cont() -> None:
-        _go, _, _ = await race(create_task(_EV.wait()), sleep(0.5, False))
+        _go, _, _ = await race(create_task(_EV.wait()), sleep(_WAIT_TIME, False))
         if _go.result():
             _EV.clear()
             await async_call(nvim, nvim.command, "silent! wa")
-        else:
+            await sleep(_WAIT_TIME)
             _EV.set()
 
     go(cont())
