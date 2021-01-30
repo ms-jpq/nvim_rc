@@ -33,7 +33,9 @@ def _ensure_marked_buf(nvim: Nvim) -> Buffer:
     if buf is not None:
         return buf
     else:
-        buf = create_buf(nvim, listed=True, scratch=True, wipe=False, nofile=False)
+        buf = create_buf(
+            nvim, listed=True, scratch=True, wipe=False, nofile=False, noswap=True
+        )
         buf_set_var(nvim, buf=buf, key=BUF_VAR_NAME, val=True)
         return buf
 
@@ -88,6 +90,7 @@ def _kill_term_wins(nvim: Nvim) -> None:
     if len(wins) != 2:
         for win in wins:
             win_close(nvim, win=win)
+
 
 # TODO -- use WinClosed for 0.5
 autocmd("WinEnter") << f"lua {_kill_term_wins.name}()"

@@ -54,7 +54,9 @@ keymap.n("<s-down>") << "<cmd>wincmd -<cr>"
 def _new_window(nvim: Nvim, vertical: bool) -> None:
     nvim.command("vnew" if vertical else "new")
     win = cur_win(nvim)
-    buf = create_buf(nvim, listed=False, scratch=True, wipe=True, nofile=True)
+    buf = create_buf(
+        nvim, listed=False, scratch=True, wipe=True, nofile=True, noswap=True
+    )
     win_set_buf(nvim, win=win, buf=buf)
 
 
