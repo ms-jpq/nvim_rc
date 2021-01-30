@@ -118,8 +118,8 @@
 - git:
     uri: https://github.com/tpope/vim-unimpaired
 
-- git:
-    uri: https://github.com/airblade/vim-gitgutter
+# - git:
+    # uri: https://github.com/airblade/vim-gitgutter
 
 - git:
     uri: https://github.com/sheerun/vim-polyglot
