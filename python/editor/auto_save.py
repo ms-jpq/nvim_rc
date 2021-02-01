@@ -59,8 +59,6 @@ def _smol_save(nvim: Nvim) -> None:
 autocmd(
     "CursorHold",
     "CursorHoldI",
-    "TextChanged",
-    "TextChangedI",
     modifiers=("*", "++nested"),
 ) << f"lua {_smol_save.name}()"
 
