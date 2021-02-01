@@ -105,12 +105,4 @@ def _trailing_ws(nvim: Nvim) -> None:
         _set_trimmed(nvim, win=win, buf=buf)
 
 
-@rpc(blocking=True)
-def _trailing_ws_thunk(nvim: Nvim) -> None:
-    try:
-        nvim.command(f"undojoin | lua {_trailing_ws.name}()")
-    except NvimError:
-        pass
-
-
-autocmd("CursorHold") << f"lua {_trailing_ws_thunk.name}()"
+autocmd("CursorHold") << f"silent! undojoin | lua {_trailing_ws.name}()"
