@@ -5,6 +5,7 @@ from pynvim_pp.api import (
     buf_set_lines,
     cur_buf,
     cur_win,
+    win_get_buf,
     win_get_cursor,
     win_set_cursor,
 )
@@ -60,7 +61,8 @@ def _reselect_visual(nvim: Nvim) -> None:
 
 @rpc(blocking=True)
 def _visual_up(nvim: Nvim) -> None:
-    buf = cur_buf(nvim)
+    win = cur_win(nvim)
+    buf = win_get_buf(nvim, win=win)
     if not writable(nvim, buf=buf):
         return
     else:
@@ -72,16 +74,15 @@ def _visual_up(nvim: Nvim) -> None:
             nxt = buf_get_lines(nvim, buf=buf, lo=row1 - 1, hi=row1)
             new = tuple((*curr, *nxt))
             buf_set_lines(nvim, buf=buf, lo=row1 - 1, hi=row2 + 1, lines=new)
-
             set_visual_selection(
-                nvim, buf=buf, mark1=(row1 - 1, col1), mark2=(row2 - 1, col2)
+                nvim, win=win, mode="v", mark1=(row1 - 1, col1), mark2=(row2 - 1, col2)
             )
-            _reselect_visual(nvim)
 
 
 @rpc(blocking=True)
 def _visual_down(nvim: Nvim) -> None:
-    buf = cur_buf(nvim)
+    win = cur_win(nvim)
+    buf = win_get_buf(nvim, win=win)
     if not writable(nvim, buf=buf):
         return
     else:
@@ -94,11 +95,9 @@ def _visual_down(nvim: Nvim) -> None:
             nxt = buf_get_lines(nvim, buf=buf, lo=row2 + 1, hi=row2 + 2)
             new = tuple((*nxt, *curr))
             buf_set_lines(nvim, buf=buf, lo=row1, hi=row2 + 2, lines=new)
-
             set_visual_selection(
-                nvim, buf=buf, mark1=(row1 + 1, col1), mark2=(row2 + 1, col2)
+                nvim, win=win, mode="v", mark1=(row1 + 1, col1), mark2=(row2 + 1, col2)
             )
-            _reselect_visual(nvim)
 
 
 keymap.v("<m-up>") << f"<esc><cmd>lua {_visual_up.name}()<cr>"

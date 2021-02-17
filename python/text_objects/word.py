@@ -39,8 +39,7 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
         mark1 = (row, c_lhs - 1)
         mark2 = (row, c_rhs + 1)
 
-    set_visual_selection(nvim, buf=buf, mark1=mark1, mark2=mark2)
-    nvim.command("norm! `<v`>")
+    set_visual_selection(nvim, win=win, mode="v", mark1=mark1, mark2=mark2)
 
 
 keymap.o("iw") << f"<cmd>lua {_word.name}(true)<cr>"

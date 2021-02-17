@@ -37,8 +37,7 @@ def _indent(nvim: Nvim) -> None:
     top = row - _p_inside(init_lv, tabsize=tabsize, lines=reversed(before))
     btm = row + _p_inside(init_lv, tabsize=tabsize, lines=after)
 
-    set_visual_selection(nvim, buf=buf, mark1=(top, 0), mark2=(btm, 0))
-    nvim.command("norm! `<V`>")
+    set_visual_selection(nvim, win=win, mode="V", mark1=(top, 0), mark2=(btm, 0))
 
 
 keymap.o("ii") << f"<cmd>lua {_indent.name}()<cr>"

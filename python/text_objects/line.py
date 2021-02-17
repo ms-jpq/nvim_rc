@@ -26,8 +26,7 @@ def _line(nvim: Nvim, is_inside: bool) -> None:
     line = next(iter(lines))
     lhs, rhs = (_p_inside if is_inside else _p_around)(line)
 
-    set_visual_selection(nvim, buf=buf, mark1=(row, lhs), mark2=(row, rhs))
-    nvim.command("norm! `<v`>")
+    set_visual_selection(nvim, win=win, mode="v", mark1=(row, lhs), mark2=(row, rhs))
 
 
 keymap.o("il") << f"<cmd>lua {_line.name}(true)<cr>"
