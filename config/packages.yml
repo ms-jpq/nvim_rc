@@ -140,12 +140,6 @@
 #         "gz": "<cmd>KoKstart<cr>"
 
 - git:
-    uri: https://github.com/honza/vim-snippets
-
-- git:
-    uri: https://github.com/Shougo/neosnippet-snippets
-
-- git:
     uri: https://github.com/norcalli/nvim-colorizer.lua
   lua: |-
     (function ()
@@ -154,7 +148,6 @@
         colourizer.setup()
       end
     end)()
-
 
 - git:
     uri: https://github.com/machakann/vim-highlightedyank.git
