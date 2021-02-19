@@ -123,6 +123,8 @@
 
 - git:
     uri: https://github.com/sheerun/vim-polyglot
+  vim:
+    let g:polyglot_disabled = ['sensible']
 
 # - git:
 #     uri: https://github.com/ms-jpq/kok-snippets
