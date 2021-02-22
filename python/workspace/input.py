@@ -7,7 +7,7 @@ settings["timeoutlen"] = 500
 # cursor hold time
 settings["updatetime"] = 300
 # allow nav keys to wrap around
-settings["whichwrap"] += ("h", "l", "<", ">", "[", "]")
+# settings["whichwrap"] += ("h", "l", "<", ">", "[", "]")
 
 
 # enable mouse
