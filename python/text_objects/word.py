@@ -16,9 +16,11 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
     row, c = win_get_cursor(nvim, win=win)
     lines = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
     line = next(iter(lines))
+    bline = line.encode()
 
     # position under cursor
-    col = len(line.encode()[:c].decode()) + 1
+    c = min(len(bline) - 1, c)
+    col = len(bline[:c].decode()) + 1
     lhs, rhs = line[:col], line[col:]
     # undo col + 1
     offset = len(next(reversed(lhs), "").encode())
