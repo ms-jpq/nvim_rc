@@ -5,7 +5,6 @@ from os import environ, pathsep, uname
 from shutil import get_terminal_size, rmtree, which
 from sys import executable, stderr
 from typing import AsyncIterator, Awaitable, Iterator, Sequence, Tuple
-from venv import EnvBuilder
 
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import ask_mc
@@ -134,27 +133,22 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
 
 
 def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
-    cmd = str(VENV_DIR / "bin" / "python3")
+    VENV_DIR.mkdir(parents=True, exist_ok=True)
     specs = tuple(_pip_specs())
-    EnvBuilder(
-        system_site_packages=False,
-        symlinks=True,
-        upgrade=True,
-        with_pip=True,
-        clear=False,
-    ).create(VENV_DIR)
 
     if specs:
 
         async def cont() -> SortOfMonoid:
             p = await call(
-                cmd,
+                executable,
                 "-m",
                 "pip",
                 "install",
                 "--upgrade",
+                "--target",
+                str(VENV_DIR),
                 "--",
-                *specs
+                *specs,
             )
             return (("", p),)
 

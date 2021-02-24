@@ -54,7 +54,7 @@ PYTHONPATH = pathsep.join(
     path
     for path in chain(
         environ.get("PYTHONPATH", "").split(pathsep),
-        map(str, VENV_DIR.glob("lib/*/site-packages")),
+        (str(VENV_DIR),),
     )
     if path
 )

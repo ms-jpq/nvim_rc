@@ -12,7 +12,7 @@ settings["laststatus"] = 2
 # always show issues column
 settings["signcolumn"] = "yes"
 # dont show eob lines
-settings["fillchars"] = "eob:\ "
+settings["fillchars"] = r"eob:\ "
 # always show tabline
 settings["showtabline"] = 2
 # show line count
