@@ -1,3 +1,5 @@
+from itertools import chain
+from os import environ, pathsep
 from pathlib import Path
 
 DATE_FMT = "%Y-%m-%d %H:%M:%S"
@@ -7,6 +9,7 @@ TOP_LEVEL = Path(__file__).resolve().parent.parent
 RT_DIR = TOP_LEVEL / ".vars" / "runtime"
 RT_BIN = RT_DIR / "bin"
 RT_PY = str(RT_BIN / "python3")
+
 
 REQUIREMENTS = str(TOP_LEVEL / "requirements.txt")
 INSTALL_SCRIPT = str(TOP_LEVEL / "init.py")
@@ -34,12 +37,15 @@ NPM_DIR = _MODULES_DIR
 GO_DIR = _MODULES_DIR / "go_modules"
 
 INSTALL_BIN_DIR = str(TOP_LEVEL / "python" / "components" / "bin")
-PATH_PREPEND = tuple(
+_PATH_PREPEND = tuple(
     map(
         str,
         (BIN_DIR, VENV_DIR / "bin", NPM_DIR / "node_modules" / ".bin", GO_DIR / "bin"),
     )
 )
+_PATHS = environ["PATH"] = pathsep.join(chain(_PATH_PREPEND, (environ["PATH"],)))
+PATH = pathsep.join(path for path in _PATHS.split(pathsep) if path != str(RT_BIN))
+
 
 TMP_DIR = VARS_DIR / "tmp"
 
