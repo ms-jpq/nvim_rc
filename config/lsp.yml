@@ -131,6 +131,12 @@
     npm:
       - pyright
 
+- server: intelephense
+  bin: intelephense
+  install:
+    npm:
+      - intelephense
+
 - server: rust_analyzer
   bin: rust-analyzer
   install:
