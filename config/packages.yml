@@ -117,6 +117,8 @@
     edge_menu_selection_background: purple
     lightline:
       colorscheme: edge
+      component:
+        sep: "-"
       component_function:
         tabsize: LightLineTabSize
         lsp_warn: LightLineLSPwarn
@@ -125,27 +127,36 @@
         right:
           - - lineinfo
           - - percent
+          - - tabsize
+            - filetype
+          - - sep
           - - lsp_err
             - lsp_warn
-            - tabsize
-            - filetype
   lua: |-
     lv = lv or {}
-    lv.buf_diagnostics_count = function (level)
+    local buf_diagnostics_count = function (level)
       local clients = vim.lsp.buf_get_clients(0)
       local tot = 0
       for _, client in ipairs(clients) do
         local count = vim.lsp.diagnostic.get_count(0, level, client.id)
         tot = tot + count
       end
-      return level .. " " .. tot
+      return  tot
+    end
+    lv.light_line_errors = function ()
+      local count = buf_diagnostics_count("Error")
+      return count > 0 and "⛔️ " .. count or ""
+    end
+    lv.light_line_warnings = function ()
+      local count = buf_diagnostics_count("Warning")
+      return count > 0 and "⚠️  " .. count or ""
     end
   viml: |-
     function LightLineLSPwarn()
-      return v:lua.lv.buf_diagnostics_count('Error')
+      return v:lua.lv.light_line_errors()
     endfunction
     function LightLineLSPerr()
-      return v:lua.lv.buf_diagnostics_count('Warning')
+      return v:lua.lv.light_line_warnings()
     endfunction
     function LightLineTabSize()
       if &expandtab
