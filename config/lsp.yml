@@ -86,11 +86,13 @@
       build:
         executable: tectonic
         args:
-          - "%f"
           - --keep-logs
           - --keep-intermediates
-          - --outdir=tex_build
-        outputDirectory: tex_build
+          - --outdir
+          - build
+          - --
+          - "%f"
+        outputDirectory: build
         onSave: True
 
   install:
