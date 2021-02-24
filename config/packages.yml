@@ -23,6 +23,33 @@
 #     -- vim.o.completefunc = "KoKomnifunc"
 
 - git:
+    uri: https://github.com/junegunn/fzf
+
+- git:
+    uri: https://github.com/junegunn/fzf.vim
+  vals:
+    fzf_buffers_jump: True
+    fzf_preview_window: right:wrap
+    fzf_layout:
+      window:
+        width: 0.9
+        height: 0.9
+  keys:
+    - modes: n
+      maps:
+        "<leader>o": "<cmd>BLines<cr>"
+        "<leader>p": "<cmd>Buffers<cr>"
+    - modes: n
+      opts:
+        silent: False
+      maps:
+        "<leader>O": ":Rg "
+  lua: |-
+    local fzf_opts = vim.api.nvim_call_function("getenv", {"FZF_DEFAULT_OPTS"})
+    local new_opts = (fzf_opts or "") .. " --no-border"
+    vim.api.nvim_call_function("setenv", {"FZF_DEFAULT_OPTS", new_opts})
+
+- git:
     uri: https://github.com/nvim-lua/plenary.nvim
 
 - git:
@@ -38,12 +65,13 @@
   keys:
     - modes: n
       maps:
-        "<leader>o": "<cmd>lua require'telescope.builtin'.find_files{}<cr>"
-        "<leader>O": "<cmd>lua require'telescope.builtin'.live_grep{}<cr>"
+        "<leader>P": "<cmd>lua require'telescope.builtin'.find_files{}<cr>"
+        # "<leader>O": "<cmd>lua require'telescope.builtin'.live_grep{}<cr>"
         "gs": "<cmd>lua require'telescope.builtin'.lsp_document_symbols{}<cr>"
         "gS": "<cmd>lua require'telescope.builtin'.lsp_workspace_symbols{}<cr>"
   lua: |-
-    require('telescope').setup(vim.g.telescope)
+    local tele = require "telescope"
+    tele.setup(vim.g.telescope)
 
 - git:
     uri: https://github.com/glepnir/lspsaga.nvim
