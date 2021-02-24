@@ -125,8 +125,8 @@
         right:
           - - lineinfo
           - - percent
-          - - lsp_warn
-            - lsp_err
+          - - lsp_err
+            - lsp_warn
             - tabsize
             - filetype
   lua: |-
@@ -138,14 +138,14 @@
         local count = vim.lsp.diagnostic.get_count(0, level, client.id)
         tot = tot + count
       end
-      return tot
+      return level .. " " .. tot
     end
   viml: |-
     function LightLineLSPwarn()
-      return v:lua.lv.buf_diagnostics_count(1)
+      return v:lua.lv.buf_diagnostics_count('Error')
     endfunction
     function LightLineLSPerr()
-      return v:lua.lv.buf_diagnostics_count(2)
+      return v:lua.lv.buf_diagnostics_count('Warning')
     endfunction
     function LightLineTabSize()
       if &expandtab
