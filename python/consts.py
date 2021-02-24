@@ -40,11 +40,22 @@ INSTALL_BIN_DIR = str(TOP_LEVEL / "python" / "components" / "bin")
 _PATH_PREPEND = tuple(
     map(
         str,
-        (BIN_DIR, VENV_DIR / "bin", NPM_DIR / "node_modules" / ".bin", GO_DIR / "bin"),
+        (
+            BIN_DIR,
+            NPM_DIR / "node_modules" / ".bin",
+            GO_DIR / "bin",
+        ),
     )
 )
 _PATHS = environ["PATH"] = pathsep.join(chain(_PATH_PREPEND, (environ["PATH"],)))
 PATH = pathsep.join(path for path in _PATHS.split(pathsep) if path != str(RT_BIN))
+PYTHONPATH = pathsep.join(
+    path
+    for path in chain(
+        environ.get("PYTHONPATH", "").split(pathsep),
+        map(str, VENV_DIR.glob("lib/*/site-packages")),
+    )
+)
 
 
 TMP_DIR = VARS_DIR / "tmp"
