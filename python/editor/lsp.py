@@ -10,7 +10,10 @@ from std2.pickle import decode, encode
 from std2.types import never
 
 from ..config.lsp import LspAttrs, RootPattern, RPFallback, lsp_specs
-from ..registery import LANG, atomic,  rpc
+from ..registery import LANG, atomic, keymap, rpc
+
+keymap.n("gp") << "<cmd>lua vim.lsp.buf.definition()<cr>"
+keymap.n("gP") << "<cmd>lua vim.lsp.buf.references()<cr>"
 
 
 @rpc(blocking=True)
