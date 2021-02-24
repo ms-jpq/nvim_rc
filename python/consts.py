@@ -50,7 +50,7 @@ _PATH_PREPEND = tuple(
 )
 _PATHS = environ["PATH"] = pathsep.join(chain(_PATH_PREPEND, (environ["PATH"],)))
 PATH = pathsep.join(path for path in _PATHS.split(pathsep) if path != str(RT_BIN))
-PYTHONPATH = pathsep.join(
+PYTHONPATH = environ["PYTHONPATH"] = pathsep.join(
     path
     for path in chain(
         environ.get("PYTHONPATH", "").split(pathsep),
