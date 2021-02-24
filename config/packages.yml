@@ -83,8 +83,8 @@
         "K": "<cmd>Lspsaga hover_doc<cr>"
         "H": "<cmd>Lspsaga preview_definition<cr>"
 
-        "<c-f>": "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>"
-        "<c-b>": "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<cr>"
+        # "<c-f>": "<cmd>lua require'lspsaga.action'.smart_scroll_with_saga(1)<cr>"
+        # "<c-b>": "<cmd>lua require'lspsaga.action'.smart_scroll_with_saga(-1)<cr>"
 
         "L": "<cmd>Lspsaga show_line_diagnostics<cr>"
         "g[": "<cmd>Lspsaga diagnostic_jump_prev<cr>"
@@ -119,13 +119,34 @@
       colorscheme: edge
       component_function:
         tabsize: LightLineTabSize
+        lsp_warn: LightLineLSPwarn
+        lsp_err: LightLineLSPerr
       active:
         right:
           - - lineinfo
           - - percent
-          - - tabsize
+          - - lsp_warn
+            - lsp_err
+            - tabsize
             - filetype
+  lua: |-
+    lv = lv or {}
+    lv.buf_diagnostics_count = function (level)
+      local clients = vim.lsp.buf_get_clients(0)
+      local tot = 0
+      for _, client in ipairs(clients) do
+        local count = vim.lsp.diagnostic.get_count(0, level, client.id)
+        tot = tot + count
+      end
+      return tot
+    end
   viml: |-
+    function LightLineLSPwarn()
+      return v:lua.lv.buf_diagnostics_count(1)
+    endfunction
+    function LightLineLSPerr()
+      return v:lua.lv.buf_diagnostics_count(2)
+    endfunction
     function LightLineTabSize()
       if &expandtab
         return 'tabs ' . &tabstop
