@@ -42,9 +42,7 @@ autocmd("InsertLeave") << f"lua {_dehl_cursor.name}()"
 # highlight yank
 @rpc(blocking=True)
 def _hl_yank(nvim: Nvim) -> None:
-    # TODO: enable this at 0.5
-    # nvim.lua.vim.highlight.on_yank({})
-    pass
+    nvim.lua.vim.highlight.on_yank({"higroup": "IncSearch"})
 
 
 atomic.command("highlight HighlightedyankRegion cterm=reverse gui=reverse")

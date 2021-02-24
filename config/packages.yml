@@ -1,6 +1,6 @@
 ---
-# - git:
-#     uri: https://github.com/neovim/nvim-lspconfig
+- git:
+    uri: https://github.com/neovim/nvim-lspconfig
 
 - git:
     uri: https://github.com/ms-jpq/chadtree
@@ -126,21 +126,6 @@
   viml: |-
     let g:polyglot_disabled = ['sensible']
 
-# - git:
-#     uri: https://github.com/ms-jpq/kok-snippets
-
-# - git:
-#     uri: https://github.com/ms-jpq/kok-t9
-#   vals:
-#     kok_settings:
-#       sources:
-#         lsp:
-#           enabled: True
-#   keys:
-#     - modes: n
-#       maps:
-#         "gz": "<cmd>KoKstart<cr>"
-
 - git:
     uri: https://github.com/norcalli/nvim-colorizer.lua
   lua: |-
@@ -150,8 +135,3 @@
         colourizer.setup()
       end
     end)()
-
-- git:
-    uri: https://github.com/machakann/vim-highlightedyank.git
-  viml: |-
-    let g:highlightedyank_highlight_duration = 200
