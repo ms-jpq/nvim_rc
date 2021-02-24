@@ -152,8 +152,8 @@ def _clear_qf(nvim: Nvim) -> None:
     nvim.command("cclose")
 
 
-# keymap.n("<leader>l") << f"<cmd>lua {_toggle_qf.name}()<cr>"
-# keymap.n("<leader>L") << f"<cmd>lua {_clear_qf.name}()<cr>"
+keymap.n("<leader>l") << f"<cmd>lua {_toggle_qf.name}()<cr>"
+keymap.n("<leader>L") << f"<cmd>lua {_clear_qf.name}()<cr>"
 
 
 @rpc(blocking=True)
