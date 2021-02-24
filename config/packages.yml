@@ -31,7 +31,7 @@
 - git:
     uri: https://github.com/nvim-telescope/telescope.nvim
   vals:
-    __telescope:
+    telescope:
       defaults:
         prompt_position: top
   keys:
@@ -40,10 +40,8 @@
         "<leader>o": "<cmd>lua require'telescope.builtin'.find_files{}<cr>"
         "<leader>O": "<cmd>lua require'telescope.builtin'.live_grep{}<cr>"
   lua: |-
-    (function ()
-      print()
-      require('telescope').setup(__telescope)
-    end)()
+    print("------------------------")
+    require('telescope').setup(vim.g.telescope)
 
 - git:
     uri: https://github.com/glepnir/lspsaga.nvim
@@ -153,9 +151,7 @@
 - git:
     uri: https://github.com/norcalli/nvim-colorizer.lua
   lua: |-
-    (function ()
-      local go, colourizer = pcall(require, "colorizer")
-      if go then
-        colourizer.setup()
-      end
-    end)()
+    local go, colourizer = pcall(require, "colorizer")
+    if go then
+      colourizer.setup()
+    end
