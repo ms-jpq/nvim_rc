@@ -6,7 +6,7 @@ from os import chdir
 from os.path import basename
 from pathlib import Path, PurePath
 from typing import Optional, cast
-from urllib.parse import urlparse
+from urllib.parse import urlsplit
 from urllib.request import build_opener
 
 
@@ -32,7 +32,7 @@ def main() -> None:
         chdir(cd)
 
     src: str = args.src
-    parsed = urlparse(src)
+    parsed = urlsplit(src)
     name = basename(parsed.path)
     suffix = "".join(PurePath(name).suffixes)
     dest = Path(args.dest if args.dest else name).with_suffix(suffix).resolve()

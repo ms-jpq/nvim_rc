@@ -53,6 +53,28 @@
     end)()
 
 - git:
+    uri: https://github.com/glepnir/lspsaga.nvim
+  keys:
+    - modes: n
+      maps:
+        "R": "<cmd>Lspsaga rename<cr>"
+        "K": "<cmd>Lspsaga hover_doc<cr>"
+        "H": "<cmd>Lspsaga preview_definition<cr>"
+
+        "<c-f>": "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>"
+        "<c-b>": "<cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<cr>"
+
+        "L": "<cmd>Lspsaga show_line_diagnostics<cr>"
+        "g[": "<cmd>Lspsaga diagnostic_jump_prev<cr>"
+        "g]": "<cmd>Lspsaga diagnostic_jump_next<cr>"
+
+        "go": "<cmd>Lspsaga signature_help<cr>"
+
+        "gh": "<cmd>Lspsaga lsp_finder<cr>"
+        "gw": "<cmd>Lspsaga code_action<cr>"
+        "gW": "<cmd>Lspsaga range_code_action<cr>"
+
+- git:
     uri: https://github.com/sainnhe/edge
   vals:
     edge_style: neon
@@ -120,8 +142,7 @@
 
 - git:
     uri: https://github.com/airblade/vim-gitgutter
-  viml:
-    :GitGutterLineNrHighlightsEnable
+  viml: :GitGutterLineNrHighlightsEnable
 
 - git:
     uri: https://github.com/sheerun/vim-polyglot
