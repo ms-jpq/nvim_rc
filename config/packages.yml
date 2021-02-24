@@ -121,6 +121,7 @@
         sep: "-"
       component_function:
         tabsize: LightLineTabSize
+        lsp_srvs: LightLineLSPsrvs
         lsp_warn: LightLineLSPwarn
         lsp_err: LightLineLSPerr
       active:
@@ -130,7 +131,8 @@
           - - tabsize
             - filetype
           - - sep
-          - - lsp_err
+          - - lsp_srvs
+            - lsp_err
             - lsp_warn
   lua: |-
     lv = lv or {}
@@ -151,7 +153,18 @@
       local count = buf_diagnostics_count("Warning")
       return count > 0 and "⚠️  [" .. count .. "]" or ""
     end
+    lv.light_line_lsp_servers = function ()
+      local clients = vim.lsp.buf_get_clients(0)
+      local names = {}
+      for _, client in ipairs(clients) do
+        table.insert(names, client.name)
+      end
+      return table.concat(names, ", ")
+    end
   viml: |-
+    function LightLineLSPsrvs()
+      return v:lua.lv.light_line_lsp_servers()
+    endfunction
     function LightLineLSPwarn()
       return v:lua.lv.light_line_errors()
     endfunction
