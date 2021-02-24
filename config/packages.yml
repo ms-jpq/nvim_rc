@@ -125,6 +125,14 @@
 
 - git:
     uri: https://github.com/sheerun/vim-polyglot
+  keys:
+    - modes: n
+      opts:
+        noremap: False
+      maps:
+        "[h": "<Plug>(GitGutterPrevHunk)"
+        "]h": "<Plug>(GitGutterNextHunk)"
+
   viml: |-
     let g:polyglot_disabled = ['sensible']
 
