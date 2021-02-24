@@ -40,8 +40,8 @@
       maps:
         "<leader>o": "<cmd>lua require'telescope.builtin'.find_files{}<cr>"
         "<leader>O": "<cmd>lua require'telescope.builtin'.live_grep{}<cr>"
-        "<leader>l": "<cmd>lua require'telescope.builtin'.loclist{}<cr>"
-        "<leader>L": "<cmd>lua require'telescope.builtin'.quickfix{}<cr>"
+        "gs": "<cmd>lua require'telescope.builtin'.lsp_document_symbols{}<cr>"
+        "gS": "<cmd>lua require'telescope.builtin'.lsp_workspace_symbols{}<cr>"
   lua: |-
     require('telescope').setup(vim.g.telescope)
 
