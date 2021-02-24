@@ -145,11 +145,11 @@
     end
     lv.light_line_errors = function ()
       local count = buf_diagnostics_count("Error")
-      return count > 0 and "⛔️ " .. count or ""
+      return count > 0 and "⛔️ [" .. count .. "]" or ""
     end
     lv.light_line_warnings = function ()
       local count = buf_diagnostics_count("Warning")
-      return count > 0 and "⚠️  " .. count or ""
+      return count > 0 and "⚠️  [" .. count .. "]" or ""
     end
   viml: |-
     function LightLineLSPwarn()
