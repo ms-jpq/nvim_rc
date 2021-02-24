@@ -2,6 +2,7 @@ from dataclasses import asdict
 from operator import attrgetter
 from os import linesep
 from pathlib import Path
+from textwrap import indent
 from urllib.parse import urlparse
 
 from pynvim.api.nvim import Nvim
@@ -39,7 +40,8 @@ def inst(nvim: Nvim) -> Atomic:
 
     for spec in pkgs.values():
         if spec.lua:
-            lua_block = f"function(){linesep}{spec.lua}{linesep}end"
+            lua = indent(spec.lua, " " * 2)
+            lua_block = f"(function(){linesep}{lua}{linesep}end)()"
             atomic2.call_function("luaeval", (lua_block, ()))
         if spec.viml:
             atomic2.command(spec.viml)

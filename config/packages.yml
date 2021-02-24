@@ -40,7 +40,6 @@
         "<leader>o": "<cmd>lua require'telescope.builtin'.find_files{}<cr>"
         "<leader>O": "<cmd>lua require'telescope.builtin'.live_grep{}<cr>"
   lua: |-
-    print("------------------------")
     require('telescope').setup(vim.g.telescope)
 
 - git:
