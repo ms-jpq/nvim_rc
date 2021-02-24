@@ -23,33 +23,26 @@
 #     -- vim.o.completefunc = "KoKomnifunc"
 
 - git:
-    uri: https://github.com/junegunn/fzf
+    uri: https://github.com/nvim-lua/plenary.nvim
 
 - git:
-    uri: https://github.com/junegunn/fzf.vim
+    uri: https://github.com/nvim-lua/popup.nvim
+
+- git:
+    uri: https://github.com/nvim-telescope/telescope.nvim
   vals:
-    fzf_buffers_jump: True
-    fzf_preview_window: right:wrap
-    fzf_layout:
-      window:
-        width: 0.9
-        height: 0.9
+    __telescope:
+      defaults:
+        prompt_position: top
   keys:
     - modes: n
       maps:
-        "<leader>o": "<cmd>BLines<cr>"
-        "<leader>p": "<cmd>Buffers<cr>"
-        "<leader>P": "<cmd>Files<cr>"
-    - modes: n
-      opts:
-        silent: False
-      maps:
-        "<leader>O": ":Rg "
+        "<leader>o": "<cmd>lua require'telescope.builtin'.find_files{}<cr>"
+        "<leader>O": "<cmd>lua require'telescope.builtin'.live_grep{}<cr>"
   lua: |-
     (function ()
-      local fzf_opts = vim.api.nvim_call_function("getenv", {"FZF_DEFAULT_OPTS"})
-      local new_opts = (fzf_opts or "") .. " --no-border"
-      vim.api.nvim_call_function("setenv", {"FZF_DEFAULT_OPTS", new_opts})
+      print()
+      require('telescope').setup(__telescope)
     end)()
 
 - git:
