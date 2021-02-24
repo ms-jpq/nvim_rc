@@ -217,6 +217,28 @@
     let g:polyglot_disabled = ['sensible']
 
 - git:
+    uri: https://github.com/jpalardy/vim-slime
+  vals:
+    slime_target: tmux
+    slime_no_mappings: True
+    slime_default_config:
+      socket_name: default
+      target_pane: "{last}"
+  keys:
+    - modes: n
+      opts:
+        noremap: False
+      maps:
+        "<leader>s": "<Plug>SlimeParagraphSend"
+    - modes: v
+      opts:
+        noremap: False
+      maps:
+        "<leader>s": "<Plug>SlimeRegionSend"
+  viml:
+    let g:slime_paste_file = tempname()
+
+- git:
     uri: https://github.com/norcalli/nvim-colorizer.lua
   lua: |-
     local go, colourizer = pcall(require, "colorizer")
