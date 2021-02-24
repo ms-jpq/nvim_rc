@@ -120,6 +120,8 @@
 
 - git:
     uri: https://github.com/airblade/vim-gitgutter
+  viml:
+    :GitGutterLineNrHighlightsEnable
 
 - git:
     uri: https://github.com/sheerun/vim-polyglot
