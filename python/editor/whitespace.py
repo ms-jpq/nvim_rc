@@ -15,7 +15,7 @@ from pynvim_pp.api import (
 )
 from pynvim_pp.operators import p_indent, writable
 
-from ..registery import autocmd, rpc, settings
+from ..registery import atomic, autocmd, rpc, settings
 
 # join only add 1 space
 settings["nojoinspaces"] = True
@@ -65,6 +65,7 @@ def _detect_tabs(nvim: Nvim) -> None:
 
 
 autocmd("FileType") << f"lua {_detect_tabs.name}()"
+atomic.command(f"command! -nargs=0 FTdetect lua {_detect_tabs.name}()")
 
 
 # smart indentation level
