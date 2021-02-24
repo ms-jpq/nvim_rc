@@ -74,7 +74,7 @@ _LSP_INIT = """
     _G[attach_fn](server)
   end
 
-  local go, _ = pcall(function () return lsp[server] end)
+  local go = lsp[server] ~= nil
 
   if not go then
     configs[server] = { default_config = cfg }
