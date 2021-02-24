@@ -68,8 +68,8 @@
         "<leader>P": "<cmd>lua require'telescope.builtin'.find_files{}<cr>"
 
         # "<leader>O": "<cmd>lua require'telescope.builtin'.live_grep{}<cr>"
-        "gs": "<cmd>lua require'telescope.builtin'.lsp_document_symbols{}<cr>"
-        "gS": "<cmd>lua require'telescope.builtin'.lsp_workspace_symbols{}<cr>"
+        "<leader>d": "<cmd>lua require'telescope.builtin'.lsp_document_symbols{}<cr>"
+        "<leader>D": "<cmd>lua require'telescope.builtin'.lsp_workspace_symbols{}<cr>"
   lua: |-
     local tele = require "telescope"
     tele.setup(vim.g.telescope)
