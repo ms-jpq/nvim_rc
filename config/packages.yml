@@ -130,8 +130,8 @@
       opts:
         noremap: False
       maps:
-        "[h": "<Plug>(GitGutterPrevHunk)"
-        "]h": "<Plug>(GitGutterNextHunk)"
+        "[c": "<Plug>(GitGutterPrevHunk)"
+        "]c": "<Plug>(GitGutterNextHunk)"
 
   viml: |-
     let g:polyglot_disabled = ['sensible']
