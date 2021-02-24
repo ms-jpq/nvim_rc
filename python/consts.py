@@ -42,6 +42,7 @@ _PATH_PREPEND = tuple(
         str,
         (
             BIN_DIR,
+            VENV_DIR / "bin",
             NPM_DIR / "node_modules" / ".bin",
             GO_DIR / "bin",
         ),
@@ -55,6 +56,7 @@ PYTHONPATH = pathsep.join(
         environ.get("PYTHONPATH", "").split(pathsep),
         map(str, VENV_DIR.glob("lib/*/site-packages")),
     )
+    if path
 )
 
 
