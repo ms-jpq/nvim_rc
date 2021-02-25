@@ -213,19 +213,10 @@
     uri: https://github.com/tpope/vim-unimpaired
 
 - git:
-    uri: https://github.com/airblade/vim-gitgutter
-  viml: :GitGutterLineNrHighlightsEnable
+    uri: https://github.com/mhinz/vim-signify
 
 - git:
     uri: https://github.com/sheerun/vim-polyglot
-  keys:
-    - modes: n
-      opts:
-        noremap: False
-      maps:
-        "[c": "<Plug>(GitGutterPrevHunk)"
-        "]c": "<Plug>(GitGutterNextHunk)"
-
   viml: |-
     let g:polyglot_disabled = ['sensible']
 
