@@ -237,18 +237,19 @@
     slime_default_config:
       socket_name: default
       target_pane: "{last}"
+    slime_cell_delimiter: "#@@"
   keys:
     - modes: n
       opts:
         noremap: False
       maps:
-        "<leader>s": "<Plug>SlimeParagraphSend"
+        "<leader>s": "<Plug>SlimeSendCell"
     - modes: v
       opts:
         noremap: False
       maps:
         "<leader>s": "<Plug>SlimeRegionSend"
-  viml:
+  viml: |-
     let g:slime_paste_file = tempname()
 
 - git:
