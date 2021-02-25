@@ -237,7 +237,7 @@
     slime_default_config:
       socket_name: default
       target_pane: "{last}"
-    slime_cell_delimiter: "#@@"
+    slime_cell_delimiter: "# @@"
   keys:
     - modes: n
       opts:
