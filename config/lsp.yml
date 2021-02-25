@@ -72,6 +72,7 @@
   filetypes:
     - yaml
     - yaml.ansible
+    - yaml.docker-compose
   install:
     npm:
       - yaml-language-server
