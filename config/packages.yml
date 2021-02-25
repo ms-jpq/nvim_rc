@@ -38,6 +38,7 @@
     - modes: n
       maps:
         "<leader>o": "<cmd>BLines<cr>"
+        "<leader>P": "<cmd>Files<cr>"
     - modes: n
       opts:
         silent: False
@@ -65,7 +66,6 @@
     - modes: n
       maps:
         "<leader>p": "<cmd>lua require'telescope.builtin'.buffers{}<cr>"
-        "<leader>P": "<cmd>lua require'telescope.builtin'.find_files{}<cr>"
 
         # "<leader>O": "<cmd>lua require'telescope.builtin'.live_grep{}<cr>"
         "<leader>d": "<cmd>lua require'telescope.builtin'.lsp_document_symbols{}<cr>"
