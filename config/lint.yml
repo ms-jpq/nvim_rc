@@ -32,9 +32,10 @@
     pip:
       - pylint
 
-- bin: eslint
+- bin: xo
   type: fs
   args:
+    - --prettier
     - --
     - ${filename}
   filetypes:
@@ -46,7 +47,7 @@
     - typescriptreact
   install:
     npm:
-      - eslint
+      - xo
 
 - bin: shellcheck
   type: fs
