@@ -1,4 +1,4 @@
-from typing import Iterator, Sequence, Tuple
+from typing import Iterator, Optional, Sequence, Tuple
 
 from pynvim import Nvim
 from pynvim.api.nvim import Buffer, Nvim
@@ -37,14 +37,14 @@ def _p_indent(line: str) -> str:
 
 def _comm(
     lhs: str, rhs: str, lines: Sequence[str]
-) -> Iterator[Tuple[bool, str, str, str]]:
+) -> Iterator[Tuple[Optional[bool], str, str, str]]:
     assert len((lhs + rhs).splitlines()) == 1
     assert lhs.lstrip() == lhs and rhs.rstrip() == rhs
     l, r = len(lhs), len(rhs)
 
     for line in lines:
         if not line:
-            yield False, line, line, line
+            yield None, "", "", ""
         else:
             enil = "".join(reversed(line))
             indent_f, indent_b = _p_indent(line), "".join(reversed(_p_indent(enil)))
@@ -60,9 +60,9 @@ def _comm(
 
 def _toggle_comment(lhs: str, rhs: str, lines: Sequence[str]) -> Sequence[str]:
     commented = tuple(_comm(lhs, rhs, lines=lines))
-    if all(com for com, _, _, _ in commented):
+    if all(com is not None and com for com, _, _, _ in commented):
         return tuple(stripped for _, _, _, stripped in commented)
-    elif any(com for com, _, _, _ in commented):
+    elif any(com is not None and com for com, _, _, _ in commented):
         return tuple(
             original if com else added for com, original, added, _ in commented
         )
