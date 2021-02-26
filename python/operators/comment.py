@@ -31,17 +31,19 @@ def _p_indent(line: str) -> str:
 def _comm(
     lhs: str, rhs: str, lines: Sequence[str]
 ) -> Iterator[Tuple[bool, str, str, str]]:
-    assert len(lhs + rhs) == 1
-    assert (lhs + rhs).strip() == (lhs + rhs)
+    assert len((lhs + rhs).splitlines()) == 1
+    assert lhs.lstrip() == lhs and rhs.rstrip() == rhs
+    l, r = len(lhs), len(rhs)
 
     for line in lines:
         enil = "".join(reversed(line))
-        indent_f, indent_b = _p_indent(line), _p_indent(enil)
+        indent_f, indent_b = _p_indent(line), "".join(reversed(_p_indent(enil)))
 
-        significant = line[indent_f:indent_b]
+        significant = line[len(indent_f) : len(indent_b)]
         is_comment = significant.startswith(lhs) and significant.endswith(rhs)
-        added = ""
-        stripped = ""
+        added = indent_f[:l] + lhs + significant + rhs + indent_b[r:]
+        stripped = indent_f + significant[l : -r if r else len(significant)] + indent_b
+
         yield is_comment, line, added, stripped
 
 
