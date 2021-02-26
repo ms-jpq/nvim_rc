@@ -18,14 +18,15 @@ from ..registery import keymap, rpc
 
 def _parse_comment_str(nvim: Nvim, buf: Buffer) -> Tuple[str, str]:
     comment_str: str = buf_get_option(nvim, buf=buf, key="commentstring")
-    lhs, _, rhs = comment_str.partition(comment_str)
+    lhs, _, rhs = comment_str.partition("%s")
     return lhs, rhs
 
 
 def _toggle_comment(lhs: str, rhs: str, lines: Sequence[str]) -> Sequence[str]:
+    l, r = len(lhs), len(rhs)
     is_commented = tuple(line.startswith(lhs) and line.endswith(rhs) for line in lines)
     if all(is_commented):
-        return tuple(line[lhs:rhs] for line in lines)
+        return tuple(line[l:-r] for line in lines)
     elif any(is_commented):
         return tuple(
             f"{lhs}{line}{rhs}" if commented else line
@@ -66,4 +67,4 @@ def _comment_line(nvim: Nvim) -> None:
         buf_set_lines(nvim, buf=buf, lo=row, hi=row + 1, lines=new_lines)
 
 
-keymap.n("grr") << f"<cmd>lua {_comment_line.name}()<cr>"
+keymap.n("gcc") << f"<cmd>lua {_comment_line.name}()<cr>"
