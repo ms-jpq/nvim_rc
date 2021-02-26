@@ -1,4 +1,4 @@
-from typing import Sequence, Tuple
+from typing import Iterator, Sequence, Tuple
 
 from pynvim import Nvim
 from pynvim.api.nvim import Buffer, Nvim
@@ -18,36 +18,43 @@ from ..registery import keymap, rpc
 
 def _parse_comment_str(nvim: Nvim, buf: Buffer) -> Tuple[str, str]:
     comment_str: str = buf_get_option(nvim, buf=buf, key="commentstring")
+    assert len(comment_str.splitlines()) == 1
     lhs, _, rhs = comment_str.partition("%s")
     return lhs, rhs
 
 
-def _is_commented(lhs: str, rhs: str, line: str) -> bool:
-    return True
+def _p_indent(line: str) -> str:
+    spaces = "".join(c for c in line if c.isspace())
+    return spaces
 
 
-def _comment_line(lhs: str, rhs: str, line: str) -> Sequence[str]:
-    l, r = len(lhs), len(rhs)
-    return [line]
+def _comm(
+    lhs: str, rhs: str, lines: Sequence[str]
+) -> Iterator[Tuple[bool, str, str, str]]:
+    assert len(lhs + rhs) == 1
+    assert (lhs + rhs).strip() == (lhs + rhs)
 
+    for line in lines:
+        enil = "".join(reversed(line))
+        indent_f, indent_b = _p_indent(line), _p_indent(enil)
 
-def _uncomment_line(lhs: str, rhs: str, line: str) -> Sequence[str]:
-    l, r = len(lhs), len(rhs)
-    return [line]
+        significant = line[indent_f:indent_b]
+        is_comment = significant.startswith(lhs) and significant.endswith(rhs)
+        added = ""
+        stripped = ""
+        yield is_comment, line, added, stripped
 
 
 def _toggle_comment(lhs: str, rhs: str, lines: Sequence[str]) -> Sequence[str]:
-    is_commented = tuple(_is_commented(lhs, rhs, line=line) for line in lines)
-    if all(is_commented):
-        return tuple(l for line in lines for l in _uncomment_line(lhs, rhs, line=line))
-    elif any(is_commented):
+    commented = _comm(lhs, rhs, lines=lines)
+    if all(com for com, _, _, _ in commented):
+        return tuple(stripped for _, _, _, stripped in commented)
+    elif any(com for com, _, _, _ in commented):
         return tuple(
-            l
-            for commented, line in zip(is_commented, lines)
-            for l in ((line,) if commented else _comment_line(lhs, rhs, line=line))
+            original if com else added for com, original, added, _ in commented
         )
     else:
-        return tuple(l for line in lines for l in _comment_line(lhs, rhs, line=line))
+        return tuple(added for _, _, added, _ in commented)
 
 
 @rpc(blocking=True)
