@@ -17,13 +17,14 @@
   keys:
     - modes: n
       maps:
-        "<c-n>": "<nop>"
-        "<c-m>": &inc_sel "<cmd>lua require'nvim-treesitter.incremental_selection'.init_selection()<cr>"
-        "gl": *inc_sel
+        "<c-h>": "<nop>"
+        "<c-l>": &init_sel "<cmd>lua require'nvim-treesitter.incremental_selection'.init_selection()<cr>"
+        "gl": *init_sel
     - modes: v
       maps:
-        "<c-n>": "<esc><cmd>lua require'nvim-treesitter.incremental_selection'.node_decremental()<cr>"
-        "<c-m>": "<esc><cmd>lua require'nvim-treesitter.incremental_selection'.node_incremental()<cr>"
+        "<c-h>": "<esc><cmd>lua require'nvim-treesitter.incremental_selection'.node_decremental()<cr>"
+        "<c-l>": &inc_sel "<esc><cmd>lua require'nvim-treesitter.incremental_selection'.node_incremental()<cr>"
+        "gl": *inc_sel
 
   lua: |-
     require'nvim-treesitter.configs'.setup(vim.g.ts_opts)
