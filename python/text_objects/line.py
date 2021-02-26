@@ -29,7 +29,7 @@ def _line(nvim: Nvim, is_inside: bool) -> None:
     set_visual_selection(nvim, win=win, mode="v", mark1=(row, lhs), mark2=(row, rhs))
 
 
-keymap.o("il") << f"<cmd>lua {_line.name}(true)<cr>"
-keymap.o("al") << f"<cmd>lua {_line.name}(false)<cr>"
-keymap.v("il") << f"<esc><cmd>lua {_line.name}(true)<cr>"
-keymap.v("al") << f"<esc><cmd>lua {_line.name}(false)<cr>"
+# keymap.o("il") << f"<cmd>lua {_line.name}(true)<cr>"
+# keymap.o("al") << f"<cmd>lua {_line.name}(false)<cr>"
+# keymap.v("il") << f"<esc><cmd>lua {_line.name}(true)<cr>"
+# keymap.v("al") << f"<esc><cmd>lua {_line.name}(false)<cr>"

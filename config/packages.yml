@@ -14,6 +14,27 @@
           node_incremental: "gs"
           node_decremental: "gs"
           scope_incremental: "gs"
+      textobjects:
+        select:
+          enable: True
+          keymaps:
+            is: "@statement.outer"
+            as: "@statement.outer"
+
+            ib: "@block.inner"
+            ab: "@block.outer"
+
+            ia: "@parameter.inner"
+            aa: "@parameter.outer"
+
+            ic: "@class.inner"
+            ac: "@class.outer"
+
+            if: "@function.inner"
+            af: "@function.outer"
+
+            il: "@loop.inner"
+            al: "@loop.outer"
   keys:
     - modes: n
       maps:
@@ -28,6 +49,9 @@
 
   lua: |-
     require'nvim-treesitter.configs'.setup(vim.g.ts_opts)
+
+- git:
+    uri: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 
 - git:
     uri: https://github.com/neovim/nvim-lspconfig
@@ -218,8 +242,8 @@
         "[": "<cmd>WhichKey '['<cr>"
         "]": "<cmd>WhichKey ']'<cr>"
 
-- git:
-    uri: https://github.com/wellle/targets.vim
+# - git:
+#     uri: https://github.com/wellle/targets.vim
 
 - git:
     uri: https://github.com/tpope/vim-repeat
