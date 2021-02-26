@@ -27,11 +27,17 @@
             ia: "@parameter.inner"
             aa: "@parameter.outer"
 
-            ic: "@class.inner"
-            ac: "@class.outer"
+            ic: "@conditional.inner"
+            ac: "@conditional.outer"
+
+            iC: "@class.inner"
+            aC: "@class.outer"
 
             if: "@function.inner"
             af: "@function.outer"
+
+            iF: "@call.inner"
+            aF: "@call.outer"
 
             il: "@loop.inner"
             al: "@loop.outer"
