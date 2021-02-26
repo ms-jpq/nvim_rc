@@ -24,7 +24,14 @@ def _parse_comment_str(nvim: Nvim, buf: Buffer) -> Tuple[str, str]:
 
 
 def _p_indent(line: str) -> str:
-    spaces = "".join(c for c in line if c.isspace())
+    def cont() -> Iterator[str]:
+        for c in line:
+            if c.isspace():
+                yield c
+            else:
+                break
+
+    spaces = "".join(cont())
     return spaces
 
 
@@ -36,16 +43,19 @@ def _comm(
     l, r = len(lhs), len(rhs)
 
     for line in lines:
-        enil = "".join(reversed(line))
-        indent_f, indent_b = _p_indent(line), "".join(reversed(_p_indent(enil)))
-        significant = line[len(indent_f) : len(line) - len(indent_b)]
+        if not line:
+            yield False, line, line, line
+        else:
+            enil = "".join(reversed(line))
+            indent_f, indent_b = _p_indent(line), "".join(reversed(_p_indent(enil)))
+            significant = line[len(indent_f) : len(line) - len(indent_b)]
 
-        is_comment = significant.startswith(lhs) and significant.endswith(rhs)
+            is_comment = significant.startswith(lhs) and significant.endswith(rhs)
 
-        added = indent_f + lhs + significant + rhs + indent_b[r:]
-        stripped = indent_f + significant[l : len(significant) - r] + indent_b
+            added = indent_f + lhs + significant + rhs + indent_b[r:]
+            stripped = indent_f + significant[l : len(significant) - r] + indent_b
 
-        yield is_comment, line, added, stripped
+            yield is_comment, line, added, stripped
 
 
 def _toggle_comment(lhs: str, rhs: str, lines: Sequence[str]) -> Sequence[str]:
