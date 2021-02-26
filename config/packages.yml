@@ -16,6 +16,13 @@
           node_decremental: "-"
           scope_incremental: "+"
           scope_decremental: "_"
+  keys:
+    - modes: n
+      maps:
+        "-": "<nop>"
+        "=": "<nop>"
+        "_": "<nop>"
+        "+": "<nop>"
   lua: |-
     require'nvim-treesitter.configs'.setup(vim.g.ts_opts)
 
