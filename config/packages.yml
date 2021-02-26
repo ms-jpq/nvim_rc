@@ -11,17 +11,24 @@
       incremental_selection:
         enable: True
         keymaps:
-          init_selection: "gl"
-          node_incremental: "="
-          node_decremental: "-"
-          scope_incremental: "+"
+          init_selection: "gs"
+          node_incremental: "gs"
+          node_decremental: "gs"
+          scope_incremental: "gs"
   keys:
     - modes: n
       maps:
         "-": "<nop>"
-        "=": "<nop>"
+        "=": "<cmd>lua require'nvim-treesitter.incremental_selection'.init_selection()<cr>"
         "_": "<nop>"
-        "+": "<nop>"
+        "+": "<cmd>lua require'nvim-treesitter.incremental_selection'.init_selection()<cr>"
+    - modes: v
+      maps:
+        "-": "<cmd>lua require'nvim-treesitter.incremental_selection'.node_decremental()<cr>"
+        "=": "<cmd>lua require'nvim-treesitter.incremental_selection'.node_incremental()<cr>"
+        "_": "<cmd>lua require'nvim-treesitter.incremental_selection'.node_decremental()<cr>"
+        "+": "<cmd>lua require'nvim-treesitter.incremental_selection'.scope_incremental()<cr>"
+
   lua: |-
     require'nvim-treesitter.configs'.setup(vim.g.ts_opts)
 
