@@ -18,7 +18,8 @@
     - modes: n
       maps:
         "<c-n>": "<nop>"
-        "<c-m>": "<cmd>lua require'nvim-treesitter.incremental_selection'.init_selection()<cr>"
+        "<c-m>": &inc_sel "<cmd>lua require'nvim-treesitter.incremental_selection'.init_selection()<cr>"
+        "gl": *inc_sel
     - modes: v
       maps:
         "<c-n>": "<esc><cmd>lua require'nvim-treesitter.incremental_selection'.node_decremental()<cr>"
