@@ -15,7 +15,6 @@
           node_incremental: "="
           node_decremental: "-"
           scope_incremental: "+"
-          scope_decremental: "_"
   keys:
     - modes: n
       maps:
