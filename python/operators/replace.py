@@ -4,6 +4,7 @@ from pynvim_pp.api import (
     buf_set_lines,
     cur_buf,
     cur_win,
+    win_get_buf,
     win_get_cursor,
 )
 from pynvim_pp.operators import VisualTypes, operator_marks, writable
@@ -38,11 +39,11 @@ keymap.v("gr") << f"<esc><cmd>lua {_go_replace.name}()<cr>"
 
 @rpc(blocking=True)
 def _go_replace_line(nvim: Nvim) -> None:
-    buf = cur_buf(nvim)
+    win = cur_win(nvim)
+    buf = win_get_buf(nvim, win=win)
     if not writable(nvim, buf=buf):
         return
     else:
-        win = cur_win(nvim)
         row, _ = win_get_cursor(nvim, win=win)
         body: str = nvim.funcs.getreg("*")
         new_lines = body.splitlines()
