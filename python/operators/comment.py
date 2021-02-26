@@ -60,9 +60,9 @@ def _comm(
 
 def _toggle_comment(lhs: str, rhs: str, lines: Sequence[str]) -> Sequence[str]:
     commented = tuple(_comm(lhs, rhs, lines=lines))
-    if all(com is not None and com for com, _, _, _ in commented):
+    if all(com for com, _, _, _ in commented if com is not None):
         return tuple(stripped for _, _, _, stripped in commented)
-    elif any(com is not None and com for com, _, _, _ in commented):
+    elif any(com for com, _, _, _ in commented if com is not None):
         return tuple(
             original if com else added for com, original, added, _ in commented
         )
