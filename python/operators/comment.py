@@ -38,11 +38,12 @@ def _comm(
     for line in lines:
         enil = "".join(reversed(line))
         indent_f, indent_b = _p_indent(line), "".join(reversed(_p_indent(enil)))
-        significant = line[len(indent_f) : len(indent_b)]
+        significant = line[len(indent_f) : len(line) - len(indent_b)]
 
         is_comment = significant.startswith(lhs) and significant.endswith(rhs)
-        added = indent_f[:l] + lhs + significant + rhs + indent_b[r:]
-        stripped = indent_f + significant[l : -r if r else len(significant)] + indent_b
+
+        added = indent_f + lhs + significant + rhs + indent_b[r:]
+        stripped = indent_f + significant[l : len(significant) - r] + indent_b
 
         yield is_comment, line, added, stripped
 
