@@ -23,7 +23,16 @@ def _parse_comment_str(nvim: Nvim, buf: Buffer) -> Tuple[str, str]:
 
 
 def _toggle_comment(lhs: str, rhs: str, lines: Sequence[str]) -> Sequence[str]:
-    return ()
+    is_commented = tuple(line.startswith(lhs) and line.endswith(rhs) for line in lines)
+    if all(is_commented):
+        return tuple(line[lhs:rhs] for line in lines)
+    elif any(is_commented):
+        return tuple(
+            f"{lhs}{line}{rhs}" if commented else line
+            for commented, line in zip(is_commented, lines)
+        )
+    else:
+        return tuple(f"{lhs}{line}{rhs}" for line in lines)
 
 
 @rpc(blocking=True)

@@ -258,9 +258,6 @@
     uri: https://github.com/tpope/vim-surround
 
 - git:
-    uri: https://github.com/tpope/vim-commentary
-
-- git:
     uri: https://github.com/junegunn/vim-easy-align
   keys:
     - modes: nv
