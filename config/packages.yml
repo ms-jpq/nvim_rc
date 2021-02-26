@@ -3,7 +3,6 @@
     uri: https://github.com/nvim-treesitter/nvim-treesitter
   vals:
     ts_opts:
-      ensure_installed: all
       highlight:
         enable: True
       indent:
@@ -18,16 +17,12 @@
   keys:
     - modes: n
       maps:
-        "-": "<nop>"
-        "=": "<cmd>lua require'nvim-treesitter.incremental_selection'.init_selection()<cr>"
-        "_": "<nop>"
-        "+": "<cmd>lua require'nvim-treesitter.incremental_selection'.init_selection()<cr>"
+        "<c-n>": "<nop>"
+        "<c-m>": "<cmd>lua require'nvim-treesitter.incremental_selection'.init_selection()<cr>"
     - modes: v
       maps:
-        "-": "<cmd>lua require'nvim-treesitter.incremental_selection'.node_decremental()<cr>"
-        "=": "<cmd>lua require'nvim-treesitter.incremental_selection'.node_incremental()<cr>"
-        "_": "<cmd>lua require'nvim-treesitter.incremental_selection'.node_decremental()<cr>"
-        "+": "<cmd>lua require'nvim-treesitter.incremental_selection'.scope_incremental()<cr>"
+        "<c-n>": "<esc><cmd>lua require'nvim-treesitter.incremental_selection'.node_decremental()<cr>"
+        "<c-m>": "<esc><cmd>lua require'nvim-treesitter.incremental_selection'.node_incremental()<cr>"
 
   lua: |-
     require'nvim-treesitter.configs'.setup(vim.g.ts_opts)
