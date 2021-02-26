@@ -1,3 +1,3 @@
 from ..registery import settings
 
-settings["commentstring"] = r"# %s"
+# settings["commentstring"] = "# %s"

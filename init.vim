@@ -10,6 +10,7 @@ set nomodeline
 set secure
 set termguicolors
 set shortmess+=I
+set commentstring=#\ %s
 
 
 function LVon_exit(_, code, __)
