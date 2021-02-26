@@ -12,9 +12,9 @@
         enable: True
         keymaps:
           init_selection: "go"
-          node_incremental: "+"
-          scope_incremental: "-"
-          node_decremental: ""
+          # node_incremental: "+"
+          # scope_incremental: "-"
+          # node_decremental: ""
   lua: |-
     require'nvim-treesitter.configs'.setup(vim.g.ts_opts)
 
