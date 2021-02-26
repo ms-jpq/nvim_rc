@@ -37,8 +37,7 @@ def _uncomment_line(lhs: str, rhs: str, line: str) -> Sequence[str]:
 
 
 def _toggle_comment(lhs: str, rhs: str, lines: Sequence[str]) -> Sequence[str]:
-    is_commented = tuple(line.startswith(lhs) and line.endswith(rhs) for line in lines)
-
+    is_commented = tuple(_is_commented(lhs, rhs, line=line) for line in lines)
     if all(is_commented):
         return tuple(l for line in lines for l in _uncomment_line(lhs, rhs, line=line))
     elif any(is_commented):
