@@ -1,5 +1,27 @@
 ---
 - git:
+    uri: https://github.com/nvim-treesitter/nvim-treesitter
+  vals:
+    ts_opts:
+      ensure_installed: all
+      highlight:
+        enable: True
+      indent:
+        enable: True
+      incremental_selection:
+        enable: True
+        keymaps:
+          init_selection: "go"
+          node_incremental: "+"
+          scope_incremental: "-"
+          node_decremental: ""
+  lua: |-
+    require'nvim-treesitter.configs'.setup(vim.g.ts_opts)
+  viml: |-
+    set foldmethod=expr
+    set foldexpr=nvim_treesitter#foldexpr()
+
+- git:
     uri: https://github.com/neovim/nvim-lspconfig
 
 - git:
@@ -45,9 +67,9 @@
       maps:
         "<leader>O": ":Rg "
   lua: |-
-    local fzf_opts = vim.api.nvim_call_function("getenv", {"FZF_DEFAULT_OPTS"})
+    local fzf_opts = vim.env.FZF_DEFAULT_OPTS
     local new_opts = (fzf_opts or "") .. " --no-border"
-    vim.api.nvim_call_function("setenv", {"FZF_DEFAULT_OPTS", new_opts})
+    vim.env.FZF_DEFAULT_OPTS = new_opts
 
 - git:
     uri: https://github.com/nvim-lua/plenary.nvim
