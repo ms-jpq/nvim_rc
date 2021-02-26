@@ -38,8 +38,8 @@ def _comm(
     for line in lines:
         enil = "".join(reversed(line))
         indent_f, indent_b = _p_indent(line), "".join(reversed(_p_indent(enil)))
-
         significant = line[len(indent_f) : len(indent_b)]
+
         is_comment = significant.startswith(lhs) and significant.endswith(rhs)
         added = indent_f[:l] + lhs + significant + rhs + indent_b[r:]
         stripped = indent_f + significant[l : -r if r else len(significant)] + indent_b
@@ -48,7 +48,7 @@ def _comm(
 
 
 def _toggle_comment(lhs: str, rhs: str, lines: Sequence[str]) -> Sequence[str]:
-    commented = _comm(lhs, rhs, lines=lines)
+    commented = tuple(_comm(lhs, rhs, lines=lines))
     if all(com for com, _, _, _ in commented):
         return tuple(stripped for _, _, _, stripped in commented)
     elif any(com for com, _, _, _ in commented):
