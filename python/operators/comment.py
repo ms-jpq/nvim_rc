@@ -22,18 +22,33 @@ def _parse_comment_str(nvim: Nvim, buf: Buffer) -> Tuple[str, str]:
     return lhs, rhs
 
 
-def _toggle_comment(lhs: str, rhs: str, lines: Sequence[str]) -> Sequence[str]:
+def _is_commented(lhs: str, rhs: str, line: str) -> bool:
+    return True
+
+
+def _comment_line(lhs: str, rhs: str, line: str) -> Sequence[str]:
     l, r = len(lhs), len(rhs)
+    return [line]
+
+
+def _uncomment_line(lhs: str, rhs: str, line: str) -> Sequence[str]:
+    l, r = len(lhs), len(rhs)
+    return [line]
+
+
+def _toggle_comment(lhs: str, rhs: str, lines: Sequence[str]) -> Sequence[str]:
     is_commented = tuple(line.startswith(lhs) and line.endswith(rhs) for line in lines)
+
     if all(is_commented):
-        return tuple(line[l:-r if r else len(line)] for line in lines)
+        return tuple(l for line in lines for l in _uncomment_line(lhs, rhs, line=line))
     elif any(is_commented):
         return tuple(
-            f"{lhs}{line}{rhs}" if commented else line
+            l
             for commented, line in zip(is_commented, lines)
+            for l in ((line,) if commented else _comment_line(lhs, rhs, line=line))
         )
     else:
-        return tuple(f"{lhs}{line}{rhs}" for line in lines)
+        return tuple(l for line in lines for l in _comment_line(lhs, rhs, line=line))
 
 
 @rpc(blocking=True)
@@ -54,7 +69,7 @@ keymap.v("gc") << f"<esc><cmd>lua {_comment.name}()<cr>"
 
 
 @rpc(blocking=True)
-def _comment_line(nvim: Nvim) -> None:
+def _comment_single(nvim: Nvim) -> None:
     win = cur_win(nvim)
     buf = win_get_buf(nvim, win=win)
     if not writable(nvim, buf=buf):
@@ -67,4 +82,4 @@ def _comment_line(nvim: Nvim) -> None:
         buf_set_lines(nvim, buf=buf, lo=row, hi=row + 1, lines=new_lines)
 
 
-keymap.n("gcc") << f"<cmd>lua {_comment_line.name}()<cr>"
+keymap.n("gcc") << f"<cmd>lua {_comment_single.name}()<cr>"
