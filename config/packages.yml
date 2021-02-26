@@ -5,8 +5,6 @@
     ts_opts:
       highlight:
         enable: True
-      indent:
-        enable: True
       incremental_selection:
         enable: True
         keymaps:
