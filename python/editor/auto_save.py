@@ -37,7 +37,9 @@ settings["backupskip"] = ""
 settings["backupdir"] = str(BACKUP_DIR)
 settings["backupext"] = ".bak"
 
-autocmd("FocusLost", "VimLeavePre", modifiers=("*", "++nested")) << "silent! wa"
+autocmd(
+    "BufLeave", "FocusLost", "VimLeavePre", modifiers=("*", "++nested")
+) << "silent! wa"
 
 
 _handle: Optional[Handle] = None
