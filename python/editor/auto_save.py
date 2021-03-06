@@ -39,7 +39,7 @@ settings["backupext"] = ".bak"
 
 autocmd(
     "BufLeave", "FocusLost", "VimLeavePre", modifiers=("*", "++nested")
-) << "silent! wa"
+) << "silent! wa!"
 
 
 _handle: Optional[Handle] = None
@@ -52,7 +52,7 @@ def _smol_save(nvim: Nvim) -> None:
         _handle.cancel()
 
     def cont() -> None:
-        go(async_call(nvim, nvim.command, "silent! wa"))
+        go(async_call(nvim, nvim.command, "silent! wa!"))
 
     loop = get_running_loop()
     _handle = loop.call_later(0.5, cont)
