@@ -68,6 +68,7 @@
     - typescriptreact
     - xml
     - yaml
+    - yaml.docker-compose
   install:
     npm:
       - prettier
