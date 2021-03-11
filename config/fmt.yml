@@ -68,6 +68,7 @@
     - typescriptreact
     - xml
     - yaml
+    - yaml.ansible
     - yaml.docker-compose
   install:
     npm:
