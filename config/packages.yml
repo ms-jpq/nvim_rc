@@ -231,9 +231,9 @@
     endfunction
     function LightLineTabSize()
       if &expandtab
-        return 'tabs ' . &tabstop
-      else
         return 'spaces ' . &tabstop
+      else
+        return 'tabs ' . &tabstop
       endif
     endfunction
 
