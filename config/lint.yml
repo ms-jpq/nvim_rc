@@ -21,17 +21,6 @@
     pip:
       - mypy
 
-- bin: pylint
-  type: fs
-  args:
-    - --
-    - ${filename}
-  filetypes:
-    - python
-  install:
-    pip:
-      - pylint
-
 - bin: eslint
   type: fs
   args:
