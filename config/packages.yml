@@ -37,8 +37,8 @@
             iF: "@call.inner"
             aF: "@call.outer"
 
-            il: "@loop.inner"
-            al: "@loop.outer"
+            iL: "@loop.inner"
+            aL: "@loop.outer"
   keys:
     - modes: n
       maps:
