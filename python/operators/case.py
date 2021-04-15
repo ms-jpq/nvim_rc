@@ -8,6 +8,7 @@ from pynvim_pp.api import (
     cur_win,
     win_get_buf,
     win_get_cursor,
+    win_set_cursor,
 )
 from pynvim_pp.operators import writable
 
@@ -44,8 +45,11 @@ def _toggle_case(nvim: Nvim) -> None:
         before, after = bline[:col], bline[col:]
         cur, *post = after
         pt = bytes((cur,)).decode()
-        new = before.decode() + _swap_case(pt) + bytes(post).decode()
+        swapped = _swap_case(pt)
+        new = before.decode() + swapped + bytes(post).decode()
+        pos = len(before) + len(swapped.encode())
         buf_set_lines(nvim, buf=buf, lo=row, hi=row + 1, lines=(new,))
+        win_set_cursor(nvim, win=win, row=row, col=pos)
 
 
 keymap.n("~") << f"<cmd>lua {_toggle_case.name}()<cr>"
