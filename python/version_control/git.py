@@ -1,4 +1,12 @@
-from ..registery import keymap
+from pynvim import Nvim
+
+from ..registery import keymap, rpc
 from ..workspace.terminal import open_term
 
-keymap.n("<leader>U") << f"<cmd>silent! wa | lua {open_term.name}('lazygit')<cr>"
+
+@rpc(blocking=True)
+def _lazygit(nvim: Nvim) -> None:
+    open_term(nvim, "lazygit", opts={"env": {"LC_ALL": "C"}})
+
+
+keymap.n("<leader>U") << f"<cmd>silent! wa | lua {_lazygit.name}()<cr>"

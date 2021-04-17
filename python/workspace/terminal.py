@@ -41,10 +41,10 @@ def _ensure_marked_buf(nvim: Nvim) -> Buffer:
 
 
 class TermOpts(TypedDict, total=False):
-    env: Optional[Mapping[str, str]]
-    on_exit: Optional[RpcCallable[None]]
-    on_stdout: Optional[RpcCallable[None]]
-    on_stderr: Optional[RpcCallable[None]]
+    env: Mapping[str, str]
+    on_exit: RpcCallable[None]
+    on_stdout: RpcCallable[None]
+    on_stderr: RpcCallable[None]
 
 
 @rpc(blocking=True)
