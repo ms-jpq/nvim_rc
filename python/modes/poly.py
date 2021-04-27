@@ -1,5 +1,9 @@
 from ..registery import keymap
 
+# {} scroll fixed lines
+keymap.nv("{") << "<up>" * 5
+keymap.nv("}") << "<down>" * 5
+
 # add emacs key binds
 keymap.i("<c-a>") << "<c-o>^"
 keymap.i("<c-x><c-a>") << "<c-a>"
