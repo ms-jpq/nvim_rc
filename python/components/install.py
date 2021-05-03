@@ -1,7 +1,7 @@
 from asyncio.tasks import as_completed
 from datetime import datetime, timezone
 from itertools import chain
-from os import environ, pathsep, uname
+from os import environ, linesep, pathsep, uname
 from shutil import get_terminal_size, rmtree, which
 from sys import executable, stderr
 from typing import AsyncIterator, Awaitable, Iterator, Sequence, Tuple
@@ -243,17 +243,11 @@ async def install() -> int:
             args = " ".join(chain((proc.prog,), proc.args))
             if proc.code == 0:
                 msg = LANG("proc succeeded", args=args)
-                print(msg)
-                print(debug)
-                print(proc.out.decode())
-                print(sep)
+                print(msg, debug, proc.out.decode(), sep, sep=linesep)
             else:
                 has_error = True
                 msg = LANG("proc failed", code=proc.code, args=args)
-                print(msg, file=stderr)
-                print(debug, file=stderr)
-                print(proc.err, file=stderr)
-                print(sep, file=stderr)
+                print(msg, debug, proc.err, sep, sep=linesep, file=stderr)
 
     return has_error
 
