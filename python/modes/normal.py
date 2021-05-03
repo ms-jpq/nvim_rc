@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, cast
 from uuid import uuid4
 
 from pynvim.api.nvim import Nvim
@@ -36,7 +36,7 @@ def _restore_pos(nvim: Nvim) -> None:
     win = cur_win(nvim)
     buf = win_get_buf(nvim, win=win)
     row, _ = win_get_cursor(nvim, win=win)
-    pos: Optional[int] = buf_get_var(nvim, buf=buf, key=BUF_VAR_NAME)
+    pos = cast(Optional[int], buf_get_var(nvim, buf=buf, key=BUF_VAR_NAME))
 
     if pos is not None:
         win_set_cursor(nvim, win=win, row=row, col=pos)
