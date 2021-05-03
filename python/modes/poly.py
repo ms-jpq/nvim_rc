@@ -40,8 +40,8 @@ keymap.nv("<c-b>") << "<c-b>zz"
 
 # emacs arrow movements
 keymap.nov("<m-left>") << "b"
-keymap.nov("<m-right>") << "e"
+keymap.nov("<m-right>") << "e<right>"
 keymap.i("<m-left>") << "<c-o>b"
-keymap.i("<m-right>") << "<c-o>e"
+keymap.i("<m-right>") << "<c-o>e<right>"
 keymap.c("<m-left>", silent=False) << "<s-left>"
 keymap.c("<m-right>", silent=False) << "<s-right>"
