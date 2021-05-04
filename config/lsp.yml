@@ -32,28 +32,7 @@
           style: hint
           warning: warning
 
-      hadolint:
-        sourceName: hadolint
-        command: hadolint
-        args:
-          - --format=json
-          - "-"
-        rootPatterns:
-          - .hadolint.yaml
-        parseJson:
-          column: column
-          line: line
-          message: ${message} [${code}]
-          security: level
-        securities:
-          error: error
-          info: info
-          style: hint
-          warning: warning
-
     filetypes:
-      dockerfile:
-        - hadolint
       sh:
         - shellcheck
 
@@ -231,6 +210,9 @@
   install:
     npm:
       - graphql-language-service-cli
+
+- server: fsautocomplete
+  bin: fsauto
 
 - server: r_language_server
   bin: R

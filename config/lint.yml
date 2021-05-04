@@ -1,15 +1,4 @@
 ---
-- bin: yamllint
-  type: fs
-  args:
-    - --
-    - ${filename}
-  filetypes:
-    - yaml
-  install:
-    pip:
-      - yamllint
-
 - bin: mypy
   type: fs
   args:
@@ -20,22 +9,6 @@
   install:
     pip:
       - mypy
-
-- bin: eslint
-  type: fs
-  args:
-    - --
-    - ${filename}
-  filetypes:
-    - javascript
-    - javascript.jsx
-    - javascriptreact
-    - typescript
-    - typescript.tsx
-    - typescriptreact
-  install:
-    npm:
-      - eslint
 
 - bin: shellcheck
   type: fs
