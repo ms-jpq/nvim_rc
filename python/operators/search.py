@@ -63,7 +63,6 @@ def _op_fzf(nvim: Nvim, visual: VisualTypes = None) -> None:
 def _op_rg(nvim: Nvim, visual: VisualTypes = None) -> None:
     text = _hl_selected(nvim, visual=visual)
     escaped = escape(text)
-    print(escaped, flush=True)
     cont = lambda: nvim.command(f"Rg {escaped}")
     go(async_call(nvim, cont))
 
