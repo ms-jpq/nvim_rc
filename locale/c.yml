@@ -12,9 +12,6 @@
 "step join sep": |-
   " -> "
 
-"lsp loaded": |-
-  LSP Loaded: ${server}
-
 "grammar error": |-
   ⛔️ Grammar Error 👉 ${text}
 

@@ -45,7 +45,7 @@ def _find_root(nvim: Nvim, _pattern: Any, filename: str, bufnr: int) -> Optional
 
 @rpc(blocking=True)
 def _on_attach(nvim: Nvim, server: str) -> None:
-    write(nvim, LANG("lsp loaded", server=server))
+    pass
 
 
 _LSP_INIT = """
