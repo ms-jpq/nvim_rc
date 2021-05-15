@@ -1,5 +1,6 @@
 from itertools import chain
 from os import linesep
+from re import escape
 
 from pynvim.api import Buffer
 from pynvim.api.nvim import Nvim
@@ -61,7 +62,9 @@ def _op_fzf(nvim: Nvim, visual: VisualTypes = None) -> None:
 @rpc(blocking=True)
 def _op_rg(nvim: Nvim, visual: VisualTypes = None) -> None:
     text = _hl_selected(nvim, visual=visual)
-    cont = lambda: nvim.command(f"Rg {text}")
+    escaped = escape(text)
+    print(escaped, flush=True)
+    cont = lambda: nvim.command(f"Rg {escaped}")
     go(async_call(nvim, cont))
 
 

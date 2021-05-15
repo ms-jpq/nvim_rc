@@ -6,7 +6,7 @@ settings["incsearch"] = True
 # search results shown on side
 settings["inccommand"] = "nosplit"
 # use ripgrep
-settings["grepprg"] = r"rg\ --vimgrep"
+settings["grepprg"] = "rg\\ --vimgrep"
 
 
 # clear hlsearch result
