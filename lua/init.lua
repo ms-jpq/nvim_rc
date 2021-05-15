@@ -4,7 +4,9 @@ return function(args)
   lv = lv or {}
   lv.on_exit = function(args)
     local code = unpack(args)
-    vim.api.nvim_err_writeln(" | EXITED - " .. code)
+    if code ~= 143 then
+      vim.api.nvim_err_writeln(" | EXITED - " .. code)
+    end
   end
 
   lv.on_stdout = function(args)

@@ -37,8 +37,7 @@ settings["backupskip"] = ""
 settings["backupdir"] = str(BACKUP_DIR)
 settings["backupext"] = ".bak"
 
-autocmd("BufLeave", "FocusLost", modifiers=("*", "++nested")) << "wa!"
-autocmd("VimLeavePre") << "wa!"
+autocmd("BufLeave", "FocusLost", "VimLeavePre") << "wa!"
 
 
 _handle: Optional[Handle] = None
@@ -57,14 +56,7 @@ def _smol_save(nvim: Nvim) -> None:
     _handle = loop.call_later(0.5, cont)
 
 
-(
-    autocmd(
-        "CursorHold",
-        "CursorHoldI",
-        modifiers=("*", "++nested"),
-    )
-    << f"lua {_smol_save.name}()"
-)
+autocmd("CursorHold", "CursorHoldI") << f"lua {_smol_save.name}()"
 
 
 # persistent undo
