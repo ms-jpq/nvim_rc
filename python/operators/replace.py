@@ -26,10 +26,6 @@ def _go_replace(nvim: Nvim, visual: VisualTypes = None) -> None:
         tail = lines[-1].encode()[col2 + 1 :].decode()
 
         new_lines = (head + body + tail).splitlines()
-        line = new_lines.pop()
-        if line:
-            new_lines.append(line)
-
         buf_set_lines(nvim, buf=buf, lo=row1, hi=row2 + 1, lines=new_lines)
 
 
@@ -47,11 +43,6 @@ def _go_replace_line(nvim: Nvim) -> None:
         row, _ = win_get_cursor(nvim, win=win)
         body: str = nvim.funcs.getreg("*")
         new_lines = body.splitlines()
-
-        line = new_lines.pop()
-        if line:
-            new_lines.append(line)
-
         buf_set_lines(nvim, buf=buf, lo=row, hi=row + 1, lines=new_lines)
 
 
