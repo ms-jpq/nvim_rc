@@ -1,5 +1,5 @@
 from os import environ
-from typing import Iterator, Mapping, Optional, TypedDict
+from typing import Iterator, Mapping, Optional, TypedDict, cast
 from uuid import uuid4
 
 from pynvim import Nvim
@@ -22,8 +22,8 @@ BUF_VAR_NAME = f"terminal_buf_{uuid4().hex}"
 
 
 def _list_marked_bufs(nvim: Nvim) -> Iterator[Buffer]:
-    for buf in list_bufs(nvim):
-        flag: Optional[bool] = buf_get_var(nvim, buf=buf, key=BUF_VAR_NAME)
+    for buf in list_bufs(nvim, listed=True):
+        flag = cast(Optional[bool], buf_get_var(nvim, buf=buf, key=BUF_VAR_NAME))
         if flag:
             yield buf
 

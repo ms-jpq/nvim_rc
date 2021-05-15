@@ -30,7 +30,7 @@ settings["breakindent"] = True
 # open with scratch buffer, like emacs
 @rpc(blocking=True)
 def _scratch_buffer(nvim: Nvim) -> None:
-    bufs = list_bufs(nvim)
+    bufs = list_bufs(nvim, listed=False)
     for buf in bufs:
         name = buf_name(nvim, buf=buf)
         if not name:
