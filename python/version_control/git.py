@@ -9,4 +9,4 @@ def _lazygit(nvim: Nvim) -> None:
     open_term(nvim, "lazygit", opts={"env": {"LC_ALL": "C"}})
 
 
-keymap.n("<leader>U") << f"<cmd>silent! wa | lua {_lazygit.name}()<cr>"
+keymap.n("<leader>U") << f"<cmd>wa! | lua {_lazygit.name}()<cr>"
