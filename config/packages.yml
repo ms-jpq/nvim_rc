@@ -62,9 +62,6 @@
 
 - git:
     uri: https://github.com/ms-jpq/chadtree
-    script:
-      body: |-
-        python3 -m chadtree deps
   keys:
     - modes: n
       maps:
