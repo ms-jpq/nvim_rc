@@ -25,4 +25,10 @@ endfunction
 
 
 let s:top_level = resolve(expand('<sfile>:p:h'))
+
+function Ndeps()
+  call termopen([s:top_level . '/init.py', 'deps'])
+endfunction
+command! Ndeps call Ndeps()
+
 call luaeval('require("init")(...)', [s:top_level])
