@@ -44,6 +44,7 @@ if command == "deps":
                 "pip",
                 "install",
                 "--upgrade",
+               "--force-reinstall",
                 "--requirement",
                 REQUIREMENTS,
             )
