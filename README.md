@@ -23,7 +23,7 @@ settings["whichwrap"] += ("h", "l", "<", ">", "[", "]")
 keymap.nv("/", silent=False) << "/\V"
 keymap.nv("?", silent=False) << "?\V"
 
-autocmd("FocusLost", "VimLeavePre", modifiers=("*", "nested")) << "silent! wa!"
+autocmd("FocusLost", "VimLeavePre", modifiers=("*", "nested")) << "silent wa!"
 ```
 
 ### Typed Config
