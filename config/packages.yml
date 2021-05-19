@@ -121,7 +121,6 @@
   keys:
     - modes: n
       maps:
-
         # "<leader>O": "<cmd>lua require'telescope.builtin'.live_grep{}<cr>"
         "<leader>d": "<cmd>lua require'telescope.builtin'.lsp_document_symbols{}<cr>"
         "<leader>D": "<cmd>lua require'telescope.builtin'.lsp_workspace_symbols{}<cr>"
@@ -165,86 +164,6 @@
     set background=light
     colorscheme edge
 
-- git:
-    uri: https://github.com/itchyny/lightline.vim
-  vals:
-    edge_style: neon
-    edge_menu_selection_background: purple
-    lightline:
-      colorscheme: edge
-      component:
-        sep: "-"
-      component_function:
-        tabsize: LightLineTabSize
-        lsp_srvs: LightLineLSPsrvs
-        lsp_warn: LightLineLSPwarn
-        lsp_err: LightLineLSPerr
-      active:
-        right:
-          - - lineinfo
-          - - percent
-          - - tabsize
-            - filetype
-          - - sep
-          - - lsp_srvs
-            - lsp_err
-            - lsp_warn
-  lua: |-
-    lv = lv or {}
-    local buf_diagnostics_count = function (level)
-      local clients = vim.lsp.buf_get_clients(0)
-      local tot = 0
-      for _, client in ipairs(clients) do
-        local count = vim.lsp.diagnostic.get_count(0, level, client.id)
-        tot = tot + count
-      end
-      return  tot
-    end
-    lv.light_line_errors = function ()
-      local count = buf_diagnostics_count("Error")
-      return count > 0 and "⛔️ [" .. count .. "]" or ""
-    end
-    lv.light_line_warnings = function ()
-      local count = buf_diagnostics_count("Warning")
-      return count > 0 and "⚠️  [" .. count .. "]" or ""
-    end
-    lv.light_line_lsp_servers = function ()
-      local clients = vim.lsp.buf_get_clients(0)
-      local names = {}
-      for _, client in ipairs(clients) do
-        table.insert(names, client.name)
-      end
-      return table.concat(names, ", ")
-    end
-  viml: |-
-    function LightLineLSPsrvs()
-      return v:lua.lv.light_line_lsp_servers()
-    endfunction
-    function LightLineLSPwarn()
-      return v:lua.lv.light_line_errors()
-    endfunction
-    function LightLineLSPerr()
-      return v:lua.lv.light_line_warnings()
-    endfunction
-    function LightLineTabSize()
-      if &expandtab
-        return 'spaces ' . &tabstop
-      else
-        return 'tabs ' . &tabstop
-      endif
-    endfunction
-
-- git:
-    uri: https://github.com/liuchengxu/vim-which-key
-  keys:
-    - modes: n
-      maps:
-        "<leader>": "<cmd>WhichKey '<space>'<cr>"
-        "[": "<cmd>WhichKey '['<cr>"
-        "]": "<cmd>WhichKey ']'<cr>"
-
-# - git:
-#     uri: https://github.com/wellle/targets.vim
 
 - git:
     uri: https://github.com/tpope/vim-repeat
