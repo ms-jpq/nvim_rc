@@ -1,5 +1,5 @@
 from pathlib import PurePath
-from typing import Any, Mapping, Sequence, Tuple
+from typing import Any, MutableMapping, Sequence, Tuple
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
@@ -64,7 +64,7 @@ end)()
 
 def _lsp(nvim: Nvim) -> str:
     clients = nvim.api.exec_lua(_LSP_CLIENTS, ())
-    lsp_stats: Mapping[str, Tuple[int, int]] = {}
+    lsp_stats: MutableMapping[str, Tuple[int, int]] = {}
     for client in clients:
         name = client["name"]
         warnings, errors = lsp_stats.setdefault(name, (0, 0))
