@@ -1,5 +1,5 @@
 from pathlib import PurePath
-from typing import Any, MutableMapping, Sequence, Tuple
+from typing import Any, MutableMapping, Tuple
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
@@ -19,14 +19,16 @@ from std2.pathlib import longest_common_path
 
 from ..registery import rpc, settings
 
-# lv.light_line_errors = function ()
-# local count = buf_diagnostics_count("Error")
-# return count > 0 and "⛔️ [" .. count .. "]" or ""
-# end
-# lv.light_line_warnings = function ()
-# local count = buf_diagnostics_count("Warning")
-# return count > 0 and "⚠️  [" .. count .. "]" or ""
-# end
+
+def _name(nvim: Nvim) -> str:
+    cwd = PurePath(get_cwd(nvim))
+    buf = cur_buf(nvim)
+    b_name = buf_name(nvim, buf=buf)
+
+    path = PurePath(b_name)
+    ancestor = longest_common_path(cwd, path)
+    name = str(path.relative_to(ancestor)) if ancestor else b_name
+    return name
 
 
 def _scroll_pos(nvim: Nvim, win: Window, buf: Buffer) -> Tuple[str, str]:
@@ -64,27 +66,27 @@ end)()
 
 def _lsp(nvim: Nvim) -> str:
     clients = nvim.api.exec_lua(_LSP_CLIENTS, ())
-    lsp_stats: MutableMapping[str, Tuple[int, int]] = {}
+    stats: MutableMapping[str, Tuple[int, int]] = {}
     for client in clients:
         name = client["name"]
-        warnings, errors = lsp_stats.setdefault(name, (0, 0))
+        warnings, errors = stats.setdefault(name, (0, 0))
         warnings += client["warnings"]
         errors += client["errors"]
-        lsp_stats[name] = warnings, errors
+        stats[name] = warnings, errors
 
-    lsp = f"[{' '.join(lsp_stats.keys())}]"
+    warnings = sum(w for w, _ in stats.values())
+    errors = sum(e for _, e in stats.values())
+
+    servers = f"[{' '.join(stats.keys())}]"
+    w_line = f" W: {warnings}" if warnings else ""
+    e_line = f" E: {errors}" if errors else ""
+    lsp = f"{servers}{w_line}{e_line}"
     return lsp
 
 
 @rpc(blocking=True)
-def _lhs(nvim: Nvim, _: Sequence[None]) -> str:
-    cwd = PurePath(get_cwd(nvim))
-    buf = cur_buf(nvim)
-    b_name = buf_name(nvim, buf=buf)
-
-    path = PurePath(b_name)
-    ancestor = longest_common_path(cwd, path)
-    name = path.relative_to(ancestor) if ancestor else b_name
+def _lhs(nvim: Nvim, _: Any) -> str:
+    name = _name(nvim)
 
     return f"{name}"
 
