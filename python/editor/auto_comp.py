@@ -30,9 +30,10 @@ keymap.i("<bs>", expr=True) << "pumvisible() ? '<c-e><bs>' : '<bs>'"
 
 
 # cua
-keymap.i(
-    "<cr>", expr=True
-) << "pumvisible() ? (complete_info().selected == -1 ? '<c-e><cr>' : '<c-y>') : '<cr>'"
+(
+    keymap.i("<cr>", expr=True)
+    << "pumvisible() ? (complete_info().selected == -1 ? '<c-e><cr>' : '<c-y>') : '<cr>'"
+)
 keymap.i("<tab>", expr=True) << "pumvisible() ? '<c-n>' : '<tab>'"
 keymap.i("<s-tab>", expr=True) << "pumvisible() ? '<c-p>' : '<bs>'"
 
