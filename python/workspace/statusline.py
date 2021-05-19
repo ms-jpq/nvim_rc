@@ -46,7 +46,8 @@ def _scroll_pos(nvim: Nvim, win: Window, buf: Buffer) -> Tuple[str, str]:
 def _indent(nvim: Nvim, buf: Buffer) -> str:
     expand_tab: bool = buf_get_option(nvim, buf=buf, key="expandtab")
     tabstop: int = buf_get_option(nvim, buf=buf, key="tabstop")
-    indent = ("spaces" if expand_tab else "tabs") + f" {tabstop}"
+    tab_style = "\\s" if expand_tab else "\\t"
+    indent = f"{tab_style} {tabstop}"
     return indent
 
 
@@ -77,9 +78,9 @@ def _lsp(nvim: Nvim) -> str:
     warnings = sum(w for w, _ in stats.values())
     errors = sum(e for _, e in stats.values())
 
-    servers = f"[{' '.join(stats.keys())}]"
-    w_line = f" W: {warnings}" if warnings else ""
-    e_line = f" E: {errors}" if errors else ""
+    servers = f"[{' '.join(stats.keys())}]" if stats else ""
+    w_line = f" ⚠️  {warnings}" if warnings else ""
+    e_line = f" ⛔️ {errors}" if errors else ""
     lsp = f"{servers}{w_line}{e_line}"
     return lsp
 
