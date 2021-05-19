@@ -9,7 +9,6 @@ from pynvim_pp.api import (
     win_get_cursor,
     win_set_cursor,
 )
-from pynvim_pp.lib import async_call, go
 
 from ..registery import autocmd, rpc
 
@@ -31,8 +30,7 @@ def _surround(nvim: Nvim) -> None:
         def cont() -> None:
             new_col = col + len(lhs.encode())
             nvim.api.set_vvar("char", lhs + cast(str, rhs))
-            set_cur = lambda: win_set_cursor(nvim, win=win, row=row, col=new_col)
-            go(async_call(nvim, set_cur))
+            win_set_cursor(nvim, win=win, row=row, col=new_col)
 
         if rhs == lhs:
             is_even = line.count(lhs) % 2 == 0
