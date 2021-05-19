@@ -1,7 +1,7 @@
 from typing import Iterable, Iterator, Tuple
 
 from pynvim import Nvim
-from pynvim.api import Buffer, NvimError, Window
+from pynvim.api import Buffer, Window
 from pynvim_pp.api import (
     buf_get_lines,
     buf_line_count,
