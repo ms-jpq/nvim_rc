@@ -1,5 +1,5 @@
 from pathlib import PurePath
-from typing import Any, MutableMapping, Tuple
+from typing import  MutableMapping, Tuple
 
 from pynvim import Nvim
 from pynvim.api import Buffer, Window
@@ -9,7 +9,6 @@ from pynvim_pp.api import (
     buf_get_option,
     buf_line_count,
     buf_name,
-    cur_buf,
     cur_win,
     get_cwd,
     win_get_buf,
@@ -20,9 +19,8 @@ from std2.pathlib import longest_common_path
 from ..registery import rpc, settings
 
 
-def _name(nvim: Nvim) -> str:
+def _name(nvim: Nvim, buf: Buffer) -> str:
     cwd = PurePath(get_cwd(nvim))
-    buf = cur_buf(nvim)
     b_name = buf_name(nvim, buf=buf)
 
     path = PurePath(b_name)
@@ -85,24 +83,20 @@ def _lsp(nvim: Nvim) -> str:
     return lsp
 
 
-@rpc(blocking=True)
-def _lhs(nvim: Nvim, _: Any) -> str:
-    name = _name(nvim)
-
-    return f"{name}"
 
 
 @rpc(blocking=True)
-def _rhs(nvim: Nvim, _: Any) -> str:
+def _status(nvim: Nvim) -> str:
     win = cur_win(nvim)
     buf = win_get_buf(nvim, win=win)
 
+    name = _name(nvim, buf=buf)
     scroll, pos = _scroll_pos(nvim, win=win, buf=buf)
     ft = buf_filetype(nvim, buf=buf)
     indent = _indent(nvim, buf=buf)
     lsp = _lsp(nvim)
 
-    return f"{lsp} | {indent} | {ft} | {scroll} | {pos}"
+    return f"{name}%={lsp} | {indent} | {ft} | {scroll} | {pos}"
 
 
-settings["statusline"] = f"%{{{_lhs.name}()}}%=%{{{_rhs.name}()}}"
+settings["statusline"] = ""
