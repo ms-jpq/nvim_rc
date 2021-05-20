@@ -1,21 +1,18 @@
 return function(args)
   local cwd = unpack(args)
 
-  lv = lv or {}
-  lv.on_exit = function(args)
-    local code = unpack(args)
+  local on_exit = function(code)
+    print(code)
     if code ~= 143 then
       vim.api.nvim_err_writeln(" | EXITED - " .. code)
     end
   end
 
-  lv.on_stdout = function(args)
-    local msg = unpack(args)
+  local on_stdout = function(_, msg)
     vim.api.nvim_out_write(table.concat(msg, "\n"))
   end
 
-  lv.on_stderr = function(args)
-    local msg = unpack(args)
+  local on_stderr = function(_, msg)
     vim.api.nvim_err_write(table.concat(msg, "\n"))
   end
 
@@ -38,9 +35,9 @@ return function(args)
   }
   local params = {
     cwd = cwd,
-    on_exit = "v:lv.on_exit",
-    on_stdout = "v:lv.on_stdout",
-    on_stderr = "v:lv.on_stderr"
+    on_exit = on_exit,
+    on_stdout = on_stdout,
+    on_stderr = on_stderr
   }
-  vim.api.nvim_call_function("jobstart", {args, params})
+  vim.fn.jobstart(args, params)
 end
