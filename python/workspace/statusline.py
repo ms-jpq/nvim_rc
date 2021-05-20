@@ -6,7 +6,7 @@ _status = Path(__file__).with_suffix(".lua").read_text()
 
 _preview = "%w"
 _ql = "%q"
-_name = "%F"
+_name = "%f"
 _modified = "%m"
 
 _lsp = "%{v:lua.LSP_status_line()}"
