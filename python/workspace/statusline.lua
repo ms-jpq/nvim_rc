@@ -1,12 +1,15 @@
 (function ()
   local cache = function (f)
     local ans = nil
+    local w = 0
     local count = 0
 
     return function ()
-      if count % 15 == 0 then
+      local win = vim.api.nvim_get_current_win()
+      if win ~= w or count % 15 == 0 then
         ans = f()
       end
+      w = win
       count = count + 1
       return ans
     end
