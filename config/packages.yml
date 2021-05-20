@@ -68,7 +68,7 @@
         "<leader>v": "<cmd>CHADopen<cr>"
 
 - git:
-    uri: https://github.com/ms-jpq/coq.nvim
+    uri: https://github.com/ms-jpq/coq-nvim
     branch: bwaaak
   lua: |-
     -- vim.o.completefunc = "KoKomnifunc"
