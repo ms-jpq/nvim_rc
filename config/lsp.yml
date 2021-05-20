@@ -4,6 +4,7 @@
   filetypes:
     - dockerfile
     - sh
+    - zsh
   root:
     fallback: cwd
 
@@ -33,8 +34,9 @@
           warning: warning
 
     filetypes:
-      sh:
+      sh: &sh
         - shellcheck
+      zsh: *sh
 
   install:
     npm:
