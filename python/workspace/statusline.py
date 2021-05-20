@@ -10,9 +10,9 @@ _name = "%F"
 _modified = "%m"
 
 _lsp = "%{v:lua.LSP_status_line()}"
-_ft = "%Y"
+_ft = "%y"
 _tabs = "%{&expandtab ? &tabstop .. 'S' : 'T'}"
-_pos = "%4l:%-3c"
+_pos = "%5l:%-3c"
 _scroll = "%3p%%"
 
 _lhs = f"{_preview}{_ql}{_name}{_modified}"
