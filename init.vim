@@ -12,18 +12,6 @@ set termguicolors
 set shortmess+=I
 set commentstring=#\ %s
 
-
-function LVon_exit(_, code, __)
-  call luaeval('lv.on_exit(...)', [a:code])
-endfunction
-function LVon_stdout(_, msg, __)
-  call luaeval('lv.on_stdout(...)', [a:msg])
-endfunction
-function LVon_stderr(_, msg, __)
-  call luaeval('lv.on_stderr(...)', [a:msg])
-endfunction
-
-
 let s:top_level = resolve(expand('<sfile>:p:h'))
 
 function Ndeps()

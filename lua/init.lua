@@ -38,9 +38,9 @@ return function(args)
   }
   local params = {
     cwd = cwd,
-    on_exit = "LVon_exit",
-    on_stdout = "LVon_stdout",
-    on_stderr = "LVon_stderr"
+    on_exit = "v:lv.on_exit",
+    on_stdout = "v:lv.on_stdout",
+    on_stderr = "v:lv.on_stderr"
   }
   vim.api.nvim_call_function("jobstart", {args, params})
 end
