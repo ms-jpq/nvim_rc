@@ -1,3 +1,4 @@
+nnoremap <silent> q  <nop>
 nnoremap <silent> Q  <esc>
 nnoremap <silent> QQ <cmd>quitall!<cr>
 vnoremap <silent> Q  <nop>
