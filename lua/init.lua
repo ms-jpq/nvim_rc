@@ -21,7 +21,7 @@ return function(args)
 
   local main = function ()
     local vpy = cwd .. "/.vars/runtime/bin/python3"
-    if vim.api.nvim_call_function("filereadable", {vpy}) == 1 then
+    if vim.fn.filereadable(vpy) == 1 then
       return vpy
     else
       return "python3"
@@ -34,7 +34,7 @@ return function(args)
     "python",
     "run",
     "--socket",
-    vim.api.nvim_get_vvar("servername")
+    vim.v.servername
   }
   local params = {
     cwd = cwd,
