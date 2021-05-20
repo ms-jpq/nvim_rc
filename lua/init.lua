@@ -1,8 +1,7 @@
 return function(args)
   local cwd = unpack(args)
 
-  local on_exit = function(code)
-    print(code)
+  local on_exit = function(_, code)
     if code ~= 143 then
       vim.api.nvim_err_writeln(" | EXITED - " .. code)
     end
