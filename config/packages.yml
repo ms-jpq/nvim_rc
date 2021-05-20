@@ -106,29 +106,6 @@
     vim.env.FZF_DEFAULT_OPTS = new_opts
 
 - git:
-    uri: https://github.com/nvim-lua/plenary.nvim
-
-- git:
-    uri: https://github.com/nvim-lua/popup.nvim
-
-- git:
-    uri: https://github.com/nvim-telescope/telescope.nvim
-  vals:
-    telescope:
-      defaults:
-        prompt_position: top
-        width: 0.95
-  keys:
-    - modes: n
-      maps:
-        # "<leader>O": "<cmd>lua require'telescope.builtin'.live_grep{}<cr>"
-        "<leader>d": "<cmd>lua require'telescope.builtin'.lsp_document_symbols{}<cr>"
-        "<leader>D": "<cmd>lua require'telescope.builtin'.lsp_workspace_symbols{}<cr>"
-  lua: |-
-    local tele = require "telescope"
-    tele.setup(vim.g.telescope)
-
-- git:
     uri: https://github.com/glepnir/lspsaga.nvim
   keys:
     - modes: n
@@ -163,7 +140,6 @@
   viml: |-
     set background=light
     colorscheme edge
-
 
 - git:
     uri: https://github.com/tpope/vim-repeat
