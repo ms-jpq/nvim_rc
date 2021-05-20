@@ -69,6 +69,7 @@
 
 - git:
     uri: https://github.com/ms-jpq/coq.nvim
+    branch: bwaaak
   lua: |-
     -- vim.o.completefunc = "KoKomnifunc"
 
