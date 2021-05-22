@@ -1,4 +1,5 @@
 from os import environ
+from shutil import which
 from typing import Iterator, Mapping, Optional, TypedDict, cast
 from uuid import uuid4
 
@@ -54,7 +55,11 @@ def _term_open(nvim: Nvim, *args: str, opts: TermOpts = {}) -> None:
     is_term_buf = buf_type == "terminal"
     open_float_win(nvim, margin=0, relsize=0.95, buf=buf)
     if not is_term_buf:
-        cmds = args or (environ["SHELL"],)
+        if args:
+            ex, *rest = args
+        else:
+            ex, rest = environ["SHELL"], ()
+        cmds = (which(ex), *rest)
         nvim.funcs.termopen(cmds, opts)
     nvim.command("startinsert")
 
