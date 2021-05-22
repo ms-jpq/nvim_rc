@@ -1,10 +1,19 @@
 from asyncio.tasks import as_completed
 from datetime import datetime, timezone
 from itertools import chain
+from json import dumps, loads
 from os import environ, linesep, pathsep, uname
 from shutil import get_terminal_size, rmtree, which
 from sys import executable, stderr
-from typing import AsyncIterator, Awaitable, Iterator, Sequence, Tuple
+from typing import (
+    AsyncIterator,
+    Awaitable,
+    Iterator,
+    Mapping,
+    Sequence,
+    Tuple,
+    TypedDict,
+)
 
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import ask_mc
@@ -36,6 +45,10 @@ from ..workspace.terminal import open_term
 from .rtp import p_name
 
 
+class _PackagesJson(TypedDict):
+    dependencies: Mapping[str, str]
+
+
 def _pip_specs() -> Iterator[str]:
     for l_spec in lsp_specs:
         yield from l_spec.install.pip
@@ -48,7 +61,6 @@ def _pip_specs() -> Iterator[str]:
 
 
 def _npm_specs() -> Iterator[str]:
-    yield "npm-check-updates"
     for l_spec in lsp_specs:
         yield from l_spec.install.npm
     for i_spec in linter_specs:
@@ -157,6 +169,8 @@ def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
 
 def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
     NPM_DIR.mkdir(parents=True, exist_ok=True)
+    packages_json = NPM_DIR / "packages.json"
+    package_lock = NPM_DIR / "package-lock.json"
 
     async def cont() -> SortOfMonoid:
         async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
@@ -166,10 +180,12 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
                 yield "", p1
 
                 if not p1.code:
-                    ncu = NPM_DIR / "node_modules" / ".bin" / "ncu"
-                    if ncu.exists():
-                        p1_1 = await call(str(ncu), "--upgrade", cwd=NPM_DIR)
-                        yield ("", p1_1)
+                    package_lock.unlink(missing_ok=True)
+                    json: _PackagesJson = loads(packages_json.read_text())
+                    json["dependencies"] = {
+                        key: "*" for key in json["dependencies"].keys()
+                    }
+                    packages_json.write_text(dumps(json))
 
                     p2 = await call(
                         cmd, "install", "--upgrade", "--", *_npm_specs(), cwd=NPM_DIR
