@@ -184,7 +184,9 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
                     json: _PackagesJson = loads(packages_json.read_text())
                     json["dependencies"] = {
                         key: "*"
-                        for key in chain(json["dependencies"].keys(), _npm_specs())
+                        for key in chain(
+                            json.get("dependencies", {}).keys(), _npm_specs()
+                        )
                     }
                     packages_json.write_text(
                         dumps(json, check_circular=False, ensure_ascii=False, indent=2)
