@@ -183,13 +183,14 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
                     package_lock.unlink(missing_ok=True)
                     json: _PackagesJson = loads(packages_json.read_text())
                     json["dependencies"] = {
-                        key: "*" for key in json["dependencies"].keys()
+                        key: "*"
+                        for key in chain(json["dependencies"].keys(), _npm_specs())
                     }
-                    packages_json.write_text(dumps(json))
-
-                    p2 = await call(
-                        cmd, "install", "--upgrade", "--", *_npm_specs(), cwd=NPM_DIR
+                    packages_json.write_text(
+                        dumps(json, check_circular=False, ensure_ascii=False, indent=2)
                     )
+
+                    p2 = await call(cmd, "install", "--upgrade", cwd=NPM_DIR)
                     yield ("", p2)
 
         return [rt async for rt in cont()]
