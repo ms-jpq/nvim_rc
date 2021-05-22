@@ -169,7 +169,7 @@ def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
 
 def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
     NPM_DIR.mkdir(parents=True, exist_ok=True)
-    packages_json = NPM_DIR / "packages.json"
+    packages_json = NPM_DIR / "package.json"
     package_lock = NPM_DIR / "package-lock.json"
 
     async def cont() -> SortOfMonoid:
