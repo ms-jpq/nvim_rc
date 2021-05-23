@@ -58,7 +58,7 @@ def _term_open(nvim: Nvim, *args: str, opts: TermOpts = {}) -> None:
         if args:
             ex, *rest = args
         else:
-            ex, rest = environ["SHELL"], ()
+            ex, rest = environ["SHELL"], []
         cmds = (which(ex), *rest)
         nvim.funcs.termopen(cmds, opts)
     nvim.command("startinsert")
