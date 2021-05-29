@@ -75,7 +75,7 @@
       maps:
         "<leader>z": "<cmd>COQnow<cr>"
   lua: |-
-    vim.o.completefunc = "COQ_omnifunc"
+    vim.o.completefunc = "COQomnifunc"
 
 - git:
     uri: https://github.com/junegunn/fzf
