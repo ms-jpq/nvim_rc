@@ -70,8 +70,12 @@
 - git:
     uri: https://github.com/ms-jpq/coq-nvim
     branch: bwaaak
+  keys:
+    - modes: n
+      maps:
+        "<leader>z": "<cmd>COQnow<cr>"
   lua: |-
-    -- vim.o.completefunc = "KoKomnifunc"
+    vim.o.completefunc = "COQ_omnifunc"
 
 - git:
     uri: https://github.com/junegunn/fzf
