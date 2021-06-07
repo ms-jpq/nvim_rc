@@ -97,5 +97,16 @@ def _kill_term_wins(nvim: Nvim) -> None:
             win_close(nvim, win=win)
 
 
-# TODO -- use WinClosed for 0.5
 autocmd("WinEnter") << f"lua {_kill_term_wins.name}()"
+
+
+@rpc(blocking=True)
+def _on_resized(nvim: Nvim) -> None:
+    wins = tuple(list_floatwins(nvim))
+    if wins:
+        for win in wins:
+            win_close(nvim, win=win)
+        toggle_floating(nvim)
+
+
+autocmd("VimResized") << f"lua {_on_resized.name}()"
