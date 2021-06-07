@@ -74,8 +74,6 @@
     - modes: n
       maps:
         "<leader>z": "<cmd>COQnow<cr>"
-  lua: |-
-    vim.o.completefunc = "COQomnifunc"
 
 - git:
     uri: https://github.com/junegunn/fzf
