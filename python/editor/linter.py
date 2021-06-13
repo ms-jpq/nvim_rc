@@ -15,6 +15,7 @@ from pynvim_pp.api import (
     buf_filetype,
     buf_get_lines,
     buf_get_option,
+    buf_linefeed,
     buf_name,
     cur_buf,
     get_cwd,
@@ -36,6 +37,7 @@ class BufContext:
     filename: str
     filetype: str
     tabsize: int
+    linefeed: str
     lines: Sequence[str]
 
 
@@ -45,9 +47,15 @@ def current_ctx(nvim: Nvim) -> Tuple[str, BufContext]:
     filename = buf_name(nvim, buf=buf)
     filetype = buf_filetype(nvim, buf=buf)
     tabsize: int = buf_get_option(nvim, buf=buf, key="tabstop")
+    linefeed = buf_linefeed(nvim, buf=buf)
     lines: Sequence[str] = buf_get_lines(nvim, buf=buf, lo=0, hi=-1)
     return cwd, BufContext(
-        buf=buf, filename=filename, filetype=filetype, tabsize=tabsize, lines=lines
+        buf=buf,
+        filename=filename,
+        filetype=filetype,
+        tabsize=tabsize,
+        linefeed=linefeed,
+        lines=lines,
     )
 
 

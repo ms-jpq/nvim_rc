@@ -86,7 +86,7 @@ async def _run(
 
                 saved = {win: pos for win, pos in it()}
 
-                lines = temp.read_text().splitlines()
+                lines = temp.read_text().split(ctx.linefeed)
                 buf_set_lines(nvim, buf=ctx.buf, lo=0, hi=-1, lines=lines)
 
                 for win, (row, col) in saved.items():
