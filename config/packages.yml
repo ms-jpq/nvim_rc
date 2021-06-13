@@ -68,7 +68,7 @@
         "<leader>v": "<cmd>CHADopen<cr>"
 
 - git:
-    uri: https://github.com/ms-jpq/coq.nvim
+    uri: https://github.com/ms-jpq/coq_nvim
     branch: bwaaak
   keys:
     - modes: n
