@@ -11,7 +11,7 @@ RT_BIN = RT_DIR / "bin"
 RT_PY = str(RT_BIN / "python3")
 
 
-REQUIREMENTS = str(TOP_LEVEL / "requirements.txt")
+REQUIREMENTS = TOP_LEVEL / "requirements.txt"
 INSTALL_SCRIPT = str(TOP_LEVEL / "init.py")
 
 LANG_ROOT = TOP_LEVEL / "locale"

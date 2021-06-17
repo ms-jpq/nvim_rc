@@ -18,7 +18,7 @@ from ..registery import keymap, rpc
 
 def _parse_comment_str(nvim: Nvim, buf: Buffer) -> Tuple[str, str]:
     comment_str: str = buf_get_option(nvim, buf=buf, key="commentstring")
-    assert len(comment_str.splitlines()) == 1
+    assert not comment_str or len(comment_str.splitlines()) == 1
     lhs, _, rhs = comment_str.partition("%s")
     return lhs, rhs
 
@@ -58,6 +58,7 @@ def _comm(
             yield None, "", "", ""
         else:
             significant = line[len(indent_f) : len(line) - len(indent_b)]
+
             is_comment = significant.startswith(lhs) and significant.endswith(rhs)
             added = indent_f + lhs + significant + rhs + indent_b[r:]
             stripped = indent_f + significant[l : len(significant) - r] + indent_b

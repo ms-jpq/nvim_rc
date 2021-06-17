@@ -7,6 +7,8 @@ from venv import EnvBuilder
 
 from .consts import REQUIREMENTS, RT_DIR, RT_PY, TOP_LEVEL
 
+_LOCK_FILE = RT_DIR / "requirements.lock"
+
 
 def parse_args() -> Namespace:
     parser = ArgumentParser()
@@ -24,6 +26,7 @@ def parse_args() -> Namespace:
 
 args = parse_args()
 command: Union[Literal["deps"], Literal["run"]] = args.command
+req = REQUIREMENTS.read_bytes()
 
 if command == "deps":
     deps: Sequence[str] = args.deps
@@ -46,9 +49,11 @@ if command == "deps":
                 "--upgrade",
                 "--force-reinstall",
                 "--requirement",
-                REQUIREMENTS,
+                str(REQUIREMENTS),
             )
         )
+
+        _LOCK_FILE.write_bytes(req)
 
     if not deps or "packages" in deps:
         if executable != RT_PY:
@@ -64,7 +69,13 @@ if command == "deps":
                 exit(code)
 
 elif command == "run":
+    try:
+        lock = _LOCK_FILE.read_bytes()
+    except Exception:
+        lock = b""
+
     assert executable == RT_PY
+    assert lock == req
 
     from pynvim import attach
     from pynvim_pp.client import run_client
@@ -82,3 +93,4 @@ elif command == "run":
 
 else:
     assert False
+
