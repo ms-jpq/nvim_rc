@@ -14,8 +14,7 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
     buf = win_get_buf(nvim, win=win)
 
     row, c = win_get_cursor(nvim, win=win)
-    lines = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
-    line = next(iter(lines))
+    line, *_ = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
     bline = line.encode()
 
     # position under cursor
@@ -48,3 +47,4 @@ keymap.o("iw") << f"<cmd>lua {_word.name}(true)<cr>"
 keymap.o("aw") << f"<cmd>lua {_word.name}(false)<cr>"
 keymap.v("iw") << f"<esc><cmd>lua {_word.name}(true)<cr>"
 keymap.v("aw") << f"<esc><cmd>lua {_word.name}(false)<cr>"
+

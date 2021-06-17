@@ -12,6 +12,9 @@
 "step join sep": |-
   " -> "
 
+"rename: ": |-
+  ✏️  :
+
 "grammar error": |-
   ⛔️ 语法错误 👉 ${text}
 
@@ -35,3 +38,4 @@
 
 "prettier succeeded": |-
   ✅ 美化成功 👉 ${prettiers}
+

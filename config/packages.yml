@@ -108,7 +108,6 @@
   keys:
     - modes: n
       maps:
-        "R": "<cmd>Lspsaga rename<cr>"
         "K": "<cmd>Lspsaga hover_doc<cr>"
         "H": "<cmd>Lspsaga preview_definition<cr>"
 

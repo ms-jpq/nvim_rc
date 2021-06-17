@@ -4,16 +4,43 @@ from shutil import which
 from typing import Any, Mapping, MutableMapping, Optional
 
 from pynvim import Nvim
-from pynvim_pp.api import get_cwd
-from pynvim_pp.lib import write
+from pynvim_pp.api import (
+    ask,
+    buf_get_lines,
+    cur_win,
+    get_cwd,
+    win_get_buf,
+    win_get_cursor,
+)
+from pynvim_pp.text_object import gen_split
 from std2.pickle import decode, encode
 from std2.types import never
 
 from ..config.lsp import LspAttrs, RootPattern, RPFallback, lsp_specs
 from ..registery import LANG, atomic, keymap, rpc
+from ..text_objects.word import UNIFIYING_CHARS
 
 keymap.n("gp") << "<cmd>lua vim.lsp.buf.definition()<cr>"
 keymap.n("gP") << "<cmd>lua vim.lsp.buf.references()<cr>"
+
+
+@rpc(blocking=True)
+def _rename(nvim: Nvim) -> None:
+    win = cur_win(nvim)
+    buf = win_get_buf(nvim, win=win)
+    row, col = win_get_cursor(nvim, win=win)
+    line, *_ = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
+    b_line = line.encode()
+    lhs, rhs = b_line[:col].decode(), b_line[col:].decode()
+    split = gen_split(lhs=lhs, rhs=rhs, unifying_chars=UNIFIYING_CHARS)
+    word = split.word_lhs + split.word_rhs
+    ans = ask(nvim, question=LANG("rename: "), default=word)
+
+    if ans:
+        nvim.lua.vim.lsp.buf.rename(ans)
+
+
+keymap.n("R") << f"<cmd>lua {_rename.name}()<cr>"
 
 
 @rpc(blocking=True)
@@ -102,3 +129,4 @@ for spec in lsp_specs:
         atomic.exec_lua(_LSP_INIT, args)
 
 atomic.command("doautoall Filetype")
+

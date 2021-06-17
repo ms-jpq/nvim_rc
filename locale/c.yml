@@ -12,6 +12,9 @@
 "step join sep": |-
   " -> "
 
+"rename: ": |-
+  ✏️  :
+
 "grammar error": |-
   ⛔️ Grammar Error 👉 ${text}
 
