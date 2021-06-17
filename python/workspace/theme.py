@@ -1,5 +1,5 @@
 from pynvim.api.nvim import Nvim
-from pynvim_pp.highlight import HLgroup, highlight
+from pynvim_pp.api import cur_win, win_set_option
 
 from ..registery import atomic, autocmd, rpc, settings
 
@@ -27,12 +27,14 @@ settings["guicursor"] = ""
 
 @rpc(blocking=True)
 def _hl_cursor(nvim: Nvim) -> None:
-    highlight(HLgroup("CursorLine", guibg="#f2d9fa")).commit(nvim)
+    win = cur_win(nvim)
+    win_set_option(nvim, win=win, key="winhighlight", val="CursorLine:Visual")
 
 
 @rpc(blocking=True)
 def _dehl_cursor(nvim: Nvim) -> None:
-    highlight(HLgroup("CursorLine", guibg="#f1f4f6")).commit(nvim)
+    win = cur_win(nvim)
+    win_set_option(nvim, win=win, key="winhighlight", val="")
 
 
 autocmd("InsertEnter") << f"lua {_hl_cursor.name}()"
@@ -47,3 +49,4 @@ def _hl_yank(nvim: Nvim) -> None:
 
 atomic.command("highlight HighlightedyankRegion cterm=reverse gui=reverse")
 autocmd("TextYankPost") << f"lua {_hl_yank.name}()"
+
