@@ -1,4 +1,4 @@
-from typing import Iterator, Optional, Sequence, Tuple
+from typing import Iterable, Iterator, Optional, Sequence, Tuple
 
 from pynvim import Nvim
 from pynvim.api.nvim import Buffer, Nvim
@@ -35,6 +35,13 @@ def _p_indent(line: str) -> str:
     return spaces
 
 
+def _p_indents(lines: Iterable[str]) -> Iterator[Tuple[str, str]]:
+    for line in lines:
+        enil = "".join(reversed(line))
+        indent_f, indent_b = _p_indent(line), "".join(reversed(_p_indent(enil)))
+        yield indent_f, indent_b
+
+
 def _comm(
     lhs: str, rhs: str, lines: Sequence[str]
 ) -> Iterator[Tuple[Optional[bool], str, str, str]]:
@@ -42,16 +49,16 @@ def _comm(
     assert lhs.lstrip() == lhs and rhs.rstrip() == rhs
     l, r = len(lhs), len(rhs)
 
+    indents = {front: back for front, back in _p_indents(lines)}
+    indent_f = min(sorted(indents.keys(), key=len))
+    indent_b = min(sorted(indents.values(), key=len))
+
     for line in lines:
         if not line:
             yield None, "", "", ""
         else:
-            enil = "".join(reversed(line))
-            indent_f, indent_b = _p_indent(line), "".join(reversed(_p_indent(enil)))
             significant = line[len(indent_f) : len(line) - len(indent_b)]
-
             is_comment = significant.startswith(lhs) and significant.endswith(rhs)
-
             added = indent_f + lhs + significant + rhs + indent_b[r:]
             stripped = indent_f + significant[l : len(significant) - r] + indent_b
 
@@ -102,3 +109,4 @@ def _comment_single(nvim: Nvim) -> None:
 
 
 keymap.n("gcc") << f"<cmd>lua {_comment_single.name}()<cr>"
+
