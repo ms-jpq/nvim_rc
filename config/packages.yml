@@ -131,15 +131,6 @@
     autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
 
 - git:
-    uri: https://github.com/sainnhe/edge
-  vals:
-    edge_style: neon
-    edge_menu_selection_background: purple
-  viml: |-
-    set background=light
-    colorscheme edge
-
-- git:
     uri: https://github.com/tpope/vim-repeat
 
 - git:
@@ -159,11 +150,6 @@
 
 - git:
     uri: https://github.com/mhinz/vim-signify
-
-- git:
-    uri: https://github.com/sheerun/vim-polyglot
-  viml: |-
-    let g:polyglot_disabled = ['sensible']
 
 - git:
     uri: https://github.com/jpalardy/vim-slime
@@ -195,3 +181,4 @@
     if go then
       colourizer.setup()
     end
+
