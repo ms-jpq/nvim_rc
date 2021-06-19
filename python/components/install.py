@@ -111,7 +111,7 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
 
             async def cont(spec: GitPkgSpec) -> SortOfMonoid:
                 async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
-                    location = VIM_DIR / p_name(spec.uri)
+                    location = p_name(spec.uri)
                     if location.is_dir():
                         p1 = await call(
                             cmd, "pull", "--recurse-submodules", cwd=location
@@ -295,3 +295,4 @@ def maybe_install(nvim: Nvim) -> None:
 
         if ans == 1:
             open_term(nvim, executable, INSTALL_SCRIPT, "deps", "packages")
+
