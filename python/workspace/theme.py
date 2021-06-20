@@ -24,6 +24,9 @@ settings["cursorline"] = True
 # constant cursor styling
 settings["guicursor"] = ""
 
+# light background
+settings["background"] = "light"
+
 
 @rpc(blocking=True)
 def _hl_cursor(nvim: Nvim) -> None:
