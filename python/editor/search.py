@@ -1,6 +1,5 @@
 from ..registery import keymap, settings
 
-
 # find result during search
 settings["incsearch"] = True
 # search results shown on side
@@ -26,3 +25,4 @@ keymap.n("N") << "N"
 # use no magic
 keymap.nv("/", silent=False) << r"/\V"
 keymap.nv("?", silent=False) << r"?\V"
+

@@ -145,3 +145,4 @@ async def _run_linter(nvim: Nvim) -> None:
 
 
 keymap.n("M") << f"<cmd>lua {_run_linter.name}()<cr>"
+

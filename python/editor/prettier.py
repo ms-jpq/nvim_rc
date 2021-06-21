@@ -117,3 +117,4 @@ async def run_fmt(nvim: Nvim) -> None:
 
 
 keymap.n("gq", nowait=True) << f"<cmd>lua {run_fmt.name}()<cr>"
+
