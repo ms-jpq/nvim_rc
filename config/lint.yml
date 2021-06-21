@@ -34,9 +34,9 @@
         else
           PLATFORM="$LINUX"
         fi
-        get "${URI_ROOT}/${PLATFORM}" "$(mktemp)" | unpack - "$TMP_DIR"
-        mv "${TMP_DIR}/${BIN_NAME}"*"/${BIN_NAME}" "$BIN_PATH"
-        chmod +x "$BIN_PATH"
+        get -- "$URI_ROOT/$PLATFORM" "$(mktemp)" | unpack - -- "$TMP_DIR"
+        mv -- "$TMP_DIR/$BIN_NAME"*"/$BIN_NAME" "$BIN_PATH"
+        chmod +x -- "$BIN_PATH"
 
 - bin: hadolint
   type: stream
@@ -55,11 +55,11 @@
 
         if [[ "$OS" == 'Darwin' ]]
         then
-          get "$MAC_OS" --cd "$TMP_DIR" | unpack - "$TMP_DIR"
-          mv "${TMP_DIR}/${BIN_NAME}/"*"/bin/${BIN_NAME}" "$BIN_PATH"
+          get --cd "$TMP_DIR" -- "$MAC_OS" | unpack - -- "$TMP_DIR"
+          mv -- "$TMP_DIR/$BIN_NAME/"*"/bin/$BIN_NAME" "$BIN_PATH"
         else
-          get "$LINUX" "$BIN_PATH"
-          chmod +x "$BIN_PATH"
+          get -- "$LINUX" "$BIN_PATH"
+          chmod +x -- "$BIN_PATH"
         fi
 
 - bin: markdownlint
