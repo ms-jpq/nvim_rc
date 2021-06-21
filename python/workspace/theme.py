@@ -24,7 +24,6 @@ settings["cursorline"] = True
 # constant cursor styling
 settings["guicursor"] = ""
 
-atomic.command("colorscheme zellner")
 # light background
 settings["background"] = "light"
 

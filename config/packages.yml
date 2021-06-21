@@ -104,6 +104,12 @@
     vim.env.FZF_DEFAULT_OPTS = new_opts
 
 - git:
+    uri: https://github.com/endel/vim-github-colorscheme
+  viml: |-
+    colorscheme github
+    set background=light
+
+- git:
     uri: https://github.com/glepnir/lspsaga.nvim
   keys:
     - modes: n
