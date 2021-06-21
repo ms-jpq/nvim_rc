@@ -15,7 +15,7 @@ from pynvim_pp.api import (
 )
 from pynvim_pp.operators import p_indent, writable
 
-from ..registery import autocmd, rpc, settings
+from ..registery import autocmd, rpc, settings, keymap
 
 # join only add 1 space
 settings["nojoinspaces"] = True
@@ -105,4 +105,5 @@ def _trailing_ws(nvim: Nvim) -> None:
         _set_trimmed(nvim, win=win, buf=buf)
 
 
-autocmd("CursorHold") << f"silent! undojoin | lua {_trailing_ws.name}()"
+keymap.n("<leader>a") << f"<cmd>lua {_trailing_ws.name}()<cr>"
+
