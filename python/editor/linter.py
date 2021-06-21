@@ -67,7 +67,7 @@ def arg_subst(args: Iterable[str], ctx: BufContext, filename: str) -> Sequence[s
 @contextmanager
 def make_temp(path: Path) -> Iterator[Path]:
     prefix, suffix = f"{path.stem}_", f"_{path.suffix}"
-    fd, temp = mkstemp(prefix=prefix, suffix=suffix, dir=path.parent)
+    fd, temp = mkstemp(prefix=prefix, suffix=suffix)
     close(fd)
     new_path = Path(temp)
     try:
