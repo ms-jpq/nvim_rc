@@ -80,8 +80,8 @@
   install:
     script:
       env:
-        MAC_URI: https://github.com/latex-lsp/texlab/releases/download/v2.2.2/texlab-x86_64-macos.tar.gz
-        LINUX_URI: https://github.com/latex-lsp/texlab/releases/download/v2.2.2/texlab-x86_64-linux.tar.gz
+        MAC_URI: https://github.com/latex-lsp/texlab/releases/download/v3.2.0/texlab-x86_64-macos.tar.gz
+        LINUX_URI: https://github.com/latex-lsp/texlab/releases/download/v3.2.0/texlab-x86_64-linux.tar.gz
       body: |-
         set -eu
         set -o pipefail
