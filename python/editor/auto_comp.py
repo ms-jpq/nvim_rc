@@ -12,7 +12,7 @@ def _update_pumheight(nvim: Nvim) -> None:
     nvim.options["pumheight"] = max(round(lines * 0.3), 15)
 
 
-atomic.call_function("luaeval", (f"{_update_pumheight.name}()", ()))
+atomic.exec_lua(f"{_update_pumheight.name}()", ())
 autocmd("VimResized") << f"lua {_update_pumheight.name}()"
 
 
