@@ -23,6 +23,15 @@ from ..text_objects.word import UNIFIYING_CHARS
 keymap.n("gp") << "<cmd>lua vim.lsp.buf.definition()<cr>"
 keymap.n("gP") << "<cmd>lua vim.lsp.buf.references()<cr>"
 
+keymap.n("H") << "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>"
+keymap.n("K") << "<cmd>lua vim.lsp.buf.hover()<cr>"
+
+keymap.n("gw") << "<cmd>lua vim.lsp.buf.code_action()<cr>"
+keymap.v("gw") << "<cmd>lua vim.lsp.buf.range_code_action()<cr>"
+
+keymap.v("g[") << "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>"
+keymap.v("g]") << "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>"
+
 
 @rpc(blocking=True)
 def _rename(nvim: Nvim) -> None:

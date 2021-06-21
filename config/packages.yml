@@ -110,27 +110,6 @@
     set background=light
 
 - git:
-    uri: https://github.com/glepnir/lspsaga.nvim
-  keys:
-    - modes: n
-      maps:
-        "K": "<cmd>Lspsaga hover_doc<cr>"
-        "H": "<cmd>Lspsaga preview_definition<cr>"
-
-        # "<c-f>": "<cmd>lua require'lspsaga.action'.smart_scroll_with_saga(1)<cr>"
-        # "<c-b>": "<cmd>lua require'lspsaga.action'.smart_scroll_with_saga(-1)<cr>"
-
-        "L": "<cmd>Lspsaga show_line_diagnostics<cr>"
-        "g[": "<cmd>Lspsaga diagnostic_jump_prev<cr>"
-        "g]": "<cmd>Lspsaga diagnostic_jump_next<cr>"
-
-        "go": "<cmd>Lspsaga signature_help<cr>"
-
-        "gh": "<cmd>Lspsaga lsp_finder<cr>"
-        "gw": "<cmd>Lspsaga code_action<cr>"
-        "gW": "<cmd>Lspsaga range_code_action<cr>"
-
-- git:
     uri: https://github.com/kosayoda/nvim-lightbulb
   viml: |-
     autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
