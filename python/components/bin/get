@@ -3,8 +3,7 @@
 from argparse import ArgumentParser, Namespace
 from http.client import HTTPResponse
 from os import chdir
-from os.path import basename
-from pathlib import Path, PurePath
+from pathlib import Path, PurePath, PurePosixPath
 from typing import Optional, cast
 from urllib.parse import urlsplit
 from urllib.request import build_opener
@@ -33,7 +32,7 @@ def main() -> None:
 
     src: str = args.src
     parsed = urlsplit(src)
-    name = basename(parsed.path)
+    name = PurePosixPath(parsed.path).name
     suffix = "".join(PurePath(name).suffixes)
     dest = Path(args.dest if args.dest else name).with_suffix(suffix).resolve()
 
@@ -43,3 +42,4 @@ def main() -> None:
 
 
 main()
+

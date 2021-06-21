@@ -94,8 +94,8 @@
         fi
 
         get "$URI" "$(mktemp)" | unpack - "$TMP_DIR"
-        mv "$TMP_DIR/$BIN_NAME" "$BIN_PATH"
-        chmod +x "$BIN_PATH"
+        mv -- "$TMP_DIR/$BIN_NAME" "$BIN_PATH"
+        chmod +x -- "$BIN_PATH"
 
 - server: bashls
   bin: bash-language-server
@@ -139,9 +139,10 @@
           URI="$LINUX"
         fi
 
-        gzip --decompress -- <(get "$URI" "$(mktemp)")
-        mv "$TMP_DIR/$BIN_NAME" "$BIN_PATH"
-        chmod +x "$BIN_PATH"
+        T="$(get "$URI" --cd "$TMP_DIR")"
+        gzip --decompress -- "$T"
+        mv -- "$TMP_DIR/$BIN_NAME"* "$BIN_PATH"
+        chmod +x -- "$BIN_PATH"
 
 - server: gopls
   bin: gopls
