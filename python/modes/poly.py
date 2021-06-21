@@ -1,8 +1,8 @@
 from ..registery import keymap
 
 # {} scroll fixed lines
-keymap.nv("{") << ("<up>" * 5 + "zz")
-keymap.nv("}") << ("<down>" * 5 + "zz")
+keymap.nv("{") << ("<up>" * 5)
+keymap.nv("}") << ("<down>" * 5)
 
 # add emacs key binds
 keymap.i("<c-a>") << "<c-o>^"
@@ -32,10 +32,10 @@ keymap.nv("P") << "gP"
 
 
 # centre on up down
-keymap.nv("<c-u>") << "<c-u>zz"
-keymap.nv("<c-d>") << "<c-d>zz"
-keymap.nv("<c-f>") << "<c-f>zz"
-keymap.nv("<c-b>") << "<c-b>zz"
+keymap.nv("<c-u>") << "<c-u>"
+keymap.nv("<c-d>") << "<c-d>"
+keymap.nv("<c-f>") << "<c-f>"
+keymap.nv("<c-b>") << "<c-b>"
 
 
 # emacs arrow movements

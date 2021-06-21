@@ -6,7 +6,7 @@ settings["incsearch"] = True
 # search results shown on side
 settings["inccommand"] = "nosplit"
 # use ripgrep
-settings["grepprg"] = "rg\\ --vimgrep"
+settings["grepprg"] = r"rg\ --vimgrep"
 
 
 # clear hlsearch result
@@ -14,13 +14,13 @@ keymap.n("<leader>i") << "<cmd>nohlsearch<cr>"
 
 
 # search without moving
-keymap.n("*") << "*Nzz"
-keymap.n("#") << "#Nzz"
-keymap.n("g*") << "g*Nzz"
-keymap.n("g#") << "g#Nzz"
+keymap.n("*") << "*N"
+keymap.n("#") << "#N"
+keymap.n("g*") << "g*N"
+keymap.n("g#") << "g#N"
 # centre on search result
-keymap.n("n") << "nzz"
-keymap.n("N") << "Nzz"
+keymap.n("n") << "n"
+keymap.n("N") << "N"
 
 
 # use no magic
