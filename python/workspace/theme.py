@@ -29,19 +29,19 @@ settings["background"] = "light"
 
 
 @rpc(blocking=True)
-def _hl_cursor(nvim: Nvim) -> None:
+def _ins_cursor(nvim: Nvim) -> None:
     win = cur_win(nvim)
-    win_set_option(nvim, win=win, key="winhighlight", val="CursorLine:Visual")
+    win_set_option(nvim, win=win, key="cursorline", val=False)
 
 
 @rpc(blocking=True)
-def _dehl_cursor(nvim: Nvim) -> None:
+def _norm_cursor(nvim: Nvim) -> None:
     win = cur_win(nvim)
-    win_set_option(nvim, win=win, key="winhighlight", val="")
+    win_set_option(nvim, win=win, key="cursorline", val=True)
 
 
-autocmd("InsertEnter") << f"lua {_hl_cursor.name}()"
-autocmd("InsertLeave") << f"lua {_dehl_cursor.name}()"
+autocmd("InsertEnter") << f"lua {_ins_cursor.name}()"
+autocmd("InsertLeave") << f"lua {_norm_cursor.name}()"
 
 
 # highlight yank
