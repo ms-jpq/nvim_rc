@@ -7,7 +7,7 @@ from pynvim.api.nvim import Nvim
 from pynvim_pp.api import buf_get_lines, cur_buf
 from pynvim_pp.lib import async_call, go
 from pynvim_pp.operators import VisualTypes, operator_marks
-from std2.lex import escape_with_prefix
+from std2.lex import escape as lex_esc
 
 from ..registery import keymap, rpc
 
@@ -21,7 +21,7 @@ def _magic_escape(text: str) -> str:
         "\r": "\\",
         "\t": "\\",
     }
-    return "".join(escape_with_prefix(text, escape=rules))
+    return "".join(lex_esc(text, replace=False, escape=rules))
 
 
 def _hl_text(nvim: Nvim, text: str) -> None:
@@ -99,3 +99,4 @@ keymap.v("gt") << f"<esc><cmd>lua {_op_sd.name}()<cr>"
 
 # very magic
 keymap.n("gT", silent=False) << ":%s/\\v//g<left><left><left>"
+
