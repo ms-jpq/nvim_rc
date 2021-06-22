@@ -104,9 +104,9 @@
     vim.env.FZF_DEFAULT_OPTS = new_opts
 
 - git:
-    uri: https://github.com/endel/vim-github-colorscheme
+    uri: https://github.com/rakr/vim-one
   viml: |-
-    colorscheme github
+    colorscheme one
     set background=light
 
 - git:
