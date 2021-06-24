@@ -44,6 +44,9 @@
 
 - server: jsonls
   bin: vscode-json-languageserver
+  args:
+    - vscode-json-languageserver
+    - --stdio
   install:
     npm:
       - vscode-json-languageserver
