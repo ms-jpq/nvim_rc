@@ -37,9 +37,10 @@ def _p_indent(line: str) -> str:
 
 def _p_indents(lines: Iterable[str]) -> Iterator[Tuple[str, str]]:
     for line in lines:
-        enil = "".join(reversed(line))
-        indent_f, indent_b = _p_indent(line), "".join(reversed(_p_indent(enil)))
-        yield indent_f, indent_b
+        if line:
+            enil = "".join(reversed(line))
+            indent_f, indent_b = _p_indent(line), "".join(reversed(_p_indent(enil)))
+            yield indent_f, indent_b
 
 
 def _comm(
@@ -50,8 +51,8 @@ def _comm(
     l, r = len(lhs), len(rhs)
 
     indents = {front: back for front, back in _p_indents(lines)}
-    indent_f = min(sorted(indents.keys(), key=len))
-    indent_b = min(sorted(indents.values(), key=len))
+    indent_f = next(iter(sorted(indents.keys(), key=len)), "")
+    indent_b = next(iter(sorted(indents.values(), key=len)), "")
 
     for line in lines:
         if not line:
