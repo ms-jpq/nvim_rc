@@ -111,6 +111,8 @@
 
 - git:
     uri: https://github.com/folke/trouble.nvim
+  lua: |-
+    require("trouble").setup{ icons=false }
 
 - git:
     uri: https://github.com/kosayoda/nvim-lightbulb
