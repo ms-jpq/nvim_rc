@@ -45,7 +45,6 @@
 - server: jsonls
   bin: vscode-json-languageserver
   args:
-    - vscode-json-languageserver
     - --stdio
   install:
     npm:
@@ -181,12 +180,16 @@
 
 - server: html
   bin: html-languageserver
+  args:
+    - --stdio
   install:
     npm:
       - vscode-html-languageserver-bin
 
 - server: cssls
   bin: css-languageserver
+  args:
+    - --stdio
   install:
     npm:
       - vscode-css-languageserver-bin
