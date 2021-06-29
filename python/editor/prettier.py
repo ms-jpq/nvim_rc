@@ -1,5 +1,4 @@
 from asyncio import gather
-from os import linesep
 from pathlib import Path
 from shutil import which
 from typing import Iterable, Iterator, Tuple
@@ -49,14 +48,14 @@ async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> 
                 return ""
             else:
                 heading = LANG("proc failed", code=proc.code, args=arg_info)
-                print_out = linesep.join((heading, proc.err))
+                print_out = ctx.linefeed.join((heading, proc.err))
                 return print_out
 
 
 async def _run(
     nvim: Nvim, ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: str
 ) -> None:
-    body = linesep.join(ctx.lines).encode()
+    body = ctx.linefeed.join(ctx.lines).encode()
     path = Path(ctx.filename)
     with make_temp(path) as temp:
         temp.write_bytes(body)
@@ -67,7 +66,7 @@ async def _run(
             )
             if err
         ]
-        errors = (linesep * 2).join(errs)
+        errors = (ctx.linefeed * 2).join(errs)
         if errors:
             await gather(
                 awrite(nvim, LANG("prettier failed")),
