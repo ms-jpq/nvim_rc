@@ -4,7 +4,7 @@ nnoremap <silent> QQ <cmd>quitall!<cr>
 vnoremap <silent> Q  <nop>
 vnoremap <silent> QQ <cmd>quitall!<cr>
 
-"autocmd BufReadPre,BufNewFile * let b:did_ftplugin = 1
+autocmd BufReadPre,BufNewFile * let b:did_ftplugin = 1
 command! -nargs=0 FTdetect filetype detect
 filetype on
 set nomodeline
@@ -20,4 +20,4 @@ function Ndeps()
 endfunction
 command! Ndeps call Ndeps()
 
-call luaeval('require("init")(...)', [s:top_level])
+call luaeval('require("_init")(...)', [s:top_level])
