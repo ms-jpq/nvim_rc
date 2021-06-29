@@ -3,7 +3,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime
 from itertools import chain
-from os import close, linesep
+from os import close
 from pathlib import Path
 from shutil import which
 from tempfile import mkstemp
@@ -103,14 +103,14 @@ async def _linter_output(
                 heading = LANG("proc succeeded", args=arg_info)
             else:
                 heading = LANG("proc failed", code=proc.code, args=arg_info)
-            print_out = linesep.join((heading, proc.out.decode(), proc.err))
+            print_out = ctx.linefeed.join((heading, proc.out.decode(), proc.err))
             return print_out
 
 
 async def _run(
     nvim: Nvim, ctx: BufContext, attrs: Iterable[LinterAttrs], cwd: str
 ) -> None:
-    body = linesep.join(ctx.lines).encode()
+    body = ctx.linefeed.join(ctx.lines).encode()
     path = Path(ctx.filename)
     with make_temp(path) as temp:
         temp.write_bytes(body)
@@ -122,7 +122,7 @@ async def _run(
         )
 
     now = datetime.now().strftime(DATE_FMT)
-    preview = (linesep * 2).join(chain((now,), outputs))
+    preview = (ctx.linefeed * 2).join(chain((now,), outputs))
     await set_preview_content(nvim, text=preview)
 
 
