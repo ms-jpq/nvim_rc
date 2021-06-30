@@ -37,8 +37,8 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
         mark1 = (row, c_lhs)
         mark2 = (row, c_rhs)
     else:
-        mark1 = (row, c_lhs - 1)
-        mark2 = (row, c_rhs + 1)
+        mark1 = (row, max(0, c_lhs - 1))
+        mark2 = (row, min(len(bline), c_rhs + 1))
 
     set_visual_selection(nvim, win=win, mode="v", mark1=mark1, mark2=mark2)
 
