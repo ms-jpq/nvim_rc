@@ -29,8 +29,8 @@ keymap.n("K") << "<cmd>lua vim.lsp.buf.hover()<cr>"
 keymap.n("gw") << "<cmd>lua vim.lsp.buf.code_action()<cr>"
 keymap.v("gw") << "<cmd>lua vim.lsp.buf.range_code_action()<cr>"
 
-keymap.v("g[") << "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>"
-keymap.v("g]") << "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>"
+keymap.n("<c-p>") << "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>"
+keymap.n("<c-n>") << "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>"
 
 
 @rpc(blocking=True)
