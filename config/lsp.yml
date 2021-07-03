@@ -95,7 +95,7 @@
           URI="$LINUX_URI"
         fi
 
-        get "$URI" "$(mktemp)" | unpack - "$TMP_DIR"
+        get "$URI" "$(mktemp)" | unpack - -- "$TMP_DIR"
         mv -- "$TMP_DIR/$BIN_NAME" "$BIN_PATH"
         chmod +x -- "$BIN_PATH"
 
@@ -194,6 +194,20 @@
     npm:
       - vscode-css-languageserver-bin
 
+- server: tailwindcss-language-server
+  bin: tailwindcss-language-server
+  install:
+    script:
+      required:
+        - git
+      env:
+        URI: https://github.com/tailwindlabs/tailwindcss-intellisense/releases/download/v0.6.12/vscode-tailwindcss-0.6.12.vsix
+      body: |-
+        set -eu
+        set -o pipefail
+
+        get "$URI" | unpack - -- "$TMP_DIR"
+
 - server: graphql
   bin: graphql-lsp
   filetypes:
@@ -231,7 +245,6 @@
   install:
     npm:
       - vim-language-server
-
 # - server: sumneko_lua
 #   bin: lua-ls
 #   install:
