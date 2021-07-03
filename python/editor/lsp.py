@@ -120,7 +120,7 @@ def _encode_spec(spec: LspAttrs) -> Mapping[str, Any]:
     if spec.args is not None:
         config["cmd"] = (spec.bin, *spec.args)
     if spec.filetypes:
-        config["filetypes"] = spec.filetypes
+        config["filetypes"] = tuple(spec.filetypes)
     if spec.init_options:
         config["init_options"] = spec.init_options
     if spec.settings:
