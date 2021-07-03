@@ -13,7 +13,7 @@ from pynvim_pp.api import (
     win_get_cursor,
 )
 from pynvim_pp.text_object import gen_split
-from std2.pickle import decode, encode
+from std2.pickle import new_decoder, new_encoder
 from std2.types import never
 
 from ..config.lsp import LspAttrs, RootPattern, RPFallback, lsp_specs
@@ -52,9 +52,12 @@ def _rename(nvim: Nvim) -> None:
 keymap.n("R") << f"<cmd>lua {_rename.name}()<cr>"
 
 
+_DECODER = new_decoder(Optional[RootPattern])
+
+
 @rpc(blocking=True)
 def _find_root(nvim: Nvim, _pattern: Any, filename: str, bufnr: int) -> Optional[str]:
-    pattern: Optional[RootPattern] = decode(Optional[RootPattern], _pattern)
+    pattern: Optional[RootPattern] = _DECODER(_pattern)
     path = Path(filename)
 
     if not pattern:
@@ -132,6 +135,8 @@ def _encode_spec(spec: LspAttrs) -> Mapping[str, Any]:
     return config
 
 
+_ENCODER = new_encoder(Optional[RootPattern])
+
 for spec in lsp_specs:
     if which(spec.bin):
         config = _encode_spec(spec)
@@ -139,8 +144,8 @@ for spec in lsp_specs:
             _find_root.name,
             _on_attach.name,
             spec.server,
-            encode(config),
-            encode(spec.root),
+            config,
+            _ENCODER(spec.root),
         )
         atomic.exec_lua(_LSP_INIT, args)
 

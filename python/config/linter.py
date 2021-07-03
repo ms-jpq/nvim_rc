@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import AbstractSet, Sequence
 
-from std2.pickle import decode
+from std2.pickle import new_decoder
 from yaml import safe_load
 
 from ..consts import CONF_LINT
@@ -25,4 +25,5 @@ class LinterAttrs:
 
 
 LinterSpecs = Sequence[LinterAttrs]
-linter_specs: LinterSpecs = decode(LinterSpecs, safe_load(CONF_LINT.open()))
+linter_specs: LinterSpecs = new_decoder(LinterSpecs)(safe_load(CONF_LINT.open()))
+

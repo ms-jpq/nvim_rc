@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, AbstractSet, Mapping, Optional, Sequence
+from typing import AbstractSet, Any, Mapping, Optional, Sequence
 
-from std2.pickle import decode
+from std2.pickle import new_decoder
 from yaml import safe_load
 
 from ..consts import CONF_LSP
@@ -36,4 +36,5 @@ class LspAttrs:
 
 
 LspSpecs = Sequence[LspAttrs]
-lsp_specs: LspSpecs = decode(LspSpecs, safe_load(CONF_LSP.open()))
+lsp_specs: LspSpecs = new_decoder(LspSpecs)(safe_load(CONF_LSP.open()))
+

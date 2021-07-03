@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import Any, Mapping, Optional, Sequence
 
 from pynvim_pp.keymap import KeymapOpts
-from std2.pickle import decode
+from std2.pickle import new_decoder
 from yaml import safe_load
 
 from ..consts import CONF_PKGS
@@ -33,4 +33,5 @@ class PkgAttrs:
 
 
 PkgSpecs = Sequence[PkgAttrs]
-pkg_specs: PkgSpecs = decode(PkgSpecs, safe_load(CONF_PKGS.open()))
+pkg_specs: PkgSpecs = new_decoder(PkgSpecs)(safe_load(CONF_PKGS.open()))
+

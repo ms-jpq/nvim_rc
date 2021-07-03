@@ -2,7 +2,7 @@ from locale import getdefaultlocale
 from string import Template
 from typing import Mapping, MutableMapping, Optional, Union
 
-from std2.pickle.decoder import decode
+from std2.pickle.decoder import new_decoder
 from yaml import safe_load
 
 from ..consts import DEFAULT_LANG, LANG_ROOT
@@ -38,5 +38,8 @@ def load(code: Optional[str]) -> Lang:
         else (LANG_ROOT / DEFAULT_LANG).with_suffix(".yml")
     )
 
-    specs: Mapping[str, str] = decode(Mapping[str, str], safe_load(yml_path.open()))
+    specs: Mapping[str, str] = new_decoder(Mapping[str, str])(
+        safe_load(yml_path.open())
+    )
     return Lang(specs=specs)
+

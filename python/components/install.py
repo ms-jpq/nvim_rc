@@ -1,10 +1,10 @@
 from asyncio.tasks import as_completed
-from datetime import datetime, timezone
 from itertools import chain
 from json import dumps, loads
 from os import environ, linesep, pathsep, uname
 from shutil import get_terminal_size, rmtree, which
 from sys import executable, stderr
+from time import time
 from typing import (
     AsyncIterator,
     Awaitable,
@@ -18,8 +18,6 @@ from typing import (
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import ask_mc
 from std2.asyncio.subprocess import ProcReturn, call
-from std2.pickle import DecodeError, decode, encode
-from std2.pickle.coders import datetime_str_decoder, datetime_str_encoder
 
 from ..config.fmt import fmt_specs
 from ..config.install import ScriptSpec
@@ -276,13 +274,14 @@ def maybe_install(nvim: Nvim) -> None:
     UPDATE_LOG.parent.mkdir(parents=True, exist_ok=True)
     try:
         coded = UPDATE_LOG.read_text()
-        before: datetime = decode(datetime, coded, decoders=(datetime_str_decoder,))
-    except (FileNotFoundError, DecodeError):
-        before = datetime(year=1949, month=9, day=21, tzinfo=timezone.utc)
+    except FileNotFoundError:
+        before = 0.0
+    else:
+        before = float(coded)
 
-    now = datetime.now(tz=timezone.utc)
+    now = time()
     diff = now - before
-    if diff.days > 7:
+    if diff > (7 * 24 * 3600):
         ans = ask_mc(
             nvim,
             question=LANG("update?"),
@@ -290,7 +289,7 @@ def maybe_install(nvim: Nvim) -> None:
             answer_key={1: 1, 2: 2},
         )
         if ans:
-            coded = encode(now, encoders=(datetime_str_encoder,))
+            coded = str(now)
             UPDATE_LOG.write_text(coded)
 
         if ans == 1:
