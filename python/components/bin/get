@@ -21,6 +21,7 @@ def _parse_args() -> Namespace:
     parser.add_argument("dest", nargs="?", default=None)
     parser.add_argument("--cd", type=Path, default=None)
     parser.add_argument("-t", "--timeout", type=float, default=60.0)
+    parser.add_argument("--type")
     return parser.parse_args()
 
 
@@ -33,7 +34,7 @@ def main() -> None:
     src: str = args.src
     parsed = urlsplit(src)
     name = PurePosixPath(parsed.path).name
-    suffix = "".join(PurePath(name).suffixes)
+    suffix = args.type or "".join(PurePath(name).suffixes)
     dest = Path(args.dest if args.dest else name).with_suffix(suffix).resolve()
 
     payload = _fetch(src, timeout=args.timeout)

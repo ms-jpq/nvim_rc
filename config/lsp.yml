@@ -206,7 +206,7 @@
         set -eu
         set -o pipefail
 
-        get "$URI" | unpack - -- "$TMP_DIR"
+        get --type '.zip' "$URI" | unpack - -- "$TMP_DIR"
 
 - server: graphql
   bin: graphql-lsp
