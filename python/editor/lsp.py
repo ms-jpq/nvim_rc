@@ -54,29 +54,32 @@ keymap.n("R") << f"<cmd>lua {_rename.name}()<cr>"
 
 @rpc(blocking=True)
 def _find_root(nvim: Nvim, _pattern: Any, filename: str, bufnr: int) -> Optional[str]:
-    pattern: RootPattern = decode(RootPattern, _pattern)
+    pattern: Optional[RootPattern] = decode(Optional[RootPattern], _pattern)
     path = Path(filename)
 
-    for parent in path.parents:
-        for member in parent.iterdir():
-            name = member.name
-            if name in pattern.exact:
-                return str(parent)
-            else:
-                for glob in pattern.glob:
-                    if fnmatch(name, glob):
-                        return str(parent)
+    if not pattern:
+        return get_cwd(nvim)
     else:
-        if pattern.fallback is RPFallback.none:
-            return None
-        elif pattern.fallback is RPFallback.cwd:
-            return get_cwd(nvim)
-        elif pattern.fallback is RPFallback.home:
-            return str(Path.home())
-        elif pattern.fallback is RPFallback.parent:
-            return str(path.parent)
+        for parent in path.parents:
+            for member in parent.iterdir():
+                name = member.name
+                if name in pattern.exact:
+                    return str(parent)
+                else:
+                    for glob in pattern.glob:
+                        if fnmatch(name, glob):
+                            return str(parent)
         else:
-            never(pattern)
+            if pattern.fallback is RPFallback.none:
+                return None
+            elif pattern.fallback is RPFallback.cwd:
+                return get_cwd(nvim)
+            elif pattern.fallback is RPFallback.home:
+                return str(Path.home())
+            elif pattern.fallback is RPFallback.parent:
+                return str(path.parent)
+            else:
+                never(pattern)
 
 
 @rpc(blocking=True)
