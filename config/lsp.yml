@@ -194,7 +194,7 @@
     npm:
       - vscode-css-languageserver-bin
 
-- server: tailwindcss-language-server
+- server: tailwindcss
   bin: tailwindcss-language-server
   install:
     script:
