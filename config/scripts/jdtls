@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set -eu
+set -o pipefail
+
+
+export JAR=''
+
+LIB="$(dirname "$(dirname "$0")")/jdtls"
+OS="$(uname | tr '[:upper:]' '[:lower:]')"
+JDTLS_CONFIG='$TOP_LV/jdtls'
+
+
+ARGS=(
+  -Declipse.application=org.eclipse.jdt.ls.core.id1
+  -Dosgi.bundles.defaultStartLevel=4
+  -Declipse.product=org.eclipse.jdt.ls.core.product
+  -Dlog.protocol=true
+  -Dlog.level=ALL
+  -Xms1g
+  -Xmx2G
+  -jar
+  "$JAR"
+  -configuration
+  "$JDTLS_CONFIG"
+  -data
+  "$WORKSPACE"
+  --add-modules=ALL-SYSTEM
+  '--add-opens java.base/java.util=ALL-UNNAMED'
+  '--add-opens java.base/java.lang=ALL-UNNAMED'
+  )
+
+
+# exec java "${ARGS[@]}"
+echo "${ARGS[*]}"

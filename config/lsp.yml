@@ -216,7 +216,7 @@
       - vim-language-server
 
 - server: jdtls
-  bin: java
+  bin: jdtls
   install:
     script:
       env:
