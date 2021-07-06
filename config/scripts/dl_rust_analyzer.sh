@@ -12,6 +12,6 @@ else
 fi
 
 gzip --decompress --force -- "$(get "$URI")"
-mv -- './rust_analyzer-'* "$BIN"
+mv -- './rust-analyzer-'* "$BIN"
 chmod +x -- "$BIN"
 
