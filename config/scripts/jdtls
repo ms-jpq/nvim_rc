@@ -4,12 +4,13 @@ set -eu
 set -o pipefail
 
 
-export JAR=''
-
-LIB="$(dirname "$(dirname "$0")")/jdtls"
+LIB="$(dirname "$(dirname "$(dirname "$PWD/$0")")")/lib/jdtls"
 OS="$(uname | tr '[:upper:]' '[:lower:]')"
-JDTLS_CONFIG='$TOP_LV/jdtls'
+EXE="$(printf '%s' 'org.eclipse.equinox.launcher_'*'.jar')"
 
+export JAR="$LIB/plugin/$EXE"
+export WORKSPACE="${WORKSPACE:="$PWD"}"
+export GRADLE_HOME="$(which gradle | rg --color=never --passthru --replace '' -- '/bin/gradle$')"
 
 ARGS=(
   -Declipse.application=org.eclipse.jdt.ls.core.id1
@@ -22,7 +23,7 @@ ARGS=(
   -jar
   "$JAR"
   -configuration
-  "$JDTLS_CONFIG"
+  "$LIB/config_$OS"
   -data
   "$WORKSPACE"
   --add-modules=ALL-SYSTEM
@@ -31,5 +32,5 @@ ARGS=(
   )
 
 
-# exec java "${ARGS[@]}"
-echo "${ARGS[*]}"
+exec java "${ARGS[@]}"
+

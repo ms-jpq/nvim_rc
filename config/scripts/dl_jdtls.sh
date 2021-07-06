@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eux
+set -eu
 set -o pipefail
 
 
@@ -9,4 +9,4 @@ ZIP="$(get -- "$PREFIX/$LATEST")"
 mkdir -p "$LIB"
 cd "$LIB" || exit 1
 unpack "$ZIP"
-
+cp -- "$(dirname "$0")/jdtls" "$BIN"
