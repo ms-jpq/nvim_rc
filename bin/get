@@ -1,18 +1,37 @@
 #!/usr/bin/env python3
 
 from argparse import ArgumentParser, Namespace
+from datetime import timezone
+from email.utils import parsedate_to_datetime
 from http.client import HTTPResponse
+from os import utime
 from pathlib import Path, PurePath, PurePosixPath
-from typing import Iterator, cast
+from typing import Iterator, Tuple, cast
 from urllib.parse import urlsplit
-from urllib.request import build_opener
+from urllib.request import Request, build_opener
 
 _MB = 10 ** 6
+_OPEN = build_opener()
+
+
+def _meta(uri, timeout: float) -> Tuple[int, float]:
+    req = Request(url=uri, method="HEAD")
+    with _OPEN.open(req, timeout=timeout) as resp:
+        tot, mod = 0, 0.0
+        for key, val in resp.headers.items():
+            match = key.casefold()
+            if match == "content-length":
+                tot = int(val)
+            elif match == "last-modified":
+                mod = (
+                    parsedate_to_datetime(val).replace(tzinfo=timezone.utc).timestamp()
+                )
+
+        return tot, mod
 
 
 def _fetch(uri: str, timeout: float) -> Iterator[bytes]:
-    opener = build_opener()
-    with opener.open(uri, timeout=timeout) as resp:
+    with _OPEN.open(uri, timeout=timeout) as resp:
         resp = cast(HTTPResponse, resp)
         while buf := resp.read(_MB):
             yield buf
@@ -36,11 +55,20 @@ def main() -> None:
     suffix = args.type or "".join(PurePath(name).suffixes)
     dest = Path(args.dest if args.dest else name).with_suffix(suffix).resolve()
 
+    size, mtime = _meta(src, timeout=args.timeout)
+
+    if dest.exists():
+        stat = dest.stat()
+        if size == stat.st_size and mtime == stat.st_mtime:
+            print(dest, end="")
+            return
+
     stream = _fetch(src, timeout=args.timeout)
     with dest.open("wb") as fd:
         for chunk in stream:
             fd.write(chunk)
 
+    utime(dest, (mtime, mtime))
     print(dest, end="")
 
 

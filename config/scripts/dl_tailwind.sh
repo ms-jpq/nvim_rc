@@ -5,7 +5,7 @@ set -o pipefail
 
 
 get --type '.zip' "$URI" | unpack -
-printf '%s\n\n' '#!/usr/bin/env node' > "$BIN_PATH"
-cat -- './extension/dist/extension/index.js' >> "$BIN_PATH"
-chmod +x -- "$BIN_PATH"
+printf '%s\n\n' '#!/usr/bin/env node' > "$BIN"
+cat -- './extension/dist/extension/index.js' >> "$BIN"
+chmod +x -- "$BIN"
 
