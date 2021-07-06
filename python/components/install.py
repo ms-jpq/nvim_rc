@@ -2,6 +2,7 @@ from asyncio.tasks import as_completed
 from itertools import chain
 from json import dumps, loads
 from os import environ, linesep, pathsep, uname
+from shlex import join
 from shutil import get_terminal_size, which
 from sys import executable, stderr
 from time import time
@@ -248,7 +249,7 @@ async def install() -> int:
         for debug, proc in await fut:
             cols, _ = get_terminal_size((80, 40))
             sep = cols * "="
-            args = " ".join(chain((proc.prog,), proc.args))
+            args = join(chain((proc.prog,), proc.args))
             if proc.code == 0:
                 msg = LANG("proc succeeded", args=args)
                 print(msg, debug, proc.out.decode(), sep, sep=linesep)
