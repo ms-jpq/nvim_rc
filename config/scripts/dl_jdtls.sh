@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
-set -eu
+set -eux
 set -o pipefail
 
 
 LATEST="$(< "$(get -- "$URI")")"
-get -- "$PREFIX/$LATEST" | unpack -
+ZIP="$(get -- "$PREFIX/$LATEST")"
+mkdir -p "$LIB"
+cd "$LIB" || exit 1
+unpack "$ZIP"
 

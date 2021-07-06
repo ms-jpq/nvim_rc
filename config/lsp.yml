@@ -215,12 +215,10 @@
     npm:
       - vim-language-server
 
-- server: sumneko_lua
-  bin: lua-ls
+- server: jdtls
+  bin: java
   install:
     script:
-      required:
-        - java
       env:
         PREFIX: http://download.eclipse.org/jdtls/snapshots/
         URI: http://download.eclipse.org/jdtls/snapshots/latest.txt
