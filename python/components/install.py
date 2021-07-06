@@ -252,11 +252,19 @@ async def install() -> int:
             args = join(chain((proc.prog,), proc.args))
             if proc.code == 0:
                 msg = LANG("proc succeeded", args=args)
-                print(msg, debug, proc.out.decode(), sep, sep=linesep)
+                print(msg, debug, proc.out.decode(), proc.err, sep, sep=linesep)
             else:
                 has_error = True
                 msg = LANG("proc failed", code=proc.code, args=args)
-                print(msg, debug, proc.err, sep, sep=linesep, file=stderr)
+                print(
+                    msg,
+                    debug,
+                    proc.out.decode(),
+                    proc.err,
+                    sep,
+                    sep=linesep,
+                    file=stderr,
+                )
 
     return has_error
 
