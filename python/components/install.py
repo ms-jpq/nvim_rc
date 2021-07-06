@@ -131,7 +131,7 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
                             env=pkg.env,
                             cwd=location,
                         )
-                        yield str(script), p2
+                        yield "", p2
 
                 return [rt async for rt in cont()]
 
@@ -236,7 +236,7 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
                 env={**env, **pkg.env},
                 cwd=TMP_DIR,
             )
-            return ((str(path), p),)
+            return (("", p),)
 
         if _installable(pkg):
             yield cont(bin, pkg)
