@@ -14,12 +14,12 @@ else
   git clone "${OPTS[@]}" --branch "$TAG" "$URI" "$LIB"
 fi
 
-(
-  cd "$LIB/3rd/luamake" || exit 1
-  ./compile/install.sh
-  cd ../.. || exit 1
-  ./3rd/luamake/luamake rebuild
-)
+# (
+#   cd "$LIB/3rd/luamake" || exit 1
+#   ./compile/install.sh
+#   cd ../.. || exit 1
+#   ./3rd/luamake/luamake rebuild
+# )
 
-ln --symbolic --force -- "$LIB/"*'/lua-language-server' "$BIN"
+# ln --symbolic --force -- "$LIB/"*'/lua-language-server' "$BIN"
 
