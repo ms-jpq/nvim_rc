@@ -58,7 +58,7 @@ def main() -> None:
 
     msg = f"""
     {src}
-    ->
+    >>>
     {dest}
     """
     print(dedent(msg), file=stderr)
