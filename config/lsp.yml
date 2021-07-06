@@ -220,6 +220,8 @@
   args: []
   install:
     script:
+      required:
+        - java
       env:
         PREFIX: http://download.eclipse.org/jdtls/snapshots/
         URI: http://download.eclipse.org/jdtls/snapshots/latest.txt
