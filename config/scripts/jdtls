@@ -4,11 +4,10 @@ set -eu
 set -o pipefail
 
 
-LIB="$(dirname "$(dirname "$(dirname "$PWD/$0")")")/lib/jdtls"
+LIB="$(dirname "$(dirname "$(realpath "$0")")")/lib/jdtls"
 OS="$(uname | tr '[:upper:]' '[:lower:]')"
-EXE="$(printf '%s' 'org.eclipse.equinox.launcher_'*'.jar')"
 
-export JAR="$LIB/plugin/$EXE"
+export JAR="$(printf '%s' "$LIB/plugin/org.eclipse.equinox.launcher_"*'.jar')"
 export WORKSPACE="${WORKSPACE:="$PWD"}"
 export GRADLE_HOME="$(which gradle | rg --color=never --passthru --replace '' -- '/bin/gradle$')"
 

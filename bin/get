@@ -67,7 +67,6 @@ def main() -> None:
     if dest.exists():
         stat = dest.stat()
         if size == stat.st_size and mtime == stat.st_mtime:
-            print("!! EXISTS", file=stderr)
             print(dest, end="")
             return
 

@@ -217,6 +217,7 @@
 
 - server: jdtls
   bin: jdtls
+  args: []
   install:
     script:
       env:
