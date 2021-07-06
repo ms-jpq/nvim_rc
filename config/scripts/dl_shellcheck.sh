@@ -6,9 +6,9 @@ set -o pipefail
 
 if [[ "$OS" == 'Darwin' ]]
 then
-  URI="$MAC_OS"
+  URI="$MAC_URI"
 else
-  URI="$LINUX"
+  URI="$LINUX_URI"
 fi
 get -- "$URI" | unpack -
 mv -- './shellcheck'*'/shellcheck' "$BIN"

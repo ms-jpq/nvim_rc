@@ -4,6 +4,6 @@ set -eu
 set -o pipefail
 
 
-LATEST="$(< "$(get --cd "$TMP_DIR" -- "$URI")")"
+LATEST="$(< "$(get -- "$URI")")"
 get -- "$PREFIX/$LATEST" | unpack -
 
