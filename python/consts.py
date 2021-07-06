@@ -28,6 +28,7 @@ CONF_TOOL = CONF_DIR / "tools.yml"
 VARS_DIR = TOP_LEVEL / ".vars"
 
 
+INSTALL_BIN_DIR = str(TOP_LEVEL / "bin")
 BIN_DIR = VARS_DIR / "bin"
 LIB_DIR = VARS_DIR / "lib"
 _MODULES_DIR = VARS_DIR / "modules"
@@ -36,7 +37,6 @@ VENV_DIR = _MODULES_DIR / "py_modules"
 NPM_DIR = _MODULES_DIR
 GO_DIR = _MODULES_DIR / "go_modules"
 
-INSTALL_BIN_DIR = str(TOP_LEVEL / "python" / "components" / "bin")
 _PATH_PREPEND = tuple(
     map(
         str,
@@ -67,3 +67,4 @@ UPDATE_LOG = LOGS_DIR / "last_update.txt"
 
 
 BACKUP_DIR = VARS_DIR / "backup"
+

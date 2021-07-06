@@ -2,7 +2,7 @@ from asyncio.tasks import as_completed
 from itertools import chain
 from json import dumps, loads
 from os import environ, linesep, pathsep, uname
-from shutil import get_terminal_size, rmtree, which
+from shutil import get_terminal_size, which
 from sys import executable, stderr
 from time import time
 from typing import (
@@ -220,9 +220,6 @@ def _go() -> Iterator[Awaitable[SortOfMonoid]]:
 
 
 def _script() -> Iterator[Awaitable[SortOfMonoid]]:
-    if TMP_DIR.exists():
-        rmtree(TMP_DIR)
-
     for path in (BIN_DIR, LIB_DIR, TMP_DIR):
         path.mkdir(parents=True, exist_ok=True)
 
@@ -244,7 +241,7 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
                 pkg.interpreter,
                 stdin=stdin,
                 env={**env, **pkg.env},
-                cwd=VARS_DIR,
+                cwd=TMP_DIR,
             )
             return ((pkg.body, p),)
 
