@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-
 from argparse import ArgumentParser, Namespace
 from datetime import timezone
 from email.utils import parsedate_to_datetime
 from http.client import HTTPResponse
 from os import utime
 from pathlib import Path, PurePath, PurePosixPath
+from sys import stderr
+from textwrap import dedent
 from typing import Iterator, Tuple, cast
 from urllib.parse import urlsplit
 from urllib.request import Request, build_opener
@@ -55,8 +56,14 @@ def main() -> None:
     suffix = args.type or "".join(PurePath(name).suffixes)
     dest = Path(args.dest if args.dest else name).with_suffix(suffix).resolve()
 
-    size, mtime = _meta(src, timeout=args.timeout)
+    msg = f"""
+    {src}
+    ->
+    {dest}
+    """
+    print(dedent(msg), file=stderr)
 
+    size, mtime = _meta(src, timeout=args.timeout)
     if dest.exists():
         stat = dest.stat()
         if size == stat.st_size and mtime == stat.st_mtime:
