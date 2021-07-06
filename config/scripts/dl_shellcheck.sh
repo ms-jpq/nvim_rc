@@ -6,11 +6,11 @@ set -o pipefail
 
 if [[ "$OS" == 'Darwin' ]]
 then
-  PLATFORM="$MAC_OS"
+  URI="$MAC_OS"
 else
-  PLATFORM="$LINUX"
+  URI="$LINUX"
 fi
-get -- "$URI_ROOT/$PLATFORM" "$(mktemp)" | unpack - -- "$TMP_DIR"
-mv -- "$TMP_DIR/$BIN_NAME"*"/$BIN_NAME" "$BIN_PATH"
-chmod +x -- "$BIN_PATH"
+get -- "$URI" | unpack -
+mv -- './shellcheck'*'/shellcheck' "$BIN"
+chmod +x -- "$BIN"
 

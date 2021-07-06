@@ -6,13 +6,13 @@ set -o pipefail
 
 if [[ "$OS" == 'Darwin' ]]
 then
-  URI="$MAC_OS"
+  URI="$MAC_URI"
 else
-  URI="$LINUX"
+  URI="$LINUX_URI"
 fi
 
-T="$(get "$URI" --cd "$TMP_DIR")"
-gzip --decompress -- "$T"
-mv -- "$TMP_DIR/$BIN_NAME"* "$BIN_PATH"
-chmod +x -- "$BIN_PATH"
+TMP="$(get "$URI")"
+gzip --decompress -- "$TMP"
+mv -- 'rust_analyzer'* "$BIN"
+chmod +x -- "$BIN"
 

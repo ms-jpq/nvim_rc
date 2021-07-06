@@ -12,6 +12,6 @@ else
 fi
 
 get "$URI" | unpack -
-mv -- "$TMP_DIR/$BIN_NAME" "$BIN_PATH"
-chmod +x -- "$BIN_PATH"
+mv -- textlab "$BIN"
+chmod +x -- "$BIN"
 

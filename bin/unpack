@@ -5,19 +5,21 @@ from pathlib import Path
 from shutil import unpack_archive
 from sys import stdin
 
+_STDIN = Path("-")
+
 
 def _parse_args() -> Namespace:
     parser = ArgumentParser()
-    parser.add_argument("src", nargs="?", type=Path, default=None)
-    parser.add_argument("dest", type=Path)
-    parser.add_argument("-", "--stdin", action="store_true")
+    parser.add_argument("src", nargs="?", type=Path, default=_STDIN)
+    parser.add_argument("-d", "--dest", type=Path)
     return parser.parse_args()
 
 
 def main() -> None:
     args = _parse_args()
-    src = stdin.read() if args.stdin else args.src
+    src = stdin.read() if args.src == _STDIN else args.src
     unpack_archive(src, extract_dir=args.dest)
 
 
 main()
+

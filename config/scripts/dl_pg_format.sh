@@ -4,15 +4,15 @@ set -eu
 set -o pipefail
 
 
-if [[ -d "$LIB_PATH" ]]
+if [[ -d "$LIB" ]]
 then
-  cd "$LIB_PATH" || exit 1
+  cd "$LIB" || exit 1
   OPTS=(--recurse-submodules)
   git pull "${OPTS[@]}" origin "refs/tags/${TAG}:refs/tags/${TAG}"
 else
   OPTS=(--depth=1 --recurse-submodules --shallow-submodules)
-  git clone "${OPTS[@]}" --branch "$TAG" "$URI" "$LIB_PATH"
+  git clone "${OPTS[@]}" --branch "$TAG" "$URI" "$LIB"
 fi
 
-ln --symbolic --force -- "$LIB_PATH/$BIN_NAME" "$BIN_PATH"
+ln --symbolic --force -- "$LIB/pg_format" "$BIN"
 

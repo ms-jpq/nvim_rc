@@ -22,8 +22,8 @@ def _parse_args() -> Namespace:
     parser = ArgumentParser()
     parser.add_argument("src")
     parser.add_argument("dest", nargs="?", default=None)
-    parser.add_argument("--type")
-    parser.add_argument("-t", "--timeout", type=float, default=60.0)
+    parser.add_argument("-t", "--type")
+    parser.add_argument("--timeout", type=float, default=60.0)
     return parser.parse_args()
 
 

@@ -21,9 +21,8 @@
   install:
     script:
       env:
-        URI_ROOT: https://github.com/koalaman/shellcheck/releases/download
-        MAC_OS: v0.7.2/shellcheck-v0.7.2.darwin.x86_64.tar.xz
-        LINUX: v0.7.2/shellcheck-v0.7.2.linux.x86_64.tar.xz
+        MAC_URI: https://github.com/koalaman/shellcheck/releases/download/v0.7.2/shellcheck-v0.7.2.darwin.x86_64.tar.xz
+        LINUX_URI: https://github.com/koalaman/shellcheck/releases/download/v0.7.2/shellcheck-v0.7.2.linux.x86_64.tar.xz
       file: dl_shellcheck.sh
 
 - bin: hadolint
