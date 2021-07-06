@@ -30,6 +30,7 @@ from ..consts import (
     GO_DIR,
     INSTALL_BIN_DIR,
     INSTALL_SCRIPT,
+    INSTALL_SCRIPTS_DIR,
     LIB_DIR,
     NPM_DIR,
     TMP_DIR,
@@ -90,11 +91,7 @@ def _script_specs() -> Iterator[Tuple[str, ScriptSpec]]:
 
 
 def _installable(script_spec: ScriptSpec) -> bool:
-    return bool(
-        which(script_spec.interpreter)
-        and all(map(which, script_spec.required))
-        and script_spec.body
-    )
+    return bool(script_spec.file and all(map(which, script_spec.required)))
 
 
 SortOfMonoid = Sequence[Tuple[str, ProcReturn]]
@@ -128,14 +125,13 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
 
                     pkg = spec.script
                     if not p1.code and _installable(pkg):
-                        stdin = pkg.body.encode()
+                        script = INSTALL_SCRIPTS_DIR / pkg.file
                         p2 = await call(
-                            pkg.interpreter,
-                            stdin=stdin,
+                            script,
                             env=pkg.env,
                             cwd=location,
                         )
-                        yield pkg.body, p2
+                        yield str(script), p2
 
                 return [rt async for rt in cont()]
 
@@ -231,19 +227,16 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
                 "PATH": pathsep.join((INSTALL_BIN_DIR, environ["PATH"])),
                 "ARCH": sys.machine,
                 "OS": sys.sysname,
-                "BIN_NAME": bin,
-                "BIN_PATH": str(BIN_DIR / bin),
-                "LIB_PATH": str(LIB_DIR / bin),
-                "TMP_DIR": str(TMP_DIR),
+                "BIN": str(BIN_DIR / bin),
+                "LIB": str(LIB_DIR / bin),
             }
-            stdin = pkg.body.encode()
+            path = INSTALL_SCRIPTS_DIR / pkg.file
             p = await call(
-                pkg.interpreter,
-                stdin=stdin,
+                path,
                 env={**env, **pkg.env},
                 cwd=TMP_DIR,
             )
-            return ((pkg.body, p),)
+            return ((str(path), p),)
 
         if _installable(pkg):
             yield cont(bin, pkg)

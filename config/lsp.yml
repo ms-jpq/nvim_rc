@@ -84,20 +84,7 @@
       env:
         MAC_URI: https://github.com/latex-lsp/texlab/releases/download/v3.2.0/texlab-x86_64-macos.tar.gz
         LINUX_URI: https://github.com/latex-lsp/texlab/releases/download/v3.2.0/texlab-x86_64-linux.tar.gz
-      body: |-
-        set -eu
-        set -o pipefail
-
-        if [[ "$OS" == 'Darwin' ]]
-        then
-          URI="$MAC_URI"
-        else
-          URI="$LINUX_URI"
-        fi
-
-        get "$URI" "$(mktemp)" | unpack - -- "$TMP_DIR"
-        mv -- "$TMP_DIR/$BIN_NAME" "$BIN_PATH"
-        chmod +x -- "$BIN_PATH"
+      file: dl_textlab.sh
 
 - server: bashls
   bin: bash-language-server
@@ -130,21 +117,7 @@
       env:
         MAC_OS: https://github.com/rust-analyzer/rust-analyzer/releases/download/2021-06-14/rust-analyzer-x86_64-apple-darwin.gz
         LINUX: https://github.com/rust-analyzer/rust-analyzer/releases/download/2021-06-14/rust-analyzer-x86_64-unknown-linux-gnu.gz
-      body: |-
-        set -eu
-        set -o pipefail
-
-        if [[ "$OS" == 'Darwin' ]]
-        then
-          URI="$MAC_OS"
-        else
-          URI="$LINUX"
-        fi
-
-        T="$(get "$URI" --cd "$TMP_DIR")"
-        gzip --decompress -- "$T"
-        mv -- "$TMP_DIR/$BIN_NAME"* "$BIN_PATH"
-        chmod +x -- "$BIN_PATH"
+      file: rust_analyzer.sh
 
 - server: gopls
   bin: gopls
@@ -202,14 +175,7 @@
         - git
       env:
         URI: https://github.com/tailwindlabs/tailwindcss-intellisense/releases/download/v0.6.12/vscode-tailwindcss-0.6.12.vsix
-      body: |-
-        set -eu
-        set -o pipefail
-
-        get --type '.zip' "$URI" | unpack - -- "$TMP_DIR"
-        printf '%s\n' '#!/usr/bin/env node' > "$BIN_PATH"
-        cat -- "$TMP_DIR/extension/dist/extension/index.js" >> "$BIN_PATH"
-        chmod +x -- "$BIN_PATH"
+      file: dl_tailwind.sh
 
 - server: graphql
   bin: graphql-lsp
@@ -258,43 +224,17 @@
       env:
         PREFIX: http://download.eclipse.org/jdtls/snapshots/
         URI: http://download.eclipse.org/jdtls/snapshots/latest.txt
-      body: |-
-        set -eu
-        set -o pipefail
+      file: dl_jdtls.sh
 
-        LATEST="$(< "$(get --cd "$TMP_DIR" -- "$URI")")"
-        get --cd "$TMP_DIR" -- "$PREFIX/$LATEST" | unpack - -- "$TMP_DIR"
-
-# - server: sumneko_lua
-#   bin: lua-ls
-#   install:
-#     script:
-#       required:
-#         - git
-#         - ninja
-#       env:
-#         URI: https://github.com/sumneko/lua-language-server.git
-#         TAG: "2.0.3"
-#       body: |-
-#         set -eu
-#         set -o pipefail
-
-#         if [[ -d "$LIB_PATH" ]]
-#         then
-#           cd "$LIB_PATH" || exit 1
-#           OPTS=(--recurse-submodules)
-#           git pull "${OPTS[@]}" origin "refs/tags/${TAG}:refs/tags/${TAG}"
-#         else
-#           OPTS=(--depth=1 --recurse-submodules --shallow-submodules)
-#           git clone "${OPTS[@]}" --branch "$TAG" "$URI" "$LIB_PATH"
-#         fi
-
-#         (
-#           cd "$LIB_PATH/3rd/luamake" || exit 1
-#           ./compile/install.sh
-#           cd ../.. || exit 1
-#           ./3rd/luamake/luamake rebuild
-#         )
-
-#         ln --symbolic --force -- "$LIB_PATH/"*'/lua-language-server' "$BIN_PATH"
+- server: sumneko_lua
+  bin: lua-ls
+  install:
+    script:
+      required:
+        - git
+        - ninja
+      env:
+        URI: https://github.com/sumneko/lua-language-server.git
+        TAG: "2.0.3"
+      file: dl_sumneko_lua.sh
 

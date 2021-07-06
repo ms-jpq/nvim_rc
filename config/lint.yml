@@ -24,19 +24,7 @@
         URI_ROOT: https://github.com/koalaman/shellcheck/releases/download
         MAC_OS: v0.7.2/shellcheck-v0.7.2.darwin.x86_64.tar.xz
         LINUX: v0.7.2/shellcheck-v0.7.2.linux.x86_64.tar.xz
-      body: |-
-        set -eu
-        set -o pipefail
-
-        if [[ "$OS" == 'Darwin' ]]
-        then
-          PLATFORM="$MAC_OS"
-        else
-          PLATFORM="$LINUX"
-        fi
-        get -- "$URI_ROOT/$PLATFORM" "$(mktemp)" | unpack - -- "$TMP_DIR"
-        mv -- "$TMP_DIR/$BIN_NAME"*"/$BIN_NAME" "$BIN_PATH"
-        chmod +x -- "$BIN_PATH"
+      file: dl_shellcheck.sh
 
 - bin: hadolint
   type: stream
@@ -49,18 +37,5 @@
       env:
         MAC_OS: https://github.com/hadolint/hadolint/releases/download/v2.6.0/hadolint-Darwin-x86_64
         LINUX: https://github.com/hadolint/hadolint/releases/download/v2.6.0/hadolint-Linux-x86_64
-      body: |-
-        set -eu
-        set -o pipefail
-
-        if [[ "$OS" == 'Darwin' ]]
-        then
-          # get --cd "$TMP_DIR" -- "$MAC_OS" | unpack - -- "$TMP_DIR"
-          # mv -- "$TMP_DIR/$BIN_NAME/"*"/bin/$BIN_NAME" "$BIN_PATH"
-          get -- "$MAC_OS" "$BIN_PATH"
-          chmod +x -- "$BIN_PATH"
-        else
-          get -- "$LINUX" "$BIN_PATH"
-          chmod +x -- "$BIN_PATH"
-        fi
+      file: dl_hadolint.sh
 

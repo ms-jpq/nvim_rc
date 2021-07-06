@@ -2,9 +2,8 @@
 
 from argparse import ArgumentParser, Namespace
 from http.client import HTTPResponse
-from os import chdir
 from pathlib import Path, PurePath, PurePosixPath
-from typing import Iterator, Optional, cast
+from typing import Iterator, cast
 from urllib.parse import urlsplit
 from urllib.request import build_opener
 
@@ -23,7 +22,6 @@ def _parse_args() -> Namespace:
     parser = ArgumentParser()
     parser.add_argument("src")
     parser.add_argument("dest", nargs="?", default=None)
-    parser.add_argument("--cd", type=Path, default=None)
     parser.add_argument("--type")
     parser.add_argument("-t", "--timeout", type=float, default=60.0)
     return parser.parse_args()
@@ -31,9 +29,6 @@ def _parse_args() -> Namespace:
 
 def main() -> None:
     args = _parse_args()
-    cd: Optional[Path] = args.cd
-    if cd:
-        chdir(cd)
 
     src: str = args.src
     parsed = urlsplit(src)

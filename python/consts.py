@@ -29,6 +29,7 @@ VARS_DIR = TOP_LEVEL / ".vars"
 
 
 INSTALL_BIN_DIR = str(TOP_LEVEL / "bin")
+INSTALL_SCRIPTS_DIR = CONF_DIR / "scripts"
 BIN_DIR = VARS_DIR / "bin"
 LIB_DIR = VARS_DIR / "lib"
 _MODULES_DIR = VARS_DIR / "modules"
