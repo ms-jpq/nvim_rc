@@ -10,6 +10,7 @@ then
 else
   URI="$LINUX_URI"
 fi
+
 get -- "$URI" | unpack -
 mv -- './shellcheck'*'/shellcheck' "$BIN"
 chmod +x -- "$BIN"

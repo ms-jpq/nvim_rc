@@ -11,8 +11,7 @@ else
   URI="$LINUX_URI"
 fi
 
-TMP="$(get "$URI")"
-gzip --decompress -- "$TMP"
+gzip --decompress -- "$(get "$URI")"
 mv -- 'rust_analyzer'* "$BIN"
 chmod +x -- "$BIN"
 
