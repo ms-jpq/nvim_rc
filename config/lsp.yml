@@ -248,6 +248,23 @@
   install:
     npm:
       - vim-language-server
+
+- server: sumneko_lua
+  bin: lua-ls
+  install:
+    script:
+      required:
+        - java
+      env:
+        PREFIX: http://download.eclipse.org/jdtls/snapshots/
+        URI: http://download.eclipse.org/jdtls/snapshots/latest.txt
+      body: |-
+        set -eu
+        set -o pipefail
+
+        LATEST="$(< "$(get --cd "$TMP_DIR" -- "$URI")")"
+        get --cd "$TMP_DIR" -- "$PREFIX/$LATEST" | unpack - -- "$TMP_DIR"
+
 # - server: sumneko_lua
 #   bin: lua-ls
 #   install:

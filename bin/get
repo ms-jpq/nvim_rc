@@ -4,15 +4,19 @@ from argparse import ArgumentParser, Namespace
 from http.client import HTTPResponse
 from os import chdir
 from pathlib import Path, PurePath, PurePosixPath
-from typing import Optional, cast
+from typing import Iterator, Optional, cast
 from urllib.parse import urlsplit
 from urllib.request import build_opener
 
+_MB = 10 ** 6
 
-def _fetch(uri: str, timeout: float) -> bytes:
+
+def _fetch(uri: str, timeout: float) -> Iterator[bytes]:
     opener = build_opener()
     with opener.open(uri, timeout=timeout) as resp:
-        return cast(HTTPResponse, resp).read()
+        resp = cast(HTTPResponse, resp)
+        while buf := resp.read(_MB):
+            yield buf
 
 
 def _parse_args() -> Namespace:
@@ -20,8 +24,8 @@ def _parse_args() -> Namespace:
     parser.add_argument("src")
     parser.add_argument("dest", nargs="?", default=None)
     parser.add_argument("--cd", type=Path, default=None)
-    parser.add_argument("-t", "--timeout", type=float, default=60.0)
     parser.add_argument("--type")
+    parser.add_argument("-t", "--timeout", type=float, default=60.0)
     return parser.parse_args()
 
 
@@ -37,8 +41,11 @@ def main() -> None:
     suffix = args.type or "".join(PurePath(name).suffixes)
     dest = Path(args.dest if args.dest else name).with_suffix(suffix).resolve()
 
-    payload = _fetch(src, timeout=args.timeout)
-    dest.write_bytes(payload)
+    stream = _fetch(src, timeout=args.timeout)
+    with dest.open("wb") as fd:
+        for chunk in stream:
+            fd.write(chunk)
+
     print(dest, end="")
 
 
