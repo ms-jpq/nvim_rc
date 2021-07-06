@@ -84,7 +84,7 @@
       env:
         MAC_URI: https://github.com/latex-lsp/texlab/releases/download/v3.2.0/texlab-x86_64-macos.tar.gz
         LINUX_URI: https://github.com/latex-lsp/texlab/releases/download/v3.2.0/texlab-x86_64-linux.tar.gz
-      file: dl_textlab.sh
+      file: dl_texlab.sh
 
 - server: bashls
   bin: bash-language-server
