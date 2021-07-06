@@ -10,7 +10,7 @@ OS="$(uname | tr '[:upper:]' '[:lower:]')"
 CANDIDATES=("$LIB/plugins/org.eclipse.equinox.launcher_"*'.jar')
 export JAR="$(printf '%s' "${CANDIDATES[@]}")"
 export WORKSPACE="${WORKSPACE:="$PWD"}"
-export GRADLE_HOME="$(which gradle | rg --color=never --passthru --replace '' -- '/bin/gradle$')"
+# export GRADLE_HOME="$(which gradle | rg --color=never --passthru --replace '' -- '/bin/gradle$')"
 
 ARGS=(
   -Declipse.application=org.eclipse.jdt.ls.core.id1
@@ -27,8 +27,10 @@ ARGS=(
   -data
   "$WORKSPACE"
   --add-modules=ALL-SYSTEM
-  '--add-opens java.base/java.util=ALL-UNNAMED'
-  '--add-opens java.base/java.lang=ALL-UNNAMED'
+  --add-opens
+  java.base/java.util=ALL-UNNAMED
+  --add-opens 
+  java.base/java.lang=ALL-UNNAMED
   )
 
 
