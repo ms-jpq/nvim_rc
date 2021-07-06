@@ -11,7 +11,7 @@ else
   URI="$LINUX_URI"
 fi
 
-gzip --decompress -- "$(get "$URI")"
-mv -- 'rust_analyzer'* "$BIN"
+gzip --decompress --force -- "$(get "$URI")"
+mv -- './rust_analyzer-'* "$BIN"
 chmod +x -- "$BIN"
 

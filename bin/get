@@ -17,17 +17,17 @@ _OPEN = build_opener()
 def _meta(uri, timeout: float) -> Tuple[int, float]:
     req = Request(url=uri, method="HEAD")
     with _OPEN.open(req, timeout=timeout) as resp:
-        tot, mod = 0, 0.0
+        tot, mtime = 0, 0.0
         for key, val in resp.headers.items():
             match = key.casefold()
             if match == "content-length":
                 tot = int(val)
             elif match == "last-modified":
-                mod = (
+                mtime = (
                     parsedate_to_datetime(val).replace(tzinfo=timezone.utc).timestamp()
                 )
 
-        return tot, mod
+        return tot, mtime
 
 
 def _fetch(uri: str, timeout: float) -> Iterator[bytes]:

@@ -12,6 +12,6 @@ else
 fi
 
 get "$URI" | unpack -
-mv -- textlab "$BIN"
+mv -- './textlab' "$BIN"
 chmod +x -- "$BIN"
 
