@@ -126,9 +126,8 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
 
                     pkg = spec.script
                     if not p1.code and _installable(pkg):
-                        script = INSTALL_SCRIPTS_DIR / pkg.file
                         p2 = await call(
-                            script,
+                            INSTALL_SCRIPTS_DIR / pkg.file,
                             env=pkg.env,
                             cwd=location,
                         )
@@ -231,9 +230,8 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
                 "BIN": str(BIN_DIR / bin),
                 "LIB": str(LIB_DIR / bin),
             }
-            path = INSTALL_SCRIPTS_DIR / pkg.file
             p = await call(
-                path,
+                INSTALL_SCRIPTS_DIR / pkg.file,
                 env={**env, **pkg.env},
                 cwd=TMP_DIR,
             )
