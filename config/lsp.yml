@@ -229,10 +229,12 @@
 
 - server: kotlin-language-server
   bin: kotlin-language-server
+  args: []
   install:
     script:
       required:
         - java
+        - gradle
       env:
         URI: https://github.com/fwcd/kotlin-language-server/releases/download/1.1.2/server.zip
       file: dl_kotlin.sh
