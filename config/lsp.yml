@@ -227,9 +227,8 @@
         URI: http://download.eclipse.org/jdtls/snapshots/latest.txt
       file: dl_jdtls.sh
 
-- server: kotlin-language-server
+- server: kotlin_language_server
   bin: kotlin-language-server
-  args: []
   install:
     script:
       required:
