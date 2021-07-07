@@ -227,6 +227,16 @@
         URI: http://download.eclipse.org/jdtls/snapshots/latest.txt
       file: dl_jdtls.sh
 
+- server: kotlin-language-server
+  bin: kotlin-language-server
+  install:
+    script:
+      required:
+        - java
+      env:
+        URI: https://github.com/fwcd/kotlin-language-server/releases/download/1.1.2/server.zip
+      file: dl_kotlin.sh
+
 - server: sumneko_lua
   bin: lua-ls
   install:
