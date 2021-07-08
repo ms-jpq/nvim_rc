@@ -15,7 +15,7 @@ from pynvim_pp.api import (
 )
 from pynvim_pp.operators import p_indent, writable
 
-from ..registery import autocmd, rpc, settings, keymap
+from ..registery import autocmd, rpc, settings
 
 # join only add 1 space
 settings["nojoinspaces"] = True
@@ -95,15 +95,11 @@ def _set_trimmed(nvim: Nvim, win: Window, buf: Buffer) -> None:
         win_set_cursor(nvim, win=win, row=row, col=col)
 
 
-@rpc(blocking=True)
-def _trailing_ws(nvim: Nvim) -> None:
+def trailing_ws(nvim: Nvim) -> None:
     win = cur_win(nvim)
     buf = win_get_buf(nvim, win=win)
     if not writable(nvim, buf=buf):
         return
     else:
         _set_trimmed(nvim, win=win, buf=buf)
-
-
-keymap.n("<leader>a") << f"<cmd>lua {_trailing_ws.name}()<cr>"
 

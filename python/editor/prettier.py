@@ -26,6 +26,7 @@ from .linter import (
     make_temp,
     set_preview_content,
 )
+from .whitespace import trailing_ws
 
 
 async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> str:
@@ -109,6 +110,7 @@ async def run_fmt(nvim: Nvim) -> None:
 
     prettiers = tuple(_fmts_for(ctx.filetype))
     if not prettiers:
+        await async_call(nvim, trailing_ws, nvim)
         await awrite(nvim, LANG("missing prettier", filetype=ctx.filetype), error=True)
     else:
         await awrite(nvim, LANG("loading..."))
