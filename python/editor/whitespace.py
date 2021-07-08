@@ -54,14 +54,18 @@ def _set_usetab(nvim: Nvim, buf: Buffer, lines: Iterable[str]) -> None:
         buf_set_option(nvim, buf=buf, key="expandtab", val=False)
 
 
-@rpc(blocking=True)
-def _detect_tabs(nvim: Nvim) -> None:
-    buf = cur_buf(nvim)
+def detect_tabs(nvim: Nvim, buf: Buffer) -> None:
     count = buf_line_count(nvim, buf=buf)
     rows = min(count, 100)
     lines = buf_get_lines(nvim, buf=buf, lo=0, hi=rows)
     _set_tabsize(nvim, buf=buf, lines=lines)
     _set_usetab(nvim, buf=buf, lines=lines)
+
+
+@rpc(blocking=True)
+def _detect_tabs(nvim: Nvim) -> None:
+    buf = cur_buf(nvim)
+    detect_tabs(nvim, buf=buf)
 
 
 autocmd("FileType") << f"lua {_detect_tabs.name}()"

@@ -26,7 +26,7 @@ from .linter import (
     make_temp,
     set_preview_content,
 )
-from .whitespace import trailing_ws
+from .whitespace import trailing_ws, detect_tabs
 
 
 async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> str:
@@ -92,6 +92,7 @@ async def _run(
                 for win, (row, col) in saved.items():
                     new_row = min(row, len(lines) - 1)
                     win_set_cursor(nvim, win=win, row=new_row, col=col)
+                detect_tabs(nvim)
 
             prettiers = LANG("step join sep").join(attr.bin for attr in attrs)
             nice = LANG("prettier succeeded", prettiers=prettiers)
