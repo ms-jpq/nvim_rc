@@ -1,4 +1,3 @@
-from ..consts import BACKUP_DIR
 from ..registery import autocmd, settings
 
 # auto load changes
@@ -11,13 +10,8 @@ settings["autowriteall"] = True
 autocmd("WinEnter") << "checktime"
 
 
-# auto backup
-BACKUP_DIR.mkdir(parents=True, exist_ok=True)
-settings["backup"] = True
-settings["writebackup"] = True
+# noskip backup
 settings["backupskip"] = ""
-settings["backupdir"] = str(BACKUP_DIR)
-settings["backupext"] = ".bak"
 
 (
     autocmd("BufLeave", "FocusLost", "VimLeavePre", "CursorHold", "CursorHoldI")

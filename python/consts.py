@@ -66,6 +66,3 @@ TMP_DIR = VARS_DIR / "tmp"
 LOGS_DIR = VARS_DIR / "logs"
 UPDATE_LOG = LOGS_DIR / "last_update.txt"
 
-
-BACKUP_DIR = VARS_DIR / "backup"
-
