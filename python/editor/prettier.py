@@ -92,7 +92,7 @@ async def _run(
                 for win, (row, col) in saved.items():
                     new_row = min(row, len(lines) - 1)
                     win_set_cursor(nvim, win=win, row=new_row, col=col)
-                detect_tabs(nvim)
+                detect_tabs(nvim, buf=ctx.buf)
 
             prettiers = LANG("step join sep").join(attr.bin for attr in attrs)
             nice = LANG("prettier succeeded", prettiers=prettiers)
