@@ -29,7 +29,7 @@ def _hl_text(nvim: Nvim, text: str) -> None:
     def cont() -> None:
         nvim.options["hlsearch"] = True
 
-    go(async_call(nvim, cont))
+    go(nvim, aw=async_call(nvim, cont))
 
 
 def _get_selected(nvim: Nvim, buf: Buffer, visual_type: VisualTypes) -> str:
@@ -62,7 +62,7 @@ def _op_search(nvim: Nvim, visual: VisualTypes = None) -> None:
 def _op_fzf(nvim: Nvim, visual: VisualTypes = None) -> None:
     text = _hl_selected(nvim, visual=visual)
     cont = lambda: nvim.command(f"BLines {text}")
-    go(async_call(nvim, cont))
+    go(nvim, aw=async_call(nvim, cont))
 
 
 @rpc(blocking=True)
@@ -70,7 +70,7 @@ def _op_rg(nvim: Nvim, visual: VisualTypes = None) -> None:
     text = _hl_selected(nvim, visual=visual)
     escaped = escape(text).replace(r"\ ", " ")
     cont = lambda: nvim.command(f"Rg {escaped}")
-    go(async_call(nvim, cont))
+    go(nvim, aw=async_call(nvim, cont))
 
 
 keymap.n("gs") << f"<cmd>set opfunc={_op_search.name}<cr>g@"
