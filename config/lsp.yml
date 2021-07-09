@@ -48,7 +48,7 @@
     - --stdio
   install:
     npm:
-      - vscode-json-language-server
+      - vscode-langservers-extracted
 
 - server: yamlls
   bin: yaml-language-server
@@ -157,7 +157,7 @@
     - --stdio
   install:
     npm:
-      - vscode-html-language-server
+      - vscode-langservers-extracted
 
 - server: cssls
   bin: vscode-css-language-server
@@ -165,7 +165,7 @@
     - --stdio
   install:
     npm:
-      - vscode-css-language-server
+      - vscode-langservers-extracted
 
 - server: tailwindcss
   bin: tailwindcss-language-server
