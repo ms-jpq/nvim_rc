@@ -43,12 +43,12 @@
       - diagnostic-languageserver
 
 - server: jsonls
-  bin: vscode-json-languageserver
+  bin: vscode-json-language-server
   args:
     - --stdio
   install:
     npm:
-      - vscode-json-languageserver
+      - vscode-json-language-server
 
 - server: yamlls
   bin: yaml-language-server
@@ -152,20 +152,20 @@
       - typescript-language-server
 
 - server: html
-  bin: html-languageserver
+  bin: vscode-html-language-server
   args:
     - --stdio
   install:
     npm:
-      - vscode-html-languageserver-bin
+      - vscode-html-language-server
 
 - server: cssls
-  bin: css-languageserver
+  bin: vscode-css-language-server
   args:
     - --stdio
   install:
     npm:
-      - vscode-css-languageserver-bin
+      - vscode-css-language-server
 
 - server: tailwindcss
   bin: tailwindcss-language-server
