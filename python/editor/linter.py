@@ -79,7 +79,7 @@ def make_temp(path: Path) -> Iterator[Path]:
 async def set_preview_content(nvim: Nvim, text: str) -> None:
     def cont() -> None:
         with hold_win_pos(nvim):
-            set_preview(nvim, syntax="", preview=text)
+            set_preview(nvim, syntax="", preview=text.splitlines())
 
     await async_call(nvim, cont)
 
