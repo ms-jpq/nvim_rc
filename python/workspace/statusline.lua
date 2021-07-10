@@ -21,7 +21,7 @@
     local names = {}
     local warnings, errors = 0, 0
 
-    for _, client in ipairs(clients) do
+    for _, client in pairs(clients) do
       warnings = warnings + vim.lsp.diagnostic.get_count(0, "Warning", client.id)
       errors = errors + vim.lsp.diagnostic.get_count(0, "Error", client.id)
       table.insert(names, client.name)
