@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -eu
+set -o pipefail
+
+
+export PATH="$PATH:$HOME/.dotnet/tools"
+
+exec dotnet-fsautocomplete --background-service-enabled
+
+

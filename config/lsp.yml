@@ -204,7 +204,7 @@
       - graphql-language-service-cli
 
 - server: fsautocomplete
-  bin: fsautocomplete
+  bin: fsharp-ls
   args: []
   install:
     script:
