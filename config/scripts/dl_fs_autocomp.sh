@@ -9,3 +9,4 @@ cd "$LIB" || exit 1
 dotnet new tool-manifest --force
 dotnet tool install fsautocomplete
 dotnet tool update fsautocomplete
+cp -- "$(dirname "$0")/jdtls" "$BIN"
