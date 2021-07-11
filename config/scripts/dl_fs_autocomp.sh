@@ -4,4 +4,8 @@ set -eu
 set -o pipefail
 
 
-get -- "$URI" | unpack - --dest "$LIB"
+mkdir --parents -- "$LIB"
+cd "$LIB" || exit 1
+dotnet new tool-manifest --force
+dotnet tool install fsautocomplete
+dotnet tool update fsautocomplete

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -eu
+set -o pipefail
+
+
+LIB="$(dirname "$(dirname "$(realpath "$0")")")/lib/fsautocomplete"
+
+ARGS=(
+  dotnet
+  tool
+  run
+  dotnet-fsautocomplete
+  )
+
+
+exec dotnet "${ARGS[@]}"
+
