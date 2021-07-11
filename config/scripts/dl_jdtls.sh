@@ -6,7 +6,7 @@ set -o pipefail
 
 LATEST="$(< "$(get -- "$URI")")"
 ZIP="$(get -- "$PREFIX/$LATEST")"
-mkdir -p "$LIB"
+mkdir --parents -- "$LIB"
 cd "$LIB" || exit 1
-unpack "$ZIP"
+unpack -- "$ZIP"
 cp -- "$(dirname "$0")/jdtls" "$BIN"

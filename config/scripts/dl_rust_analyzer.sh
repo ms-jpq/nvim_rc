@@ -12,7 +12,7 @@ else
 fi
 
 TMP="$(mktemp)"
-ZIP="$(get "$URI")"
+ZIP="$(get -- "$URI")"
 gzip --decompress --keep --force -- "$ZIP"
 mv -- "$ZIP" "$TMP"
 mv -- "./rust-analyzer-"* "$BIN"
