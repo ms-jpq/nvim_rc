@@ -1,7 +1,5 @@
 from ..registery import keymap, settings
 
-# find result during search
-settings["incsearch"] = True
 # search results shown on side
 settings["inccommand"] = "nosplit"
 # use ripgrep

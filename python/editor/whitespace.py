@@ -72,7 +72,6 @@ autocmd("FileType") << f"lua {_detect_tabs.name}()"
 
 
 # smart indentation level
-settings["autoindent"] = True
 settings["smarttab"] = True
 
 
