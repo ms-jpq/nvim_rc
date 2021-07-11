@@ -6,7 +6,6 @@ set -o pipefail
 
 mkdir --parents -- "$LIB"
 cd "$LIB" || exit 1
-dotnet new tool-manifest --force
-dotnet tool install fsautocomplete
-dotnet tool update fsautocomplete
-cp -- "$(dirname "$0")/jdtls" "$BIN"
+dotnet tool install --global fsautocomplete
+dotnet tool update --global fsautocomplete
+cp -- "$(dirname "$0")/fsautocomplete" "$BIN"
