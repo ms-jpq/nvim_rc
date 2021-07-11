@@ -5,7 +5,9 @@ set -o pipefail
 
 
 export PATH="$PATH:$HOME/.dotnet/tools"
+ROOTS=("$ASDF_DATA_DIR/installs/dotnet-core/"*)
+export DOTNET_ROOT="${ROOTS[0]}"
+
 
 exec dotnet-fsautocomplete --background-service-enabled
-
 
