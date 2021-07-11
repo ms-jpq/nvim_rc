@@ -4,4 +4,4 @@ set -eu
 set -o pipefail
 
 
-get -- "$URI" | unpack -
+get -- "$URI" | unpack - --dest "$LIB"
