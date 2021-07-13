@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 from argparse import ArgumentParser, Namespace
+from contextlib import suppress
 from datetime import timezone
 from email.utils import parsedate_to_datetime
 from http.client import HTTPResponse
 from os import utime
-from pathlib import Path, PurePath, PurePosixPath
+from pathlib import Path, PurePosixPath
 from sys import stderr
 from textwrap import dedent
 from typing import Iterator, Tuple, cast
@@ -51,10 +52,9 @@ def main() -> None:
     args = _parse_args()
 
     src: str = args.src
-    parsed = urlsplit(src)
-    name = PurePosixPath(parsed.path).name
-    suffix = args.type or "".join(PurePath(name).suffix)
-    dest = Path(args.dest if args.dest else name).with_suffix(suffix).resolve()
+    path = PurePosixPath(urlsplit(src).path)
+    suffix = args.type or path.suffix
+    dest = Path(args.dest if args.dest else path.name).with_suffix(suffix).resolve()
 
     msg = f"""
     {src}
@@ -64,7 +64,7 @@ def main() -> None:
     print(dedent(msg), file=stderr)
 
     size, mtime = _meta(src, timeout=args.timeout)
-    if dest.exists():
+    with suppress(FileNotFoundError):
         stat = dest.stat()
         if size == stat.st_size and mtime == stat.st_mtime:
             print(dest, end="")
