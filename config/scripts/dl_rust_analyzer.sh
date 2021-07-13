@@ -12,11 +12,8 @@ else
 fi
 
 
-TMP="$(mktemp)"
-ZIP="$(get -- "$URI")"
-gzip --decompress --keep --force -- "$ZIP"
-mv -- "$ZIP" "$TMP"
-mv -- './rust-analyzer-'* "$BIN"
-mv -- "$TMP" "$ZIP"
+TMP="$(mktemp --directory)"
+get -- "$URI" | unpack --dest "$TMP"
+mv -- "$TMP/rust-analyzer-"* "$BIN"
 chmod +x -- "$BIN"
 

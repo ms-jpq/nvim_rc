@@ -1,11 +1,25 @@
 #!/usr/bin/env python3
 
 from argparse import ArgumentParser, Namespace
-from pathlib import Path
-from shutil import unpack_archive
+from pathlib import Path, PurePath
+from shutil import register_unpack_format, unpack_archive, which
+from subprocess import check_call
 from sys import stdin
 
 _STDIN = Path("-")
+
+
+def _unpack_gz(source: str, destination: str) -> None:
+    cmd = "gzip"
+    if which(cmd):
+        dest = Path(destination) / PurePath(source).name
+        with dest.open("wb") as fd:
+            check_call(
+                (cmd, "--decompress", "--keep", "--force", "--stdout", "--", source),
+                stdout=fd,
+            )
+    else:
+        raise RuntimeError(f"No {cmd} found in PATH")
 
 
 def _parse_args() -> Namespace:
@@ -17,6 +31,7 @@ def _parse_args() -> Namespace:
 
 
 def main() -> None:
+    register_unpack_format("gz", extensions=[".gz"], function=_unpack_gz)
     args = _parse_args()
     src = stdin.read() if args.src == _STDIN else args.src
     unpack_archive(src, format=args.format, extract_dir=args.dest)
