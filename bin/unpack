@@ -5,6 +5,7 @@ from pathlib import Path, PurePath
 from shutil import register_unpack_format, unpack_archive, which
 from subprocess import check_call
 from sys import stdin
+from textwrap import dedent
 
 _STDIN = Path("-")
 
@@ -26,7 +27,7 @@ def _parse_args() -> Namespace:
     parser = ArgumentParser()
     parser.add_argument("src", nargs="?", type=Path, default=_STDIN)
     parser.add_argument("-f", "--format")
-    parser.add_argument("-d", "--dest", type=Path)
+    parser.add_argument("-d", "--dest", type=Path, default=Path.cwd())
     return parser.parse_args()
 
 
@@ -34,7 +35,13 @@ def main() -> None:
     register_unpack_format("gz", extensions=[".gz"], function=_unpack_gz)
     args = _parse_args()
     src = stdin.read() if args.src == _STDIN else args.src
+    msg = f"""
+    {src}
+    -> -> ->
+    {args.dest}
+    """
     unpack_archive(src, format=args.format, extract_dir=args.dest)
+    print(dedent(msg))
 
 
 main()
