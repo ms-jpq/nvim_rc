@@ -53,7 +53,7 @@ def main() -> None:
     src: str = args.src
     parsed = urlsplit(src)
     name = PurePosixPath(parsed.path).name
-    suffix = args.type or "".join(PurePath(name).suffixes)
+    suffix = args.type or "".join(PurePath(name).suffix)
     dest = Path(args.dest if args.dest else name).with_suffix(suffix).resolve()
 
     msg = f"""
