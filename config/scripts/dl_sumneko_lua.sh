@@ -15,14 +15,17 @@ else
 fi
 
 
-if [[ "$OS" = 'Darwin' ]]
+if [[ ! -x "$BIN" ]]
 then
- (
-   cd "$LIB/3rd/luamake" || exit 1
-   ./compile/install.sh
-   cd ../.. || exit 1
-   ./3rd/luamake/luamake rebuild
- )
+  if [[ "$OS" = 'Darwin' ]]
+  then
+   (
+     cd "$LIB/3rd/luamake" || exit 1
+     ./compile/install.sh
+     cd ../.. || exit 1
+     ./3rd/luamake/luamake rebuild
+   )
 
- ln --symbolic --force -- "$LIB/bin/"*'/lua-language-server' "$BIN"
+   ln --symbolic --force -- "$LIB/bin/"*'/lua-language-server' "$BIN"
+  fi
 fi
