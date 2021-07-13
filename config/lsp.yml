@@ -214,6 +214,10 @@
 
 - server: r_language_server
   bin: R
+  install:
+    script:
+      required:
+        - R
 
 - server: vimls
   bin: vim-language-server
