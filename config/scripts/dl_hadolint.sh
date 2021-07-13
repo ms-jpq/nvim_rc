@@ -12,5 +12,6 @@ else
 fi
 
 
+rm --force -- "$BIN"
 cp -- "$FILE" "$BIN"
 chmod +x -- "$BIN"
