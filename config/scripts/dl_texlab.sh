@@ -11,7 +11,9 @@ else
   URI="$LINUX_URI"
 fi
 
-get -- "$URI" | unpack -
-mv -- './texlab' "$BIN"
+
+TMP="$(mktemp --directory)"
+get -- "$URI" | unpack --dest "$TMP" -
+mv -- "$TMP/texlab" "$BIN"
 chmod +x -- "$BIN"
 

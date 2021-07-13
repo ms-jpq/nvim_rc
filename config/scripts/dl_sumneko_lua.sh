@@ -23,5 +23,5 @@ then
    ./3rd/luamake/luamake rebuild
  )
 
- ln --symbolic --force -- "$LIB/"*'/lua-language-server' "$BIN"
+ ln --symbolic --force -- "$LIB/bin/"*'/lua-language-server' "$BIN"
 fi

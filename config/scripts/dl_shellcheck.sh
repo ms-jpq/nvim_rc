@@ -11,7 +11,9 @@ else
   URI="$LINUX_URI"
 fi
 
-get -- "$URI" | unpack -
-mv -- './shellcheck'*'/shellcheck' "$BIN"
+
+TMP="$(mktemp --directory)"
+get -- "$URI" | unpack --dest "$TMP" -
+mv -- "$TMP/shellcheck"*'/shellcheck' "$BIN"
 chmod +x -- "$BIN"
 

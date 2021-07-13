@@ -4,8 +4,9 @@ set -eu
 set -o pipefail
 
 
-get --type '.zip' "$URI" | unpack -
+TMP="$(mktemp --directory)"
+get --type '.zip' "$URI" | unpack --dest "$TMP" -
 printf '%s\n\n' '#!/usr/bin/env node' > "$BIN"
-cat -- './extension/dist/server/tailwindServer.js' >> "$BIN"
+cat -- "$TMP/extension/dist/server/tailwindServer.js" >> "$BIN"
 chmod +x -- "$BIN"
 
