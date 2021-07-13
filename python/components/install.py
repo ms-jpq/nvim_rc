@@ -172,7 +172,10 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
             if which(cmd):
                 packages_json.unlink(missing_ok=True)
                 p1 = await call(cmd, "init", "--yes", cwd=NPM_DIR)
-                yield "", p1
+                p = ProcReturn(
+                    prog=p1.prog, args=p1.args, code=p1.code, out=b"", err=p1.err
+                )
+                yield "", p
 
                 if not p1.code:
                     package_lock.unlink(missing_ok=True)
@@ -242,11 +245,12 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
 
 
 async def install() -> int:
+    cols, _ = get_terminal_size((80, 40))
+    sep = cols * "="
+
     has_error = False
     for fut in as_completed(chain(_git(), _pip(), _npm(), _go(), _script())):
         for debug, proc in await fut:
-            cols, _ = get_terminal_size((80, 40))
-            sep = cols * "="
             args = join(chain((proc.prog,), proc.args))
             if proc.code == 0:
                 msg = LANG("proc succeeded", args=args)
