@@ -6,10 +6,11 @@ set -o pipefail
 
 if [[ "$OS" == 'Darwin' ]]
 then
-  get -- "$MAC_OS" "$BIN"
+  FILE="$(get -- "$MAC_URI")"
 else
-  get -- "$LINUX" "$BIN"
+  FILE="$(get -- "$LINUX_URI")"
 fi
 
 
+cp -- "$FILE" "$BIN"
 chmod +x -- "$BIN"

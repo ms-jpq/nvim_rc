@@ -34,7 +34,7 @@
   install:
     script:
       env:
-        MAC_OS: https://github.com/hadolint/hadolint/releases/download/v2.6.0/hadolint-Darwin-x86_64
-        LINUX: https://github.com/hadolint/hadolint/releases/download/v2.6.0/hadolint-Linux-x86_64
+        MAC_URI: https://github.com/hadolint/hadolint/releases/download/v2.6.0/hadolint-Darwin-x86_64
+        LINUX_URI: https://github.com/hadolint/hadolint/releases/download/v2.6.0/hadolint-Linux-x86_64
       file: dl_hadolint.sh
 
