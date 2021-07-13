@@ -8,7 +8,7 @@ LIB="$(dirname "$(dirname "$(realpath "$0")")")/lib/jdtls"
 OS="$(uname | tr '[:upper:]' '[:lower:]')"
 
 CANDIDATES=("$LIB/plugins/org.eclipse.equinox.launcher_"*'.jar')
-export JAR="$(printf '%s' "${CANDIDATES[@]}")"
+export JAR="${CANDIDATES[0]}"
 export WORKSPACE="${WORKSPACE:="$PWD"}"
 # export GRADLE_HOME="$(which gradle | rg --color=never --passthru --replace '' -- '/bin/gradle$')"
 
@@ -29,7 +29,7 @@ ARGS=(
   --add-modules=ALL-SYSTEM
   --add-opens
   java.base/java.util=ALL-UNNAMED
-  --add-opens 
+  --add-opens
   java.base/java.lang=ALL-UNNAMED
   )
 
