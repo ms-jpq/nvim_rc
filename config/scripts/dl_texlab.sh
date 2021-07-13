@@ -13,7 +13,7 @@ fi
 
 
 TMP="$(mktemp --directory)"
-get -- "$URI" | unpack --dest "$TMP" -
+get -- "$URI" | unpack --dest "$TMP"
 mv -- "$TMP/texlab" "$BIN"
 chmod +x -- "$BIN"
 

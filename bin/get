@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 from argparse import ArgumentParser, Namespace
 from contextlib import suppress
 from datetime import timezone
@@ -43,7 +44,6 @@ def _parse_args() -> Namespace:
     parser = ArgumentParser()
     parser.add_argument("src")
     parser.add_argument("dest", nargs="?", default=None)
-    parser.add_argument("-t", "--type")
     parser.add_argument("--timeout", type=float, default=60.0)
     return parser.parse_args()
 
@@ -53,8 +53,7 @@ def main() -> None:
 
     src: str = args.src
     path = PurePosixPath(urlsplit(src).path)
-    suffix = args.type or path.suffix
-    dest = Path(args.dest if args.dest else path.name).with_suffix(suffix).resolve()
+    dest = Path(args.dest if args.dest else path.name).resolve()
 
     msg = f"""
     {src}
