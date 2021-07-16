@@ -70,6 +70,11 @@
 - git:
     uri: https://github.com/ms-jpq/coq_nvim
     branch: bwaaak
+  vals:
+    coq_settings:
+      clients:
+        lsp:
+          enabled: True
   keys:
     - modes: n
       maps:
