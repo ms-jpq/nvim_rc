@@ -37,19 +37,19 @@ def _toggle_case(nvim: Nvim) -> None:
     win = cur_win(nvim)
     row, col = win_get_cursor(nvim, win=win)
     buf = win_get_buf(nvim, win=win)
-    if not writable(nvim, buf=buf):
-        return
-    else:
+    if writable(nvim, buf=buf):
         line, *_ = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
         bline = line.encode()
         before, after = bline[:col], bline[col:]
-        cur, *post = after
-        pt = bytes((cur,)).decode()
-        swapped = _swap_case(pt)
-        new = before.decode() + swapped + bytes(post).decode()
-        pos = len(before) + len(swapped.encode())
-        buf_set_lines(nvim, buf=buf, lo=row, hi=row + 1, lines=(new,))
-        win_set_cursor(nvim, win=win, row=row, col=pos)
+        if after:
+            cur, *post = after
+            pt = bytes((cur,)).decode()
+            swapped = _swap_case(pt)
+            new = before.decode() + swapped + bytes(post).decode()
+            pos = len(before) + len(swapped.encode())
+            buf_set_lines(nvim, buf=buf, lo=row, hi=row + 1, lines=(new,))
+            win_set_cursor(nvim, win=win, row=row, col=pos)
 
 
 keymap.n("~") << f"<cmd>lua {_toggle_case.name}()<cr>"
+
