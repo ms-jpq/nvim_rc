@@ -69,7 +69,7 @@
 
 - git:
     uri: https://github.com/ms-jpq/coq_nvim
-    branch: bwaaak
+    branch: coq
   vals:
     coq_settings:
       clients:
