@@ -167,15 +167,15 @@
     npm:
       - vscode-langservers-extracted
 
-- server: tailwindcss
-  bin: tailwindcss-language-server
-  install:
-    script:
-      required:
-        - git
-      env:
-        URI: https://github.com/tailwindlabs/tailwindcss-intellisense/releases/download/v0.6.12/vscode-tailwindcss-0.6.12.vsix
-      file: dl_tailwind.sh
+# - server: tailwindcss
+#   bin: tailwindcss-language-server
+#   install:
+#     script:
+#       required:
+#         - git
+#       env:
+#         URI: https://github.com/tailwindlabs/tailwindcss-intellisense/releases/download/v0.6.12/vscode-tailwindcss-0.6.12.vsix
+#       file: dl_tailwind.sh
 
 - server: graphql
   bin: graphql-lsp
