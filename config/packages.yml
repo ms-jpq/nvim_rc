@@ -6,13 +6,6 @@
     ts_opts:
       highlight:
         enable: True
-      incremental_selection:
-        enable: True
-        keymaps:
-          init_selection: "gs"
-          node_incremental: "gs"
-          node_decremental: "gs"
-          scope_incremental: "gs"
       textobjects:
         select:
           enable: True
