@@ -110,7 +110,11 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
                     location = p_name(spec.uri)
                     if location.is_dir():
                         p1 = await call(
-                            cmd, "pull", "--recurse-submodules", cwd=location
+                            cmd,
+                            "pull",
+                            "--recurse-submodules",
+                            *(("origin", spec.branch) if spec.branch else ()),
+                            cwd=location,
                         )
                     else:
                         p1 = await call(
@@ -119,6 +123,8 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
                             "--depth=1",
                             "--recurse-submodules",
                             "--shallow-submodules",
+                            *(("--branch", spec.branch) if spec.branch else ()),
+                            "--",
                             spec.uri,
                             str(location),
                         )
