@@ -34,7 +34,7 @@
   args:
     - --write
     - --
-    - ${filename}
+    - ${tmpname}
   type: fs
   filetypes:
     - javascript

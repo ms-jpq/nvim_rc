@@ -60,8 +60,13 @@ def current_ctx(nvim: Nvim) -> Tuple[str, BufContext]:
     )
 
 
-def arg_subst(args: Iterable[str], ctx: BufContext, filename: str) -> Sequence[str]:
-    env = {"filename": filename, "filetype": ctx.filetype, "tabsize": str(ctx.tabsize)}
+def arg_subst(args: Iterable[str], ctx: BufContext, tmp_name: str) -> Sequence[str]:
+    env = {
+        "tmpname": tmp_name,
+        "filename": ctx.filename,
+        "filetype": ctx.filetype,
+        "tabsize": str(ctx.tabsize),
+    }
     return tuple(envsubst(arg, env=env) for arg in args)
 
 
@@ -88,7 +93,7 @@ async def _linter_output(
     arg_info = join(chain((attr.bin,), attr.args))
 
     try:
-        args = arg_subst(attr.args, ctx=ctx, filename=str(temp))
+        args = arg_subst(attr.args, ctx=ctx, tmp_name=str(temp))
     except ParseError:
         return LANG("grammar error", text=arg_info)
     else:

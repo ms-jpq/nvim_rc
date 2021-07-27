@@ -34,7 +34,7 @@ async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> 
     arg_info = join(chain((attr.bin,), attr.args))
 
     try:
-        args = arg_subst(attr.args, ctx=ctx, filename=str(temp))
+        args = arg_subst(attr.args, ctx=ctx, tmp_name=str(temp))
     except ParseError:
         return LANG("grammar error", text=arg_info)
     else:
