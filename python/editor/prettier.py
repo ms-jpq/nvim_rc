@@ -1,5 +1,6 @@
-from asyncio import gather
+from itertools import chain
 from pathlib import Path
+from shlex import join
 from shutil import which
 from typing import Iterable, Iterator, Tuple
 
@@ -12,7 +13,7 @@ from pynvim_pp.api import (
     win_get_cursor,
     win_set_cursor,
 )
-from pynvim_pp.lib import async_call, awrite
+from pynvim_pp.lib import async_call, awrite, write
 from std2.aitertools import aiterify
 from std2.asyncio.subprocess import call
 
@@ -26,11 +27,11 @@ from .linter import (
     make_temp,
     set_preview_content,
 )
-from .whitespace import trailing_ws, detect_tabs
+from .whitespace import detect_tabs, trailing_ws
 
 
 async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> str:
-    arg_info = f"{attr.bin} {' '.join(attr.args)}"
+    arg_info = join(chain((attr.bin,), attr.args))
 
     try:
         args = arg_subst(attr.args, ctx=ctx, filename=str(temp))
@@ -69,13 +70,16 @@ async def _run(
         ]
         errors = (ctx.linefeed * 2).join(errs)
         if errors:
-            await gather(
-                awrite(nvim, LANG("prettier failed")),
-                set_preview_content(nvim, text=errors),
-            )
+
+            def c1() -> None:
+                set_preview_content(nvim, text=errors)
+                write(nvim, LANG("prettier failed"))
+
+            await async_call(nvim, c1)
+
         else:
 
-            def cont() -> None:
+            def c2() -> None:
                 def it() -> Iterator[Tuple[Window, Tuple[int, int]]]:
                     wins = list_wins(nvim)
                     for win in wins:
@@ -94,9 +98,11 @@ async def _run(
                     win_set_cursor(nvim, win=win, row=new_row, col=col)
                 detect_tabs(nvim, buf=ctx.buf)
 
-            prettiers = LANG("step join sep").join(attr.bin for attr in attrs)
-            nice = LANG("prettier succeeded", prettiers=prettiers)
-            await gather(awrite(nvim, nice), async_call(nvim, cont))
+                prettiers = LANG("step join sep").join(attr.bin for attr in attrs)
+                nice = LANG("prettier succeeded", prettiers=prettiers)
+                write(nvim, nice)
+
+            await async_call(nvim, c2)
 
 
 def _fmts_for(filetype: str) -> Iterator[FmtAttrs]:

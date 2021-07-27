@@ -5,6 +5,7 @@ from datetime import datetime
 from itertools import chain
 from os import close
 from pathlib import Path
+from shlex import join
 from shutil import which
 from tempfile import mkstemp
 from typing import Iterable, Iterator, Sequence, Tuple
@@ -76,18 +77,15 @@ def make_temp(path: Path) -> Iterator[Path]:
         new_path.unlink(missing_ok=True)
 
 
-async def set_preview_content(nvim: Nvim, text: str) -> None:
-    def cont() -> None:
-        with hold_win_pos(nvim):
-            set_preview(nvim, syntax="", preview=text.splitlines())
-
-    await async_call(nvim, cont)
+def set_preview_content(nvim: Nvim, text: str) -> None:
+    with hold_win_pos(nvim):
+        set_preview(nvim, syntax="", preview=text.splitlines())
 
 
 async def _linter_output(
     attr: LinterAttrs, ctx: BufContext, cwd: str, body: bytes, temp: Path
 ) -> str:
-    arg_info = f"{attr.bin} {' '.join(attr.args)}"
+    arg_info = join(chain((attr.bin,), attr.args))
 
     try:
         args = arg_subst(attr.args, ctx=ctx, filename=str(temp))
@@ -123,7 +121,7 @@ async def _run(
 
     now = datetime.now().strftime(DATE_FMT)
     preview = (ctx.linefeed * 2).join(chain((now,), outputs))
-    await set_preview_content(nvim, text=preview)
+    await async_call(nvim, lambda: set_preview_content(nvim, text=preview))
 
 
 def _linters_for(filetype: str) -> Iterator[LinterAttrs]:
