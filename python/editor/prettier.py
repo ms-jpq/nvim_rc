@@ -42,7 +42,13 @@ async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> 
             return LANG("missing", thing=attr.bin)
         else:
             stdin = temp.read_bytes() if attr.type is FmtType.stream else None
-            proc = await call(attr.bin, *args, stdin=stdin, cwd=cwd)
+            proc = await call(
+                attr.bin,
+                *args,
+                stdin=stdin,
+                cwd=cwd,
+                check_returncode=set(),
+            )
             if attr.type is FmtType.stream:
                 temp.write_bytes(proc.out)
 
@@ -125,3 +131,4 @@ async def run_fmt(nvim: Nvim) -> None:
 
 
 keymap.n("gq", nowait=True) << f"<cmd>lua {run_fmt.name}()<cr>"
+

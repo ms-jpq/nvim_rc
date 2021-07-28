@@ -116,6 +116,7 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
                             "--recurse-submodules",
                             *(("origin", spec.branch) if spec.branch else ()),
                             cwd=location,
+                            check_returncode=set(),
                         )
                     else:
                         p1 = await call(
@@ -128,6 +129,7 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
                             "--",
                             spec.uri,
                             location,
+                            check_returncode=set(),
                         )
                     yield spec.uri, p1
 
@@ -137,6 +139,7 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
                             INSTALL_SCRIPTS_DIR / pkg.file,
                             env=pkg.env,
                             cwd=location,
+                            check_returncode=set(),
                         )
                         yield "", p2
 
@@ -162,6 +165,7 @@ def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
                 VENV_DIR,
                 "--",
                 *specs,
+                check_returncode=set(),
             )
             return (("", p),)
 
@@ -198,7 +202,13 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
                         dumps(json, check_circular=False, ensure_ascii=False, indent=2)
                     )
 
-                    p2 = await call(cmd, "install", "--upgrade", cwd=NPM_DIR)
+                    p2 = await call(
+                        cmd,
+                        "install",
+                        "--upgrade",
+                        cwd=NPM_DIR,
+                        check_returncode=set(),
+                    )
                     yield ("", p2)
 
         return [rt async for rt in cont()]
@@ -220,6 +230,7 @@ def _go() -> Iterator[Awaitable[SortOfMonoid]]:
                 *_go_specs(),
                 env={"GO111MODULE": "on", "GOPATH": str(GO_DIR)},
                 cwd=VARS_DIR,
+                check_returncode=set(),
             )
             return (("", p),)
 
@@ -250,6 +261,7 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
                 INSTALL_SCRIPTS_DIR / pkg.file,
                 env={**env, **pkg.env},
                 cwd=TMP_DIR,
+                check_returncode=set(),
             )
             return (("", p),)
 

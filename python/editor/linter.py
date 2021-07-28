@@ -101,7 +101,13 @@ async def _linter_output(
             return LANG("missing", thing=attr.bin)
         else:
             stdin = body if attr.type is LinterType.stream else None
-            proc = await call(attr.bin, *args, stdin=stdin, cwd=cwd)
+            proc = await call(
+                attr.bin,
+                *args,
+                stdin=stdin,
+                cwd=cwd,
+                check_returncode=set(),
+            )
             if proc.code == attr.exit_code:
                 heading = LANG("proc succeeded", args=arg_info)
             else:
@@ -148,3 +154,4 @@ async def _run_linter(nvim: Nvim) -> None:
 
 
 keymap.n("M") << f"<cmd>lua {_run_linter.name}()<cr>"
+
