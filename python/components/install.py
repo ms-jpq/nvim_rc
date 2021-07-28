@@ -46,6 +46,7 @@ from .rtp import p_name
 
 
 class _PackagesJson(TypedDict):
+    dependencies: Mapping[str, str]
     devDependencies: Mapping[str, str]
 
 
@@ -186,6 +187,7 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
                 if not p1.code:
                     package_lock.unlink(missing_ok=True)
                     json: _PackagesJson = loads(packages_json.read_text())
+                    json["dependencies"] = {}
                     json["devDependencies"] = {
                         key: "*"
                         for key in chain(
