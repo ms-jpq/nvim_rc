@@ -49,8 +49,8 @@
 - bin: prettier
   args:
     - --stdin-filepath
-    - --
     - ${filename}
+    - --
   type: stream
   filetypes:
     - css
