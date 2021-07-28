@@ -13,6 +13,9 @@
 - bin: isort
   type: stream
   args:
+    - --profile
+    - black
+    - --
     - "-"
   filetypes:
     - python
