@@ -150,4 +150,3 @@ for spec in lsp_specs:
         atomic.exec_lua(_LSP_INIT, args)
 
 atomic.command("doautoall Filetype")
-

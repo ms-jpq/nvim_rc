@@ -8,4 +8,3 @@ from .install import InstallSpec
 
 ToolSpecs = Sequence[InstallSpec]
 tool_specs: ToolSpecs = new_decoder(ToolSpecs)(safe_load(CONF_TOOL.open()))
-

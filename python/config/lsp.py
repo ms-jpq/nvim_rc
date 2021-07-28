@@ -37,4 +37,3 @@ class LspAttrs:
 
 LspSpecs = Sequence[LspAttrs]
 lsp_specs: LspSpecs = new_decoder(LspSpecs)(safe_load(CONF_LSP.open()))
-

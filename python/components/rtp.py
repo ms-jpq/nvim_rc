@@ -50,4 +50,3 @@ def inst(nvim: Nvim) -> Atomic:
             atomic2.command(spec.viml)
 
     return atomic1 + keymap.drain(buf=None) + atomic2
-

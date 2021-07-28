@@ -105,4 +105,3 @@ def trailing_ws(nvim: Nvim) -> None:
         return
     else:
         _set_trimmed(nvim, win=win, buf=buf)
-

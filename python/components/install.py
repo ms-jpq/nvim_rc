@@ -127,7 +127,7 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
                             *(("--branch", spec.branch) if spec.branch else ()),
                             "--",
                             spec.uri,
-                            str(location),
+                            location,
                         )
                     yield spec.uri, p1
 
@@ -159,7 +159,7 @@ def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
                 "install",
                 "--upgrade",
                 "--target",
-                str(VENV_DIR),
+                VENV_DIR,
                 "--",
                 *specs,
             )
@@ -235,7 +235,12 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
 
         async def cont(bin: str, pkg: ScriptSpec) -> SortOfMonoid:
             env = {
-                "PATH": pathsep.join((INSTALL_BIN_DIR, environ["PATH"])),
+                "PATH": pathsep.join(
+                    (
+                        str(INSTALL_BIN_DIR),
+                        environ["PATH"],
+                    )
+                ),
                 "ARCH": sys.machine,
                 "OS": sys.sysname,
                 "BIN": str(BIN_DIR / bin),
@@ -303,4 +308,3 @@ def maybe_install(nvim: Nvim) -> None:
 
         if ans == 1:
             open_term(nvim, executable, INSTALL_SCRIPT, "deps", "packages")
-

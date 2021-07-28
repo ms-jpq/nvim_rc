@@ -32,4 +32,3 @@ keymap.nv("$") << "$<right>"
 settings["clipboard"] = "unnamedplus"
 # fake DISPLAY for xclip
 atomic.call_function("setenv", ("DISPLAY", environ.get("DISPLAY", "VIM_FAKE_DISPLAY")))
-

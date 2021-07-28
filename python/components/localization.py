@@ -42,4 +42,3 @@ def load(code: Optional[str]) -> Lang:
         safe_load(yml_path.open())
     )
     return Lang(specs=specs)
-

@@ -47,4 +47,3 @@ keymap.o("iw") << f"<cmd>lua {_word.name}(true)<cr>"
 keymap.o("aw") << f"<cmd>lua {_word.name}(false)<cr>"
 keymap.v("iw") << f"<esc><cmd>lua {_word.name}(true)<cr>"
 keymap.v("aw") << f"<esc><cmd>lua {_word.name}(false)<cr>"
-

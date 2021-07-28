@@ -1,5 +1,6 @@
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
+from pathlib import PurePath
 from subprocess import check_call
 from sys import executable, stderr
 from typing import Literal, Sequence, Union
@@ -7,6 +8,7 @@ from venv import EnvBuilder
 
 from .consts import REQUIREMENTS, RT_DIR, RT_PY, TOP_LEVEL
 
+_EX = PurePath(executable)
 _LOCK_FILE = RT_DIR / "requirements.lock"
 
 
@@ -49,14 +51,14 @@ if command == "deps":
                 "--upgrade",
                 "--force-reinstall",
                 "--requirement",
-                str(REQUIREMENTS),
+                REQUIREMENTS,
             )
         )
 
         _LOCK_FILE.write_bytes(req)
 
     if not deps or "packages" in deps:
-        if executable != RT_PY:
+        if _EX != RT_PY:
             code = check_call(
                 (RT_PY, "-m", "python", "deps", "packages"), cwd=TOP_LEVEL
             )
@@ -74,7 +76,7 @@ elif command == "run":
     except Exception:
         lock = b""
 
-    assert executable == RT_PY
+    assert _EX == RT_PY
     assert lock == req
 
     from pynvim import attach
@@ -93,4 +95,3 @@ elif command == "run":
 
 else:
     assert False
-

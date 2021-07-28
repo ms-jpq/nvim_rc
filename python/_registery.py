@@ -8,4 +8,3 @@ from .version_control import git
 from .workspace import input, misc, navigation, statusline, theme, wm
 
 ____ = None
-

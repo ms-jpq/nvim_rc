@@ -27,4 +27,3 @@ class FmtAttrs:
 
 FmtSpecs = Sequence[FmtAttrs]
 fmt_specs: FmtSpecs = new_decoder(FmtSpecs)(safe_load(CONF_FMT.open()))
-

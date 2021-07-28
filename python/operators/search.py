@@ -99,4 +99,3 @@ keymap.v("gt") << f"<esc><cmd>lua {_op_sd.name}()<cr>"
 
 # very magic
 keymap.n("gT", silent=False) << ":%s/\\v//g<left><left><left>"
-

@@ -52,4 +52,3 @@ def _hl_yank(nvim: Nvim) -> None:
 
 atomic.command("highlight HighlightedyankRegion cterm=reverse gui=reverse")
 autocmd("TextYankPost") << f"lua {_hl_yank.name}()"
-

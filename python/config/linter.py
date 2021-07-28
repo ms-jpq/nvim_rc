@@ -26,4 +26,3 @@ class LinterAttrs:
 
 LinterSpecs = Sequence[LinterAttrs]
 linter_specs: LinterSpecs = new_decoder(LinterSpecs)(safe_load(CONF_LINT.open()))
-

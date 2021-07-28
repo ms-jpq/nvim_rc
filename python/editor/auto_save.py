@@ -25,4 +25,3 @@ settings["undofile"] = True
 settings["undolevels"] = 1000
 # maximum number lines to save for undo on a buffer reload
 settings["undoreload"] = 1000
-

@@ -111,4 +111,3 @@ def _comment_single(nvim: Nvim) -> None:
 
 
 keymap.n("gcc") << f"<cmd>lua {_comment_single.name}()<cr>"
-

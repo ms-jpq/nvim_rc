@@ -8,11 +8,11 @@ TOP_LEVEL = Path(__file__).resolve().parent.parent
 
 RT_DIR = TOP_LEVEL / ".vars" / "runtime"
 RT_BIN = RT_DIR / "bin"
-RT_PY = str(RT_BIN / "python3")
+RT_PY = RT_BIN / "python3"
 
 
 REQUIREMENTS = TOP_LEVEL / "requirements.txt"
-INSTALL_SCRIPT = str(TOP_LEVEL / "init.py")
+INSTALL_SCRIPT = TOP_LEVEL / "init.py"
 
 LANG_ROOT = TOP_LEVEL / "locale"
 DEFAULT_LANG = "c"
@@ -28,7 +28,7 @@ CONF_TOOL = CONF_DIR / "tools.yml"
 VARS_DIR = TOP_LEVEL / ".vars"
 
 
-INSTALL_BIN_DIR = str(TOP_LEVEL / "bin")
+INSTALL_BIN_DIR = TOP_LEVEL / "bin"
 INSTALL_SCRIPTS_DIR = CONF_DIR / "scripts"
 BIN_DIR = VARS_DIR / "bin"
 LIB_DIR = VARS_DIR / "lib"
@@ -65,4 +65,3 @@ TMP_DIR = VARS_DIR / "tmp"
 
 LOGS_DIR = VARS_DIR / "logs"
 UPDATE_LOG = LOGS_DIR / "last_update.txt"
-

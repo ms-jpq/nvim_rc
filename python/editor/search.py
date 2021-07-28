@@ -23,4 +23,3 @@ keymap.n("N") << "N"
 # use no magic
 keymap.nv("/", silent=False) << r"/\V"
 keymap.nv("?", silent=False) << r"?\V"
-

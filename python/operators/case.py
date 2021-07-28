@@ -52,4 +52,3 @@ def _toggle_case(nvim: Nvim) -> None:
 
 
 keymap.n("~") << f"<cmd>lua {_toggle_case.name}()<cr>"
-

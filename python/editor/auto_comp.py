@@ -18,4 +18,3 @@ keymap.i("<c-l>") << "<c-x><c-l>"
 keymap.i("<c-f>") << "<c-x><c-f>"
 # omnifunc
 keymap.i("<c-o>") << "<c-x><c-o>"
-
