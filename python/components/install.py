@@ -264,7 +264,7 @@ async def install() -> int:
     has_error = False
     for fut in as_completed(chain(_git(), _pip(), _npm(), _go(), _script())):
         for debug, proc in await fut:
-            args = join(chain((proc.prog,), proc.args))
+            args = join(map(str, chain((proc.prog,), proc.args)))
             if proc.code == 0:
                 msg = LANG("proc succeeded", args=args)
                 print(msg, debug, proc.out.decode(), proc.err, sep, sep=linesep)
@@ -308,3 +308,4 @@ def maybe_install(nvim: Nvim) -> None:
 
         if ans == 1:
             open_term(nvim, executable, INSTALL_SCRIPT, "deps", "packages")
+
