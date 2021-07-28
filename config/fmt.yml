@@ -23,6 +23,9 @@
 - bin: black
   type: stream
   args:
+    - --stdin-filename
+    - ${filename}
+    - --
     - "-"
   filetypes:
     - python
