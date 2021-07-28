@@ -182,7 +182,13 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
             cmd = "npm"
             if which(cmd):
                 packages_json.unlink(missing_ok=True)
-                p1 = await call(cmd, "init", "--yes", cwd=NPM_DIR)
+                p1 = await call(
+                    cmd,
+                    "init",
+                    "--yes",
+                    cwd=NPM_DIR,
+                    check_returncode=set(),
+                )
                 p = ProcReturn(
                     prog=p1.prog, args=p1.args, code=p1.code, out=b"", err=p1.err
                 )
