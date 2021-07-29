@@ -1,7 +1,8 @@
 from asyncio.tasks import as_completed
 from itertools import chain
 from json import dumps, loads
-from os import environ, linesep, pathsep, uname
+from os import environ, linesep, pathsep
+from platform import uname
 from shlex import join
 from shutil import get_terminal_size, which
 from sys import executable, stderr
@@ -259,7 +260,7 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
                     )
                 ),
                 "ARCH": sys.machine,
-                "OS": sys.sysname,
+                "OS": sys.system,
                 "BIN": str(BIN_DIR / bin),
                 "LIB": str(LIB_DIR / bin),
             }
