@@ -28,7 +28,6 @@ CONF_TOOL = CONF_DIR / "tools.yml"
 VARS_DIR = TOP_LEVEL / ".vars"
 
 
-INSTALL_BIN_DIR = TOP_LEVEL / "bin"
 INSTALL_SCRIPTS_DIR = CONF_DIR / "scripts"
 BIN_DIR = VARS_DIR / "bin"
 LIB_DIR = VARS_DIR / "lib"

@@ -30,7 +30,6 @@ from ..config.tools import tool_specs
 from ..consts import (
     BIN_DIR,
     GO_DIR,
-    INSTALL_BIN_DIR,
     INSTALL_SCRIPT,
     INSTALL_SCRIPTS_DIR,
     LIB_DIR,
@@ -255,7 +254,7 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
             env = {
                 "PATH": pathsep.join(
                     (
-                        str(INSTALL_BIN_DIR),
+                        str(INSTALL_SCRIPTS_DIR),
                         environ["PATH"],
                     )
                 ),
