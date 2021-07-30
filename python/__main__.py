@@ -2,7 +2,7 @@ from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
 from pathlib import PurePath
 from subprocess import check_call
-from sys import executable, stderr
+from sys import executable, exit, stderr
 from typing import Literal, Sequence, Union
 from venv import EnvBuilder
 
