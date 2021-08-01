@@ -113,6 +113,7 @@ _LSP_INIT = """
   end
 
   coq.lsp_ensure_capacities(cfg)
+  chad.lsp_ensure_capacities(cfg)
 
   lsp[server].setup(cfg)
 end)(...)
