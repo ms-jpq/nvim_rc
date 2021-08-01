@@ -112,9 +112,7 @@ _LSP_INIT = """
     end
   end
 
-  local capabilities = vim.lsp.protocol.make_client_capabilities()
-  capabilities.textDocument.completion.completionItem.snippetSupport = true
-  cfg.capabilities = capabilities
+  coq.lsp_ensure_capacities(cfg)
 
   lsp[server].setup(cfg)
 end)(...)
