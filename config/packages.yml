@@ -57,7 +57,7 @@
   vals:
     coq_settings:
       clients:
-        lsp:
+        tabnine:
           enabled: True
   keys:
     - modes: n
