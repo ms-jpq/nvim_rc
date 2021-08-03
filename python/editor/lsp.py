@@ -114,7 +114,7 @@ _LSP_INIT = """
 
 
   cfg = coq.lsp_ensure_capabilities(cfg)
-  --cfg = chad.lsp_ensure_capabilities(cfg)
+  cfg = chad.lsp_ensure_capabilities(cfg)
 
   lsp[server].setup(cfg)
 end)(...)
