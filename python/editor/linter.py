@@ -112,7 +112,9 @@ async def _linter_output(
                 heading = LANG("proc succeeded", args=arg_info)
             else:
                 heading = LANG("proc failed", code=proc.code, args=arg_info)
-            print_out = ctx.linefeed.join((heading, proc.out.decode(), proc.err))
+            print_out = ctx.linefeed.join(
+                (heading, proc.out.decode(), proc.err.decode())
+            )
             return print_out
 
 

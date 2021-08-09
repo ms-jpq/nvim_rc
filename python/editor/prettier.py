@@ -56,7 +56,7 @@ async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> 
                 return ""
             else:
                 heading = LANG("proc failed", code=proc.code, args=arg_info)
-                print_out = ctx.linefeed.join((heading, proc.err))
+                print_out = ctx.linefeed.join((heading, proc.err.decode()))
                 return print_out
 
 
