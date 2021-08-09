@@ -126,7 +126,7 @@
       - golang.org/x/tools/gopls@latest
 
 - server: sourcekit
-  bin: xcrun
+  bin: sourcekit-lsp
 
 # - server: sqlls
 #   bin: sql-language-server
@@ -225,6 +225,12 @@
     npm:
       - vim-language-server
 
+- server: ansiblels
+  bin: ansible-language-server
+  install:
+    npm:
+      - ansible-language-server
+
 - server: jdtls
   bin: jdtls
   args: []
@@ -259,4 +265,3 @@
         URI: https://github.com/sumneko/lua-language-server.git
         TAG: "2.0.3"
       file: dl_sumneko_lua.sh
-
