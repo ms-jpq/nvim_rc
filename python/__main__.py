@@ -91,9 +91,9 @@ elif command == "run":
         exit(1)
     else:
         nvim = attach("socket", path=args.socket)
-        pool = ThreadPoolExecutor()
-        code = run_client(nvim, pool=pool, client=Client(pool=pool))
-        exit(code)
+        with ThreadPoolExecutor() as pool:
+            code = run_client(nvim, pool=pool, client=Client(pool=pool))
+            exit(code)
 
 else:
     assert False
