@@ -1,5 +1,6 @@
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import PurePath
 from subprocess import check_call
 from sys import executable, exit, stderr
@@ -90,7 +91,7 @@ elif command == "run":
         exit(1)
     else:
         nvim = attach("socket", path=args.socket)
-        code = run_client(nvim, client=Client())
+        code = run_client(nvim, pool=ThreadPoolExecutor(), client=Client())
         exit(code)
 
 else:
