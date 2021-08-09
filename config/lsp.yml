@@ -219,11 +219,11 @@
     npm:
       - vim-language-server
 
-- server: ansiblels
-  bin: ansible-language-server
-  install:
-    npm:
-      - ansible-language-server
+# - server: ansiblels
+#   bin: ansible-language-server
+#   install:
+#     npm:
+#       - ansible-language-server
 
 - server: jdtls
   bin: jdtls
