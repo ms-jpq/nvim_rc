@@ -2,6 +2,7 @@ from asyncio.tasks import as_completed
 from itertools import chain
 from json import dumps, loads
 from os import environ, linesep, pathsep
+from pathlib import Path
 from platform import uname
 from shlex import join
 from shutil import get_terminal_size, which
@@ -293,7 +294,7 @@ async def install() -> int:
                     msg,
                     debug,
                     proc.out.decode(),
-                    proc.err,
+                    proc.err.decode(),
                     sep,
                     sep=linesep,
                     file=stderr,
@@ -325,4 +326,6 @@ def maybe_install(nvim: Nvim) -> None:
             UPDATE_LOG.write_text(coded)
 
         if ans == 1:
-            open_term(nvim, executable, INSTALL_SCRIPT, "deps", "packages")
+            open_term(
+                nvim, Path(executable).resolve(), INSTALL_SCRIPT, "deps", "packages"
+            )

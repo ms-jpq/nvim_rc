@@ -1,3 +1,4 @@
+from itertools import chain
 from os import environ
 from shutil import which
 from typing import Iterator, Mapping, Optional, TypedDict, cast
@@ -16,6 +17,7 @@ from pynvim_pp.api import (
 )
 from pynvim_pp.float_win import list_floatwins, open_float_win
 from pynvim_pp.rpc import RpcCallable
+from std2.pathlib import AnyPath
 
 from ..registery import autocmd, keymap, rpc
 
@@ -49,7 +51,7 @@ class TermOpts(TypedDict, total=False):
 
 
 @rpc(blocking=True)
-def _term_open(nvim: Nvim, *args: str, opts: TermOpts = {}) -> None:
+def _term_open(nvim: Nvim, *args: AnyPath, opts: TermOpts = {}) -> None:
     buf = _ensure_marked_buf(nvim)
     buf_type: str = buf_get_option(nvim, buf=buf, key="buftype")
     is_term_buf = buf_type == "terminal"
@@ -59,7 +61,7 @@ def _term_open(nvim: Nvim, *args: str, opts: TermOpts = {}) -> None:
             ex, *rest = args
         else:
             ex, rest = environ["SHELL"], []
-        cmds = (which(ex), *rest)
+        cmds = tuple(map(str, chain((which(ex),), rest)))
         nvim.funcs.termopen(cmds, opts)
     nvim.command("startinsert")
 
@@ -70,7 +72,7 @@ def close_term(nvim: Nvim) -> None:
 
 
 @rpc(blocking=True)
-def open_term(nvim: Nvim, prog: str, *args: str, opts: TermOpts = {}) -> None:
+def open_term(nvim: Nvim, prog: AnyPath, *args: AnyPath, opts: TermOpts = {}) -> None:
     close_term(nvim)
     _term_open(nvim, prog, *args, opts=opts)
 
