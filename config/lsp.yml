@@ -126,15 +126,15 @@
 - server: sourcekit
   bin: sourcekit-lsp
 
-- server: sqlls
-  bin: sql-language-server
-  args:
-    - up
-    - --method
-    - stdio
-  install:
-    npm:
-      - sql-language-server
+# - server: sqlls
+#   bin: sql-language-server
+#   args:
+#     - up
+#     - --method
+#     - stdio
+#   install:
+#     npm:
+#       - sql-language-server
 
 - server: rome
   bin: rome
