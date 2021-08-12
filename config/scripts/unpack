@@ -4,7 +4,7 @@ from argparse import ArgumentParser, Namespace
 from pathlib import Path, PurePath
 from shutil import register_unpack_format, unpack_archive, which
 from subprocess import check_call
-from sys import stdin
+from sys import stderr, stdin
 from textwrap import dedent
 
 _STDIN = Path("-")
@@ -41,8 +41,7 @@ def main() -> None:
     {args.dest}
     """
     unpack_archive(src, format=args.format, extract_dir=args.dest)
-    print(dedent(msg))
+    print(dedent(msg), file=stderr)
 
 
 main()
-
