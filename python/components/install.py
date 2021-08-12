@@ -287,7 +287,7 @@ async def install() -> int:
             if proc.code == 0:
                 msg = LANG("proc succeeded", args=args)
                 print(
-                    msg, debug, proc.out.decode(), proc.err.decode(), sep, sep=linesep
+                    msg, debug, proc.err.decode(), proc.out.decode(), sep, sep=linesep
                 )
             else:
                 has_error = True
