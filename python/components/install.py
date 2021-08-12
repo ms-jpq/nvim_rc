@@ -295,8 +295,8 @@ async def install() -> int:
                 print(
                     msg,
                     debug,
-                    proc.out.decode(),
                     proc.err.decode(),
+                    proc.out.decode(),
                     sep,
                     sep=linesep,
                     file=stderr,
