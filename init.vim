@@ -13,11 +13,9 @@ set termguicolors
 set shortmess+=I
 set commentstring=#\ %s
 
-let s:top_level = resolve(expand('<sfile>:p:h'))
-
 function Ndeps()
   call termopen([s:top_level . '/init.py', 'deps'])
 endfunction
 command! Ndeps call Ndeps()
 
-call luaeval('require("_init")(...)', [s:top_level])
+call luaeval('require("_init")()', [])

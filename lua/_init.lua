@@ -1,5 +1,5 @@
-return function(args)
-  local cwd = unpack(args)
+return function()
+  local cwd = vim.fn.stdpath("config")
 
   local on_exit = function(_, code)
     if code ~= 143 then
