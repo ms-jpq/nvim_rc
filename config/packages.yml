@@ -58,7 +58,7 @@
     coq_settings:
       clients:
         tabnine:
-          enabled: False
+          enabled: True
   keys:
     - modes: n
       maps:
