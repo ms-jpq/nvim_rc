@@ -1,7 +1,7 @@
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
 from concurrent.futures import ThreadPoolExecutor
-from pathlib import PurePath
+from pathlib import Path
 from subprocess import check_call
 from sys import executable, exit, stderr
 from typing import Literal, Sequence, Union
@@ -9,7 +9,7 @@ from venv import EnvBuilder
 
 from .consts import REQUIREMENTS, RT_DIR, RT_PY, TOP_LEVEL
 
-_EX = PurePath(executable)
+_EX = Path(executable)
 _LOCK_FILE = RT_DIR / "requirements.lock"
 
 
@@ -77,7 +77,7 @@ elif command == "run":
     except Exception:
         lock = b""
 
-    assert _EX == RT_PY
+    assert (_EX.parent.resolve() / _EX.name) == (RT_PY.parent.resolve() / RT_PY.name)
     assert lock == req
 
     from pynvim import attach
