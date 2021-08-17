@@ -10,6 +10,7 @@ from venv import EnvBuilder
 from .consts import REQUIREMENTS, RT_DIR, RT_PY, TOP_LEVEL
 
 _EX = Path(executable)
+_EX = _EX.parent.resolve() / _EX.name
 _LOCK_FILE = RT_DIR / "requirements.lock"
 
 
@@ -77,7 +78,7 @@ elif command == "run":
     except Exception:
         lock = b""
 
-    assert (_EX.parent.resolve() / _EX.name) == (RT_PY.parent.resolve() / RT_PY.name)
+    assert _EX == RT_PY
     assert lock == req
 
     from pynvim import attach
