@@ -102,10 +102,10 @@
     colorscheme one
     set background=light
 
-- git:
-    uri: https://github.com/kosayoda/nvim-lightbulb
-  viml: |-
-    autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
+# - git:
+#     uri: https://github.com/kosayoda/nvim-lightbulb
+#   viml: |-
+#     autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
 
 - git:
     uri: https://github.com/tpope/vim-repeat
