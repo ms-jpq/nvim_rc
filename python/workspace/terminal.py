@@ -55,7 +55,7 @@ def _term_open(nvim: Nvim, *args: AnyPath, opts: TermOpts = {}) -> None:
     buf = _ensure_marked_buf(nvim)
     buf_type: str = buf_get_option(nvim, buf=buf, key="buftype")
     is_term_buf = buf_type == "terminal"
-    open_float_win(nvim, margin=0, relsize=0.95, buf=buf)
+    open_float_win(nvim, margin=0, relsize=0.95, buf=buf, border="rounded")
     if not is_term_buf:
         if args:
             ex, *rest = args
