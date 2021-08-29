@@ -32,7 +32,7 @@ def _go_replace(nvim: Nvim, visual: VisualTypes = None) -> None:
 
 
 keymap.n("gr") << f"<cmd>set opfunc={_go_replace.name}<cr>g@"
-keymap.v("gr") << f"<esc><cmd>lua {_go_replace.name}()<cr>"
+keymap.v("gr") << rf"<c-\><c-n><cmd>lua {_go_replace.name}()<cr>"
 
 
 @rpc(blocking=True)

@@ -100,5 +100,5 @@ def _visual_down(nvim: Nvim) -> None:
             )
 
 
-keymap.v("<m-up>") << f"<esc><cmd>lua {_visual_up.name}()<cr>"
-keymap.v("<m-down>") << f"<esc><cmd>lua {_visual_down.name}()<cr>"
+keymap.v("<m-up>") << rf"<c-\><c-n><cmd>lua {_visual_up.name}()<cr>"
+keymap.v("<m-down>") << rf"<c-\><c-n><cmd>lua {_visual_down.name}()<cr>"

@@ -18,5 +18,5 @@ def _entire(nvim: Nvim) -> None:
 
 keymap.o("ie") << f"<cmd>lua {_entire.name}()<cr>"
 keymap.o("ae") << f"<cmd>lua {_entire.name}()<cr>"
-keymap.v("ie") << f"<esc><cmd>lua {_entire.name}()<cr>"
-keymap.v("ae") << f"<esc><cmd>lua {_entire.name}()<cr>"
+keymap.v("ie") << rf"<c-\><c-n><cmd>lua {_entire.name}()<cr>"
+keymap.v("ae") << rf"<c-\><c-n><cmd>lua {_entire.name}()<cr>"

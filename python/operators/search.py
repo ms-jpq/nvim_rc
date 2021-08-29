@@ -74,13 +74,13 @@ def _op_rg(nvim: Nvim, visual: VisualTypes = None) -> None:
 
 
 keymap.n("gs") << f"<cmd>set opfunc={_op_search.name}<cr>g@"
-keymap.v("gs") << f"<esc><cmd>lua {_op_search.name}()<cr>"
+keymap.v("gs") << rf"<c-\><c-n><cmd>lua {_op_search.name}()<cr>"
 
 keymap.n("gf") << f"<cmd>set opfunc={_op_fzf.name}<cr>g@"
-keymap.v("gf") << f"<esc><cmd>lua {_op_fzf.name}()<cr>"
+keymap.v("gf") << rf"<c-\><c-n><cmd>lua {_op_fzf.name}()<cr>"
 
 keymap.n("gF") << f"<cmd>set opfunc={_op_rg.name}<cr>g@"
-keymap.v("gF") << f"<esc><cmd>lua {_op_rg.name}()<cr>"
+keymap.v("gF") << rf"<c-\><c-n><cmd>lua {_op_rg.name}()<cr>"
 
 
 # replace selection
@@ -95,7 +95,7 @@ def _op_sd(nvim: Nvim, visual: VisualTypes = None) -> None:
 
 
 keymap.n("gt") << f"<cmd>set opfunc={_op_sd.name}<cr>g@"
-keymap.v("gt") << f"<esc><cmd>lua {_op_sd.name}()<cr>"
+keymap.v("gt") << rf"<c-\><c-n><cmd>lua {_op_sd.name}()<cr>"
 
 # very magic
 keymap.n("gT", silent=False) << ":%s/\\v//g<left><left><left>"

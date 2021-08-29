@@ -41,4 +41,4 @@ def _indent(nvim: Nvim) -> None:
 
 
 keymap.o("ii") << f"<cmd>lua {_indent.name}()<cr>"
-keymap.v("ii") << f"<esc><cmd>lua {_indent.name}()<cr>"
+keymap.v("ii") << rf"<c-\><c-n><cmd>lua {_indent.name}()<cr>"

@@ -31,5 +31,5 @@ def _line(nvim: Nvim, is_inside: bool) -> None:
 
 keymap.o("il") << f"<cmd>lua {_line.name}(true)<cr>"
 keymap.o("al") << f"<cmd>lua {_line.name}(false)<cr>"
-keymap.v("il") << f"<esc><cmd>lua {_line.name}(true)<cr>"
-keymap.v("al") << f"<esc><cmd>lua {_line.name}(false)<cr>"
+keymap.v("il") << rf"<c-\><c-n><cmd>lua {_line.name}(true)<cr>"
+keymap.v("al") << rf"<c-\><c-n><cmd>lua {_line.name}(false)<cr>"
