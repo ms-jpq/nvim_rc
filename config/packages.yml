@@ -58,13 +58,14 @@
     coq_settings:
       auto_start: True
       xdg: True
-      clients:
-        tabnine:
-          enabled: True
   keys:
     - modes: n
       maps:
         "<leader>z": "<cmd>COQnow<cr>"
+  lua: |-
+    if package.preload.ffi().os ~= "OSX" then
+      vim.g.coq_settings["clients.tabnine.enabled"] = true
+    end
 
 - git:
     uri: https://github.com/ms-jpq/coq.artifacts
