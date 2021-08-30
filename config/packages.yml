@@ -56,9 +56,11 @@
     branch: coq
   vals:
     coq_settings:
+      auto_start: True
+      xdg: True
       clients:
         tabnine:
-          enabled: False
+          enabled: True
   keys:
     - modes: n
       maps:
