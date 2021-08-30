@@ -64,7 +64,9 @@
         "<leader>z": "<cmd>COQnow<cr>"
   lua: |-
     if package.preload.ffi().os ~= "OSX" then
-      vim.g.coq_settings["clients.tabnine.enabled"] = true
+      local cs = vim.g.coq_settings
+      cs["clients.tabnine.enabled"] = true
+      vim.g.coq_settings = cs
     end
 
 - git:
