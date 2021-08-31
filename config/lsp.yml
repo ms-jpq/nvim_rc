@@ -254,8 +254,8 @@
     script:
       required:
         - git
-        - ninja
+        - python3
       env:
-        URI: https://github.com/sumneko/lua-language-server.git
-        TAG: "2.0.3"
+        URI: https://github.com/sumneko/lua-language-server
+        TAG: "2.3.6"
       file: dl_sumneko_lua.sh
