@@ -136,11 +136,11 @@
 #     npm:
 #       - sql-language-server
 
-- server: rome
-  bin: rome
-  install:
-    npm:
-      - rome
+# - server: rome
+#   bin: rome
+#   install:
+#     npm:
+#       - rome
 
 - server: tsserver
   bin: typescript-language-server
