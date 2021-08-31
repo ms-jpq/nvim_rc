@@ -25,6 +25,12 @@ else
 fi
 
 
+if [[ "$OS" = "Linux" ]]
+then
+  exit
+fi
+
+
 if [[ ! -x "$BIN" ]]
 then
  (
