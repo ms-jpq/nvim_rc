@@ -101,6 +101,9 @@
 
 - bin: rustfmt
   type: stream
+  args:
+    - --edition
+    - 2018
   filetypes:
     - rust
 
@@ -120,4 +123,3 @@
   install:
     npm:
       - lua-fmt
-
