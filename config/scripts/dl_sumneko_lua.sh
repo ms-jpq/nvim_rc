@@ -4,9 +4,13 @@ set -eu
 set -o pipefail
 
 
-VENV="$PWD/lua-compile-venv"
+LOCATION="$PWD/lua-ls"
+REPO="$LOCATION/repo"
+
+VENV="$LOCATION/venv"
 VENV_BIN="$VENV/bin"
 NINJA="$VENV_BIN/ninja"
+
 if [[ ! -x "$NINJA" ]]
 then
   python3 -m venv "$VENV"
@@ -14,14 +18,14 @@ then
 fi
 
 
-if [[ -d "$LIB" ]]
+if [[ -d "$REPO" ]]
 then
-  cd "$LIB" || exit 1
+  cd "$REPO" || exit 1
   OPTS=(--recurse-submodules)
   git pull "${OPTS[@]}" origin "refs/tags/${TAG}:refs/tags/${TAG}"
 else
   OPTS=(--depth=1 --recurse-submodules --shallow-submodules)
-  git clone "${OPTS[@]}" --branch "$TAG" "$URI" "$LIB"
+  git clone "${OPTS[@]}" --branch "$TAG" "$URI" "$REPO"
 fi
 
 
@@ -35,11 +39,11 @@ if [[ ! -x "$BIN" ]]
 then
  (
    export PATH="$VENV_BIN:$PATH"
-   cd "$LIB/3rd/luamake" || exit 1
+   cd "$REPO/3rd/luamake" || exit 1
    ./compile/install.sh
    cd ../.. || exit 1
    ./3rd/luamake/luamake rebuild
  )
 
- ln --symbolic --force -- "$LIB/bin/"*'/lua-language-server' "$BIN"
+ ln --symbolic --force -- "$REPO/bin/"*'/lua-language-server' "$BIN"
 fi
