@@ -173,26 +173,6 @@
 
 - server: graphql
   bin: graphql-lsp
-  filetypes:
-    - graphql
-    - javascript
-    - javascript.jsx
-    - javascriptreact
-    - typescript
-    - typescript.tsx
-    - typescriptreact
-  root:
-    fallback: none
-    exact:
-      - .graphqlrc
-      - .graphqlrc.js
-      - .graphqlrc.json
-      - .graphqlrc.yaml
-      - .graphqlrc.yml
-      - graphql.config.js
-      - graphql.config.json
-      - graphql.config.yaml
-      - graphql.config.yml
   install:
     npm:
       - graphql-language-service-cli

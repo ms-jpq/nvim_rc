@@ -43,11 +43,8 @@
     - ${tmpname}
   type: fs
   filetypes:
-    - javascript
-    - javascript.jsx
-    - typescript
-    - typescript.tsx
-    - typescriptreact
+    - javascript*
+    - typescript*
   install:
     npm:
       - import-sort-cli
@@ -61,21 +58,14 @@
   filetypes:
     - css
     - html
-    - javascript
-    - javascript.jsx
-    - json
-    - jsonc
-    - javascriptreact
+    - javascript*
+    - json*
     - less
     - markdown
     - scss
-    - typescript
-    - typescript.tsx
-    - typescriptreact
+    - typescript*
     - xml
-    - yaml
-    - yaml.ansible
-    - yaml.docker-compose
+    - yaml*
   install:
     npm:
       - prettier
