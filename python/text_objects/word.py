@@ -13,25 +13,20 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
     win = cur_win(nvim)
     buf = win_get_buf(nvim, win=win)
 
-    row, c = win_get_cursor(nvim, win=win)
+    row, col = win_get_cursor(nvim, win=win)
     line, *_ = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
+
     bline = line.encode()
-
-    # position under cursor
-    c = min(len(bline) - 1, c)
-    col = len(bline[:c].decode())
-    lhs, rhs = line[:col], line[col:]
-    # undo col + 1
-    offset = len(next(reversed(lhs), "").encode())
-
+    lhs, rhs = bline[:col].decode(), bline[col:].decode()
     ctx = gen_split(lhs, rhs, unifying_chars=UNIFIYING_CHARS)
+
     if not (ctx.word_lhs + ctx.word_rhs):
         words_lhs, words_rhs = ctx.syms_lhs, ctx.syms_rhs
     else:
         words_lhs, words_rhs = ctx.word_lhs, ctx.word_rhs
 
-    c_lhs = max(c + offset - len(words_lhs.encode()), 0)
-    c_rhs = max(c + offset + len(words_rhs.encode()) - 1, 0)
+    c_lhs = max(col - len(words_lhs.encode()), 0)
+    c_rhs = max(col + len(words_rhs.encode()) - 1, 0)
 
     if is_inside:
         mark1 = (row, c_lhs)
