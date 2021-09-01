@@ -91,27 +91,26 @@ def _on_attach(nvim: Nvim, server: str) -> None:
 
 
 _LSP_INIT = """
-(function (root_fn, attach_fn, server, cfg, root_cfg)
+(function(root_fn, attach_fn, server, cfg, root_cfg)
   local lsp = require "lspconfig"
   local configs = require "lspconfig/configs"
 
-  cfg.on_attach = function (client, bufnr)
+  cfg.on_attach = function(client, bufnr)
     _G[attach_fn](server)
   end
 
   local go = lsp[server] ~= nil
 
   if not go then
-    configs[server] = { default_config = cfg }
+    configs[server] = {default_config = cfg}
   end
 
   if root_cfg ~= vim.NIL or not go then
-    cfg.root_dir = function (filename, bufnr)
-        local root = _G[root_fn](root_cfg, filename, bufnr)
-        return root ~= vim.NIL and root or nil
+    cfg.root_dir = function(filename, bufnr)
+      local root = _G[root_fn](root_cfg, filename, bufnr)
+      return root ~= vim.NIL and root or nil
     end
   end
-
 
   cfg = coq.lsp_ensure_capabilities(cfg)
   cfg = chad.lsp_ensure_capabilities(cfg)

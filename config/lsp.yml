@@ -230,6 +230,7 @@
 
 - server: sumneko_lua
   bin: lua-ls
+  args: []
   install:
     script:
       required:
