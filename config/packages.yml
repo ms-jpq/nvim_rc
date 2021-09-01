@@ -62,7 +62,7 @@
       maps:
         "<leader>z": "<cmd>COQnow<cr>"
   lua: |-
-    if package.preload.ffi().os ~= "OSX" then
+    if package.preload.ffi().os ~= "OSX" or vim.env.T9 then
       local cs = vim.g.coq_settings
       cs["clients.tabnine.enabled"] = true
       vim.g.coq_settings = cs
