@@ -103,7 +103,7 @@
   type: stream
   args:
     - --edition
-    - 2018
+    - "2018"
   filetypes:
     - rust
 
