@@ -2,6 +2,7 @@ from asyncio import gather
 from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime
+from fnmatch import fnmatch
 from itertools import chain
 from os import close
 from pathlib import Path
@@ -139,8 +140,10 @@ async def _run(
 
 def _linters_for(filetype: str) -> Iterator[LinterAttrs]:
     for attr in linter_specs:
-        if filetype in attr.filetypes:
-            yield attr
+        for pat in attr.filetypes:
+            if fnmatch(filetype, pat=pat):
+                yield attr
+                break
 
 
 @rpc(blocking=False)

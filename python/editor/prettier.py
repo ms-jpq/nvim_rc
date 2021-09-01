@@ -1,3 +1,4 @@
+from fnmatch import fnmatch
 from itertools import chain
 from pathlib import Path
 from shlex import join
@@ -117,8 +118,10 @@ async def _run(
 
 def _fmts_for(filetype: str) -> Iterator[FmtAttrs]:
     for attr in fmt_specs:
-        if filetype in attr.filetypes:
-            yield attr
+        for pat in attr.filetypes:
+            if fnmatch(filetype, pat=pat):
+                yield attr
+                break
 
 
 @rpc(blocking=False)
