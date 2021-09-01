@@ -61,7 +61,7 @@ def _find_root(nvim: Nvim, _pattern: Any, filename: str, bufnr: int) -> Optional
     path = Path(filename)
 
     if not pattern:
-        return get_cwd(nvim)
+        return str(get_cwd(nvim))
     else:
         for parent in path.parents:
             for member in parent.iterdir():
@@ -76,7 +76,7 @@ def _find_root(nvim: Nvim, _pattern: Any, filename: str, bufnr: int) -> Optional
             if pattern.fallback is RPFallback.none:
                 return None
             elif pattern.fallback is RPFallback.cwd:
-                return get_cwd(nvim)
+                return str(get_cwd(nvim))
             elif pattern.fallback is RPFallback.home:
                 return str(Path.home())
             elif pattern.fallback is RPFallback.parent:

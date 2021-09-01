@@ -5,7 +5,7 @@ from datetime import datetime
 from fnmatch import fnmatch
 from itertools import chain
 from os import close
-from pathlib import Path
+from pathlib import Path, PurePath
 from shlex import join
 from shutil import which
 from tempfile import mkstemp
@@ -43,7 +43,7 @@ class BufContext:
     lines: Sequence[str]
 
 
-def current_ctx(nvim: Nvim) -> Tuple[str, BufContext]:
+def current_ctx(nvim: Nvim) -> Tuple[PurePath, BufContext]:
     cwd = get_cwd(nvim)
     buf = cur_buf(nvim)
     filename = buf_name(nvim, buf=buf)
@@ -89,7 +89,7 @@ def set_preview_content(nvim: Nvim, text: str) -> None:
 
 
 async def _linter_output(
-    attr: LinterAttrs, ctx: BufContext, cwd: str, body: bytes, temp: Path
+    attr: LinterAttrs, ctx: BufContext, cwd: PurePath, body: bytes, temp: Path
 ) -> str:
     arg_info = join(chain((attr.bin,), attr.args))
 
@@ -120,7 +120,7 @@ async def _linter_output(
 
 
 async def _run(
-    nvim: Nvim, ctx: BufContext, attrs: Iterable[LinterAttrs], cwd: str
+    nvim: Nvim, ctx: BufContext, attrs: Iterable[LinterAttrs], cwd: PurePath
 ) -> None:
     body = ctx.linefeed.join(ctx.lines).encode()
     path = Path(ctx.filename)

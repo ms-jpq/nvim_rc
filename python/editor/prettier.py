@@ -1,6 +1,6 @@
 from fnmatch import fnmatch
 from itertools import chain
-from pathlib import Path
+from pathlib import Path, PurePath
 from shlex import join
 from shutil import which
 from typing import Iterable, Iterator, Tuple
@@ -31,7 +31,9 @@ from .linter import (
 from .whitespace import detect_tabs, trailing_ws
 
 
-async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> str:
+async def _fmt_output(
+    attr: FmtAttrs, ctx: BufContext, cwd: PurePath, temp: Path
+) -> str:
     arg_info = join(chain((attr.bin,), attr.args))
 
     try:
@@ -62,7 +64,7 @@ async def _fmt_output(attr: FmtAttrs, ctx: BufContext, cwd: str, temp: Path) -> 
 
 
 async def _run(
-    nvim: Nvim, ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: str
+    nvim: Nvim, ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: PurePath
 ) -> None:
     body = ctx.linefeed.join(ctx.lines).encode()
     path = Path(ctx.filename)
