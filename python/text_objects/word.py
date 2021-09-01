@@ -19,7 +19,7 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
 
     # position under cursor
     c = min(len(bline) - 1, c)
-    col = len(bline[:c].decode()) + 1
+    col = len(bline[:c].decode())
     lhs, rhs = line[:col], line[col:]
     # undo col + 1
     offset = len(next(reversed(lhs), "").encode())
