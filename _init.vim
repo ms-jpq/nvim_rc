@@ -5,3 +5,8 @@ function s:Ndeps()
 endfunction
 command! Ndeps call s:Ndeps()
 
+augroup man
+  autocmd!
+  autocmd BufReadCmd man://* call man#read_page(matchstr(expand('<amatch>'), 'man://\zs.*'))
+augroup END
+
