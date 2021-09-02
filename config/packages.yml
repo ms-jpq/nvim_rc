@@ -56,6 +56,8 @@
     branch: coq
   vals:
     coq_settings:
+      keymap:
+        eval_snips: "<leader>j"
       auto_start: True
   keys:
     - modes: n
