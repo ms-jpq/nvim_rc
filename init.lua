@@ -1,4 +1,20 @@
-return function()
+local l1 = function()
+  vim.opt.loadplugins = false
+  vim.opt.modeline = false
+  vim.opt.secure = true
+  vim.opt.termguicolors = true
+end
+
+local l2 = function()
+  vim.api.nvim_set_keymap("n", "q", "<nop>", {noremap = true})
+  vim.api.nvim_set_keymap("n", "Q", "<esc>", {noremap = true})
+  vim.api.nvim_set_keymap("n", "QQ", "<cmd>quitall!<cr>", {noremap = true})
+  vim.api.nvim_set_keymap("v", "QQ", "<cmd>quitall!<cr>", {noremap = true})
+  vim.api.nvim_set_keymap("v", "Q", "<nop>", {noremap = true})
+  vim.opt.shortmess:append("I")
+end
+
+local l3 = function()
   local cwd = vim.fn.stdpath("config")
 
   local on_exit = function(_, code)
@@ -15,7 +31,7 @@ return function()
     vim.api.nvim_err_write(table.concat(msg, "\n"))
   end
 
-  local main = function ()
+  local main = function()
     local vpy = cwd .. "/.vars/runtime/bin/python3"
     if vim.fn.filereadable(vpy) == 1 then
       return vpy
@@ -40,3 +56,7 @@ return function()
   }
   vim.fn.jobstart(args, params)
 end
+
+l1()
+l2()
+l3()

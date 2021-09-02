@@ -13,7 +13,9 @@ from pynvim_pp.api import (
 )
 from pynvim_pp.operators import VisualTypes, operator_marks, writable
 
-from ..registery import keymap, rpc
+from ..registery import keymap, rpc, settings
+
+settings["commentstring"] = r"#\ %s"
 
 
 def _parse_comment_str(nvim: Nvim, buf: Buffer) -> Tuple[str, str]:
