@@ -1,3 +1,5 @@
+local t1 = vim.fn.localtime()
+
 local l1 = function()
   vim.opt.loadplugins = false
   vim.opt.modeline = false
@@ -53,7 +55,7 @@ local l3 = function()
     on_exit = on_exit,
     on_stdout = on_stdout,
     on_stderr = on_stderr,
-    env = {_VIM_START_TIME = tostring(vim.fn.localtime())}
+    env = {_VIM_START_TIME = tostring(t1)}
   }
   vim.fn.jobstart(args, params)
 end
