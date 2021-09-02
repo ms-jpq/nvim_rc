@@ -1,6 +1,10 @@
+from os import environ
+from time import time
+
 from pynvim import Nvim
 from pynvim_pp.client import BasicClient
 from pynvim_pp.lib import threadsafe_call
+from std2.locale import si_prefixed_smol
 
 from ._registery import ____
 from .components.install import maybe_install
@@ -16,4 +20,8 @@ class Client(BasicClient):
             maybe_install(nvim)
 
         threadsafe_call(nvim, init)
+        t1 = int(environ["_VIM_START_TIME"])
+        t2 = time()
+        span = si_prefixed_smol(t2 - t1)
+        print(f"{span}s", flush=True)
         return super().wait(nvim)

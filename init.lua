@@ -52,7 +52,8 @@ local l3 = function()
     cwd = cwd,
     on_exit = on_exit,
     on_stdout = on_stdout,
-    on_stderr = on_stderr
+    on_stderr = on_stderr,
+    env = {_VIM_START_TIME = tostring(vim.fn.localtime())}
   }
   vim.fn.jobstart(args, params)
 end
