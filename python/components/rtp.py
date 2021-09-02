@@ -7,7 +7,6 @@ from urllib.parse import urlparse
 from pynvim.api.nvim import Nvim
 from pynvim_pp.atomic import Atomic
 from pynvim_pp.keymap import Keymap
-from pynvim_pp.rtp import rtp_packages
 
 from ..config.pkgs import pkg_specs
 from ..consts import VIM_DIR
@@ -35,8 +34,7 @@ def inst(nvim: Nvim) -> Atomic:
         for lhs, rhs in spec.vals.items():
             atomic1.set_var(lhs, rhs)
 
-    atomic2 = rtp_packages(nvim, plugins=pkgs)
-
+    atomic2 = Atomic()
     for spec in pkgs.values():
         if spec.lua:
             body = indent(spec.lua, " " * 2)

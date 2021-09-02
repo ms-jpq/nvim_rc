@@ -25,6 +25,8 @@ CONF_LINT = CONF_DIR / "lint.yml"
 CONF_FMT = CONF_DIR / "fmt.yml"
 CONF_TOOL = CONF_DIR / "tools.yml"
 
+
+VIM_DIR = TOP_LEVEL / "pack" / "_modules" / "start"
 VARS_DIR = TOP_LEVEL / ".vars"
 
 
@@ -32,7 +34,6 @@ INSTALL_SCRIPTS_DIR = CONF_DIR / "scripts"
 BIN_DIR = VARS_DIR / "bin"
 LIB_DIR = VARS_DIR / "lib"
 _MODULES_DIR = VARS_DIR / "modules"
-VIM_DIR = _MODULES_DIR / "vim_modules"
 VENV_DIR = _MODULES_DIR / "py_modules"
 NPM_DIR = _MODULES_DIR
 GO_DIR = _MODULES_DIR / "go_modules"
