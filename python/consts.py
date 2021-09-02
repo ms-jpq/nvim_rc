@@ -26,7 +26,7 @@ CONF_FMT = CONF_DIR / "fmt.yml"
 CONF_TOOL = CONF_DIR / "tools.yml"
 
 
-VIM_DIR = TOP_LEVEL / "pack" / "_modules" / "start"
+VIM_DIR = TOP_LEVEL / "pack" / "_modules" / "opt"
 VARS_DIR = TOP_LEVEL / ".vars"
 
 

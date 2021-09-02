@@ -35,6 +35,9 @@ def inst(nvim: Nvim) -> Atomic:
             atomic1.set_var(lhs, rhs)
 
     atomic2 = Atomic()
+    for path in VIM_DIR.iterdir():
+        atomic2.command(f"packadd {path.name}")
+
     for spec in pkgs.values():
         if spec.lua:
             body = indent(spec.lua, " " * 2)
