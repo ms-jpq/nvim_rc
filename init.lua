@@ -1,4 +1,5 @@
 local t1 = vim.fn.localtime()
+local cwd = vim.fn.stdpath("config")
 
 local l1 = function()
   vim.opt.loadplugins = false
@@ -14,11 +15,10 @@ local l2 = function()
   vim.api.nvim_set_keymap("v", "QQ", "<cmd>quitall!<cr>", {noremap = true})
   vim.api.nvim_set_keymap("v", "Q", "<nop>", {noremap = true})
   vim.opt.shortmess:append("I")
+  vim.cmd("source " .. cwd .. "/_init.vim")
 end
 
 local l3 = function()
-  local cwd = vim.fn.stdpath("config")
-
   local on_exit = function(_, code)
     if code ~= 143 then
       vim.api.nvim_err_writeln(" | EXITED - " .. code)
