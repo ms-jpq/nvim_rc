@@ -53,7 +53,6 @@
 
 - git:
     uri: https://github.com/ms-jpq/coq_nvim
-    branch: coq
   vals:
     coq_settings:
       keymap:
@@ -72,7 +71,6 @@
 
 - git:
     uri: https://github.com/ms-jpq/coq.artifacts
-    branch: artifacts
 
 - git:
     uri: https://github.com/junegunn/fzf
@@ -104,9 +102,9 @@
 
 - git:
     uri: https://github.com/rakr/vim-one
-  viml: |-
-    colorscheme one
-    set background=light
+  lua: |-
+    vim.cmd [[colorscheme one]]
+    vim.opt.background = "light"
 
 # - git:
 #     uri: https://github.com/kosayoda/nvim-lightbulb
