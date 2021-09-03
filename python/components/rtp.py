@@ -42,11 +42,24 @@ def inst(nvim: Nvim) -> Atomic:
             body = indent(spec.lua, " " * 2)
             lua = f"""
             (function()
+            local _, err = pcall(function()
             {body}
+            end)
+            if err then
+              vim.api.nvim_err_writeln(err)
+            end
             end)()
             """
-            atomic2.exec_lua(dedent(lua).lstrip(), ())
+            atomic2.exec_lua(dedent(lua), ())
         if spec.viml:
-            atomic2.command(spec.viml)
+            lua = f"""
+            (function(viml)
+            local _, err = pcall(vim.cmd, viml)
+            if err then
+              vim.api.nvim_err_writeln(err)
+            end
+            end)(...)
+            """
+            atomic2.exec_lua(dedent(lua), (spec.viml,))
 
     return atomic1 + keymap.drain(buf=None) + atomic2
