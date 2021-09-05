@@ -66,14 +66,10 @@ def _term_open(nvim: Nvim, *args: AnyPath, opts: TermOpts = {}) -> None:
     nvim.command("startinsert")
 
 
-def close_term(nvim: Nvim) -> None:
-    for win in list_floatwins(nvim):
-        win_close(nvim, win=win)
-
-
 @rpc(blocking=True)
 def open_term(nvim: Nvim, prog: AnyPath, *args: AnyPath, opts: TermOpts = {}) -> None:
-    close_term(nvim)
+    for win in list_floatwins(nvim):
+        win_close(nvim, win=win)
     _term_open(nvim, prog, *args, opts=opts)
 
 
@@ -89,17 +85,6 @@ def toggle_floating(nvim: Nvim, *args: str) -> None:
 
 
 keymap.n("<leader>u") << f"<cmd>lua {toggle_floating.name}()<cr>"
-
-
-@rpc(blocking=True)
-def _kill_term_wins(nvim: Nvim) -> None:
-    wins = tuple(list_floatwins(nvim))
-    if len(wins) != 2:
-        for win in wins:
-            win_close(nvim, win=win)
-
-
-autocmd("WinEnter") << f"lua {_kill_term_wins.name}()"
 
 
 @rpc(blocking=True)
