@@ -90,7 +90,7 @@ def _op_sd(nvim: Nvim, visual: VisualTypes = None) -> None:
     buf = cur_buf(nvim)
     selected = _get_selected(nvim, buf=buf, visual_type=visual)
     escaped = _magic_escape(selected)
-    instruction = f":%s/{escaped}//g<left><left>"
+    instruction = rf":%s/\V{escaped}//g<left><left>"
     nvim.api.input(instruction)
 
 
@@ -98,4 +98,4 @@ keymap.n("gt") << f"<cmd>set opfunc={_op_sd.name}<cr>g@"
 keymap.v("gt") << rf"<c-\><c-n><cmd>lua {_op_sd.name}()<cr>"
 
 # very magic
-keymap.n("gT", silent=False) << ":%s/\\v//g<left><left><left>"
+keymap.n("gT", silent=False) << r":%s/\v//g<left><left><left>"
