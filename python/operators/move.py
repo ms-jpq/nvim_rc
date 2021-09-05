@@ -1,12 +1,5 @@
 from pynvim.api.nvim import Nvim
-from pynvim_pp.api import (
-    buf_get_lines,
-    buf_line_count,
-    buf_set_lines,
-    cur_win,
-    win_get_buf,
-    win_get_cursor,
-)
+from pynvim_pp.api import buf_line_count, cur_win, win_get_buf, win_get_cursor
 from pynvim_pp.operators import operator_marks, set_visual_selection, writable
 
 from ..registery import keymap, rpc
