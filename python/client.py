@@ -20,8 +20,9 @@ class Client(BasicClient):
             maybe_install(nvim)
 
         threadsafe_call(nvim, init)
-        t1 = int(environ["_VIM_START_TIME"])
-        t2 = time()
-        span = si_prefixed_smol(t2 - t1)
-        print(f"{span}s", flush=True)
+        if "NVIM_DEBUG" in environ:
+            t1 = int(environ["_VIM_START_TIME"])
+            t2 = time()
+            span = si_prefixed_smol(t2 - t1)
+            print(f"{span}s", flush=True)
         return super().wait(nvim)

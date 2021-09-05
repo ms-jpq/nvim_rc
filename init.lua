@@ -19,18 +19,20 @@ local l2 = function()
 end
 
 local l3 = function()
+  local linesep = "\n"
+
   local on_exit = function(_, code)
     if code ~= 143 then
-      vim.api.nvim_err_writeln(" | EXITED - " .. code)
+      vim.api.nvim_err_writeln("EXITED - " .. code)
     end
   end
 
   local on_stdout = function(_, msg)
-    vim.api.nvim_out_write(table.concat(msg, "\n"))
+    vim.api.nvim_out_write(table.concat(msg, linesep))
   end
 
   local on_stderr = function(_, msg)
-    vim.api.nvim_err_write(table.concat(msg, "\n"))
+    vim.api.nvim_echo({{table.concat(msg, linesep), "ErrorMsg"}}, true, {})
   end
 
   local main = function()
