@@ -3,11 +3,9 @@ from pynvim_pp.api import (
     buf_get_lines,
     buf_line_count,
     buf_set_lines,
-    cur_buf,
     cur_win,
     win_get_buf,
     win_get_cursor,
-    win_set_cursor,
 )
 from pynvim_pp.operators import operator_marks, set_visual_selection, writable
 
@@ -15,44 +13,24 @@ from ..registery import keymap, rpc
 
 
 @rpc(blocking=True)
-def _normal_up(nvim: Nvim) -> None:
-    buf = cur_buf(nvim)
+def _norm_mv(nvim: Nvim, up: bool) -> None:
+    win = cur_win(nvim)
+    buf = win_get_buf(nvim, win=win)
     if not writable(nvim, buf=buf):
         return
     else:
-        win = cur_win(nvim)
-        row, col = win_get_cursor(nvim, win=win)
-        if row <= 0:
-            return
+        row, _ = win_get_cursor(nvim, win=win)
+        lines = buf_line_count(nvim, buf=buf)
+        if up:
+            nvim.command(f"{row},{row}move{row+1}")
+            nvim.command("norm! k")
         else:
-            curr = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
-            nxt = buf_get_lines(nvim, buf=buf, lo=row - 1, hi=row)
-            new = tuple((*curr, *nxt))
-            buf_set_lines(nvim, buf=buf, lo=row - 1, hi=row + 1, lines=new)
-            win_set_cursor(nvim, win=win, row=row - 1, col=col)
+            if row < lines - 1:
+                nvim.command(f"{row+1},{row+1}move{row+2}")
 
 
-@rpc(blocking=True)
-def _normal_down(nvim: Nvim) -> None:
-    buf = cur_buf(nvim)
-    if not writable(nvim, buf=buf):
-        return
-    else:
-        win = cur_win(nvim)
-        row, col = win_get_cursor(nvim, win=win)
-        count = buf_line_count(nvim, buf=buf)
-        if row >= count - 1:
-            return
-        else:
-            curr = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
-            nxt = buf_get_lines(nvim, buf=buf, lo=row + 1, hi=row + 2)
-            new = tuple((*nxt, *curr))
-            buf_set_lines(nvim, buf=buf, lo=row, hi=row + 2, lines=new)
-            win_set_cursor(nvim, win=win, row=row + 1, col=col)
-
-
-keymap.n("<m-up>") << f"<cmd>lua {_normal_up.name}()<cr>"
-keymap.n("<m-down>") << f"<cmd>lua {_normal_down.name}()<cr>"
+keymap.n("<m-up>") << f"<cmd>lua {_norm_mv.name}(true)<cr>"
+keymap.n("<m-down>") << f"<cmd>lua {_norm_mv.name}(false)<cr>"
 
 
 def _reselect_visual(nvim: Nvim) -> None:
