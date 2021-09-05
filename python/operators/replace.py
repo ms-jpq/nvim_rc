@@ -1,8 +1,8 @@
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import (
-    buf_get_lines,
     buf_linefeed,
     buf_set_lines,
+    buf_set_text,
     cur_buf,
     cur_win,
     win_get_buf,
@@ -20,15 +20,9 @@ def _go_replace(nvim: Nvim, visual: VisualTypes = None) -> None:
         return
     else:
         linefeed = buf_linefeed(nvim, buf=buf)
-        (row1, col1), (row2, col2) = operator_marks(nvim, buf=buf, visual_type=visual)
-
-        lines = buf_get_lines(nvim, buf=buf, lo=row1, hi=row2 + 1)
-        head = lines[0].encode()[:col1].decode()
-        body: str = nvim.funcs.getreg("*")
-        tail = lines[-1].encode()[col2 + 1 :].decode()
-
-        new_lines = (head + body + tail).split(linefeed)
-        buf_set_lines(nvim, buf=buf, lo=row1, hi=row2 + 1, lines=new_lines)
+        begin, end = operator_marks(nvim, buf=buf, visual_type=visual)
+        text: str = nvim.funcs.getreg("*")
+        buf_set_text(nvim, buf=buf, begin=begin, end=end, text=text.split(linefeed))
 
 
 keymap.n("gr") << f"<cmd>set opfunc={_go_replace.name}<cr>g@"
