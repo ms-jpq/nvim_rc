@@ -9,8 +9,8 @@ from ..registery import keymap, rpc
 
 
 @rpc(blocking=True)
-def _sort_lines(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
-    visual_type, *_ = args
+def _sort_lines(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
+    (visual_type,), *_ = args
     buf = cur_buf(nvim)
     if not writable(nvim, buf=buf):
         return
@@ -22,4 +22,4 @@ def _sort_lines(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
 
 
 keymap.n("gu") << f"<cmd>set opfunc={_sort_lines.name}<cr>g@"
-keymap.v("gu") << rf"<c-\><c-n><cmd>lua {_sort_lines.name}{{vim.NIL}}<cr>"
+keymap.v("gu") << rf"<c-\><c-n><cmd>lua {_sort_lines.name}{{{{vim.NIL}}}}<cr>"

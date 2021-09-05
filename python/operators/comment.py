@@ -82,8 +82,8 @@ def _toggle_comment(lhs: str, rhs: str, lines: Sequence[str]) -> Sequence[str]:
 
 
 @rpc(blocking=True)
-def _comment(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
-    visual, *_ = args
+def _comment(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
+    (visual,), *_ = args
     buf = cur_buf(nvim)
     if not writable(nvim, buf=buf):
         return

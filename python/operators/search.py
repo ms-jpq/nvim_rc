@@ -55,21 +55,22 @@ def _hl_selected(nvim: Nvim, visual: VisualTypes) -> str:
 
 
 @rpc(blocking=True)
-def _op_search(nvim: Nvim, visual: VisualTypes = None) -> None:
+def _op_search(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
+    (visual,), *_ = args
     _hl_selected(nvim, visual=visual)
 
 
 @rpc(blocking=True)
-def _op_fzf(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
-    visual, *_ = args
+def _op_fzf(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
+    (visual,), *_ = args
     text = _hl_selected(nvim, visual=visual)
     cont = lambda: nvim.command(f"BLines {text}")
     go(nvim, aw=async_call(nvim, cont))
 
 
 @rpc(blocking=True)
-def _op_rg(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
-    visual, *_ = args
+def _op_rg(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
+    (visual,), *_ = args
     text = _hl_selected(nvim, visual=visual)
     escaped = escape(text).replace(r"\ ", " ")
     cont = lambda: nvim.command(f"Rg {escaped}")
@@ -77,20 +78,20 @@ def _op_rg(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
 
 
 keymap.n("gs") << f"<cmd>set opfunc={_op_search.name}<cr>g@"
-keymap.v("gs") << rf"<c-\><c-n><cmd>lua {_op_search.name}{{vim.NIL}}<cr>"
+keymap.v("gs") << rf"<c-\><c-n><cmd>lua {_op_search.name}{{{{vim.NIL}}}}<cr>"
 
 keymap.n("gf") << f"<cmd>set opfunc={_op_fzf.name}<cr>g@"
-keymap.v("gf") << rf"<c-\><c-n><cmd>lua {_op_fzf.name}{{vim.NIL}}<cr>"
+keymap.v("gf") << rf"<c-\><c-n><cmd>lua {_op_fzf.name}{{{{vim.NIL}}}}<cr>"
 
 keymap.n("gF") << f"<cmd>set opfunc={_op_rg.name}<cr>g@"
-keymap.v("gF") << rf"<c-\><c-n><cmd>lua {_op_rg.name}{{vim.NIL}}<cr>"
+keymap.v("gF") << rf"<c-\><c-n><cmd>lua {_op_rg.name}{{{{vim.NIL}}}}<cr>"
 
 
 # replace selection
 # no magic
 @rpc(blocking=True)
-def _op_sd(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
-    visual, *_ = args
+def _op_sd(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
+    (visual,), *_ = args
     buf = cur_buf(nvim)
     selected = _get_selected(nvim, buf=buf, visual_type=visual)
     escaped = _magic_escape(selected)
@@ -99,7 +100,7 @@ def _op_sd(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
 
 
 keymap.n("gt") << f"<cmd>set opfunc={_op_sd.name}<cr>g@"
-keymap.v("gt") << rf"<c-\><c-n><cmd>lua {_op_sd.name}{{vim.NIL}}<cr>"
+keymap.v("gt") << rf"<c-\><c-n><cmd>lua {_op_sd.name}{{{{vim.NIL}}}}<cr>"
 
 # very magic
 keymap.n("gT", silent=False) << r":%s/\v//g<left><left><left>"

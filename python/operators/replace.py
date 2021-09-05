@@ -16,8 +16,8 @@ from ..registery import keymap, rpc
 
 
 @rpc(blocking=True)
-def _go_replace(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
-    visual, *_ = args
+def _go_replace(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
+    (visual,), *_ = args
     buf = cur_buf(nvim)
     if not writable(nvim, buf=buf):
         return
@@ -29,7 +29,7 @@ def _go_replace(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
 
 
 keymap.n("gr") << f"<cmd>set opfunc={_go_replace.name}<cr>g@"
-keymap.v("gr") << rf"<c-\><c-n><cmd>lua {_go_replace.name}()<cr>"
+keymap.v("gr") << rf"<c-\><c-n><cmd>lua {_go_replace.name}{{{{vim.NIL}}}}<cr>"
 
 
 @rpc(blocking=True)
