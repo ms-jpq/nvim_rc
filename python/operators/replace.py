@@ -2,6 +2,7 @@ from typing import Tuple
 
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import (
+    buf_get_iines,
     buf_linefeed,
     buf_set_lines,
     buf_set_text,
@@ -23,7 +24,9 @@ def _go_replace(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
         return
     else:
         linefeed = buf_linefeed(nvim, buf=buf)
-        begin, end = operator_marks(nvim, buf=buf, visual_type=visual)
+        (r1, c1), (r2, c2) = operator_marks(nvim, buf=buf, visual_type=visual)
+        line, *_ = buf_get_iines(nvim, buf=buf, lo=r1, hi=r2 + 1)
+        begin, end = (r1, c1), (r2, min(len(line.encode("UTF-8")), c2 + 1))
         text: str = nvim.funcs.getreg("*")
         buf_set_text(nvim, buf=buf, begin=begin, end=end, text=text.split(linefeed))
 
