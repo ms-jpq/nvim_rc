@@ -48,6 +48,7 @@ def _visual_mv(nvim: Nvim, up: bool) -> None:
                     mode="v",
                     mark1=(row1 - 1, col1),
                     mark2=(row2 - 1, col2),
+                    reverse=True
                 )
 
         else:
