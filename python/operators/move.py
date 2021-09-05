@@ -22,11 +22,11 @@ def _norm_mv(nvim: Nvim, up: bool) -> None:
         row, _ = win_get_cursor(nvim, win=win)
         lines = buf_line_count(nvim, buf=buf)
         if up:
-            nvim.command(f"{row},{row}move{row+1}")
-            nvim.command("norm! k")
+            if row:
+                nvim.command(f"move -2")
         else:
             if row < lines - 1:
-                nvim.command(f"{row+1},{row+1}move{row+2}")
+                nvim.command(f"move +1")
 
 
 keymap.n("<m-up>") << f"<cmd>lua {_norm_mv.name}(true)<cr>"
