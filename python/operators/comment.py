@@ -82,7 +82,8 @@ def _toggle_comment(lhs: str, rhs: str, lines: Sequence[str]) -> Sequence[str]:
 
 
 @rpc(blocking=True)
-def _comment(nvim: Nvim, visual: VisualTypes = None) -> None:
+def _comment(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
+    visual, *_ = args
     buf = cur_buf(nvim)
     if not writable(nvim, buf=buf):
         return
@@ -95,7 +96,7 @@ def _comment(nvim: Nvim, visual: VisualTypes = None) -> None:
 
 
 keymap.n("gc") << f"<cmd>set opfunc={_comment.name}<cr>g@"
-keymap.v("gc") << rf"<c-\><c-n><cmd>lua {_comment.name}()<cr>"
+keymap.v("gc") << rf"<c-\><c-n><cmd>lua {_comment.name}{{Vim.NIL}}<cr>"
 
 
 @rpc(blocking=True)

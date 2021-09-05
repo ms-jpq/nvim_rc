@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import (
     buf_linefeed,
@@ -14,7 +16,8 @@ from ..registery import keymap, rpc
 
 
 @rpc(blocking=True)
-def _go_replace(nvim: Nvim, visual: VisualTypes = None) -> None:
+def _go_replace(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
+    visual, *_ = args
     buf = cur_buf(nvim)
     if not writable(nvim, buf=buf):
         return

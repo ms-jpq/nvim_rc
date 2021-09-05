@@ -1,4 +1,5 @@
 from locale import strxfrm
+from typing import Tuple
 
 from pynvim.api import Nvim
 from pynvim_pp.api import buf_get_lines, buf_set_lines, cur_buf
@@ -8,7 +9,8 @@ from ..registery import keymap, rpc
 
 
 @rpc(blocking=True)
-def _sort_lines(nvim: Nvim, visual_type: VisualTypes = None) -> None:
+def _sort_lines(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
+    visual_type, *_ = args
     buf = cur_buf(nvim)
     if not writable(nvim, buf=buf):
         return
@@ -20,4 +22,4 @@ def _sort_lines(nvim: Nvim, visual_type: VisualTypes = None) -> None:
 
 
 keymap.n("gu") << f"<cmd>set opfunc={_sort_lines.name}<cr>g@"
-keymap.v("gu") << rf"<c-\><c-n><cmd>lua {_sort_lines.name}()<cr>"
+keymap.v("gu") << rf"<c-\><c-n><cmd>lua {_sort_lines.name}{{vim.NIL}}<cr>"

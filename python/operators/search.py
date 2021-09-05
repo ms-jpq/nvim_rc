@@ -1,5 +1,6 @@
 from itertools import chain
 from re import escape
+from typing import Tuple
 
 from pynvim.api import Buffer
 from pynvim.api.nvim import Nvim
@@ -59,14 +60,16 @@ def _op_search(nvim: Nvim, visual: VisualTypes = None) -> None:
 
 
 @rpc(blocking=True)
-def _op_fzf(nvim: Nvim, visual: VisualTypes = None) -> None:
+def _op_fzf(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
+    visual, *_ = args
     text = _hl_selected(nvim, visual=visual)
     cont = lambda: nvim.command(f"BLines {text}")
     go(nvim, aw=async_call(nvim, cont))
 
 
 @rpc(blocking=True)
-def _op_rg(nvim: Nvim, visual: VisualTypes = None) -> None:
+def _op_rg(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
+    visual, *_ = args
     text = _hl_selected(nvim, visual=visual)
     escaped = escape(text).replace(r"\ ", " ")
     cont = lambda: nvim.command(f"Rg {escaped}")
@@ -74,19 +77,20 @@ def _op_rg(nvim: Nvim, visual: VisualTypes = None) -> None:
 
 
 keymap.n("gs") << f"<cmd>set opfunc={_op_search.name}<cr>g@"
-keymap.v("gs") << rf"<c-\><c-n><cmd>lua {_op_search.name}()<cr>"
+keymap.v("gs") << rf"<c-\><c-n><cmd>lua {_op_search.name}{{vim.NIL}}<cr>"
 
 keymap.n("gf") << f"<cmd>set opfunc={_op_fzf.name}<cr>g@"
-keymap.v("gf") << rf"<c-\><c-n><cmd>lua {_op_fzf.name}()<cr>"
+keymap.v("gf") << rf"<c-\><c-n><cmd>lua {_op_fzf.name}{{vim.NIL}}<cr>"
 
 keymap.n("gF") << f"<cmd>set opfunc={_op_rg.name}<cr>g@"
-keymap.v("gF") << rf"<c-\><c-n><cmd>lua {_op_rg.name}()<cr>"
+keymap.v("gF") << rf"<c-\><c-n><cmd>lua {_op_rg.name}{{vim.NIL}}<cr>"
 
 
 # replace selection
 # no magic
 @rpc(blocking=True)
-def _op_sd(nvim: Nvim, visual: VisualTypes = None) -> None:
+def _op_sd(nvim: Nvim, args: Tuple[VisualTypes]) -> None:
+    visual, *_ = args
     buf = cur_buf(nvim)
     selected = _get_selected(nvim, buf=buf, visual_type=visual)
     escaped = _magic_escape(selected)
@@ -95,7 +99,7 @@ def _op_sd(nvim: Nvim, visual: VisualTypes = None) -> None:
 
 
 keymap.n("gt") << f"<cmd>set opfunc={_op_sd.name}<cr>g@"
-keymap.v("gt") << rf"<c-\><c-n><cmd>lua {_op_sd.name}()<cr>"
+keymap.v("gt") << rf"<c-\><c-n><cmd>lua {_op_sd.name}{{vim.NIL}}<cr>"
 
 # very magic
 keymap.n("gT", silent=False) << r":%s/\v//g<left><left><left>"
