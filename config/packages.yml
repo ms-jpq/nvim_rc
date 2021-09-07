@@ -55,9 +55,10 @@
     uri: https://github.com/ms-jpq/coq_nvim
   vals:
     coq_settings:
+      auto_start: True
+      clients.snippets.user_path: "~/.config/snips/"
       keymap:
         eval_snips: "<leader>j"
-      auto_start: True
   keys:
     - modes: n
       maps:
