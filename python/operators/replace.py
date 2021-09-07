@@ -28,6 +28,7 @@ def _go_replace(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
         line, *_ = buf_get_lines(nvim, buf=buf, lo=r1, hi=r2 + 1)
         begin, end = (r1, c1), (r2, min(len(line.encode("UTF-8")), c2 + 1))
         text: str = nvim.funcs.getreg("*")
+        nvim.options["undolevels"] = nvim.options["undolevels"]
         buf_set_text(nvim, buf=buf, begin=begin, end=end, text=text.split(linefeed))
 
 
