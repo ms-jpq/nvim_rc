@@ -38,7 +38,7 @@ def load(code: Optional[str]) -> Lang:
         else (LANG_ROOT / DEFAULT_LANG).with_suffix(".yml")
     )
 
-    specs: Mapping[str, str] = new_decoder(Mapping[str, str])(
+    specs = new_decoder[Mapping[str, str]](Mapping[str, str])(
         safe_load(yml_path.open())
     )
     return Lang(specs=specs)

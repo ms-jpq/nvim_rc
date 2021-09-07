@@ -33,4 +33,4 @@ class PkgAttrs:
 
 
 PkgSpecs = Sequence[PkgAttrs]
-pkg_specs: PkgSpecs = new_decoder(PkgSpecs)(safe_load(CONF_PKGS.open()))
+pkg_specs = new_decoder[PkgSpecs](PkgSpecs)(safe_load(CONF_PKGS.open()))

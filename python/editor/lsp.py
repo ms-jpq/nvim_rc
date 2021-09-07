@@ -52,7 +52,7 @@ def _rename(nvim: Nvim) -> None:
 keymap.n("R") << f"<cmd>lua {_rename.name}()<cr>"
 
 
-_DECODER = new_decoder(Optional[RootPattern])
+_DECODER = new_decoder[Optional[RootPattern]](Optional[RootPattern])
 
 
 @rpc(blocking=True)
@@ -142,7 +142,7 @@ def _encode_spec(spec: LspAttrs) -> Mapping[str, Any]:
     return config
 
 
-_ENCODER = new_encoder(Optional[RootPattern])
+_ENCODER = new_encoder[Optional[RootPattern]](Optional[RootPattern])
 
 for spec in lsp_specs:
     if which(spec.bin):
