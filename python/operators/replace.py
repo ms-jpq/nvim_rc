@@ -36,8 +36,13 @@ def _go_replace(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
         end = (r2, min(len(t.encode()), c2 + 1))
 
         text: str = nvim.funcs.getreg("*")
+        new_lines = text.split(linefeed)
+        if new_lines:
+            n = new_lines.pop()
+            if n:
+                new_lines.append(n)
         nvim.options["undolevels"] = nvim.options["undolevels"]
-        buf_set_text(nvim, buf=buf, begin=begin, end=end, text=text.split(linefeed))
+        buf_set_text(nvim, buf=buf, begin=begin, end=end, text=new_lines)
 
 
 keymap.n("gr") << f"<cmd>set opfunc={_go_replace.name}<cr>g@"
@@ -55,6 +60,11 @@ def _go_replace_line(nvim: Nvim) -> None:
         row, _ = win_get_cursor(nvim, win=win)
         body: str = nvim.funcs.getreg("*")
         new_lines = body.split(linefeed)
+        if new_lines:
+            n = new_lines.pop()
+            if n:
+                new_lines.append(n)
+
         buf_set_lines(nvim, buf=buf, lo=row, hi=row + 1, lines=new_lines)
 
 
