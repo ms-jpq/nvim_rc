@@ -12,6 +12,7 @@ from pynvim_pp.api import (
     win_get_cursor,
 )
 from pynvim_pp.operators import VisualTypes, operator_marks, writable
+from std2 import clamp
 
 from ..registery import keymap, rpc
 
@@ -25,8 +26,16 @@ def _go_replace(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
     else:
         linefeed = buf_linefeed(nvim, buf=buf)
         (r1, c1), (r2, c2) = operator_marks(nvim, buf=buf, visual_type=visual)
-        line, *_ = buf_get_lines(nvim, buf=buf, lo=r1, hi=r2 + 1)
-        begin, end = (r1, c1), (r2, min(len(line.encode("UTF-8")), c2 + 1))
+        lines = buf_get_lines(nvim, buf=buf, lo=r1, hi=r2 + 1)
+
+        if len(lines) > 1:
+            h, *_, t = lines
+        else:
+            h, *_ = t, *_ = lines
+
+        begin = (r1, clamp(0, c1, len(h.encode("UTF-8")) - 1))
+        end = (r2, min(len(t.encode("UTF-8")), c2 + 1))
+
         text: str = nvim.funcs.getreg("*")
         nvim.options["undolevels"] = nvim.options["undolevels"]
         buf_set_text(nvim, buf=buf, begin=begin, end=end, text=text.split(linefeed))
