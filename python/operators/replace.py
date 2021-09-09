@@ -32,8 +32,8 @@ def _go_replace(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
         else:
             h, *_ = t, *_ = lines
 
-        begin = (r1, min(c1, max(0, len(h.encode("UTF-8")) - 1)))
-        end = (r2, min(len(t.encode("UTF-8")), c2 + 1))
+        begin = (r1, min(c1, max(0, len(h.encode()) - 1)))
+        end = (r2, min(len(t.encode()), c2 + 1))
 
         text: str = nvim.funcs.getreg("*")
         nvim.options["undolevels"] = nvim.options["undolevels"]
