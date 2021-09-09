@@ -12,7 +12,6 @@ from pynvim_pp.api import (
     win_get_cursor,
 )
 from pynvim_pp.operators import VisualTypes, operator_marks, writable
-from std2 import clamp
 
 from ..registery import keymap, rpc
 
@@ -33,7 +32,7 @@ def _go_replace(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
         else:
             h, *_ = t, *_ = lines
 
-        begin = (r1, clamp(0, c1, len(h.encode("UTF-8")) - 1))
+        begin = (r1, min(c1, max(0, len(h.encode("UTF-8")) - 1)))
         end = (r2, min(len(t.encode("UTF-8")), c2 + 1))
 
         text: str = nvim.funcs.getreg("*")
