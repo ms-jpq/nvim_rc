@@ -11,6 +11,7 @@ from pynvim_pp.api import (
     win_get_buf,
     win_get_cursor,
 )
+from pynvim_pp.lib import encode
 from pynvim_pp.operators import VisualTypes, operator_marks, writable
 
 from ..registery import keymap, rpc
@@ -32,8 +33,8 @@ def _go_replace(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
         else:
             h, *_ = t, *_ = lines
 
-        begin = (r1, min(c1, max(0, len(h.encode()) - 1)))
-        end = (r2, min(len(t.encode()), c2 + 1))
+        begin = (r1, min(c1, max(0, len(encode(h)) - 1)))
+        end = (r2, min(len(encode(t)), c2 + 1))
 
         text: str = nvim.funcs.getreg("*")
         new_lines = text.split(linefeed)

@@ -14,7 +14,7 @@ from pynvim_pp.api import (
     win_get_cursor,
     win_set_cursor,
 )
-from pynvim_pp.lib import async_call, awrite, write
+from pynvim_pp.lib import async_call, awrite, decode, encode, write
 from std2.aitertools import aiterify
 from std2.asyncio.subprocess import call
 
@@ -59,14 +59,14 @@ async def _fmt_output(
                 return ""
             else:
                 heading = LANG("proc failed", code=proc.code, args=arg_info)
-                print_out = ctx.linefeed.join((heading, proc.err.decode()))
+                print_out = ctx.linefeed.join((heading, decode(proc.err)))
                 return print_out
 
 
 async def _run(
     nvim: Nvim, ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: PurePath
 ) -> None:
-    body = ctx.linefeed.join(ctx.lines).encode()
+    body = encode(ctx.linefeed.join(ctx.lines))
     path = Path(ctx.filename)
     with make_temp(path) as temp:
         temp.write_bytes(body)

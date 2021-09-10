@@ -13,6 +13,7 @@ from pynvim_pp.api import (
     win_get_cursor,
     win_set_cursor,
 )
+from pynvim_pp.lib import decode, encode
 from pynvim_pp.operators import p_indent, writable
 
 from ..registery import autocmd, rpc, settings
@@ -79,7 +80,7 @@ def _set_trimmed(nvim: Nvim, win: Window, buf: Buffer) -> None:
     row, col = win_get_cursor(nvim, win=win)
     lines = buf_get_lines(nvim, buf=buf, lo=0, hi=-1)
     new_lines = [
-        line.encode()[:col].decode() + line.encode()[col:].decode().rstrip()
+        decode(encode(line)[:col]) + decode(encode(line)[col:]).rstrip()
         if r == row
         else line.rstrip()
         for r, line in enumerate(lines)

@@ -23,7 +23,7 @@ from pynvim_pp.api import (
     get_cwd,
 )
 from pynvim_pp.hold import hold_win_pos
-from pynvim_pp.lib import async_call, awrite
+from pynvim_pp.lib import async_call, awrite, decode, encode
 from pynvim_pp.preview import set_preview
 from std2.asyncio.subprocess import call
 from std2.lex import ParseError, envsubst
@@ -113,16 +113,14 @@ async def _linter_output(
                 heading = LANG("proc succeeded", args=arg_info)
             else:
                 heading = LANG("proc failed", code=proc.code, args=arg_info)
-            print_out = ctx.linefeed.join(
-                (heading, proc.err.decode(), proc.out.decode())
-            )
+            print_out = ctx.linefeed.join((heading, decode(proc.err), decode(proc.out)))
             return print_out
 
 
 async def _run(
     nvim: Nvim, ctx: BufContext, attrs: Iterable[LinterAttrs], cwd: PurePath
 ) -> None:
-    body = ctx.linefeed.join(ctx.lines).encode()
+    body = encode(ctx.linefeed.join(ctx.lines))
     path = Path(ctx.filename)
     with make_temp(path) as temp:
         temp.write_bytes(body)

@@ -20,6 +20,7 @@ from typing import (
 
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import ask_mc
+from pynvim_pp.lib import decode
 from std2.asyncio.subprocess import ProcReturn, call
 
 from ..config.fmt import fmt_specs
@@ -286,17 +287,15 @@ async def install() -> int:
             args = join(map(str, chain((proc.prog,), proc.args)))
             if proc.code == 0:
                 msg = LANG("proc succeeded", args=args)
-                print(
-                    msg, debug, proc.err.decode(), proc.out.decode(), sep, sep=linesep
-                )
+                print(msg, debug, decode(proc.err), decode(proc.out), sep, sep=linesep)
             else:
                 has_error = True
                 msg = LANG("proc failed", code=proc.code, args=args)
                 print(
                     msg,
                     debug,
-                    proc.err.decode(),
-                    proc.out.decode(),
+                    decode(proc.err),
+                    decode(proc.out),
                     sep,
                     sep=linesep,
                     file=stderr,

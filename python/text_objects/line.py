@@ -2,19 +2,20 @@ from typing import Tuple
 
 from pynvim import Nvim
 from pynvim_pp.api import buf_get_lines, cur_win, win_get_buf, win_get_cursor
+from pynvim_pp.lib import encode
 from pynvim_pp.operators import set_visual_selection
 
 from ..registery import keymap, rpc
 
 
 def _p_inside(line: str) -> Tuple[int, int]:
-    lhs = len(line.encode()) - len(line.lstrip().encode())
-    rhs = len(line.rstrip().encode()) - 1
+    lhs = len(encode(line)) - len(encode(line.lstrip()))
+    rhs = len(encode(line.rstrip())) - 1
     return lhs, rhs
 
 
 def _p_around(line: str) -> Tuple[int, int]:
-    return 0, len(line.encode())
+    return 0, len(encode(line))
 
 
 @rpc(blocking=True)

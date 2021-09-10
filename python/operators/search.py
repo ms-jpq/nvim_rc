@@ -5,7 +5,7 @@ from typing import Tuple
 from pynvim.api import Buffer
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import buf_get_lines, buf_linefeed, cur_buf
-from pynvim_pp.lib import async_call, go
+from pynvim_pp.lib import async_call, decode, encode, go
 from pynvim_pp.operators import VisualTypes, operator_marks
 from std2.lex import escape as lex_esc
 
@@ -39,11 +39,11 @@ def _get_selected(nvim: Nvim, buf: Buffer, visual_type: VisualTypes) -> str:
     lines = buf_get_lines(nvim, buf=buf, lo=row1, hi=row2 + 1)
 
     if len(lines) == 1:
-        return lines[0].encode()[col1 : col2 + 1].decode()
+        return decode(encode(lines[0])[col1 : col2 + 1])
     else:
-        head = lines[0].encode()[col1:].decode()
+        head = decode(encode(lines[0])[col1:])
         body = lines[1:-1]
-        tail = lines[-1].encode()[: col2 + 1].decode()
+        tail = decode(encode(lines[-1])[: col2 + 1])
         return linefeed.join(chain((head,), body, (tail,)))
 
 

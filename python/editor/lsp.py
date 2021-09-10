@@ -12,6 +12,7 @@ from pynvim_pp.api import (
     win_get_buf,
     win_get_cursor,
 )
+from pynvim_pp.lib import decode, encode
 from pynvim_pp.text_object import gen_split
 from std2.pickle import new_decoder, new_encoder
 from std2.types import never
@@ -39,8 +40,8 @@ def _rename(nvim: Nvim) -> None:
     buf = win_get_buf(nvim, win=win)
     row, col = win_get_cursor(nvim, win=win)
     line, *_ = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
-    b_line = line.encode()
-    lhs, rhs = b_line[:col].decode(), b_line[col:].decode()
+    b_line = encode(line)
+    lhs, rhs = decode(b_line[:col]), decode(b_line[col:])
     split = gen_split(lhs=lhs, rhs=rhs, unifying_chars=UNIFIYING_CHARS)
     word = split.word_lhs + split.word_rhs
     ans = ask(nvim, question=LANG("rename: "), default=word)

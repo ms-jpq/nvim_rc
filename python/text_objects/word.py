@@ -1,5 +1,6 @@
 from pynvim import Nvim
 from pynvim_pp.api import buf_get_lines, cur_win, win_get_buf, win_get_cursor
+from pynvim_pp.lib import decode, encode
 from pynvim_pp.operators import set_visual_selection
 from pynvim_pp.text_object import gen_split
 
@@ -16,8 +17,8 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
     row, col = win_get_cursor(nvim, win=win)
     line, *_ = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
 
-    bline = line.encode()
-    lhs, rhs = bline[:col].decode(), bline[col:].decode()
+    bline = encode(line)
+    lhs, rhs = decode(bline[:col]), decode(bline[col:])
     ctx = gen_split(lhs, rhs, unifying_chars=UNIFIYING_CHARS)
 
     if not (ctx.word_lhs + ctx.word_rhs):
@@ -25,8 +26,8 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
     else:
         words_lhs, words_rhs = ctx.word_lhs, ctx.word_rhs
 
-    c_lhs = max(col - len(words_lhs.encode()), 0)
-    c_rhs = max(col + len(words_rhs.encode()) - 1, 0)
+    c_lhs = max(col - len(encode(words_lhs)), 0)
+    c_rhs = max(col + len(encode(words_rhs)) - 1, 0)
 
     if is_inside:
         mark1 = (row, c_lhs)
