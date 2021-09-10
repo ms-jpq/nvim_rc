@@ -1,8 +1,8 @@
 from ..registery import keymap
 
 # dont shift move too much
-keymap.v("<s-up>") << "<up>"
-keymap.v("<s-down>") << "<down>"
+keymap.v("<s-up>") << "g<up>"
+keymap.v("<s-down>") << "g<down>"
 
 
 # keep selected when indenting
