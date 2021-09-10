@@ -1,5 +1,9 @@
 from ..registery import keymap
 
+# move w linewrap
+keymap.nv("<up>") << "g<up>"
+keymap.nv("<down>") << "g<down>"
+
 # {} scroll fixed lines
 keymap.nv("{") << ("5<up>")
 keymap.nv("}") << ("5<down>")
