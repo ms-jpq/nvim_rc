@@ -1,9 +1,5 @@
 from ..registery import keymap, settings
 
-# transparency
-settings["pumblend"] = 5
-
-
 # dont follow tags
 settings["complete"] -= "i"
 

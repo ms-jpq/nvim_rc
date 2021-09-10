@@ -8,21 +8,19 @@ settings["termguicolors"] = True
 
 # remove welcome message
 settings["shortmess"] += "I"
-
 # always show status line
 settings["laststatus"] = 2
-
-# always show issues column
-settings["signcolumn"] = "yes"
-
-# dont show eob lines
-settings["fillchars"] = r"eob:\ "
-
 # always show tabline
 settings["showtabline"] = 2
 
+
+# always show issues column
+settings["signcolumn"] = "yes"
 # show line count
 settings["number"] = True
+# dont show eob lines
+settings["fillchars"] = r"eob:\ "
+
 
 # keep wrapped text indent
 settings["breakindent"] = True
@@ -33,6 +31,8 @@ settings["cursorline"] = True
 # constant cursor styling
 settings["guicursor"] = ""
 
+# completion menu transparency
+settings["pumblend"] = 5
 # light background
 settings["background"] = "light"
 
