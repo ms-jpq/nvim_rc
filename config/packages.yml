@@ -58,6 +58,7 @@
       auto_start: True
       clients.snippets.user_path: "~/.config/snips/"
       keymap:
+        repeat: "<leader>."
         eval_snips: "<leader>j"
   keys:
     - modes: n
