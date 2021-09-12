@@ -1,11 +1,10 @@
-from itertools import chain
 from re import escape
 from typing import Tuple
 
 from pynvim.api import Buffer
 from pynvim.api.nvim import Nvim
-from pynvim_pp.api import buf_get_lines, buf_linefeed, cur_buf
-from pynvim_pp.lib import async_call, decode, encode, go
+from pynvim_pp.api import buf_get_text, cur_buf
+from pynvim_pp.lib import async_call, go
 from pynvim_pp.operators import VisualTypes, operator_marks
 from std2.lex import escape as lex_esc
 
@@ -34,17 +33,8 @@ def _hl_text(nvim: Nvim, text: str) -> None:
 
 
 def _get_selected(nvim: Nvim, buf: Buffer, visual_type: VisualTypes) -> str:
-    (row1, col1), (row2, col2) = operator_marks(nvim, buf=buf, visual_type=visual_type)
-    linefeed = buf_linefeed(nvim, buf=buf)
-    lines = buf_get_lines(nvim, buf=buf, lo=row1, hi=row2 + 1)
-
-    if len(lines) == 1:
-        return decode(encode(lines[0])[col1 : col2 + 1])
-    else:
-        head = decode(encode(lines[0])[col1:])
-        body = lines[1:-1]
-        tail = decode(encode(lines[-1])[: col2 + 1])
-        return linefeed.join(chain((head,), body, (tail,)))
+    begin, (r2, c2) = operator_marks(nvim, buf=buf, visual_type=visual_type)
+    return buf_get_text(nvim, buf=buf, begin=begin, end=(r2, c2 + 1))
 
 
 def _hl_selected(nvim: Nvim, visual: VisualTypes) -> str:
