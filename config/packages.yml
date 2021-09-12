@@ -75,6 +75,9 @@
     uri: https://github.com/ms-jpq/coq.artifacts
 
 - git:
+    uri: https://github.com/ms-jpq/coq.thirdparty
+
+- git:
     uri: https://github.com/junegunn/fzf
 
 - git:
