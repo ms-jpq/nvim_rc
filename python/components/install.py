@@ -59,8 +59,7 @@ def _pip_specs() -> Iterator[str]:
         yield from i_spec.install.pip
     for f_spec in fmt_specs:
         yield from f_spec.install.pip
-    for t_spec in tool_specs:
-        yield from t_spec.pip
+    yield from tool_specs.pip
 
 
 def _npm_specs() -> Iterator[str]:
@@ -70,8 +69,7 @@ def _npm_specs() -> Iterator[str]:
         yield from i_spec.install.npm
     for f_spec in fmt_specs:
         yield from f_spec.install.npm
-    for t_spec in tool_specs:
-        yield from t_spec.npm
+    yield from tool_specs.npm
 
 
 def _go_specs() -> Iterator[str]:
@@ -81,8 +79,7 @@ def _go_specs() -> Iterator[str]:
         yield from i_spec.install.go
     for f_spec in fmt_specs:
         yield from f_spec.install.go
-    for t_spec in tool_specs:
-        yield from t_spec.go
+    yield from tool_specs.go
 
 
 def _script_specs() -> Iterator[Tuple[str, ScriptSpec]]:
@@ -92,6 +89,8 @@ def _script_specs() -> Iterator[Tuple[str, ScriptSpec]]:
         yield i_spec.bin, i_spec.install.script
     for f_spec in fmt_specs:
         yield f_spec.bin, f_spec.install.script
+    for t_spec in tool_specs.script:
+        yield "", t_spec
 
 
 def _installable(script_spec: ScriptSpec) -> bool:

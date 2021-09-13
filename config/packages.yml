@@ -78,7 +78,7 @@
     uri: https://github.com/ms-jpq/coq.thirdparty
   lua: |-
     require("coq_3rd") {
-      -- {src = "demo"}
+      {src = "vimtex"}
     }
 
 - git:
@@ -171,3 +171,6 @@
     if go then
       colourizer.setup()
     end
+
+- git:
+    uri: https://github.com/lervag/vimtex
