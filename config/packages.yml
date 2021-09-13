@@ -174,3 +174,6 @@
 
 - git:
     uri: https://github.com/lervag/vimtex
+  vals:
+    vimtex_compiler_method: tectonic
+    vimtex_view_enabled: false
