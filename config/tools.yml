@@ -2,3 +2,9 @@
 go:
   - github.com/junegunn/fzf
   - github.com/jesseduffield/lazygit
+
+script:
+  - file: dl_tectonic.sh
+    env:
+      MAC_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.7.1/tectonic-0.7.1-x86_64-apple-darwin.tar.gz
+      LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.7.1/tectonic-0.7.1-x86_64-unknown-linux-gnu.tar.gz
