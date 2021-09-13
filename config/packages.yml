@@ -78,7 +78,7 @@
     uri: https://github.com/ms-jpq/coq.thirdparty
   lua: |-
     require("coq_3rd") {
-      {src = "demo"}
+      -- {src = "demo"}
     }
 
 - git:
