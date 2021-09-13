@@ -76,6 +76,10 @@
 
 - git:
     uri: https://github.com/ms-jpq/coq.thirdparty
+  lua: |-
+    require("coq_3rd") {
+      {src = "demo"}
+    }
 
 - git:
     uri: https://github.com/junegunn/fzf
