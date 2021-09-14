@@ -116,11 +116,6 @@
     vim.cmd [[colorscheme one]]
     vim.opt.background = "light"
 
-# - git:
-#     uri: https://github.com/kosayoda/nvim-lightbulb
-#   viml: |-
-#     autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
-
 - git:
     uri: https://github.com/tpope/vim-repeat
 
@@ -166,6 +161,12 @@
     let g:slime_paste_file = tempname()
 
 - git:
+    uri: https://github.com/lervag/vimtex
+  vals:
+    vimtex_compiler_method: tectonic
+    vimtex_view_enabled: false
+
+- git:
     uri: https://github.com/norcalli/nvim-colorizer.lua
   lua: |-
     local go, colourizer = pcall(require, "colorizer")
@@ -173,9 +174,7 @@
       colourizer.setup()
     end
 
-- git:
-    uri: https://github.com/lervag/vimtex
-  vals:
-    vimtex_compiler_method: tectonic
-    vimtex_view_enabled: false
-
+# - git:
+#     uri: https://github.com/kosayoda/nvim-lightbulb
+#   viml: |-
+#     autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
