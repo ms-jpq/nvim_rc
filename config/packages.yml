@@ -77,7 +77,7 @@
 - git:
     uri: https://github.com/ms-jpq/coq.thirdparty
   lua: |-
-    require("coq_3rd") {
+    require("coq_3p") {
       { src = "vimtex", short_name = "vTEX" }
     }
 
