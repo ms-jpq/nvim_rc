@@ -23,5 +23,5 @@ def _sort_lines(nvim: Nvim, visual: VisualTypes) -> None:
 keymap.n("gu") << f"<cmd>set opfunc={_sort_lines.name}<cr>g@"
 (
     keymap.v("gu")
-    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_sort_lines.name}{{{{vim.NIL}}}}<cr>"
+    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_sort_lines.name}(vim.NIL)<cr>"
 )

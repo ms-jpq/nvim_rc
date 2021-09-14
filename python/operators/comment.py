@@ -95,7 +95,7 @@ def _comment(nvim: Nvim, visual: VisualTypes) -> None:
 
 
 keymap.n("gc") << f"<cmd>set opfunc={_comment.name}<cr>g@"
-keymap.v("gc") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_comment.name}{{{{vim.NIL}}}}<cr>"
+keymap.v("gc") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_comment.name}(vim.NIL)<cr>"
 
 
 @rpc(blocking=True)

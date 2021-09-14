@@ -48,7 +48,7 @@ def _go_replace(nvim: Nvim, visual: VisualTypes) -> None:
 keymap.n("gr") << f"<cmd>set opfunc={_go_replace.name}<cr>g@"
 (
     keymap.v("gr")
-    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_go_replace.name}{{{{vim.NIL}}}}<cr>"
+    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_go_replace.name}(vim.NIL)<cr>"
 )
 
 
