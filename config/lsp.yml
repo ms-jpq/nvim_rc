@@ -82,6 +82,8 @@
       env:
         MAC_URI: https://github.com/latex-lsp/texlab/releases/download/v3.2.0/texlab-x86_64-macos.tar.gz
         LINUX_URI: https://github.com/latex-lsp/texlab/releases/download/v3.2.0/texlab-x86_64-linux.tar.gz
+        T_MAC_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.7.1/tectonic-0.7.1-x86_64-apple-darwin.tar.gz
+        T_LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.7.1/tectonic-0.7.1-x86_64-unknown-linux-gnu.tar.gz
       file: dl_texlab.sh
 
 - server: bashls
@@ -240,7 +242,6 @@
         URI: https://github.com/sumneko/lua-language-server
         TAG: "2.3.6"
       file: dl_sumneko_lua.sh
-
 # - server: pylsp
 #   bin: pylsp
 #   install:
