@@ -113,6 +113,7 @@ for spec in lsp_specs:
     if which(spec.bin):
         config = _encode_spec(spec)
         args = (
+            NAMESPACE,
             _find_root.name,
             _on_attach.name,
             spec.server,

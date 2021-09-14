@@ -1,4 +1,4 @@
-(function(root_fn, attach_fn, server, cfg, root_cfg)
+(function(ns, root_fn, attach_fn, server, cfg, root_cfg)
   local _, err =
     pcall(
     function()
@@ -17,7 +17,7 @@
 
       if root_cfg ~= vim.NIL or not go then
         cfg.root_dir = function(filename, bufnr)
-          local root = _G[root_fn](root_cfg, filename, bufnr)
+          local root = _G[ns][root_fn](root_cfg, filename, bufnr)
           return root ~= vim.NIL and root or nil
         end
       end
