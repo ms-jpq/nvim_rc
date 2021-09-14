@@ -178,11 +178,3 @@
     vimtex_compiler_method: tectonic
     vimtex_view_enabled: false
 
-
-- git:
-    uri: https://github.com/kristijanhusak/orgmode.nvim
-  lua: |-
-    require('orgmode').setup {
-      org_agenda_files = { "~/org/"},
-      org_default_notes_file = '~/ok.org',
-    }
