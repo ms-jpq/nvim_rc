@@ -13,7 +13,7 @@ from pynvim_pp.api import (
 from pynvim_pp.lib import decode, encode
 from pynvim_pp.operators import writable
 
-from ..registery import NAMESPACE,  keymap, rpc
+from ..registery import NAMESPACE, keymap, rpc
 
 _PAIRS = {"-": "_"}
 

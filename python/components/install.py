@@ -42,7 +42,7 @@ from ..consts import (
     VENV_DIR,
     VIM_DIR,
 )
-from ..registery import NAMESPACE,  LANG
+from ..registery import LANG
 from ..workspace.terminal import open_term
 from .rtp import p_name
 

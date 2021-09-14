@@ -1,4 +1,4 @@
-from ..registery import NAMESPACE,  keymap
+from ..registery import keymap
 
 # move w linewrap
 keymap.nv("<up>") << "g<up>"

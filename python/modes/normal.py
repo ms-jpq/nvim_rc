@@ -17,7 +17,7 @@ from ..registery import NAMESPACE,  autocmd, keymap, rpc
 keymap.n("Y") << "y$"
 
 # fix cursor pos moving 1 back
-BUF_VAR_NAME = f"buf_cursor_pos_{uuid4().hex}"
+_BUF_VAR_NAME = f"buf_cursor_pos_{uuid4().hex}"
 
 
 @rpc(blocking=True)
@@ -25,7 +25,7 @@ def _record_pos(nvim: Nvim) -> None:
     win = cur_win(nvim)
     buf = win_get_buf(nvim, win=win)
     _, col = win_get_cursor(nvim, win=win)
-    buf_set_var(nvim, buf=buf, key=BUF_VAR_NAME, val=col)
+    buf_set_var(nvim, buf=buf, key=_BUF_VAR_NAME, val=col)
 
 
 autocmd("InsertEnter", "CursorMovedI", "TextChangedP") << f"lua {NAMESPACE}.{_record_pos.name}()"
@@ -36,7 +36,7 @@ def _restore_pos(nvim: Nvim) -> None:
     win = cur_win(nvim)
     buf = win_get_buf(nvim, win=win)
     row, _ = win_get_cursor(nvim, win=win)
-    pos = cast(Optional[int], buf_get_var(nvim, buf=buf, key=BUF_VAR_NAME))
+    pos = cast(Optional[int], buf_get_var(nvim, buf=buf, key=_BUF_VAR_NAME))
 
     if pos is not None:
         win_set_cursor(nvim, win=win, row=row, col=pos)

@@ -19,7 +19,7 @@ from pynvim_pp.float_win import list_floatwins, open_float_win
 from pynvim_pp.rpc import RpcCallable
 from std2.pathlib import AnyPath
 
-from ..registery import NAMESPACE,  autocmd, keymap, rpc
+from ..registery import NAMESPACE, autocmd, keymap, rpc
 
 BUF_VAR_NAME = f"terminal_buf_{uuid4().hex}"
 

@@ -5,7 +5,7 @@ from pynvim_pp.api import buf_get_lines, cur_win, win_get_buf, win_get_cursor
 from pynvim_pp.lib import encode
 from pynvim_pp.operators import set_visual_selection
 
-from ..registery import NAMESPACE,  keymap, rpc
+from ..registery import NAMESPACE, keymap, rpc
 
 
 def _p_inside(line: str) -> Tuple[int, int]:

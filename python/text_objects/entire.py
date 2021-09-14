@@ -3,7 +3,7 @@ from pynvim_pp.api import buf_get_lines, buf_line_count, cur_win, win_get_buf
 from pynvim_pp.lib import encode
 from pynvim_pp.operators import set_visual_selection
 
-from ..registery import NAMESPACE,  keymap, rpc
+from ..registery import NAMESPACE, keymap, rpc
 
 
 @rpc(blocking=True)

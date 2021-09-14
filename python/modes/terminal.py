@@ -1,4 +1,4 @@
-from ..registery import NAMESPACE,  keymap
+from ..registery import keymap
 
 # leave terminal
 keymap.t("<c-g>") << "<c-\\><c-n>"

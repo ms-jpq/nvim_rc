@@ -10,7 +10,7 @@ from pynvim_pp.api import (
 )
 from pynvim_pp.operators import p_indent, set_visual_selection
 
-from ..registery import NAMESPACE,  keymap, rpc
+from ..registery import NAMESPACE, keymap, rpc
 
 
 def _p_inside(init_lv: int, tabsize: int, lines: Iterable[str]) -> int:

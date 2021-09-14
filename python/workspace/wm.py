@@ -14,7 +14,7 @@ from pynvim_pp.api import (
     win_set_option,
 )
 
-from ..registery import NAMESPACE,  keymap, rpc, settings
+from ..registery import NAMESPACE, keymap, rpc, settings
 
 # hide background buffers
 settings["hidden"] = True

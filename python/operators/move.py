@@ -2,7 +2,7 @@ from pynvim.api.nvim import Nvim
 from pynvim_pp.api import buf_line_count, cur_win, win_get_buf, win_get_cursor
 from pynvim_pp.operators import operator_marks, set_visual_selection, writable
 
-from ..registery import NAMESPACE,  keymap, rpc
+from ..registery import NAMESPACE, keymap, rpc
 
 
 @rpc(blocking=True)
@@ -48,14 +48,14 @@ def _visual_mv(nvim: Nvim, up: bool) -> None:
                     mode="v",
                     mark1=(row1 - 1, col1),
                     mark2=(row2 - 1, col2),
-                    reverse=True
+                    reverse=True,
                 )
 
         else:
             if row2 >= lines - 1:
                 nvim.command("norm! gv")
             else:
-                nvim.command(f"{row1+1},{row2+1}move {row2 +2}")
+                nvim.command(f"{row1+1},{row2+1}move {row2+2}")
                 set_visual_selection(
                     nvim,
                     win=win,

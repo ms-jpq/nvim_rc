@@ -1,4 +1,4 @@
-from ..registery import NAMESPACE,  autocmd, settings
+from ..registery import autocmd, settings
 
 # auto load changes
 settings["autoread"] = True

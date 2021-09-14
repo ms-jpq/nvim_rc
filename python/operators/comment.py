@@ -13,7 +13,7 @@ from pynvim_pp.api import (
 )
 from pynvim_pp.operators import VisualTypes, operator_marks, writable
 
-from ..registery import NAMESPACE,  keymap, rpc, settings
+from ..registery import NAMESPACE, keymap, rpc, settings
 
 settings["commentstring"] = r"#\ %s"
 

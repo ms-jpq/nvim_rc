@@ -1,4 +1,4 @@
-from ..registery import NAMESPACE,  settings
+from ..registery import settings
 
 # ui for cmd auto complete
 settings["wildmenu"] = True

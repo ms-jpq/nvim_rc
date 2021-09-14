@@ -16,7 +16,7 @@ from pynvim_pp.api import (
 from pynvim_pp.lib import decode, encode
 from pynvim_pp.operators import p_indent, writable
 
-from ..registery import NAMESPACE,  autocmd, rpc, settings
+from ..registery import NAMESPACE, autocmd, rpc, settings
 
 # join only add 1 space
 settings["nojoinspaces"] = True

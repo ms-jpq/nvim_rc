@@ -8,7 +8,7 @@ from pynvim_pp.lib import async_call, go
 from pynvim_pp.operators import VisualTypes, operator_marks
 from std2.lex import escape as lex_esc
 
-from ..registery import NAMESPACE,  keymap, rpc
+from ..registery import NAMESPACE, keymap, rpc
 
 
 # search and highlight
@@ -68,7 +68,10 @@ def _op_rg(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
 
 
 keymap.n("gs") << f"<cmd>set opfunc={_op_search.name}<cr>g@"
-keymap.v("gs") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_search.name}{{{{vim.NIL}}}}<cr>"
+(
+    keymap.v("gs")
+    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_search.name}{{{{vim.NIL}}}}<cr>"
+)
 
 keymap.n("gf") << f"<cmd>set opfunc={_op_fzf.name}<cr>g@"
 keymap.v("gf") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_fzf.name}{{{{vim.NIL}}}}<cr>"

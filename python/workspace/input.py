@@ -1,6 +1,6 @@
 from os import environ
 
-from ..registery import NAMESPACE,  atomic, keymap, settings
+from ..registery import atomic, keymap, settings
 
 # waiting time within a key sequence
 settings["timeoutlen"] = 500

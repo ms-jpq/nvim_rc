@@ -19,7 +19,7 @@ from std2.aitertools import aiterify
 from std2.asyncio.subprocess import call
 
 from ..config.fmt import FmtAttrs, FmtType, fmt_specs
-from ..registery import NAMESPACE,  LANG, keymap, rpc
+from ..registery import LANG, NAMESPACE, keymap, rpc
 from .linter import (
     BufContext,
     ParseError,

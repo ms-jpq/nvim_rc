@@ -1,7 +1,7 @@
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import cur_win, win_set_option
 
-from ..registery import NAMESPACE,  atomic, autocmd, rpc, settings
+from ..registery import NAMESPACE, atomic, autocmd, rpc, settings
 
 # use 256 colours
 settings["termguicolors"] = True

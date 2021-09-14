@@ -1,6 +1,6 @@
 from pynvim import Nvim
 
-from ..registery import NAMESPACE,  keymap, rpc
+from ..registery import NAMESPACE, keymap, rpc
 from ..workspace.terminal import open_term
 
 

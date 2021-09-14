@@ -8,7 +8,7 @@ from std2.locale import si_prefixed_smol
 
 from ._registery import ____
 from .components.install import maybe_install
-from .registery import NAMESPACE, drain
+from .registery import drain
 
 
 class Client(BasicClient):

@@ -1,4 +1,4 @@
-from ..registery import NAMESPACE,  keymap
+from ..registery import keymap
 
 # dont go into ex mode
 keymap.c("<c-f>") << ""
