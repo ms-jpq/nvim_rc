@@ -6,7 +6,7 @@
       local configs = require "lspconfig/configs"
 
       cfg.on_attach = function(client, bufnr)
-        _G[attach_fn](server)
+        _G[ns][attach_fn](server)
       end
 
       local go = lsp[server] ~= nil
