@@ -14,7 +14,7 @@ from pynvim_pp.api import (
 from pynvim_pp.lib import encode
 from pynvim_pp.operators import VisualTypes, operator_marks, writable
 
-from ..registery import keymap, rpc
+from ..registery import NAMESPACE,  keymap, rpc
 
 
 @rpc(blocking=True)
@@ -47,7 +47,7 @@ def _go_replace(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
 
 
 keymap.n("gr") << f"<cmd>set opfunc={_go_replace.name}<cr>g@"
-keymap.v("gr") << rf"<c-\><c-n><cmd>lua {_go_replace.name}{{{{vim.NIL}}}}<cr>"
+keymap.v("gr") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_go_replace.name}{{{{vim.NIL}}}}<cr>"
 
 
 @rpc(blocking=True)
@@ -69,4 +69,4 @@ def _go_replace_line(nvim: Nvim) -> None:
         buf_set_lines(nvim, buf=buf, lo=row, hi=row + 1, lines=new_lines)
 
 
-keymap.n("grr") << f"<cmd>lua {_go_replace_line.name}()<cr>"
+keymap.n("grr") << f"<cmd>lua {NAMESPACE}.{_go_replace_line.name}()<cr>"

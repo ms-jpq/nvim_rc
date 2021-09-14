@@ -1,4 +1,4 @@
-from ..registery import keymap
+from ..registery import NAMESPACE,  keymap
 
 # dont shift move too much
 keymap.v("<s-up>") << "g<up>"

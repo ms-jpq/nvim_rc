@@ -19,7 +19,7 @@ from std2.aitertools import aiterify
 from std2.asyncio.subprocess import call
 
 from ..config.fmt import FmtAttrs, FmtType, fmt_specs
-from ..registery import LANG, keymap, rpc
+from ..registery import NAMESPACE,  LANG, keymap, rpc
 from .linter import (
     BufContext,
     ParseError,
@@ -139,4 +139,4 @@ async def run_fmt(nvim: Nvim) -> None:
         await _run(nvim, ctx=ctx, attrs=prettiers, cwd=cwd)
 
 
-keymap.n("gq", nowait=True) << f"<cmd>lua {run_fmt.name}()<cr>"
+keymap.n("gq", nowait=True) << f"<cmd>lua {NAMESPACE}.{run_fmt.name}()<cr>"

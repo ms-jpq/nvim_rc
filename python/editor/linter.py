@@ -30,7 +30,7 @@ from std2.lex import ParseError, envsubst
 
 from ..config.linter import LinterAttrs, LinterType, linter_specs
 from ..consts import DATE_FMT
-from ..registery import LANG, keymap, rpc
+from ..registery import NAMESPACE,  LANG, keymap, rpc
 
 
 @dataclass(frozen=True)
@@ -156,4 +156,4 @@ async def _run_linter(nvim: Nvim) -> None:
         await awrite(nvim, "")
 
 
-keymap.n("M") << f"<cmd>lua {_run_linter.name}()<cr>"
+keymap.n("M") << f"<cmd>lua {NAMESPACE}.{_run_linter.name}()<cr>"

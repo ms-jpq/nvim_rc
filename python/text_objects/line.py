@@ -5,7 +5,7 @@ from pynvim_pp.api import buf_get_lines, cur_win, win_get_buf, win_get_cursor
 from pynvim_pp.lib import encode
 from pynvim_pp.operators import set_visual_selection
 
-from ..registery import keymap, rpc
+from ..registery import NAMESPACE,  keymap, rpc
 
 
 def _p_inside(line: str) -> Tuple[int, int]:
@@ -30,7 +30,7 @@ def _line(nvim: Nvim, is_inside: bool) -> None:
     set_visual_selection(nvim, win=win, mode="v", mark1=(row, lhs), mark2=(row, rhs))
 
 
-keymap.o("il") << f"<cmd>lua {_line.name}(true)<cr>"
-keymap.o("al") << f"<cmd>lua {_line.name}(false)<cr>"
-keymap.v("il") << rf"<c-\><c-n><cmd>lua {_line.name}(true)<cr>"
-keymap.v("al") << rf"<c-\><c-n><cmd>lua {_line.name}(false)<cr>"
+keymap.o("il") << f"<cmd>lua {NAMESPACE}.{_line.name}(true)<cr>"
+keymap.o("al") << f"<cmd>lua {NAMESPACE}.{_line.name}(false)<cr>"
+keymap.v("il") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_line.name}(true)<cr>"
+keymap.v("al") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_line.name}(false)<cr>"

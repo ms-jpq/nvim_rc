@@ -13,7 +13,7 @@ from pynvim_pp.api import (
 from pynvim_pp.lib import decode, encode
 from pynvim_pp.operators import writable
 
-from ..registery import keymap, rpc
+from ..registery import NAMESPACE,  keymap, rpc
 
 _PAIRS = {"-": "_"}
 
@@ -52,4 +52,4 @@ def _toggle_case(nvim: Nvim) -> None:
             win_set_cursor(nvim, win=win, row=row, col=pos)
 
 
-keymap.n("~") << f"<cmd>lua {_toggle_case.name}()<cr>"
+keymap.n("~") << f"<cmd>lua {NAMESPACE}.{_toggle_case.name}()<cr>"

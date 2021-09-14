@@ -14,7 +14,7 @@ from pynvim_pp.api import (
     win_set_option,
 )
 
-from ..registery import keymap, rpc, settings
+from ..registery import NAMESPACE,  keymap, rpc, settings
 
 # hide background buffers
 settings["hidden"] = True
@@ -60,8 +60,8 @@ def _new_window(nvim: Nvim, vertical: bool) -> None:
     win_set_buf(nvim, win=win, buf=buf)
 
 
-keymap.n("<leader>=") << f"<cmd>lua {_new_window.name}(true)<cr>"
-keymap.n("<leader>-") << f"<cmd>lua {_new_window.name}(false)<cr>"
+keymap.n("<leader>=") << f"<cmd>lua {NAMESPACE}.{_new_window.name}(true)<cr>"
+keymap.n("<leader>-") << f"<cmd>lua {NAMESPACE}.{_new_window.name}(false)<cr>"
 
 
 # kill current buf
@@ -85,8 +85,8 @@ def _new_tab(nvim: Nvim) -> None:
     buf_set_var(nvim, buf=buf, key="buftype", val="nofile")
 
 
-keymap.n("<leader>t") << f"<cmd>lua {_new_tab.name}()<cr>"
-keymap.n("<leader>n") << f"<cmd>lua {_new_tab.name}()<cr>"
+keymap.n("<leader>t") << f"<cmd>lua {NAMESPACE}.{_new_tab.name}()<cr>"
+keymap.n("<leader>n") << f"<cmd>lua {NAMESPACE}.{_new_tab.name}()<cr>"
 
 
 # cycle between tabs
@@ -120,7 +120,7 @@ def _toggle_preview(nvim: Nvim) -> None:
         nvim.api.win_set_height(win, height)
 
 
-keymap.n("<leader>m") << f"<cmd>lua {_toggle_preview.name}()<cr>"
+keymap.n("<leader>m") << f"<cmd>lua {NAMESPACE}.{_toggle_preview.name}()<cr>"
 
 
 # quickfix
@@ -152,8 +152,8 @@ def _clear_qf(nvim: Nvim) -> None:
     nvim.command("cclose")
 
 
-keymap.n("<leader>l") << f"<cmd>lua {_toggle_qf.name}()<cr>"
-keymap.n("<leader>L") << f"<cmd>lua {_clear_qf.name}()<cr>"
+keymap.n("<leader>l") << f"<cmd>lua {NAMESPACE}.{_toggle_qf.name}()<cr>"
+keymap.n("<leader>L") << f"<cmd>lua {NAMESPACE}.{_clear_qf.name}()<cr>"
 
 
 @rpc(blocking=True)
@@ -170,4 +170,4 @@ def _resize_secondary(nvim: Nvim) -> None:
             nvim.api.win_set_height(win, height)
 
 
-keymap.n("<leader>M") << f"<cmd>lua {_resize_secondary.name}()<cr>"
+keymap.n("<leader>M") << f"<cmd>lua {NAMESPACE}.{_resize_secondary.name}()<cr>"

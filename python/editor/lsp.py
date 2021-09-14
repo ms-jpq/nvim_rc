@@ -18,7 +18,7 @@ from std2.pickle import new_decoder, new_encoder
 from std2.types import never
 
 from ..config.lsp import LspAttrs, RootPattern, RPFallback, lsp_specs
-from ..registery import LANG, atomic, keymap, rpc
+from ..registery import NAMESPACE,  LANG, atomic, keymap, rpc
 from ..text_objects.word import UNIFIYING_CHARS
 
 keymap.n("gp") << "<cmd>lua vim.lsp.buf.definition()<cr>"
@@ -50,7 +50,7 @@ def _rename(nvim: Nvim) -> None:
         nvim.lua.vim.lsp.buf.rename(ans)
 
 
-keymap.n("R") << f"<cmd>lua {_rename.name}()<cr>"
+keymap.n("R") << f"<cmd>lua {NAMESPACE}.{_rename.name}()<cr>"
 
 
 _DECODER = new_decoder[Optional[RootPattern]](Optional[RootPattern])

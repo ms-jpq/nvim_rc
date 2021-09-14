@@ -2,7 +2,7 @@ from pynvim.api.nvim import Nvim
 from pynvim_pp.api import buf_line_count, cur_win, win_get_buf, win_get_cursor
 from pynvim_pp.operators import operator_marks, set_visual_selection, writable
 
-from ..registery import keymap, rpc
+from ..registery import NAMESPACE,  keymap, rpc
 
 
 @rpc(blocking=True)
@@ -23,8 +23,8 @@ def _norm_mv(nvim: Nvim, up: bool) -> None:
                 nvim.command(f"move +1")
 
 
-keymap.n("<m-up>") << f"<cmd>lua {_norm_mv.name}(true)<cr>"
-keymap.n("<m-down>") << f"<cmd>lua {_norm_mv.name}(false)<cr>"
+keymap.n("<m-up>") << f"<cmd>lua {NAMESPACE}.{_norm_mv.name}(true)<cr>"
+keymap.n("<m-down>") << f"<cmd>lua {NAMESPACE}.{_norm_mv.name}(false)<cr>"
 
 
 @rpc(blocking=True)
@@ -65,5 +65,5 @@ def _visual_mv(nvim: Nvim, up: bool) -> None:
                 )
 
 
-keymap.v("<m-up>") << rf"<c-\><c-n><cmd>lua {_visual_mv.name}(true)<cr>"
-keymap.v("<m-down>") << rf"<c-\><c-n><cmd>lua {_visual_mv.name}(false)<cr>"
+keymap.v("<m-up>") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_visual_mv.name}(true)<cr>"
+keymap.v("<m-down>") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_visual_mv.name}(false)<cr>"

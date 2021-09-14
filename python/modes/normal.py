@@ -11,7 +11,7 @@ from pynvim_pp.api import (
     win_set_cursor,
 )
 
-from ..registery import autocmd, keymap, rpc
+from ..registery import NAMESPACE,  autocmd, keymap, rpc
 
 # # normalize Y
 keymap.n("Y") << "y$"
@@ -28,7 +28,7 @@ def _record_pos(nvim: Nvim) -> None:
     buf_set_var(nvim, buf=buf, key=BUF_VAR_NAME, val=col)
 
 
-autocmd("InsertEnter", "CursorMovedI", "TextChangedP") << f"lua {_record_pos.name}()"
+autocmd("InsertEnter", "CursorMovedI", "TextChangedP") << f"lua {NAMESPACE}.{_record_pos.name}()"
 
 
 @rpc(blocking=True)
@@ -42,4 +42,4 @@ def _restore_pos(nvim: Nvim) -> None:
         win_set_cursor(nvim, win=win, row=row, col=pos)
 
 
-autocmd("InsertLeave") << f"lua {_restore_pos.name}()"
+autocmd("InsertLeave") << f"lua {NAMESPACE}.{_restore_pos.name}()"

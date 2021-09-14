@@ -10,7 +10,7 @@ from pynvim_pp.api import (
 )
 from pynvim_pp.operators import p_indent, set_visual_selection
 
-from ..registery import keymap, rpc
+from ..registery import NAMESPACE,  keymap, rpc
 
 
 def _p_inside(init_lv: int, tabsize: int, lines: Iterable[str]) -> int:
@@ -40,5 +40,5 @@ def _indent(nvim: Nvim) -> None:
     set_visual_selection(nvim, win=win, mode="V", mark1=(top, 0), mark2=(btm, 0))
 
 
-keymap.o("ii") << f"<cmd>lua {_indent.name}()<cr>"
-keymap.v("ii") << rf"<c-\><c-n><cmd>lua {_indent.name}()<cr>"
+keymap.o("ii") << f"<cmd>lua {NAMESPACE}.{_indent.name}()<cr>"
+keymap.v("ii") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_indent.name}()<cr>"

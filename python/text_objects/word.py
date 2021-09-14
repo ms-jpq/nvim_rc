@@ -4,7 +4,7 @@ from pynvim_pp.lib import decode, encode
 from pynvim_pp.operators import set_visual_selection
 from pynvim_pp.text_object import gen_split
 
-from ..registery import keymap, rpc
+from ..registery import NAMESPACE,  keymap, rpc
 
 UNIFIYING_CHARS = frozenset(("_", "-"))
 
@@ -39,7 +39,7 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
     set_visual_selection(nvim, win=win, mode="v", mark1=mark1, mark2=mark2)
 
 
-keymap.o("iw") << f"<cmd>lua {_word.name}(true)<cr>"
-keymap.o("aw") << f"<cmd>lua {_word.name}(false)<cr>"
-keymap.v("iw") << rf"<c-\><c-n><cmd>lua {_word.name}(true)<cr>"
-keymap.v("aw") << rf"<c-\><c-n><cmd>lua {_word.name}(false)<cr>"
+keymap.o("iw") << f"<cmd>lua {NAMESPACE}.{_word.name}(true)<cr>"
+keymap.o("aw") << f"<cmd>lua {NAMESPACE}.{_word.name}(false)<cr>"
+keymap.v("iw") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_word.name}(true)<cr>"
+keymap.v("aw") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_word.name}(false)<cr>"

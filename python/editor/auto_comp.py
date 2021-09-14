@@ -1,4 +1,4 @@
-from ..registery import keymap, settings
+from ..registery import NAMESPACE,  keymap, settings
 
 # dont follow tags
 settings["complete"] -= "i"

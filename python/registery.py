@@ -11,11 +11,13 @@ from .components.localization import load
 from .components.rtp import inst
 from .consts import PATH, PYTHONPATH
 
+NAMESPACE = "__init__"
+
 LANG = load(code=None)
 atomic = Atomic()
 autocmd = AutoCMD()
 keymap = Keymap()
-rpc = RPC()
+rpc = RPC(NAMESPACE)
 settings = Settings()
 
 

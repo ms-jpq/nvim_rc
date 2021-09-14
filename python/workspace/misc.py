@@ -1,7 +1,7 @@
 from pynvim.api import Nvim
 from pynvim_pp.api import buf_name, buf_set_option, list_bufs
 
-from ..registery import atomic, rpc, settings
+from ..registery import NAMESPACE, atomic, rpc, settings
 
 # do not exec arbitrary code
 settings["nomodeline"] = True
@@ -37,4 +37,4 @@ def _scratch_buffer(nvim: Nvim) -> None:
             buf_set_option(nvim, buf=buf, key="buftype", val="nofile")
 
 
-atomic.exec_lua(f"{_scratch_buffer.name}()", ())
+atomic.exec_lua(f"{NAMESPACE}.{_scratch_buffer.name}()", ())

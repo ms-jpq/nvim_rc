@@ -13,7 +13,7 @@ from pynvim_pp.api import (
 )
 from pynvim_pp.operators import VisualTypes, operator_marks, writable
 
-from ..registery import keymap, rpc, settings
+from ..registery import NAMESPACE,  keymap, rpc, settings
 
 settings["commentstring"] = r"#\ %s"
 
@@ -96,7 +96,7 @@ def _comment(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
 
 
 keymap.n("gc") << f"<cmd>set opfunc={_comment.name}<cr>g@"
-keymap.v("gc") << rf"<c-\><c-n><cmd>lua {_comment.name}{{{{vim.NIL}}}}<cr>"
+keymap.v("gc") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_comment.name}{{{{vim.NIL}}}}<cr>"
 
 
 @rpc(blocking=True)
@@ -113,4 +113,4 @@ def _comment_single(nvim: Nvim) -> None:
         buf_set_lines(nvim, buf=buf, lo=row, hi=row + 1, lines=new_lines)
 
 
-keymap.n("gcc") << f"<cmd>lua {_comment_single.name}()<cr>"
+keymap.n("gcc") << f"<cmd>lua {NAMESPACE}.{_comment_single.name}()<cr>"

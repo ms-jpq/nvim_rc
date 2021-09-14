@@ -3,7 +3,7 @@ from pynvim_pp.api import buf_get_lines, buf_line_count, cur_win, win_get_buf
 from pynvim_pp.lib import encode
 from pynvim_pp.operators import set_visual_selection
 
-from ..registery import keymap, rpc
+from ..registery import NAMESPACE,  keymap, rpc
 
 
 @rpc(blocking=True)
@@ -17,7 +17,7 @@ def _entire(nvim: Nvim) -> None:
     set_visual_selection(nvim, win=win, mode="V", mark1=mark1, mark2=mark2)
 
 
-keymap.o("ie") << f"<cmd>lua {_entire.name}()<cr>"
-keymap.o("ae") << f"<cmd>lua {_entire.name}()<cr>"
-keymap.v("ie") << rf"<c-\><c-n><cmd>lua {_entire.name}()<cr>"
-keymap.v("ae") << rf"<c-\><c-n><cmd>lua {_entire.name}()<cr>"
+keymap.o("ie") << f"<cmd>lua {NAMESPACE}.{_entire.name}()<cr>"
+keymap.o("ae") << f"<cmd>lua {NAMESPACE}.{_entire.name}()<cr>"
+keymap.v("ie") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_entire.name}()<cr>"
+keymap.v("ae") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_entire.name}()<cr>"

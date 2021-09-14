@@ -19,7 +19,7 @@ from pynvim_pp.float_win import list_floatwins, open_float_win
 from pynvim_pp.rpc import RpcCallable
 from std2.pathlib import AnyPath
 
-from ..registery import autocmd, keymap, rpc
+from ..registery import NAMESPACE,  autocmd, keymap, rpc
 
 BUF_VAR_NAME = f"terminal_buf_{uuid4().hex}"
 
@@ -84,7 +84,7 @@ def toggle_floating(nvim: Nvim, *args: str) -> None:
         _term_open(nvim, *args)
 
 
-keymap.n("<leader>u") << f"<cmd>lua {toggle_floating.name}()<cr>"
+keymap.n("<leader>u") << f"<cmd>lua {NAMESPACE}.{toggle_floating.name}()<cr>"
 
 
 @rpc(blocking=True)
@@ -96,4 +96,4 @@ def _on_resized(nvim: Nvim) -> None:
         toggle_floating(nvim)
 
 
-autocmd("VimResized") << f"lua {_on_resized.name}()"
+autocmd("VimResized") << f"lua {NAMESPACE}.{_on_resized.name}()"
