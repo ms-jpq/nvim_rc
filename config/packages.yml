@@ -65,7 +65,7 @@
       maps:
         "<leader>z": "<cmd>COQnow<cr>"
   lua: |-
-    if vim.env.SSH_CONNECTION or vim.env.T9 then
+    if vim.env.T9 then
       local cs = vim.g.coq_settings
       cs["clients.tabnine.enabled"] = true
       vim.g.coq_settings = cs
@@ -177,3 +177,12 @@
   vals:
     vimtex_compiler_method: tectonic
     vimtex_view_enabled: false
+
+
+- git:
+    uri: https://github.com/kristijanhusak/orgmode.nvim
+  lua: |-
+    require('orgmode').setup {
+      org_agenda_files = { "~/org/"},
+      org_default_notes_file = '~/ok.org',
+    }
