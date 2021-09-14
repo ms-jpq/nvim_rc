@@ -18,8 +18,10 @@ from std2.pickle import new_decoder, new_encoder
 from std2.types import never
 
 from ..config.lsp import LspAttrs, RootPattern, RPFallback, lsp_specs
-from ..registery import NAMESPACE,  LANG, atomic, keymap, rpc
+from ..registery import LANG, NAMESPACE, atomic, keymap, rpc
 from ..text_objects.word import UNIFIYING_CHARS
+
+_LSP_INIT = (Path(__file__).resolve().parent / "lsp.lua").read_text()
 
 keymap.n("gp") << "<cmd>lua vim.lsp.buf.definition()<cr>"
 keymap.n("gP") << "<cmd>lua vim.lsp.buf.references()<cr>"
@@ -91,44 +93,6 @@ def _on_attach(nvim: Nvim, server: str) -> None:
     pass
 
 
-_LSP_INIT = """
-(function(root_fn, attach_fn, server, cfg, root_cfg)
-  local _, err =
-    pcall(
-    function()
-      local lsp = require "lspconfig"
-      local configs = require "lspconfig/configs"
-
-      cfg.on_attach = function(client, bufnr)
-        _G[attach_fn](server)
-      end
-
-      local go = lsp[server] ~= nil
-
-      if not go then
-        configs[server] = {default_config = cfg}
-      end
-
-      if root_cfg ~= vim.NIL or not go then
-        cfg.root_dir = function(filename, bufnr)
-          local root = _G[root_fn](root_cfg, filename, bufnr)
-          return root ~= vim.NIL and root or nil
-        end
-      end
-
-      cfg = coq.lsp_ensure_capabilities(cfg)
-      cfg = chad.lsp_ensure_capabilities(cfg)
-
-      lsp[server].setup(cfg)
-    end
-  )
-  if err then
-    vim.api.nvim_err_writeln(err)
-  end
-end)(...)
-"""
-
-
 def _encode_spec(spec: LspAttrs) -> Mapping[str, Any]:
     config: MutableMapping[str, Any] = {}
     if spec.args is not None:
@@ -137,9 +101,9 @@ def _encode_spec(spec: LspAttrs) -> Mapping[str, Any]:
         config["filetypes"] = tuple(spec.filetypes)
     if spec.init_options:
         config["init_options"] = spec.init_options
+
     if spec.settings:
         config["settings"] = spec.settings
-
     return config
 
 
