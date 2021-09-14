@@ -45,22 +45,19 @@ def _hl_selected(nvim: Nvim, visual: VisualTypes) -> str:
 
 
 @rpc(blocking=True)
-def _op_search(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
-    (visual,), *_ = args
+def _op_search(nvim: Nvim, visual: VisualTypes) -> None:
     _hl_selected(nvim, visual=visual)
 
 
 @rpc(blocking=True)
-def _op_fzf(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
-    (visual,), *_ = args
+def _op_fzf(nvim: Nvim, visual: VisualTypes) -> None:
     text = _hl_selected(nvim, visual=visual)
     cont = lambda: nvim.command(f"BLines {text}")
     go(nvim, aw=async_call(nvim, cont))
 
 
 @rpc(blocking=True)
-def _op_rg(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
-    (visual,), *_ = args
+def _op_rg(nvim: Nvim, visual: VisualTypes) -> None:
     text = _hl_selected(nvim, visual=visual)
     escaped = escape(text).replace(r"\ ", " ")
     cont = lambda: nvim.command(f"Rg {escaped}")
@@ -83,8 +80,7 @@ keymap.v("gF") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_rg.name}{{{{vim.NIL}}}}
 # replace selection
 # no magic
 @rpc(blocking=True)
-def _op_sd(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
-    (visual,), *_ = args
+def _op_sd(nvim: Nvim, visual: VisualTypes) -> None:
     buf = cur_buf(nvim)
     selected = _get_selected(nvim, buf=buf, visual_type=visual)
     escaped = _magic_escape(selected)

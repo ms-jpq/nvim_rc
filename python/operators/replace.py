@@ -18,8 +18,7 @@ from ..registery import NAMESPACE, keymap, rpc
 
 
 @rpc(blocking=True)
-def _go_replace(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
-    (visual,), *_ = args
+def _go_replace(nvim: Nvim, visual: VisualTypes) -> None:
     buf = cur_buf(nvim)
     if not writable(nvim, buf=buf):
         return

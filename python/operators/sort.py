@@ -9,8 +9,7 @@ from ..registery import NAMESPACE, keymap, rpc
 
 
 @rpc(blocking=True)
-def _sort_lines(nvim: Nvim, args: Tuple[Tuple[VisualTypes]]) -> None:
-    (visual_type,), *_ = args
+def _sort_lines(nvim: Nvim, visual: VisualTypes) -> None:
     buf = cur_buf(nvim)
     if not writable(nvim, buf=buf):
         return
