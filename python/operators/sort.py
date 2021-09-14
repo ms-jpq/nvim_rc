@@ -14,7 +14,7 @@ def _sort_lines(nvim: Nvim, visual: VisualTypes) -> None:
     if not writable(nvim, buf=buf):
         return
     else:
-        (row1, _), (row2, _) = operator_marks(nvim, buf=buf, visual_type=visual_type)
+        (row1, _), (row2, _) = operator_marks(nvim, buf=buf, visual_type=visual)
         lines = buf_get_lines(nvim, buf=buf, lo=row1, hi=row2 + 1)
         new_lines = sorted(lines, key=strxfrm)
         buf_set_lines(nvim, buf=buf, lo=row1, hi=row2 + 1, lines=new_lines)
