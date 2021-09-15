@@ -11,7 +11,7 @@ _modified = "%m"
 
 _lsp = "%{v:lua.LSP_status_line()}"
 _ft = "%y"
-_tabs = "%{&expandtab ? &tabstop .. 'S' : 'T'}"
+_tabs = "%{&tabstop .. (&expandtab ? 'S' : 'T')}"
 _linefeed = "%{&fileformat}"
 _pos = "%5l:%-3c"
 _scroll = "%3p%%"
