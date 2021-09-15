@@ -97,7 +97,10 @@
 
 - bin: latexindent
   type: stream
-  args: []
+  args:
+    - --overwrite
+    - --
+    - ${tmpname}
   filetypes:
     - plaintex
     - tex
