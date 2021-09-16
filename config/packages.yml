@@ -65,7 +65,7 @@
       maps:
         "<leader>z": "<cmd>COQnow<cr>"
   lua: |-
-    if vim.env.T9 then
+    if vim.env.SSH_TTY or vim.env.T9 then
       local cs = vim.g.coq_settings
       cs["clients.tabnine.enabled"] = true
       vim.g.coq_settings = cs
