@@ -76,14 +76,21 @@
 
 - git:
     uri: https://github.com/ms-jpq/coq.thirdparty
+  vals:
+    COQ3p:
+      - src: nvimlua
+        short_name: nLUA
+        conf_only: True
+      - src: bc
+        short_name: MATH
+        precision: 6
+      - src: vimtex
+        short_name: vTEX
+      - src: figlet
+        short_name: BIG
+      - src: cow
   lua: |-
-    require("coq_3p") {
-      { src = "nvimlua", short_name = "nLUA", conf_only = true },
-      { src = "cow" },
-      { src = "figlet", short_name = "BIG" },
-      { src = "bc", short_name = "MATH", precision = 6 },
-      { src = "vimtex", short_name = "vTEX" },
-    }
+    require("coq_3p")(COQ3p)
 
 - git:
     uri: https://github.com/junegunn/fzf
