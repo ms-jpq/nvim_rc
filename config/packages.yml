@@ -90,7 +90,7 @@
         short_name: BIG
       - src: cow
   lua: |-
-    require("coq_3p")(COQ3p)
+    require("coq_3p")(vim.g.COQ3p)
 
 - git:
     uri: https://github.com/junegunn/fzf
