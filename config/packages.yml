@@ -77,7 +77,6 @@
     COQ3p:
       - src: nvimlua
         short_name: nLUA
-        conf_only: True
       - src: repl
       - src: bc
         short_name: MATH
