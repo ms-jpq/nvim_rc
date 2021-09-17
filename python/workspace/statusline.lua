@@ -20,14 +20,15 @@
   end
 
   local lsp = function()
-    local clients = vim.lsp.buf_get_clients(0)
+    local buf = vim.api.nvim_get_current_buf()
+    local clients = vim.lsp.buf_get_clients(buf)
     local names = {}
     local warnings, errors = 0, 0
 
     for _, client in pairs(clients) do
       warnings =
-        warnings + vim.lsp.diagnostic.get_count(0, "Warning", client.id)
-      errors = errors + vim.lsp.diagnostic.get_count(0, "Error", client.id)
+        warnings + vim.lsp.diagnostic.get_count(buf, "Warning", client.id)
+      errors = errors + vim.lsp.diagnostic.get_count(buf, "Error", client.id)
       table.insert(names, client.name)
     end
 
