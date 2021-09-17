@@ -5,8 +5,8 @@ keymap.nv("<up>") << "g<up>"
 keymap.nv("<down>") << "g<down>"
 
 # {} scroll fixed lines
-keymap.nv("{") << ("5<up>")
-keymap.nv("}") << ("5<down>")
+keymap.nv("{") << ("5g<up>")
+keymap.nv("}") << ("5g<down>")
 
 # add emacs key binds
 keymap.i("<c-a>") << "<c-o>^"
