@@ -64,12 +64,6 @@
     - modes: n
       maps:
         "<leader>z": "<cmd>COQnow<cr>"
-  lua: |-
-    if vim.env.SSH_TTY or vim.env.T9 then
-      local cs = vim.g.coq_settings
-      cs["clients.tabnine.enabled"] = true
-      vim.g.coq_settings = cs
-    end
 
 - git:
     uri: https://github.com/ms-jpq/coq.thirdparty
@@ -187,3 +181,4 @@
 #     uri: https://github.com/kosayoda/nvim-lightbulb
 #   viml: |-
 #     autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
+#
