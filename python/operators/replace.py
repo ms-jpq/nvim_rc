@@ -35,7 +35,7 @@ def _go_replace(nvim: Nvim, visual: VisualTypes) -> None:
         begin = (r1, min(c1, max(0, len(encode(h)) - 1)))
         end = (r2, min(len(encode(t)), c2 + 1))
 
-        text: str = nvim.funcs.getreg("*")
+        text: str = nvim.funcs.getreg()
         new_lines = text.split(linefeed)
         if new_lines:
             n = new_lines.pop()
@@ -61,7 +61,7 @@ def _go_replace_line(nvim: Nvim) -> None:
     else:
         linefeed = buf_linefeed(nvim, buf=buf)
         row, _ = win_get_cursor(nvim, win=win)
-        body: str = nvim.funcs.getreg("*")
+        body: str = nvim.funcs.getreg()
         new_lines = body.split(linefeed)
         if new_lines:
             n = new_lines.pop()
