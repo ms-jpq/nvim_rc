@@ -38,13 +38,12 @@ fi
 
 if [[ ! -x "$BIN" ]]
 then
- (
-   export PATH="$VENV_BIN:$PATH"
-   cd "$REPO/3rd/luamake" || exit 1
-   ./compile/install.sh
-   cd ../.. || exit 1
-   ./3rd/luamake/luamake rebuild
- )
-
- ln --symbolic --force -- "$REPO/bin/"*'/lua-language-server' "$BIN"
+  (
+    export PATH="$VENV_BIN:$PATH"
+    cd "$REPO/3rd/luamake" || exit 1
+    ./compile/install.sh
+    cd ../.. || exit 1
+    ./3rd/luamake/luamake rebuild
+  )
+  cp -- "$(dirname "$0")/luals" "$BIN"
 fi
