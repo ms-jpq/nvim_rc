@@ -2,6 +2,7 @@
 
 set -eu
 set -o pipefail
+shopt -s globstar failglob
 
 
 if [[ -d "$LIB" ]]

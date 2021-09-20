@@ -2,6 +2,7 @@
 
 set -eu
 set -o pipefail
+shopt -s globstar failglob
 
 
 dotnet tool install --global fsautocomplete || true
