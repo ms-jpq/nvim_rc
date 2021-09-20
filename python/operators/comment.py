@@ -1,10 +1,10 @@
 from typing import Iterable, Iterator, Optional, Sequence, Tuple
 
 from pynvim import Nvim
-from pynvim.api.nvim import Buffer, Nvim
+from pynvim.api.nvim import Nvim
 from pynvim_pp.api import (
+    buf_commentstr,
     buf_get_lines,
-    buf_get_option,
     buf_set_lines,
     cur_buf,
     cur_win,
@@ -16,13 +16,6 @@ from pynvim_pp.operators import VisualTypes, operator_marks, writable
 from ..registery import NAMESPACE, keymap, rpc, settings
 
 settings["commentstring"] = r"#\ %s"
-
-
-def _parse_comment_str(nvim: Nvim, buf: Buffer) -> Tuple[str, str]:
-    comment_str: str = buf_get_option(nvim, buf=buf, key="commentstring")
-    assert not comment_str or len(comment_str.splitlines()) == 1
-    lhs, _, rhs = comment_str.partition("%s")
-    return lhs, rhs
 
 
 def _p_indent(line: str) -> str:
@@ -89,7 +82,7 @@ def _comment(nvim: Nvim, visual: VisualTypes) -> None:
     else:
         (row1, _), (row2, _) = operator_marks(nvim, buf=buf, visual_type=visual)
         lines = buf_get_lines(nvim, buf=buf, lo=row1, hi=row2 + 1)
-        lhs, rhs = _parse_comment_str(nvim, buf=buf)
+        lhs, rhs = buf_commentstr(nvim, buf=buf)
         new_lines = _toggle_comment(lhs, rhs, lines=lines)
         buf_set_lines(nvim, buf=buf, lo=row1, hi=row2 + 1, lines=new_lines)
 
@@ -107,7 +100,7 @@ def _comment_single(nvim: Nvim) -> None:
     else:
         row, _ = win_get_cursor(nvim, win=win)
         lines = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
-        lhs, rhs = _parse_comment_str(nvim, buf=buf)
+        lhs, rhs = buf_commentstr(nvim, buf=buf)
         new_lines = _toggle_comment(lhs, rhs, lines=lines)
         buf_set_lines(nvim, buf=buf, lo=row, hi=row + 1, lines=new_lines)
 
