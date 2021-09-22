@@ -120,6 +120,12 @@
     - ${tmpname}
   filetypes:
     - r
+  install:
+    script:
+      required:
+        - Rscript
+        - R
+      file: dl_rfmt.sh
 
 - bin: pg_format
   args:
