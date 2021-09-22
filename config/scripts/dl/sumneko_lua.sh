@@ -45,5 +45,5 @@ then
     cd ../.. || exit 1
     ./3rd/luamake/luamake rebuild
   )
-  cp -- "../exec/luals" "$BIN"
+  cp -- "$(dirname "$0")/../exec/lua-ls.sh" "$BIN"
 fi

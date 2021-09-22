@@ -8,4 +8,4 @@ shopt -s globstar failglob
 LATEST="$(< "$(get -- "$URI")")"
 mkdir --parents -- "$LIB"
 get -- "$PREFIX/$LATEST" | unpack --dest "$LIB"
-cp -- "../exec/jdt-ls" "$BIN"
+cp -- "$(dirname "$0")/../exec/jdt-ls.sh" "$BIN"

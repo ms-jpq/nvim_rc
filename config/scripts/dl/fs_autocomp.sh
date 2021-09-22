@@ -7,4 +7,4 @@ shopt -s globstar failglob
 
 dotnet tool install --global fsautocomplete || true
 dotnet tool update --global fsautocomplete
-cp -- "../exec/fsharp-ls.sh" "$BIN"
+cp -- "$(dirname "$0")/../exec/fsharp-ls.sh" "$BIN"
