@@ -200,6 +200,7 @@
     script:
       required:
         - Rscript
+        - R
       file: dl_rlang_server.r
 
 # - server: ansiblels
