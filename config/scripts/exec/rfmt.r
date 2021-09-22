@@ -2,4 +2,4 @@
 
 library(styler)
 
-style_file(commandArgs(TRUE), dry = "off")
+style_file(commandArgs(trailingOnly = TRUE), dry = "off")
