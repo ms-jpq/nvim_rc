@@ -210,7 +210,7 @@
 #       - ansible-language-server
 
 - server: jdtls
-  bin: jdtls
+  bin: jdt-ls
   args: []
   install:
     script:
