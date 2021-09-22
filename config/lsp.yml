@@ -199,7 +199,7 @@
   install:
     script:
       required:
-        - R
+        - Rscript
       file: dl_rlang_server.r
 
 # - server: ansiblels
