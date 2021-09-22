@@ -1,4 +1,6 @@
-from pynvim.api.nvim import Nvim
+from contextlib import suppress
+
+from pynvim.api.nvim import Nvim, NvimError
 from pynvim_pp.api import (
     buf_filetype,
     buf_set_var,
@@ -149,7 +151,8 @@ def _toggle_qf(nvim: Nvim) -> None:
 @rpc(blocking=True)
 def _clear_qf(nvim: Nvim) -> None:
     nvim.funcs.setqflist(())
-    nvim.command("cclose")
+    with suppress(NvimError):
+        nvim.command("cclose")
 
 
 keymap.n("<leader>l") << f"<cmd>lua {NAMESPACE}.{_toggle_qf.name}()<cr>"
