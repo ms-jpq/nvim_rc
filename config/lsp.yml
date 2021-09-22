@@ -84,7 +84,7 @@
         LINUX_URI: https://github.com/latex-lsp/texlab/releases/download/v3.2.0/texlab-x86_64-linux.tar.gz
         T_MAC_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.7.1/tectonic-0.7.1-x86_64-apple-darwin.tar.gz
         T_LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.7.1/tectonic-0.7.1-x86_64-unknown-linux-gnu.tar.gz
-      file: dl_texlab.sh
+      file: dl/texlab.sh
 
 - server: bashls
   bin: bash-language-server
@@ -117,7 +117,7 @@
       env:
         MAC_URI: https://github.com/rust-analyzer/rust-analyzer/releases/download/2021-06-14/rust-analyzer-x86_64-apple-darwin.gz
         LINUX_URI: https://github.com/rust-analyzer/rust-analyzer/releases/download/2021-06-14/rust-analyzer-x86_64-unknown-linux-gnu.gz
-      file: dl_rust_analyzer.sh
+      file: dl/rust_analyzer.sh
 
 - server: gopls
   bin: gopls
@@ -171,7 +171,7 @@
         - git
       env:
         URI: https://github.com/tailwindlabs/tailwindcss-intellisense/releases/download/v0.6.12/vscode-tailwindcss-0.6.12.vsix
-      file: dl_tailwind.sh
+      file: dl/tailwind.sh
 
 - server: graphql
   bin: graphql-lsp
@@ -186,7 +186,7 @@
     script:
       required:
         - dotnet
-      file: dl_fs_autocomp.sh
+      file: dl/fs_autocomp.sh
 
 - server: vimls
   bin: vim-language-server
@@ -201,7 +201,7 @@
       required:
         - Rscript
         - R
-      file: dl_rlang_server.r
+      file: dl/rlang_server.r
 
 # - server: ansiblels
 #   bin: ansible-language-server
@@ -219,7 +219,7 @@
       env:
         PREFIX: http://download.eclipse.org/jdtls/snapshots/
         URI: http://download.eclipse.org/jdtls/snapshots/latest.txt
-      file: dl_jdtls.sh
+      file: dl/jdtls.sh
 
 - server: kotlin_language_server
   bin: kotlin-language-server
@@ -230,7 +230,7 @@
         - gradle
       env:
         URI: https://github.com/fwcd/kotlin-language-server/releases/download/1.1.2/server.zip
-      file: dl_kotlin.sh
+      file: dl/kotlin.sh
 
 - server: sumneko_lua
   bin: lua-ls
@@ -243,7 +243,7 @@
       env:
         URI: https://github.com/sumneko/lua-language-server
         TAG: "2.3.6"
-      file: dl_sumneko_lua.sh
+      file: dl/sumneko_lua.sh
 # - server: pylsp
 #   bin: pylsp
 #   install:

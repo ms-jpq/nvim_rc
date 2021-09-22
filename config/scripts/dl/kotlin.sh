@@ -4,6 +4,8 @@ set -eu
 set -o pipefail
 shopt -s globstar failglob
 
+cd "$(dirname "$0")" || exit 1
+
 
 LL="$LIB/bin/kotlin-language-server"
 TMP="$(mktemp --directory)"

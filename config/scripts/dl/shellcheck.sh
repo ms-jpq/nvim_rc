@@ -4,6 +4,8 @@ set -eu
 set -o pipefail
 shopt -s globstar failglob
 
+cd "$(dirname "$0")" || exit 1
+
 
 if [[ "$OS" == 'Darwin' ]]
 then
@@ -15,6 +17,6 @@ fi
 
 TMP="$(mktemp --directory)"
 get -- "$URI" | unpack --dest "$TMP"
-mv -- "$TMP/rust-analyzer-"* "$BIN"
+mv -- "$TMP/shellcheck"*'/shellcheck' "$BIN"
 chmod +x -- "$BIN"
 

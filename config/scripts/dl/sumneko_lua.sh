@@ -4,6 +4,8 @@ set -eu
 set -o pipefail
 shopt -s globstar failglob
 
+cd "$(dirname "$0")" || exit 1
+
 
 LOCATION="$PWD/lua-ls"
 REPO="$LOCATION/repo"
@@ -45,5 +47,5 @@ then
     cd ../.. || exit 1
     ./3rd/luamake/luamake rebuild
   )
-  cp -- "$(dirname "$0")/luals" "$BIN"
+  cp -- "../exec/luals" "$BIN"
 fi

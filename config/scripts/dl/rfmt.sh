@@ -4,5 +4,7 @@ set -eu
 set -o pipefail
 shopt -s globstar failglob
 
+cd "$(dirname "$0")" || exit 1
 
-cp -- "$(dirname "$0")/rfmt.r" "$BIN"
+
+cp -- "../exec/rfmt.r" "$BIN"

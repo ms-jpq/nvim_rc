@@ -94,7 +94,7 @@ def _script_specs() -> Iterator[Tuple[str, ScriptSpec]]:
 
 
 def _installable(script_spec: ScriptSpec) -> bool:
-    return bool(script_spec.file and all(map(which, script_spec.required)))
+    return bool(script_spec.file) and all(map(which, script_spec.required))
 
 
 SortOfMonoid = Sequence[Tuple[str, ProcReturn]]

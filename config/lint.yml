@@ -23,7 +23,7 @@
       env:
         MAC_URI: https://github.com/koalaman/shellcheck/releases/download/v0.7.2/shellcheck-v0.7.2.darwin.x86_64.tar.xz
         LINUX_URI: https://github.com/koalaman/shellcheck/releases/download/v0.7.2/shellcheck-v0.7.2.linux.x86_64.tar.xz
-      file: dl_shellcheck.sh
+      file: dl/shellcheck.sh
 
 - bin: hadolint
   type: stream
@@ -36,5 +36,5 @@
       env:
         MAC_URI: https://github.com/hadolint/hadolint/releases/download/v2.6.0/hadolint-Darwin-x86_64
         LINUX_URI: https://github.com/hadolint/hadolint/releases/download/v2.6.0/hadolint-Linux-x86_64
-      file: dl_hadolint.sh
+      file: dl/hadolint.sh
 

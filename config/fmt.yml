@@ -112,7 +112,7 @@
       env:
         URI: https://github.com/cmhughes/latexindent.pl
         TAG: "V3.11"
-      file: dl_latex_format.sh
+      file: dl/latex_format.sh
 
 - bin: r-fmt
   type: fs
@@ -125,7 +125,7 @@
       required:
         - Rscript
         - R
-      file: dl_rfmt.sh
+      file: dl/rfmt.sh
 
 - bin: pg_format
   args:
@@ -144,4 +144,4 @@
       env:
         URI: https://github.com/darold/pgFormatter
         TAG: "v4.4"
-      file: dl_pg_format.sh
+      file: dl/pg_format.sh
