@@ -188,18 +188,19 @@
         - dotnet
       file: dl_fs_autocomp.sh
 
+- server: vimls
+  bin: vim-language-server
+  install:
+    npm:
+      - vim-language-server
+
 - server: r_language_server
   bin: R
   install:
     script:
       required:
         - R
-
-- server: vimls
-  bin: vim-language-server
-  install:
-    npm:
-      - vim-language-server
+      file: dl_rlang_server.r
 
 # - server: ansiblels
 #   bin: ansible-language-server
