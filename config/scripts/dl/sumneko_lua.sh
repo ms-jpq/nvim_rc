@@ -4,8 +4,6 @@ set -eu
 set -o pipefail
 shopt -s globstar failglob
 
-cd "$(dirname "$0")" || exit 1
-
 
 LOCATION="$PWD/lua-ls"
 REPO="$LOCATION/repo"

@@ -4,8 +4,6 @@ set -eu
 set -o pipefail
 shopt -s globstar failglob
 
-cd "$(dirname "$0")" || exit 1
-
 
 TMP="$(mktemp --directory)"
 get "$URI" | unpack --format 'zip' --dest "$TMP"
