@@ -11,12 +11,12 @@
       - sortd
 
 - bin: isort
-  type: stream
   args:
     - --profile
     - black
     - --
     - "-"
+  type: stream
   filetypes:
     - python
   install:
@@ -24,12 +24,12 @@
       - isort
 
 - bin: black
-  type: stream
   args:
     - --stdin-filename
     - ${filename}
     - --
     - "-"
+  type: stream
   filetypes:
     - python
   install:
@@ -71,11 +71,11 @@
       - prettier
 
 - bin: luafmt
-  type: stream
   args:
     - --stdin
     - --line-width=80
     - --indent-count=${tabsize}
+  type: stream
   filetypes:
     - lua
   install:
@@ -83,10 +83,10 @@
       - lua-fmt
 
 - bin: rustfmt
-  type: stream
   args:
     - --edition
     - "2018"
+  type: stream
   filetypes:
     - rust
 
@@ -96,11 +96,11 @@
     - go
 
 - bin: latexindent
-  type: stream
   args:
     - --overwrite
     - --
     - ${tmpname}
+  type: fs
   filetypes:
     - plaintex
     - tex
@@ -114,13 +114,20 @@
         TAG: "V3.11"
       file: dl_latex_format.sh
 
+- bin: rfmt
+  type: fs
+  args:
+    - ${tmpname}
+  filetypes:
+    - r
+
 - bin: pg_format
-  type: stream
   args:
     - --spaces=${tabsize}
     - --comma-break
     - --nogrouping
     - --function-case=0
+  type: stream
   filetypes:
     - sql
   install:
