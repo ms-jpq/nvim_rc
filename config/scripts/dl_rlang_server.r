@@ -2,7 +2,9 @@
 
 if (Sys.which("apt") != "") {
   system2("apt", c(
-    "install", "--yes", "--",
+    "install",
+    "--yes",
+    "--",
     "libcurl4-openssl-dev",
     "libssl-dev",
     "libxml2-dev"
