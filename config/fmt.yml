@@ -143,5 +143,5 @@
         - perl
       env:
         URI: https://github.com/darold/pgFormatter
-        TAG: "v4.4"
+        TAG: "v5.0"
       file: dl/pg_format.sh

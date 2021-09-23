@@ -125,8 +125,8 @@
   install:
     script:
       env:
-        MAC_URI: https://github.com/rust-analyzer/rust-analyzer/releases/download/2021-06-14/rust-analyzer-x86_64-apple-darwin.gz
-        LINUX_URI: https://github.com/rust-analyzer/rust-analyzer/releases/download/2021-06-14/rust-analyzer-x86_64-unknown-linux-gnu.gz
+        MAC_URI: https://github.com/rust-analyzer/rust-analyzer/releases/download/2021-09-20/rust-analyzer-x86_64-apple-darwin.gz
+        LINUX_URI: https://github.com/rust-analyzer/rust-analyzer/releases/download/2021-09-20/rust-analyzer-x86_64-unknown-linux-gnu.gz
       file: dl/rust_analyzer.sh
 
 - server: gopls
@@ -242,18 +242,19 @@
         URI: https://github.com/fwcd/kotlin-language-server/releases/download/1.1.2/server.zip
       file: dl/kotlin.sh
 
-- server: sumneko_lua
-  bin: lua-ls
-  args: []
-  install:
-    script:
-      required:
-        - git
-        - python3
-      env:
-        URI: https://github.com/sumneko/lua-language-server
-        TAG: "2.3.6"
-      file: dl/sumneko_lua.sh
+# - server: sumneko_lua
+#   bin: lua-ls
+#   args: []
+#   install:
+#     script:
+#       required:
+#         - git
+#         - python3
+#       env:
+#         URI: https://github.com/sumneko/lua-language-server
+#         TAG: "2.3.6"
+#       file: dl/sumneko_lua.sh
+
 # - server: pylsp
 #   bin: pylsp
 #   install:
