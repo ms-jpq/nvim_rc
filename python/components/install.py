@@ -124,7 +124,7 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
                         p1 = await call(
                             cmd,
                             "clone",
-                            f"--jobs{cpu_count()}",
+                            f"--jobs={cpu_count()}",
                             "--depth=1",
                             "--recurse-submodules",
                             "--shallow-submodules",
