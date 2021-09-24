@@ -76,9 +76,9 @@
         short_name: MATH
       - src: vimtex
         short_name: vTEX
-      - src: figlet
-        short_name: BIG
-      - src: cow
+      # - src: figlet
+      #   short_name: BIG
+      # - src: cow
   lua: |-
     require("coq_3p")(vim.g.COQ3p)
 
