@@ -1,6 +1,7 @@
 from asyncio.tasks import as_completed
 from itertools import chain
 from json import dumps, loads
+from multiprocessing import cpu_count
 from os import environ, linesep, pathsep
 from pathlib import Path
 from platform import uname
@@ -123,6 +124,7 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
                         p1 = await call(
                             cmd,
                             "clone",
+                            f"--jobs{cpu_count()}",
                             "--depth=1",
                             "--recurse-submodules",
                             "--shallow-submodules",
