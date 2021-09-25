@@ -2,7 +2,7 @@ from dataclasses import asdict
 from operator import attrgetter
 from pathlib import Path, PurePosixPath
 from textwrap import dedent, indent
-from urllib.parse import urlparse
+from urllib.parse import urlsplit
 
 from pynvim.api.nvim import Nvim
 from pynvim_pp.atomic import Atomic
@@ -13,7 +13,7 @@ from ..consts import VIM_DIR
 
 
 def p_name(uri: str) -> Path:
-    return VIM_DIR / PurePosixPath(urlparse(uri).path).name
+    return VIM_DIR / PurePosixPath(urlsplit(uri).path).name
 
 
 def inst(nvim: Nvim) -> Atomic:
