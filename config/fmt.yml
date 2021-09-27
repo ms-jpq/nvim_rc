@@ -84,14 +84,20 @@
 
 - bin: rustfmt
   args:
-    - --edition
-    - "2018"
-  type: stream
+    - --edition=2018
+    - --emit=files
+    - --
+    - ${tmpname}
+  type: fs
   filetypes:
     - rust
 
 - bin: gofmt
-  type: stream
+  args:
+    - -w
+    - --
+    - ${tmpname}
+  type: fs
   filetypes:
     - go
 
