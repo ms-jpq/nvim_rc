@@ -26,9 +26,11 @@
       - mypy
 
 - bin: hadolint
-  type: stream
+  type: fs
   args:
-    - "-"
+    - --no-color
+    - --
+    - ${tmpname}
   filetypes:
     - dockerfile
   install:
