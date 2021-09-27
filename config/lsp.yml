@@ -220,9 +220,7 @@
 #       - ansible-language-server
 
 - server: clangd
-  bin: clangd-12
-  args:
-    - --background-index
+  bin: clangd
 
 - server: jdtls
   bin: jdt-ls
