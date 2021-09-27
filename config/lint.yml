@@ -51,4 +51,4 @@
       required:
         - Rscript
         - R
-      file: dl/rlintr.sh
+      file: dl/rlint.sh
