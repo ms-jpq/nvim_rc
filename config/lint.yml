@@ -37,3 +37,16 @@
         MAC_URI: https://github.com/hadolint/hadolint/releases/download/v2.7.0/hadolint-Darwin-x86_64
         LINUX_URI: https://github.com/hadolint/hadolint/releases/download/v2.7.0/hadolint-Linux-x86_64
       file: dl/hadolint.sh
+
+- bin: r-lint
+  type: fs
+  args:
+    - ${tmpname}
+  filetypes:
+    - r
+  install:
+    script:
+      required:
+        - Rscript
+        - R
+      file: dl/rlintr.sh
