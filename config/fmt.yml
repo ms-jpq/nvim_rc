@@ -127,6 +127,19 @@
         - R
       file: dl/rfmt.sh
 
+- bin: shfmt
+  type: fs
+  args:
+    - -l
+    - -w
+    - ${tmpname}
+  filetypes:
+    - sh
+    - zsh
+  install:
+    go:
+      - mvdan.cc/sh/v3/cmd/shfmt@latest
+
 - bin: pg_format
   args:
     - --spaces=${tabsize}
