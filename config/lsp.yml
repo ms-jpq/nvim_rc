@@ -114,12 +114,6 @@
     npm:
       - pyright
 
-- server: intelephense
-  bin: intelephense
-  install:
-    npm:
-      - intelephense
-
 - server: rust_analyzer
   bin: rust-analyzer
   install:
@@ -173,15 +167,6 @@
     npm:
       - graphql-language-service-cli
 
-- server: fsautocomplete
-  bin: fsharp-ls
-  args: []
-  install:
-    script:
-      required:
-        - dotnet
-      file: dl/fs_autocomp.sh
-
 - server: vimls
   bin: vim-language-server
   install:
@@ -199,6 +184,21 @@
 
 - server: clangd
   bin: clangd
+
+- server: intelephense
+  bin: intelephense
+  install:
+    npm:
+      - intelephense
+
+- server: fsautocomplete
+  bin: fsharp-ls
+  args: []
+  install:
+    script:
+      required:
+        - dotnet
+      file: dl/fs_autocomp.sh
 
 - server: jdtls
   bin: jdt-ls
