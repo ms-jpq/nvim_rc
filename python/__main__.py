@@ -1,6 +1,7 @@
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import nullcontext
 from pathlib import Path
 from subprocess import check_call
 from sys import executable, exit, stderr
@@ -19,11 +20,11 @@ def parse_args() -> Namespace:
 
     sub_parsers = parser.add_subparsers(dest="command", required=True)
 
-    s_run = sub_parsers.add_parser("run")
-    s_run.add_argument("--socket", required=True)
+    with nullcontext(sub_parsers.add_parser("run")) as parser:
+        parser.add_argument("--socket", required=True)
 
-    s_deps = sub_parsers.add_parser("deps")
-    s_deps.add_argument("deps", nargs="*", default=())
+    with nullcontext(sub_parsers.add_parser("deps")) as parser:
+        parser.add_argument("deps", nargs="*", default=())
 
     return parser.parse_args()
 
