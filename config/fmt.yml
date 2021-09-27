@@ -15,8 +15,8 @@
     - --profile
     - black
     - --
-    - "-"
-  type: stream
+    - ${tmpname}
+  type: fs
   filetypes:
     - python
   install:
@@ -25,11 +25,9 @@
 
 - bin: black
   args:
-    - --stdin-filename
-    - ${filename}
     - --
-    - "-"
-  type: stream
+    - ${tmpname}
+  type: fs
   filetypes:
     - python
   install:
@@ -72,10 +70,12 @@
 
 - bin: luafmt
   args:
-    - --stdin
     - --line-width=80
     - --indent-count=${tabsize}
-  type: stream
+    - --write-mode=replace
+    - --
+    - ${tmpname}
+  type: fs
   filetypes:
     - lua
   install:
