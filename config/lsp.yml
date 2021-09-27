@@ -138,22 +138,6 @@
 - server: sourcekit
   bin: sourcekit-lsp
 
-# - server: sqlls
-#   bin: sql-language-server
-#   args:
-#     - up
-#     - --method
-#     - stdio
-#   install:
-#     npm:
-#       - sql-language-server
-
-# - server: rome
-#   bin: rome
-#   install:
-#     npm:
-#       - rome
-
 - server: tsserver
   bin: typescript-language-server
   install:
@@ -213,12 +197,6 @@
         - R
       file: dl/rlang_server.r
 
-# - server: ansiblels
-#   bin: ansible-language-server
-#   install:
-#     npm:
-#       - ansible-language-server
-
 - server: clangd
   bin: clangd
 
@@ -262,3 +240,25 @@
 #   install:
 #     pip:
 #       - python-lsp-server[all]
+
+# - server: sqlls
+#   bin: sql-language-server
+#   args:
+#     - up
+#     - --method
+#     - stdio
+#   install:
+#     npm:
+#       - sql-language-server
+
+# - server: rome
+#   bin: rome
+#   install:
+#     npm:
+#       - rome
+
+# - server: ansiblels
+#   bin: ansible-language-server
+#   install:
+#     npm:
+#       - ansible-language-server
