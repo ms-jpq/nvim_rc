@@ -130,7 +130,6 @@
 - bin: shfmt
   type: fs
   args:
-    - -l
     - -w
     - ${tmpname}
   filetypes:
