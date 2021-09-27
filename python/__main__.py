@@ -20,11 +20,11 @@ def parse_args() -> Namespace:
 
     sub_parsers = parser.add_subparsers(dest="command", required=True)
 
-    with nullcontext(sub_parsers.add_parser("run")) as parser:
-        parser.add_argument("--socket", required=True)
+    with nullcontext(sub_parsers.add_parser("run")) as p:
+        p.add_argument("--socket", required=True)
 
-    with nullcontext(sub_parsers.add_parser("deps")) as parser:
-        parser.add_argument("deps", nargs="*", default=())
+    with nullcontext(sub_parsers.add_parser("deps")) as p:
+        p.add_argument("deps", nargs="*", default=())
 
     return parser.parse_args()
 
