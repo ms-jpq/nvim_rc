@@ -145,7 +145,10 @@
     - --comma-break
     - --nogrouping
     - --function-case=0
-  type: stream
+    - --output=${tmpname}
+    - --
+    - ${tmpname}
+  type: fs
   filetypes:
     - sql
   install:
