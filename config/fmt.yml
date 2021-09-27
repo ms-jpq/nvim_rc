@@ -85,10 +85,7 @@
 - bin: rustfmt
   args:
     - --edition=2018
-    - --emit=files
-    - --
-    - ${tmpname}
-  type: fs
+  type: stream
   filetypes:
     - rust
 
