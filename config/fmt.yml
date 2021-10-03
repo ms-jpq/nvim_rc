@@ -5,6 +5,7 @@
   type: stream
   filetypes:
     - json
+    - toml
     - cfg
   install:
     pip:
