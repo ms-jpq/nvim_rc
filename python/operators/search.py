@@ -65,10 +65,7 @@ def _op_rg(nvim: Nvim, visual: VisualTypes) -> None:
 
 
 keymap.n("gs") << f"<cmd>set opfunc={_op_search.name}<cr>g@"
-(
-    keymap.v("gs")
-    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_search.name}(vim.NIL)<cr>"
-)
+(keymap.v("gs") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_search.name}(vim.NIL)<cr>")
 
 keymap.n("gf") << f"<cmd>set opfunc={_op_fzf.name}<cr>g@"
 keymap.v("gf") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_fzf.name}(vim.NIL)<cr>"
