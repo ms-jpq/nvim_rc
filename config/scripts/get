@@ -10,7 +10,7 @@ from pathlib import Path, PurePosixPath
 from sys import stderr
 from textwrap import dedent
 from typing import Iterator, Tuple, cast
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 from urllib.request import Request, build_opener
 
 _MB = 10 ** 6
@@ -52,7 +52,7 @@ def main() -> None:
     args = _parse_args()
 
     src: str = args.src
-    path = PurePosixPath(urlsplit(src).path)
+    path = PurePosixPath(unquote(urlsplit(src).path))
     dest = Path(args.dest if args.dest else path.name).resolve()
 
     msg = f"""
@@ -79,4 +79,3 @@ def main() -> None:
 
 
 main()
-
