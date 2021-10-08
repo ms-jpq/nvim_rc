@@ -2,7 +2,7 @@ from asyncio.tasks import as_completed
 from itertools import chain
 from json import dumps, loads
 from multiprocessing import cpu_count
-from os import environ, linesep, pathsep
+from os import X_OK, access, environ, linesep, pathsep
 from os.path import normcase
 from pathlib import Path
 from platform import uname
@@ -157,12 +157,13 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
 
 
 def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
+    pip = VENV_DIR / "bin" / "pip"
     specs = tuple(_pip_specs())
 
     if specs:
 
         async def cont() -> SortOfMonoid:
-            if not VENV_DIR.is_dir():
+            if not access(pip, X_OK):
                 builder = EnvBuilder(
                     system_site_packages=False,
                     with_pip=True,
@@ -173,7 +174,7 @@ def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
                 await run_in_executor(lambda: builder.create(VENV_DIR))
 
             p = await call(
-                VENV_DIR / "bin" / "pip",
+                pip,
                 "install",
                 "--upgrade",
                 "--",
