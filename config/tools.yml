@@ -1,4 +1,4 @@
 ---
 go:
-  - github.com/junegunn/fzf
-  - github.com/jesseduffield/lazygit
+  - github.com/junegunn/fzf@latest
+  - github.com/jesseduffield/lazygit@latest

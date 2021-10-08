@@ -3,6 +3,7 @@ from itertools import chain
 from json import dumps, loads
 from multiprocessing import cpu_count
 from os import environ, linesep, pathsep
+from os.path import normcase
 from pathlib import Path
 from platform import uname
 from shlex import join
@@ -18,10 +19,12 @@ from typing import (
     Tuple,
     TypedDict,
 )
+from venv import EnvBuilder
 
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import ask_mc
 from pynvim_pp.lib import decode
+from std2.asyncio import run_in_executor
 from std2.asyncio.subprocess import ProcReturn, call
 
 from ..config.fmt import fmt_specs
@@ -106,6 +109,8 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
     cmd = "git"
 
     if which(cmd):
+        jobs = cpu_count()
+
         for spec in pkg_specs:
 
             async def cont(spec: GitPkgSpec) -> SortOfMonoid:
@@ -124,7 +129,7 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
                         p1 = await call(
                             cmd,
                             "clone",
-                            f"--jobs={cpu_count()}",
+                            f"--jobs={jobs}",
                             "--depth=1",
                             "--recurse-submodules",
                             "--shallow-submodules",
@@ -152,20 +157,25 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
 
 
 def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
-    VENV_DIR.mkdir(parents=True, exist_ok=True)
     specs = tuple(_pip_specs())
 
     if specs:
 
         async def cont() -> SortOfMonoid:
+            if not VENV_DIR.is_dir():
+                builder = EnvBuilder(
+                    system_site_packages=False,
+                    with_pip=True,
+                    upgrade=True,
+                    symlinks=True,
+                    clear=True,
+                )
+                await run_in_executor(lambda: builder.create(VENV_DIR))
+
             p = await call(
-                executable,
-                "-m",
-                "pip",
+                VENV_DIR / "bin" / "pip",
                 "install",
                 "--upgrade",
-                "--target",
-                VENV_DIR,
                 "--",
                 *specs,
                 check_returncode=set(),
@@ -237,7 +247,7 @@ def _go() -> Iterator[Awaitable[SortOfMonoid]]:
                 "get",
                 "--",
                 *_go_specs(),
-                env={"GO111MODULE": "on", "GOPATH": str(GO_DIR)},
+                env={"GO111MODULE": "on", "GOPATH": normcase(GO_DIR / "bin")},
                 cwd=VARS_DIR,
                 check_returncode=set(),
             )
@@ -257,14 +267,14 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
             env = {
                 "PATH": pathsep.join(
                     (
-                        str(INSTALL_SCRIPTS_DIR),
+                        normcase(INSTALL_SCRIPTS_DIR),
                         environ["PATH"],
                     )
                 ),
                 "ARCH": sys.machine,
                 "OS": sys.system,
-                "BIN": str(BIN_DIR / bin),
-                "LIB": str(LIB_DIR / bin),
+                "BIN": normcase(BIN_DIR / bin),
+                "LIB": normcase(LIB_DIR / bin),
             }
             p = await call(
                 INSTALL_SCRIPTS_DIR / pkg.file,

@@ -14,16 +14,16 @@
         LINUX_URI: https://github.com/koalaman/shellcheck/releases/download/v0.7.2/shellcheck-v0.7.2.linux.x86_64.tar.xz
       file: dl/shellcheck.sh
 
-- bin: mypy
-  type: fs
-  args:
-    - --
-    - ${tmpname}
-  filetypes:
-    - python
-  install:
-    pip:
-      - mypy
+# - bin: mypy
+#   type: fs
+#   args:
+#     - --
+#     - ${tmpname}
+#   filetypes:
+#     - python
+#   install:
+#     pip:
+#       - mypy
 
 - bin: hadolint
   type: fs
@@ -39,6 +39,18 @@
         MAC_URI: https://github.com/hadolint/hadolint/releases/download/v2.7.0/hadolint-Darwin-x86_64
         LINUX_URI: https://github.com/hadolint/hadolint/releases/download/v2.7.0/hadolint-Linux-x86_64
       file: dl/hadolint.sh
+
+- bin: sqlfluff
+  type: fs
+  args:
+    - lint
+    - --
+    - ${tmpname}
+  filetypes:
+    - sql
+  install:
+    pip:
+      - sqlfluff
 
 - bin: r-lint
   type: fs
