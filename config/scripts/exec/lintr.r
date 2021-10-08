@@ -1,4 +1,5 @@
 #!/usr/bin/env Rscript
 
-code <- length(lintr::lint(commandArgs(trailingOnly = TRUE)))
+errs <- lintr::lint(commandArgs(trailingOnly = TRUE))
+code <- length(errs) != 0
 quit(save = "no", status = code)
