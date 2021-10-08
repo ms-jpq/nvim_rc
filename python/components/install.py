@@ -225,6 +225,7 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
                     p2 = await call(
                         cmd,
                         "install",
+                        "--no-package-lock",
                         "--upgrade",
                         cwd=NPM_DIR,
                         check_returncode=set(),

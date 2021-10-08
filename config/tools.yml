@@ -2,3 +2,5 @@
 go:
   - github.com/junegunn/fzf@latest
   - github.com/jesseduffield/lazygit@latest
+npm:
+  - fx
