@@ -52,17 +52,7 @@ _PATH_PREPEND = tuple(
 )
 _PATHS = environ["PATH"] = pathsep.join(chain(_PATH_PREPEND, (environ["PATH"],)))
 PATH = pathsep.join(path for path in _PATHS.split(pathsep) if path != normcase(RT_BIN))
-PYTHONPATH = environ["PYTHONPATH"] = pathsep.join(
-    path
-    for path in chain(
-        environ.get("PYTHONPATH", "").split(pathsep),
-        (normcase(VENV_DIR),),
-    )
-    if path
-)
-
 
 TMP_DIR = VARS_DIR / "tmp"
-
 LOGS_DIR = VARS_DIR / "logs"
 UPDATE_LOG = LOGS_DIR / "last_update.txt"
