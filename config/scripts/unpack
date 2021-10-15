@@ -11,8 +11,7 @@ _STDIN = Path("-")
 
 
 def _unpack_gz(source: str, destination: str) -> None:
-    cmd = "gzip"
-    if which(cmd):
+    if cmd:= which("gzip"):
         dest = Path(destination) / PurePath(source).name
         with dest.open("wb") as fd:
             check_call(
