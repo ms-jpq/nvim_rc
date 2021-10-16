@@ -19,7 +19,6 @@ from typing import (
     Tuple,
     TypedDict,
 )
-from venv import EnvBuilder
 
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import ask_mc
@@ -157,31 +156,25 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
 
 
 def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
-    pip = VENV_DIR / "bin" / "pip"
     specs = tuple(_pip_specs())
 
     if specs:
 
         async def cont() -> SortOfMonoid:
-            if not access(pip, X_OK):
-                builder = EnvBuilder(
-                    system_site_packages=False,
-                    with_pip=True,
-                    upgrade=True,
-                    symlinks=True,
-                    clear=True,
+            if pip := which("pip"):
+                p = await call(
+                    pip,
+                    "install",
+                    "--upgrade",
+                    "--user",
+                    "--",
+                    *specs,
+                    check_returncode=set(),
+                    env={"PYTHONUSERBASE": normcase(VENV_DIR)}
                 )
-                await run_in_executor(lambda: builder.create(VENV_DIR))
-
-            p = await call(
-                pip,
-                "install",
-                "--upgrade",
-                "--",
-                *specs,
-                check_returncode=set(),
-            )
-            return (("", p),)
+                return (("", p),)
+            else:
+                return ()
 
         yield cont()
 
