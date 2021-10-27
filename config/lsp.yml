@@ -139,7 +139,7 @@
       - solargraph
 
 - server: sorbet
-  bin: sorbet
+  bin: srb
   install:
     gem:
       - sorbet
