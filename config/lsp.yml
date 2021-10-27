@@ -132,6 +132,10 @@
 - server: sourcekit
   bin: sourcekit-lsp
 
+- server: solargraph
+
+- server: sorbet
+
 - server: tsserver
   bin: typescript-language-server
   install:

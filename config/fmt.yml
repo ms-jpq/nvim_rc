@@ -70,9 +70,9 @@
   install:
     npm:
       - prettier
-      - "@pretier/plugin-php"
-      - "@pretier/plugin-ruby"
-      - "@pretier/plugin-xml"
+      - "@prettier/plugin-php"
+      - "@prettier/plugin-ruby"
+      - "@prettier/plugin-xml"
 
 - bin: luafmt
   args:
