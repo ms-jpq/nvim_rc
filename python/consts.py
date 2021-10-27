@@ -1,7 +1,7 @@
 from itertools import chain
 from os import environ, pathsep
 from os.path import normcase
-from pathlib import Path
+from pathlib import Path, PurePath
 
 DATE_FMT = "%Y-%m-%d %H:%M:%S"
 
@@ -41,23 +41,41 @@ GEM_DIR = _MODULES_DIR / "rb_modules"
 NPM_DIR = _MODULES_DIR
 GO_DIR = _MODULES_DIR / "go_modules"
 
-_PATH_PREPEND = tuple(
+
+PATH = environ["PATH"] = pathsep.join(
     map(
-        str,
-        (
-            BIN_DIR,
-            PIP_DIR / "bin",
-            GEM_DIR / "bin",
-            NPM_DIR / "node_modules" / ".bin",
-            GO_DIR / "bin",
+        normcase,
+        chain(
+            (
+                BIN_DIR,
+                PIP_DIR / "bin",
+                GEM_DIR / "bin",
+                NPM_DIR / "node_modules" / ".bin",
+                GO_DIR / "bin",
+            ),
+            (
+                path
+                for path in map(PurePath, environ["PATH"].split(pathsep))
+                if path != RT_BIN
+            ),
         ),
     )
 )
-_PATHS = environ["PATH"] = pathsep.join(chain(_PATH_PREPEND, (environ["PATH"],)))
-PATH = pathsep.join(path for path in _PATHS.split(pathsep) if path != normcase(RT_BIN))
 environ["PYTHONUSERBASE"] = normcase(PIP_DIR)
+GEM_PATH = environ["GEM_PATH"] = pathsep.join(
+    map(
+        normcase,
+        chain(
+            (GEM_DIR / "gems",),
+            (
+                PurePath(path)
+                for path in environ.get("GEM_PATH", "").split(pathsep)
+                if path
+            ),
+        ),
+    )
+)
 
 TMP_DIR = VARS_DIR / "tmp"
-
 LOGS_DIR = VARS_DIR / "logs"
 UPDATE_LOG = LOGS_DIR / "last_update.txt"

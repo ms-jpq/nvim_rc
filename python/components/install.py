@@ -201,7 +201,6 @@ def _gem() -> Iterator[Awaitable[_SortOfMonoid]]:
                     GEM_DIR / "bin",
                     *specs,
                     check_returncode=set(),
-                    # env={"PYTHONUSERBASE": normcase(VENV_DIR)},
                 )
                 return (("", p),)
             else:
