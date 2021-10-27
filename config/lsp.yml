@@ -133,8 +133,10 @@
   bin: sourcekit-lsp
 
 - server: solargraph
+  bin: solargraph
 
 - server: sorbet
+  bin: sorbet
 
 - server: tsserver
   bin: typescript-language-server
