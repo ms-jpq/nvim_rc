@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from typing import Sequence
+from typing import AbstractSet, Sequence
 
-from std2.pickle import new_decoder
+from std2.pickle.decoder import new_decoder
 from yaml import safe_load
 
 from ..consts import CONF_TOOL
@@ -10,9 +10,10 @@ from .install import ScriptSpec
 
 @dataclass(frozen=True)
 class ToolSpecs:
-    pip: Sequence[str] = ()
-    npm: Sequence[str] = ()
-    go: Sequence[str] = ()
+    pip: AbstractSet[str] = frozenset()
+    gem: AbstractSet[str] = frozenset()
+    npm: AbstractSet[str] = frozenset()
+    go: AbstractSet[str] = frozenset()
     script: Sequence[ScriptSpec] = ()
 
 

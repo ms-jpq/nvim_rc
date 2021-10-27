@@ -2,9 +2,9 @@ from asyncio.tasks import as_completed
 from itertools import chain
 from json import dumps, loads
 from multiprocessing import cpu_count
-from os import X_OK, access, environ, linesep, pathsep
+from os import environ, linesep, pathsep
 from os.path import normcase
-from pathlib import Path
+from pathlib import Path, PurePath
 from platform import uname
 from shlex import join
 from shutil import get_terminal_size, which
@@ -23,8 +23,8 @@ from typing import (
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import ask_mc
 from pynvim_pp.lib import decode
-from std2.asyncio import run_in_executor
-from std2.asyncio.subprocess import ProcReturn, call
+from std2.asyncio.subprocess import call
+from std2.subprocess import ProcReturn
 
 from ..config.fmt import fmt_specs
 from ..config.install import ScriptSpec
@@ -34,20 +34,23 @@ from ..config.pkgs import GitPkgSpec, pkg_specs
 from ..config.tools import tool_specs
 from ..consts import (
     BIN_DIR,
+    GEM_DIR,
     GO_DIR,
     INSTALL_SCRIPT,
     INSTALL_SCRIPTS_DIR,
     LIB_DIR,
     NPM_DIR,
+    PIP_DIR,
     TMP_DIR,
     UPDATE_LOG,
     VARS_DIR,
-    VENV_DIR,
     VIM_DIR,
 )
 from ..registery import LANG
 from ..workspace.terminal import open_term
 from .rtp import p_name
+
+_SortOfMonoid = Sequence[Tuple[str, ProcReturn]]
 
 
 class _PackagesJson(TypedDict):
@@ -63,6 +66,16 @@ def _pip_specs() -> Iterator[str]:
     for f_spec in fmt_specs:
         yield from f_spec.install.pip
     yield from tool_specs.pip
+
+
+def _gem_specs() -> Iterator[str]:
+    for l_spec in lsp_specs:
+        yield from l_spec.install.gem
+    for i_spec in linter_specs:
+        yield from i_spec.install.gem
+    for f_spec in fmt_specs:
+        yield from f_spec.install.gem
+    yield from tool_specs.gem
 
 
 def _npm_specs() -> Iterator[str]:
@@ -96,14 +109,7 @@ def _script_specs() -> Iterator[Tuple[str, ScriptSpec]]:
         yield "", t_spec
 
 
-def _installable(script_spec: ScriptSpec) -> bool:
-    return bool(script_spec.file) and all(map(which, script_spec.required))
-
-
-SortOfMonoid = Sequence[Tuple[str, ProcReturn]]
-
-
-def _git() -> Iterator[Awaitable[SortOfMonoid]]:
+def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
     VIM_DIR.mkdir(parents=True, exist_ok=True)
     cmd = "git"
 
@@ -112,7 +118,7 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
 
         for spec in pkg_specs:
 
-            async def cont(spec: GitPkgSpec) -> SortOfMonoid:
+            async def cont(spec: GitPkgSpec) -> _SortOfMonoid:
                 async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
                     location = p_name(spec.uri)
                     if location.is_dir():
@@ -141,26 +147,27 @@ def _git() -> Iterator[Awaitable[SortOfMonoid]]:
                     yield spec.uri, p1
 
                     pkg = spec.script
-                    if not p1.code and _installable(pkg):
-                        p2 = await call(
-                            INSTALL_SCRIPTS_DIR / pkg.file,
-                            env=pkg.env,
-                            cwd=location,
-                            check_returncode=set(),
-                        )
-                        yield "", p2
+                    if not p1.code and pkg.file and all(map(which, pkg.required)):
+                        if path := which(INSTALL_SCRIPTS_DIR / pkg.file):
+                            p2 = await call(
+                                path,
+                                env=pkg.env,
+                                cwd=location,
+                                check_returncode=set(),
+                            )
+                            yield "", p2
 
                 return [rt async for rt in cont()]
 
             yield cont(spec.git)
 
 
-def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
-    specs = tuple(_pip_specs())
+def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
+    specs = {*_pip_specs()}
 
     if specs:
 
-        async def cont() -> SortOfMonoid:
+        async def cont() -> _SortOfMonoid:
             if pip := which("pip"):
                 p = await call(
                     pip,
@@ -170,7 +177,7 @@ def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
                     "--",
                     *specs,
                     check_returncode=set(),
-                    env={"PYTHONUSERBASE": normcase(VENV_DIR)}
+                    env={"PYTHONUSERBASE": normcase(PIP_DIR)},
                 )
                 return (("", p),)
             else:
@@ -179,12 +186,37 @@ def _pip() -> Iterator[Awaitable[SortOfMonoid]]:
         yield cont()
 
 
-def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
+def _gem() -> Iterator[Awaitable[_SortOfMonoid]]:
+    specs = {*_gem_specs()}
+
+    if specs:
+
+        async def cont() -> _SortOfMonoid:
+            if gem := which("gem"):
+                p = await call(
+                    gem,
+                    "install",
+                    "--install-dir",
+                    GEM_DIR / "gems",
+                    "--bindir",
+                    GEM_DIR / "bin",
+                    *specs,
+                    check_returncode=set(),
+                    # env={"PYTHONUSERBASE": normcase(VENV_DIR)},
+                )
+                return (("", p),)
+            else:
+                return ()
+
+        yield cont()
+
+
+def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
     NPM_DIR.mkdir(parents=True, exist_ok=True)
     packages_json = NPM_DIR / "package.json"
     package_lock = NPM_DIR / "package-lock.json"
 
-    async def cont() -> SortOfMonoid:
+    async def cont() -> _SortOfMonoid:
         async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
             cmd = "npm"
             if which(cmd):
@@ -230,35 +262,38 @@ def _npm() -> Iterator[Awaitable[SortOfMonoid]]:
     yield cont()
 
 
-def _go() -> Iterator[Awaitable[SortOfMonoid]]:
+def _go() -> Iterator[Awaitable[_SortOfMonoid]]:
     GO_DIR.mkdir(parents=True, exist_ok=True)
-    cmd = "go"
+    specs = {*_go_specs()}
 
-    if which(cmd):
+    if specs:
 
-        async def cont() -> SortOfMonoid:
-            p = await call(
-                cmd,
-                "get",
-                "--",
-                *_go_specs(),
-                env={"GO111MODULE": "on", "GOPATH": normcase(GO_DIR / "bin")},
-                cwd=VARS_DIR,
-                check_returncode=set(),
-            )
-            return (("", p),)
+        async def cont() -> _SortOfMonoid:
+            if go := which("go"):
+                p = await call(
+                    go,
+                    "get",
+                    "--",
+                    *specs,
+                    env={"GO111MODULE": "on", "GOPATH": normcase(GO_DIR / "bin")},
+                    cwd=VARS_DIR,
+                    check_returncode=set(),
+                )
+                return (("", p),)
+            else:
+                return ()
 
         yield cont()
 
 
-def _script() -> Iterator[Awaitable[SortOfMonoid]]:
+def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
     for path in (BIN_DIR, LIB_DIR, TMP_DIR):
         path.mkdir(parents=True, exist_ok=True)
 
     sys = uname()
     for bin, pkg in _script_specs():
 
-        async def cont(bin: str, pkg: ScriptSpec) -> SortOfMonoid:
+        async def cont(path: PurePath, bin: str, pkg: ScriptSpec) -> _SortOfMonoid:
             env = {
                 "PATH": pathsep.join(
                     (
@@ -272,23 +307,25 @@ def _script() -> Iterator[Awaitable[SortOfMonoid]]:
                 "LIB": normcase(LIB_DIR / bin),
             }
             p = await call(
-                INSTALL_SCRIPTS_DIR / pkg.file,
+                path,
                 env={**env, **pkg.env},
                 cwd=TMP_DIR,
                 check_returncode=set(),
             )
             return (("", p),)
 
-        if _installable(pkg):
-            yield cont(bin, pkg)
+        if pkg.file and all(map(which, pkg.required)):
+            if s_path := which(INSTALL_SCRIPTS_DIR / pkg.file):
+                yield cont(PurePath(s_path), bin=bin, pkg=pkg)
 
 
 async def install() -> int:
-    cols, _ = get_terminal_size((80, 40))
+    cols, _ = get_terminal_size()
     sep = cols * "="
 
     has_error = False
-    for fut in as_completed(chain(_git(), _pip(), _npm(), _go(), _script())):
+    tasks = chain(_git(), _pip(), _gem(), _npm(), _go(), _script())
+    for fut in as_completed(tasks):
         for debug, proc in await fut:
             args = join(map(str, chain((proc.prog,), proc.args)))
             if proc.code == 0:
@@ -312,6 +349,7 @@ async def install() -> int:
 
 def maybe_install(nvim: Nvim) -> None:
     UPDATE_LOG.parent.mkdir(parents=True, exist_ok=True)
+
     try:
         coded = UPDATE_LOG.read_text()
     except FileNotFoundError:

@@ -34,8 +34,10 @@ VARS_DIR = TOP_LEVEL / ".vars"
 INSTALL_SCRIPTS_DIR = CONF_DIR / "scripts"
 BIN_DIR = VARS_DIR / "bin"
 LIB_DIR = VARS_DIR / "lib"
+
 _MODULES_DIR = VARS_DIR / "modules"
-VENV_DIR = _MODULES_DIR / "py_modules"
+PIP_DIR = _MODULES_DIR / "py_modules"
+GEM_DIR = _MODULES_DIR / "rb_modules"
 NPM_DIR = _MODULES_DIR
 GO_DIR = _MODULES_DIR / "go_modules"
 
@@ -44,7 +46,8 @@ _PATH_PREPEND = tuple(
         str,
         (
             BIN_DIR,
-            VENV_DIR / "bin",
+            PIP_DIR / "bin",
+            GEM_DIR / "bin",
             NPM_DIR / "node_modules" / ".bin",
             GO_DIR / "bin",
         ),
@@ -52,7 +55,7 @@ _PATH_PREPEND = tuple(
 )
 _PATHS = environ["PATH"] = pathsep.join(chain(_PATH_PREPEND, (environ["PATH"],)))
 PATH = pathsep.join(path for path in _PATHS.split(pathsep) if path != normcase(RT_BIN))
-environ["PYTHONUSERBASE"] = normcase(VENV_DIR)
+environ["PYTHONUSERBASE"] = normcase(PIP_DIR)
 
 TMP_DIR = VARS_DIR / "tmp"
 
