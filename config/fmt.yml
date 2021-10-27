@@ -61,6 +61,8 @@
     - json*
     - less
     - markdown
+    - php
+    - ruby
     - scss
     - typescript*
     - xml
@@ -68,6 +70,9 @@
   install:
     npm:
       - prettier
+      - "@pretier/plugin-php"
+      - "@pretier/plugin-ruby"
+      - "@pretier/plugin-xml"
 
 - bin: luafmt
   args:
