@@ -134,9 +134,16 @@
 
 - server: solargraph
   bin: solargraph
+  install:
+    gem:
+      - solargraph
 
 - server: sorbet
   bin: sorbet
+  install:
+    gem:
+      - sorbet
+      - sorbet-runtime
 
 - server: tsserver
   bin: typescript-language-server
