@@ -168,20 +168,19 @@ def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
     if specs:
 
         async def cont() -> _SortOfMonoid:
-            if pip := which("pip"):
-                p = await call(
-                    pip,
-                    "install",
-                    "--upgrade",
-                    "--user",
-                    "--",
-                    *specs,
-                    check_returncode=set(),
-                    env={"PYTHONUSERBASE": normcase(PIP_DIR)},
-                )
-                return (("", p),)
-            else:
-                return ()
+            p = await call(
+                Path(executable).resolve(),
+                "-m",
+                "pip",
+                "install",
+                "--upgrade",
+                "--user",
+                "--",
+                *specs,
+                check_returncode=set(),
+                env={"PYTHONUSERBASE": normcase(PIP_DIR)},
+            )
+            return (("", p),)
 
         yield cont()
 
