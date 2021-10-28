@@ -82,6 +82,8 @@
         short_name: MATH
       - src: vimtex
         short_name: vTEX
+      - src: copilot
+        short_name: COP
       # - src: figlet
       #   short_name: BIG
       # - src: cow
