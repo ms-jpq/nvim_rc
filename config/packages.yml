@@ -183,6 +183,8 @@
       colourizer.setup()
     end
 
+- git:
+    uri: https://github.com/github/copilot.vim
 # - git:
 #     uri: https://github.com/kosayoda/nvim-lightbulb
 #   viml: |-
