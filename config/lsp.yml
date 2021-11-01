@@ -138,12 +138,12 @@
     gem:
       - solargraph
 
-- server: sorbet
-  bin: srb
-  install:
-    gem:
-      - sorbet
-      - sorbet-runtime
+# - server: sorbet
+#   bin: srb
+#   install:
+#     gem:
+#       - sorbet
+#       - sorbet-runtime
 
 - server: tsserver
   bin: typescript-language-server
