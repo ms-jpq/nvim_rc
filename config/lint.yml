@@ -42,19 +42,21 @@
 
 - bin: rubocop
   type: stream
+  args:
+    - ${tmpname}
   filetypes:
     - ruby
   install:
     gem:
       - rubocop
 
-- bin: rbs
-  type: fs
-  args:
-    - validate
-    - ${tmpname}
-  filetypes:
-    - ruby
+# - bin: rbs
+#   type: fs
+#   args:
+#     - validate
+#     - ${tmpname}
+#   filetypes:
+#     - ruby
 
 - bin: r-lint
   type: fs
