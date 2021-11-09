@@ -40,13 +40,23 @@
         LINUX_URI: https://github.com/hadolint/hadolint/releases/download/v2.7.0/hadolint-Linux-x86_64
       file: dl/hadolint.sh
 
-- bin: rbs
-  type: fs
+- bin: rubocop
+  type: stream
   args:
-    - validate
     - ${tmpname}
   filetypes:
     - ruby
+  install:
+    gem:
+      - rubocop
+
+# - bin: rbs
+#   type: fs
+#   args:
+#     - validate
+#     - ${tmpname}
+#   filetypes:
+#     - ruby
 
 - bin: r-lint
   type: fs
