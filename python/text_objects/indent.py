@@ -8,6 +8,7 @@ from pynvim_pp.api import (
     win_get_buf,
     win_get_cursor,
 )
+from pynvim_pp.lib import encode
 from pynvim_pp.operators import p_indent, set_visual_selection
 
 from ..registery import NAMESPACE, keymap, rpc
@@ -37,7 +38,9 @@ def _indent(nvim: Nvim) -> None:
     top = row - _p_inside(init_lv, tabsize=tabsize, lines=reversed(before))
     btm = row + _p_inside(init_lv, tabsize=tabsize, lines=after)
 
-    set_visual_selection(nvim, win=win, mode="V", mark1=(top, 0), mark2=(btm, 0))
+    btm_line, *_ = buf_get_lines(nvim, buf=buf, lo=btm, hi=btm + 1)
+    mark1, mark2 = (top, 0), (btm, len(encode(btm_line)))
+    set_visual_selection(nvim, win=win, mode="V", mark1=mark1, mark2=mark2)
 
 
 keymap.o("ii") << f"<cmd>lua {NAMESPACE}.{_indent.name}()<cr>"
