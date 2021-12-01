@@ -1,7 +1,6 @@
 ---
 - git:
     uri: https://github.com/nvim-treesitter/nvim-treesitter
-    branch: 0.5-compat
   vals:
     ts_opts:
       highlight:
