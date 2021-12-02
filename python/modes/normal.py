@@ -13,9 +13,6 @@ from pynvim_pp.api import (
 
 from ..registery import NAMESPACE, autocmd, keymap, rpc
 
-# # normalize Y
-keymap.n("Y") << "y$"
-
 # fix cursor pos moving 1 back
 _BUF_VAR_NAME = f"buf_cursor_pos_{uuid4().hex}"
 
