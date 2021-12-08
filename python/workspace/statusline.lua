@@ -4,10 +4,10 @@
     local w = 0
     local count = 0
 
-    return function()
+    return function(...)
       local win = vim.api.nvim_get_current_win()
       if win ~= w or count % 15 == 0 then
-        ans = f()
+        ans = f(...)
       end
       w = win
       count = count + 1
@@ -15,24 +15,30 @@
     end
   end
 
-  local sort = function(lhs, rhs)
-    return vim.stricmp(lhs, rhs) < 0
-  end
-
   local lsp = function()
     local buf = vim.api.nvim_get_current_buf()
-    local clients = vim.lsp.buf_get_clients(buf)
-    local names = {}
-    local warnings, errors = 0, 0
 
-    for _, client in pairs(clients) do
-      warnings =
-        warnings + vim.lsp.diagnostic.get_count(buf, "Warning", client.id)
-      errors = errors + vim.lsp.diagnostic.get_count(buf, "Error", client.id)
-      table.insert(names, client.name)
-    end
+    local names =
+      (function()
+      local clients = vim.lsp.buf_get_clients(buf)
+      local acc = {}
+      for _, client in pairs(clients) do
+        table.insert(acc, client.name)
+      end
+      table.sort(
+        acc,
+        function(lhs, rhs)
+          return vim.stricmp(lhs, rhs) < 0
+        end
+      )
+      return acc
+    end)()
 
-    table.sort(names, sort)
+    local warnings =
+      #vim.diagnostic.get(buf, {severity = vim.diagnostic.severity.WARN})
+    local errors =
+      #vim.diagnostic.get(buf, {severity = vim.diagnostic.severity.ERROR})
+
     local s1 = #names > 0 and "[" .. table.concat(names, " ") .. "]" or ""
     local s2 = warnings > 0 and " ⚠️  " .. warnings or ""
     local s3 = errors > 0 and " ⛔️ " .. errors or ""
