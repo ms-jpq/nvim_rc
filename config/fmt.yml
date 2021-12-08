@@ -48,6 +48,17 @@
     npm:
       - import-sort-cli
 
+- bin: csscomb
+  args:
+    - --
+    - ${tmpname}
+  type: stream
+  filetypes:
+    - css
+  install:
+    npm:
+      - csscomb
+
 - bin: prettier
   args:
     - --stdin-filepath
