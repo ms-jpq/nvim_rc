@@ -26,14 +26,14 @@ _LSP_INIT = (Path(__file__).resolve().parent / "lsp.lua").read_text("UTF-8")
 keymap.n("gp") << "<cmd>lua vim.lsp.buf.definition()<cr>"
 keymap.n("gP") << "<cmd>lua vim.lsp.buf.references()<cr>"
 
-keymap.n("H") << "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>"
+keymap.n("H") << "<cmd>lua vim.diagnostic.open_float()<cr>"
 keymap.n("K") << "<cmd>lua vim.lsp.buf.hover()<cr>"
 
 keymap.n("gw") << "<cmd>lua vim.lsp.buf.code_action()<cr>"
 keymap.v("gw") << "<cmd>lua vim.lsp.buf.range_code_action()<cr>"
 
-keymap.n("<c-p>") << "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>"
-keymap.n("<c-n>") << "<cmd>lua vim.lsp.diagnostic.goto_next()<cr>"
+keymap.n("<c-p>") << "<cmd>lua vim.diagnostic.goto_prev()<cr>"
+keymap.n("<c-n>") << "<cmd>lua vim.diagnostic.goto_next()<cr>"
 
 
 @rpc(blocking=True)

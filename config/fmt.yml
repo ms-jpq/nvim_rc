@@ -35,18 +35,18 @@
     pip:
       - black
 
-- bin: import-sort
-  args:
-    - --write
-    - --
-    - ${tmpname}
-  type: fs
-  filetypes:
-    - javascript*
-    - typescript*
-  install:
-    npm:
-      - import-sort-cli
+# - bin: import-sort
+#   args:
+#     - --write
+#     - --
+#     - ${tmpname}
+#   type: fs
+#   filetypes:
+#     - javascript*
+#     - typescript*
+#   install:
+#     npm:
+#       - import-sort-cli
 
 - bin: csscomb
   args:
