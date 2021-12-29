@@ -218,7 +218,7 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
     async def cont() -> _SortOfMonoid:
         async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
             cmd = "npm"
-            if which(cmd):
+            if which("node") and which(cmd):
                 packages_json.unlink(missing_ok=True)
                 p1 = await call(
                     cmd,
