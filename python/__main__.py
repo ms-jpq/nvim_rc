@@ -69,8 +69,7 @@ if command == "deps":
         else:
             from .components.install import install
 
-            code = arun(install())
-            if code:
+            if code := arun(install()):
                 exit(code)
 
 elif command == "run":

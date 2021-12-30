@@ -10,8 +10,8 @@
   install:
     script:
       env:
-        MAC_URI: https://github.com/koalaman/shellcheck/releases/download/v0.7.2/shellcheck-v0.7.2.darwin.x86_64.tar.xz
-        LINUX_URI: https://github.com/koalaman/shellcheck/releases/download/v0.7.2/shellcheck-v0.7.2.linux.x86_64.tar.xz
+        MAC_URI: https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.darwin.x86_64.tar.xz
+        LINUX_URI: https://github.com/koalaman/shellcheck/releases/download/v0.8.0/shellcheck-v0.8.0.linux.x86_64.tar.xz
       file: dl/shellcheck.sh
 
 - bin: mypy
@@ -36,8 +36,8 @@
   install:
     script:
       env:
-        MAC_URI: https://github.com/hadolint/hadolint/releases/download/v2.7.0/hadolint-Darwin-x86_64
-        LINUX_URI: https://github.com/hadolint/hadolint/releases/download/v2.7.0/hadolint-Linux-x86_64
+        MAC_URI: https://github.com/hadolint/hadolint/releases/download/v2.8.0/hadolint-Darwin-x86_64
+        LINUX_URI: https://github.com/hadolint/hadolint/releases/download/v2.8.0/hadolint-Linux-x86_64
       file: dl/hadolint.sh
 
 - bin: rubocop
@@ -50,13 +50,13 @@
     gem:
       - rubocop
 
-# - bin: rbs
-#   type: fs
-#   args:
-#     - validate
-#     - ${tmpname}
-#   filetypes:
-#     - ruby
+- bin: steep
+  type: fs
+  args:
+    - check
+    - ${tmpname}
+  filetypes:
+    - ruby
 
 - bin: r-lint
   type: fs

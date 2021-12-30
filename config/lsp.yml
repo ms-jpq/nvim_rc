@@ -64,8 +64,8 @@
   install:
     script:
       env:
-        MAC_URI: https://download.jboss.org/jbosstools/vscode/stable/lemminx-binary/0.18.0-400/lemminx-osx-x86_64.zip
-        LINUX_URI: https://download.jboss.org/jbosstools/vscode/stable/lemminx-binary/0.18.0-400/lemminx-linux.zip
+        MAC_URI: https://download.jboss.org/jbosstools/vscode/stable/lemminx-binary/0.18.2-467/lemminx-osx-x86_64.zip
+        LINUX_URI: https://download.jboss.org/jbosstools/vscode/stable/lemminx-binary/0.18.2-467/lemminx-linux.zip
       file: dl/lemminx.sh
 
 - server: texlab
@@ -90,8 +90,8 @@
   install:
     script:
       env:
-        MAC_URI: https://github.com/latex-lsp/texlab/releases/download/v3.2.0/texlab-x86_64-macos.tar.gz
-        LINUX_URI: https://github.com/latex-lsp/texlab/releases/download/v3.2.0/texlab-x86_64-linux.tar.gz
+        MAC_URI: https://github.com/latex-lsp/texlab/releases/download/v3.3.1/texlab-x86_64-macos.tar.gz
+        LINUX_URI: https://github.com/latex-lsp/texlab/releases/download/v3.3.1/texlab-x86_64-linux.tar.gz
         T_MAC_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.8.0/tectonic-0.8.0-x86_64-apple-darwin.tar.gz
         T_LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.8.0/tectonic-0.8.0-x86_64-unknown-linux-gnu.tar.gz
       file: dl/texlab.sh
@@ -119,8 +119,8 @@
   install:
     script:
       env:
-        MAC_URI: https://github.com/rust-analyzer/rust-analyzer/releases/download/2021-09-20/rust-analyzer-x86_64-apple-darwin.gz
-        LINUX_URI: https://github.com/rust-analyzer/rust-analyzer/releases/download/2021-09-20/rust-analyzer-x86_64-unknown-linux-gnu.gz
+        MAC_URI: https://github.com/rust-analyzer/rust-analyzer/releases/download/2021-12-27/rust-analyzer-aarch64-apple-darwin.gz
+        LINUX_URI: https://github.com/rust-analyzer/rust-analyzer/releases/download/2021-12-27/rust-analyzer-x86_64-unknown-linux-gnu.gz
       file: dl/rust_analyzer.sh
 
 - server: gopls
@@ -233,7 +233,7 @@
         - java
         - gradle
       env:
-        URI: https://github.com/fwcd/kotlin-language-server/releases/download/1.1.2/server.zip
+        URI: https://github.com/fwcd/kotlin-language-server/releases/download/1.2.0/server.zip
       file: dl/kotlin.sh
 # - server: sumneko_lua
 #   bin: lua-ls
