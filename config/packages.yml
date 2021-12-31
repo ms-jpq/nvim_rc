@@ -78,13 +78,15 @@
       - src: repl
       - src: bc
         short_name: MATH
+      - src: figlet
+        short_name: BIG
+        trigger: "!big"
+      - src: cow
+        trigger: "!cow"
       - src: vimtex
         short_name: vTEX
       # - src: copilot
       #   short_name: COP
-      # - src: figlet
-      #   short_name: BIG
-      # - src: cow
   lua: |-
     require("coq_3p")(vim.g.COQ3p)
 
