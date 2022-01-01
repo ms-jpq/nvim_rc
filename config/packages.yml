@@ -44,6 +44,12 @@
 
 - git:
     uri: https://github.com/ms-jpq/chadtree
+    call:
+      - python3
+      - -m
+      - chadtree
+      - deps
+      - --nvim
   keys:
     - modes: n
       maps:
@@ -51,6 +57,11 @@
 
 - git:
     uri: https://github.com/ms-jpq/coq_nvim
+    call:
+      - python3
+      - -m
+      - coq
+      - deps
   vals:
     coq_settings:
       auto_start: True
@@ -85,8 +96,9 @@
         trigger: "!cow"
       - src: vimtex
         short_name: vTEX
-      # - src: copilot
-      #   short_name: COP
+      - src: copilot
+        short_name: COP
+        accept_key: <c-f>
   lua: |-
     require("coq_3p")(vim.g.COQ3p)
 
@@ -185,8 +197,8 @@
       colourizer.setup()
     end
 
-# - git:
-#     uri: https://github.com/github/copilot.vim
+- git:
+    uri: https://github.com/github/copilot.vim
 # - git:
 #     uri: https://github.com/kosayoda/nvim-lightbulb
 #   viml: |-

@@ -146,16 +146,13 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
                         )
                     yield spec.uri, p1
 
-                    pkg = spec.script
-                    if not p1.code and pkg.file and all(map(which, pkg.required)):
-                        if path := which(INSTALL_SCRIPTS_DIR / pkg.file):
-                            p2 = await call(
-                                path,
-                                env=pkg.env,
-                                cwd=location,
-                                check_returncode=set(),
-                            )
-                            yield "", p2
+                    if not p1.code and spec.call:
+                        p2 = await call(
+                            *spec.call,
+                            cwd=location,
+                            check_returncode=set(),
+                        )
+                        yield "", p2
 
                 return [rt async for rt in cont()]
 

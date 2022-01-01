@@ -13,7 +13,7 @@ from .install import ScriptSpec
 class GitPkgSpec:
     uri: str
     branch: Optional[str] = None
-    script: ScriptSpec = ScriptSpec()
+    call: Sequence[str] = ()
 
 
 @dataclass(frozen=True)
