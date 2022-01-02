@@ -5,7 +5,7 @@ from pathlib import Path, PurePath
 
 DATE_FMT = "%Y-%m-%d %H:%M:%S"
 
-TOP_LEVEL = Path(__file__).resolve().parent.parent
+TOP_LEVEL = Path(__file__).resolve(strict=True).parent.parent
 
 RT_DIR = TOP_LEVEL / ".vars" / "runtime"
 RT_BIN = RT_DIR / "bin"

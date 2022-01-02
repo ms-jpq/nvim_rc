@@ -11,7 +11,7 @@ from venv import EnvBuilder
 from .consts import REQUIREMENTS, RT_DIR, RT_PY, TOP_LEVEL
 
 _EX = Path(executable)
-_EX = _EX.parent.resolve() / _EX.name
+_EX = _EX.parent.resolve(strict=True) / _EX.name
 _LOCK_FILE = RT_DIR / "requirements.lock"
 
 

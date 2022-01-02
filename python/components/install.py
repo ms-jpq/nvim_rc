@@ -368,5 +368,5 @@ def maybe_install(nvim: Nvim) -> None:
 
         if ans == 1:
             open_term(
-                nvim, Path(executable).resolve(), INSTALL_SCRIPT, "deps", "packages"
+                nvim, Path(executable).resolve(strict=True), INSTALL_SCRIPT, "deps", "packages"
             )

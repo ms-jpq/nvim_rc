@@ -53,7 +53,7 @@ def main() -> None:
 
     src: str = args.src
     path = PurePosixPath(unquote(urlsplit(src).path))
-    dest = Path(args.dest if args.dest else path.name).resolve()
+    dest = Path(args.dest if args.dest else path.name).resolve(strict=True)
 
     msg = f"""
     {src}

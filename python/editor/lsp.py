@@ -21,7 +21,7 @@ from ..config.lsp import LspAttrs, RootPattern, RPFallback, lsp_specs
 from ..registery import LANG, NAMESPACE, atomic, keymap, rpc
 from ..text_objects.word import UNIFIYING_CHARS
 
-_LSP_INIT = (Path(__file__).resolve().parent / "lsp.lua").read_text("UTF-8")
+_LSP_INIT = (Path(__file__).resolve(strict=True).parent / "lsp.lua").read_text("UTF-8")
 
 keymap.n("gp") << "<cmd>lua vim.lsp.buf.definition()<cr>"
 keymap.n("gP") << "<cmd>lua vim.lsp.buf.references()<cr>"
