@@ -14,7 +14,8 @@ from pynvim_pp.api import (
 )
 from pynvim_pp.lib import decode, encode
 from pynvim_pp.text_object import gen_split
-from std2.pickle import new_decoder, new_encoder
+from std2.pickle.decoder import new_decoder
+from std2.pickle.encoder import new_encoder
 from std2.types import never
 
 from ..config.lsp import LspAttrs, RootPattern, RPFallback, lsp_specs

@@ -2,11 +2,10 @@ from dataclasses import dataclass, field
 from typing import Any, Mapping, Optional, Sequence
 
 from pynvim_pp.keymap import KeymapOpts
-from std2.pickle import new_decoder
+from std2.pickle.decoder import new_decoder
 from yaml import safe_load
 
 from ..consts import CONF_PKGS
-from .install import ScriptSpec
 
 
 @dataclass(frozen=True)

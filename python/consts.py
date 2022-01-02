@@ -3,7 +3,7 @@ from os import environ, pathsep
 from os.path import normcase
 from pathlib import Path, PurePath
 
-DATE_FMT = "%Y-%m-%d %H:%M:%S"
+DATE_FMT = "%Y-%m-%d %X"
 
 TOP_LEVEL = Path(__file__).resolve(strict=True).parent.parent
 

@@ -1,3 +1,4 @@
+from contextlib import suppress
 from fnmatch import fnmatch
 from itertools import chain
 from pathlib import Path, PurePath
@@ -6,6 +7,7 @@ from shutil import which
 from typing import Iterable, Iterator, Tuple
 
 from pynvim import Nvim
+from pynvim.api.common import NvimError
 from pynvim.api.window import Window
 from pynvim_pp.api import (
     buf_set_lines,
@@ -108,7 +110,8 @@ async def _run(
 
                 for win, (row, col) in saved.items():
                     new_row = min(row, len(lines) - 1)
-                    win_set_cursor(nvim, win=win, row=new_row, col=col)
+                    with suppress(NvimError):
+                        win_set_cursor(nvim, win=win, row=new_row, col=col)
                 detect_tabs(nvim, buf=ctx.buf)
 
                 prettiers = LANG("step join sep").join(attr.bin for attr in attrs)

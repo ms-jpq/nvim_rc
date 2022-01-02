@@ -1,7 +1,7 @@
 ---
 "ask yes/no": |-
-  &Yes
-  &No
+  &Y (确定)
+  &N (取消)
 
 "update?": |-
   "要升级吗？"
@@ -38,4 +38,3 @@
 
 "prettier succeeded": |-
   ✅ 美化成功 👉 ${prettiers}
-

@@ -3,6 +3,7 @@ command! -nargs=0 FTdetect filetype detect
 function s:Ndeps()
   call termopen([stdpath('config') . '/init.py', 'deps'])
 endfunction
+" TODO -- nvim_add_user_command
 command! Ndeps call s:Ndeps()
 
 command! -bang -bar -addr=other -complete=customlist,man#complete -nargs=* Man

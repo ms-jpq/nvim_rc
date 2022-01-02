@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import AbstractSet, Sequence
 
-from std2.pickle import new_decoder
+from std2.pickle.decoder import new_decoder
 from yaml import safe_load
 
 from ..consts import CONF_LINT
