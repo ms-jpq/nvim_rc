@@ -26,9 +26,8 @@ def _meta(uri, timeout: float) -> Tuple[int, float]:
             if match == "content-length":
                 tot = int(val)
             elif match == "last-modified":
-                mtime = (
-                    parsedate_to_datetime(val).replace(tzinfo=timezone.utc).timestamp()
-                )
+                if req_mtime := parsedate_to_datetime(val):
+                    mtime = req_mtime.replace(tzinfo=timezone.utc).timestamp()
 
         return tot, mtime
 
@@ -53,7 +52,7 @@ def main() -> None:
 
     src: str = args.src
     path = PurePosixPath(unquote(urlsplit(src).path))
-    dest = Path(args.dest if args.dest else path.name).resolve(strict=True)
+    dest = Path(args.dest if args.dest else path.name).resolve(strict=False)
 
     msg = f"""
     {src}
