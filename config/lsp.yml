@@ -132,6 +132,12 @@
 - server: sourcekit
   bin: sourcekit-lsp
 
+- server: clangd
+  bin: clangd
+
+- server: ccls
+  bin: ccls
+
 - server: solargraph
   bin: solargraph
   install:
@@ -194,9 +200,6 @@
         - Rscript
         - R
       file: dl/rlang_server.r
-
-- server: clangd
-  bin: clangd
 
 - server: intelephense
   bin: intelephense
