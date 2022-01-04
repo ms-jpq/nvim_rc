@@ -160,12 +160,33 @@
 #     go:
 #       - mvdan.cc/sh/v3/cmd/shfmt@latest
 
-- bin: pg_format
+# - bin: pg_format
+#   args:
+#     - --spaces=${tabsize}
+#     - --comma-break
+#     - --nogrouping
+#     - --function-case=0
+#     - --output=${tmpname}
+#     - --
+#     - ${tmpname}
+#   type: fs
+#   filetypes:
+#     - sql
+#   install:
+#     script:
+#       required:
+#         - git
+#         - perl
+#       env:
+#         URI: https://github.com/darold/pgFormatter
+#         TAG: "v5.0"
+#       file: dl/pg_format.sh
+
+- bin: sql-formatter
   args:
-    - --spaces=${tabsize}
-    - --comma-break
-    - --nogrouping
-    - --function-case=0
+    - --uppercase
+    - --lines-between-queries=2
+    - --indent=${tabsize}
     - --output=${tmpname}
     - --
     - ${tmpname}
@@ -173,11 +194,5 @@
   filetypes:
     - sql
   install:
-    script:
-      required:
-        - git
-        - perl
-      env:
-        URI: https://github.com/darold/pgFormatter
-        TAG: "v5.0"
-      file: dl/pg_format.sh
+    npm:
+      - sql-formatter
