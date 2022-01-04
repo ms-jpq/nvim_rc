@@ -257,6 +257,12 @@
       env:
         URI: https://github.com/fwcd/kotlin-language-server/releases/download/1.2.0/server.zip
       file: dl/kotlin.sh
+
+- server: remark_ls
+  bin: remark-language-server
+  install:
+    npm:
+      - remark-language-server
 # - server: sumneko_lua
 #   bin: lua-ls
 #   args: []
