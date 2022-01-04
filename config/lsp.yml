@@ -5,6 +5,7 @@
     - dockerfile
     - sh
     - zsh
+    - python
   root:
     fallback: cwd
 
@@ -32,11 +33,29 @@
           info: info
           style: hint
           warning: warning
+      mypy:
+        sourceName: mypy
+        command: mypy
+        args:
+          - --no-error-summary
+          - --show-column-numbers
+          # - --follow-imports=silent
+          - "%file"
+        formatPattern:
+          - "^.*:(\\d+?):(\\d+?): ([a-z]+?): (.*)$"
+          - line: 1
+            column: 2
+            security: 3
+            message: 4
+        securities:
+          error: error
 
     filetypes:
       sh: &sh
         - shellcheck
       zsh: *sh
+      python:
+        - mypy
 
   install:
     npm:
