@@ -17,7 +17,7 @@ _MB = 10 ** 6
 _OPEN = build_opener()
 
 
-def _meta(uri, timeout: float) -> Tuple[int, float]:
+def _meta(uri: str, timeout: float) -> Tuple[int, float]:
     req = Request(url=uri, method="HEAD")
     with _OPEN.open(req, timeout=timeout) as resp:
         tot, mtime = 0, 0.0
