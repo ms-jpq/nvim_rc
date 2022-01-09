@@ -72,7 +72,7 @@ def main() -> None:
             return
 
     stream = _fetch(src, timeout=args.timeout)
-
+    dest.parent.mkdir(parents=True, exist_ok=True)
     with NamedTemporaryFile(dir=dest.parent, prefix=dest.name, delete=False) as fd:
         for chunk in stream:
             fd.write(chunk)
