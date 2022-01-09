@@ -8,6 +8,7 @@ from http.client import HTTPResponse
 from os import utime
 from pathlib import Path, PurePosixPath
 from sys import stderr
+from tempfile import NamedTemporaryFile
 from textwrap import dedent
 from typing import Iterator, Tuple, cast
 from urllib.parse import unquote, urlsplit
@@ -70,10 +71,12 @@ def main() -> None:
             return
 
     stream = _fetch(src, timeout=args.timeout)
-    with dest.open("wb") as fd:
+
+    with NamedTemporaryFile(dir=dest.parent, prefix=dest.name, delete=False) as fd:
         for chunk in stream:
             fd.write(chunk)
 
+    Path(fd.name).replace(dest)
     utime(dest, (mtime, mtime))
     print(dest, end="")
 
