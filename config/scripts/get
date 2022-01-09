@@ -20,6 +20,7 @@ _OPEN = build_opener()
 def _meta(uri: str, timeout: float) -> Tuple[int, float]:
     req = Request(url=uri, method="HEAD")
     with _OPEN.open(req, timeout=timeout) as resp:
+        resp = cast(HTTPResponse, resp)
         tot, mtime = 0, 0.0
         for key, val in resp.headers.items():
             match = key.casefold()
