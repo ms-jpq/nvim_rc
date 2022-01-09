@@ -7,7 +7,8 @@ from email.utils import parsedate_to_datetime
 from http.client import HTTPResponse
 from os import utime
 from pathlib import Path, PurePosixPath
-from sys import stderr
+from posixpath import normcase
+from sys import stderr, stdout
 from tempfile import NamedTemporaryFile
 from textwrap import dedent
 from typing import Iterator, Tuple, cast
@@ -61,13 +62,13 @@ def main() -> None:
     >>>
     {dest}
     """
-    print(dedent(msg), file=stderr)
+    stderr.write(dedent(msg))
 
     size, mtime = _meta(src, timeout=args.timeout)
     with suppress(FileNotFoundError):
         stat = dest.stat()
         if size == stat.st_size and mtime == stat.st_mtime:
-            print(dest, end="")
+            stdout.write(normcase(dest))
             return
 
     stream = _fetch(src, timeout=args.timeout)
@@ -78,7 +79,7 @@ def main() -> None:
 
     Path(fd.name).replace(dest)
     utime(dest, (mtime, mtime))
-    print(dest, end="")
+    stdout.write(normcase(dest))
 
 
 main()
