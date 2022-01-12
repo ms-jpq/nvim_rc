@@ -122,7 +122,7 @@ def _toggle_preview(nvim: Nvim) -> None:
         nvim.api.win_set_height(win, height)
 
 
-keymap.n("<leader>m") << f"<cmd>lua {NAMESPACE}.{_toggle_preview.name}()<cr>"
+keymap.n("<leader>h") << f"<cmd>lua {NAMESPACE}.{_toggle_preview.name}()<cr>"
 
 
 # quickfix
@@ -173,4 +173,4 @@ def _resize_secondary(nvim: Nvim) -> None:
             nvim.api.win_set_height(win, height)
 
 
-keymap.n("<leader>M") << f"<cmd>lua {NAMESPACE}.{_resize_secondary.name}()<cr>"
+keymap.n("<leader>H") << f"<cmd>lua {NAMESPACE}.{_resize_secondary.name}()<cr>"

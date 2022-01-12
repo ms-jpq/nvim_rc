@@ -123,6 +123,7 @@
         "<leader>o": "<cmd>BLines<cr>"
         "<leader>p": "<cmd>Buffers<cr>"
         "<leader>P": "<cmd>Files<cr>"
+        "<leader>m": "<cmd>Marks<cr>"
     - modes: n
       opts:
         silent: False
