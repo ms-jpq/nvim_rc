@@ -52,6 +52,7 @@
           error: error
       hadolint:
         sourceName: hadolint
+        command: hadolint
         args:
           - --format
           - json
@@ -75,7 +76,8 @@
       sh: &sh
         - shellcheck
       zsh: *sh
-      dockerfile: hadolint
+      dockerfile: 
+        - hadolint
       python:
         - mypy
 
