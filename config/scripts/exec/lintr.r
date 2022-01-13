@@ -2,4 +2,4 @@
 
 errs <- lintr::lint(commandArgs(trailingOnly = TRUE))
 code <- length(errs) != 0
-quit(save = "no", status = code)
+quit(status = code)
