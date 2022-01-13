@@ -7,11 +7,11 @@ from subprocess import check_call
 from sys import stderr, stdin
 from textwrap import dedent
 
-_STDIN = Path("-")
+_STDIN = PurePath("-")
 
 
 def _unpack_gz(source: str, destination: str) -> None:
-    if cmd:= which("gzip"):
+    if cmd := which("gzip"):
         dest = Path(destination) / PurePath(source).name
         with dest.open("wb") as fd:
             check_call(
@@ -33,14 +33,16 @@ def _parse_args() -> Namespace:
 def main() -> None:
     register_unpack_format("gz", extensions=[".gz"], function=_unpack_gz)
     args = _parse_args()
+
     src = stdin.read() if args.src == _STDIN else args.src
     msg = f"""
     {src}
     -> -> ->
     {args.dest}
     """
+
     unpack_archive(src, format=args.format, extract_dir=args.dest)
-    print(dedent(msg), file=stderr)
+    stderr.write(dedent(msg))
 
 
 main()
