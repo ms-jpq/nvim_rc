@@ -39,7 +39,6 @@
         args:
           - --no-error-summary
           - --show-column-numbers
-          # - --follow-imports=silent
           - --
           - "%file"
         formatPattern:
