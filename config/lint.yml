@@ -5,7 +5,7 @@
     - --enable-neovim
     - --style-problem
     - --
-    - "${tmpname}"
+    - ${tmpname}
   filetypes:
     - vim
   install:
@@ -83,3 +83,15 @@
         - Rscript
         - R
       file: dl/rlint.sh
+
+- bin: htmlhint
+  type: fs
+  args:
+    - --nocolor
+    - --
+    - ${tmpname}
+  filetypes:
+    - html
+  install:
+    npm:
+      - htmlhint
