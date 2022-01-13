@@ -41,6 +41,8 @@
           - --show-column-numbers
           - --
           - "%file"
+        rootPatterns:
+          - .mypy.ini
         formatPattern:
           - "^.*:(\\d+?):(\\d+?): ([a-z]+?): (.*)$"
           - line: 1
