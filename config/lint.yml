@@ -1,4 +1,17 @@
 ---
+- bin: vint
+  type: fs
+  args:
+    - --enable-neovim
+    - --style-problem
+    - --
+    - "${tmpname}"
+  filetypes:
+    - vim
+  install:
+    pip:
+      - vim-vint
+
 - bin: shellcheck
   type: fs
   args:
