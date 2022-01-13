@@ -61,7 +61,7 @@ PATH = environ["PATH"] = pathsep.join(
         ),
     )
 )
-environ["PYTHONUSERBASE"] = normcase(PIP_DIR)
+PYTHONUSERBASE = environ["PYTHONUSERBASE"] = normcase(PIP_DIR)
 GEM_PATH = environ["GEM_PATH"] = pathsep.join(
     map(
         normcase,
