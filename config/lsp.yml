@@ -50,11 +50,32 @@
             message: 4
         securities:
           error: error
+      hadolint:
+        sourceName: hadolint
+        args:
+          - --format
+          - json
+          - --
+          - "%file"
+        rootPatterns:
+          - .hadolint.yml
+          - .hadolint.yaml
+        parseJson:
+          line: line
+          column: column
+          security: level
+          message: "${message} [${code}]"
+        securities:
+          error: error
+          warning: warning
+          info: info
+          style: hint
 
     filetypes:
       sh: &sh
         - shellcheck
       zsh: *sh
+      dockerfile: hadolint
       python:
         - mypy
 
@@ -258,7 +279,6 @@
       env:
         URI: https://github.com/fwcd/kotlin-language-server/releases/download/1.2.0/server.zip
       file: dl/kotlin.sh
-
 # - server: remark_ls
 #   bin: remark-language-server
 #   install:
