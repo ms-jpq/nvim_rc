@@ -15,6 +15,9 @@
 "rename: ": |-
   ✏️  :
 
+"invaild command: ": |-
+  ⛔️ Invaild Command :: ${cmd}
+
 "grammar error": |-
   ⛔️ Grammar Error 👉 ${text}
 

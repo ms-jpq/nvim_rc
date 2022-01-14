@@ -1,5 +1,6 @@
 from itertools import chain
 from os import environ
+from os.path import normcase
 from shutil import which
 from typing import Iterator, Mapping, Optional, TypedDict, cast
 from uuid import uuid4
@@ -16,10 +17,11 @@ from pynvim_pp.api import (
     win_close,
 )
 from pynvim_pp.float_win import list_floatwins, open_float_win
+from pynvim_pp.lib import write
 from pynvim_pp.rpc import RpcCallable
 from std2.pathlib import AnyPath
 
-from ..registery import NAMESPACE, autocmd, keymap, rpc
+from ..registery import LANG, NAMESPACE, atomic, autocmd, keymap, rpc
 
 BUF_VAR_NAME = f"terminal_buf_{uuid4().hex}"
 
@@ -51,26 +53,31 @@ class TermOpts(TypedDict, total=False):
 
 
 @rpc(blocking=True)
-def _term_open(nvim: Nvim, *args: AnyPath, opts: TermOpts = {}) -> None:
+def _term_open(nvim: Nvim, prog: AnyPath, *args: AnyPath, opts: TermOpts = {}) -> None:
     buf = _ensure_marked_buf(nvim)
     buf_type: str = buf_get_option(nvim, buf=buf, key="buftype")
     is_term_buf = buf_type == "terminal"
     open_float_win(nvim, margin=0, relsize=0.95, buf=buf, border="rounded")
     if not is_term_buf:
-        if args:
-            ex, *rest = args
-        else:
-            ex, rest = environ["SHELL"], []
-        cmds = tuple(map(str, chain((which(ex),), rest)))
+        cmds = tuple(map(str, chain((which(prog),), args)))
         nvim.funcs.termopen(cmds, opts)
     nvim.command("startinsert")
 
 
 @rpc(blocking=True)
-def open_term(nvim: Nvim, prog: AnyPath, *args: AnyPath, opts: TermOpts = {}) -> None:
+def open_term(nvim: Nvim, *args: AnyPath, opts: TermOpts = {}) -> None:
     for win in list_floatwins(nvim):
         win_close(nvim, win=win)
-    _term_open(nvim, prog, *args, opts=opts)
+    argv = args or (environ["SHELL"],)
+    prog, *_ = argv
+    if not which(prog):
+
+        write(nvim, LANG("invaild command: ", cmd=normcase(prog)), error=True)
+    else:
+        _term_open(nvim, *argv, opts=opts)
+
+
+atomic.command(f"command! -nargs=* FTerm lua {NAMESPACE}.{open_term.name}(<f-args>)")
 
 
 @rpc(blocking=True)
@@ -81,7 +88,8 @@ def toggle_floating(nvim: Nvim, *args: str) -> None:
         for win in float_wins:
             win_close(nvim, win=win)
     else:
-        _term_open(nvim, *args)
+        argv = args or (environ["SHELL"],)
+        _term_open(nvim, *argv)
 
 
 keymap.n("<leader>u") << f"<cmd>lua {NAMESPACE}.{toggle_floating.name}()<cr>"
