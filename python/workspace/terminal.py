@@ -77,7 +77,7 @@ def open_term(nvim: Nvim, *args: AnyPath, opts: TermOpts = {}) -> None:
         _term_open(nvim, *argv, opts=opts)
 
 
-atomic.command(f"command! -nargs=* FCmd lua {NAMESPACE}.{open_term.name}(<q-args>)")
+atomic.command(f"command! -nargs=* FCmd lua {NAMESPACE}.{open_term.name}(<f-args>)")
 
 
 @rpc(blocking=True)
