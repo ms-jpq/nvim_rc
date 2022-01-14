@@ -159,7 +159,7 @@
     uri: https://github.com/tpope/vim-unimpaired
 
 - git:
-    uri: https://github.com/mhinz/vim-signify
+    uri: https://github.com/airblade/vim-gitgutter
 
 - git:
     uri: https://github.com/jpalardy/vim-slime
