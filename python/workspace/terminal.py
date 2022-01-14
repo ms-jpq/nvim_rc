@@ -66,18 +66,18 @@ def _term_open(nvim: Nvim, prog: AnyPath, *args: AnyPath, opts: TermOpts = {}) -
 
 @rpc(blocking=True)
 def open_term(nvim: Nvim, *args: AnyPath, opts: TermOpts = {}) -> None:
-    for win in list_floatwins(nvim):
-        win_close(nvim, win=win)
     argv = args or (environ["SHELL"],)
     prog, *_ = argv
-    if not which(prog):
 
+    if not which(prog):
         write(nvim, LANG("invaild command: ", cmd=normcase(prog)), error=True)
     else:
+        for win in list_floatwins(nvim):
+            win_close(nvim, win=win)
         _term_open(nvim, *argv, opts=opts)
 
 
-atomic.command(f"command! -nargs=* FCmd lua {NAMESPACE}.{open_term.name}(<f-args>)")
+atomic.command(f"command! -nargs=* FCmd lua {NAMESPACE}.{open_term.name}(<q-args>)")
 
 
 @rpc(blocking=True)
