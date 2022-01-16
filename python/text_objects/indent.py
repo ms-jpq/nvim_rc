@@ -38,7 +38,8 @@ def _indent(nvim: Nvim) -> None:
     top = row - _p_inside(init_lv, tabsize=tabsize, lines=reversed(before))
     btm = row + _p_inside(init_lv, tabsize=tabsize, lines=after)
 
-    btm_line, *_ = buf_get_lines(nvim, buf=buf, lo=btm, hi=btm + 1)
+    lines = buf_get_lines(nvim, buf=buf, lo=top, hi=btm + 1)
+    *_, btm_line = lines
     mark1, mark2 = (top, 0), (btm, len(encode(btm_line)))
     set_visual_selection(nvim, win=win, mode="V", mark1=mark1, mark2=mark2)
 
