@@ -1,3 +1,4 @@
+from collections import deque
 from typing import Iterable
 
 from pynvim import Nvim
@@ -38,9 +39,27 @@ def _indent(nvim: Nvim) -> None:
     top = row - _p_inside(init_lv, tabsize=tabsize, lines=reversed(before))
     btm = row + _p_inside(init_lv, tabsize=tabsize, lines=after)
 
-    lines = buf_get_lines(nvim, buf=buf, lo=top, hi=btm + 1)
-    *_, btm_line = lines
-    mark1, mark2 = (top, 0), (btm, len(encode(btm_line)))
+    lines = deque(buf_get_lines(nvim, buf=buf, lo=top, hi=btm + 1))
+    while lines:
+        if line := lines.popleft():
+            lines.appendleft(line)
+            break
+        else:
+            top += 1
+
+    while lines:
+        if line := lines.pop():
+            lines.append(line)
+            break
+        else:
+            btm -= 1
+
+    if lines:
+        *_, btm_line = lines
+        mark1, mark2 = (top, 0), (btm, len(encode(btm_line)))
+    else:
+        mark1, mark2 = (row, 0), (row, len(encode(curr)))
+
     set_visual_selection(nvim, win=win, mode="V", mark1=mark1, mark2=mark2)
 
 
