@@ -66,6 +66,7 @@
     coq_settings:
       auto_start: True
       clients.snippets.user_path: "~/.config/snips/"
+      clients.tabnine.enabled: true
       keymap:
         repeat: "<leader>."
         eval_snips: "<leader>j"
@@ -73,12 +74,6 @@
     - modes: n
       maps:
         "<leader>z": "<cmd>COQnow<cr>"
-  lua: |-
-    local s = vim.g.coq_settings
-    if vim.env.SSH_TTY then
-      s["clients.tabnine.enabled"] = true
-    end
-    vim.g.coq_settings = s
 
 - git:
     uri: https://github.com/ms-jpq/coq.thirdparty
