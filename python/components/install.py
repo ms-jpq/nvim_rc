@@ -1,7 +1,6 @@
 from asyncio.tasks import as_completed
 from itertools import chain
 from json import dumps, loads
-from multiprocessing import cpu_count
 from os import environ, linesep, pathsep
 from os.path import normcase
 from pathlib import Path, PurePath
@@ -114,7 +113,6 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
     cmd = "git"
 
     if which(cmd):
-        jobs = cpu_count()
 
         for spec in pkg_specs:
 
@@ -134,7 +132,6 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
                         p1 = await call(
                             cmd,
                             "clone",
-                            f"--jobs={jobs}",
                             "--depth=1",
                             "--recurse-submodules",
                             "--shallow-submodules",
@@ -368,5 +365,9 @@ def maybe_install(nvim: Nvim) -> None:
 
         if ans == 1:
             open_term(
-                nvim, Path(executable).resolve(strict=True), INSTALL_SCRIPT, "deps", "packages"
+                nvim,
+                Path(executable).resolve(strict=True),
+                INSTALL_SCRIPT,
+                "deps",
+                "packages",
             )
