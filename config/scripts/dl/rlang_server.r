@@ -1,7 +1,8 @@
 #!/usr/bin/env Rscript
 
-if (Sys.which("apt") != "") {
-  system2("apt", c(
+apt <- Sys.which("apt")
+if (apt != "") {
+  system2(apt, c(
     "install",
     "--yes",
     "--",
