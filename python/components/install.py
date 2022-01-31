@@ -14,6 +14,7 @@ from typing import (
     Awaitable,
     Iterator,
     Mapping,
+    MutableSequence,
     Sequence,
     Tuple,
     TypedDict,
@@ -268,7 +269,7 @@ def _go() -> Iterator[Awaitable[_SortOfMonoid]]:
                     "get",
                     "--",
                     *specs,
-                    env={"GO111MODULE": "on", "GOPATH": normcase(GO_DIR / "bin")},
+                    env={"GO111MODULE": "on", "GOPATH": normcase(GO_DIR)},
                     cwd=VARS_DIR,
                     check_returncode=set(),
                 )
@@ -316,7 +317,7 @@ async def install() -> int:
     cols, _ = get_terminal_size()
     sep = cols * "="
 
-    has_error = False
+    errors: MutableSequence[str] = []
     tasks = chain(_git(), _pip(), _gem(), _npm(), _go(), _script())
     for fut in as_completed(tasks):
         for debug, proc in await fut:
@@ -325,7 +326,7 @@ async def install() -> int:
                 msg = LANG("proc succeeded", args=args)
                 print(msg, debug, decode(proc.err), decode(proc.out), sep, sep=linesep)
             else:
-                has_error = True
+                errors.append(args)
                 msg = LANG("proc failed", code=proc.code, args=args)
                 print(
                     msg,
@@ -337,7 +338,9 @@ async def install() -> int:
                     file=stderr,
                 )
 
-    return has_error
+    if errors:
+        print(linesep.join(errors))
+    return bool(errors)
 
 
 def maybe_install(nvim: Nvim) -> None:
