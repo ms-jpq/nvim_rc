@@ -157,9 +157,7 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
 
 
 def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
-    specs = {*_pip_specs()}
-
-    if pip := which("pip") and specs:
+    if (pip := which("pip")) and (specs := {*_pip_specs()}):
 
         async def cont() -> _SortOfMonoid:
             assert pip
@@ -179,9 +177,7 @@ def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
 
 
 def _gem() -> Iterator[Awaitable[_SortOfMonoid]]:
-    specs = {*_gem_specs()}
-
-    if gem := which("gem") and specs:
+    if (gem := which("gem")) and (specs := {*_gem_specs()}):
 
         async def cont() -> _SortOfMonoid:
             assert gem
@@ -205,7 +201,7 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
     packages_json = NPM_DIR / "package.json"
     package_lock = NPM_DIR / "package-lock.json"
 
-    if which("node") and (npm := which("npm")):
+    if which("node") and (npm := which("npm")) and (specs := {*_npm_specs()}):
 
         async def cont() -> _SortOfMonoid:
             async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
@@ -230,7 +226,7 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
                     json["dependencies"] = {}
                     json["devDependencies"] = {
                         key: "*"
-                        for key in chain(json.get("devDependencies", {}), _npm_specs())
+                        for key in chain(json.get("devDependencies", {}), specs)
                     }
                     packages_json.write_text(
                         dumps(json, check_circular=False, ensure_ascii=False, indent=2)
@@ -253,9 +249,8 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
 
 def _go() -> Iterator[Awaitable[_SortOfMonoid]]:
     GO_DIR.mkdir(parents=True, exist_ok=True)
-    specs = {*_go_specs()}
 
-    if go := which("go"):
+    if (go := which("go")) and (specs := {*_go_specs()}):
 
         async def cont(spec: str) -> _SortOfMonoid:
             assert go
