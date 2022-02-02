@@ -111,18 +111,18 @@ def _script_specs() -> Iterator[Tuple[str, ScriptSpec]]:
 
 def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
     VIM_DIR.mkdir(parents=True, exist_ok=True)
-    cmd = "git"
 
-    if which(cmd):
+    if git := which("git"):
 
         for spec in pkg_specs:
 
             async def cont(spec: GitPkgSpec) -> _SortOfMonoid:
                 async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
+                    assert git
                     location = p_name(spec.uri)
                     if location.is_dir():
                         p1 = await call(
-                            cmd,
+                            git,
                             "pull",
                             "--recurse-submodules",
                             *(("origin", spec.branch) if spec.branch else ()),
@@ -131,7 +131,7 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
                         )
                     else:
                         p1 = await call(
-                            cmd,
+                            git,
                             "clone",
                             "--depth=1",
                             "--recurse-submodules",
@@ -212,11 +212,10 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
 
     async def cont() -> _SortOfMonoid:
         async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
-            cmd = "npm"
-            if which("node") and which(cmd):
+            if which("node") and (npm := which("npm")):
                 packages_json.unlink(missing_ok=True)
                 p1 = await call(
-                    cmd,
+                    npm,
                     "init",
                     "--yes",
                     cwd=NPM_DIR,
@@ -242,7 +241,7 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
                     )
 
                     p2 = await call(
-                        cmd,
+                        npm,
                         "install",
                         "--no-package-lock",
                         "--upgrade",
@@ -266,7 +265,7 @@ def _go() -> Iterator[Awaitable[_SortOfMonoid]]:
             if go := which("go"):
                 p = await call(
                     go,
-                    "get",
+                    "install",
                     "--",
                     *specs,
                     env={"GO111MODULE": "on", "GOPATH": normcase(GO_DIR)},
