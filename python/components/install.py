@@ -113,69 +113,67 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
     VIM_DIR.mkdir(parents=True, exist_ok=True)
 
     if git := which("git"):
+
+        async def cont(spec: GitPkgSpec) -> _SortOfMonoid:
+            async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
+                assert git
+                location = p_name(spec.uri)
+                if location.is_dir():
+                    p1 = await call(
+                        git,
+                        "pull",
+                        "--recurse-submodules",
+                        *(("origin", spec.branch) if spec.branch else ()),
+                        cwd=location,
+                        check_returncode=set(),
+                    )
+                else:
+                    p1 = await call(
+                        git,
+                        "clone",
+                        "--depth=1",
+                        "--recurse-submodules",
+                        "--shallow-submodules",
+                        *(("--branch", spec.branch) if spec.branch else ()),
+                        "--",
+                        spec.uri,
+                        location,
+                        check_returncode=set(),
+                    )
+                yield spec.uri, p1
+
+                if not p1.code and spec.call:
+                    p2 = await call(
+                        *spec.call,
+                        cwd=location,
+                        check_returncode=set(),
+                    )
+                    yield "", p2
+
+            return [rt async for rt in cont()]
+
         for spec in pkg_specs:
-
-            async def cont(spec: GitPkgSpec) -> _SortOfMonoid:
-                async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
-                    assert git
-                    location = p_name(spec.uri)
-                    if location.is_dir():
-                        p1 = await call(
-                            git,
-                            "pull",
-                            "--recurse-submodules",
-                            *(("origin", spec.branch) if spec.branch else ()),
-                            cwd=location,
-                            check_returncode=set(),
-                        )
-                    else:
-                        p1 = await call(
-                            git,
-                            "clone",
-                            "--depth=1",
-                            "--recurse-submodules",
-                            "--shallow-submodules",
-                            *(("--branch", spec.branch) if spec.branch else ()),
-                            "--",
-                            spec.uri,
-                            location,
-                            check_returncode=set(),
-                        )
-                    yield spec.uri, p1
-
-                    if not p1.code and spec.call:
-                        p2 = await call(
-                            *spec.call,
-                            cwd=location,
-                            check_returncode=set(),
-                        )
-                        yield "", p2
-
-                return [rt async for rt in cont()]
-
             yield cont(spec.git)
 
 
 def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
     specs = {*_pip_specs()}
 
-    if specs:
+    if pip := which("pip") and specs:
 
         async def cont() -> _SortOfMonoid:
-            if pip := which("pip"):
-                p = await call(
-                    pip,
-                    "install",
-                    "--upgrade",
-                    "--user",
-                    "--",
-                    *specs,
-                    check_returncode=set(),
-                    env={"PYTHONUSERBASE": normcase(PIP_DIR)},
-                )
-                return (("", p),)
-            else:
-                return ()
+            assert pip
+            p = await call(
+                pip,
+                "install",
+                "--upgrade",
+                "--user",
+                "--",
+                *specs,
+                check_returncode=set(),
+                env={"PYTHONUSERBASE": normcase(PIP_DIR)},
+            )
+            return (("", p),)
 
         yield cont()
 
@@ -183,23 +181,21 @@ def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
 def _gem() -> Iterator[Awaitable[_SortOfMonoid]]:
     specs = {*_gem_specs()}
 
-    if specs:
+    if gem := which("gem") and specs:
 
         async def cont() -> _SortOfMonoid:
-            if gem := which("gem"):
-                p = await call(
-                    gem,
-                    "install",
-                    "--install-dir",
-                    GEM_DIR / "gems",
-                    "--bindir",
-                    GEM_DIR / "bin",
-                    *specs,
-                    check_returncode=set(),
-                )
-                return (("", p),)
-            else:
-                return ()
+            assert gem
+            p = await call(
+                gem,
+                "install",
+                "--install-dir",
+                GEM_DIR / "gems",
+                "--bindir",
+                GEM_DIR / "bin",
+                *specs,
+                check_returncode=set(),
+            )
+            return (("", p),)
 
         yield cont()
 
@@ -209,10 +205,13 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
     packages_json = NPM_DIR / "package.json"
     package_lock = NPM_DIR / "package-lock.json"
 
-    async def cont() -> _SortOfMonoid:
-        async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
-            if which("node") and (npm := which("npm")):
+    if which("node") and (npm := which("npm")):
+
+        async def cont() -> _SortOfMonoid:
+            async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
+                assert npm
                 packages_json.unlink(missing_ok=True)
+
                 p1 = await call(
                     npm,
                     "init",
@@ -231,9 +230,7 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
                     json["dependencies"] = {}
                     json["devDependencies"] = {
                         key: "*"
-                        for key in chain(
-                            json.get("devDependencies", {}).keys(), _npm_specs()
-                        )
+                        for key in chain(json.get("devDependencies", {}), _npm_specs())
                     }
                     packages_json.write_text(
                         dumps(json, check_circular=False, ensure_ascii=False, indent=2)
@@ -249,33 +246,32 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
                     )
                     yield ("", p2)
 
-        return [rt async for rt in cont()]
+            return [rt async for rt in cont()]
 
-    yield cont()
+        yield cont()
 
 
 def _go() -> Iterator[Awaitable[_SortOfMonoid]]:
     GO_DIR.mkdir(parents=True, exist_ok=True)
     specs = {*_go_specs()}
 
-    if specs:
+    if go := which("go"):
 
-        async def cont() -> _SortOfMonoid:
-            if go := which("go"):
-                p = await call(
-                    go,
-                    "install",
-                    "--",
-                    *specs,
-                    env={"GO111MODULE": "on", "GOPATH": normcase(GO_DIR)},
-                    cwd=VARS_DIR,
-                    check_returncode=set(),
-                )
-                return (("", p),)
-            else:
-                return ()
+        async def cont(spec: str) -> _SortOfMonoid:
+            assert go
+            p = await call(
+                go,
+                "install",
+                "--",
+                spec,
+                env={"GO111MODULE": "on", "GOPATH": normcase(GO_DIR)},
+                cwd=VARS_DIR,
+                check_returncode=set(),
+            )
+            return (("", p),)
 
-        yield cont()
+        for spec in specs:
+            yield cont(spec)
 
 
 def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
