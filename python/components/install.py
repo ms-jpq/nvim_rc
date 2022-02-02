@@ -113,7 +113,6 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
     VIM_DIR.mkdir(parents=True, exist_ok=True)
 
     if git := which("git"):
-
         for spec in pkg_specs:
 
             async def cont(spec: GitPkgSpec) -> _SortOfMonoid:
