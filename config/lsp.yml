@@ -142,8 +142,8 @@
   install:
     script:
       env:
-        MAC_URI: https://github.com/rust-analyzer/rust-analyzer/releases/download/2021-12-27/rust-analyzer-aarch64-apple-darwin.gz
-        LINUX_URI: https://github.com/rust-analyzer/rust-analyzer/releases/download/2021-12-27/rust-analyzer-x86_64-unknown-linux-gnu.gz
+        MAC_URI: https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-aarch64-apple-darwin.gz
+        LINUX_URI: https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz
       file: dl/rust_analyzer.sh
 
 - server: gopls
