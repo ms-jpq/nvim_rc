@@ -259,7 +259,7 @@
         - java
         - gradle
       env:
-        URI: https://github.com/fwcd/kotlin-language-server/releases/download/1.2.0/server.zip
+        URI: https://github.com/fwcd/kotlin-language-server/releases/latest/download/server.zip
       file: dl/kotlin.sh
 # - server: remark_ls
 #   bin: remark-language-server
