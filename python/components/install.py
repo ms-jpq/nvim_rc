@@ -122,6 +122,7 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
                     p1 = await call(
                         git,
                         "pull",
+                        "--no-tags",
                         "--recurse-submodules",
                         *(("origin", spec.branch) if spec.branch else ()),
                         cwd=location,
