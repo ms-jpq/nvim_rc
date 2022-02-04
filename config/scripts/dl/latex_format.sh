@@ -8,7 +8,7 @@ shopt -s globstar failglob
 if [[ -d "$LIB" ]]
 then
   cd "$LIB" || exit 1
-  OPTS=(--recurse-submodules)
+  OPTS=(--recurse-submodules --no-tags)
   git pull "${OPTS[@]}" origin "refs/tags/${TAG}:refs/tags/${TAG}"
 else
   OPTS=(--depth=1 --recurse-submodules --shallow-submodules)
