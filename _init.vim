@@ -1,3 +1,5 @@
+let g:omni_sql_no_default_maps = 1
+
 command! -nargs=0 FTdetect filetype detect
 
 function s:Ndeps()

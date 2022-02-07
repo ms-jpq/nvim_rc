@@ -15,8 +15,11 @@ RUN apt-get update && \
 
 # Dependencies
 RUN apt-get update && \
-    apt-get install -y \
-    nodejs npm golang-go perl && \
+    apt-get install --yes -- \
+    nodejs \
+    npm \
+    # golang-go \
+    perl && \
     rm -rf /var/lib/apt/lists/*
 
 
