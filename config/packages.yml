@@ -170,12 +170,12 @@
       opts:
         noremap: False
       maps:
-        "<leader>s": "<Plug>SlimeSendCell"
+        "<leader>g": "<Plug>SlimeSendCell"
     - modes: v
       opts:
         noremap: False
       maps:
-        "<leader>s": "<Plug>SlimeRegionSend"
+        "<leader>g": "<Plug>SlimeRegionSend"
   viml: |-
     let g:slime_paste_file = tempname()
 
