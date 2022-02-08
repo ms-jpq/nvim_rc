@@ -161,6 +161,7 @@
   vals:
     slime_target: tmux
     slime_no_mappings: True
+    slime_dont_ask_default: True
     slime_default_config:
       socket_name: default
       target_pane: "{last}"
