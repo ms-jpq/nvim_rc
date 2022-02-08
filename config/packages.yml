@@ -183,9 +183,9 @@
     SLIME = {}
     SLIME.set_delim = function()
       local lhs, rhs = unpack(vim.split(vim.bo.commentstring, "%s", true))
-      if lhs and rhs then
+      if lhs ~= "" and rhs ~= "" then
         vim.b.slime_cell_delimiter = lhs .. " " .. tag .. " " .. rhs
-      elseif lhs then
+      elseif lhs ~= "" then
         vim.b.slime_cell_delimiter = lhs .. " " .. tag
       end
     end
