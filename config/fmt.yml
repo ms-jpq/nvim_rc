@@ -100,14 +100,6 @@
     npm:
       - lua-fmt
 
-- bin: rubocop
-  args:
-    - --fix-layout
-    - ${tmpname}
-  type: fs
-  filetypes:
-    - ruby
-
 - bin: rustfmt
   args:
     - --edition=2021
