@@ -63,6 +63,7 @@
   args:
     - --stdin-filepath
     - ${filename}
+    - --tab-width=${tabsize}
     - --
   type: stream
   filetypes:
