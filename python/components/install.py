@@ -7,6 +7,7 @@ from pathlib import Path, PurePath
 from platform import uname
 from shlex import join
 from shutil import get_terminal_size, which
+from subprocess import CompletedProcess
 from sys import executable, stderr
 from time import time
 from typing import (
@@ -24,7 +25,6 @@ from pynvim.api.nvim import Nvim
 from pynvim_pp.api import ask_mc
 from pynvim_pp.lib import decode
 from std2.asyncio.subprocess import call
-from std2.subprocess import ProcReturn
 
 from ..config.fmt import fmt_specs
 from ..config.install import ScriptSpec
@@ -50,7 +50,7 @@ from ..registery import LANG
 from ..workspace.terminal import open_term
 from .rtp import p_name
 
-_SortOfMonoid = Sequence[Tuple[str, ProcReturn]]
+_SortOfMonoid = Sequence[Tuple[str, CompletedProcess[bytes]]]
 
 
 class _PackagesJson(TypedDict):
@@ -115,7 +115,7 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
     if git := which("git"):
 
         async def cont(spec: GitPkgSpec) -> _SortOfMonoid:
-            async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
+            async def cont() -> AsyncIterator[Tuple[str, CompletedProcess]]:
                 assert git
                 location = p_name(spec.uri)
                 if location.is_dir():
@@ -143,7 +143,7 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
                     )
                 yield spec.uri, p1
 
-                if not p1.code and spec.call:
+                if not p1.returncode and spec.call:
                     p2 = await call(
                         *spec.call,
                         cwd=location,
@@ -205,7 +205,7 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
     if which("node") and (npm := which("npm")) and (specs := {*_npm_specs()}):
 
         async def cont() -> _SortOfMonoid:
-            async def cont() -> AsyncIterator[Tuple[str, ProcReturn]]:
+            async def cont() -> AsyncIterator[Tuple[str, CompletedProcess]]:
                 assert npm
                 packages_json.unlink(missing_ok=True)
 
@@ -216,12 +216,15 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
                     cwd=NPM_DIR,
                     check_returncode=set(),
                 )
-                p = ProcReturn(
-                    prog=p1.prog, args=p1.args, code=p1.code, out=b"", err=p1.err
+                p = CompletedProcess(
+                    args=p1.args,
+                    returncode=p1.returncode,
+                    stdout=b"",
+                    stderr=p1.stderr,
                 )
                 yield "", p
 
-                if not p1.code:
+                if not p.returncode:
                     package_lock.unlink(missing_ok=True)
                     json: _PackagesJson = loads(packages_json.read_text())
                     json["dependencies"] = {}
@@ -311,18 +314,25 @@ async def install() -> int:
     tasks = chain(_git(), _pip(), _gem(), _npm(), _go(), _script())
     for fut in as_completed(tasks):
         for debug, proc in await fut:
-            args = join(map(str, chain((proc.prog,), proc.args)))
-            if proc.code == 0:
+            args = join(map(str, proc.args))
+            if proc.returncode == 0:
                 msg = LANG("proc succeeded", args=args)
-                print(msg, debug, decode(proc.err), decode(proc.out), sep, sep=linesep)
-            else:
-                errors.append(args)
-                msg = LANG("proc failed", code=proc.code, args=args)
                 print(
                     msg,
                     debug,
-                    decode(proc.err),
-                    decode(proc.out),
+                    decode(proc.stderr),
+                    decode(proc.stdout),
+                    sep,
+                    sep=linesep,
+                )
+            else:
+                errors.append(args)
+                msg = LANG("proc failed", code=proc.returncode, args=args)
+                print(
+                    msg,
+                    debug,
+                    decode(proc.stderr),
+                    decode(proc.stdout),
                     sep,
                     sep=linesep,
                     file=stderr,

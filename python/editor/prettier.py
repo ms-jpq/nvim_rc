@@ -55,13 +55,13 @@ async def _fmt_output(
                 check_returncode=set(),
             )
             if attr.type is FmtType.stream:
-                temp.write_bytes(proc.out)
+                temp.write_bytes(proc.stdout)
 
-            if proc.code == attr.exit_code:
+            if proc.returncode == attr.exit_code:
                 return ""
             else:
-                heading = LANG("proc failed", code=proc.code, args=arg_info)
-                print_out = ctx.linefeed.join((heading, decode(proc.err)))
+                heading = LANG("proc failed", code=proc.returncode, args=arg_info)
+                print_out = ctx.linefeed.join((heading, decode(proc.stderr)))
                 return print_out
 
 

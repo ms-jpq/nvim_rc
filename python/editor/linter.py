@@ -109,11 +109,17 @@ async def _linter_output(
                 cwd=cwd,
                 check_returncode=set(),
             )
-            if proc.code == attr.exit_code:
+            if proc.returncode == attr.exit_code:
                 heading = LANG("proc succeeded", args=arg_info)
             else:
-                heading = LANG("proc failed", code=proc.code, args=arg_info)
-            print_out = ctx.linefeed.join((heading, decode(proc.err), decode(proc.out)))
+                heading = LANG("proc failed", code=proc.returncode, args=arg_info)
+            print_out = ctx.linefeed.join(
+                (
+                    heading,
+                    decode(proc.stderr),
+                    decode(proc.stdout),
+                )
+            )
             return print_out
 
 
