@@ -87,6 +87,19 @@
       - "@prettier/plugin-ruby"
       - "@prettier/plugin-xml"
 
+- bin: rubocop
+  type: fs
+  args:
+    - --fail-level=fatal
+    - --auto-correct
+    - --
+    - ${tmpname}
+  filetypes:
+    - ruby
+  install:
+    gem:
+      - rubocop
+
 - bin: luafmt
   args:
     - --line-width=80
