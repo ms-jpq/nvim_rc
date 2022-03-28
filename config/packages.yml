@@ -50,6 +50,9 @@
       - chadtree
       - deps
       - --nvim
+  vals:
+    chadtree_settings:
+      theme.icon_glyph_set: ascii_hollow
   keys:
     - modes: n
       maps:
