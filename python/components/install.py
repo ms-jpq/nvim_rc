@@ -50,7 +50,7 @@ from ..registery import LANG
 from ..workspace.terminal import open_term
 from .rtp import p_name
 
-_SortOfMonoid = Sequence[Tuple[str, CompletedProcess[bytes]]]
+_SortOfMonoid = Sequence[Tuple[str, CompletedProcess]]
 
 
 class _PackagesJson(TypedDict):
