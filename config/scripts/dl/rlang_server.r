@@ -13,12 +13,13 @@ if (apt != "") {
 }
 
 repos <- c("https://cloud.r-project.org")
-pkgs <- c("languageserver")
+pkgs <- c("languageserver", "httpgd")
 
-if (!require(languageserver)) {
-  install.packages(pkgs, repos = repos)
-} else {
-  update.packages(oldPkgs = pkgs, repos = repos)
+for (pkg in pkgs) {
+  if (!require(pkg, character.only = TRUE)) {
+    install.packages(c(pkg), repos = repos)
+  } else {
+    update.packages(oldPkgs = c(pkg), repos = repos)
+  }
+  library(pkg, character.only = TRUE)
 }
-
-library(languageserver)
