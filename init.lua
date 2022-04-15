@@ -2,6 +2,8 @@ local t1 = vim.fn.localtime()
 local cwd = vim.fn.stdpath("config")
 
 local l1 = function()
+  vim.g.do_filetype_lua = 1
+  vim.g.did_load_filetypes = 0
   vim.opt.loadplugins = false
   vim.opt.modeline = false
   vim.opt.secure = true
@@ -15,7 +17,20 @@ local l2 = function()
   vim.api.nvim_set_keymap("v", "QQ", "<cmd>quitall!<cr>", {noremap = true})
   vim.api.nvim_set_keymap("v", "Q", "<nop>", {noremap = true})
   vim.opt.shortmess:append("I")
-  vim.cmd("source " .. cwd .. "/_init.vim")
+  vim.api.nvim_create_user_command(
+    "FTdetect",
+    function()
+      vim.cmd [[filetype detect]]
+    end,
+    {}
+  )
+  vim.api.nvim_create_user_command(
+    "Ndeps",
+    function()
+      vim.fn.termopen(vim.fn.stdpath("config") .. "/init.py", "deps")
+    end,
+    {}
+  )
 end
 
 local l3 = function()
@@ -62,6 +77,12 @@ local l3 = function()
   vim.fn.jobstart(args, params)
 end
 
+l4 = function()
+  vim.g.omni_sql_no_default_maps = 1
+  vim.cmd("source " .. cwd .. "/_init.vim")
+end
+
 l1()
 l2()
 l3()
+l4()

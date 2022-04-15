@@ -9,7 +9,7 @@ settings["termguicolors"] = True
 # remove welcome message
 settings["shortmess"] += "I"
 # always show status line
-settings["laststatus"] = 2
+settings["laststatus"] = 3
 # always show tabline
 settings["showtabline"] = 2
 
