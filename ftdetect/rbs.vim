@@ -1,1 +1,1 @@
-autocmd BufNewFile,BufRead *.rbs set filetype=ruby
+autocmd BufNewFile,BufRead *.rbs set syntax=ruby

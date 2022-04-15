@@ -86,3 +86,17 @@ l1()
 l2()
 l3()
 l4()
+
+l5 = function()
+  local ffi = require("ffi")
+  ffi.cdef [[
+  void init(void (*cb)(const char *data, uintptr_t len));
+]]
+  ffi.load(vim.fn.stdpath("config") .. "/temp/cargo/debug/libnvim.so", true)
+  ffi.C.init(
+    function(data, len)
+      local str = ffi.string(data, len)
+      print(str)
+    end
+  )
+end

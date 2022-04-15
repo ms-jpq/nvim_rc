@@ -159,41 +159,41 @@
 - git:
     uri: https://github.com/airblade/vim-gitgutter
 
-- git:
-    uri: https://github.com/jpalardy/vim-slime
-  vals:
-    slime_target: tmux
-    slime_no_mappings: True
-    slime_dont_ask_default: True
-    slime_default_config:
-      socket_name: default
-      target_pane: "{last}"
-  keys:
-    - modes: n
-      opts:
-        noremap: False
-      maps:
-        "<leader>g": "<Plug>SlimeSendCell"
-    - modes: v
-      opts:
-        noremap: False
-      maps:
-        "<leader>g": "<Plug>SlimeRegionSend"
-  lua: |-
-    local tag = "@@"
-    vim.g.slime_cell_delimiter = "# " .. tag
-    vim.g.slime_paste_file = vim.fn.tempname()
-    SLIME = {}
-    SLIME.set_delim = function()
-      local lhs, rhs = unpack(vim.split(vim.bo.commentstring, "%s", true))
-      if lhs ~= "" and rhs ~= "" then
-        vim.b.slime_cell_delimiter = lhs .. " " .. tag .. " " .. rhs
-      elseif lhs ~= "" then
-        vim.b.slime_cell_delimiter = lhs .. " " .. tag
-      end
-    end
-  viml: |-
-    autocmd FileType * lua SLIME.set_delim()
+# - git:
+#     uri: https://github.com/jpalardy/vim-slime
+#   vals:
+#     slime_target: tmux
+#     slime_no_mappings: True
+#     slime_dont_ask_default: True
+#     slime_default_config:
+#       socket_name: default
+#       target_pane: "{last}"
+#   keys:
+#     - modes: n
+#       opts:
+#         noremap: False
+#       maps:
+#         "<leader>g": "<Plug>SlimeSendCell"
+#     - modes: v
+#       opts:
+#         noremap: False
+#       maps:
+#         "<leader>g": "<Plug>SlimeRegionSend"
+#   lua: |-
+#     local tag = "@@"
+#     vim.g.slime_cell_delimiter = "# " .. tag
+#     vim.g.slime_paste_file = vim.fn.tempname()
+#     SLIME = {}
+#     SLIME.set_delim = function()
+#       local lhs, rhs = unpack(vim.split(vim.bo.commentstring, "%s", true))
+#       if lhs ~= "" and rhs ~= "" then
+#         vim.b.slime_cell_delimiter = lhs .. " " .. tag .. " " .. rhs
+#       elseif lhs ~= "" then
+#         vim.b.slime_cell_delimiter = lhs .. " " .. tag
+#       end
+#     end
+#   viml: |-
+#     autocmd FileType * lua SLIME.set_delim()
 
 - git:
     uri: https://github.com/lervag/vimtex

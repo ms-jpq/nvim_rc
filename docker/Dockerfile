@@ -4,23 +4,22 @@ FROM ubuntu:latest
 # Requirements
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
-    apt-get install -y \
+    apt-get install --no-install-recommends --yes -- \
     software-properties-common \
     git python3 python3-venv python3-pip && \
-    add-apt-repository ppa:neovim-ppa/stable && \
+    # add-apt-repository ppa:neovim-ppa/stable && \
     apt-get update && \
     apt-get install -y neovim && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf -- /var/lib/apt/lists/*
 
 
 # Dependencies
 RUN apt-get update && \
-    apt-get install --yes -- \
+    apt-get install --no-install-recommends --yes -- \
     nodejs \
     npm \
-    # golang-go \
-    perl && \
-    rm -rf /var/lib/apt/lists/*
+    golang-go && \
+    rm -rf -- /var/lib/apt/lists/*
 
 
 # INSTALL
@@ -31,5 +30,5 @@ RUN ./.config/nvim/init.py deps
 
 
 # Cleanup
-RUN apt-get autoremove -y && \
+RUN apt-get autoremove --yes && \
     apt-get clean
