@@ -27,7 +27,7 @@ local l2 = function()
   vim.api.nvim_create_user_command(
     "Ndeps",
     function()
-      vim.fn.termopen(vim.fn.stdpath("config") .. "/init.py", "deps")
+      vim.fn.termopen({vim.fn.stdpath("config") .. "/init.py", "deps"})
     end,
     {}
   )

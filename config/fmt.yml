@@ -4,12 +4,24 @@
     - ${filetype}
   type: stream
   filetypes:
-    - json
-    - toml
     - cfg
+    - json
   install:
     pip:
       - sortd
+
+- bin: taplo
+  args:
+    - --warn-as-error
+    - format
+    - --
+    - ${tmpname}
+  type: fs
+  filetypes:
+    - toml
+  install:
+    npm:
+      - "@taplo/cli"
 
 - bin: isort
   args:

@@ -81,6 +81,12 @@
     npm:
       - yaml-language-server
 
+- server: taplo
+  bin: taplo
+  install:
+    npm:
+      - "@taplo/cli"
+
 - server: lemminx
   bin: lemminx
   args: []
@@ -183,6 +189,15 @@
     npm:
       - typescript
       - typescript-language-server
+
+- server: eslint
+  bin: vscode-eslint-language-server
+  install:
+    npm:
+      - vscode-langservers-extracted
+
+# - server: denols
+#   bin: deno
 
 - server: html
   bin: vscode-html-language-server
