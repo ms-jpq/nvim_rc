@@ -14,4 +14,3 @@ ARGS=(
 
 
 exec "$LIB/bin/"*'/lua-language-server' "${ARGS[@]}"
-

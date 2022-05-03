@@ -11,4 +11,3 @@ export DOTNET_ROOT="${ROOTS[0]}"
 
 
 exec dotnet-fsautocomplete --background-service-enabled
-

@@ -36,4 +36,3 @@ ARGS=(
 
 
 exec java "${ARGS[@]}"
-

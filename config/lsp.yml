@@ -103,26 +103,32 @@
     - tex
     - plaintex
   settings:
-    latex:
+    texlab:
       build:
         executable: tectonic
         args:
           - --keep-logs
           - --keep-intermediates
-          - --outdir
-          - build
+          - --synctex
           - --
           - "%f"
-        outputDirectory: build
-        onSave: True
+        # onSave: True
+        # forwardSearchAfter: True
+      # forwardSearch:
+      #   executable: evince-synctex
+      #   args:
+      #     - "-f"
+      #     - "%l"
+      #     - "%p"
+      #     - '"code -g %f:%l"'
 
   install:
     script:
       env:
-        MAC_URI: https://github.com/latex-lsp/texlab/releases/download/v3.3.1/texlab-x86_64-macos.tar.gz
-        LINUX_URI: https://github.com/latex-lsp/texlab/releases/download/v3.3.1/texlab-x86_64-linux.tar.gz
-        T_MAC_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.8.0/tectonic-0.8.0-x86_64-apple-darwin.tar.gz
-        T_LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.8.0/tectonic-0.8.0-x86_64-unknown-linux-gnu.tar.gz
+        MAC_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-macos.tar.gz
+        LINUX_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-linux.tar.gz
+        T_MAC_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.9.0/tectonic-0.9.0-x86_64-apple-darwin.tar.gz
+        T_LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.9.0/tectonic-0.9.0-x86_64-unknown-linux-gnu.tar.gz
       file: dl/texlab.sh
 
 - server: bashls
@@ -214,12 +220,8 @@
 - server: tailwindcss
   bin: tailwindcss-language-server
   install:
-    script:
-      required:
-        - git
-      env:
-        URI: https://github.com/tailwindlabs/tailwindcss-intellisense/releases/download/v0.7.4/vscode-tailwindcss-0.7.4.vsix
-      file: dl/tailwind.sh
+    npm:
+      - "@tailwindcss/language-server"
 
 - server: graphql
   bin: graphql-lsp

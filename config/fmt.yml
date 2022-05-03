@@ -156,6 +156,7 @@
       required:
         - git
         - perl
+        - cpanm
       env:
         URI: https://github.com/cmhughes/latexindent.pl
         TAG: "V3.11"

@@ -15,5 +15,12 @@ else
   git clone "${OPTS[@]}" --branch "$TAG" "$URI" "$LIB"
 fi
 
-ln --symbolic --force -- "$LIB/latexindent.pl" "$BIN"
+PERL_LIB_DIR="$(dirname "$LIB")/perllibs"
+PERL_LIBS=(
+  YAML::Tiny
+  File::HomeDir
+  Unicode::GCString
+)
 
+cpanm --local-lib "$PERL_LIB_DIR" -- "${PERL_LIBS[@]}"
+cp -- "$(dirname "$0")/../exec/latexindent.sh" "$BIN"
