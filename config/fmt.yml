@@ -25,11 +25,11 @@
 
 - bin: isort
   args:
-    - --profile
-    - black
+    - --profile=black
+    - --filename=${filename}
     - --
-    - ${tmpname}
-  type: fs
+    - "-"
+  type: stream
   filetypes:
     - python
   install:
@@ -38,9 +38,10 @@
 
 - bin: black
   args:
+    - --stdin-filename=${filename}
     - --
-    - ${tmpname}
-  type: fs
+    - "-"
+  type: stream
   filetypes:
     - python
   install:
@@ -73,8 +74,7 @@
 
 - bin: prettier
   args:
-    - --stdin-filepath
-    - ${filename}
+    - --stdin-filepath=${filename}
     - --tab-width=${tabsize}
     - --
   type: stream
