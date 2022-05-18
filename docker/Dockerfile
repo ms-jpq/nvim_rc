@@ -9,7 +9,7 @@ RUN apt-get update && \
     git python3 python3-venv python3-pip && \
     # add-apt-repository ppa:neovim-ppa/stable && \
     apt-get update && \
-    apt-get install -y neovim && \
+    apt-get install --no-install-recommends --yes -- neovim && \
     rm -rf -- /var/lib/apt/lists/*
 
 
