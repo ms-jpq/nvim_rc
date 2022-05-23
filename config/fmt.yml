@@ -14,6 +14,7 @@
   args:
     - --warn-as-error
     - format
+    - --options=align_entries=true,array_trailing_comma=true,reorder_keys=true
     - --
     - ${tmpname}
   type: fs
@@ -98,6 +99,11 @@
       - "@prettier/plugin-php"
       - "@prettier/plugin-ruby"
       - "@prettier/plugin-xml"
+    gem:
+      - prettier_print
+      - syntax_tree
+      - syntax_tree-haml
+      - syntax_tree-rbs
 
 - bin: rubocop
   type: fs

@@ -1,19 +1,19 @@
 from dataclasses import asdict
 from operator import attrgetter
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 from textwrap import dedent, indent
-from urllib.parse import unquote, urlsplit
 
 from pynvim.api.nvim import Nvim
 from pynvim_pp.atomic import Atomic
 from pynvim_pp.keymap import Keymap
+from std2.urllib import uri_path
 
 from ..config.pkgs import pkg_specs
 from ..consts import VIM_DIR
 
 
 def p_name(uri: str) -> Path:
-    return VIM_DIR / PurePosixPath(unquote(urlsplit(uri).path)).name
+    return VIM_DIR / uri_path(uri).name
 
 
 def inst(nvim: Nvim) -> Atomic:
