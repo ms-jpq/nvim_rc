@@ -137,6 +137,17 @@
     npm:
       - bash-language-server
 
+- server: powershell_es
+  bin: powershell-ls
+  args: []
+  install:
+    script:
+      required:
+        - pwsh
+      env:
+        URI: https://github.com/PowerShell/PowerShellEditorServices/releases/latest/download/PowerShellEditorServices.zip
+      file: dl/powershell_ls.sh
+
 - server: dockerls
   bin: docker-langserver
   install:
