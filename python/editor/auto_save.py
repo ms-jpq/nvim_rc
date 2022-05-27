@@ -1,4 +1,4 @@
-from ..registery import autocmd, settings
+from ..registery import autocmd, keymap, settings
 
 # auto load changes
 settings["autoread"] = True
@@ -21,3 +21,5 @@ settings["backupskip"] = ""
 
 # persistent undo
 settings["undofile"] = True
+
+keymap.n("<c-s>") << "<cmd>w<cr>"
