@@ -1,4 +1,5 @@
 /.venv/
+/pack
+/.vars
 __pycache__/
 /temp/
-Cargo.lock

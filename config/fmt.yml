@@ -87,8 +87,6 @@
     - less
     - markdown
     - php
-    - rbs
-    - ruby
     - scss
     - typescript*
     - xml
@@ -97,19 +95,26 @@
     npm:
       - prettier
       - "@prettier/plugin-php"
-      - "@prettier/plugin-ruby"
       - "@prettier/plugin-xml"
+
+- bin: rbprettier
+  args:
+    - --stdin-filepath=${filename}
+    - --tab-width=${tabsize}
+    - --
+  type: stream
+  filetypes:
+    - rbs
+    - ruby
+  install:
     gem:
-      - prettier_print
-      - syntax_tree
-      - syntax_tree-haml
-      - syntax_tree-rbs
+      - prettier
 
 - bin: rubocop
   type: fs
   args:
     - --fail-level=fatal
-    - --auto-correct
+    - --autocorrect
     - --
     - ${tmpname}
   filetypes:
