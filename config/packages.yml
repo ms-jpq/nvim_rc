@@ -94,9 +94,6 @@
         trigger: "!cow"
       - src: vimtex
         short_name: vTEX
-      - src: copilot
-        short_name: COP
-        accept_key: <c-f>
   lua: |-
     require("coq_3p")(vim.g.COQ3p)
 
@@ -209,8 +206,6 @@
       colourizer.setup()
     end
 
-- git:
-    uri: https://github.com/github/copilot.vim
 # - git:
 #     uri: https://github.com/kosayoda/nvim-lightbulb
 #   viml: |-
