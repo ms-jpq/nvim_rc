@@ -69,7 +69,7 @@
     coq_settings:
       auto_start: True
       clients.snippets.user_path: "~/.config/snips/"
-      clients.tabnine.enabled: true
+      # clients.tabnine.enabled: true
       keymap:
         repeat: "<leader>."
         eval_snips: "<leader>j"
