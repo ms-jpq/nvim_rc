@@ -222,9 +222,9 @@
 
 - bin: sql-formatter
   args:
-    - --uppercase
-    - --lines-between-queries=2
-    - --indent=${tabsize}
+    # - --uppercase
+    # - --lines-between-queries=2
+    # - --indent=${tabsize}
     - --output=${tmpname}
     - --
     - ${tmpname}
