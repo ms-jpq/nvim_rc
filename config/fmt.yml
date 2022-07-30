@@ -12,7 +12,6 @@
 
 - bin: taplo
   args:
-    - --warn-as-error
     - format
     - --options=align_entries=true,array_trailing_comma=true,reorder_keys=true
     - --
