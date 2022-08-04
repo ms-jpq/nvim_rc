@@ -1,9 +1,8 @@
 from re import escape
-from typing import Tuple
 
 from pynvim.api import Buffer
 from pynvim.api.nvim import Nvim
-from pynvim_pp.api import buf_get_text, cur_buf
+from pynvim_pp.api import buf_get_text, buf_linefeed, cur_buf
 from pynvim_pp.lib import async_call, go
 from pynvim_pp.operators import VisualTypes, operator_marks
 from std2.lex import escape as lex_esc
@@ -34,7 +33,9 @@ def _hl_text(nvim: Nvim, text: str) -> None:
 
 def _get_selected(nvim: Nvim, buf: Buffer, visual_type: VisualTypes) -> str:
     begin, (r2, c2) = operator_marks(nvim, buf=buf, visual_type=visual_type)
-    return buf_get_text(nvim, buf=buf, begin=begin, end=(r2, c2 + 1))
+    linesep = buf_linefeed(nvim, buf=buf)
+    lines = buf_get_text(nvim, buf=buf, begin=begin, end=(r2, c2 + 1))
+    return linesep.join(lines)
 
 
 def _hl_selected(nvim: Nvim, visual: VisualTypes) -> str:
