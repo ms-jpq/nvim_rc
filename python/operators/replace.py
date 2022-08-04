@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import (
     buf_get_lines,
@@ -33,7 +31,7 @@ def _go_replace(nvim: Nvim, visual: VisualTypes) -> None:
             h, *_ = t, *_ = lines
 
         begin = (r1, min(c1, max(0, len(encode(h)) - 1)))
-        end = (r2, min(len(encode(t)), c2 + 1))
+        end = (r2, min(len(encode(t)), c2))
 
         text: str = nvim.funcs.getreg()
         new_lines = text.split(linefeed)
@@ -45,8 +43,8 @@ def _go_replace(nvim: Nvim, visual: VisualTypes) -> None:
         buf_set_text(nvim, buf=buf, begin=begin, end=end, text=new_lines)
 
 
-keymap.n("gr") << f"<cmd>set opfunc={_go_replace.name}<cr>g@"
-(keymap.v("gr") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_go_replace.name}(vim.NIL)<cr>")
+_ = keymap.n("gr") << f"<cmd>set opfunc={_go_replace.name}<cr>g@"
+_ = keymap.v("gr") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_go_replace.name}(vim.NIL)<cr>"
 
 
 @rpc(blocking=True)
@@ -68,4 +66,4 @@ def _go_replace_line(nvim: Nvim) -> None:
         buf_set_lines(nvim, buf=buf, lo=row, hi=row + 1, lines=new_lines)
 
 
-keymap.n("grr") << f"<cmd>lua {NAMESPACE}.{_go_replace_line.name}()<cr>"
+_ = keymap.n("grr") << f"<cmd>lua {NAMESPACE}.{_go_replace_line.name}()<cr>"

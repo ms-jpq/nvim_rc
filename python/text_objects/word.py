@@ -27,7 +27,7 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
         words_lhs, words_rhs = ctx.word_lhs, ctx.word_rhs
 
     c_lhs = max(col - len(encode(words_lhs)), 0)
-    c_rhs = max(col + len(encode(words_rhs)) - 1, 0)
+    c_rhs = max(col + len(encode(words_rhs)) - 2, 0)
 
     if is_inside:
         mark1 = (row, c_lhs)
@@ -39,7 +39,7 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
     set_visual_selection(nvim, win=win, mode="v", mark1=mark1, mark2=mark2)
 
 
-keymap.o("iw") << f"<cmd>lua {NAMESPACE}.{_word.name}(true)<cr>"
-keymap.o("aw") << f"<cmd>lua {NAMESPACE}.{_word.name}(false)<cr>"
-keymap.v("iw") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_word.name}(true)<cr>"
-keymap.v("aw") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_word.name}(false)<cr>"
+_ = keymap.o("iw") << f"<cmd>lua {NAMESPACE}.{_word.name}(true)<cr>"
+_ = keymap.o("aw") << f"<cmd>lua {NAMESPACE}.{_word.name}(false)<cr>"
+_ = keymap.v("iw") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_word.name}(true)<cr>"
+_ = keymap.v("aw") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_word.name}(false)<cr>"

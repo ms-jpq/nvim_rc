@@ -32,9 +32,9 @@ def _hl_text(nvim: Nvim, text: str) -> None:
 
 
 def _get_selected(nvim: Nvim, buf: Buffer, visual_type: VisualTypes) -> str:
-    begin, (r2, c2) = operator_marks(nvim, buf=buf, visual_type=visual_type)
+    begin, end = operator_marks(nvim, buf=buf, visual_type=visual_type)
     linesep = buf_linefeed(nvim, buf=buf)
-    lines = buf_get_text(nvim, buf=buf, begin=begin, end=(r2, c2 + 1))
+    lines = buf_get_text(nvim, buf=buf, begin=begin, end=end)
     return linesep.join(lines)
 
 

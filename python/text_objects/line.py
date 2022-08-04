@@ -15,7 +15,7 @@ def _p_inside(line: str) -> Tuple[int, int]:
 
 
 def _p_around(line: str) -> Tuple[int, int]:
-    return 0, len(encode(line))
+    return 0, len(encode(line)) - 1
 
 
 @rpc(blocking=True)
@@ -30,7 +30,7 @@ def _line(nvim: Nvim, is_inside: bool) -> None:
     set_visual_selection(nvim, win=win, mode="v", mark1=(row, lhs), mark2=(row, rhs))
 
 
-keymap.o("il") << f"<cmd>lua {NAMESPACE}.{_line.name}(true)<cr>"
-keymap.o("al") << f"<cmd>lua {NAMESPACE}.{_line.name}(false)<cr>"
-keymap.v("il") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_line.name}(true)<cr>"
-keymap.v("al") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_line.name}(false)<cr>"
+_ = keymap.o("il") << f"<cmd>lua {NAMESPACE}.{_line.name}(true)<cr>"
+_ = keymap.o("al") << f"<cmd>lua {NAMESPACE}.{_line.name}(false)<cr>"
+_ = keymap.v("il") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_line.name}(true)<cr>"
+_ = keymap.v("al") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_line.name}(false)<cr>"

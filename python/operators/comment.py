@@ -87,8 +87,8 @@ def _comment(nvim: Nvim, visual: VisualTypes) -> None:
         buf_set_lines(nvim, buf=buf, lo=row1, hi=row2 + 1, lines=new_lines)
 
 
-keymap.n("gc") << f"<cmd>set opfunc={_comment.name}<cr>g@"
-keymap.v("gc") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_comment.name}(vim.NIL)<cr>"
+_ = keymap.n("gc") << f"<cmd>set opfunc={_comment.name}<cr>g@"
+_ = keymap.v("gc") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_comment.name}(vim.NIL)<cr>"
 
 
 @rpc(blocking=True)
@@ -105,4 +105,4 @@ def _comment_single(nvim: Nvim) -> None:
         buf_set_lines(nvim, buf=buf, lo=row, hi=row + 1, lines=new_lines)
 
 
-keymap.n("gcc") << f"<cmd>lua {NAMESPACE}.{_comment_single.name}()<cr>"
+_ = keymap.n("gcc") << f"<cmd>lua {NAMESPACE}.{_comment_single.name}()<cr>"

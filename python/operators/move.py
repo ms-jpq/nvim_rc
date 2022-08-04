@@ -23,8 +23,8 @@ def _norm_mv(nvim: Nvim, up: bool) -> None:
                 nvim.command(f"move +1")
 
 
-keymap.n("<m-up>") << f"<cmd>lua {NAMESPACE}.{_norm_mv.name}(true)<cr>"
-keymap.n("<m-down>") << f"<cmd>lua {NAMESPACE}.{_norm_mv.name}(false)<cr>"
+_ = keymap.n("<m-up>") << f"<cmd>lua {NAMESPACE}.{_norm_mv.name}(true)<cr>"
+_ = keymap.n("<m-down>") << f"<cmd>lua {NAMESPACE}.{_norm_mv.name}(false)<cr>"
 
 
 @rpc(blocking=True)
@@ -65,5 +65,5 @@ def _visual_mv(nvim: Nvim, up: bool) -> None:
                 )
 
 
-keymap.v("<m-up>") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_visual_mv.name}(true)<cr>"
-keymap.v("<m-down>") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_visual_mv.name}(false)<cr>"
+_ = keymap.v("<m-up>") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_visual_mv.name}(true)<cr>"
+_ = keymap.v("<m-down>") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_visual_mv.name}(false)<cr>"

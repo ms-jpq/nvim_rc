@@ -56,12 +56,12 @@ def _indent(nvim: Nvim) -> None:
 
     if lines:
         *_, btm_line = lines
-        mark1, mark2 = (top, 0), (btm, len(encode(btm_line)))
+        mark1, mark2 = (top, 0), (btm, max(0, len(encode(btm_line)) - 1))
     else:
-        mark1, mark2 = (row, 0), (row, len(encode(curr)))
+        mark1, mark2 = (row, 0), (row, max(0, len(encode(curr)) - 1))
 
     set_visual_selection(nvim, win=win, mode="V", mark1=mark1, mark2=mark2)
 
 
-keymap.o("ii") << f"<cmd>lua {NAMESPACE}.{_indent.name}()<cr>"
-keymap.v("ii") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_indent.name}()<cr>"
+_ = keymap.o("ii") << f"<cmd>lua {NAMESPACE}.{_indent.name}()<cr>"
+_ = keymap.v("ii") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_indent.name}()<cr>"
