@@ -65,14 +65,14 @@ def _op_rg(nvim: Nvim, visual: VisualTypes) -> None:
     go(nvim, aw=async_call(nvim, cont))
 
 
-keymap.n("gs") << f"<cmd>set opfunc={_op_search.name}<cr>g@"
-(keymap.v("gs") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_search.name}(vim.NIL)<cr>")
+_ = keymap.n("gs") << f"<cmd>set opfunc={_op_search.name}<cr>g@"
+_ = (keymap.v("gs") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_search.name}(vim.NIL)<cr>")
 
-keymap.n("gf") << f"<cmd>set opfunc={_op_fzf.name}<cr>g@"
-keymap.v("gf") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_fzf.name}(vim.NIL)<cr>"
+_ = keymap.n("gf") << f"<cmd>set opfunc={_op_fzf.name}<cr>g@"
+_ = keymap.v("gf") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_fzf.name}(vim.NIL)<cr>"
 
-keymap.n("gF") << f"<cmd>set opfunc={_op_rg.name}<cr>g@"
-keymap.v("gF") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_rg.name}(vim.NIL)<cr>"
+_ = keymap.n("gF") << f"<cmd>set opfunc={_op_rg.name}<cr>g@"
+_ = keymap.v("gF") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_rg.name}(vim.NIL)<cr>"
 
 
 # replace selection
@@ -86,8 +86,8 @@ def _op_sd(nvim: Nvim, visual: VisualTypes) -> None:
     nvim.api.input(instruction)
 
 
-keymap.n("gt") << f"<cmd>set opfunc={_op_sd.name}<cr>g@"
-keymap.v("gt") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_sd.name}(vim.NIL)<cr>"
+_ = keymap.n("gt") << f"<cmd>set opfunc={_op_sd.name}<cr>g@"
+_ = keymap.v("gt") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_sd.name}(vim.NIL)<cr>"
 
 # very magic
-keymap.n("gT", silent=False) << r":%s/\v//g<left><left><left>"
+_ = keymap.n("gT", silent=False) << r":%s/\v//g<left><left><left>"
