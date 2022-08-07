@@ -27,7 +27,7 @@ def _word(nvim: Nvim, is_inside: bool) -> None:
         words_lhs, words_rhs = ctx.word_lhs, ctx.word_rhs
 
     c_lhs = max(col - len(encode(words_lhs)), 0)
-    c_rhs = max(col + len(encode(words_rhs)) - 2, 0)
+    c_rhs = col + len(encode(words_rhs))
 
     if is_inside:
         mark1 = (row, c_lhs)

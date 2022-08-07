@@ -13,7 +13,7 @@ def _entire(nvim: Nvim) -> None:
     count = buf_line_count(nvim, buf=buf)
     last_line, *_ = buf_get_lines(nvim, buf=buf, lo=-2, hi=-1)
     mark1 = (0, 0)
-    mark2 = (count - 1, max(0, len(encode(last_line)) - 1))
+    mark2 = (count - 1, len(encode(last_line)))
     set_visual_selection(nvim, win=win, mode="V", mark1=mark1, mark2=mark2)
 
 

@@ -10,12 +10,12 @@ from ..registery import NAMESPACE, keymap, rpc
 
 def _p_inside(line: str) -> Tuple[int, int]:
     lhs = len(encode(line)) - len(encode(line.lstrip()))
-    rhs = len(encode(line.rstrip())) - 1
+    rhs = len(encode(line.rstrip()))
     return lhs, rhs
 
 
 def _p_around(line: str) -> Tuple[int, int]:
-    return 0, len(encode(line)) - 1
+    return 0, len(encode(line))
 
 
 @rpc(blocking=True)

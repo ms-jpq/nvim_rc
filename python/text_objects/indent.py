@@ -56,9 +56,9 @@ def _indent(nvim: Nvim) -> None:
 
     if lines:
         *_, btm_line = lines
-        mark1, mark2 = (top, 0), (btm, max(0, len(encode(btm_line)) - 1))
+        mark1, mark2 = (top, 0), (btm, len(encode(btm_line)))
     else:
-        mark1, mark2 = (row, 0), (row, max(0, len(encode(curr)) - 1))
+        mark1, mark2 = (row, 0), (row, len(encode(curr)))
 
     set_visual_selection(nvim, win=win, mode="V", mark1=mark1, mark2=mark2)
 
