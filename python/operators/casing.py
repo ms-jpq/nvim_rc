@@ -14,17 +14,12 @@ def _snake_case(nvim: Nvim, visual: VisualTypes) -> None:
     if not writable(nvim, buf=buf):
         return
     else:
-        re = compile("[A-Z][a-z]", flags=RegexFlag.U)
-
-        def cont(match: Match[str]) -> str:
-            lo, _ = match.span()
-            prefix = "_" if lo else ""
-            return prefix + match.group().casefold()
+        re = compile(r"(?<!^)(?=[A-Z])", flags=RegexFlag.U)
 
         begin, end = operator_marks(nvim, buf=buf, visual_type=visual)
         if begin < end:
             lines = buf_get_text(nvim, buf=buf, begin=begin, end=end)
-            new_lines = tuple(re.sub(cont, line) for line in lines)
+            new_lines = tuple(re.sub("_", line).casefold() for line in lines)
             buf_set_text(nvim, buf=buf, begin=begin, end=end, text=new_lines)
 
 
