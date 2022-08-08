@@ -1,5 +1,4 @@
 from re import RegexFlag, compile
-from typing import Match
 
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import buf_get_text, buf_set_text, cur_buf
