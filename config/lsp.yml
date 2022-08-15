@@ -193,13 +193,6 @@
     gem:
       - solargraph
 
-# - server: sorbet
-#   bin: srb
-#   install:
-#     gem:
-#       - sorbet
-#       - sorbet-runtime
-
 - server: tsserver
   bin: typescript-language-server
   install:
@@ -255,6 +248,16 @@
         - R
       file: dl/rlang_server.r
 
+- server: phan
+  bin: phan
+  install:
+    script:
+      required:
+        - php
+      env:
+        URI: https://github.com/phan/phan/releases/latest/download/phan.phar
+      file: dl/phan.sh
+
 - server: intelephense
   bin: intelephense
   install:
@@ -292,11 +295,6 @@
       env:
         URI: https://github.com/fwcd/kotlin-language-server/releases/latest/download/server.zip
       file: dl/kotlin.sh
-# - server: remark_ls
-#   bin: remark-language-server
-#   install:
-#     npm:
-#       - remark-language-server
 # - server: sumneko_lua
 #   bin: lua-ls
 #   args: []

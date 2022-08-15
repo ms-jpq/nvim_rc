@@ -53,6 +53,17 @@
         LINUX_URI: https://github.com/hadolint/hadolint/releases/download/v2.8.0/hadolint-Linux-x86_64
       file: dl/hadolint.sh
 
+- bin: actionlint
+  type: fs
+  args:
+    - --
+    - ${tmpname}
+  filetypes:
+    - yaml*
+  install:
+    go:
+      - github.com/rhysd/actionlint/cmd/actionlint@latest
+
 - bin: rubocop
   type: stream
   args:
@@ -63,14 +74,6 @@
   install:
     gem:
       - rubocop
-
-- bin: steep
-  type: fs
-  args:
-    - check
-    - ${tmpname}
-  filetypes:
-    - ruby
 
 - bin: r-lint
   type: fs
