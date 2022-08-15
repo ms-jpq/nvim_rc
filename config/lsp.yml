@@ -248,16 +248,6 @@
         - R
       file: dl/rlang_server.r
 
-- server: phan
-  bin: phan
-  install:
-    script:
-      required:
-        - php
-      env:
-        URI: https://github.com/phan/phan/releases/latest/download/phan.phar
-      file: dl/phan.sh
-
 - server: intelephense
   bin: intelephense
   install:

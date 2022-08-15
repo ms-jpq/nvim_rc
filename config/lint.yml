@@ -99,3 +99,17 @@
   install:
     npm:
       - htmlhint
+
+- bin: phan
+  type: fs
+  args:
+    - ${tmpname}
+  filetypes:
+    - php
+  install:
+    script:
+      required:
+        - php
+      env:
+        URI: https://github.com/phan/phan/releases/latest/download/phan.phar
+      file: dl/phan.sh
