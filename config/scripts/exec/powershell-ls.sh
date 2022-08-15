@@ -42,4 +42,4 @@ ARGS=(
   )
 
 
-"${CMD[@]}" "${ARGS[@]}"
+pwsh "${ARGS[@]}"
