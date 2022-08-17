@@ -7,19 +7,19 @@ settings["grepprg"] = r"rg\ --vimgrep"
 
 
 # clear hlsearch result
-keymap.n("<leader>i") << "<cmd>nohlsearch<cr>"
+_ = keymap.n("<leader>i") << "<cmd>nohlsearch<cr>"
 
 
 # search without moving
-keymap.n("*") << "*N"
-keymap.n("#") << "#N"
-keymap.n("g*") << "g*N"
-keymap.n("g#") << "g#N"
+_ = keymap.n("*") << "*N"
+_ = keymap.n("#") << "#N"
+_ = keymap.n("g*") << "g*N"
+_ = keymap.n("g#") << "g#N"
 # centre on search result
-keymap.n("n") << "n"
-keymap.n("N") << "N"
+_ = keymap.n("n") << "n"
+_ = keymap.n("N") << "N"
 
 
 # use no magic
-keymap.nv("/", silent=False) << r"/\V"
-keymap.nv("?", silent=False) << r"?\V"
+_ = keymap.nv("/", silent=False) << r"/\V"
+_ = keymap.nv("?", silent=False) << r"?\V"

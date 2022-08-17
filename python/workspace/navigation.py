@@ -13,3 +13,4 @@ settings["history"] = 10000
 
 # ignore case
 settings["ignorecase"] = True
+settings["smartcase"] = True
