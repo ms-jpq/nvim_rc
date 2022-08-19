@@ -339,7 +339,17 @@ async def install() -> int:
                 )
 
     if errors:
-        print(linesep.join(errors))
+        print(linesep.join(errors), file=stderr)
+
+    proc = await call(
+        "nvim",
+        "--headless",
+        "+sleep 1",
+        "+TSUpdateSync",
+        "+qall",
+        capture_stderr=False,
+        capture_stdout=False,
+    )
     return bool(errors)
 
 
