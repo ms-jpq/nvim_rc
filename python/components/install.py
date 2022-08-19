@@ -34,6 +34,7 @@ from ..config.pkgs import GitPkgSpec, pkg_specs
 from ..config.tools import tool_specs
 from ..consts import (
     BIN_DIR,
+    CONF_DIR,
     GEM_DIR,
     GO_DIR,
     INSTALL_SCRIPT,
@@ -344,9 +345,8 @@ async def install() -> int:
     proc = await call(
         "nvim",
         "--headless",
-        "+sleep 1",
-        "+TSUpdateSync",
-        "+qall",
+        "-u",
+        CONF_DIR / "packadd.lua",
         capture_stderr=False,
         capture_stdout=False,
     )
