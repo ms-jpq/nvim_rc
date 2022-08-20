@@ -1,4 +1,3 @@
----
 - bin: sortd
   args:
     - ${filetype}
@@ -50,19 +49,6 @@
     pip:
       - black
 
-- bin: import-sort
-  args:
-    - --write
-    - --
-    - ${tmpname}
-  type: fs
-  filetypes:
-    - javascript*
-    - typescript*
-  install:
-    npm:
-      - import-sort-cli
-
 - bin: csscomb
   args:
     - --
@@ -97,6 +83,7 @@
       - prettier
       - "@prettier/plugin-php"
       - "@prettier/plugin-xml"
+      - "@trivago/prettier-plugin-sort-imports"
 
 - bin: rbprettier
   args:

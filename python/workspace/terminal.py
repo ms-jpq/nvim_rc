@@ -92,7 +92,7 @@ def toggle_floating(nvim: Nvim, *args: str) -> None:
         _term_open(nvim, *argv)
 
 
-keymap.n("<leader>u") << f"<cmd>lua {NAMESPACE}.{toggle_floating.name}()<cr>"
+_ = keymap.n("<leader>u") << f"<cmd>lua {NAMESPACE}.{toggle_floating.name}()<cr>"
 
 
 @rpc(blocking=True)
@@ -104,4 +104,4 @@ def _on_resized(nvim: Nvim) -> None:
         toggle_floating(nvim)
 
 
-autocmd("VimResized") << f"lua {NAMESPACE}.{_on_resized.name}()"
+_ = autocmd("VimResized") << f"lua {NAMESPACE}.{_on_resized.name}()"
