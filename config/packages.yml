@@ -154,7 +154,12 @@
     uri: https://github.com/tpope/vim-unimpaired
 
 - git:
-    uri: https://github.com/airblade/vim-gitgutter
+    uri: https://github.com/lewis6991/gitsigns.nvim
+  vals:
+    git_opts:
+      word_diff: True
+  lua: |-
+    require('gitsigns').setup(git_opts)
 
 - git:
     uri: https://github.com/lervag/vimtex
