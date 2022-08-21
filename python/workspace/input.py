@@ -25,7 +25,7 @@ settings["sidescrolloff"] = 10
 
 # normalize cursor pos
 settings["virtualedit"] = ("onemore", "block")
-keymap.nv("$") << "$<right>"
+_ = keymap.nv("$") << "$<right>"
 
 
 # use system clipboard
