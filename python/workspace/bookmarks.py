@@ -25,27 +25,26 @@ def _bookmark_signs(nvim: Nvim) -> None:
         buf = cur_buf(nvim)
         clear_ns(nvim, buf=buf, id=ns)
 
-        def cont() -> Iterator[ExtMarkBase]:
-            idx = 1
-            l_marks = list_buf_bookmarks(nvim, buf=buf)
-            for idx, (name, (row, _)) in enumerate(l_marks.items(), start=idx):
+        def c1() -> Iterator[tuple[str, int]]:
+            for name, (row, _) in list_buf_bookmarks(nvim, buf=buf).items():
+                yield name, row
+            for name, buf_nr, (row, _), _ in list_bookmarks(nvim):
+                if buf_nr == buf.number:
+                    yield name, row
+
+        def c2() -> Iterator[ExtMarkBase]:
+            for idx, (name, row) in enumerate(c1(), start=1):
                 sign = ExtMarkBase(
                     idx=idx,
                     begin=(row, 0),
-                    meta={"sign_text": name, "sign_hl_group": "IncSearch"},
+                    meta={
+                        "sign_text": name,
+                        "sign_hl_group": "IncSearch",
+                    },
                 )
                 yield sign
-            g_marks = list_bookmarks(nvim)
-            for idx, (name, buf_nr, (row, _), _) in enumerate(g_marks, start=idx):
-                if buf_nr == buf.number:
-                    sign = ExtMarkBase(
-                        idx=idx,
-                        begin=(row, 0),
-                        meta={"sign_text": name, "sign_hl_group": "IncSearch"},
-                    )
-                    yield sign
 
-        buf_set_extmarks_base(nvim, buf=buf, id=ns, marks=cont())
+        buf_set_extmarks_base(nvim, buf=buf, id=ns, marks=c2())
 
 
 _ = (
