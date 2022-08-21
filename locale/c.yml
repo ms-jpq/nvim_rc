@@ -41,3 +41,9 @@
 
 "prettier succeeded": |-
   ✅ Prettier Succeeded 👉 ${prettiers}
+
+"tmux pane?": |-
+  "👾? "
+
+"repl": |-
+  "🎮 REPL"
