@@ -154,7 +154,7 @@ def _eval(nvim: Nvim, visual: bool) -> None:
                 end = int(min(end or inf, r))
 
     lines = buf_get_lines(nvim, buf=buf, lo=begin, hi=end or -2 + 1)
-    text = dedent(linesep.join(lines)) + linesep
+    text = dedent(linesep.join(lines)) + linesep * 2
     _tmux_send(nvim, buf=buf, text=text)
 
 
