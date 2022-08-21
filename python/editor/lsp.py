@@ -24,17 +24,17 @@ from ..text_objects.word import UNIFIYING_CHARS
 
 _LSP_INIT = (Path(__file__).resolve(strict=True).parent / "lsp.lua").read_text("UTF-8")
 
-keymap.n("gp") << "<cmd>lua vim.lsp.buf.definition()<cr>"
-keymap.n("gP") << "<cmd>lua vim.lsp.buf.references()<cr>"
+_ = keymap.n("gp") << "<cmd>lua vim.lsp.buf.definition()<cr>"
+_ = keymap.n("gP") << "<cmd>lua vim.lsp.buf.references()<cr>"
 
-keymap.n("H") << "<cmd>lua vim.diagnostic.open_float()<cr>"
-keymap.n("K") << "<cmd>lua vim.lsp.buf.hover()<cr>"
+_ = keymap.n("H") << "<cmd>lua vim.diagnostic.open_float()<cr>"
+_ = keymap.n("K") << "<cmd>lua vim.lsp.buf.hover()<cr>"
 
-keymap.n("gw") << "<cmd>lua vim.lsp.buf.code_action()<cr>"
-keymap.v("gw") << "<cmd>lua vim.lsp.buf.range_code_action()<cr>"
+_ = keymap.n("gw") << "<cmd>lua vim.lsp.buf.code_action()<cr>"
+_ = keymap.v("gw") << "<cmd>lua vim.lsp.buf.range_code_action()<cr>"
 
-keymap.n("<c-p>") << "<cmd>lua vim.diagnostic.goto_prev()<cr>"
-keymap.n("<c-n>") << "<cmd>lua vim.diagnostic.goto_next()<cr>"
+_ = keymap.n("<c-p>") << "<cmd>lua vim.diagnostic.goto_prev()<cr>"
+_ = keymap.n("<c-n>") << "<cmd>lua vim.diagnostic.goto_next()<cr>"
 
 
 @rpc(blocking=True)
@@ -53,7 +53,7 @@ def _rename(nvim: Nvim) -> None:
         nvim.lua.vim.lsp.buf.rename(ans)
 
 
-keymap.n("R") << f"<cmd>lua {NAMESPACE}.{_rename.name}()<cr>"
+_ = keymap.n("R") << f"<cmd>lua {NAMESPACE}.{_rename.name}()<cr>"
 
 
 _DECODER = new_decoder[Optional[RootPattern]](Optional[RootPattern])
@@ -86,7 +86,7 @@ def _find_root(nvim: Nvim, _pattern: Any, filename: str, bufnr: int) -> Optional
             elif pattern.fallback is RPFallback.parent:
                 return str(path.parent)
             else:
-                never(pattern)
+                never(pattern.fallback)
 
 
 @rpc(blocking=True)
