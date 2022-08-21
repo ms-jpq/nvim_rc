@@ -13,9 +13,11 @@ from pynvim_pp.api import (
     list_buf_bookmarks,
 )
 
-from ..registery import NAMESPACE, autocmd, rpc
+from ..registery import NAMESPACE, atomic, autocmd, rpc
 
 _NS = uuid4()
+
+_HL = "IncSearch"
 
 
 @rpc(blocking=True)
@@ -39,7 +41,9 @@ def _bookmark_signs(nvim: Nvim) -> None:
                     begin=(row, 0),
                     meta={
                         "sign_text": name,
-                        "sign_hl_group": "IncSearch",
+                        "hl_mode": "combine",
+                        "sign_hl_group": _HL,
+                        "number_hl_group": _HL,
                     },
                 )
                 yield sign
@@ -51,3 +55,5 @@ _ = (
     autocmd("BufEnter", "CursorHold", "CursorHoldI")
     << f"lua {NAMESPACE}.{_bookmark_signs.name}()"
 )
+
+atomic.exec_lua(f"{NAMESPACE}.{_bookmark_signs.name}()", ())

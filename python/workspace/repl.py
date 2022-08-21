@@ -36,6 +36,9 @@ _NS = uuid4()
 _HNS = uuid4()
 _TMUX_NS = "NVIM-"
 
+_TEXT_HL = "Normal"
+_LINE_HL = "CursorLine"
+
 
 @rpc(blocking=True)
 def _marks_clear(nvim: Nvim, visual: bool) -> None:
@@ -72,7 +75,12 @@ def _mark_set(nvim: Nvim, visual: bool) -> None:
         return ExtMarkBase(
             idx=next(gen),
             begin=(r, 0),
-            meta={"virt_text": ((cs, "Normal"),), "virt_text_pos": "right_align"},
+            meta={
+                "virt_text": ((cs, _TEXT_HL),),
+                "virt_text_pos": "right_align",
+                "hl_mode": "combine",
+                "line_hl_group": _LINE_HL,
+            },
         )
 
     if visual:
