@@ -33,8 +33,8 @@ _ = keymap.n("K") << "<cmd>lua vim.lsp.buf.hover()<cr>"
 _ = keymap.n("gw") << "<cmd>lua vim.lsp.buf.code_action()<cr>"
 _ = keymap.v("gw") << "<cmd>lua vim.lsp.buf.range_code_action()<cr>"
 
-_ = keymap.n("<c-p>") << "<cmd>lua vim.diagnostic.goto_prev()<cr>"
-_ = keymap.n("<c-n>") << "<cmd>lua vim.diagnostic.goto_next()<cr>"
+_ = keymap.n("<c-p>") << "<cmd>lua vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR }<cr>"
+_ = keymap.n("<c-n>") << "<cmd>lua vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR }<cr>"
 
 
 @rpc(blocking=True)
