@@ -1,9 +1,10 @@
+from asyncio import sleep
 from itertools import count
 from math import inf
 from os import linesep
 from tempfile import NamedTemporaryFile
 from textwrap import dedent
-from typing import Iterator, Optional
+from typing import Iterator, Optional, Sequence
 from uuid import uuid4
 
 from pynvim import Nvim
@@ -25,13 +26,14 @@ from pynvim_pp.api import (
     win_get_buf,
     win_get_cursor,
 )
-from pynvim_pp.lib import encode, go
+from pynvim_pp.lib import async_call, encode, go
 from pynvim_pp.operators import operator_marks
 from std2.asyncio.subprocess import call
 
 from ..registery import LANG, NAMESPACE, keymap, rpc
 
 _NS = uuid4()
+_HNS = uuid4()
 _TMUX_NS = "NVIM-"
 
 
@@ -133,6 +135,26 @@ def _tmux_send(nvim: Nvim, buf: Buffer, text: str) -> None:
     go(nvim, aw=cont())
 
 
+def _highlight(nvim: Nvim, buf: Buffer, begin: int, lines: Sequence[str]) -> None:
+    hns = create_ns(nvim, ns=_HNS)
+    *_, line = lines or ("",)
+    end_c = len(encode(line))
+    nvim.lua.vim.highlight.range(
+        buf,
+        hns,
+        "HighlightedyankRegion",
+        (begin, 0),
+        (max(0, begin + len(lines) - 1), end_c),
+        {"inclusive": False},
+    )
+
+    async def cont() -> None:
+        await sleep(1)
+        await async_call(nvim, lambda: clear_ns(nvim, buf=buf, id=hns))
+
+    go(nvim, aw=cont())
+
+
 @rpc(blocking=True)
 def _eval(nvim: Nvim, visual: bool) -> None:
     win = cur_win(nvim)
@@ -140,7 +162,6 @@ def _eval(nvim: Nvim, visual: bool) -> None:
 
     if visual:
         (begin, _), (end, _) = operator_marks(nvim, buf=buf, visual_type=None)
-        end += 1
     else:
         ns = create_ns(nvim, ns=_NS)
         row, _ = win_get_cursor(nvim, win=win)
@@ -153,9 +174,10 @@ def _eval(nvim: Nvim, visual: bool) -> None:
             else:
                 end = int(min(end or inf, r))
 
-    lines = buf_get_lines(nvim, buf=buf, lo=begin, hi=end or -2 + 1)
+    lines = buf_get_lines(nvim, buf=buf, lo=begin, hi=(end or -2) + 1)
     text = dedent(linesep.join(lines)) + linesep * 2
     _tmux_send(nvim, buf=buf, text=text)
+    _highlight(nvim, buf=buf, begin=begin, lines=lines)
 
 
 _ = keymap.n("<leader>g") << f"<cmd>lua {NAMESPACE}.{_eval.name}(false)<cr>"

@@ -49,8 +49,8 @@ def _norm_cursor(nvim: Nvim) -> None:
     win_set_option(nvim, win=win, key="cursorline", val=True)
 
 
-autocmd("InsertEnter") << f"lua {NAMESPACE}.{_ins_cursor.name}()"
-autocmd("InsertLeave") << f"lua {NAMESPACE}.{_norm_cursor.name}()"
+_ = autocmd("InsertEnter") << f"lua {NAMESPACE}.{_ins_cursor.name}()"
+_ = autocmd("InsertLeave") << f"lua {NAMESPACE}.{_norm_cursor.name}()"
 
 
 # highlight yank
@@ -60,4 +60,4 @@ def _hl_yank(nvim: Nvim) -> None:
 
 
 atomic.command("highlight HighlightedyankRegion cterm=reverse gui=reverse")
-autocmd("TextYankPost") << f"lua {NAMESPACE}.{_hl_yank.name}()"
+_ = autocmd("TextYankPost") << f"lua {NAMESPACE}.{_hl_yank.name}()"
