@@ -7,7 +7,7 @@ RUN apt-get update && \
     apt-get install --no-install-recommends --yes -- \
     software-properties-common \
     git python3 python3-venv python3-pip && \
-    # add-apt-repository ppa:neovim-ppa/stable && \
+    add-apt-repository ppa:neovim-ppa/unstable && \
     apt-get update && \
     apt-get install --no-install-recommends --yes -- neovim && \
     rm -rf -- /var/lib/apt/lists/*
