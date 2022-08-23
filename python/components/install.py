@@ -342,14 +342,6 @@ async def install() -> int:
     if errors:
         print(linesep.join(errors), file=stderr)
 
-    proc = await call(
-        "nvim",
-        "--headless",
-        "-u",
-        TOP_LEVEL / "packadd.lua",
-        capture_stderr=False,
-        capture_stdout=False,
-    )
     return bool(errors)
 
 

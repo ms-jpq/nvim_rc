@@ -1,6 +1,14 @@
 ---
 - git:
     uri: https://github.com/nvim-treesitter/nvim-treesitter
+    call:
+      - nvim
+      - --headless
+      - -u
+      - NONE
+      - +packadd nvim-treesitter
+      - +TSUpdateSync
+      - +quitall
   vals:
     ts_opts:
       highlight:
