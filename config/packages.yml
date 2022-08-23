@@ -84,6 +84,18 @@
     COQ3p:
       - src: nvimlua
         short_name: nLUA
+
+      - src: builtin/ada
+      - src: builtin/c
+      - src: builtin/clojure
+      - src: builtin/css
+      - src: builtin/haskell
+      - src: builtin/html
+      - src: builtin/js
+      - src: builtin/php
+      - src: builtin/syntax
+      - src: builtin/xml
+
       - src: repl
       - src: bc
         short_name: MATH
