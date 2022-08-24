@@ -101,7 +101,6 @@
       - src: builtin/html
       - src: builtin/js
       - src: builtin/php
-      - src: builtin/syntax
       - src: builtin/xml
 
       - src: repl
