@@ -16,4 +16,3 @@ else
 fi
 
 ln --symbolic --force -- "$LIB/pg_format" "$BIN"
-
