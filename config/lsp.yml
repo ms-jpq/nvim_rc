@@ -81,11 +81,11 @@
     npm:
       - yaml-language-server
 
-- server: taplo
-  bin: taplo
-  install:
-    npm:
-      - "@taplo/cli"
+# - server: taplo
+#   bin: taplo
+#   install:
+#     npm:
+#       - "@taplo/lsp"
 
 - server: lemminx
   bin: lemminx
