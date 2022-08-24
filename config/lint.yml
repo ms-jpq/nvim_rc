@@ -49,8 +49,8 @@
   install:
     script:
       env:
-        MAC_URI: https://github.com/hadolint/hadolint/releases/download/v2.8.0/hadolint-Darwin-x86_64
-        LINUX_URI: https://github.com/hadolint/hadolint/releases/download/v2.8.0/hadolint-Linux-x86_64
+        MAC_URI: https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Darwin-x86_64
+        LINUX_URI: https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
       file: dl/hadolint.sh
 
 - bin: actionlint

@@ -42,4 +42,4 @@ ARGS=(
   )
 
 
-pwsh "${ARGS[@]}"
+exec pwsh "${ARGS[@]}"
