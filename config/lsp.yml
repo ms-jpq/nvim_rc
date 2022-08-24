@@ -255,12 +255,13 @@
       - intelephense
 
 - server: fsautocomplete
-  bin: fsharp-ls
-  args: []
+  bin: fsautocomplete
   install:
     script:
       required:
         - dotnet
+      env:
+        URI: https://github.com/fsharp/FsAutoComplete/releases/latest/download/fsautocomplete.netcore.zip
       file: dl/fs_autocomp.sh
 
 - server: jdtls
