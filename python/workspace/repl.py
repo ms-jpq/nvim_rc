@@ -144,7 +144,7 @@ def _tmux_send(nvim: Nvim, buf: Buffer, text: str) -> None:
                         "tmux", "paste-buffer", "-d", "-r", "-b", name, "-t", pane
                     )
                 except CalledProcessError as e:
-                    await awrite(nvim, e)
+                    await awrite(nvim, e, e.stdout, e.stderr)
 
     go(nvim, aw=cont())
 
