@@ -2,6 +2,7 @@ from asyncio import sleep
 from itertools import count
 from math import inf
 from os import linesep
+from subprocess import CalledProcessError
 from tempfile import NamedTemporaryFile
 from textwrap import dedent
 from typing import Iterator, Optional, Sequence
@@ -26,7 +27,7 @@ from pynvim_pp.api import (
     win_get_buf,
     win_get_cursor,
 )
-from pynvim_pp.lib import async_call, encode, go
+from pynvim_pp.lib import async_call, awrite, encode, go
 from pynvim_pp.operators import operator_marks
 from std2.asyncio.subprocess import call
 
@@ -137,8 +138,13 @@ def _tmux_send(nvim: Nvim, buf: Buffer, text: str) -> None:
             with NamedTemporaryFile() as fd:
                 fd.write(encode(text))
                 fd.flush()
-                await call("tmux", "load-buffer", "-b", name, "--", fd.name)
-                await call("tmux", "paste-buffer", "-d", "-r", "-b", name, "-t", pane)
+                try:
+                    await call("tmux", "load-buffer", "-b", name, "--", fd.name)
+                    await call(
+                        "tmux", "paste-buffer", "-d", "-r", "-b", name, "-t", pane
+                    )
+                except CalledProcessError as e:
+                    await awrite(nvim, e)
 
     go(nvim, aw=cont())
 
