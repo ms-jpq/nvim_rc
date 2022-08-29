@@ -63,19 +63,19 @@ PATH = environ["PATH"] = pathsep.join(
         ),
     )
 )
-GEM_PATH = environ["GEM_PATH"] = pathsep.join(
-    map(
-        normcase,
-        chain(
-            (GEM_DIR / "gems",),
-            (
-                PurePath(path)
-                for path in environ.get("GEM_PATH", "").split(pathsep)
-                if path
-            ),
-        ),
-    )
-)
+# GEM_PATH = environ["GEM_PATH"] = pathsep.join(
+#     map(
+#         normcase,
+#         chain(
+#             (GEM_DIR / "gems",),
+#             (
+#                 PurePath(path)
+#                 for path in environ.get("GEM_PATH", "").split(pathsep)
+#                 if path
+#             ),
+#         ),
+#     )
+# )
 
 TMP_DIR = VARS_DIR / "tmp"
 LOGS_DIR = VARS_DIR / "logs"
