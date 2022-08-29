@@ -20,6 +20,7 @@ from typing import (
     Tuple,
     TypedDict,
 )
+from venv import EnvBuilder
 
 from pynvim.api.nvim import Nvim
 from pynvim_pp.api import ask_mc
@@ -42,7 +43,6 @@ from ..consts import (
     NPM_DIR,
     PIP_DIR,
     TMP_DIR,
-    TOP_LEVEL,
     UPDATE_LOG,
     VARS_DIR,
     VIM_DIR,
@@ -159,19 +159,25 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
 
 
 def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
-    if (pip := which("pip")) and (specs := {*_pip_specs()}):
+    if specs := {*_pip_specs()}:
+        builder = EnvBuilder(
+            system_site_packages=False,
+            with_pip=True,
+            upgrade=True,
+            symlinks=True,
+            clear=False,
+        )
+        builder.create(PIP_DIR)
+        pip = PIP_DIR / "bin" / "pip"
 
         async def cont() -> _SortOfMonoid:
-            assert pip
             p = await call(
                 pip,
                 "install",
                 "--upgrade",
-                "--user",
                 "--",
                 *specs,
                 check_returncode=set(),
-                env={"PYTHONUSERBASE": normcase(PIP_DIR)},
             )
             return (("", p),)
 

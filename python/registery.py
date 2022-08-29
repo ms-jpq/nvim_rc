@@ -9,7 +9,7 @@ from pynvim_pp.settings import Settings
 
 from .components.localization import load
 from .components.rtp import inst
-from .consts import GEM_PATH, PATH, PYTHONUSERBASE
+from .consts import GEM_PATH, PATH
 
 NAMESPACE = "__init__"
 
@@ -24,7 +24,6 @@ settings = Settings()
 def drain(nvim: Nvim) -> Tuple[Atomic, Sequence[RpcSpec]]:
     _atomic = Atomic()
     _atomic.call_function("setenv", ("PATH", PATH))
-    _atomic.call_function("setenv", ("PYTHONUSERBASE", PYTHONUSERBASE))
     _atomic.call_function("setenv", ("GEM_PATH", GEM_PATH))
     _atomic.set_var("mapleader", " ")
     _atomic.set_var("maplocalleader", " ")

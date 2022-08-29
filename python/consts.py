@@ -1,5 +1,5 @@
 from itertools import chain
-from os import environ, pathsep
+from os import environ, name, pathsep
 from os.path import normcase
 from pathlib import Path, PurePath
 
@@ -36,11 +36,13 @@ BIN_DIR = VARS_DIR / "bin"
 LIB_DIR = VARS_DIR / "lib"
 
 _MODULES_DIR = VARS_DIR / "modules"
+
 PIP_DIR = _MODULES_DIR / "py_modules"
 GEM_DIR = _MODULES_DIR / "rb_modules"
 NPM_DIR = _MODULES_DIR
 GO_DIR = _MODULES_DIR / "go_modules"
 
+PIP_BIN = PIP_DIR / ("scripts" if name == "nt" else "bin")
 
 PATH = environ["PATH"] = pathsep.join(
     map(
@@ -48,7 +50,7 @@ PATH = environ["PATH"] = pathsep.join(
         chain(
             (
                 BIN_DIR,
-                PIP_DIR / "bin",
+                PIP_BIN,
                 GEM_DIR / "bin",
                 NPM_DIR / "node_modules" / ".bin",
                 GO_DIR / "bin",
@@ -61,7 +63,6 @@ PATH = environ["PATH"] = pathsep.join(
         ),
     )
 )
-PYTHONUSERBASE = environ["PYTHONUSERBASE"] = normcase(PIP_DIR)
 GEM_PATH = environ["GEM_PATH"] = pathsep.join(
     map(
         normcase,

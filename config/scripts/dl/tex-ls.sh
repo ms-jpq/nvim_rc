@@ -15,5 +15,5 @@ fi
 
 TMP="$(mktemp --directory)"
 get -- "$URI" | unpack --dest "$TMP"
-mv -- "$TMP/shellcheck"*'/shellcheck' "$BIN"
-chmod +x -- "$BIN"
+rm --recursive --force -- "$LIB"
+mv -- "$TMP" "$LIB"

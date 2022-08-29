@@ -7,12 +7,13 @@ shopt -s globstar failglob
 
 if [[ "$OS" == 'Darwin' ]]
 then
-  FILE="$(get -- "$MAC_URI")"
+  URI="$MAC_URI"
 else
-  FILE="$(get -- "$LINUX_URI")"
+  URI="$LINUX_URI"
 fi
 
 
+FILE="$(get -- "$URI")"
 rm --force -- "$BIN"
 cp -- "$FILE" "$BIN"
 chmod +x -- "$BIN"

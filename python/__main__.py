@@ -83,7 +83,7 @@ elif command == "run":
 
     from pynvim import attach
     from pynvim_pp.client import run_client
-    from std2.pickle import DecodeError
+    from std2.pickle.types import DecodeError
 
     try:
         from .client import Client
