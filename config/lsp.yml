@@ -351,34 +351,40 @@
   install:
     npm:
       - "@volar/vue-language-server"
-# - server: sumneko_lua
-#   bin: lua-ls
-#   args: []
-#   install:
-#     script:
-#       required:
-#         - git
-#         - python3
-#       env:
-#         URI: https://github.com/sumneko/lua-language-server
-#         TAG: "2.3.6"
-#       file: dl/sumneko_lua.sh
+
+- server: sqlls
+  bin: sql-language-server
+  args:
+    - up
+    - --method
+    - stdio
+  install:
+    npm:
+      - sql-language-server
+
+- server: sumneko_lua
+  bin: lua-language-server
+  init_options:
+    Lua:
+      runtime:
+        version: "LuaJIT"
+      diagnostics:
+        globals: "vim"
+  install:
+    script:
+      required:
+        - git
+        - python3
+      env:
+        URI: https://github.com/sumneko/lua-language-server
+        TAG: "3.5.3"
+      file: dl/sumneko_lua.sh
 
 # - server: pylsp
 #   bin: pylsp
 #   install:
 #     pip:
 #       - python-lsp-server[all]
-
-# - server: sqlls
-#   bin: sql-language-server
-#   args:
-#     - up
-#     - --method
-#     - stdio
-#   install:
-#     npm:
-#       - sql-language-server
 
 # - server: rome
 #   bin: rome

@@ -5,7 +5,7 @@ set -o pipefail
 shopt -s globstar failglob
 
 
-LOCATION="$PWD/lua-ls"
+LOCATION="$PWD/lua-lsp"
 REPO="$LOCATION/repo"
 
 VENV="$LOCATION/venv"
@@ -30,20 +30,13 @@ else
 fi
 
 
-if [[ "$OS" = "Linux" ]]
-then
-  exit
-fi
-
-
 if [[ ! -x "$BIN" ]]
 then
   (
     export PATH="$VENV_BIN:$PATH"
     cd "$REPO/3rd/luamake" || exit 1
-    ./compile/install.sh
     cd ../.. || exit 1
     ./3rd/luamake/luamake rebuild
   )
-  cp -- "$(dirname "$0")/../exec/lua-ls.sh" "$BIN"
+  cp -- "$REPO/bin/lua-language-server" "$BIN"
 fi
