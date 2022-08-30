@@ -38,5 +38,5 @@ then
     cd ../.. || exit 1
     ./3rd/luamake/luamake rebuild
   )
-  cp -- "$REPO/bin/lua-language-server" "$BIN"
+  ln --symbolic --force -- "$REPO/bin/lua-language-server" "$BIN"
 fi
