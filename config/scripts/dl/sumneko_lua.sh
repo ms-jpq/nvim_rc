@@ -44,7 +44,7 @@ then
     fi
 
     ninja -f "$PWD/compile/ninja/$NAME.ninja"
-    cd ../.. || exit 1
+    cd "$REPO" || exit 1
     ./3rd/luamake/luamake rebuild
   )
   ln --symbolic --force -- "$REPO/bin/lua-language-server" "$BIN"

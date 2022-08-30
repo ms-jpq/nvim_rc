@@ -373,6 +373,7 @@
       required:
         - git
         - python3
+        - gcc
       env:
         URI: https://github.com/sumneko/lua-language-server
         TAG: "3.5.3"
