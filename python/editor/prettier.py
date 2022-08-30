@@ -19,17 +19,11 @@ from pynvim_pp.api import (
 from pynvim_pp.lib import async_call, awrite, decode, encode, write
 from std2.aitertools import aiterify
 from std2.asyncio.subprocess import call
+from std2.lex import ParseError
 
 from ..config.fmt import FmtAttrs, FmtType, fmt_specs
 from ..registery import LANG, NAMESPACE, keymap, rpc
-from .linter import (
-    BufContext,
-    ParseError,
-    arg_subst,
-    current_ctx,
-    make_temp,
-    set_preview_content,
-)
+from .linter import BufContext, arg_subst, current_ctx, make_temp, set_preview_content
 from .whitespace import detect_tabs, trailing_ws
 
 
