@@ -45,7 +45,12 @@ then
 
     ninja -f "$PWD/compile/ninja/$NAME.ninja"
     cd "$REPO" || exit 1
-    ./3rd/luamake/luamake rebuild
+    "$REPO/3rd/luamake/luamake" rebuild
   )
-  ln --symbolic --force -- "$REPO/bin/lua-language-server" "$BIN"
+
+  PREFIX="$(dirname "$BIN")"
+  for file in "$REPO/bin/"*
+  do
+    ln --symbolic --force -- "$file" "$PREFIX/$(basename "$file")"
+  done
 fi
