@@ -2,7 +2,7 @@
 
 from argparse import ArgumentParser, Namespace
 from os import linesep
-from os.path import normcase
+from os.path import commonpath, normcase
 from pathlib import Path
 from shlex import quote
 from stat import S_IRGRP, S_IROTH, S_IRUSR, S_IWUSR, S_IXGRP, S_IXOTH, S_IXUSR
@@ -32,11 +32,12 @@ def main() -> None:
     args = _parse_args()
     src, dst = Path(args.src), Path(args.dst)
     template = Template(_STUB.lstrip())
+    bins = src / "bin"
 
-    for path in (src, dst):
+    for path in (bins, dst):
         path.mkdir(parents=True, exist_ok=True)
 
-    for path in (src / "bin").iterdir():
+    for path in bins.iterdir():
         bin = dst / path.name
         stub = template.substitute(
             GEM_PATH=quote(normcase(src)),
@@ -48,7 +49,11 @@ def main() -> None:
 
         Path(fd.name).replace(bin)
         bin.chmod(_RWXR_XR_X)
-        for m in map(str, (path, " -> ", bin, linesep)):
+
+        common = commonpath((path, bin))
+        for m in map(
+            str, (path.relative_to(common), " -> ", bin.relative_to(common), linesep)
+        ):
             stderr.write(m)
 
 
