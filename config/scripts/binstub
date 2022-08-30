@@ -33,7 +33,8 @@ def main() -> None:
     src, dst = Path(args.src), Path(args.dst)
     template = Template(_STUB.lstrip())
 
-    dst.mkdir(parents=True, exist_ok=True)
+    for path in (src, dst):
+        path.mkdir(parents=True, exist_ok=True)
 
     for path in (src / "bin").iterdir():
         bin = dst / path.name
