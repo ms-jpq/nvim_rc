@@ -35,6 +35,15 @@ then
   (
     export PATH="$VENV_BIN:$PATH"
     cd "$REPO/3rd/luamake" || exit 1
+
+    if [[ "$OS" == 'Darwin' ]]
+    then
+      NAME=macos
+    else
+      NAME=linux
+    fi
+
+    ninja -f "$PWD/compile/ninja/$NAME.ninja"
     cd ../.. || exit 1
     ./3rd/luamake/luamake rebuild
   )
