@@ -49,16 +49,16 @@ PATH = environ["PATH"] = pathsep.join(
         normcase,
         chain(
             (
+                path
+                for path in map(PurePath, environ["PATH"].split(pathsep))
+                if path != RT_BIN
+            ),
+            (
                 BIN_DIR,
                 PIP_BIN,
                 GEM_DIR / "bin",
                 NPM_DIR / "node_modules" / ".bin",
                 GO_DIR / "bin",
-            ),
-            (
-                path
-                for path in map(PurePath, environ["PATH"].split(pathsep))
-                if path != RT_BIN
             ),
         ),
     )
