@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+
+from argparse import ArgumentParser, Namespace
+from os import linesep
+from os.path import normcase
+from pathlib import Path
+from shlex import quote
+from stat import S_IRGRP, S_IROTH, S_IRUSR, S_IWUSR, S_IXGRP, S_IXOTH, S_IXUSR
+from string import Template
+from sys import stderr
+from tempfile import NamedTemporaryFile
+
+_RWXR_XR_X = (S_IRUSR | S_IWUSR | S_IXUSR) | (S_IRGRP | S_IXGRP) | (S_IROTH | S_IXOTH)
+
+
+_STUB = """
+#!/usr/bin/env sh
+
+export GEM_PATH=$GEM_PATH
+exec $BIN "$$@"
+"""
+
+
+def _parse_args() -> Namespace:
+    parser = ArgumentParser()
+    parser.add_argument("--src", type=Path)
+    parser.add_argument("--dst", type=Path)
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = _parse_args()
+    src, dst = Path(args.src), Path(args.dst)
+    template = Template(_STUB.lstrip())
+
+    dst.mkdir(parents=True, exist_ok=True)
+
+    for path in (src / "bin").iterdir():
+        bin = dst / path.name
+        stub = template.substitute(
+            GEM_PATH=quote(normcase(src)),
+            BIN=quote(normcase(path)),
+        )
+        with NamedTemporaryFile(mode="w", encoding="utf-8", delete=False) as fd:
+            fd.write(stub)
+            fd.flush()
+
+        Path(fd.name).replace(bin)
+        bin.chmod(_RWXR_XR_X)
+        for m in map(str, (path, " -> ", bin, linesep)):
+            stderr.write(m)
+
+
+main()

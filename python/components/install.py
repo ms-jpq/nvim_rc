@@ -59,6 +59,9 @@ class _PackagesJson(TypedDict):
     devDependencies: Mapping[str, str]
 
 
+_GEMS = GEM_DIR / "gems"
+
+
 def _pip_specs() -> Iterator[str]:
     for l_spec in lsp_specs:
         yield from l_spec.install.pip
@@ -193,15 +196,25 @@ def _gem() -> Iterator[Awaitable[_SortOfMonoid]]:
                 gem,
                 "install",
                 "--install-dir",
-                GEM_DIR / "gems",
-                "--bindir",
-                GEM_DIR / "bin",
+                _GEMS,
                 *specs,
                 check_returncode=set(),
             )
             return (("", p),)
 
         yield cont()
+
+
+async def _binstub() -> _SortOfMonoid:
+    p = await call(
+        INSTALL_SCRIPTS_DIR / "binstub",
+        "--src",
+        _GEMS,
+        "--dst",
+        GEM_DIR / "bin",
+        check_returncode=set(),
+    )
+    return (("", p),)
 
 
 def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
@@ -319,7 +332,7 @@ async def install() -> int:
 
     errors: MutableSequence[str] = []
     tasks = chain(_git(), _pip(), _gem(), _npm(), _go(), _script())
-    for fut in as_completed(tasks):
+    for fut in chain(as_completed(tasks), (_binstub(),)):
         for debug, proc in await fut:
             args = join(map(str, proc.args))
             if proc.returncode == 0:
