@@ -207,6 +207,7 @@ def _gem() -> Iterator[Awaitable[_SortOfMonoid]]:
 
 async def _binstub() -> _SortOfMonoid:
     p = await call(
+        executable,
         INSTALL_SCRIPTS_DIR / "binstub",
         "--src",
         _GEMS,
