@@ -3,6 +3,7 @@
   bin: diagnostic-languageserver
   filetypes:
     - dockerfile
+    - ruby
     - sh
     - zsh
   root:
@@ -53,6 +54,31 @@
           warning: warning
           info: info
           style: hint
+      rubocop:
+        sourceName: rubocop
+        command: rubocop
+        args:
+          - --format
+          - json
+          - --force-exclusion
+          - --stdin
+          - "%filepath"
+        debounce: 100
+        parseJson:
+          column: location.start_column
+          endColumn: location.end_column
+          endLine: location.last_line
+          errorsRoot: files[0].offenses
+          line: location.start_line
+          message: "[${cop_name}] ${message}"
+          security: severity
+        securities:
+          convention: info
+          error: error
+          fatal: error
+          info: info
+          refactor: info
+          warning: warning
 
     filetypes:
       sh: &sh
@@ -60,6 +86,8 @@
       zsh: *sh
       dockerfile:
         - hadolint
+      ruby:
+        - rubocop
 
   install:
     npm:
