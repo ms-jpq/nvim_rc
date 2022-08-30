@@ -3,6 +3,7 @@
   bin: diagnostic-languageserver
   filetypes:
     - dockerfile
+    - python
     - ruby
     - sh
     - zsh
@@ -54,6 +55,25 @@
           warning: warning
           info: info
           style: hint
+      mypy:
+        sourceName: mypy
+        command: mypy
+        args:
+          - --no-color-output
+          - --no-error-summary
+          - --show-column-numbers
+          - --follow-imports
+          - silent
+          - --
+          - "%file"
+        formatPattern:
+          - '^.*:(\d+?):(\d+?): ([a-z]+?): (.*)$'
+          - column: 2
+            line: 1
+            message: 4
+            security: 3
+        securities:
+          error: error
       rubocop:
         sourceName: rubocop
         command: rubocop
@@ -86,6 +106,8 @@
       zsh: *sh
       dockerfile:
         - hadolint
+      python:
+        - mypy
       ruby:
         - rubocop
 
