@@ -5,6 +5,12 @@ set -o pipefail
 shopt -s globstar failglob
 
 
+if [[ "$OS" != "Linux" ]]
+then
+  exit
+fi
+
+
 LOCATION="$PWD/lua-lsp"
 REPO="$LOCATION/repo"
 
