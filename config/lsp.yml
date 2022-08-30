@@ -364,12 +364,10 @@
 
 - server: sumneko_lua
   bin: lua-language-server
-  init_options:
+  settings:
     Lua:
       runtime:
-        version: "LuaJIT"
-      diagnostics:
-        globals: "vim"
+        version: "Lua 5.1"
   install:
     script:
       required:
@@ -379,7 +377,6 @@
         URI: https://github.com/sumneko/lua-language-server
         TAG: "3.5.3"
       file: dl/sumneko_lua.sh
-
 # - server: pylsp
 #   bin: pylsp
 #   install:
