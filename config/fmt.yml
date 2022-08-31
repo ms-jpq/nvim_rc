@@ -148,6 +148,13 @@
   filetypes:
     - go
 
+- bin: clang-format
+  args: []
+  type: stream
+  filetypes:
+    - c
+    - cpp
+
 - bin: latexindent
   args:
     - --overwrite

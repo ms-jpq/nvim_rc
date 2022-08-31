@@ -113,3 +113,16 @@
       env:
         URI: https://github.com/phan/phan/releases/latest/download/phan.phar
       file: dl/phan.sh
+
+- bin: sqlfluff
+  type: fs
+  args:
+    - lint
+    - --dialect=sqlite
+    - --
+    - ${tmpname}
+  filetypes:
+    - sql
+  install:
+    pip:
+      - sqlfluff
