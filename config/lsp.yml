@@ -318,6 +318,15 @@
         - R
       file: dl/rlang_server.r
 
+- server: julials
+  bin: julia-lsp
+  args: []
+  install:
+    script:
+      required:
+        - julia
+      file: dl/julia-ls.sh
+
 - server: intelephense
   bin: intelephense
   install:
