@@ -62,8 +62,7 @@
           - --no-color-output
           - --no-error-summary
           - --show-column-numbers
-          - --follow-imports
-          - silent
+          - --follow-imports=silent
           - --
           - "%file"
         formatPattern:
