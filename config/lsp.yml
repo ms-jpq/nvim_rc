@@ -131,11 +131,14 @@
     npm:
       - yaml-language-server
 
-# - server: taplo
-#   bin: taplo
-#   install:
-#     npm:
-#       - "@taplo/lsp"
+- server: taplo
+  bin: taplo
+  install:
+    script:
+      env:
+        MAC_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-apple-darwin-gnu.tar.gz
+        LINUX_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-x86_64-unknown-linux-gnu.tar.gz
+      file: dl/taplo.sh
 
 - server: lemminx
   bin: lemminx

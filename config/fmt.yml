@@ -20,9 +20,6 @@
   type: fs
   filetypes:
     - toml
-  install:
-    npm:
-      - "@taplo/cli"
 
 - bin: isort
   args:
