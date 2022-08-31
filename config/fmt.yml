@@ -21,6 +21,16 @@
   filetypes:
     - toml
 
+- bin: dockerfile-utils
+  args:
+    - format
+    - --spaces
+    - ${tabsize}
+    - ${tmpname}
+  type: stream
+  filetypes:
+    - dockerfile
+
 - bin: isort
   args:
     - --profile=black
