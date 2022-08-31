@@ -236,6 +236,9 @@
         LINUX_URI: https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz
       file: dl/rust_analyzer.sh
 
+- server: clangd
+  bin: clangd
+
 - server: gopls
   bin: gopls
   install:
