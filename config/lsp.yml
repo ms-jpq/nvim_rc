@@ -105,8 +105,8 @@
       zsh: *sh
       dockerfile:
         - hadolint
-      python:
-        - mypy
+      # python:
+      #   - mypy
       ruby:
         - rubocop
 
