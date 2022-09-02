@@ -100,9 +100,9 @@
           warning: warning
 
     filetypes:
-      sh: &sh
-        - shellcheck
-      zsh: *sh
+      # sh: &sh
+      #   - shellcheck
+      # zsh: *sh
       dockerfile:
         - hadolint
       # python:
