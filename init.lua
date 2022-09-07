@@ -77,7 +77,6 @@ end
 
 l4 = function()
   vim.g.omni_sql_no_default_maps = 1
-  vim.cmd("source " .. cwd .. "/_init.vim")
 end
 
 l1()
