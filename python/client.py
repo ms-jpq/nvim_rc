@@ -1,28 +1,28 @@
 from os import environ
 from time import time
+from types import NoneType
 
-from pynvim import Nvim
-from pynvim_pp.client import BasicClient
-from pynvim_pp.lib import threadsafe_call
+from pynvim_pp.types import RPClient
 from std2.locale import si_prefixed_smol
 
 from ._registery import ____
-from .components.install import maybe_install
+# from .components.install import maybe_install
 from .registery import drain
 
+from sys import stderr
+assert ____ or 1
 
-class Client(BasicClient):
-    def wait(self, nvim: Nvim) -> int:
-        def init() -> None:
-            atomic, specs = drain(nvim)
-            self._handlers.update(specs)
-            atomic.commit(nvim)
-            maybe_install(nvim)
 
-        threadsafe_call(nvim, init)
-        if "NVIM_DEBUG" in environ:
-            t1 = int(environ["_VIM_START_TIME"])
-            t2 = time()
-            span = si_prefixed_smol(t2 - t1)
-            print(f"{span}s", flush=True)
-        return super().wait(nvim)
+async def init(client: RPClient) -> None:
+    atomic, specs = drain()
+    for method, callback in specs.items():
+        client.on_callback(method, callback)
+    await atomic.commit(NoneType)
+
+    # await maybe_install()
+
+    if "NVIM_DEBUG" in environ:
+        t1 = int(environ["_VIM_START_TIME"])
+        t2 = time()
+        span = si_prefixed_smol(t2 - t1)
+        print(f"{span}s", flush=True)

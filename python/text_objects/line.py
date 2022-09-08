@@ -1,9 +1,8 @@
 from typing import Tuple
 
-from pynvim import Nvim
-from pynvim_pp.api import buf_get_lines, cur_win, win_get_buf, win_get_cursor
 from pynvim_pp.lib import encode
 from pynvim_pp.operators import set_visual_selection
+from pynvim_pp.window import Window
 
 from ..registery import NAMESPACE, keymap, rpc
 
@@ -19,15 +18,15 @@ def _p_around(line: str) -> Tuple[int, int]:
 
 
 @rpc(blocking=True)
-def _line(nvim: Nvim, is_inside: bool) -> None:
-    win = cur_win(nvim)
-    buf = win_get_buf(nvim, win=win)
-    row, _ = win_get_cursor(nvim, win=win)
-    lines = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
+async def _line(is_inside: bool) -> None:
+    win = await Window.get_current()
+    buf = await win.get_buf()
+    row, _ = await win.get_cursor()
+    lines = await buf.get_lines(lo=row, hi=row + 1)
     line = next(iter(lines))
     lhs, rhs = (_p_inside if is_inside else _p_around)(line)
 
-    set_visual_selection(nvim, win=win, mode="v", mark1=(row, lhs), mark2=(row, rhs))
+    await set_visual_selection(win, mode="v", mark1=(row, lhs), mark2=(row, rhs))
 
 
 _ = keymap.o("il") << f"<cmd>lua {NAMESPACE}.{_line.name}(true)<cr>"

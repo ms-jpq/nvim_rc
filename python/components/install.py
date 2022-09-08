@@ -22,9 +22,8 @@ from typing import (
 )
 from venv import EnvBuilder
 
-from pynvim.api.nvim import Nvim
-from pynvim_pp.api import ask_mc
 from pynvim_pp.lib import decode
+from pynvim_pp.nvim import Nvim
 from std2.asyncio.subprocess import call
 
 from ..config.fmt import fmt_specs
@@ -365,7 +364,7 @@ async def install() -> int:
     return bool(errors)
 
 
-def maybe_install(nvim: Nvim) -> None:
+async def maybe_install() -> None:
     UPDATE_LOG.parent.mkdir(parents=True, exist_ok=True)
 
     try:
@@ -378,8 +377,7 @@ def maybe_install(nvim: Nvim) -> None:
     now = time()
     diff = now - before
     if diff > (7 * 24 * 3600):
-        ans = ask_mc(
-            nvim,
+        ans = await Nvim.confirm(
             question=LANG("update?"),
             answers=LANG("ask yes/no"),
             answer_key={1: 1, 2: 2},
@@ -389,8 +387,7 @@ def maybe_install(nvim: Nvim) -> None:
             UPDATE_LOG.write_text(coded)
 
         if ans == 1:
-            open_term(
-                nvim,
+            await open_term(
                 Path(executable).resolve(strict=True),
                 INSTALL_SCRIPT,
                 "deps",

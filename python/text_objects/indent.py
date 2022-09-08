@@ -1,16 +1,9 @@
 from collections import deque
 from typing import Iterable
 
-from pynvim import Nvim
-from pynvim_pp.api import (
-    buf_get_lines,
-    buf_get_option,
-    cur_win,
-    win_get_buf,
-    win_get_cursor,
-)
 from pynvim_pp.lib import encode
 from pynvim_pp.operators import p_indent, set_visual_selection
+from pynvim_pp.window import Window
 
 from ..registery import NAMESPACE, keymap, rpc
 
@@ -26,20 +19,21 @@ def _p_inside(init_lv: int, tabsize: int, lines: Iterable[str]) -> int:
 
 
 @rpc(blocking=True)
-def _indent(nvim: Nvim) -> None:
-    win = cur_win(nvim)
-    buf = win_get_buf(nvim, win)
-    row, _ = win_get_cursor(nvim, win)
-    tabsize: int = buf_get_option(nvim, buf=buf, key="tabstop")
+async def _indent() -> None:
+    win = await Window.get_current()
+    buf = await win.get_buf()
+    row, _ = await win.get_cursor()
 
-    lines = buf_get_lines(nvim, buf=buf, lo=0, hi=-1)
+    tabsize = await buf.opts.get(int, "tabstop")
+
+    lines = await buf.get_lines(lo=0, hi=-1)
     before, curr, after = lines[:row], lines[row], lines[row + 1 :]
     init_lv = p_indent(curr, tabsize=tabsize)
 
     top = row - _p_inside(init_lv, tabsize=tabsize, lines=reversed(before))
     btm = row + _p_inside(init_lv, tabsize=tabsize, lines=after)
 
-    lines = deque(buf_get_lines(nvim, buf=buf, lo=top, hi=btm + 1))
+    lines = deque(await buf.get_lines(lo=top, hi=btm + 1))
     while lines:
         if line := lines.popleft():
             lines.appendleft(line)
@@ -60,7 +54,7 @@ def _indent(nvim: Nvim) -> None:
     else:
         mark1, mark2 = (row, 0), (row, len(encode(curr)))
 
-    set_visual_selection(nvim, win=win, mode="V", mark1=mark1, mark2=mark2)
+    await set_visual_selection(win, mode="V", mark1=mark1, mark2=mark2)
 
 
 _ = keymap.o("ii") << f"<cmd>lua {NAMESPACE}.{_indent.name}()<cr>"

@@ -1,22 +1,21 @@
 from locale import strxfrm
 
-from pynvim.api import Nvim
-from pynvim_pp.api import buf_get_lines, buf_set_lines, cur_buf
-from pynvim_pp.operators import VisualTypes, operator_marks, writable
+from pynvim_pp.buffer import Buffer
+from pynvim_pp.operators import VisualTypes, operator_marks
 
 from ..registery import NAMESPACE, keymap, rpc
 
 
 @rpc(blocking=True)
-def _sort_lines(nvim: Nvim, visual: VisualTypes) -> None:
-    buf = cur_buf(nvim)
-    if not writable(nvim, buf=buf):
+async def _sort_lines(visual: VisualTypes) -> None:
+    buf = await Buffer.get_current()
+    if not await buf.modifiable():
         return
     else:
-        (row1, _), (row2, _) = operator_marks(nvim, buf=buf, visual_type=visual)
-        lines = buf_get_lines(nvim, buf=buf, lo=row1, hi=row2 + 1)
+        (row1, _), (row2, _) = await operator_marks(buf, visual_type=visual)
+        lines = await buf.get_lines(lo=row1, hi=row2 + 1)
         new_lines = sorted(lines, key=strxfrm)
-        buf_set_lines(nvim, buf=buf, lo=row1, hi=row2 + 1, lines=new_lines)
+        await buf.set_lines(lo=row1, hi=row2 + 1, lines=new_lines)
 
 
 _ = keymap.n("gu") << f"<cmd>set opfunc={_sort_lines.name}<cr>g@"

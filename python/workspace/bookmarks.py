@@ -1,17 +1,9 @@
+from asyncio import gather
 from collections.abc import Iterator
-from contextlib import suppress
 from uuid import uuid4
 
-from pynvim import Nvim, NvimError
-from pynvim_pp.api import (
-    ExtMarkBase,
-    buf_set_extmarks_base,
-    clear_ns,
-    create_ns,
-    cur_buf,
-    list_bookmarks,
-    list_buf_bookmarks,
-)
+from pynvim_pp.buffer import Buffer, ExtMark, ExtMarker
+from pynvim_pp.nvim import Nvim
 
 from ..registery import NAMESPACE, atomic, autocmd, rpc
 
@@ -21,34 +13,36 @@ _HL = "IncSearch"
 
 
 @rpc(blocking=True)
-def _bookmark_signs(nvim: Nvim) -> None:
-    with suppress(NvimError):
-        ns = create_ns(nvim, ns=_NS)
-        buf = cur_buf(nvim)
-        clear_ns(nvim, buf=buf, id=ns)
+async def _bookmark_signs() -> None:
+    buf = await Buffer.get_current()
+    local, glob = await gather(buf.list_bookmarks(), Nvim.list_bookmarks())
 
-        def c1() -> Iterator[tuple[str, int]]:
-            for name, (row, _) in list_buf_bookmarks(nvim, buf=buf).items():
-                yield name, row
-            for name, buf_nr, (row, _), _ in list_bookmarks(nvim):
-                if buf_nr == buf.number:
-                    yield name, row
+    def c1() -> Iterator[tuple[str, int]]:
+        for l_marker, (row, _) in local.items():
+            yield l_marker, row
+        for g_marker, (_, b, (row, _)) in glob.items():
+            if b == buf:
+                yield g_marker, row
 
-        def c2() -> Iterator[ExtMarkBase]:
-            for idx, (name, row) in enumerate(c1(), start=1):
-                sign = ExtMarkBase(
-                    idx=idx,
-                    begin=(row, 0),
-                    meta={
-                        "sign_text": name,
-                        "hl_mode": "combine",
-                        "sign_hl_group": _HL,
-                        "number_hl_group": _HL,
-                    },
-                )
-                yield sign
+    def c2() -> Iterator[ExtMark]:
+        for marker, (name, row) in enumerate(c1(), start=1):
+            sign = ExtMark(
+                buf=buf,
+                marker=ExtMarker(marker),
+                begin=(row, 0),
+                end=None,
+                meta={
+                    "sign_text": name,
+                    "hl_mode": "combine",
+                    "sign_hl_group": _HL,
+                    "number_hl_group": _HL,
+                },
+            )
+            yield sign
 
-        buf_set_extmarks_base(nvim, buf=buf, id=ns, marks=c2())
+    ns = await Nvim.create_namespace(_NS)
+    await buf.clear_namespace(ns)
+    await buf.set_ext_marks(ns, extmarks=c2())
 
 
 _ = (

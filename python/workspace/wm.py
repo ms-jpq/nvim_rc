@@ -1,20 +1,13 @@
 from contextlib import suppress
+from types import NoneType
 
-from pynvim.api.nvim import Nvim, NvimError
-from pynvim_pp.api import (
-    buf_filetype,
-    buf_set_var,
-    create_buf,
-    cur_buf,
-    cur_tab,
-    cur_win,
-    tab_list_wins,
-    win_close,
-    win_get_buf,
-    win_get_option,
-    win_set_buf,
-    win_set_option,
-)
+from pynvim_pp.atomic import Atomic
+from pynvim_pp.buffer import Buffer
+from pynvim_pp.nvim import Nvim
+from pynvim_pp.preview import preview_windows
+from pynvim_pp.tabpage import Tabpage
+from pynvim_pp.types import NvimError
+from pynvim_pp.window import Window
 
 from ..registery import NAMESPACE, keymap, rpc, settings
 
@@ -29,75 +22,74 @@ settings["splitright"] = True
 settings["splitbelow"] = True
 
 # move between windows
-keymap.n("<c-left>") << "<cmd>wincmd h<cr>"
-keymap.n("<c-right>") << "<cmd>wincmd l<cr>"
-keymap.n("<c-up>") << "<cmd>wincmd k<cr>"
-keymap.n("<c-down>") << "<cmd>wincmd j<cr>"
+_ = keymap.n("<c-left>") << "<cmd>wincmd h<cr>"
+_ = keymap.n("<c-up>") << "<cmd>wincmd k<cr>"
+_ = keymap.n("<c-right>") << "<cmd>wincmd l<cr>"
+_ = keymap.n("<c-down>") << "<cmd>wincmd j<cr>"
 
 # swap windows
-keymap.n("<leader>'") << "<cmd>wincmd r<cr>"
-keymap.n("<leader>;") << "<cmd>wincmd R<cr>"
+_ = keymap.n("<leader>'") << "<cmd>wincmd r<cr>"
+_ = keymap.n("<leader>;") << "<cmd>wincmd R<cr>"
 
 # move windows
-keymap.n("<s-m-left>") << "<cmd>wincmd H<cr>"
-keymap.n("<s-m-right>") << "<cmd>wincmd L<cr>"
-keymap.n("<s-m-up>") << "<cmd>wincmd K<cr>"
-keymap.n("<s-m-down>") << "<cmd>wincmd J<cr>"
+_ = keymap.n("<s-m-left>") << "<cmd>wincmd H<cr>"
+_ = keymap.n("<s-m-right>") << "<cmd>wincmd L<cr>"
+_ = keymap.n("<s-m-up>") << "<cmd>wincmd K<cr>"
+_ = keymap.n("<s-m-down>") << "<cmd>wincmd J<cr>"
 
 # resize windows
-keymap.n("+") << "<cmd>wincmd =<cr>"
-keymap.n("<s-left>") << "<cmd>wincmd <<cr>"
-keymap.n("<s-right>") << "<cmd>wincmd ><cr>"
-keymap.n("<s-up>") << "<cmd>wincmd +<cr>"
-keymap.n("<s-down>") << "<cmd>wincmd -<cr>"
+_ = keymap.n("+") << "<cmd>wincmd =<cr>"
+_ = keymap.n("<s-left>") << "<cmd>wincmd <<cr>"
+_ = keymap.n("<s-right>") << "<cmd>wincmd ><cr>"
+_ = keymap.n("<s-up>") << "<cmd>wincmd +<cr>"
+_ = keymap.n("<s-down>") << "<cmd>wincmd -<cr>"
 
 
 @rpc(blocking=True)
-def _new_window(nvim: Nvim, vertical: bool) -> None:
-    nvim.command("vnew" if vertical else "new")
-    win = cur_win(nvim)
-    buf = create_buf(
-        nvim, listed=False, scratch=True, wipe=True, nofile=True, noswap=True
+async def _new_window(vertical: bool) -> None:
+    await Nvim.api.command(NoneType, "vnew" if vertical else "new")
+    win = await Window.get_current()
+    buf = await Buffer.create(
+        listed=False, scratch=True, wipe=True, nofile=True, noswap=True
     )
-    win_set_buf(nvim, win=win, buf=buf)
+    await win.set_buf(buf)
 
 
-keymap.n("<leader>=") << f"<cmd>lua {NAMESPACE}.{_new_window.name}(true)<cr>"
-keymap.n("<leader>-") << f"<cmd>lua {NAMESPACE}.{_new_window.name}(false)<cr>"
+_ = keymap.n("<leader>=") << f"<cmd>lua {NAMESPACE}.{_new_window.name}(true)<cr>"
+_ = keymap.n("<leader>-") << f"<cmd>lua {NAMESPACE}.{_new_window.name}(false)<cr>"
 
 
 # kill current buf
-keymap.n("<leader>x") << "<cmd>bwipeout!<cr>"
+_ = keymap.n("<leader>x") << "<cmd>bwipeout!<cr>"
 # close self
-keymap.n("<leader>w") << f"<cmd>close<cr>"
+_ = keymap.n("<leader>w") << f"<cmd>close<cr>"
 # close others
-keymap.n("<leader>W") << f"<cmd>wincmd o<cr>"
+_ = keymap.n("<leader>W") << f"<cmd>wincmd o<cr>"
 
 
 # break window into tab
-keymap.n("<leader>k") << "<cmd>wincmd T<cr>"
+_ = keymap.n("<leader>k") << "<cmd>wincmd T<cr>"
 
 # close tab
-keymap.n("<leader>q") << "<cmd>tabclose<cr>"
+_ = keymap.n("<leader>q") << "<cmd>tabclose<cr>"
 # create new tab
 @rpc(blocking=True)
-def _new_tab(nvim: Nvim) -> None:
-    nvim.command("tabnew")
-    buf = cur_buf(nvim)
-    buf_set_var(nvim, buf=buf, key="buftype", val="nofile")
+async def _new_tab() -> None:
+    await Nvim.api.command(NoneType, "tabnew")
+    buf = await Buffer.get_current()
+    await buf.vars.set("buftype", val="nofile")
 
 
-keymap.n("<leader>t") << f"<cmd>lua {NAMESPACE}.{_new_tab.name}()<cr>"
-keymap.n("<leader>n") << f"<cmd>lua {NAMESPACE}.{_new_tab.name}()<cr>"
+_ = keymap.n("<leader>n") << f"<cmd>lua {NAMESPACE}.{_new_tab.name}()<cr>"
 
 
 # cycle between tabs
-keymap.n("<leader>[") << "<cmd>tabprevious<cr>"
-keymap.n("<leader>]") << "<cmd>tabnext<cr>"
+_ = keymap.n("<leader>[") << "<cmd>tabprevious<cr>"
+_ = keymap.n("<leader>]") << "<cmd>tabnext<cr>"
 
-keymap.n("<leader>0") << "g<tab>"
+_ = keymap.n("<leader>0") << "g<tab>"
 for i in range(1, 10):
-    keymap.n(f"<leader>{i}") << f"<cmd>tabnext {i}<cr>"
+    _ = keymap.n(f"<leader>{i}") << f"<cmd>tabnext {i}<cr>"
 
 
 # preview height
@@ -105,72 +97,70 @@ settings["previewheight"] = 11
 
 
 @rpc(blocking=True)
-def _toggle_preview(nvim: Nvim) -> None:
-    tab = cur_tab(nvim)
-    wins = tab_list_wins(nvim, tab=tab)
-    closed = False
-    for win in wins:
-        is_preview: bool = win_get_option(nvim, win=win, key="previewwindow")
-        if is_preview:
-            win_close(nvim, win=win)
-            closed = True
-    if not closed:
-        nvim.command("new")
-        win = cur_win(nvim)
-        win_set_option(nvim, win=win, key="previewwindow", val=True)
-        height = nvim.options["previewheight"]
-        nvim.api.win_set_height(win, height)
+async def _toggle_preview() -> None:
+    tab = await Tabpage.get_current()
+    if previews := await preview_windows(tab):
+        atomic = Atomic()
+        for win in previews:
+            atomic.win_close(win)
+        await atomic.commit(NoneType)
+    else:
+        await Nvim.api.command(NoneType, "new")
+        win = await Window.get_current()
+        height = await Nvim.opts.get(int, "previewheight")
+        await win.opts.set("previewwindow", val=True)
+        await Nvim.api.win_set_height(NoneType, win, height)
 
 
-keymap.n("<leader>h") << f"<cmd>lua {NAMESPACE}.{_toggle_preview.name}()<cr>"
+_ = keymap.n("<leader>h") << f"<cmd>lua {NAMESPACE}.{_toggle_preview.name}()<cr>"
 
 
 # quickfix
-keymap.n("<c-j>") << "<cmd>cprevious<cr>"
-keymap.n("<c-k>") << "<cmd>cnext<cr>"
+_ = keymap.n("<c-j>") << "<cmd>cprevious<cr>"
+_ = keymap.n("<c-k>") << "<cmd>cnext<cr>"
 
 
 @rpc(blocking=True)
-def _toggle_qf(nvim: Nvim) -> None:
-    tab = cur_tab(nvim)
-    wins = tab_list_wins(nvim, tab=tab)
+async def _toggle_qf() -> None:
+    tab = await Tabpage.get_current()
+    wins = await tab.list_wins()
+
     closed = False
     for win in wins:
-        buf = win_get_buf(nvim, win=win)
-        ft = buf_filetype(nvim, buf=buf)
+        buf = await win.get_buf()
+        ft = await buf.filetype()
         if ft == "qf":
-            win_close(nvim, win=win)
+            await win.close()
             closed = True
     if not closed:
-        nvim.command("copen")
-        win = cur_win(nvim)
-        height = nvim.options["previewheight"]
-        nvim.api.win_set_height(win, height)
+        await Nvim.api.command(NoneType, "copen")
+        win = await Window.get_current()
+        height = await Nvim.opts.get(int, "previewheight")
+        await Nvim.api.win_set_height(NoneType, win, height)
 
 
 @rpc(blocking=True)
-def _clear_qf(nvim: Nvim) -> None:
-    nvim.funcs.setqflist(())
+async def _clear_qf() -> None:
+    await Nvim.fn.setqflist(NoneType, ())
     with suppress(NvimError):
-        nvim.command("cclose")
+        await Nvim.api.command(NoneType, "cclose")
 
 
-keymap.n("<leader>l") << f"<cmd>lua {NAMESPACE}.{_toggle_qf.name}()<cr>"
-keymap.n("<leader>L") << f"<cmd>lua {NAMESPACE}.{_clear_qf.name}()<cr>"
+_ = keymap.n("<leader>l") << f"<cmd>lua {NAMESPACE}.{_toggle_qf.name}()<cr>"
+_ = keymap.n("<leader>L") << f"<cmd>lua {NAMESPACE}.{_clear_qf.name}()<cr>"
 
 
 @rpc(blocking=True)
-def _resize_secondary(nvim: Nvim) -> None:
-    tab = cur_tab(nvim)
-    wins = tab_list_wins(nvim, tab=tab)
-    height = nvim.options["previewheight"]
+async def _resize_secondary() -> None:
+    tab = await Tabpage.get_current()
+    wins = await tab.list_wins()
+    height = await Nvim.opts.get(int, "previewheight")
 
     for win in wins:
-        is_preview: bool = win_get_option(nvim, win=win, key="previewwindow")
-        buf = win_get_buf(nvim, win=win)
-        ft = buf_filetype(nvim, buf=buf)
-        if is_preview or ft == "qf":
-            nvim.api.win_set_height(win, height)
+        if (await win.opts.get(bool, "previewwindow")) or (
+            (buf := await win.get_buf()) and (await buf.filetype()) == "qf"
+        ):
+            await win.api.set_height(NoneType, height)
 
 
-keymap.n("<leader>H") << f"<cmd>lua {NAMESPACE}.{_resize_secondary.name}()<cr>"
+_ = keymap.n("<leader>H") << f"<cmd>lua {NAMESPACE}.{_resize_secondary.name}()<cr>"

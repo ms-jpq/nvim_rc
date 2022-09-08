@@ -1,6 +1,5 @@
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
-from concurrent.futures import ThreadPoolExecutor
 from contextlib import nullcontext
 from pathlib import Path
 from subprocess import check_call
@@ -81,20 +80,21 @@ elif command == "run":
     assert _EX == RT_PY
     assert lock == req
 
-    from pynvim import attach
-    from pynvim_pp.client import run_client
+    from pynvim_pp.nvim import conn
     from std2.pickle.types import DecodeError
 
     try:
-        from .client import Client
+        from .client import init
     except DecodeError as e:
         print(e, file=stderr)
         exit(1)
     else:
-        nvim = attach("socket", path=args.socket)
-        with ThreadPoolExecutor() as pool:
-            code = run_client(nvim, pool=pool, client=Client(pool=pool))
-            exit(code)
+
+        async def main() -> None:
+            async with conn(args.socket) as client:
+                await init(client)
+
+        arun(main())
 
 else:
     assert False

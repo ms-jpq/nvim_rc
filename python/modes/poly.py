@@ -1,51 +1,51 @@
 from ..registery import keymap
 
 # move w linewrap
-keymap.nv("<up>") << "g<up>"
-keymap.nv("<down>") << "g<down>"
+_ = keymap.nv("<up>") << "g<up>"
+_ = keymap.nv("<down>") << "g<down>"
 
 # {} scroll fixed lines
-keymap.nv("{") << ("5g<up>")
-keymap.nv("}") << ("5g<down>")
+_ = keymap.nv("{") << ("5g<up>")
+_ = keymap.nv("}") << ("5g<down>")
 
 # add emacs key binds
-keymap.i("<c-a>") << "<c-o>^"
-keymap.i("<c-x><c-a>") << "<c-a>"
-keymap.i("<c-e>", expr=True) << "pumvisible() ? '<c-e><End>' : '<End>'"
+_ = keymap.i("<c-a>") << "<c-o>^"
+_ = keymap.i("<c-x><c-a>") << "<c-a>"
+_ = keymap.i("<c-e>", expr=True) << "pumvisible() ? '<c-e><End>' : '<End>'"
 
-keymap.c("<c-a>", silent=False) << "<Home>"
-keymap.c("<c-x><c-a>", silent=False) << "<c-a>"
-keymap.c("<c-e>", silent=False) << "<End>"
+_ = keymap.c("<c-a>", silent=False) << "<Home>"
+_ = keymap.c("<c-x><c-a>", silent=False) << "<c-a>"
+_ = keymap.c("<c-e>", silent=False) << "<End>"
 
 
 # delete dont copy
-keymap.n("s") << '"_s'
-keymap.n("S") << '"_S'
-keymap.n("x") << '"_x'
-keymap.n("X") << '"_X'
+_ = keymap.n("s") << '"_s'
+_ = keymap.n("S") << '"_S'
+_ = keymap.n("x") << '"_x'
+_ = keymap.n("X") << '"_X'
 
-keymap.nv("d") << '"_d'
-keymap.nv("D") << '"_D'
-keymap.nv("c") << '"_c'
-keymap.nv("C") << '"_C'
+_ = keymap.nv("d") << '"_d'
+_ = keymap.nv("D") << '"_D'
+_ = keymap.nv("c") << '"_c'
+_ = keymap.nv("C") << '"_C'
 
 
 # leave cursor 1 behind instead of before
-keymap.nv("p") << "gp"
-keymap.nv("P") << "gP"
+_ = keymap.nv("p") << "gp"
+_ = keymap.nv("P") << "gP"
 
 
 # centre on up down
-keymap.nv("<c-u>") << "<c-u>"
-keymap.nv("<c-d>") << "<c-d>"
-keymap.nv("<c-f>") << "<c-f>"
-keymap.nv("<c-b>") << "<c-b>"
+_ = keymap.nv("<c-u>") << "<c-u>"
+_ = keymap.nv("<c-d>") << "<c-d>"
+_ = keymap.nv("<c-f>") << "<c-f>"
+_ = keymap.nv("<c-b>") << "<c-b>"
 
 
 # emacs arrow movements
-keymap.nov("<m-left>") << "b"
-keymap.nov("<m-right>") << "e<right>"
-keymap.i("<m-left>") << "<c-o>b"
-keymap.i("<m-right>") << "<c-o>e<right>"
-keymap.c("<m-left>", silent=False) << "<s-left>"
-keymap.c("<m-right>", silent=False) << "<s-right>"
+_ = keymap.nov("<m-left>") << "b"
+_ = keymap.nov("<m-right>") << "e<right>"
+_ = keymap.i("<m-left>") << "<c-o>b"
+_ = keymap.i("<m-right>") << "<c-o>e<right>"
+_ = keymap.c("<m-left>", silent=False) << "<s-left>"
+_ = keymap.c("<m-right>", silent=False) << "<s-right>"

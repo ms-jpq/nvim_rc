@@ -1,20 +1,12 @@
+from asyncio import gather
+from types import NoneType
 from typing import Iterable, Iterator, Tuple
 
-from pynvim import Nvim
-from pynvim.api import Buffer, Window
-from pynvim_pp.api import (
-    buf_get_lines,
-    buf_line_count,
-    buf_set_lines,
-    buf_set_option,
-    cur_buf,
-    cur_win,
-    win_get_buf,
-    win_get_cursor,
-    win_set_cursor,
-)
+from pynvim_pp.atomic import Atomic
+from pynvim_pp.buffer import Buffer
 from pynvim_pp.lib import decode, encode
-from pynvim_pp.operators import p_indent, writable
+from pynvim_pp.operators import p_indent
+from pynvim_pp.window import Window
 
 from ..registery import NAMESPACE, autocmd, rpc, settings
 
@@ -34,7 +26,7 @@ for option in _TAB_OPTIONS:
 settings["expandtab"] = True
 
 
-def _set_tabsize(nvim: Nvim, buf: Buffer, lines: Iterable[str]) -> None:
+async def _set_tabsize(buf: Buffer, lines: Iterable[str]) -> None:
     def it() -> Iterator[Tuple[int, int]]:
         for tabsize in range(2, 9):
             indent_lvs = tuple(
@@ -45,40 +37,42 @@ def _set_tabsize(nvim: Nvim, buf: Buffer, lines: Iterable[str]) -> None:
                 yield divibilty, tabsize
 
     _, tabsize = next(iter(sorted(it(), reverse=True)), (-1, tabsize_d))
+
+    atomic = Atomic()
     for option in _TAB_OPTIONS:
-        buf_set_option(nvim, buf=buf, key=option, val=tabsize)
+        atomic.buf_set_option(buf, option, tabsize)
+    await atomic.commit(NoneType)
 
 
-def _set_usetab(nvim: Nvim, buf: Buffer, lines: Iterable[str]) -> None:
+async def _set_usetab(buf: Buffer, lines: Iterable[str]) -> None:
     first_chars = tuple(next(iter(line), "") for line in lines if lines)
     if first_chars.count("\t") > first_chars.count(" "):
-        buf_set_option(nvim, buf=buf, key="expandtab", val=False)
+        await buf.opts.set("expandtab", val=False)
 
 
-def detect_tabs(nvim: Nvim, buf: Buffer) -> None:
-    count = buf_line_count(nvim, buf=buf)
+async def detect_tabs(buf: Buffer) -> None:
+    count = await buf.line_count()
     rows = min(count, 100)
-    lines = buf_get_lines(nvim, buf=buf, lo=0, hi=rows)
-    _set_tabsize(nvim, buf=buf, lines=lines)
-    _set_usetab(nvim, buf=buf, lines=lines)
+    lines = await buf.get_lines(lo=0, hi=rows)
+    await gather(_set_tabsize(buf, lines=lines), _set_usetab(buf, lines=lines))
 
 
 @rpc(blocking=True)
-def _detect_tabs(nvim: Nvim) -> None:
-    buf = cur_buf(nvim)
-    detect_tabs(nvim, buf=buf)
+async def _detect_tabs() -> None:
+    buf = await Buffer.get_current()
+    await detect_tabs(buf=buf)
 
 
-autocmd("FileType") << f"lua {NAMESPACE}.{_detect_tabs.name}()"
+_ = autocmd("FileType") << f"lua {NAMESPACE}.{_detect_tabs.name}()"
 
 
 # smart indentation level
 settings["smarttab"] = True
 
 
-def _set_trimmed(nvim: Nvim, win: Window, buf: Buffer) -> None:
-    row, col = win_get_cursor(nvim, win=win)
-    lines = buf_get_lines(nvim, buf=buf, lo=0, hi=-1)
+async def _set_trimmed(win: Window, buf: Buffer) -> None:
+    row, col = await win.get_cursor()
+    lines = await buf.get_lines(lo=0, hi=-1)
     new_lines = [
         decode(encode(line)[:col]) + decode(encode(line)[col:]).rstrip()
         if r == row
@@ -95,14 +89,16 @@ def _set_trimmed(nvim: Nvim, win: Window, buf: Buffer) -> None:
         new_lines.append("")
 
     if new_lines != lines:
-        buf_set_lines(nvim, buf=buf, lo=0, hi=-1, lines=new_lines)
-        win_set_cursor(nvim, win=win, row=row, col=col)
+        atomic = Atomic()
+        atomic.buf_set_lines(buf, 0, -1, True, lines)
+        atomic.win_set_cursor(row + 1, col)
+        await atomic.commit(NoneType)
 
 
-def trailing_ws(nvim: Nvim) -> None:
-    win = cur_win(nvim)
-    buf = win_get_buf(nvim, win=win)
-    if not writable(nvim, buf=buf):
+async def trailing_ws() -> None:
+    win = await Window.get_current()
+    buf = await win.get_buf()
+    if not await buf.modifiable():
         return
     else:
-        _set_trimmed(nvim, win=win, buf=buf)
+        await _set_trimmed(win, buf=buf)

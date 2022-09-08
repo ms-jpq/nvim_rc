@@ -1,4 +1,4 @@
-from asyncio import sleep
+from asyncio import gather, sleep
 from itertools import count
 from math import inf
 from os import linesep
@@ -8,27 +8,12 @@ from textwrap import dedent
 from typing import Iterator, Optional, Sequence
 from uuid import uuid4
 
-from pynvim import Nvim
-from pynvim.api.nvim import Buffer
-from pynvim_pp.api import (
-    ExtMarkBase,
-    ask,
-    buf_commentstr,
-    buf_del_extmarks,
-    buf_get_extmarks_base,
-    buf_get_lines,
-    buf_get_var,
-    buf_set_extmarks_base,
-    buf_set_var,
-    clear_ns,
-    create_ns,
-    cur_buf,
-    cur_win,
-    win_get_buf,
-    win_get_cursor,
-)
-from pynvim_pp.lib import async_call, awrite, encode, go
+from pynvim_pp.buffer import Buffer, ExtMark, ExtMarker
+from pynvim_pp.lib import encode
+from pynvim_pp.nvim import Nvim
 from pynvim_pp.operators import operator_marks
+from pynvim_pp.types import NoneType
+from pynvim_pp.window import Window
 from std2.asyncio.subprocess import call
 
 from ..registery import LANG, NAMESPACE, keymap, rpc
@@ -42,15 +27,15 @@ _LINE_HL = "CursorLine"
 
 
 @rpc(blocking=True)
-def _marks_clear(nvim: Nvim, visual: bool) -> None:
-    ns = create_ns(nvim, ns=_NS)
-    buf = cur_buf(nvim)
+async def _marks_clear(visual: bool) -> None:
+    ns = await Nvim.create_namespace(_NS)
+    buf = await Buffer.get_current()
     if visual:
-        (lo, _), (hi, _) = operator_marks(nvim, buf=buf, visual_type=None)
-        clear_ns(nvim, id=ns, buf=buf, lo=lo, hi=hi + 1)
+        (lo, _), (hi, _) = await operator_marks(buf, visual_type=None)
+        await buf.clear_namespace(ns, lo=lo, hi=hi + 1)
     else:
-        clear_ns(nvim, id=ns, buf=buf)
-        buf_set_var(nvim, buf=buf, key=str(_NS), val=None)
+        await buf.clear_namespace(ns)
+        await buf.vars.set(str(_NS), val=None)
 
 
 _ = keymap.n("<leader>E") << f"<cmd>lua {NAMESPACE}.{_marks_clear.name}(false)<cr>"
@@ -61,21 +46,23 @@ _ = (
 
 
 @rpc(blocking=True)
-def _mark_set(nvim: Nvim, visual: bool) -> None:
-    ns = create_ns(nvim, ns=_NS)
-    win = cur_win(nvim)
-    buf = win_get_buf(nvim, win=win)
+async def _mark_set(visual: bool) -> None:
+    ns = await Nvim.create_namespace(_NS)
+    win = await Window.get_current()
+    buf = await win.get_buf()
 
-    marks = tuple(buf_get_extmarks_base(nvim, id=ns, buf=buf))
-    indices = {mark.idx for mark in marks}
-    gen = (i for i in count(1) if i not in indices)
-    lcs, rcs = buf_commentstr(nvim, buf=buf)
-    cs = (lcs + rcs) + LANG("repl")
+    marks = await buf.get_ext_marks(ns)
+    indices = {mark.marker for mark in marks}
+    gen = map(ExtMarker, (i for i in count(1) if i not in indices))
+    lcs, rcs = (await buf.commentstr()) or ("", "")
+    cs = lcs + LANG("repl") + rcs
 
-    def mk(r: int) -> ExtMarkBase:
-        return ExtMarkBase(
-            idx=next(gen),
+    def mk(r: int) -> ExtMark:
+        return ExtMark(
+            buf=buf,
+            marker=next(gen),
             begin=(r, 0),
+            end=None,
             meta={
                 "virt_text": ((cs, _TEXT_HL),),
                 "virt_text_pos": "right_align",
@@ -85,31 +72,31 @@ def _mark_set(nvim: Nvim, visual: bool) -> None:
         )
 
     if visual:
-        (lo, _), (hi, _) = operator_marks(nvim, buf=buf, visual_type=None)
+        (lo, _), (hi, _) = await operator_marks(buf, visual_type=None)
 
-        def cont() -> Iterator[ExtMarkBase]:
+        def cont() -> Iterator[ExtMarker]:
             for mark in marks:
                 r, _ = mark.begin
                 if r <= hi and r >= lo:
-                    yield mark
+                    yield mark.marker
 
         existing = tuple(cont())
         if existing:
-            buf_del_extmarks(nvim, buf=buf, id=ns, marks=existing)
+            await buf.del_extmarks(ns, markers=existing)
         else:
             m1, m2 = mk(lo), mk(hi)
-            buf_set_extmarks_base(nvim, buf=buf, id=ns, marks=(m1, m2))
+            await buf.set_ext_marks(ns, extmarks=(m1, m2))
 
     else:
-        row, _ = win_get_cursor(nvim, win=win)
+        row, _ = await win.get_cursor()
         for mark in marks:
             r, _ = mark.begin
             if r == row:
-                buf_del_extmarks(nvim, buf=buf, id=ns, marks=(mark,))
+                await buf.del_extmarks(ns, markers=(mark.marker,))
                 break
         else:
             mark = mk(row)
-            buf_set_extmarks_base(nvim, buf=buf, id=ns, marks=(mark,))
+            await buf.set_ext_marks(ns, extmarks=(mark,))
 
 
 _ = keymap.n("<leader>e") << f"<cmd>lua {NAMESPACE}.{_mark_set.name}(false)<cr>"
@@ -119,41 +106,37 @@ _ = (
 )
 
 
-def _pane(nvim: Nvim, buf: Buffer) -> Optional[str]:
-    if pane := ask(nvim, question=LANG("tmux pane?"), default="{last}"):
-        buf_set_var(nvim, buf=buf, key=str(_NS), val=pane)
+async def _pane(buf: Buffer) -> Optional[str]:
+    if pane := await Nvim.input(question=LANG("tmux pane?"), default="{last}"):
+        await buf.vars.set(str(_NS), val=pane)
         return pane
     else:
         return None
 
 
-def _tmux_send(nvim: Nvim, buf: Buffer, text: str) -> None:
-    pane: Optional[str] = buf_get_var(nvim, buf=buf, key=str(_NS)) or _pane(
-        nvim, buf=buf
-    )
+async def _tmux_send(buf: Buffer, text: str) -> None:
+    pane = await buf.vars.get(str, str(_NS)) or await _pane(buf)
 
-    async def cont() -> None:
-        if pane:
-            name = f"{_TMUX_NS}-{uuid4()}"
-            with NamedTemporaryFile() as fd:
-                fd.write(encode(text))
-                fd.flush()
-                try:
-                    await call("tmux", "load-buffer", "-b", name, "--", fd.name)
-                    await call(
-                        "tmux", "paste-buffer", "-d", "-r", "-p", "-b", name, "-t", pane
-                    )
-                except CalledProcessError as e:
-                    await awrite(nvim, e, e.stdout, e.stderr)
-
-    go(nvim, aw=cont())
+    if pane:
+        name = f"{_TMUX_NS}-{uuid4()}"
+        with NamedTemporaryFile() as fd:
+            fd.write(encode(text))
+            fd.flush()
+            try:
+                await call("tmux", "load-buffer", "-b", name, "--", fd.name)
+                await call(
+                    "tmux", "paste-buffer", "-d", "-r", "-p", "-b", name, "-t", pane
+                )
+            except CalledProcessError as e:
+                await Nvim.write(e, e.stderr, e.stdout)
 
 
-def _highlight(nvim: Nvim, buf: Buffer, begin: int, lines: Sequence[str]) -> None:
-    hns = create_ns(nvim, ns=_HNS)
+async def _highlight(buf: Buffer, begin: int, lines: Sequence[str]) -> None:
+    hns = await Nvim.create_namespace(_HNS)
     *_, line = lines or ("",)
     end_c = len(encode(line))
-    nvim.lua.vim.highlight.range(
+    await Nvim.lua.vim.highlight.range(
+        NoneType,
         buf,
         hns,
         "HighlightedyankRegion",
@@ -162,24 +145,21 @@ def _highlight(nvim: Nvim, buf: Buffer, begin: int, lines: Sequence[str]) -> Non
         {"inclusive": False},
     )
 
-    async def cont() -> None:
-        await sleep(1)
-        await async_call(nvim, lambda: clear_ns(nvim, buf=buf, id=hns))
-
-    go(nvim, aw=cont())
+    await sleep(1)
+    await buf.clear_namespace(hns)
 
 
 @rpc(blocking=True)
-def _eval(nvim: Nvim, visual: bool) -> None:
-    win = cur_win(nvim)
-    buf = win_get_buf(nvim, win=win)
+async def _eval(visual: bool) -> None:
+    win = await Window.get_current()
+    buf = await win.get_buf()
 
     if visual:
-        (begin, _), (end, _) = operator_marks(nvim, buf=buf, visual_type=None)
+        (begin, _), (end, _) = await operator_marks(buf, visual_type=None)
     else:
-        ns = create_ns(nvim, ns=_NS)
-        row, _ = win_get_cursor(nvim, win=win)
-        marks = tuple(buf_get_extmarks_base(nvim, id=ns, buf=buf))
+        ns = await Nvim.create_namespace(_NS)
+        row, _ = await win.get_cursor()
+        marks = await buf.get_ext_marks(ns)
         begin, end = 0, None
         for mark in marks:
             r, _ = mark.begin
@@ -188,10 +168,9 @@ def _eval(nvim: Nvim, visual: bool) -> None:
             else:
                 end = int(min(end or inf, r))
 
-    lines = buf_get_lines(nvim, buf=buf, lo=begin, hi=(end or -2) + 1)
+    lines = await buf.get_lines(lo=begin, hi=(end or -2) + 1)
     text = dedent(linesep.join(lines)) + linesep * 2
-    _tmux_send(nvim, buf=buf, text=text)
-    _highlight(nvim, buf=buf, begin=begin, lines=lines)
+    await gather(_tmux_send(buf, text=text), _highlight(buf, begin=begin, lines=lines))
 
 
 _ = keymap.n("<leader>g") << f"<cmd>lua {NAMESPACE}.{_eval.name}(false)<cr>"

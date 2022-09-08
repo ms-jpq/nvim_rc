@@ -1,5 +1,6 @@
 local t1 = vim.fn.localtime()
-local cwd = vim.fn.stdpath("config")
+--local cwd = vim.fn.stdpath("config")
+local cwd = "/root/tmp/nvim_rc"
 
 local l1 = function()
   vim.opt.loadplugins = false

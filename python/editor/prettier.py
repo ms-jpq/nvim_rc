@@ -4,19 +4,12 @@ from itertools import chain
 from pathlib import Path, PurePath
 from shlex import join
 from shutil import which
-from typing import Iterable, Iterator, Tuple
+from typing import AsyncIterator, Iterable, Iterator, Tuple
 
-from pynvim import Nvim
-from pynvim.api.common import NvimError
-from pynvim.api.window import Window
-from pynvim_pp.api import (
-    buf_set_lines,
-    list_wins,
-    win_get_buf,
-    win_get_cursor,
-    win_set_cursor,
-)
-from pynvim_pp.lib import async_call, awrite, decode, encode, write
+from pynvim_pp.lib import decode, encode
+from pynvim_pp.nvim import Nvim
+from pynvim_pp.types import NvimError
+from pynvim_pp.window import Window
 from std2.aitertools import aiterify
 from std2.asyncio.subprocess import call
 from std2.lex import ParseError
@@ -59,9 +52,7 @@ async def _fmt_output(
                 return print_out
 
 
-async def _run(
-    nvim: Nvim, ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: PurePath
-) -> None:
+async def _run(ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: PurePath) -> None:
     body = encode(ctx.linefeed.join(ctx.lines))
     path = Path(ctx.filename)
     with make_temp(path) as temp:
@@ -75,44 +66,39 @@ async def _run(
         ]
         errors = (ctx.linefeed * 2).join(errs)
         if errors:
-
-            def c1() -> None:
-                set_preview_content(nvim, text=errors)
-                write(nvim, LANG("prettier failed"))
-
-            await async_call(nvim, c1)
+            await set_preview_content(errors)
+            await Nvim.write(LANG("prettier failed"))
 
         else:
 
-            def c2() -> None:
-                def it() -> Iterator[Tuple[Window, Tuple[int, int]]]:
-                    wins = list_wins(nvim)
-                    for win in wins:
-                        buf = win_get_buf(nvim, win=win)
-                        if buf == ctx.buf:
-                            row, col = win_get_cursor(nvim, win)
-                            yield win, (row, col)
+            async def it() -> AsyncIterator[Tuple[Window, Tuple[int, int]]]:
+                wins = await Window.list()
+                for win in wins:
+                    buf = await win.get_buf()
+                    if buf == ctx.buf:
+                        row, col = await win.get_cursor()
+                        yield win, (row, col)
 
-                saved = {win: pos for win, pos in it()}
+            saved = {win: pos async for win, pos in it()}
 
-                lines = temp.read_text().split(ctx.linefeed)
-                if lines:
-                    l = lines.pop()
-                    if l:
-                        lines.append(l)
-                buf_set_lines(nvim, buf=ctx.buf, lo=0, hi=-1, lines=lines)
+            lines = temp.read_text().split(ctx.linefeed)
+            if lines:
+                l = lines.pop()
+                if l:
+                    lines.append(l)
 
-                for win, (row, col) in saved.items():
-                    new_row = min(row, len(lines) - 1)
-                    with suppress(NvimError):
-                        win_set_cursor(nvim, win=win, row=new_row, col=col)
-                detect_tabs(nvim, buf=ctx.buf)
+            await ctx.buf.set_lines(lo=0, hi=-1, lines=lines)
 
-                prettiers = LANG("step join sep").join(attr.bin for attr in attrs)
-                nice = LANG("prettier succeeded", prettiers=prettiers)
-                write(nvim, nice)
+            for win, (row, col) in saved.items():
+                new_row = min(row, len(lines) - 1)
+                with suppress(NvimError):
+                    await win.set_cursor(row=new_row, col=col)
 
-            await async_call(nvim, c2)
+            await detect_tabs(ctx.buf)
+
+            prettiers = LANG("step join sep").join(attr.bin for attr in attrs)
+            nice = LANG("prettier succeeded", prettiers=prettiers)
+            await Nvim.write(nice)
 
 
 def _fmts_for(filetype: str) -> Iterator[FmtAttrs]:
@@ -124,16 +110,16 @@ def _fmts_for(filetype: str) -> Iterator[FmtAttrs]:
 
 
 @rpc(blocking=False)
-async def run_fmt(nvim: Nvim) -> None:
-    cwd, ctx = await async_call(nvim, current_ctx, nvim)
+async def run_fmt() -> None:
+    cwd, ctx = await current_ctx()
 
     prettiers = tuple(_fmts_for(ctx.filetype))
     if not prettiers:
-        await async_call(nvim, trailing_ws, nvim)
-        await awrite(nvim, LANG("missing prettier", filetype=ctx.filetype), error=True)
+        await trailing_ws()
+        await Nvim.write(LANG("missing prettier", filetype=ctx.filetype), error=True)
     else:
-        await awrite(nvim, LANG("loading..."))
-        await _run(nvim, ctx=ctx, attrs=prettiers, cwd=cwd)
+        await Nvim.write(LANG("loading..."))
+        await _run(ctx, attrs=prettiers, cwd=cwd)
 
 
-keymap.n("gq", nowait=True) << f"<cmd>lua {NAMESPACE}.{run_fmt.name}()<cr>"
+_ = keymap.n("gq", nowait=True) << f"<cmd>lua {NAMESPACE}.{run_fmt.name}()<cr>"

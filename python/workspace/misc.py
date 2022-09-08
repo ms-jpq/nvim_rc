@@ -1,5 +1,4 @@
-from pynvim.api import Nvim
-from pynvim_pp.api import buf_name, buf_set_option, list_bufs
+from pynvim_pp.buffer import Buffer
 
 from ..registery import NAMESPACE, atomic, rpc, settings
 
@@ -29,12 +28,12 @@ settings["breakindent"] = True
 
 # open with scratch buffer, like emacs
 @rpc(blocking=True)
-def _scratch_buffer(nvim: Nvim) -> None:
-    bufs = list_bufs(nvim, listed=False)
+async def _scratch_buffer() -> None:
+    bufs = await Buffer.list(listed=False)
     for buf in bufs:
-        name = buf_name(nvim, buf=buf)
+        name = await buf.get_name()
         if not name:
-            buf_set_option(nvim, buf=buf, key="buftype", val="nofile")
+            await buf.opts.set("buftype", val="nofile")
 
 
 atomic.exec_lua(f"{NAMESPACE}.{_scratch_buffer.name}()", ())

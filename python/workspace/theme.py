@@ -1,5 +1,7 @@
-from pynvim.api.nvim import Nvim
-from pynvim_pp.api import cur_win, win_set_option
+from types import NoneType
+
+from pynvim_pp.nvim import Nvim
+from pynvim_pp.window import Window
 
 from ..registery import NAMESPACE, atomic, autocmd, rpc, settings
 
@@ -38,15 +40,15 @@ settings["background"] = "light"
 
 
 @rpc(blocking=True)
-def _ins_cursor(nvim: Nvim) -> None:
-    win = cur_win(nvim)
-    win_set_option(nvim, win=win, key="cursorline", val=False)
+async def _ins_cursor() -> None:
+    win = await Window.get_current()
+    await win.opts.set("cursorline", False)
 
 
 @rpc(blocking=True)
-def _norm_cursor(nvim: Nvim) -> None:
-    win = cur_win(nvim)
-    win_set_option(nvim, win=win, key="cursorline", val=True)
+async def _norm_cursor() -> None:
+    win = await Window.get_current()
+    await win.opts.set("cursorline", True)
 
 
 _ = autocmd("InsertEnter") << f"lua {NAMESPACE}.{_ins_cursor.name}()"
@@ -55,8 +57,8 @@ _ = autocmd("InsertLeave") << f"lua {NAMESPACE}.{_norm_cursor.name}()"
 
 # highlight yank
 @rpc(blocking=True)
-def _hl_yank(nvim: Nvim) -> None:
-    nvim.lua.vim.highlight.on_yank({"higroup": "HighlightedyankRegion"})
+async def _hl_yank() -> None:
+    await Nvim.lua.vim.highlight.on_yank(NoneType, {"higroup": "HighlightedyankRegion"})
 
 
 atomic.command("highlight HighlightedyankRegion cterm=reverse gui=reverse")

@@ -1,19 +1,13 @@
 from fnmatch import fnmatch
 from pathlib import Path
 from shutil import which
+from types import NoneType
 from typing import Any, Mapping, MutableMapping, Optional
 
-from pynvim import Nvim
-from pynvim_pp.api import (
-    ask,
-    buf_get_lines,
-    cur_win,
-    get_cwd,
-    win_get_buf,
-    win_get_cursor,
-)
 from pynvim_pp.lib import decode, encode
+from pynvim_pp.nvim import Nvim
 from pynvim_pp.text_object import gen_split
+from pynvim_pp.window import Window
 from std2.pickle.decoder import new_decoder
 from std2.pickle.encoder import new_encoder
 from std2.types import never
@@ -33,24 +27,31 @@ _ = keymap.n("K") << "<cmd>lua vim.lsp.buf.hover()<cr>"
 _ = keymap.n("gw") << "<cmd>lua vim.lsp.buf.code_action()<cr>"
 _ = keymap.v("gw") << "<cmd>lua vim.lsp.buf.range_code_action()<cr>"
 
-_ = keymap.n("<c-p>") << "<cmd>lua vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR }<cr>"
-_ = keymap.n("<c-n>") << "<cmd>lua vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR }<cr>"
+_ = (
+    keymap.n("<c-p>")
+    << "<cmd>lua vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR }<cr>"
+)
+_ = (
+    keymap.n("<c-n>")
+    << "<cmd>lua vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR }<cr>"
+)
 
 
 @rpc(blocking=True)
-def _rename(nvim: Nvim) -> None:
-    win = cur_win(nvim)
-    buf = win_get_buf(nvim, win=win)
-    row, col = win_get_cursor(nvim, win=win)
-    line, *_ = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
+async def _rename() -> None:
+    win = await Window.get_current()
+    buf = await win.get_buf()
+    row, col = await win.get_cursor()
+    line, *_ = await buf.get_lines(lo=row, hi=row + 1)
+
     b_line = encode(line)
     lhs, rhs = decode(b_line[:col]), decode(b_line[col:])
     split = gen_split(lhs=lhs, rhs=rhs, unifying_chars=UNIFIYING_CHARS)
     word = split.word_lhs + split.word_rhs
-    ans = ask(nvim, question=LANG("rename: "), default=word)
+    ans = await Nvim.input(question=LANG("rename: "), default=word)
 
     if ans:
-        nvim.lua.vim.lsp.buf.rename(ans)
+        await Nvim.lua.vim.lsp.buf.rename(NoneType, ans)
 
 
 _ = keymap.n("R") << f"<cmd>lua {NAMESPACE}.{_rename.name}()<cr>"
@@ -60,12 +61,12 @@ _DECODER = new_decoder[Optional[RootPattern]](Optional[RootPattern])
 
 
 @rpc(blocking=True)
-def _find_root(nvim: Nvim, _pattern: Any, filename: str, bufnr: int) -> Optional[str]:
+async def _find_root(_pattern: Any, filename: str, bufnr: int) -> Optional[str]:
     pattern: Optional[RootPattern] = _DECODER(_pattern)
     path = Path(filename)
 
     if not pattern:
-        return str(get_cwd(nvim))
+        return str(await Nvim.getcwd())
     else:
         for parent in path.parents:
             for member in parent.iterdir():
@@ -80,7 +81,7 @@ def _find_root(nvim: Nvim, _pattern: Any, filename: str, bufnr: int) -> Optional
             if pattern.fallback is RPFallback.none:
                 return None
             elif pattern.fallback is RPFallback.cwd:
-                return str(get_cwd(nvim))
+                return str(await Nvim.getcwd())
             elif pattern.fallback is RPFallback.home:
                 return str(Path.home())
             elif pattern.fallback is RPFallback.parent:
@@ -90,7 +91,7 @@ def _find_root(nvim: Nvim, _pattern: Any, filename: str, bufnr: int) -> Optional
 
 
 @rpc(blocking=True)
-def _on_attach(nvim: Nvim, server: str) -> None:
+async def _on_attach(server: str) -> None:
     pass
 
 

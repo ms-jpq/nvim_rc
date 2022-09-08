@@ -3,7 +3,6 @@ from operator import attrgetter
 from pathlib import Path
 from textwrap import dedent, indent
 
-from pynvim.api.nvim import Nvim
 from pynvim_pp.atomic import Atomic
 from pynvim_pp.keymap import Keymap
 from std2.urllib import uri_path
@@ -16,7 +15,7 @@ def p_name(uri: str) -> Path:
     return VIM_DIR / uri_path(uri).name
 
 
-def inst(nvim: Nvim) -> Atomic:
+def inst() -> Atomic:
     pkgs = {
         path: spec
         for path, spec in ((p_name(spec.git.uri), spec) for spec in pkg_specs)
@@ -29,7 +28,7 @@ def inst(nvim: Nvim) -> Atomic:
     for spec in pkgs.values():
         for key in spec.keys:
             for lhs, rhs in key.maps.items():
-                attrgetter(key.modes)(keymap)(lhs, **asdict(key.opts)) << rhs
+                _ = attrgetter(key.modes)(keymap)(lhs, **asdict(key.opts)) << rhs
 
         for lhs, rhs in spec.vals.items():
             atomic1.set_var(lhs, rhs)

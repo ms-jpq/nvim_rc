@@ -1,17 +1,8 @@
 from itertools import chain
 from typing import Iterator
 
-from pynvim.api import Nvim
-from pynvim_pp.api import (
-    buf_get_lines,
-    buf_set_lines,
-    cur_win,
-    win_get_buf,
-    win_get_cursor,
-    win_set_cursor,
-)
 from pynvim_pp.lib import decode, encode
-from pynvim_pp.operators import writable
+from pynvim_pp.window import Window
 
 from ..registery import NAMESPACE, keymap, rpc
 
@@ -34,12 +25,13 @@ def _swap_case(chars: str) -> str:
 
 
 @rpc(blocking=True)
-def _toggle_case(nvim: Nvim) -> None:
-    win = cur_win(nvim)
-    row, col = win_get_cursor(nvim, win=win)
-    buf = win_get_buf(nvim, win=win)
-    if writable(nvim, buf=buf):
-        line, *_ = buf_get_lines(nvim, buf=buf, lo=row, hi=row + 1)
+async def _toggle_case() -> None:
+    win = await Window.get_current()
+    buf = await win.get_buf()
+    row, col = await win.get_cursor()
+
+    if await buf.modifiable():
+        line, *_ = await buf.get_lines(lo=row, hi=row + 1)
         bline = encode(line)
         before, after = bline[:col], bline[col:]
         if after:
@@ -48,8 +40,8 @@ def _toggle_case(nvim: Nvim) -> None:
             swapped = _swap_case(pt)
             new = decode(before) + swapped + decode(bytes(post))
             pos = len(before) + len(encode(swapped))
-            buf_set_lines(nvim, buf=buf, lo=row, hi=row + 1, lines=(new,))
-            win_set_cursor(nvim, win=win, row=row, col=pos)
+            await buf.set_lines(lo=row, hi=row + 1, lines=(new,))
+            await win.set_cursor(row=row, col=pos)
 
 
-keymap.n("~") << f"<cmd>lua {NAMESPACE}.{_toggle_case.name}()<cr>"
+_ = keymap.n("~") << f"<cmd>lua {NAMESPACE}.{_toggle_case.name}()<cr>"

@@ -1,29 +1,21 @@
-from pynvim.api.nvim import Nvim
-from pynvim_pp.api import (
-    buf_get_lines,
-    buf_linefeed,
-    buf_set_lines,
-    buf_set_text,
-    cur_buf,
-    cur_win,
-    win_get_buf,
-    win_get_cursor,
-)
+from pynvim_pp.buffer import Buffer
 from pynvim_pp.lib import encode
-from pynvim_pp.operators import VisualTypes, operator_marks, writable
+from pynvim_pp.nvim import Nvim
+from pynvim_pp.operators import VisualTypes, operator_marks
+from pynvim_pp.window import Window
 
 from ..registery import NAMESPACE, keymap, rpc
 
 
 @rpc(blocking=True)
-def _go_replace(nvim: Nvim, visual: VisualTypes) -> None:
-    buf = cur_buf(nvim)
-    if not writable(nvim, buf=buf):
+async def _go_replace(visual: VisualTypes) -> None:
+    buf = await Buffer.get_current()
+    if not await buf.modifiable():
         return
     else:
-        linefeed = buf_linefeed(nvim, buf=buf)
-        (r1, c1), (r2, c2) = operator_marks(nvim, buf=buf, visual_type=visual)
-        lines = buf_get_lines(nvim, buf=buf, lo=r1, hi=r2 + 1)
+        linefeed = await buf.linefeed()
+        (r1, c1), (r2, c2) = await operator_marks(buf, visual_type=visual)
+        lines = await buf.get_lines(lo=r1, hi=r2 + 1)
 
         if len(lines) > 1:
             h, *_, t = lines
@@ -33,14 +25,16 @@ def _go_replace(nvim: Nvim, visual: VisualTypes) -> None:
         begin = (r1, min(c1, max(0, len(encode(h)) - 1)))
         end = (r2, min(len(encode(t)), c2))
 
-        text: str = nvim.funcs.getreg()
+        text = await Nvim.fn.getreg(str)
         new_lines = text.split(linefeed)
         if new_lines:
             n = new_lines.pop()
             if n:
                 new_lines.append(n)
-        nvim.options["undolevels"] = nvim.options["undolevels"]
-        buf_set_text(nvim, buf=buf, begin=begin, end=end, text=new_lines)
+
+        undolevels = await Nvim.opts.get(int, "undolevels")
+        await Nvim.opts.set("undolevels", undolevels)
+        await buf.set_text(begin=begin, end=end, text=new_lines)
 
 
 _ = keymap.n("gr") << f"<cmd>set opfunc={_go_replace.name}<cr>g@"
@@ -48,22 +42,22 @@ _ = keymap.v("gr") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_go_replace.name}(vim.N
 
 
 @rpc(blocking=True)
-def _go_replace_line(nvim: Nvim) -> None:
-    win = cur_win(nvim)
-    buf = win_get_buf(nvim, win=win)
-    if not writable(nvim, buf=buf):
+async def _go_replace_line() -> None:
+    win = await Window.get_current()
+    buf = await win.get_buf()
+    if not await buf.modifiable():
         return
     else:
-        linefeed = buf_linefeed(nvim, buf=buf)
-        row, _ = win_get_cursor(nvim, win=win)
-        body: str = nvim.funcs.getreg()
+        linefeed = await buf.linefeed()
+        row, _ = await win.get_cursor()
+        body = await Nvim.fn.getreg(str)
         new_lines = body.split(linefeed)
         if new_lines:
             n = new_lines.pop()
             if n:
                 new_lines.append(n)
 
-        buf_set_lines(nvim, buf=buf, lo=row, hi=row + 1, lines=new_lines)
+        await buf.set_lines(lo=row, hi=row + 1, lines=new_lines)
 
 
 _ = keymap.n("grr") << f"<cmd>lua {NAMESPACE}.{_go_replace_line.name}()<cr>"

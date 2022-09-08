@@ -1,9 +1,8 @@
 from re import escape
+from types import NoneType
 
-from pynvim.api import Buffer
-from pynvim.api.nvim import Nvim
-from pynvim_pp.api import buf_get_text, buf_linefeed, cur_buf
-from pynvim_pp.lib import async_call, go
+from pynvim_pp.buffer import Buffer
+from pynvim_pp.nvim import Nvim
 from pynvim_pp.operators import VisualTypes, operator_marks
 from std2.lex import escape as lex_esc
 
@@ -22,51 +21,45 @@ def _magic_escape(text: str) -> str:
     return "".join(lex_esc(text, replace=False, escape=rules))
 
 
-def _hl_text(nvim: Nvim, text: str) -> None:
-    nvim.funcs.setreg("/", _magic_escape(text))
-
-    def cont() -> None:
-        nvim.options["hlsearch"] = True
-
-    go(nvim, aw=async_call(nvim, cont))
+async def _hl_text(text: str) -> None:
+    await Nvim.fn.setreg(NoneType, "/", _magic_escape(text))
+    await Nvim.opts.set("hlsearch", val=True)
 
 
-def _get_selected(nvim: Nvim, buf: Buffer, visual_type: VisualTypes) -> str:
-    begin, end = operator_marks(nvim, buf=buf, visual_type=visual_type)
-    linesep = buf_linefeed(nvim, buf=buf)
-    lines = buf_get_text(nvim, buf=buf, begin=begin, end=end)
+async def _get_selected(buf: Buffer, visual_type: VisualTypes) -> str:
+    begin, end = await operator_marks(buf, visual_type=visual_type)
+    linesep = await buf.linefeed()
+    lines = await buf.get_text(begin=begin, end=end)
     return linesep.join(lines)
 
 
-def _hl_selected(nvim: Nvim, visual: VisualTypes) -> str:
-    buf = cur_buf(nvim)
-    selected = _get_selected(nvim, buf=buf, visual_type=visual)
-    _hl_text(nvim, text=selected)
+async def _hl_selected(visual: VisualTypes) -> str:
+    buf = await Buffer.get_current()
+    selected = await _get_selected(buf=buf, visual_type=visual)
+    await _hl_text(selected)
     return selected
 
 
 @rpc(blocking=True)
-def _op_search(nvim: Nvim, visual: VisualTypes) -> None:
-    _hl_selected(nvim, visual=visual)
+async def _op_search(visual: VisualTypes) -> None:
+    await _hl_selected(visual)
 
 
 @rpc(blocking=True)
-def _op_fzf(nvim: Nvim, visual: VisualTypes) -> None:
-    text = _hl_selected(nvim, visual=visual)
-    cont = lambda: nvim.command(f"BLines {text}")
-    go(nvim, aw=async_call(nvim, cont))
+async def _op_fzf(visual: VisualTypes) -> None:
+    text = await _hl_selected(visual)
+    await Nvim.exec(f"BLines {text}")
 
 
 @rpc(blocking=True)
-def _op_rg(nvim: Nvim, visual: VisualTypes) -> None:
-    text = _hl_selected(nvim, visual=visual)
+async def _op_rg(visual: VisualTypes) -> None:
+    text = await _hl_selected(visual)
     escaped = escape(text).replace(r"\ ", " ")
-    cont = lambda: nvim.command(f"Rg {escaped}")
-    go(nvim, aw=async_call(nvim, cont))
+    await Nvim.exec(f"Rg {escaped}")
 
 
 _ = keymap.n("gs") << f"<cmd>set opfunc={_op_search.name}<cr>g@"
-_ = (keymap.v("gs") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_search.name}(vim.NIL)<cr>")
+_ = keymap.v("gs") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_search.name}(vim.NIL)<cr>"
 
 _ = keymap.n("gf") << f"<cmd>set opfunc={_op_fzf.name}<cr>g@"
 _ = keymap.v("gf") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_fzf.name}(vim.NIL)<cr>"
@@ -78,12 +71,12 @@ _ = keymap.v("gF") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_rg.name}(vim.NIL)<c
 # replace selection
 # no magic
 @rpc(blocking=True)
-def _op_sd(nvim: Nvim, visual: VisualTypes) -> None:
-    buf = cur_buf(nvim)
-    selected = _get_selected(nvim, buf=buf, visual_type=visual)
+async def _op_sd(visual: VisualTypes) -> None:
+    buf = await Buffer.get_current()
+    selected = await _get_selected(buf, visual_type=visual)
     escaped = _magic_escape(selected)
     instruction = rf":%s/\V{escaped}//g<left><left>"
-    nvim.api.input(instruction)
+    await Nvim.api.input(NoneType, instruction)
 
 
 _ = keymap.n("gt") << f"<cmd>set opfunc={_op_sd.name}<cr>g@"

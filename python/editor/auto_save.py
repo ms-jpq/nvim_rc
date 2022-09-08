@@ -7,13 +7,13 @@ settings["autowrite"] = True
 settings["autowriteall"] = True
 
 
-autocmd("WinEnter") << "checktime"
+_ = autocmd("WinEnter") << "checktime"
 
 
 # noskip backup
 settings["backupskip"] = ""
 
-(
+_ = (
     autocmd("BufLeave", "FocusLost", "VimLeavePre", "CursorHold", "CursorHoldI")
     << "silent! wa!"
 )
@@ -22,4 +22,4 @@ settings["backupskip"] = ""
 # persistent undo
 settings["undofile"] = True
 
-keymap.n("<c-s>") << "<cmd>w<cr>"
+_ = keymap.n("<c-s>") << "<cmd>w<cr>"

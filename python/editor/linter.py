@@ -11,19 +11,10 @@ from shutil import which
 from tempfile import mkstemp
 from typing import Iterable, Iterator, Sequence, Tuple
 
-from pynvim import Nvim
-from pynvim.api.buffer import Buffer
-from pynvim_pp.api import (
-    buf_filetype,
-    buf_get_lines,
-    buf_get_option,
-    buf_linefeed,
-    buf_name,
-    cur_buf,
-    get_cwd,
-)
-from pynvim_pp.hold import hold_win_pos
-from pynvim_pp.lib import async_call, awrite, decode, encode
+from pynvim_pp.buffer import Buffer
+from pynvim_pp.hold import hold_win
+from pynvim_pp.lib import decode, encode
+from pynvim_pp.nvim import Nvim
 from pynvim_pp.preview import set_preview
 from std2.asyncio.subprocess import call
 from std2.lex import ParseError, envsubst
@@ -43,17 +34,18 @@ class BufContext:
     lines: Sequence[str]
 
 
-def current_ctx(nvim: Nvim) -> Tuple[PurePath, BufContext]:
-    cwd = get_cwd(nvim)
-    buf = cur_buf(nvim)
-    filename = buf_name(nvim, buf=buf)
-    filetype = buf_filetype(nvim, buf=buf)
-    tabsize: int = buf_get_option(nvim, buf=buf, key="tabstop")
-    linefeed = buf_linefeed(nvim, buf=buf)
-    lines: Sequence[str] = buf_get_lines(nvim, buf=buf, lo=0, hi=-1)
+async def current_ctx() -> Tuple[PurePath, BufContext]:
+    cwd = await Nvim.getcwd()
+    buf = await Buffer.get_current()
+    filename = await buf.get_name()
+    filetype = await buf.filetype()
+    tabsize = await buf.opts.get(int, "tabstop")
+    linefeed = await buf.linefeed()
+    lines = await buf.get_lines()
+
     return cwd, BufContext(
         buf=buf,
-        filename=filename,
+        filename=filename or "",
         filetype=filetype,
         tabsize=tabsize,
         linefeed=linefeed,
@@ -83,9 +75,9 @@ def make_temp(path: Path) -> Iterator[Path]:
         new_path.unlink(missing_ok=True)
 
 
-def set_preview_content(nvim: Nvim, text: str) -> None:
-    with hold_win_pos(nvim):
-        set_preview(nvim, syntax="", preview=text.splitlines())
+async def set_preview_content(text: str) -> None:
+    async with hold_win(win=None):
+        await set_preview(syntax="", preview=text.splitlines())
 
 
 async def _linter_output(
@@ -123,9 +115,7 @@ async def _linter_output(
             return print_out
 
 
-async def _run(
-    nvim: Nvim, ctx: BufContext, attrs: Iterable[LinterAttrs], cwd: PurePath
-) -> None:
+async def _run(ctx: BufContext, attrs: Iterable[LinterAttrs], cwd: PurePath) -> None:
     body = encode(ctx.linefeed.join(ctx.lines))
     path = Path(ctx.filename)
     with make_temp(path) as temp:
@@ -139,7 +129,7 @@ async def _run(
 
     now = datetime.now().strftime(DATE_FMT)
     preview = (ctx.linefeed * 2).join(chain((now,), outputs))
-    await async_call(nvim, lambda: set_preview_content(nvim, text=preview))
+    await set_preview_content(preview)
 
 
 def _linters_for(filetype: str) -> Iterator[LinterAttrs]:
@@ -151,15 +141,15 @@ def _linters_for(filetype: str) -> Iterator[LinterAttrs]:
 
 
 @rpc(blocking=False)
-async def _run_linter(nvim: Nvim) -> None:
-    cwd, ctx = await async_call(nvim, current_ctx, nvim)
+async def _run_linter() -> None:
+    cwd, ctx = await current_ctx()
     linters = tuple(_linters_for(ctx.filetype))
     if not linters:
-        await awrite(nvim, LANG("missing_linter", filetype=ctx.filetype), error=True)
+        await Nvim.write(LANG("missing_linter", filetype=ctx.filetype), error=True)
     else:
-        await awrite(nvim, LANG("loading..."))
-        await _run(nvim, ctx=ctx, attrs=linters, cwd=cwd)
-        await awrite(nvim, "")
+        await Nvim.write(LANG("loading..."))
+        await _run(ctx, attrs=linters, cwd=cwd)
+        await Nvim.write("")
 
 
-keymap.n("M") << f"<cmd>lua {NAMESPACE}.{_run_linter.name}()<cr>"
+_ = keymap.n("M") << f"<cmd>lua {NAMESPACE}.{_run_linter.name}()<cr>"
