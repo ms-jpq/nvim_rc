@@ -12,7 +12,7 @@ _NS = uuid4()
 _HL = "IncSearch"
 
 
-@rpc(blocking=True)
+@rpc()
 async def _bookmark_signs() -> None:
     buf = await Buffer.get_current()
     local, glob = await gather(buf.list_bookmarks(), Nvim.list_bookmarks())

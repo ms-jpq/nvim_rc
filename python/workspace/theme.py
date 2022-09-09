@@ -39,13 +39,13 @@ settings["pumblend"] = 5
 settings["background"] = "light"
 
 
-@rpc(blocking=True)
+@rpc()
 async def _ins_cursor() -> None:
     win = await Window.get_current()
     await win.opts.set("cursorline", False)
 
 
-@rpc(blocking=True)
+@rpc()
 async def _norm_cursor() -> None:
     win = await Window.get_current()
     await win.opts.set("cursorline", True)
@@ -56,7 +56,7 @@ _ = autocmd("InsertLeave") << f"lua {NAMESPACE}.{_norm_cursor.name}()"
 
 
 # highlight yank
-@rpc(blocking=True)
+@rpc()
 async def _hl_yank() -> None:
     await Nvim.lua.vim.highlight.on_yank(NoneType, {"higroup": "HighlightedyankRegion"})
 

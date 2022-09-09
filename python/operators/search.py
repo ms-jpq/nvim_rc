@@ -40,18 +40,18 @@ async def _hl_selected(visual: VisualTypes) -> str:
     return selected
 
 
-@rpc(blocking=True)
+@rpc(schedule=True)
 async def _op_search(visual: VisualTypes) -> None:
     await _hl_selected(visual)
 
 
-@rpc(blocking=True)
+@rpc(schedule=True)
 async def _op_fzf(visual: VisualTypes) -> None:
     text = await _hl_selected(visual)
     await Nvim.exec(f"BLines {text}")
 
 
-@rpc(blocking=True)
+@rpc(schedule=True)
 async def _op_rg(visual: VisualTypes) -> None:
     text = await _hl_selected(visual)
     escaped = escape(text).replace(r"\ ", " ")
@@ -70,7 +70,7 @@ _ = keymap.v("gF") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_rg.name}(vim.NIL)<c
 
 # replace selection
 # no magic
-@rpc(blocking=True)
+@rpc()
 async def _op_sd(visual: VisualTypes) -> None:
     buf = await Buffer.get_current()
     selected = await _get_selected(buf, visual_type=visual)

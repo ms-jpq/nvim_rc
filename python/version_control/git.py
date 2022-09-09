@@ -2,7 +2,7 @@ from ..registery import NAMESPACE, keymap, rpc
 from ..workspace.terminal import open_term
 
 
-@rpc(blocking=True)
+@rpc()
 async def _lazygit() -> None:
     await open_term("lazygit")
 

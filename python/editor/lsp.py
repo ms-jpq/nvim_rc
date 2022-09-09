@@ -4,6 +4,7 @@ from shutil import which
 from types import NoneType
 from typing import Any, Mapping, MutableMapping, Optional
 
+from pynvim_pp.handler import GLOBAL_NS
 from pynvim_pp.lib import decode, encode
 from pynvim_pp.nvim import Nvim
 from pynvim_pp.text_object import gen_split
@@ -37,7 +38,7 @@ _ = (
 )
 
 
-@rpc(blocking=True)
+@rpc()
 async def _rename() -> None:
     win = await Window.get_current()
     buf = await win.get_buf()
@@ -60,7 +61,7 @@ _ = keymap.n("R") << f"<cmd>lua {NAMESPACE}.{_rename.name}()<cr>"
 _DECODER = new_decoder[Optional[RootPattern]](Optional[RootPattern])
 
 
-@rpc(blocking=True)
+@rpc()
 async def _find_root(_pattern: Any, filename: str, bufnr: int) -> Optional[str]:
     pattern: Optional[RootPattern] = _DECODER(_pattern)
     path = Path(filename)
@@ -90,7 +91,7 @@ async def _find_root(_pattern: Any, filename: str, bufnr: int) -> Optional[str]:
                 never(pattern.fallback)
 
 
-@rpc(blocking=True)
+@rpc()
 async def _on_attach(server: str) -> None:
     pass
 
@@ -115,9 +116,9 @@ for spec in lsp_specs:
     if which(spec.bin):
         config = _encode_spec(spec)
         args = (
-            NAMESPACE,
-            _find_root.name,
-            _on_attach.name,
+            GLOBAL_NS,
+            str(_find_root.uuid),
+            str(_on_attach.uuid),
             spec.server,
             config,
             _ENCODER(spec.root),

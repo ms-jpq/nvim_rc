@@ -26,7 +26,7 @@ _TEXT_HL = "Normal"
 _LINE_HL = "CursorLine"
 
 
-@rpc(blocking=True)
+@rpc()
 async def _marks_clear(visual: bool) -> None:
     ns = await Nvim.create_namespace(_NS)
     buf = await Buffer.get_current()
@@ -45,7 +45,7 @@ _ = (
 )
 
 
-@rpc(blocking=True)
+@rpc()
 async def _mark_set(visual: bool) -> None:
     ns = await Nvim.create_namespace(_NS)
     win = await Window.get_current()
@@ -149,7 +149,7 @@ async def _highlight(buf: Buffer, begin: int, lines: Sequence[str]) -> None:
     await buf.clear_namespace(hns)
 
 
-@rpc(blocking=True)
+@rpc()
 async def _eval(visual: bool) -> None:
     win = await Window.get_current()
     buf = await win.get_buf()

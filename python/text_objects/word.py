@@ -8,7 +8,7 @@ from ..registery import NAMESPACE, keymap, rpc
 UNIFIYING_CHARS = frozenset(("_", "-"))
 
 
-@rpc(blocking=True)
+@rpc()
 async def _word(is_inside: bool) -> None:
     win = await Window.get_current()
     buf = await win.get_buf()

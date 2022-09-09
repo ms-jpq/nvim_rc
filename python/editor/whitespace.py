@@ -57,7 +57,7 @@ async def detect_tabs(buf: Buffer) -> None:
     await gather(_set_tabsize(buf, lines=lines), _set_usetab(buf, lines=lines))
 
 
-@rpc(blocking=True)
+@rpc()
 async def _detect_tabs() -> None:
     buf = await Buffer.get_current()
     await detect_tabs(buf=buf)

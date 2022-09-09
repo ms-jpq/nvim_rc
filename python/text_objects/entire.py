@@ -5,7 +5,7 @@ from pynvim_pp.window import Window
 from ..registery import NAMESPACE, keymap, rpc
 
 
-@rpc(blocking=True)
+@rpc()
 async def _entire() -> None:
     win = await Window.get_current()
     buf = await win.get_buf()

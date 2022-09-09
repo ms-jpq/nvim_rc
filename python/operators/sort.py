@@ -6,7 +6,7 @@ from pynvim_pp.operators import VisualTypes, operator_marks
 from ..registery import NAMESPACE, keymap, rpc
 
 
-@rpc(blocking=True)
+@rpc()
 async def _sort_lines(visual: VisualTypes) -> None:
     buf = await Buffer.get_current()
     if not await buf.modifiable():

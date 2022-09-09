@@ -17,7 +17,7 @@ def _p_around(line: str) -> Tuple[int, int]:
     return 0, len(encode(line))
 
 
-@rpc(blocking=True)
+@rpc()
 async def _line(is_inside: bool) -> None:
     win = await Window.get_current()
     buf = await win.get_buf()

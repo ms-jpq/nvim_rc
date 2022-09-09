@@ -5,7 +5,7 @@ from pynvim_pp.window import Window
 from ..registery import NAMESPACE, keymap, rpc
 
 
-@rpc(blocking=True)
+@rpc()
 async def _norm_mv(up: bool) -> None:
     win = await Window.get_current()
     buf = await win.get_buf()
@@ -27,7 +27,7 @@ _ = keymap.n("<m-up>") << f"<cmd>lua {NAMESPACE}.{_norm_mv.name}(true)<cr>"
 _ = keymap.n("<m-down>") << f"<cmd>lua {NAMESPACE}.{_norm_mv.name}(false)<cr>"
 
 
-@rpc(blocking=True)
+@rpc()
 async def _visual_mv(up: bool) -> None:
     win = await Window.get_current()
     buf = await win.get_buf()

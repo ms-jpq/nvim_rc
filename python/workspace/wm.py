@@ -1,7 +1,6 @@
 from contextlib import suppress
 from types import NoneType
 
-from pynvim_pp.atomic import Atomic
 from pynvim_pp.buffer import Buffer
 from pynvim_pp.nvim import Nvim
 from pynvim_pp.preview import preview_windows
@@ -45,7 +44,7 @@ _ = keymap.n("<s-up>") << "<cmd>wincmd +<cr>"
 _ = keymap.n("<s-down>") << "<cmd>wincmd -<cr>"
 
 
-@rpc(blocking=True)
+@rpc()
 async def _new_window(vertical: bool) -> None:
     await Nvim.api.command(NoneType, "vnew" if vertical else "new")
     win = await Window.get_current()
@@ -73,7 +72,7 @@ _ = keymap.n("<leader>k") << "<cmd>wincmd T<cr>"
 # close tab
 _ = keymap.n("<leader>q") << "<cmd>tabclose<cr>"
 # create new tab
-@rpc(blocking=True)
+@rpc()
 async def _new_tab() -> None:
     await Nvim.api.command(NoneType, "tabnew")
     buf = await Buffer.get_current()
@@ -96,14 +95,12 @@ for i in range(1, 10):
 settings["previewheight"] = 11
 
 
-@rpc(blocking=True)
+@rpc()
 async def _toggle_preview() -> None:
     tab = await Tabpage.get_current()
     if previews := await preview_windows(tab):
-        atomic = Atomic()
         for win in previews:
-            atomic.win_close(win)
-        await atomic.commit(NoneType)
+            await win.close()
     else:
         await Nvim.api.command(NoneType, "new")
         win = await Window.get_current()
@@ -120,7 +117,7 @@ _ = keymap.n("<c-j>") << "<cmd>cprevious<cr>"
 _ = keymap.n("<c-k>") << "<cmd>cnext<cr>"
 
 
-@rpc(blocking=True)
+@rpc()
 async def _toggle_qf() -> None:
     tab = await Tabpage.get_current()
     wins = await tab.list_wins()
@@ -139,7 +136,7 @@ async def _toggle_qf() -> None:
         await Nvim.api.win_set_height(NoneType, win, height)
 
 
-@rpc(blocking=True)
+@rpc()
 async def _clear_qf() -> None:
     await Nvim.fn.setqflist(NoneType, ())
     with suppress(NvimError):
@@ -150,7 +147,7 @@ _ = keymap.n("<leader>l") << f"<cmd>lua {NAMESPACE}.{_toggle_qf.name}()<cr>"
 _ = keymap.n("<leader>L") << f"<cmd>lua {NAMESPACE}.{_clear_qf.name}()<cr>"
 
 
-@rpc(blocking=True)
+@rpc()
 async def _resize_secondary() -> None:
     tab = await Tabpage.get_current()
     wins = await tab.list_wins()

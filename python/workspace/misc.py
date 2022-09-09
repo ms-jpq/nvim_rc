@@ -27,7 +27,7 @@ settings["wrap"] = True
 settings["breakindent"] = True
 
 # open with scratch buffer, like emacs
-@rpc(blocking=True)
+@rpc()
 async def _scratch_buffer() -> None:
     bufs = await Buffer.list(listed=False)
     for buf in bufs:

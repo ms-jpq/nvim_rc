@@ -18,7 +18,7 @@ def _p_inside(init_lv: int, tabsize: int, lines: Iterable[str]) -> int:
         return n + 1 if n else 0
 
 
-@rpc(blocking=True)
+@rpc()
 async def _indent() -> None:
     win = await Window.get_current()
     buf = await win.get_buf()

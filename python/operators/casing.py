@@ -6,7 +6,7 @@ from pynvim_pp.operators import VisualTypes, operator_marks
 from ..registery import NAMESPACE, keymap, rpc
 
 
-@rpc(blocking=True)
+@rpc()
 async def _snake_case(visual: VisualTypes) -> None:
     buf = await Buffer.get_current()
     if not await buf.modifiable():
@@ -25,7 +25,7 @@ _ = keymap.n("gh") << f"<cmd>set opfunc={_snake_case.name}<cr>g@"
 _ = keymap.v("gh") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_snake_case.name}(vim.NIL)<cr>"
 
 
-@rpc(blocking=True)
+@rpc()
 async def _camel_case(visual: VisualTypes) -> None:
     buf = await Buffer.get_current()
     if not await buf.modifiable():

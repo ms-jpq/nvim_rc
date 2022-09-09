@@ -24,7 +24,7 @@ def _swap_case(chars: str) -> str:
     return "".join(cont())
 
 
-@rpc(blocking=True)
+@rpc()
 async def _toggle_case() -> None:
     win = await Window.get_current()
     buf = await win.get_buf()

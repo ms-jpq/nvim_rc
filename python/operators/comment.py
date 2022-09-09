@@ -65,7 +65,7 @@ def _toggle_comment(lhs: str, rhs: str, lines: Sequence[str]) -> Sequence[str]:
         return tuple(added for _, _, added, _ in commented)
 
 
-@rpc(blocking=True)
+@rpc()
 async def _comment(visual: VisualTypes) -> None:
     buf = await Buffer.get_current()
     if not await buf.modifiable():
@@ -83,7 +83,7 @@ _ = keymap.n("gc") << f"<cmd>set opfunc={_comment.name}<cr>g@"
 _ = keymap.v("gc") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_comment.name}(vim.NIL)<cr>"
 
 
-@rpc(blocking=True)
+@rpc()
 async def _comment_single() -> None:
     win = await Window.get_current()
     buf = await win.get_buf()

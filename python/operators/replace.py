@@ -7,7 +7,7 @@ from pynvim_pp.window import Window
 from ..registery import NAMESPACE, keymap, rpc
 
 
-@rpc(blocking=True)
+@rpc()
 async def _go_replace(visual: VisualTypes) -> None:
     buf = await Buffer.get_current()
     if not await buf.modifiable():
@@ -41,7 +41,7 @@ _ = keymap.n("gr") << f"<cmd>set opfunc={_go_replace.name}<cr>g@"
 _ = keymap.v("gr") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_go_replace.name}(vim.NIL)<cr>"
 
 
-@rpc(blocking=True)
+@rpc()
 async def _go_replace_line() -> None:
     win = await Window.get_current()
     buf = await win.get_buf()

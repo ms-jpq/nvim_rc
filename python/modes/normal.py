@@ -1,7 +1,5 @@
-from typing import Optional, cast
 from uuid import uuid4
 
-from pynvim_pp.buffer import Buffer
 from pynvim_pp.window import Window
 
 from ..registery import NAMESPACE, autocmd, rpc
@@ -10,7 +8,7 @@ from ..registery import NAMESPACE, autocmd, rpc
 _BUF_VAR_NAME = f"buf_cursor_pos_{uuid4().hex}"
 
 
-@rpc(blocking=True)
+@rpc()
 async def _record_pos() -> None:
     win = await Window.get_current()
     buf = await win.get_buf()
@@ -24,7 +22,7 @@ _ = (
 )
 
 
-@rpc(blocking=True)
+@rpc()
 async def _restore_pos() -> None:
     win = await Window.get_current()
     buf = await win.get_buf()
