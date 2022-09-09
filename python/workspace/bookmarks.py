@@ -42,7 +42,7 @@ async def _bookmark_signs() -> None:
 
     ns = await Nvim.create_namespace(_NS)
     await buf.clear_namespace(ns)
-    await buf.set_ext_marks(ns, extmarks=c2())
+    await buf.set_extmarks(ns, extmarks=c2())
 
 
 _ = (

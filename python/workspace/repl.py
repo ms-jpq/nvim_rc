@@ -51,7 +51,7 @@ async def _mark_set(visual: bool) -> None:
     win = await Window.get_current()
     buf = await win.get_buf()
 
-    marks = await buf.get_ext_marks(ns)
+    marks = await buf.get_extmarks(ns)
     indices = {mark.marker for mark in marks}
     gen = map(ExtMarker, (i for i in count(1) if i not in indices))
     lcs, rcs = (await buf.commentstr()) or ("", "")
@@ -85,7 +85,7 @@ async def _mark_set(visual: bool) -> None:
             await buf.del_extmarks(ns, markers=existing)
         else:
             m1, m2 = mk(lo), mk(hi)
-            await buf.set_ext_marks(ns, extmarks=(m1, m2))
+            await buf.set_extmarks(ns, extmarks=(m1, m2))
 
     else:
         row, _ = await win.get_cursor()
@@ -96,7 +96,7 @@ async def _mark_set(visual: bool) -> None:
                 break
         else:
             mark = mk(row)
-            await buf.set_ext_marks(ns, extmarks=(mark,))
+            await buf.set_extmarks(ns, extmarks=(mark,))
 
 
 _ = keymap.n("<leader>e") << f"<cmd>lua {NAMESPACE}.{_mark_set.name}(false)<cr>"
@@ -159,7 +159,7 @@ async def _eval(visual: bool) -> None:
     else:
         ns = await Nvim.create_namespace(_NS)
         row, _ = await win.get_cursor()
-        marks = await buf.get_ext_marks(ns)
+        marks = await buf.get_extmarks(ns)
         begin, end = 0, None
         for mark in marks:
             r, _ = mark.begin
