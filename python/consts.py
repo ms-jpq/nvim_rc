@@ -65,5 +65,4 @@ PATH = environ["PATH"] = pathsep.join(
 )
 
 TMP_DIR = VARS_DIR / "tmp"
-LOGS_DIR = VARS_DIR / "logs"
-UPDATE_LOG = LOGS_DIR / "last_update.txt"
+UPDATE_LOG = TMP_DIR / "last_update.txt"
