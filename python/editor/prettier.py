@@ -122,4 +122,4 @@ async def run_fmt() -> None:
         await _run(ctx, attrs=prettiers, cwd=cwd)
 
 
-_ = keymap.n("gq", nowait=True) << f"<cmd>lua {NAMESPACE}.{run_fmt.name}()<cr>"
+_ = keymap.n("gq", nowait=True) << f"<cmd>lua {NAMESPACE}.{run_fmt.method}()<cr>"

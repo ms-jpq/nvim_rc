@@ -5,7 +5,7 @@ from pynvim_pp.autocmd import AutoCMD
 from pynvim_pp.handler import RPC
 from pynvim_pp.keymap import Keymap
 from pynvim_pp.settings import Settings
-from pynvim_pp.types import RPCallable
+from pynvim_pp.types import Method, RPCallable
 
 from .components.localization import load
 from .components.rtp import inst
@@ -21,7 +21,7 @@ rpc = RPC(NAMESPACE)
 settings = Settings()
 
 
-def drain() -> tuple[Atomic, Mapping[str, RPCallable]]:
+def drain() -> tuple[Atomic, Mapping[Method, RPCallable]]:
     _atomic = Atomic()
     _atomic.call_function("setenv", ("PATH", PATH))
     _atomic.set_var("mapleader", " ")

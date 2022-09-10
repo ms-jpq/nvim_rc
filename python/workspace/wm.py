@@ -54,8 +54,8 @@ async def _new_window(vertical: bool) -> None:
     await win.set_buf(buf)
 
 
-_ = keymap.n("<leader>=") << f"<cmd>lua {NAMESPACE}.{_new_window.name}(true)<cr>"
-_ = keymap.n("<leader>-") << f"<cmd>lua {NAMESPACE}.{_new_window.name}(false)<cr>"
+_ = keymap.n("<leader>=") << f"<cmd>lua {NAMESPACE}.{_new_window.method}(true)<cr>"
+_ = keymap.n("<leader>-") << f"<cmd>lua {NAMESPACE}.{_new_window.method}(false)<cr>"
 
 
 # kill current buf
@@ -79,7 +79,7 @@ async def _new_tab() -> None:
     await buf.vars.set("buftype", val="nofile")
 
 
-_ = keymap.n("<leader>n") << f"<cmd>lua {NAMESPACE}.{_new_tab.name}()<cr>"
+_ = keymap.n("<leader>n") << f"<cmd>lua {NAMESPACE}.{_new_tab.method}()<cr>"
 
 
 # cycle between tabs
@@ -109,7 +109,7 @@ async def _toggle_preview() -> None:
         await win.set_height(height)
 
 
-_ = keymap.n("<leader>h") << f"<cmd>lua {NAMESPACE}.{_toggle_preview.name}()<cr>"
+_ = keymap.n("<leader>h") << f"<cmd>lua {NAMESPACE}.{_toggle_preview.method}()<cr>"
 
 
 # quickfix
@@ -143,8 +143,8 @@ async def _clear_qf() -> None:
         await Nvim.api.command(NoneType, "cclose")
 
 
-_ = keymap.n("<leader>l") << f"<cmd>lua {NAMESPACE}.{_toggle_qf.name}()<cr>"
-_ = keymap.n("<leader>L") << f"<cmd>lua {NAMESPACE}.{_clear_qf.name}()<cr>"
+_ = keymap.n("<leader>l") << f"<cmd>lua {NAMESPACE}.{_toggle_qf.method}()<cr>"
+_ = keymap.n("<leader>L") << f"<cmd>lua {NAMESPACE}.{_clear_qf.method}()<cr>"
 
 
 @rpc()
@@ -160,4 +160,4 @@ async def _resize_secondary() -> None:
             await win.set_height(height)
 
 
-_ = keymap.n("<leader>H") << f"<cmd>lua {NAMESPACE}.{_resize_secondary.name}()<cr>"
+_ = keymap.n("<leader>H") << f"<cmd>lua {NAMESPACE}.{_resize_secondary.method}()<cr>"

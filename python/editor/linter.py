@@ -152,4 +152,4 @@ async def _run_linter() -> None:
         await Nvim.write("")
 
 
-_ = keymap.n("M") << f"<cmd>lua {NAMESPACE}.{_run_linter.name}()<cr>"
+_ = keymap.n("M") << f"<cmd>lua {NAMESPACE}.{_run_linter.method}()<cr>"

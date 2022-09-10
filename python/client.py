@@ -9,14 +9,13 @@ from ._registery import ____
 from .components.install import maybe_install
 from .registery import drain
 
-from sys import stderr
 assert ____ or 1
 
 
 async def init(client: RPClient) -> None:
-    atomic, specs = drain()
-    for method, callback in specs.items():
-        client.on_callback(method, callback)
+    atomic, handlers = drain()
+    for handler in handlers.values():
+        client.register(handler)
     await atomic.commit(NoneType)
 
     await maybe_install()

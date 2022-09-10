@@ -18,7 +18,7 @@ async def _record_pos() -> None:
 
 _ = (
     autocmd("InsertEnter", "CursorMovedI", "TextChangedP")
-    << f"lua {NAMESPACE}.{_record_pos.name}()"
+    << f"lua {NAMESPACE}.{_record_pos.method}()"
 )
 
 
@@ -33,4 +33,4 @@ async def _restore_pos() -> None:
         await win.set_cursor(row=row, col=col)
 
 
-_ = autocmd("InsertLeave") << f"lua {NAMESPACE}.{_restore_pos.name}()"
+_ = autocmd("InsertLeave") << f"lua {NAMESPACE}.{_restore_pos.method}()"

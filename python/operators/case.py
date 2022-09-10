@@ -44,4 +44,4 @@ async def _toggle_case() -> None:
             await win.set_cursor(row=row, col=pos)
 
 
-_ = keymap.n("~") << f"<cmd>lua {NAMESPACE}.{_toggle_case.name}()<cr>"
+_ = keymap.n("~") << f"<cmd>lua {NAMESPACE}.{_toggle_case.method}()<cr>"

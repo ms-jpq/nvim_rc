@@ -38,10 +38,10 @@ async def _marks_clear(visual: bool) -> None:
         await buf.vars.set(str(_NS), val=None)
 
 
-_ = keymap.n("<leader>E") << f"<cmd>lua {NAMESPACE}.{_marks_clear.name}(false)<cr>"
+_ = keymap.n("<leader>E") << f"<cmd>lua {NAMESPACE}.{_marks_clear.method}(false)<cr>"
 _ = (
     keymap.v("<leader>E")
-    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_marks_clear.name}(true)<cr>"
+    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_marks_clear.method}(true)<cr>"
 )
 
 
@@ -99,10 +99,10 @@ async def _mark_set(visual: bool) -> None:
             await buf.set_extmarks(ns, extmarks=(mark,))
 
 
-_ = keymap.n("<leader>e") << f"<cmd>lua {NAMESPACE}.{_mark_set.name}(false)<cr>"
+_ = keymap.n("<leader>e") << f"<cmd>lua {NAMESPACE}.{_mark_set.method}(false)<cr>"
 _ = (
     keymap.v("<leader>e")
-    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_mark_set.name}(true)<cr>"
+    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_mark_set.method}(true)<cr>"
 )
 
 
@@ -123,7 +123,7 @@ async def _tmux_send(buf: Buffer, text: str) -> None:
             fd.write(encode(text))
             fd.flush()
             try:
-                await call("tmux", "load-buffer", "-b", name, "--", fd.name)
+                await call("tmux", "load-buffer", "-b", name, "--", fd.method)
                 await call(
                     "tmux", "paste-buffer", "-d", "-r", "-p", "-b", name, "-t", pane
                 )
@@ -173,5 +173,5 @@ async def _eval(visual: bool) -> None:
     await gather(_tmux_send(buf, text=text), _highlight(buf, begin=begin, lines=lines))
 
 
-_ = keymap.n("<leader>g") << f"<cmd>lua {NAMESPACE}.{_eval.name}(false)<cr>"
-_ = keymap.v("<leader>g") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_eval.name}(true)<cr>"
+_ = keymap.n("<leader>g") << f"<cmd>lua {NAMESPACE}.{_eval.method}(false)<cr>"
+_ = keymap.v("<leader>g") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_eval.method}(true)<cr>"

@@ -51,8 +51,8 @@ async def _norm_cursor() -> None:
     await win.opts.set("cursorline", True)
 
 
-_ = autocmd("InsertEnter") << f"lua {NAMESPACE}.{_ins_cursor.name}()"
-_ = autocmd("InsertLeave") << f"lua {NAMESPACE}.{_norm_cursor.name}()"
+_ = autocmd("InsertEnter") << f"lua {NAMESPACE}.{_ins_cursor.method}()"
+_ = autocmd("InsertLeave") << f"lua {NAMESPACE}.{_norm_cursor.method}()"
 
 
 # highlight yank
@@ -62,4 +62,4 @@ async def _hl_yank() -> None:
 
 
 atomic.command("highlight HighlightedyankRegion cterm=reverse gui=reverse")
-_ = autocmd("TextYankPost") << f"lua {NAMESPACE}.{_hl_yank.name}()"
+_ = autocmd("TextYankPost") << f"lua {NAMESPACE}.{_hl_yank.method}()"

@@ -38,7 +38,7 @@ async def _word(is_inside: bool) -> None:
     await set_visual_selection(win, mode="v", mark1=mark1, mark2=mark2)
 
 
-_ = keymap.o("iw") << f"<cmd>lua {NAMESPACE}.{_word.name}(true)<cr>"
-_ = keymap.o("aw") << f"<cmd>lua {NAMESPACE}.{_word.name}(false)<cr>"
-_ = keymap.v("iw") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_word.name}(true)<cr>"
-_ = keymap.v("aw") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_word.name}(false)<cr>"
+_ = keymap.o("iw") << f"<cmd>lua {NAMESPACE}.{_word.method}(true)<cr>"
+_ = keymap.o("aw") << f"<cmd>lua {NAMESPACE}.{_word.method}(false)<cr>"
+_ = keymap.v("iw") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_word.method}(true)<cr>"
+_ = keymap.v("aw") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_word.method}(false)<cr>"

@@ -37,8 +37,8 @@ async def _go_replace(visual: VisualTypes) -> None:
         await buf.set_text(begin=begin, end=end, text=new_lines)
 
 
-_ = keymap.n("gr") << f"<cmd>set opfunc={_go_replace.name}<cr>g@"
-_ = keymap.v("gr") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_go_replace.name}(vim.NIL)<cr>"
+_ = keymap.n("gr") << f"<cmd>set opfunc={_go_replace.method}<cr>g@"
+_ = keymap.v("gr") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_go_replace.method}(vim.NIL)<cr>"
 
 
 @rpc()
@@ -60,4 +60,4 @@ async def _go_replace_line() -> None:
         await buf.set_lines(lo=row, hi=row + 1, lines=new_lines)
 
 
-_ = keymap.n("grr") << f"<cmd>lua {NAMESPACE}.{_go_replace_line.name}()<cr>"
+_ = keymap.n("grr") << f"<cmd>lua {NAMESPACE}.{_go_replace_line.method}()<cr>"

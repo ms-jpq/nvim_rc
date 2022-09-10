@@ -47,7 +47,7 @@ async def _bookmark_signs() -> None:
 
 _ = (
     autocmd("BufEnter", "CursorHold", "CursorHoldI")
-    << f"lua {NAMESPACE}.{_bookmark_signs.name}()"
+    << f"lua {NAMESPACE}.{_bookmark_signs.method}()"
 )
 
-atomic.exec_lua(f"{NAMESPACE}.{_bookmark_signs.name}()", ())
+atomic.exec_lua(f"{NAMESPACE}.{_bookmark_signs.method}()", ())

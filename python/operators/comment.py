@@ -79,8 +79,8 @@ async def _comment(visual: VisualTypes) -> None:
             await buf.set_lines(lo=row1, hi=row2 + 1, lines=new_lines)
 
 
-_ = keymap.n("gc") << f"<cmd>set opfunc={_comment.name}<cr>g@"
-_ = keymap.v("gc") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_comment.name}(vim.NIL)<cr>"
+_ = keymap.n("gc") << f"<cmd>set opfunc={_comment.method}<cr>g@"
+_ = keymap.v("gc") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_comment.method}(vim.NIL)<cr>"
 
 
 @rpc()
@@ -98,4 +98,4 @@ async def _comment_single() -> None:
             await buf.set_lines(lo=row, hi=row + 1, lines=new_lines)
 
 
-_ = keymap.n("gcc") << f"<cmd>lua {NAMESPACE}.{_comment_single.name}()<cr>"
+_ = keymap.n("gcc") << f"<cmd>lua {NAMESPACE}.{_comment_single.method}()<cr>"

@@ -57,5 +57,5 @@ async def _indent() -> None:
     await set_visual_selection(win, mode="V", mark1=mark1, mark2=mark2)
 
 
-_ = keymap.o("ii") << f"<cmd>lua {NAMESPACE}.{_indent.name}()<cr>"
-_ = keymap.v("ii") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_indent.name}()<cr>"
+_ = keymap.o("ii") << f"<cmd>lua {NAMESPACE}.{_indent.method}()<cr>"
+_ = keymap.v("ii") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_indent.method}()<cr>"

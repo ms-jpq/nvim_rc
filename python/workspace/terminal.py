@@ -73,7 +73,7 @@ async def open_term(*args: AnyPath, opts: TermOpts = {}) -> None:
         await _term_open(*argv, opts=opts)
 
 
-atomic.command(f"command! -nargs=* FCmd lua {NAMESPACE}.{open_term.name}(<f-args>)")
+atomic.command(f"command! -nargs=* FCmd lua {NAMESPACE}.{open_term.method}(<f-args>)")
 
 
 @rpc()
@@ -88,7 +88,7 @@ async def toggle_floating(*args: str) -> None:
         await _term_open(*argv)
 
 
-_ = keymap.n("<leader>u") << f"<cmd>lua {NAMESPACE}.{toggle_floating.name}()<cr>"
+_ = keymap.n("<leader>u") << f"<cmd>lua {NAMESPACE}.{toggle_floating.method}()<cr>"
 
 
 @rpc()
@@ -99,4 +99,4 @@ async def _on_resized() -> None:
         await toggle_floating()
 
 
-_ = autocmd("VimResized") << f"lua {NAMESPACE}.{_on_resized.name}()"
+_ = autocmd("VimResized") << f"lua {NAMESPACE}.{_on_resized.method}()"

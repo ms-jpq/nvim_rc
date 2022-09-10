@@ -63,7 +63,7 @@ async def _detect_tabs() -> None:
     await detect_tabs(buf=buf)
 
 
-_ = autocmd("FileType") << f"lua {NAMESPACE}.{_detect_tabs.name}()"
+_ = autocmd("FileType") << f"lua {NAMESPACE}.{_detect_tabs.method}()"
 
 
 # smart indentation level

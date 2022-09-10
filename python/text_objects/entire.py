@@ -16,7 +16,7 @@ async def _entire() -> None:
     await set_visual_selection(win, mode="V", mark1=mark1, mark2=mark2)
 
 
-_ = keymap.o("ie") << f"<cmd>lua {NAMESPACE}.{_entire.name}()<cr>"
-_ = keymap.o("ae") << f"<cmd>lua {NAMESPACE}.{_entire.name}()<cr>"
-_ = keymap.v("ie") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_entire.name}()<cr>"
-_ = keymap.v("ae") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_entire.name}()<cr>"
+_ = keymap.o("ie") << f"<cmd>lua {NAMESPACE}.{_entire.method}()<cr>"
+_ = keymap.o("ae") << f"<cmd>lua {NAMESPACE}.{_entire.method}()<cr>"
+_ = keymap.v("ie") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_entire.method}()<cr>"
+_ = keymap.v("ae") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_entire.method}()<cr>"

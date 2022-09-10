@@ -55,7 +55,7 @@ async def _rename() -> None:
         await Nvim.lua.vim.lsp.buf.rename(NoneType, ans)
 
 
-_ = keymap.n("R") << f"<cmd>lua {NAMESPACE}.{_rename.name}()<cr>"
+_ = keymap.n("R") << f"<cmd>lua {NAMESPACE}.{_rename.method}()<cr>"
 
 
 _DECODER = new_decoder[Optional[RootPattern]](Optional[RootPattern])

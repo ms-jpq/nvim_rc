@@ -36,4 +36,4 @@ async def _scratch_buffer() -> None:
             await buf.opts.set("buftype", val="nofile")
 
 
-atomic.exec_lua(f"{NAMESPACE}.{_scratch_buffer.name}()", ())
+atomic.exec_lua(f"{NAMESPACE}.{_scratch_buffer.method}()", ())

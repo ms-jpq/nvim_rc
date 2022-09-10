@@ -29,7 +29,7 @@ async def _line(is_inside: bool) -> None:
     await set_visual_selection(win, mode="v", mark1=(row, lhs), mark2=(row, rhs))
 
 
-_ = keymap.o("il") << f"<cmd>lua {NAMESPACE}.{_line.name}(true)<cr>"
-_ = keymap.o("al") << f"<cmd>lua {NAMESPACE}.{_line.name}(false)<cr>"
-_ = keymap.v("il") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_line.name}(true)<cr>"
-_ = keymap.v("al") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_line.name}(false)<cr>"
+_ = keymap.o("il") << f"<cmd>lua {NAMESPACE}.{_line.method}(true)<cr>"
+_ = keymap.o("al") << f"<cmd>lua {NAMESPACE}.{_line.method}(false)<cr>"
+_ = keymap.v("il") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_line.method}(true)<cr>"
+_ = keymap.v("al") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_line.method}(false)<cr>"
