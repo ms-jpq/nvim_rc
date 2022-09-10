@@ -106,7 +106,7 @@ async def _toggle_preview() -> None:
         win = await Window.get_current()
         height = await Nvim.opts.get(int, "previewheight")
         await win.opts.set("previewwindow", val=True)
-        await Nvim.api.win_set_height(NoneType, win, height)
+        await win.set_height(height)
 
 
 _ = keymap.n("<leader>h") << f"<cmd>lua {NAMESPACE}.{_toggle_preview.name}()<cr>"
@@ -133,7 +133,7 @@ async def _toggle_qf() -> None:
         await Nvim.api.command(NoneType, "copen")
         win = await Window.get_current()
         height = await Nvim.opts.get(int, "previewheight")
-        await Nvim.api.win_set_height(NoneType, win, height)
+        await win.set_height(height)
 
 
 @rpc()
@@ -157,7 +157,7 @@ async def _resize_secondary() -> None:
         if (await win.opts.get(bool, "previewwindow")) or (
             (buf := await win.get_buf()) and (await buf.filetype()) == "qf"
         ):
-            await win.api.set_height(NoneType, height)
+            await win.set_height(height)
 
 
 _ = keymap.n("<leader>H") << f"<cmd>lua {NAMESPACE}.{_resize_secondary.name}()<cr>"
