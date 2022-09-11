@@ -20,6 +20,7 @@ def parse_args() -> Namespace:
     sub_parsers = parser.add_subparsers(dest="command", required=True)
 
     with nullcontext(sub_parsers.add_parser("run")) as p:
+        p.add_argument("--ppid", type=int)
         p.add_argument("--socket", required=True)
 
     with nullcontext(sub_parsers.add_parser("deps")) as p:
@@ -80,8 +81,8 @@ elif command == "run":
     assert _EX == RT_PY
     assert lock == req
 
-    from std2.sys import suicide
     from std2.pickle.types import DecodeError
+    from std2.sys import suicide
 
     try:
         from .client import init
@@ -89,8 +90,9 @@ elif command == "run":
         print(e, file=stderr)
         exit(1)
     else:
+
         async def main() -> None:
-            async with suicide(None):
+            async with suicide(args.ppid):
                 await init(args.socket)
 
         arun(main())

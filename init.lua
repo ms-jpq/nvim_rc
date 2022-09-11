@@ -62,6 +62,8 @@ local l3 = function()
     "-m",
     "python",
     "run",
+    "--ppid",
+    vim.fn.getpid(),
     "--socket",
     vim.v.servername
   }
