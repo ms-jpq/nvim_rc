@@ -4,6 +4,7 @@ from time import time
 from types import NoneType
 from typing import Any, Sequence
 
+from pynvim_pp.logging import suppress_and_log
 from pynvim_pp.nvim import conn
 from pynvim_pp.rpc import MsgType
 from pynvim_pp.types import Method
@@ -17,7 +18,8 @@ assert ____ or 1
 
 
 async def _default(msg: MsgType, method: Method, params: Sequence[Any]) -> None:
-    assert False, (method, params)
+    with suppress_and_log():
+        assert False, (method, params)
 
 
 async def init(socket: PurePath) -> None:
@@ -25,6 +27,7 @@ async def init(socket: PurePath) -> None:
         atomic, handlers = drain()
         for handler in handlers.values():
             client.register(handler)
+        print(client.chan, flush=True)
         await atomic.commit(NoneType)
 
         await maybe_install()
