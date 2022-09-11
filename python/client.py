@@ -27,7 +27,6 @@ async def init(socket: PurePath) -> None:
         atomic, handlers = drain()
         for handler in handlers.values():
             client.register(handler)
-        print(client.chan, flush=True)
         await atomic.commit(NoneType)
 
         await maybe_install()
