@@ -80,6 +80,7 @@ elif command == "run":
     assert _EX == RT_PY
     assert lock == req
 
+    from std2.sys import suicide
     from std2.pickle.types import DecodeError
 
     try:
@@ -88,8 +89,11 @@ elif command == "run":
         print(e, file=stderr)
         exit(1)
     else:
+        async def main() -> None:
+            async with suicide(None):
+                await init(args.socket)
 
-        arun(init(args.socket))
+        arun(main())
 
 else:
     assert False
