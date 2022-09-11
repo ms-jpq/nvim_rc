@@ -38,7 +38,10 @@ async def _go_replace(visual: VisualTypes) -> None:
 
 
 _ = keymap.n("gr") << f"<cmd>set opfunc={_go_replace.method}<cr>g@"
-_ = keymap.v("gr") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_go_replace.method}(vim.NIL)<cr>"
+_ = (
+    keymap.v("gr")
+    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_go_replace.method}(vim.NIL)<cr>"
+)
 
 
 @rpc()

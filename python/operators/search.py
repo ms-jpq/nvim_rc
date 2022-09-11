@@ -59,7 +59,10 @@ async def _op_rg(visual: VisualTypes) -> None:
 
 
 _ = keymap.n("gs") << f"<cmd>set opfunc={_op_search.method}<cr>g@"
-_ = keymap.v("gs") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_search.method}(vim.NIL)<cr>"
+_ = (
+    keymap.v("gs")
+    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_search.method}(vim.NIL)<cr>"
+)
 
 _ = keymap.n("gf") << f"<cmd>set opfunc={_op_fzf.method}<cr>g@"
 _ = keymap.v("gf") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_fzf.method}(vim.NIL)<cr>"

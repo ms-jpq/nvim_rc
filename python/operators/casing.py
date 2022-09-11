@@ -22,7 +22,10 @@ async def _snake_case(visual: VisualTypes) -> None:
 
 
 _ = keymap.n("gh") << f"<cmd>set opfunc={_snake_case.method}<cr>g@"
-_ = keymap.v("gh") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_snake_case.method}(vim.NIL)<cr>"
+_ = (
+    keymap.v("gh")
+    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_snake_case.method}(vim.NIL)<cr>"
+)
 
 
 @rpc()
@@ -41,4 +44,7 @@ async def _camel_case(visual: VisualTypes) -> None:
 
 
 _ = keymap.n("gH") << f"<cmd>set opfunc={_camel_case.method}<cr>g@"
-_ = keymap.v("gH") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_camel_case.method}(vim.NIL)<cr>"
+_ = (
+    keymap.v("gH")
+    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_camel_case.method}(vim.NIL)<cr>"
+)

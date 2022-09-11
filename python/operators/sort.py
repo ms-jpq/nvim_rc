@@ -19,4 +19,7 @@ async def _sort_lines(visual: VisualTypes) -> None:
 
 
 _ = keymap.n("gu") << f"<cmd>set opfunc={_sort_lines.method}<cr>g@"
-_ = keymap.v("gu") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_sort_lines.method}(vim.NIL)<cr>"
+_ = (
+    keymap.v("gu")
+    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_sort_lines.method}(vim.NIL)<cr>"
+)

@@ -7,4 +7,7 @@ async def _lazygit() -> None:
     await open_term("lazygit")
 
 
-_ = keymap.n("<leader>U") << f"<cmd>silent! wa! | lua {NAMESPACE}.{_lazygit.method}()<cr>"
+_ = (
+    keymap.n("<leader>U")
+    << f"<cmd>silent! wa! | lua {NAMESPACE}.{_lazygit.method}()<cr>"
+)

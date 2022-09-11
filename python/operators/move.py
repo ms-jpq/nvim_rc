@@ -63,7 +63,10 @@ async def _visual_mv(up: bool) -> None:
                 )
 
 
-_ = keymap.v("<m-up>") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_visual_mv.method}(true)<cr>"
+_ = (
+    keymap.v("<m-up>")
+    << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_visual_mv.method}(true)<cr>"
+)
 _ = (
     keymap.v("<m-down>")
     << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_visual_mv.method}(false)<cr>"
