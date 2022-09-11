@@ -80,7 +80,6 @@ elif command == "run":
     assert _EX == RT_PY
     assert lock == req
 
-    from pynvim_pp.nvim import conn
     from std2.pickle.types import DecodeError
 
     try:
@@ -90,11 +89,7 @@ elif command == "run":
         exit(1)
     else:
 
-        async def main() -> None:
-            async with conn(args.socket) as client:
-                await init(client)
-
-        arun(main())
+        arun(init(args.socket))
 
 else:
     assert False
