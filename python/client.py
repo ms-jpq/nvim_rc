@@ -19,7 +19,7 @@ assert ____ or 1
 
 async def _default(msg: MsgType, method: Method, params: Sequence[Any]) -> None:
     with suppress_and_log():
-        assert False, (method, params)
+        assert False, (msg, method, params)
 
 
 async def init(socket: PurePath) -> None:
