@@ -19,9 +19,10 @@ async def _bookmark_signs() -> None:
 
     def c1() -> Iterator[tuple[str, int]]:
         for l_marker, (row, _) in local.items():
-            yield l_marker, row
+            if row >= 0:
+                yield l_marker, row
         for g_marker, (_, b, (row, _)) in glob.items():
-            if b == buf:
+            if b == buf and row >= 0:
                 yield g_marker, row
 
     def c2() -> Iterator[ExtMark]:
