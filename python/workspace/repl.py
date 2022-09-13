@@ -123,7 +123,7 @@ async def _tmux_send(buf: Buffer, text: str) -> None:
             fd.write(encode(text))
             fd.flush()
             try:
-                await call("tmux", "load-buffer", "-b", name, "--", fd.method)
+                await call("tmux", "load-buffer", "-b", name, "--", fd.name)
                 await call(
                     "tmux", "paste-buffer", "-d", "-r", "-p", "-b", name, "-t", pane
                 )
