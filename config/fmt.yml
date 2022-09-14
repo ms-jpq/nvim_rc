@@ -227,6 +227,7 @@
     # - --uppercase
     # - --lines-between-queries=2
     # - --indent=${tabsize}
+    - --language=mysql
     - --output=${tmpname}
     - --
     - ${tmpname}
