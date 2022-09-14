@@ -23,7 +23,7 @@ _HNS = uuid4()
 _TMUX_NS = "NVIM-"
 
 _TEXT_HL = "Normal"
-_LINE_HL = "CursorLine"
+_LINE_HL = "Cursor"
 
 
 @rpc()
