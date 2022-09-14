@@ -168,7 +168,7 @@ async def _eval(visual: bool) -> None:
             else:
                 end = int(min(end or inf, r))
 
-    lo, hi = max(0, begin), -1 if end is None else min(await buf.line_count(), end)
+    lo, hi = max(0, begin), -1 if end is None else min(await buf.line_count(), end + 1)
     lines = await buf.get_lines(lo=lo, hi=hi)
     text = dedent(linesep.join(lines)) + linesep * 2
     await gather(_tmux_send(buf, text=text), _highlight(buf, begin=begin, lines=lines))
