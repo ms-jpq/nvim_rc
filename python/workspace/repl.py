@@ -1,7 +1,9 @@
 from asyncio import gather, sleep
+from contextlib import suppress
 from itertools import count
 from math import inf
 from os import linesep
+from shutil import which
 from subprocess import CalledProcessError
 from tempfile import NamedTemporaryFile
 from textwrap import dedent
@@ -117,18 +119,20 @@ async def _pane(buf: Buffer) -> Optional[str]:
 async def _tmux_send(buf: Buffer, text: str) -> None:
     pane = await buf.vars.get(str, str(_NS)) or await _pane(buf)
 
-    if pane:
+    if pane and (tmux := which("tmux")):
         name = f"{_TMUX_NS}-{uuid4()}"
         with NamedTemporaryFile() as fd:
             fd.write(encode(text))
             fd.flush()
             try:
-                await call("tmux", "load-buffer", "-b", name, "--", fd.name)
+                await call(tmux, "load-buffer", "-b", name, "--", fd.name)
                 await call(
-                    "tmux", "paste-buffer", "-d", "-r", "-p", "-b", name, "-t", pane
+                    tmux, "paste-buffer", "-d", "-r", "-p", "-b", name, "-t", pane
                 )
             except CalledProcessError as e:
                 await Nvim.write(e, e.stderr, e.stdout)
+                with suppress(CalledProcessError):
+                    await call(tmux, "delete-buffer", "-b", name)
 
 
 async def _highlight(buf: Buffer, begin: int, lines: Sequence[str]) -> None:
