@@ -75,6 +75,7 @@
   type: stream
   filetypes:
     - css
+    - graphql
     - html
     - javascript*
     - json*
