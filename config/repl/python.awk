@@ -19,5 +19,5 @@ $0 {
 }
 
 END {
-  print
+  printf "\n"
 }
