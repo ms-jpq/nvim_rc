@@ -1,13 +1,14 @@
 from asyncio import gather, sleep
 from contextlib import suppress
+from functools import cache
 from itertools import count
 from math import inf
 from os import linesep
+from pathlib import PurePath
 from shutil import which
 from subprocess import CalledProcessError
 from tempfile import NamedTemporaryFile
-from textwrap import dedent
-from typing import Iterator, Optional, Sequence
+from typing import Iterator, Mapping, Optional, Sequence
 from uuid import uuid4
 
 from pynvim_pp.buffer import Buffer, ExtMark, ExtMarker
@@ -18,7 +19,10 @@ from pynvim_pp.types import NoneType
 from pynvim_pp.window import Window
 from std2.asyncio.subprocess import call
 
+from ..consts import CONF_DIR
 from ..registery import LANG, NAMESPACE, keymap, rpc
+
+_REPL_SCRIPTS = CONF_DIR / "repl"
 
 _NS = uuid4()
 _HNS = uuid4()
@@ -116,14 +120,15 @@ async def _pane(buf: Buffer) -> Optional[str]:
         return None
 
 
-async def _tmux_send(buf: Buffer, text: str) -> None:
+async def _tmux_send(buf: Buffer, text: bytes) -> None:
     pane = await buf.vars.get(str, str(_NS)) or await _pane(buf)
 
     if pane and (tmux := which("tmux")):
         name = f"{_TMUX_NS}-{uuid4()}"
         with NamedTemporaryFile() as fd:
-            fd.write(encode(text))
+            fd.write(text)
             fd.flush()
+
             try:
                 await call(tmux, "load-buffer", "-b", name, "--", fd.name)
                 await call(
@@ -153,10 +158,30 @@ async def _highlight(buf: Buffer, begin: int, lines: Sequence[str]) -> None:
     await buf.clear_namespace(hns)
 
 
+@cache
+def _scripts() -> Mapping[str, PurePath]:
+    return {path.name: path for path in _REPL_SCRIPTS.iterdir()}
+
+
+async def _process(filetype: str, lines: Sequence[str]) -> Optional[bytes]:
+    text = encode(linesep.join(lines))
+    if script := _scripts().get(filetype):
+        try:
+            proc = await call(script, stdin=text)
+        except CalledProcessError as e:
+            await Nvim.write(e, e.stderr, e.stdout)
+            return None
+        else:
+            return proc.stdout
+    else:
+        return text
+
+
 @rpc()
 async def _eval(visual: bool) -> None:
     win = await Window.get_current()
     buf = await win.get_buf()
+    filetype = await buf.filetype()
 
     if visual:
         (begin, _), (end, _) = await operator_marks(buf, visual_type=None)
@@ -174,8 +199,10 @@ async def _eval(visual: bool) -> None:
 
     lo, hi = max(0, begin), -1 if end is None else min(await buf.line_count(), end + 1)
     lines = await buf.get_lines(lo=lo, hi=hi)
-    text = dedent(linesep.join(lines)) + linesep * 2
-    await gather(_tmux_send(buf, text=text), _highlight(buf, begin=begin, lines=lines))
+    if text := await _process(filetype, lines=lines):
+        await gather(
+            _tmux_send(buf, text=text), _highlight(buf, begin=begin, lines=lines)
+        )
 
 
 _ = keymap.n("<leader>g") << f"<cmd>lua {NAMESPACE}.{_eval.method}(false)<cr>"
