@@ -2,7 +2,7 @@
 
 BEGIN {
   DEDENT=-2
-  BLANKED=0
+  SKIPPED=0
 }
 
 {
@@ -10,18 +10,18 @@ BEGIN {
   gsub(/[[:space:]]/, " ")
 }
 
-NF && DEDENT == -2 {
+$0 && DEDENT == -2 {
   match($0, /^[[:space:]]+/)
   DEDENT=RLENGTH
 }
 
-!NF {
-  BLANKED++
+!$0 {
+  SKIPPED++
 }
 
-NF || BLANKED > 2 {
+$0 || SKIPPED > 2 {
+  SKIPPED=0
   print substr($0, DEDENT + 1)
-  BLANKED=0
 }
 
 END {
