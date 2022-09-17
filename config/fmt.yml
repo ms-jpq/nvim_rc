@@ -74,6 +74,7 @@
     - --
   type: stream
   filetypes:
+    - awk
     - css
     - graphql
     - html
@@ -92,6 +93,7 @@
       - "@prettier/plugin-php"
       - "@prettier/plugin-xml"
       - "@trivago/prettier-plugin-sort-imports"
+      - prettier-plugin-awk
 
 - bin: rbprettier
   args:

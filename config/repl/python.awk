@@ -1,3 +1,3 @@
-#!/usr/bin/awk -f
+#!/usr/bin/env -S awk -f
 
 
