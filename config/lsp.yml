@@ -366,11 +366,11 @@
         URI: https://github.com/fwcd/kotlin-language-server/releases/latest/download/server.zip
       file: dl/kotlin.sh
 
-- server: volar
-  bin: vue-language-server
-  install:
-    npm:
-      - "@volar/vue-language-server"
+# - server: volar
+#   bin: vue-language-server
+#   install:
+#     npm:
+#       - "@volar/vue-language-server"
 
 - server: sqlls
   bin: sql-language-server
