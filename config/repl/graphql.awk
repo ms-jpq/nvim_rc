@@ -4,17 +4,17 @@ BEGIN {
   OBS=""
 }
 
-NR != 1 { 
+NR != 1 {
   print " "
 }
 
-{ 
+{
   gsub(/^[[:space:]]+/, "")
   gsub(/[[:space:]]+/, " ")
-  print 
+  print
 }
 
 # <ctrl-q>
-END { 
-  printf "\x11"
+END {
+  print "\x11"
 }

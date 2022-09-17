@@ -90,7 +90,7 @@ async def _set_trimmed(win: Window, buf: Buffer) -> None:
 
     if new_lines != lines:
         atomic = Atomic()
-        atomic.buf_set_lines(buf, 0, -1, True, lines)
+        atomic.buf_set_lines(buf, 0, -1, True, new_lines)
         atomic.win_set_cursor(win, (row + 1, col))
         await atomic.commit(NoneType)
 
