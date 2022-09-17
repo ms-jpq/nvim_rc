@@ -2,6 +2,7 @@
 
 {
   gsub(/[[:space:]]/, " ")
+  sub(/[[:space:]]+$/, "")
 }
 
 NR == 1 {
@@ -12,7 +13,6 @@ NR == 1 {
 {
   if (!$0) { next }
 
-  sub(/[[:space:]]+$/, "")
   print substr($0, DEDENT)
 }
 
