@@ -1,5 +1,5 @@
 from asyncio import gather, sleep
-from contextlib import suppress
+from contextlib import asynccontextmanager, suppress
 from functools import cache
 from itertools import count
 from math import inf
@@ -8,7 +8,7 @@ from pathlib import PurePath
 from shutil import which
 from subprocess import CalledProcessError
 from tempfile import NamedTemporaryFile
-from typing import Iterator, Mapping, Optional, Sequence
+from typing import AsyncIterator, Iterator, Mapping, Optional, Sequence
 from uuid import uuid4
 
 from pynvim_pp.buffer import Buffer, ExtMark, ExtMarker
@@ -140,7 +140,10 @@ async def _tmux_send(buf: Buffer, text: bytes) -> None:
                     await call(tmux, "delete-buffer", "-b", name)
 
 
-async def _highlight(buf: Buffer, begin: int, lines: Sequence[str]) -> None:
+@asynccontextmanager
+async def _highlight(
+    buf: Buffer, begin: int, lines: Sequence[str]
+) -> AsyncIterator[None]:
     hns = await Nvim.create_namespace(_HNS)
     *_, line = lines or ("",)
     end_c = len(encode(line))
@@ -154,7 +157,8 @@ async def _highlight(buf: Buffer, begin: int, lines: Sequence[str]) -> None:
         {"inclusive": False},
     )
 
-    await sleep(1)
+    yield None
+
     await buf.clear_namespace(hns)
 
 
@@ -200,9 +204,8 @@ async def _eval(visual: bool) -> None:
     lo, hi = max(0, begin), -1 if end is None else min(await buf.line_count(), end + 1)
     lines = await buf.get_lines(lo=lo, hi=hi)
     if text := await _process(filetype, lines=lines):
-        await gather(
-            _tmux_send(buf, text=text), _highlight(buf, begin=begin, lines=lines)
-        )
+        async with _highlight(buf, begin=begin, lines=lines):
+            await _tmux_send(buf, text=text)
 
 
 _ = keymap.n("<leader>g") << f"<cmd>lua {NAMESPACE}.{_eval.method}(false)<cr>"
