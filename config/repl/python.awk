@@ -26,7 +26,7 @@ $0 && DEDENT == -2 {
 $0 {
   # Ensure Single Newline
   if (SKIPPED) {
-    printf "\n"
+    print ""
   }
   SKIPPED=0
   print substr($0, DEDENT + 1)
