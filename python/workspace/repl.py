@@ -160,7 +160,7 @@ async def _highlight(buf: Buffer, begin: int, lines: Sequence[str]) -> None:
 
 @cache
 def _scripts() -> Mapping[str, PurePath]:
-    return {path.name: path for path in _REPL_SCRIPTS.iterdir()}
+    return {path.stem: path for path in _REPL_SCRIPTS.iterdir()}
 
 
 async def _process(filetype: str, lines: Sequence[str]) -> Optional[bytes]:
