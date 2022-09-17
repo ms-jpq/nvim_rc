@@ -78,6 +78,8 @@ local l3 = function()
 end
 
 l4 = function()
+  local man = unpack(vim.api.nvim_get_runtime_file("plugin/man.*", true))
+  vim.cmd("source " .. man)
   vim.g.omni_sql_no_default_maps = 1
 end
 
