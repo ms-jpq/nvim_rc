@@ -204,14 +204,14 @@ async def _eval(visual: bool) -> None:
 
     lo, hi = max(0, begin), -1 if end is None else min(await buf.line_count(), end + 1)
     lines = await buf.get_lines(lo=lo, hi=hi)
-    if text := await _process(filetype, lines=lines):
 
-        async def cont() -> None:
-            with suppress_and_log():
+    async def cont() -> None:
+        with suppress_and_log():
+            if text := await _process(filetype, lines=lines):
                 async with _highlight(buf, begin=begin, lines=lines):
                     await _tmux_send(buf, text=text)
 
-        create_task(cont())
+    create_task(cont())
 
 
 _ = keymap.n("<leader>g") << f"<cmd>lua {NAMESPACE}.{_eval.method}(false)<cr>"
