@@ -6,24 +6,28 @@ BEGIN {
 }
 
 {
+  # Trim Trailing Spaces
   sub(/[[:space:]]+$/, "")
+  # Standardize Indent
   gsub(/[[:space:]]/, " ")
 }
 
+# Dedent @ First Non-Empty Line
 $0 && DEDENT == -2 {
   match($0, /^[[:space:]]+/)
   DEDENT=RLENGTH
 }
 
+# Skip Empty Line
 !$0 {
-  SKIPPED++
+  SKIPPED=1
 }
 
-$0 || SKIPPED > 2 {
+$0 {
+  # Ensure Single Newline
+  if (SKIPPED) {
+    printf "\n"
+  }
   SKIPPED=0
   print substr($0, DEDENT + 1)
-}
-
-END {
-  printf "\n"
 }

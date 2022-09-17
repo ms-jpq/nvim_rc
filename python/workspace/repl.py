@@ -1,4 +1,4 @@
-from asyncio import gather, sleep
+from asyncio import create_task, gather, sleep
 from contextlib import asynccontextmanager, suppress
 from functools import cache
 from itertools import count
@@ -13,6 +13,7 @@ from uuid import uuid4
 
 from pynvim_pp.buffer import Buffer, ExtMark, ExtMarker
 from pynvim_pp.lib import encode
+from pynvim_pp.logging import suppress_and_log
 from pynvim_pp.nvim import Nvim
 from pynvim_pp.operators import operator_marks
 from pynvim_pp.types import NoneType
@@ -204,8 +205,13 @@ async def _eval(visual: bool) -> None:
     lo, hi = max(0, begin), -1 if end is None else min(await buf.line_count(), end + 1)
     lines = await buf.get_lines(lo=lo, hi=hi)
     if text := await _process(filetype, lines=lines):
-        async with _highlight(buf, begin=begin, lines=lines):
-            await _tmux_send(buf, text=text)
+
+        async def cont() -> None:
+            with suppress_and_log():
+                async with _highlight(buf, begin=begin, lines=lines):
+                    await _tmux_send(buf, text=text)
+
+        create_task(cont())
 
 
 _ = keymap.n("<leader>g") << f"<cmd>lua {NAMESPACE}.{_eval.method}(false)<cr>"
