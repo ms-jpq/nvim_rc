@@ -1,6 +1,20 @@
 #!/usr/bin/env -S awk -f
 
-{ print }
+BEGIN {
+  OBS=""
+}
+
+NR != 1 { 
+  print " "
+}
+
+{ 
+  gsub(/^[[:space:]]+/, "")
+  gsub(/[[:space:]]+/, " ")
+  print 
+}
 
 # <ctrl-q>
-END { printf("%s", "\x11") }
+END { 
+  printf "\x11"
+}
