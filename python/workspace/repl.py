@@ -113,7 +113,7 @@ _ = (
 
 
 async def _pane(buf: Buffer) -> Optional[str]:
-    if pane := await Nvim.input(question=LANG("tmux pane?"), default="{last}"):
+    if pane := await Nvim.input(question=LANG("tmux pane?"), default=""):
         await buf.vars.set(str(_NS), val=pane)
         return pane
     else:
