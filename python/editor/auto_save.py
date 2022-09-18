@@ -1,3 +1,6 @@
+from pynvim_pp.buffer import Buffer
+from pynvim_pp.nvim import Nvim
+
 from ..registery import NAMESPACE, autocmd, keymap, rpc, settings
 
 # auto load changes
@@ -7,21 +10,29 @@ settings["autowrite"] = True
 settings["autowriteall"] = True
 
 
-_ = autocmd("WinEnter") << "checktime"
-
-
 # noskip backup
 settings["backupskip"] = ""
 
-_ = autocmd("BufLeave", "FocusLost", "VimLeavePre") << "silent! wall!"
+
+_ = autocmd("FocusGained", "VimResume", "WinEnter") < "checktime"
 
 
 @rpc()
-async def _auto_save() -> None:
-    ...
+async def _auto_save(local: bool) -> None:
+    if local:
+        buf = await Buffer.get_current()
+        await Nvim.exec(f"checktime {buf.number}")
+    else:
+        await Nvim.exec("checktime")
+    await Nvim.exec("silent! wall!")
 
 
-_ = autocmd("CursorHold", "CursorHoldI") << f"lua {NAMESPACE}.{_auto_save.method}()"
+_ = (
+    autocmd("BufLeave", "FocusLost", "VimLeavePre")
+    << f"lua {NAMESPACE}.{_auto_save.method}(false)"
+)
+
+_ = autocmd("CursorHold", "CursorHoldI") << f"lua {NAMESPACE}.{_auto_save.method}(true)"
 
 # persistent undo
 settings["undofile"] = True
