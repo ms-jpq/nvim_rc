@@ -5,7 +5,7 @@ set -o pipefail
 shopt -s globstar failglob
 
 
-LIB="$(dirname "$(dirname "$(realpath "$0")")")/lib/jdtls"
+LIB="$(dirname -- "$(dirname -- "$(realpath -- "$0")")")/lib/jdtls"
 OS="$(uname | tr '[:upper:]' '[:lower:]')"
 
 CANDIDATES=("$LIB/plugins/org.eclipse.equinox.launcher_"*'.jar')

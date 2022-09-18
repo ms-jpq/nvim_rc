@@ -54,7 +54,7 @@ then
     "$REPO/3rd/luamake/luamake" rebuild
   )
 
-  PREFIX="$(dirname "$BIN")"
+  PREFIX="$(dirname -- "$BIN")"
   for file in "$REPO/bin/"*
   do
     ln --symbolic --force -- "$file" "$PREFIX/$(basename "$file")"

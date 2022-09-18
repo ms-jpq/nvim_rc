@@ -5,7 +5,7 @@ set -o pipefail
 shopt -s globstar failglob
 
 
-LIB="$(dirname "$(dirname "$(realpath "$0")")")/lib/powershell-ls"
+LIB="$(dirname -- "$(dirname -- "$(realpath -- "$0")")")/lib/powershell-ls"
 
 CACHE="$(mktemp --directory)"
 trap 'rm --recursive --force -- "$CACHE"' EXIT INT HUP TERM

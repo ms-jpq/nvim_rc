@@ -5,7 +5,7 @@ set -o pipefail
 shopt -s globstar failglob
 
 
-LIB="$(dirname "$(dirname "$(realpath "$0")")")/lib"
+LIB="$(dirname -- "$(dirname -- "$(realpath -- "$0")")")/lib"
 
 
 export PERL5LIB="$LIB/perllibs/lib/perl5"

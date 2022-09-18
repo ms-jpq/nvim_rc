@@ -5,7 +5,7 @@ set -o pipefail
 shopt -s globstar failglob
 
 
-T_BIN="$(dirname "$BIN")/tectonic"
+T_BIN="$(dirname -- "$BIN")/tectonic"
 
 
 if [[ "$OS" == 'Darwin' ]]

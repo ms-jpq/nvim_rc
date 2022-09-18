@@ -15,7 +15,7 @@ else
   git clone "${OPTS[@]}" --branch "$TAG" "$URI" "$LIB"
 fi
 
-PERL_LIB_DIR="$(dirname "$LIB")/perllibs"
+PERL_LIB_DIR="$(dirname -- "$LIB")/perllibs"
 PERL_LIBS=(
   YAML::Tiny
   File::HomeDir
@@ -23,4 +23,4 @@ PERL_LIBS=(
 )
 
 cpanm --local-lib "$PERL_LIB_DIR" -- "${PERL_LIBS[@]}"
-cp -- "$(dirname "$0")/../exec/latexindent.sh" "$BIN"
+cp -- "$(dirname -- "$0")/../exec/latexindent.sh" "$BIN"
