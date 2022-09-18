@@ -42,7 +42,7 @@
             aL: "@loop.outer"
 
   lua: |-
-    require'nvim-treesitter.configs'.setup(vim.g.ts_opts)
+    require("nvim-treesitter.configs").setup(vim.g.ts_opts)
 
 - git:
     uri: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
