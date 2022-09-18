@@ -14,7 +14,7 @@ settings["autowriteall"] = True
 settings["backupskip"] = ""
 
 
-_ = autocmd("FocusGained", "VimResume", "WinEnter") < "checktime"
+_ = autocmd("FocusGained", "VimResume", "WinEnter") << "checktime"
 
 
 @rpc()
