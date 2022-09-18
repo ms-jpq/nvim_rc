@@ -20,7 +20,7 @@ NINJA="$VENV_BIN/ninja"
 
 if [[ ! -x "$NINJA" ]]
 then
-  python3 -m venv "$VENV"
+  python3 -m venv -- "$VENV"
   "$VENV_BIN/pip" install -- ninja
 fi
 
@@ -57,6 +57,6 @@ then
   PREFIX="$(dirname -- "$BIN")"
   for file in "$REPO/bin/"*
   do
-    ln --symbolic --force -- "$file" "$PREFIX/$(basename "$file")"
+    ln --symbolic --force -- "$file" "$PREFIX/$(basename -- "$file")"
   done
 fi

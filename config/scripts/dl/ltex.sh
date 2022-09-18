@@ -16,4 +16,6 @@ fi
 TMP="$(mktemp --directory)"
 get -- "$URI" | unpack --dest "$TMP"
 rm --recursive --force -- "$LIB"
-mv -- "$TMP" "$LIB"
+mkdir --parents -- "$LIB"
+mv -- "$TMP/"*/* "$LIB/"
+ln --symbolic --force -- "$LIB/bin/$(basename -- "$BIN")" "$BIN"

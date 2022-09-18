@@ -176,21 +176,18 @@
       env:
         MAC_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-macos.tar.gz
         LINUX_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-linux.tar.gz
-        T_MAC_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.9.0/tectonic-0.9.0-x86_64-apple-darwin.tar.gz
-        T_LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.9.0/tectonic-0.9.0-x86_64-unknown-linux-gnu.tar.gz
+        T_MAC_URI: https://github.com/tectonic-typesetting/tectonic/releases/latest/download/tectonic-0.9.0-x86_64-apple-darwin.tar.gz
+        T_LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/latest/download/tectonic-0.9.0-x86_64-unknown-linux-gnu.tar.gz
       file: dl/texlab.sh
 
-- server: texls
-  bin: texls
-  filetypes:
-    - tex
-    - plaintex
+- server: ltex
+  bin: ltex-ls
   install:
     script:
       env:
-        MAC_URI: https://github.com/valentjn/ltex-ls/releases/download/15.2.0/ltex-ls-15.2.0-mac-x64.tar.gz
-        LINUX_URI: https://github.com/valentjn/ltex-ls/releases/download/15.2.0/ltex-ls-15.2.0-linux-x64.tar.gz
-      file: dl/tex-ls.sh
+        MAC_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-15.2.0-mac-x64.tar.gz
+        LINUX_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-15.2.0-linux-x64.tar.gz
+      file: dl/ltex.sh
 
 - server: bashls
   bin: bash-language-server
