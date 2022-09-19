@@ -1,4 +1,4 @@
-from asyncio import create_task, gather, sleep
+from asyncio import create_task
 from contextlib import asynccontextmanager, suppress
 from functools import cache
 from itertools import count
@@ -8,11 +8,11 @@ from pathlib import PurePath
 from shutil import which
 from subprocess import CalledProcessError
 from tempfile import NamedTemporaryFile
-from typing import AsyncIterator, Iterator, Mapping, Optional, Sequence
+from typing import AsyncIterator, Iterator, Mapping, Optional, Sequence, Tuple
 from uuid import uuid4
 
 from pynvim_pp.buffer import Buffer, ExtMark, ExtMarker
-from pynvim_pp.lib import encode
+from pynvim_pp.lib import decode, encode
 from pynvim_pp.logging import suppress_and_log
 from pynvim_pp.nvim import Nvim
 from pynvim_pp.operators import operator_marks
@@ -24,6 +24,8 @@ from ..consts import CONF_DIR
 from ..registery import LANG, NAMESPACE, keymap, rpc
 
 _REPL_SCRIPTS = CONF_DIR / "repl"
+
+_SEP = "\x1f"
 
 _NS = uuid4()
 _HNS = uuid4()
@@ -113,8 +115,31 @@ _ = (
 )
 
 
-async def _pane(buf: Buffer) -> Optional[str]:
-    if pane := await Nvim.input(question=LANG("tmux pane?"), default=""):
+async def _pane(tmux: PurePath, buf: Buffer) -> Optional[str]:
+    try:
+        proc = await call(
+            tmux,
+            "list-panes",
+            "-a",
+            "-F",
+            _SEP.join(
+                (
+                    "S: #{session_name} W: #{window_index} P: #{pane_index} #{?window_active,#{?pane_active,<-,},}",
+                    "#{pane_id}",
+                )
+            ),
+        )
+    except CalledProcessError as e:
+        await Nvim.write(e, e.stderr, e.stdout)
+        return None
+    else:
+
+        def cont() -> Iterator[Tuple[str, str]]:
+            for idx, line in enumerate(decode(proc.stdout).splitlines(), start=1):
+                show, _, id = line.partition(_SEP)
+                yield f"({idx}) {show}", id
+
+    if pane := await Nvim.input_list({k: v for k, v in cont()}):
         await buf.vars.set(str(_NS), val=pane)
         return pane
     else:
@@ -122,23 +147,23 @@ async def _pane(buf: Buffer) -> Optional[str]:
 
 
 async def _tmux_send(buf: Buffer, text: bytes) -> None:
-    pane = await buf.vars.get(str, str(_NS)) or await _pane(buf)
+    if tmux := which("tmux"):
+        mux = PurePath(tmux)
+        if pane := await buf.vars.get(str, str(_NS)) or await _pane(mux, buf=buf):
+            name = f"{_TMUX_NS}-{uuid4()}"
+            with NamedTemporaryFile() as fd:
+                fd.write(text)
+                fd.flush()
 
-    if pane and (tmux := which("tmux")):
-        name = f"{_TMUX_NS}-{uuid4()}"
-        with NamedTemporaryFile() as fd:
-            fd.write(text)
-            fd.flush()
-
-            try:
-                await call(tmux, "load-buffer", "-b", name, "--", fd.name)
-                await call(
-                    tmux, "paste-buffer", "-d", "-r", "-p", "-b", name, "-t", pane
-                )
-            except CalledProcessError as e:
-                await Nvim.write(e, e.stderr, e.stdout)
-                with suppress(CalledProcessError):
-                    await call(tmux, "delete-buffer", "-b", name)
+                try:
+                    await call(mux, "load-buffer", "-b", name, "--", fd.name)
+                    await call(
+                        mux, "paste-buffer", "-d", "-r", "-p", "-b", name, "-t", pane
+                    )
+                except CalledProcessError as e:
+                    await Nvim.write(e, e.stderr, e.stdout)
+                    with suppress(CalledProcessError):
+                        await call(mux, "delete-buffer", "-b", name)
 
 
 @asynccontextmanager
