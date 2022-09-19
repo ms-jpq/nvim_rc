@@ -1,7 +1,7 @@
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
 from contextlib import nullcontext
-from pathlib import Path
+from pathlib import Path, PurePath
 from subprocess import check_call
 from sys import executable, exit, stderr
 from typing import Literal, Sequence, Union
@@ -21,7 +21,7 @@ def parse_args() -> Namespace:
 
     with nullcontext(sub_parsers.add_parser("run")) as p:
         p.add_argument("--ppid", type=int)
-        p.add_argument("--socket", required=True)
+        p.add_argument("--socket", required=True, type=PurePath)
 
     with nullcontext(sub_parsers.add_parser("deps")) as p:
         p.add_argument("deps", nargs="*", default=())
