@@ -194,7 +194,7 @@ def _scripts() -> Mapping[str, PurePath]:
 
 
 async def _process(filetype: str, lines: Sequence[str]) -> Optional[bytes]:
-    text = encode(linesep.join(chain(lines, "")))
+    text = encode(linesep.join(chain(lines, ("",))))
     if script := _scripts().get(filetype):
         try:
             proc = await call(script, stdin=text)
