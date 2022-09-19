@@ -1,7 +1,7 @@
 from asyncio import create_task
 from contextlib import asynccontextmanager, suppress
 from functools import cache
-from itertools import count
+from itertools import chain, count
 from math import inf
 from os import linesep
 from pathlib import PurePath
@@ -124,7 +124,7 @@ async def _pane(tmux: PurePath, buf: Buffer) -> Optional[str]:
             "-F",
             _SEP.join(
                 (
-                    "S: #{session_name} W: #{window_index} P: #{pane_index} #{?window_active,#{?pane_active,<-,},}",
+                    "#{session_name} -> #{window_index} -> #{pane_index} #{?window_active,#{?pane_active,<-,},}",
                     "#{pane_id}",
                 )
             ),
@@ -194,7 +194,7 @@ def _scripts() -> Mapping[str, PurePath]:
 
 
 async def _process(filetype: str, lines: Sequence[str]) -> Optional[bytes]:
-    text = encode(linesep.join(lines))
+    text = encode(linesep.join(chain(lines, "")))
     if script := _scripts().get(filetype):
         try:
             proc = await call(script, stdin=text)
