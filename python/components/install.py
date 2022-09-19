@@ -297,7 +297,6 @@ def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
     for path in (BIN_DIR, LIB_DIR, TMP_DIR):
         path.mkdir(parents=True, exist_ok=True)
 
-    sys = uname()
     for bin, pkg in _script_specs():
 
         async def cont(path: PurePath, bin: str, pkg: ScriptSpec) -> _SortOfMonoid:
@@ -308,8 +307,6 @@ def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
                         environ["PATH"],
                     )
                 ),
-                "ARCH": sys.machine,
-                "OS": sys.system,
                 "BIN": normcase(BIN_DIR / bin),
                 "LIB": normcase(LIB_DIR / bin),
             }

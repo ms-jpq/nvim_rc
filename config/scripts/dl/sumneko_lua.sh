@@ -5,7 +5,7 @@ set -o pipefail
 shopt -s globstar failglob
 
 
-if [[ "$OS" != "Linux" ]]
+if [[ ! "$OSTYPE" =~ "linux" ]]
 then
   exit
 fi
@@ -42,7 +42,7 @@ then
     export PATH="$VENV_BIN:$PATH"
     cd "$REPO/3rd/luamake" || exit 1
 
-    if [[ "$OS" == 'Darwin' ]]
+    if [[ "$OSTYPE" =~ 'darwin' ]]
     then
       NAME=macos
     else

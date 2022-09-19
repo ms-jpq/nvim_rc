@@ -8,7 +8,7 @@ shopt -s globstar failglob
 T_BIN="$(dirname -- "$BIN")/tectonic"
 
 
-if [[ "$OS" == 'Darwin' ]]
+if [[ "$OSTYPE" =~ 'darwin' ]]
 then
   URI="$MAC_URI"
   T_URI="$T_MAC_URI"

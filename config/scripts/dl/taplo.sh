@@ -5,7 +5,7 @@ set -o pipefail
 shopt -s globstar failglob
 
 
-if [[ "$OS" == 'Darwin' ]]
+if [[ "$OSTYPE" =~ 'darwin' ]]
 then
   URI="$MAC_URI"
 else
