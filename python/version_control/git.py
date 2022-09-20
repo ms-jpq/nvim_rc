@@ -6,7 +6,7 @@ from ..workspace.terminal import open_term
 
 @rpc()
 async def _git_tui() -> None:
-    if tui := which("gitui"):
+    if tui := which("lazygit"):
         await open_term(tui)
 
 
