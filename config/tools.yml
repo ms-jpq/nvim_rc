@@ -2,5 +2,4 @@
 go:
   - github.com/junegunn/fzf@latest
 npm:
-  - fx
   - diff2html-cli
