@@ -76,11 +76,12 @@
   vals:
     coq_settings:
       auto_start: True
-      clients.snippets.user_path: "~/.config/snips/"
-      # clients.tabnine.enabled: true
+      clients.snippets.user_path: |-
+        ~/.config/nvim/pack/modules/start/snips
       keymap:
         repeat: "<leader>."
         eval_snips: "<leader>j"
+      # clients.tabnine.enabled: true
   keys:
     - modes: n
       maps:
@@ -115,6 +116,9 @@
         short_name: vTEX
   lua: |-
     require("coq_3p")(vim.g.COQ3p)
+
+- git:
+    uri: https://github.com/ms-jpq/snips
 
 - git:
     uri: https://github.com/ms-jpq/coq.artifacts
