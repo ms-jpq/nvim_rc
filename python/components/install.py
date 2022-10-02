@@ -135,8 +135,8 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
                     p1 = await call(
                         git,
                         "clone",
-                        "--depth=1",
                         "--recurse-submodules",
+                        "--depth=1",
                         "--shallow-submodules",
                         *(("--branch", spec.branch) if spec.branch else ()),
                         "--",
