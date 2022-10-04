@@ -176,8 +176,8 @@
       env:
         MAC_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-macos.tar.gz
         LINUX_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-linux.tar.gz
-        T_MAC_URI: https://github.com/tectonic-typesetting/tectonic/releases/latest/download/tectonic-0.9.0-x86_64-apple-darwin.tar.gz
-        T_LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/latest/download/tectonic-0.9.0-x86_64-unknown-linux-gnu.tar.gz
+        T_MAC_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.10.0/tectonic-0.10.0-x86_64-apple-darwin.tar.gz
+        T_LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.10.0/tectonic-0.10.0-x86_64-unknown-linux-gnu.tar.gz
       file: dl/texlab.sh
 
 - server: ltex
@@ -363,12 +363,6 @@
         URI: https://github.com/fwcd/kotlin-language-server/releases/latest/download/server.zip
       file: dl/kotlin.sh
 
-# - server: volar
-#   bin: vue-language-server
-#   install:
-#     npm:
-#       - "@volar/vue-language-server"
-
 - server: sqlls
   bin: sql-language-server
   args:
@@ -395,6 +389,12 @@
         URI: https://github.com/sumneko/lua-language-server
         TAG: "3.5.3"
       file: dl/sumneko_lua.sh
+
+- server: ansiblels
+  bin: ansible-language-server
+  install:
+    npm:
+      - ansible-language-server
 # - server: pylsp
 #   bin: pylsp
 #   install:
@@ -407,8 +407,8 @@
 #     npm:
 #       - rome
 
-# - server: ansiblels
-#   bin: ansible-language-server
+# - server: volar
+#   bin: vue-language-server
 #   install:
 #     npm:
-#       - ansible-language-server
+#       - "@volar/vue-language-server"
