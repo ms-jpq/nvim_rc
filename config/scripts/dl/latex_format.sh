@@ -8,7 +8,7 @@ shopt -s globstar failglob
 if [[ ! -d "$LIB" ]]
 then
   TMP="$(mktemp --directory)"
-  TMP_LIB="$TMP/lib"
+  TMP_LIB="$TMP/$(uuidgen)"
   get -- "$URI" | unpack --dest "$TMP"
   mv -- "$TMP"/* "$TMP_LIB"
 
