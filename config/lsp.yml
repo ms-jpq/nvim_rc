@@ -176,8 +176,8 @@
       env:
         MAC_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-macos.tar.gz
         LINUX_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-linux.tar.gz
-        T_MAC_URI: https://github.com/tectonic-typesetting/tectonic/releases/latest/download/tectonic-0.10.0-x86_64-apple-darwin.tar.gz
-        T_LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/latest/download/tectonic-0.10.0-x86_64-unknown-linux-gnu.tar.gz
+        T_MAC_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.11.0/tectonic-0.11.0-x86_64-apple-darwin.tar.gz
+        T_LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.11.0/tectonic-0.11.0-x86_64-unknown-linux-gnu.tar.gz
       file: dl/texlab.sh
 
 - server: ltex
