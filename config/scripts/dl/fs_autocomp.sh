@@ -6,12 +6,7 @@ shopt -s globstar failglob
 
 
 TMP="$(mktemp --directory)"
-TOOLS="$TMP/fsa"
-mkdir --parent -- "$TOOLS"
-
-cd "$TMP" || exit 1
-dotnet new tool-manifest
-dotnet tool install --tool-path "$TOOLS" fsautocomplete
+dotnet tool install --tool-path "$TMP" fsautocomplete
 rm --recursive --force -- "$LIB"
-mv -- "$TOOLS" "$LIB"
+mv -- "$TMP" "$LIB"
 ln --symbolic --force -- "$LIB/fsautocomplete" "$BIN"
