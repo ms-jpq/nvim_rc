@@ -170,12 +170,10 @@
   install:
     script:
       required:
-        - git
         - perl
         - cpanm
       env:
-        URI: https://github.com/cmhughes/latexindent.pl
-        TAG: "V3.11"
+        URI: https://github.com/cmhughes/latexindent.pl/archive/V3.11.tar.gz
       file: dl/latex_format.sh
 
 - bin: r-fmt
@@ -202,28 +200,6 @@
 #   install:
 #     go:
 #       - mvdan.cc/sh/v3/cmd/shfmt@latest
-
-# - bin: pg_format
-#   args:
-#     - --spaces=${tabsize}
-#     - --comma-break
-#     - --nogrouping
-#     - --function-case=0
-#     - --output=${tmpname}
-#     - --
-#     - ${tmpname}
-#   type: fs
-#   filetypes:
-#     - sql
-#   install:
-#     script:
-#       required:
-#         - git
-#         - perl
-#       env:
-#         URI: https://github.com/darold/pgFormatter
-#         TAG: "v5.0"
-#       file: dl/pg_format.sh
 
 - bin: sql-formatter
   args:
