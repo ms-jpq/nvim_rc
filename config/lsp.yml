@@ -336,7 +336,19 @@
     script:
       required:
         - dotnet
-      file: dl/fs_autocomp.sh
+      file: dl/fsharp-ls.sh
+
+- server: omnisharp
+  bin: omnisharp
+  args: []
+  install:
+    script:
+      required:
+        - dotnet
+      env:
+        MAC_URI: https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx-arm64-net6.0.tar.gz
+        LINUX_URI: https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-linux-x64-net6.0.tar.gz
+      file: dl/omnisharp.sh
 
 - server: jdtls
   bin: jdt-ls
