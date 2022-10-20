@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager, suppress
 from functools import cache
 from itertools import chain, count
 from math import inf
-from os import linesep
+from os import environ, linesep
 from pathlib import PurePath
 from shutil import which
 from subprocess import CalledProcessError
@@ -116,6 +116,7 @@ _ = (
 
 
 async def _pane(tmux: PurePath, buf: Buffer) -> Optional[str]:
+    pane_id = environ.get("TMUX_PANE")
     try:
         proc = await call(
             tmux,
@@ -134,12 +135,17 @@ async def _pane(tmux: PurePath, buf: Buffer) -> Optional[str]:
         return None
     else:
 
-        def cont() -> Iterator[Tuple[str, str]]:
-            for idx, line in enumerate(decode(proc.stdout).splitlines(), start=1):
+        def c1() -> Iterator[Tuple[str, str]]:
+            for line in decode(proc.stdout).splitlines():
                 show, _, id = line.partition(_SEP)
-                yield f"({idx}) {show}", id
+                if id != pane_id:
+                    yield show, id
 
-    if pane := await Nvim.input_list({k: v for k, v in cont()}):
+        def c2() -> Iterator[Tuple[str, str]]:
+            for idx, (line, id) in enumerate(c1(), start=1):
+                yield f"({idx}) {line}", id
+
+    if pane := await Nvim.input_list({k: v for k, v in c2()}):
         await buf.vars.set(str(_NS), val=pane)
         return pane
     else:
