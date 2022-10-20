@@ -6,6 +6,21 @@ shopt -s globstar failglob
 
 
 BASE="$(dirname -- "$0")"
+EXEC="$BASE/../exec"
 
-"$BASE/../exec/julia.sh" "$BASE/julia-ls.jl"
-ln --symbolic --force -- "$BASE/../exec/julia-ls.sh" "$BIN"
+"$EXEC/julia.sh" "$BASE/julia-ls.jl"
+
+CP=(
+  julia-ls.jl
+  julia-ls.sh
+  julia.sh
+  )
+
+mkdir --parents -- "$LIB"
+
+for name in "${CP[@]}"
+do
+  cp -- "$EXEC/$name" "$LIB/$name"
+done
+
+ln --symbolic --force -- "$LIB/julia-ls.sh" "$BIN"
