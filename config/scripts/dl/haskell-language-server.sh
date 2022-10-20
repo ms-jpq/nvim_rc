@@ -16,6 +16,5 @@ fi
 TMP="$(mktemp --directory)"
 get -- "$URI" | unpack --dest "$TMP"
 rm --recursive --force -- "$LIB"
-mkdir --parents -- "$LIB"
-mv -- "$TMP"/*/* "$LIB/"
-ln --symbolic --force -- "$LIB/bin/$(basename -- "$BIN")" "$BIN"
+mv -- "$TMP"/* "$LIB"
+cp -- "$(dirname -- "$0")/../exec/hls.sh" "$BIN" 

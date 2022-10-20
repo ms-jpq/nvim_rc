@@ -224,6 +224,15 @@
     npm:
       - pyright
 
+- server: hls
+  bin: haskell-language-server-wrapper
+  install:
+    script:
+      env:
+        MAC_URI: https://downloads.haskell.org/~hls/haskell-language-server-1.8.0.0/haskell-language-server-1.8.0.0-aarch64-darwin.tar.xz
+        LINUX_URI: https://downloads.haskell.org/~hls/haskell-language-server-1.8.0.0/haskell-language-server-1.8.0.0-x86_64-linux-deb10.tar.xz
+      file: dl/haskell-language-server.sh
+
 - server: rust_analyzer
   bin: rust-analyzer
   install:
