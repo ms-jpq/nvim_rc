@@ -9,4 +9,4 @@ TMP="$(mktemp --directory)"
 dotnet tool install --tool-path "$TMP" fsautocomplete
 rm --recursive --force -- "$LIB"
 mv -- "$TMP" "$LIB"
-ln --symbolic --force -- "$LIB/fsautocomplete" "$BIN"
+cp -- "$(dirname -- "$0")/../exec/fsautocomplete.sh" "$BIN"
