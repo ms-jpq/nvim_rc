@@ -192,7 +192,7 @@ def _gem() -> Iterator[Awaitable[_SortOfMonoid]]:
         and (specs := {*_gem_specs()})
         and (
             os != OS.macos
-            or not PurePath(gem).relative_to(PurePath(sep) / "usr" / "bin")
+            or not PurePath(gem).is_relative_to(PurePath(sep) / "usr" / "bin")
         )
     ):
 
