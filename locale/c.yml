@@ -15,8 +15,8 @@
 "rename: ": |-
   ✏️  :
 
-"invaild command: ": |-
-  ⛔️ Invaild Command :: ${cmd}
+"cannot tmux": |-
+  ⛔️ Cannot launch tmux
 
 "grammar error": |-
   ⛔️ Grammar Error 👉 ${text}
