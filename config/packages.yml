@@ -154,10 +154,10 @@
     vim.env.FZF_DEFAULT_OPTS = new_opts
 
 - git:
-    uri: https://github.com/rakr/vim-one
+    uri: https://github.com/cocopon/iceberg.vim.git
   lua: |-
-    vim.cmd [[colorscheme one]]
     vim.opt.background = "light"
+    vim.cmd [[colorscheme iceberg]]
 
 - git:
     uri: https://github.com/tpope/vim-repeat
