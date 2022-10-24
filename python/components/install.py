@@ -1,10 +1,9 @@
 from asyncio.tasks import as_completed
 from itertools import chain
 from json import dumps, loads
-from os import environ, linesep, pathsep
+from os import environ, linesep, pathsep, sep
 from os.path import normcase
 from pathlib import Path, PurePath
-from platform import uname
 from shlex import join
 from shutil import get_terminal_size, which
 from subprocess import CompletedProcess
@@ -25,6 +24,7 @@ from venv import EnvBuilder
 from pynvim_pp.lib import decode
 from pynvim_pp.nvim import Nvim
 from std2.asyncio.subprocess import call
+from std2.platform import OS, os
 
 from ..config.fmt import fmt_specs
 from ..config.install import ScriptSpec
@@ -187,7 +187,14 @@ def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
 
 
 def _gem() -> Iterator[Awaitable[_SortOfMonoid]]:
-    if (gem := which("gem")) and (specs := {*_gem_specs()}):
+    if (
+        (gem := which("gem"))
+        and (specs := {*_gem_specs()})
+        and (
+            os != OS.macos
+            or not PurePath(gem).relative_to(PurePath(sep) / "usr" / "bin")
+        )
+    ):
 
         async def cont() -> _SortOfMonoid:
             assert gem
