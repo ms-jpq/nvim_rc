@@ -59,6 +59,7 @@ local l3 = function()
 
   local args = {
     main(),
+    "-u",
     "-m",
     "python",
     "run",
