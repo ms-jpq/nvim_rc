@@ -37,8 +37,8 @@ def inst() -> Atomic:
     atomic2.command("packloadall")
 
     for spec in pkgs.values():
-        if spec.lua:
-            body = indent(spec.lua, " " * 2)
+        if code := spec.lua:
+            body = indent(code, " " * 2)
             lua = f"""
             (function()
             local _, err = pcall(function()
@@ -50,7 +50,8 @@ def inst() -> Atomic:
             end)()
             """
             atomic2.exec_lua(dedent(lua), ())
-        if spec.viml:
+
+        if code := spec.viml:
             lua = f"""
             (function(viml)
             local _, err = pcall(vim.cmd, viml)
@@ -59,6 +60,6 @@ def inst() -> Atomic:
             end
             end)(...)
             """
-            atomic2.exec_lua(dedent(lua), (spec.viml,))
+            atomic2.exec_lua(dedent(lua), (code,))
 
     return atomic1 + keymap.drain(buf=None) + atomic2
