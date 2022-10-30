@@ -1,4 +1,4 @@
-from .editor import auto_comp, auto_save, linter, lsp, prettier
+from .editor import auto_comp, auto_save, code_action, linter, lsp, prettier
 from .editor import search as e_search
 from .editor import whitespace
 from .modes import command, normal, poly, terminal, visual
@@ -12,6 +12,7 @@ assert auto_save
 assert bookmarks
 assert case
 assert casing
+assert code_action
 assert command
 assert comment
 assert e_search

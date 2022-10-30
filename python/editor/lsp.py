@@ -25,8 +25,6 @@ _ = keymap.n("gP") << "<cmd>lua vim.lsp.buf.references()<cr>"
 _ = keymap.n("H") << "<cmd>lua vim.diagnostic.open_float()<cr>"
 _ = keymap.n("K") << "<cmd>lua vim.lsp.buf.hover()<cr>"
 
-_ = keymap.n("gw") << "<cmd>lua vim.lsp.buf.code_action()<cr>"
-_ = keymap.v("gw") << "<cmd>lua vim.lsp.buf.range_code_action()<cr>"
 
 _ = (
     keymap.n("<c-p>")
@@ -49,9 +47,7 @@ async def _rename() -> None:
     lhs, rhs = decode(b_line[:col]), decode(b_line[col:])
     split = gen_split(lhs=lhs, rhs=rhs, unifying_chars=UNIFIYING_CHARS)
     word = split.word_lhs + split.word_rhs
-    ans = await Nvim.input(question=LANG("rename: "), default=word)
-
-    if ans:
+    if ans := await Nvim.input(question=LANG("rename: "), default=word):
         await Nvim.lua.vim.lsp.buf.rename(NoneType, ans)
 
 

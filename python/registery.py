@@ -11,7 +11,7 @@ from .components.localization import load
 from .components.rtp import inst
 from .consts import PATH
 
-NAMESPACE = "__init__"
+NAMESPACE = "__INIT__"
 
 LANG = load(code=None)
 atomic = Atomic()
