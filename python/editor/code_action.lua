@@ -22,7 +22,17 @@
 
   local cancel = function()
   end
-  local callback = _G[ns][cb]
+
+  local callback = function(row, resp)
+    local acc = {}
+
+    for _, val in pairs(resp) do
+      val.result = val.result or vim.NIL
+      table.insert(acc, val)
+    end
+
+    _G[ns][cb](row, acc)
+  end
 
   _G[ns].code_action = function()
     local params = (function()
