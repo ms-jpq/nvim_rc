@@ -17,7 +17,7 @@ _pos = "%5l:%-3c"
 _scroll = "%3p%%"
 
 _lhs = f"{_preview}{_ql}{_name}{_modified}"
-_rhs = f"{_lsp} | {_ft} {_tabs} {_linefeed}{_pos}{_scroll}"
+_rhs = f"{_lsp} | {_ft} {_tabs} {_linefeed} @{_pos}≡ {_scroll}"
 _line = f"{_lhs} %= {_rhs}"
 
 atomic.exec_lua(_status, ())
