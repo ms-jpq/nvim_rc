@@ -23,18 +23,13 @@
   local cancel = function()
   end
 
-  local callback = function(row, resp)
-    local acc = {}
-
-    for _, val in pairs(resp) do
-      val.result = val.result or vim.NIL
-      table.insert(acc, val)
+  local callback = function(idx, row, error, resp)
+    if (error or {}).code ~= vim.lsp.protocol.ErrorCodes.MethodNotFound then
+      _G[ns][cb](idx, row, error or vim.NIL, resp and true or false)
     end
-
-    _G[ns][cb](row, acc)
   end
 
-  _G[ns].code_action = function()
+  _G[ns].code_action = function(idx)
     local params = (function()
       local mode = vim.api.nvim_get_mode().mode
       if mode == "v" or mode == "V" then
@@ -47,16 +42,37 @@
     end)()
     params.context = {diagnostics = vim.lsp.diagnostic.get_line_diagnostics()}
 
+    local buf = vim.api.nvim_get_current_buf()
+    local clients = vim.lsp.get_active_clients({bufnr = buf})
     local row = unpack(vim.api.nvim_win_get_cursor(0))
+    row = row - 1
+
     cancel()
-    cancel =
-      vim.lsp.buf_request_all(
-      vim.api.nvim_get_current_buf(),
-      "textDocument/codeAction",
-      params,
-      function(resp)
-        callback(row - 1, resp)
+
+    local cancels = {}
+    for _, client in pairs(clients) do
+      local go, handle =
+        client.request(
+        "textDocument/codeAction",
+        params,
+        function(error, resp)
+          callback(idx, row, error, resp)
+        end,
+        buf
+      )
+      if go then
+        table.insert(
+          cancels,
+          function()
+            client.cancel_request(handle)
+          end
+        )
       end
-    )
+    end
+    cancel = function()
+      for _, handle in pairs(cancels) do
+        handle()
+      end
+    end
   end
 end)(...)
