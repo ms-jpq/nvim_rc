@@ -37,13 +37,16 @@
     end)()
     params.context = {diagnostics = vim.lsp.diagnostic.get_line_diagnostics()}
 
+    local row = unpack(vim.api.nvim_win_get_cursor(0))
     cancel()
     cancel =
       vim.lsp.buf_request_all(
       vim.api.nvim_get_current_buf(),
       "textDocument/codeAction",
       params,
-      callback
+      function(resp)
+        callback(row - 1, resp)
+      end
     )
   end
 end)(...)

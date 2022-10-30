@@ -26,36 +26,9 @@ class _Error:
 
 
 @dataclass(frozen=True)
-class _Pos:
-    line: int
-    character: int
-
-
-@dataclass(frozen=True)
-class _Range:
-    start: _Pos
-    end: _Pos
-
-
-@dataclass(frozen=True)
-class _CodeAction:
-    range: _Range
-
-
-@dataclass(frozen=True)
-class _CodeActionParams:
-    codeActionParams: _CodeAction
-
-
-@dataclass(frozen=True)
-class _CodeActionData:
-    data: _CodeActionParams
-
-
-@dataclass(frozen=True)
 class _CodeActionReply:
     error: Optional[_Error] = None
-    result: Sequence[_CodeActionData] = ()
+    result: Optional[Any] = None
 
 
 _CodeActionReplies = Union[Mapping[int, _CodeActionReply], Sequence[_CodeActionReply]]
@@ -64,7 +37,7 @@ _DECODER = new_decoder[_CodeActionReplies](_CodeActionReplies, strict=False)
 
 
 @rpc()
-async def _on_code_action_notif(values: Any) -> None:
+async def _on_code_action_notif(line: int, values: Any) -> None:
     def parse() -> Iterator[_CodeActionReply]:
         vals = _DECODER(values)
         if isinstance(vals, Mapping):
@@ -77,33 +50,24 @@ async def _on_code_action_notif(values: Any) -> None:
     if errs := tuple(err.message for action in actions if (err := action.error)):
         await Nvim.write(linesep.join(errs))
 
-    def extmarks() -> Iterator[ExtMark]:
-        for marker, action in enumerate(actions, start=1):
-            if results := action.result:
-                lo = min(re.data.codeActionParams.range.start.line for re in results)
-                hi = max(re.data.codeActionParams.range.end.line for re in results)
-                begin, end = (lo, 0), None if hi == lo else (hi, 0)
-                count = len(results)
-                text = LANG("code action", count="*" if count > 9 else count)
-
-                sign = ExtMark(
-                    buf=buf,
-                    marker=ExtMarker(marker),
-                    begin=begin,
-                    end=end,
-                    meta={
-                        "sign_text": text,
-                        "hl_mode": "combine",
-                        "sign_hl_group": _HL,
-                        "number_hl_group": _HL,
-                    },
-                )
-                yield sign
-
     buf = await Buffer.get_current()
+    sign = ExtMark(
+        buf=buf,
+        marker=ExtMarker(1),
+        begin=(line, 0),
+        end=None,
+        meta={
+            "sign_text": LANG("code action"),
+            "hl_mode": "combine",
+            "sign_hl_group": _HL,
+            "number_hl_group": _HL,
+        },
+    )
+    extmarks = (sign,) if any(action.result for action in actions) else ()
+
     ns = await Nvim.create_namespace(_NS)
     await buf.clear_namespace(ns)
-    await buf.set_extmarks(ns, extmarks=extmarks())
+    await buf.set_extmarks(ns, extmarks=extmarks)
 
 
 atomic.exec_lua(_CODE_ACTION, (NAMESPACE, _on_code_action_notif.method))
