@@ -195,11 +195,11 @@
     npm:
       - bash-language-server
 
-# - server: awk_ls
-#   bin: awk-language-server
-#   install:
-#     npm:
-#       - awk-language-server
+- server: awk_ls
+  bin: awk-language-server
+  install:
+    npm:
+      - awk-language-server
 
 - server: powershell_es
   bin: powershell-ls
