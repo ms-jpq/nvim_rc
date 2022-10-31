@@ -95,15 +95,15 @@
       - src: nvimlua
         short_name: nLUA
 
-      - src: builtin/ada
-      - src: builtin/c
-      - src: builtin/clojure
-      - src: builtin/css
-      - src: builtin/haskell
-      - src: builtin/html
-      - src: builtin/js
-      - src: builtin/php
-      - src: builtin/xml
+      # - src: builtin/ada
+      # - src: builtin/c
+      # - src: builtin/clojure
+      # - src: builtin/css
+      # - src: builtin/haskell
+      # - src: builtin/html
+      # - src: builtin/js
+      # - src: builtin/php
+      # - src: builtin/xml
 
       - src: copilot
         short_name: COP
