@@ -77,5 +77,4 @@ async def _on_hover() -> None:
 _ = autocmd("CursorHold", "CursorHoldI") << f"lua {NAMESPACE}.{_on_hover.method}()"
 
 
-_ = keymap.n("gw") << f"<cmd>lua vim.lsp.buf.code_action()<cr>"
-_ = keymap.v("gw") << f"<cmd>lua vim.lsp.buf.code_action()<cr>"
+_ = keymap.nv("gw") << "<cmd>lua vim.lsp.buf.code_action()<cr>"

@@ -1,4 +1,5 @@
 (function(ns, cb)
+  -- TODO: https://github.com/neovim/neovim/pull/13896
   local function range_from_selection()
     -- [bufnum, lnum, col, off]; both row and column 1-indexed
     local start = vim.fn.getpos("v")
