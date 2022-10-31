@@ -35,8 +35,6 @@ settings["guicursor"] = ""
 
 # completion menu transparency
 settings["pumblend"] = 5
-# light background
-settings["background"] = "light"
 
 
 @rpc()
