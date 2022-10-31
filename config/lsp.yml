@@ -1,4 +1,89 @@
 ---
+- server: jsonls
+  bin: vscode-json-language-server
+  install:
+    npm:
+      - vscode-langservers-extracted
+
+- server: yamlls
+  bin: yaml-language-server
+  filetypes:
+    - yaml
+    - yaml.ansible
+    - yaml.docker-compose
+  install:
+    npm:
+      - yaml-language-server
+
+- server: taplo
+  bin: taplo
+  install:
+    script:
+      env:
+        MAC_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-x86_64-apple-darwin-gnu.tar.gz
+        LINUX_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-x86_64-unknown-linux-gnu.tar.gz
+      file: dl/taplo.sh
+
+- server: lemminx
+  bin: lemminx
+  args: []
+  install:
+    script:
+      env:
+        MAC_URI: https://download.jboss.org/jbosstools/vscode/stable/lemminx-binary/0.19.1-541/lemminx-osx-x86_64.zip
+        LINUX_URI: https://download.jboss.org/jbosstools/vscode/stable/lemminx-binary/0.19.1-541/lemminx-linux.zip
+      file: dl/lemminx.sh
+
+- server: markdown
+  bin: vscode-markdown-language-server
+  args:
+    - --stdio
+  filetypes:
+    - markdown
+  install:
+    npm:
+      - vscode-langservers-extracted
+
+- server: ltex
+  bin: ltex-ls
+  install:
+    script:
+      env:
+        MAC_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-15.2.0-mac-x64.tar.gz
+        LINUX_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-15.2.0-linux-x64.tar.gz
+      file: dl/ltex.sh
+
+- server: texlab
+  bin: texlab
+  settings:
+    texlab:
+      build:
+        executable: tectonic
+        args:
+          - --keep-logs
+          - --keep-intermediates
+          - --synctex
+          - --
+          - "%f"
+        # onSave: True
+        # forwardSearchAfter: True
+      # forwardSearch:
+      #   executable: evince-synctex
+      #   args:
+      #     - "-f"
+      #     - "%l"
+      #     - "%p"
+      #     - '"code -g %f:%l"'
+
+  install:
+    script:
+      env:
+        MAC_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-macos.tar.gz
+        LINUX_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-linux.tar.gz
+        T_MAC_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.11.0/tectonic-0.11.0-x86_64-apple-darwin.tar.gz
+        T_LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.11.0/tectonic-0.11.0-x86_64-unknown-linux-gnu.tar.gz
+      file: dl/texlab.sh
+
 - server: diagnosticls
   bin: diagnostic-languageserver
   filetypes:
@@ -113,81 +198,6 @@
   install:
     npm:
       - diagnostic-languageserver
-
-- server: jsonls
-  bin: vscode-json-language-server
-  install:
-    npm:
-      - vscode-langservers-extracted
-
-- server: yamlls
-  bin: yaml-language-server
-  filetypes:
-    - yaml
-    - yaml.ansible
-    - yaml.docker-compose
-  install:
-    npm:
-      - yaml-language-server
-
-- server: taplo
-  bin: taplo
-  install:
-    script:
-      env:
-        MAC_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-x86_64-apple-darwin-gnu.tar.gz
-        LINUX_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-x86_64-unknown-linux-gnu.tar.gz
-      file: dl/taplo.sh
-
-- server: lemminx
-  bin: lemminx
-  args: []
-  install:
-    script:
-      env:
-        MAC_URI: https://download.jboss.org/jbosstools/vscode/stable/lemminx-binary/0.19.1-541/lemminx-osx-x86_64.zip
-        LINUX_URI: https://download.jboss.org/jbosstools/vscode/stable/lemminx-binary/0.19.1-541/lemminx-linux.zip
-      file: dl/lemminx.sh
-
-- server: texlab
-  bin: texlab
-  settings:
-    texlab:
-      build:
-        executable: tectonic
-        args:
-          - --keep-logs
-          - --keep-intermediates
-          - --synctex
-          - --
-          - "%f"
-        # onSave: True
-        # forwardSearchAfter: True
-      # forwardSearch:
-      #   executable: evince-synctex
-      #   args:
-      #     - "-f"
-      #     - "%l"
-      #     - "%p"
-      #     - '"code -g %f:%l"'
-
-  install:
-    script:
-      env:
-        MAC_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-macos.tar.gz
-        LINUX_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-linux.tar.gz
-        T_MAC_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.11.0/tectonic-0.11.0-x86_64-apple-darwin.tar.gz
-        T_LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.11.0/tectonic-0.11.0-x86_64-unknown-linux-gnu.tar.gz
-      file: dl/texlab.sh
-
-- server: ltex
-  bin: ltex-ls
-  install:
-    script:
-      env:
-        MAC_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-15.2.0-mac-x64.tar.gz
-        LINUX_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-15.2.0-linux-x64.tar.gz
-      file: dl/ltex.sh
 
 - server: bashls
   bin: bash-language-server
