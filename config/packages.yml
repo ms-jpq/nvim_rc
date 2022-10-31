@@ -105,6 +105,9 @@
       - src: builtin/php
       - src: builtin/xml
 
+      - src: copilot
+        short_name: COP
+        accept_key: <c-f>
       - src: repl
       - src: bc
         short_name: MATH
@@ -123,6 +126,11 @@
 
 - git:
     uri: https://github.com/ms-jpq/coq.artifacts
+
+- git:
+    uri: https://github.com/github/copilot.vim
+  lua: |-
+    vim.g.copilot_node_command =  vim.env.ASDF_DATA_DIR .. '/installs/nodejs/lts-gallium/bin/node'
 
 - git:
     uri: https://github.com/junegunn/fzf
