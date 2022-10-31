@@ -58,8 +58,8 @@ _DECODER = new_decoder[Optional[RootPattern]](Optional[RootPattern])
 
 
 @rpc()
-async def _find_root(_pattern: Any, filename: str, bufnr: int) -> Optional[str]:
-    pattern: Optional[RootPattern] = _DECODER(_pattern)
+async def _find_root(r_pattern: Any, filename: str, bufnr: int) -> Optional[str]:
+    pattern: Optional[RootPattern] = _DECODER(r_pattern)
     path = Path(filename)
 
     if not pattern:
@@ -88,7 +88,7 @@ async def _find_root(_pattern: Any, filename: str, bufnr: int) -> Optional[str]:
 
 
 @rpc()
-async def _on_attach(server: str) -> None:
+async def _on_attach(_: str) -> None:
     pass
 
 
