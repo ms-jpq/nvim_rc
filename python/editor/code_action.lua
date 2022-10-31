@@ -25,7 +25,15 @@
 
   local callback = function(idx, row, error, resp)
     if (error or {}).code ~= vim.lsp.protocol.ErrorCodes.MethodNotFound then
-      _G[ns][cb](idx, row, error or vim.NIL, resp and true or false)
+      local actionable = (function()
+        local acc = {}
+        for key, val in pairs(resp or {}) do
+          table.insert(acc, {key, val})
+          break
+        end
+        return #acc > 0
+      end)()
+      _G[ns][cb](idx, row, error or vim.NIL, actionable)
     end
   end
 
