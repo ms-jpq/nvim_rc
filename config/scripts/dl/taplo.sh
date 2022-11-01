@@ -15,4 +15,5 @@ fi
 
 TMP="$(mktemp --directory)"
 get -- "$URI" | unpack --dest "$TMP"
-mv -- "$TMP/taplo" "$BIN"
+mv -- "$TMP"/* "$BIN"
+chmod +x -- "$BIN"

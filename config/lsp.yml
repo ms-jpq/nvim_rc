@@ -20,8 +20,8 @@
   install:
     script:
       env:
-        MAC_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-x86_64-darwin-gnu.tar.gz
-        LINUX_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-x86_64-linux-gnu.tar.gz
+        MAC_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-darwin-aarch64.gz
+        LINUX_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz
       file: dl/taplo.sh
 
 - server: lemminx
