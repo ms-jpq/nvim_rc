@@ -5,4 +5,4 @@ function s:colours()
   highlight NormalNC guibg=NONE ctermbg=NONE
 endfunction
 
-autocmd auto ColorScheme * call s:colours()
+"autocmd auto ColorScheme * call s:colours()

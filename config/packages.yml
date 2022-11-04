@@ -164,6 +164,10 @@
 - git:
     uri: https://github.com/EdenEast/nightfox.nvim
   lua: |-
+    vim.schedule(function() 
+      vim.cmd [[highlight Normal   guibg=NONE ctermbg=NONE]]
+      vim.cmd [[highlight NormalNC guibg=NONE ctermbg=NONE]]
+    end)
     vim.cmd [[colorscheme dayfox]]
 
 - git:
