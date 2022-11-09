@@ -1,1 +1,7 @@
-vim.filetype.add({extension = {ini = "cfg"}})
+vim.filetype.add(
+  {
+    extension = {
+      ini = "cfg"
+    }
+  }
+)
