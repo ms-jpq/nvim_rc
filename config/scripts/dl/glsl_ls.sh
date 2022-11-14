@@ -22,6 +22,8 @@ if [[ ! -x "$NINJA" ]]
 then
   python3 -m venv -- "$VENV"
   "$VENV_BIN/pip" install -- ninja
+else
+  export PATH="$VENV_BIN:$PATH"
 fi
 
 
