@@ -29,7 +29,7 @@ if [[ -d "$REPO" ]]
 then
   cd "$REPO" || exit 1
   OPTS=(--recurse-submodules --no-tags)
-  git pull "${OPTS[@]}" origin "refs/tags/${TAG}:refs/tags/${TAG}"
+  git pull "${OPTS[@]}" origin "refs/tags/$TAG:refs/tags/$TAG"
 else
   OPTS=(--depth=1 --recurse-submodules --shallow-submodules)
   git clone "${OPTS[@]}" --branch "$TAG" "$URI" "$REPO"

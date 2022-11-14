@@ -436,7 +436,6 @@
         - python3
       env:
         URI: https://github.com/svenstaro/glsl-language-server
-        TAG: "master"
       file: dl/glsl_ls.sh
 
 # - server: rome
