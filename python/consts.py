@@ -7,7 +7,10 @@ DATE_FMT = "%Y-%m-%d %X"
 
 TOP_LEVEL = Path(__file__).resolve(strict=True).parent.parent
 
-RT_DIR = TOP_LEVEL / ".vars" / "runtime"
+VIM_DIR = TOP_LEVEL / "pack" / "modules" / "start"
+VARS_DIR = TOP_LEVEL / "tmp"
+
+RT_DIR = VARS_DIR / "runtime"
 RT_BIN = RT_DIR / "bin"
 RT_PY = RT_BIN / "python3"
 
@@ -25,10 +28,6 @@ CONF_LSP = CONF_DIR / "lsp.yml"
 CONF_LINT = CONF_DIR / "lint.yml"
 CONF_FMT = CONF_DIR / "fmt.yml"
 CONF_TOOL = CONF_DIR / "tools.yml"
-
-
-VIM_DIR = TOP_LEVEL / "pack" / "modules" / "start"
-VARS_DIR = TOP_LEVEL / ".vars"
 
 
 INSTALL_SCRIPTS_DIR = CONF_DIR / "scripts"

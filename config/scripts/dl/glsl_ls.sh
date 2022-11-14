@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+set -Eeu
+set -o pipefail
+shopt -s globstar failglob
+
+
+if [[ ! "$OSTYPE" =~ "linux" ]]
+then
+  exit
+fi
+
+
+LOCATION="$PWD/glsl-ls"
+REPO="$LOCATION/repo"
+
+VENV="$LOCATION/venv"
+VENV_BIN="$VENV/bin"
+NINJA="$VENV_BIN/ninja"
+
+if [[ ! -x "$NINJA" ]]
+then
+  python3 -m venv -- "$VENV"
+  "$VENV_BIN/pip" install -- ninja
+fi
+
+
+if [[ -d "$REPO" ]]
+then
+  cd "$REPO" || exit 1
+  OPTS=(--recurse-submodules --no-tags)
+  git pull "${OPTS[@]}" origin "refs/tags/${TAG}:refs/tags/${TAG}"
+else
+  OPTS=(--depth=1 --recurse-submodules --shallow-submodules)
+  git clone "${OPTS[@]}" --branch "$TAG" "$URI" "$REPO"
+fi
+
+
+if [[ ! -x "$BIN" ]]
+then
+  cd "$REPO" || exit 1
+  make build
+  ln --symbolic --force -- "$PWD/build/glslls" "$BIN"
+fi

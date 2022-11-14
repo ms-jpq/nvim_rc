@@ -82,7 +82,7 @@
       keymap:
         repeat: "<leader>."
         eval_snips: "<leader>j"
-      # clients.tabnine.enabled: true
+      clients.tabnine.enabled: true
   keys:
     - modes: n
       maps:

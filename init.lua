@@ -49,7 +49,7 @@ local l3 = function()
   end
 
   local main = function()
-    local vpy = cwd .. "/.vars/runtime/bin/python3"
+    local vpy = cwd .. "/tmp/runtime/bin/python3"
     if vim.fn.filereadable(vpy) == 1 then
       return vpy
     else

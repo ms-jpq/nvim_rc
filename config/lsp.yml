@@ -241,7 +241,7 @@
       env:
         MAC_URI: https://downloads.haskell.org/~hls/haskell-language-server-1.8.0.0/haskell-language-server-1.8.0.0-aarch64-darwin.tar.xz
         LINUX_URI: https://downloads.haskell.org/~hls/haskell-language-server-1.8.0.0/haskell-language-server-1.8.0.0-x86_64-linux-deb10.tar.xz
-      file: dl/haskell-language-server.sh
+      file: dl/haskell_language_server.sh
 
 - server: rust_analyzer
   bin: rust-analyzer
@@ -341,7 +341,7 @@
     script:
       required:
         - julia
-      file: dl/julia-ls.sh
+      file: dl/julia_ls.sh
 
 - server: intelephense
   bin: intelephense
@@ -355,7 +355,7 @@
     script:
       required:
         - dotnet
-      file: dl/fsharp-ls.sh
+      file: dl/fsharp_ls.sh
 
 - server: omnisharp
   bin: omnisharp
@@ -379,7 +379,7 @@
       env:
         PREFIX: http://download.eclipse.org/jdtls/snapshots/
         URI: http://download.eclipse.org/jdtls/snapshots/latest.txt
-      file: dl/jdtls.sh
+      file: dl/jdt_ls.sh
 
 - server: kotlin_language_server
   bin: kotlin-language-server
@@ -424,11 +424,20 @@
   install:
     npm:
       - ansible-language-server
-# - server: pylsp
-#   bin: pylsp
-#   install:
-#     pip:
-#       - python-lsp-server[all]
+
+
+- server: glslls
+  bin: glslls
+  install:
+    script:
+      required:
+        - cmake
+        - git
+        - python3
+      env:
+        URI: https://github.com/svenstaro/glsl-language-server
+        TAG: "master"
+      file: dl/glsl_ls.sh
 
 # - server: rome
 #   bin: rome
