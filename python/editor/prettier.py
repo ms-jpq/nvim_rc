@@ -81,12 +81,11 @@ async def _run(ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: PurePath) -> Non
 
             saved = {win: pos async for win, pos in it()}
 
-            lines = temp.read_text().split(ctx.linefeed)
-            if lines:
-                l = lines.pop()
-                if l:
+            if lines := temp.read_text().split(ctx.linefeed):
+                if l := lines.pop():
                     lines.append(l)
 
+            await ctx.buf.opts.set("modifiable", True)
             await ctx.buf.set_lines(lo=0, hi=-1, lines=lines)
 
             for win, (row, col) in saved.items():
@@ -119,6 +118,8 @@ async def run_fmt() -> None:
         await Nvim.write(LANG("missing prettier", filetype=ctx.filetype), error=True)
     else:
         await Nvim.write(LANG("loading..."))
+
+        await ctx.buf.opts.set("modifiable", False)
         await _run(ctx, attrs=prettiers, cwd=cwd)
 
 
