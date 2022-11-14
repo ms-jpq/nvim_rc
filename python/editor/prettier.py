@@ -64,8 +64,8 @@ async def _run(ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: PurePath) -> Non
             )
             if err
         ]
-        errors = (ctx.linefeed * 2).join(errs)
-        if errors:
+        if errors := (ctx.linefeed * 2).join(errs):
+            await ctx.buf.opts.set("modifiable", True)
             await set_preview_content(errors)
             await Nvim.write(LANG("prettier failed"))
 
