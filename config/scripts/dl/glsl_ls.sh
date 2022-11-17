@@ -18,12 +18,13 @@ VENV="$LOCATION/venv"
 VENV_BIN="$VENV/bin"
 NINJA="$VENV_BIN/ninja"
 
+export PATH="$VENV_BIN:$PATH"
+
+
 if [[ ! -x "$NINJA" ]]
 then
   python3 -m venv -- "$VENV"
   "$VENV_BIN/pip" install -- ninja
-else
-  export PATH="$VENV_BIN:$PATH"
 fi
 
 
