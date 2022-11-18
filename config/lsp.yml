@@ -88,8 +88,6 @@
   bin: diagnostic-languageserver
   filetypes:
     - dockerfile
-    - python
-    - ruby
     - sh
     - zsh
   root:
@@ -140,49 +138,6 @@
           warning: warning
           info: info
           style: hint
-      mypy:
-        sourceName: mypy
-        command: mypy
-        args:
-          - --no-color-output
-          - --no-error-summary
-          - --show-column-numbers
-          - --follow-imports=silent
-          - --
-          - "%file"
-        formatPattern:
-          - '^.*:(\d+?):(\d+?): ([a-z]+?): (.*)$'
-          - column: 2
-            line: 1
-            message: 4
-            security: 3
-        securities:
-          error: error
-      rubocop:
-        sourceName: rubocop
-        command: rubocop
-        args:
-          - --format
-          - json
-          - --force-exclusion
-          - --stdin
-          - "%filepath"
-        debounce: 100
-        parseJson:
-          column: location.start_column
-          endColumn: location.end_column
-          endLine: location.last_line
-          errorsRoot: files[0].offenses
-          line: location.start_line
-          message: "[${cop_name}] ${message}"
-          security: severity
-        securities:
-          convention: info
-          error: error
-          fatal: error
-          info: info
-          refactor: info
-          warning: warning
 
     filetypes:
       # sh: &sh
@@ -190,10 +145,6 @@
       # zsh: *sh
       dockerfile:
         - hadolint
-      # python:
-      #   - mypy
-      ruby:
-        - rubocop
 
   install:
     npm:
@@ -425,7 +376,6 @@
     npm:
       - ansible-language-server
 
-
 - server: glslls
   bin: glslls
   install:
@@ -437,7 +387,6 @@
       env:
         URI: https://github.com/svenstaro/glsl-language-server
       file: dl/glsl_ls.sh
-
 # - server: rome
 #   bin: rome
 #   install:
