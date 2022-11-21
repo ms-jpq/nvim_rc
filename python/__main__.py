@@ -51,6 +51,7 @@ if command == "deps":
                 "-m",
                 "pip",
                 "install",
+                "--require-virtualenv",
                 "--upgrade",
                 "--force-reinstall",
                 "--requirement",

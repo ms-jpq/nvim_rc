@@ -176,6 +176,7 @@ def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
             p = await call(
                 pip,
                 "install",
+                "--require-virtualenv",
                 "--upgrade",
                 "--",
                 *specs,
