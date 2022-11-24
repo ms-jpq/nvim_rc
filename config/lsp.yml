@@ -387,11 +387,6 @@
       env:
         URI: https://github.com/svenstaro/glsl-language-server
       file: dl/glsl_ls.sh
-# - server: rome
-#   bin: rome
-#   install:
-#     npm:
-#       - rome
 
 # - server: volar
 #   bin: vue-language-server
