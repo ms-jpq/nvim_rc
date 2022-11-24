@@ -30,7 +30,7 @@ fi
 
 if [[ -d "$REPO" ]]
 then
-  cd "$REPO" || exit 1
+  cd -- "$REPO" || exit 1
   OPTS=(--recurse-submodules --no-tags)
   git pull "${OPTS[@]}"
 else
@@ -41,7 +41,7 @@ fi
 
 if [[ ! -x "$BIN" ]]
 then
-  cd "$REPO" || exit 1
+  cd -- "$REPO" || exit 1
   make build
   ln --symbolic --force -- "$PWD/build/glslls" "$BIN"
 fi
