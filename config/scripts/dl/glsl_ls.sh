@@ -4,6 +4,7 @@ set -Eeu
 set -o pipefail
 shopt -s globstar failglob
 
+exit
 
 if [[ ! "$OSTYPE" =~ "linux" ]]
 then
