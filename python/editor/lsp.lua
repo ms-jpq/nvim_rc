@@ -4,6 +4,7 @@
     function()
       local lsp = require("lspconfig")
       local configs = require("lspconfig/configs")
+      local util = require("lspconfig/util")
 
       local has_server =
         pcall(require, "lspconfig/server_configurations/" .. server)
@@ -25,7 +26,7 @@
       if has_server then
         lsp[server].setup(cfg)
       else
-        configs[server] = {default_config = {}}
+        configs[server] = {default_config = util.default_config}
         configs[server].setup(cfg)
       end
     end

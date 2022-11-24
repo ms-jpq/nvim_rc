@@ -224,6 +224,12 @@
 # - server: typeprof
 #   bin: typeprof
 
+- server: ruby_ls
+  bin: ruby-lsp
+  install:
+    gem:
+      - ruby-lsp
+
 - server: solargraph
   bin: solargraph
   install:
@@ -387,7 +393,6 @@
       env:
         URI: https://github.com/svenstaro/glsl-language-server
       file: dl/glsl_ls.sh
-
 # - server: volar
 #   bin: vue-language-server
 #   install:
