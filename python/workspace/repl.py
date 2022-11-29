@@ -117,16 +117,20 @@ _ = (
 
 async def _pane(tmux: PurePath, buf: Buffer) -> Optional[str]:
     pane_id = environ.get("TMUX_PANE")
+
     try:
-        proc = await call(
+        p1 = await call(tmux, "display-message", "-p", "-F", "#{window_id}")
+        p2 = await call(
             tmux,
             "list-panes",
             "-a",
             "-F",
             _SEP.join(
                 (
-                    "#{session_name} -> #{window_index} -> #{pane_index} #{?window_active,#{?pane_active,<-,},}",
                     "#{pane_id}",
+                    "#{window_id}",
+                    "#{window_active}",
+                    "#{session_name} -> #{window_index} -> #{pane_index}",
                 )
             ),
         )
@@ -134,16 +138,27 @@ async def _pane(tmux: PurePath, buf: Buffer) -> Optional[str]:
         await Nvim.write(e, e.stderr, e.stdout)
         return None
     else:
+        win_id = decode(p1.stdout).strip()
 
-        def c1() -> Iterator[Tuple[str, str]]:
-            for line in decode(proc.stdout).splitlines():
-                show, _, id = line.partition(_SEP)
-                if id != pane_id:
-                    yield show, id
+        def c1() -> Iterator[tuple[bool, bool, int, str, str]]:
+            for idx, line in enumerate(decode(p2.stdout).splitlines()):
+                p_id, w_id, w_active, show = line.split(_SEP, maxsplit=3)
+                local, active = w_id == win_id, int(w_active)
+
+                def cont() -> Iterator[str]:
+                    yield show
+                    if local:
+                        yield "◉"
+                    elif active:
+                        yield "<-"
+
+                if p_id != pane_id:
+                    line = " ".join(cont())
+                    yield not active, not local, idx, p_id, line
 
         def c2() -> Iterator[Tuple[str, str]]:
-            for idx, (line, id) in enumerate(c1(), start=1):
-                yield f"({idx}) {line}", id
+            for idx, (_, _, _, p_id, line) in enumerate(sorted(c1()), start=1):
+                yield f"({idx}) {line}", p_id
 
     if pane := await Nvim.input_list({k: v for k, v in c2()}):
         await buf.vars.set(str(_NS), val=pane)
