@@ -1,13 +1,12 @@
 from asyncio import create_task
 from contextlib import asynccontextmanager, suppress
 from functools import cache
-from itertools import chain, count
+from itertools import count
 from math import inf
 from os import environ, linesep
 from pathlib import PurePath
 from shutil import which
 from subprocess import CalledProcessError
-from tempfile import NamedTemporaryFile
 from typing import AsyncIterator, Iterator, Mapping, Optional, Sequence, Tuple
 from uuid import uuid4
 
@@ -171,19 +170,26 @@ async def _tmux_send(buf: Buffer, text: bytes) -> None:
     if tmux := which("tmux"):
         mux = PurePath(tmux)
         if pane := await buf.vars.get(str, str(_NS)) or await _pane(mux, buf=buf):
-            with NamedTemporaryFile() as fd:
-                fd.write(text)
-                fd.flush()
-
-                try:
-                    await call(mux, "load-buffer", "-b", _TMUX_NS, "--", fd.name)
-                    await call(
-                        mux, "paste-buffer", "-d", "-r", "-p", "-b", _TMUX_NS, "-t", pane
-                    )
-                except CalledProcessError as e:
-                    await Nvim.write(e, e.stderr, e.stdout)
-                    with suppress(CalledProcessError):
-                        await call(mux, "delete-buffer", "-b", _TMUX_NS)
+            try:
+                await call(mux, "load-buffer", "-b", _TMUX_NS, "--", "-", stdin=text)
+                await call(
+                    mux,
+                    "paste-buffer",
+                    "-r",
+                    "-p",
+                    "-t",
+                    pane,
+                    "-b",
+                    _TMUX_NS,
+                )
+                await call(
+                    mux, "load-buffer", "-b", _TMUX_NS, "--", "-", stdin=encode(linesep)
+                )
+                await call(mux, "paste-buffer", "-d", "-r", "-b", _TMUX_NS, "-t", pane)
+            except CalledProcessError as e:
+                await Nvim.write(e, e.stderr, e.stdout)
+                with suppress(CalledProcessError):
+                    await call(mux, "delete-buffer", "-b", _TMUX_NS)
 
 
 @asynccontextmanager
@@ -214,7 +220,7 @@ def _scripts() -> Mapping[str, PurePath]:
 
 
 async def _process(filetype: str, lines: Sequence[str]) -> Optional[bytes]:
-    text = encode(linesep.join(chain(lines, ("",))))
+    text = encode(linesep.join(lines))
     if script := _scripts().get(filetype):
         try:
             proc = await call(script, stdin=text)
