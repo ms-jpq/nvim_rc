@@ -29,7 +29,7 @@ _SEP = "\x1f"
 
 _NS = uuid4()
 _HNS = uuid4()
-_TMUX_NS = "NVIM-"
+_TMUX_NS = f"NVIM-#{_NS}"
 
 _TEXT_HL = "Normal"
 _LINE_HL = "Cursor"
@@ -171,20 +171,19 @@ async def _tmux_send(buf: Buffer, text: bytes) -> None:
     if tmux := which("tmux"):
         mux = PurePath(tmux)
         if pane := await buf.vars.get(str, str(_NS)) or await _pane(mux, buf=buf):
-            name = f"{_TMUX_NS}-{uuid4()}"
             with NamedTemporaryFile() as fd:
                 fd.write(text)
                 fd.flush()
 
                 try:
-                    await call(mux, "load-buffer", "-b", name, "--", fd.name)
+                    await call(mux, "load-buffer", "-b", _TMUX_NS, "--", fd.name)
                     await call(
-                        mux, "paste-buffer", "-d", "-r", "-p", "-b", name, "-t", pane
+                        mux, "paste-buffer", "-d", "-r", "-p", "-b", _TMUX_NS, "-t", pane
                     )
                 except CalledProcessError as e:
                     await Nvim.write(e, e.stderr, e.stdout)
                     with suppress(CalledProcessError):
-                        await call(mux, "delete-buffer", "-b", name)
+                        await call(mux, "delete-buffer", "-b", _TMUX_NS)
 
 
 @asynccontextmanager
