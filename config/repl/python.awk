@@ -8,7 +8,7 @@ BEGIN {
   # Trim Trailing Spaces
   sub(/[[:space:]]+$/, "")
   # Standardize Indent
-  gsub(/[[:space:]]/, " ")
+  gsub(/^[[:space:]]/, " ")
 }
 
 # Dedent @ First Non-Empty Line

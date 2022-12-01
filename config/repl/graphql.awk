@@ -1,13 +1,14 @@
 #!/usr/bin/env -S awk -f
-BEGIN { OBS = "" }
-
-NR != 1 { print " " }
+BEGIN { ORS = " " }
 
 {
   gsub(/^[[:space:]]+/, "")
-  gsub(/[[:space:]]+/, " ")
+  gsub(/[[:space:]]+$/, "")
   print
 }
 
 # <ctrl-q>
-END { print "\x11" }
+END {
+  ORS = ""
+  print "\x11"
+}
