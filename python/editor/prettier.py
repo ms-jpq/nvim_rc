@@ -81,7 +81,7 @@ async def _run(ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: PurePath) -> Non
 
             saved = {win: pos async for win, pos in it()}
 
-            if lines := temp.read_text().split(ctx.linefeed):
+            if lines := temp.read_text().splitlines():
                 if l := lines.pop():
                     lines.append(l)
 
