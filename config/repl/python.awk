@@ -17,11 +17,11 @@ $0 && DEDENT == -2 {
   DEDENT = RLENGTH
 }
 
-# Skip Empty Line
+# Skip Empty Lines
 !$0 { SKIPPED = 1 }
 
 $0 {
-  # Ensure Single Newline
+  # Ensure Single Empty Line
   if (SKIPPED) { print "" }
 
   SKIPPED = 0
