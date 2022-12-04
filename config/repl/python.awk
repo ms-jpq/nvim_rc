@@ -5,8 +5,8 @@ BEGIN {
 }
 
 {
-  gsub(/[[:space:]]+$/, "")
   gsub(/^[[:space:]]/, " ")
+  gsub(/[[:space:]]+$/, "")
 }
 
 DEDENT == -2 && $0 {
