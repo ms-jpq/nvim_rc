@@ -1,14 +1,11 @@
 #!/usr/bin/env -S awk -f
 BEGIN { ORS = " " }
 
-{
-  gsub(/^[[:space:]]+/, "")
-  gsub(/[[:space:]]+$/, "")
-  print
-}
+{ gsub(/^[[:space:]]+|[[:space:]]*,?[[:space:]]*$/, "") }
 
-# <ctrl-q>
+$0 { print }
+
 END {
-  ORS = ""
-  print "\x11"
+  # <ctrl-q>
+  printf("%s", "\x11")
 }

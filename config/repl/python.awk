@@ -5,25 +5,22 @@ BEGIN {
 }
 
 {
-  # Trim Trailing Spaces
-  sub(/[[:space:]]+$/, "")
-  # Standardize Indent
+  gsub(/[[:space:]]+$/, "")
   gsub(/^[[:space:]]/, " ")
 }
 
-# Dedent @ First Non-Empty Line
-$0 && DEDENT == -2 {
+DEDENT == -2 && $0 {
   match($0, /^[[:space:]]+/)
   DEDENT = RLENGTH
 }
 
-# Skip Empty Lines
-!$0 { SKIPPED = 1 }
+{
+  if (!$0) { SKIPPED = 1 }
+  else {
+    if (SKIPPED) { print "" }
 
-$0 {
-  # Ensure Single Empty Line
-  if (SKIPPED) { print "" }
+    SKIPPED = 0
 
-  SKIPPED = 0
-  print substr($0, DEDENT + 1)
+    print substr($0, DEDENT + 1)
+  }
 }
