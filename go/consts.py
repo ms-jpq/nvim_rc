@@ -20,7 +20,7 @@ RT_PY = _RT_BIN / basename(executable)
 
 
 REQUIREMENTS = TOP_LEVEL / "requirements.txt"
-INSTALL_SCRIPT = TOP_LEVEL / "init.sh"
+INSTALL_SCRIPT = TOP_LEVEL / "install.sh"
 
 LANG_ROOT = TOP_LEVEL / "locale"
 DEFAULT_LANG = "c"

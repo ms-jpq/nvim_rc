@@ -99,7 +99,6 @@ def main() -> None:
         assert lock == req
 
         from std2.pickle.types import DecodeError
-        from std2.sys import suicide
 
         try:
             from .client import init
@@ -109,8 +108,7 @@ def main() -> None:
         else:
 
             async def m() -> None:
-                # async with suicide(args.ppid):
-                await init(args.socket)
+                await init(args.socket, ppid= args.ppid)
 
             arun(m())
 

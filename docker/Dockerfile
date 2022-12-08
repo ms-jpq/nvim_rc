@@ -26,7 +26,7 @@ RUN apt-get update && \
 COPY . /root/.config/nvim
 ENV TERM=xterm-256color
 WORKDIR "/root"
-RUN ./.config/nvim/init.sh
+RUN ./.config/nvim/install.sh
 
 
 # Cleanup
