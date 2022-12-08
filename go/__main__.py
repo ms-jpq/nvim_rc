@@ -1,6 +1,7 @@
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
 from contextlib import nullcontext
+from os.path import basename
 from pathlib import Path, PurePath
 from subprocess import check_call
 from sys import executable, exit, stderr
@@ -46,19 +47,6 @@ def main() -> None:
                 clear=True,
             )
             builder.create(RT_DIR)
-            print(
-                (
-                    RT_PY,
-                    "-m",
-                    "pip",
-                    "install",
-                    "--require-virtualenv",
-                    "--upgrade",
-                    "--force-reinstall",
-                    "--requirement",
-                    REQUIREMENTS,
-                )
-            )
             check_call(
                 (
                     RT_PY,
@@ -78,7 +66,7 @@ def main() -> None:
         if not deps or "packages" in deps:
             if _EX != RT_PY:
                 code = check_call(
-                    (RT_PY, "-m", "python", "deps", "packages"), cwd=TOP_LEVEL
+                    (RT_PY, "-m", basename(__file__), "deps", "packages"), cwd=TOP_LEVEL
                 )
                 exit(code)
             else:
