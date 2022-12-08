@@ -65,6 +65,9 @@ local l3 = function()
     end
   end
 
+  local srv = is_win and {"localhost:0"} or {}
+  local server = vim.fn.serverstart(unpack(srv))
+
   local args = {
     main(),
     "-u",
@@ -74,7 +77,7 @@ local l3 = function()
     "--ppid",
     vim.fn.getpid(),
     "--socket",
-    is_win and "localhost:0" or vim.v.servername
+    server
   }
   local params = {
     cwd = cwd,
