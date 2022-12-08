@@ -166,7 +166,7 @@ def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
             system_site_packages=False,
             with_pip=True,
             upgrade=True,
-            symlinks=True,
+            symlinks=os is not OS.windows,
             clear=False,
         )
         builder.create(PIP_DIR)
