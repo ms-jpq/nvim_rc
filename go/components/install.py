@@ -41,6 +41,7 @@ from ..consts import (
     LIB_DIR,
     NPM_DIR,
     PIP_DIR,
+    RT_SCRIPTS,
     TMP_DIR,
     UPDATE_LOG,
     VARS_DIR,
@@ -170,7 +171,7 @@ def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
             clear=False,
         )
         builder.create(PIP_DIR)
-        pip = PIP_DIR / "bin" / "pip"
+        pip = PIP_DIR / RT_SCRIPTS / "pip"
 
         async def cont() -> _SortOfMonoid:
             p = await call(

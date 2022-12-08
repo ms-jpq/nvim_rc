@@ -14,8 +14,8 @@ VIM_DIR = TOP_LEVEL / "pack" / "modules" / "start"
 VARS_DIR = TOP_LEVEL / "tmp"
 
 RT_DIR = VARS_DIR / "runtime"
-_RT_SCRIPTS = "Scripts" if IS_WIN else "bin"
-_RT_BIN = RT_DIR / _RT_SCRIPTS
+RT_SCRIPTS = "Scripts" if IS_WIN else "bin"
+_RT_BIN = RT_DIR / RT_SCRIPTS
 RT_PY = _RT_BIN / basename(executable)
 
 
@@ -45,7 +45,7 @@ GEM_DIR = _MODULES_DIR / "rb_modules"
 NPM_DIR = _MODULES_DIR
 GO_DIR = _MODULES_DIR / "go_modules"
 
-_PIP_BIN = PIP_DIR / _RT_SCRIPTS
+_PIP_BIN = PIP_DIR / RT_SCRIPTS
 
 PATH = environ["PATH"] = pathsep.join(
     map(
