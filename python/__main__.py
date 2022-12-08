@@ -14,7 +14,7 @@ _EX = _EX.parent.resolve(strict=True) / _EX.name
 _LOCK_FILE = RT_DIR / "requirements.lock"
 
 
-def parse_args() -> Namespace:
+def _parse_args() -> Namespace:
     parser = ArgumentParser()
 
     sub_parsers = parser.add_subparsers(dest="command", required=True)
@@ -29,74 +29,79 @@ def parse_args() -> Namespace:
     return parser.parse_args()
 
 
-args = parse_args()
-command: Union[Literal["deps"], Literal["run"]] = args.command
-req = REQUIREMENTS.read_bytes()
+def main() -> None:
+    args = _parse_args()
+    command: Union[Literal["deps"], Literal["run"]] = args.command
+    req = REQUIREMENTS.read_bytes()
 
-if command == "deps":
-    deps: Sequence[str] = args.deps
+    if command == "deps":
+        deps: Sequence[str] = args.deps
 
-    if not deps or "runtime" in deps:
-        builder = EnvBuilder(
-            system_site_packages=False,
-            with_pip=True,
-            upgrade=True,
-            symlinks=True,
-            clear=True,
-        )
-        builder.create(RT_DIR)
-        check_call(
-            (
-                RT_PY,
-                "-m",
-                "pip",
-                "install",
-                "--require-virtualenv",
-                "--upgrade",
-                "--force-reinstall",
-                "--requirement",
-                REQUIREMENTS,
+        if not deps or "runtime" in deps:
+            builder = EnvBuilder(
+                system_site_packages=False,
+                with_pip=True,
+                upgrade=True,
+                symlinks=True,
+                clear=True,
             )
-        )
-
-        _LOCK_FILE.write_bytes(req)
-
-    if not deps or "packages" in deps:
-        if _EX != RT_PY:
-            code = check_call(
-                (RT_PY, "-m", "python", "deps", "packages"), cwd=TOP_LEVEL
+            builder.create(RT_DIR)
+            check_call(
+                (
+                    RT_PY,
+                    "-m",
+                    "pip",
+                    "install",
+                    "--require-virtualenv",
+                    "--upgrade",
+                    "--force-reinstall",
+                    "--requirement",
+                    REQUIREMENTS,
+                )
             )
-            exit(code)
-        else:
-            from .components.install import install
 
-            if code := arun(install()):
+            _LOCK_FILE.write_bytes(req)
+
+        if not deps or "packages" in deps:
+            if _EX != RT_PY:
+                code = check_call(
+                    (RT_PY, "-m", "python", "deps", "packages"), cwd=TOP_LEVEL
+                )
                 exit(code)
+            else:
+                from .components.install import install
 
-elif command == "run":
-    try:
-        lock = _LOCK_FILE.read_bytes()
-    except Exception:
-        lock = b""
+                if code := arun(install()):
+                    exit(code)
 
-    assert _EX == RT_PY
-    assert lock == req
+    elif command == "run":
+        try:
+            lock = _LOCK_FILE.read_bytes()
+        except Exception:
+            lock = b""
 
-    from std2.pickle.types import DecodeError
-    from std2.sys import suicide
+        assert _EX == RT_PY
+        assert lock == req
 
-    try:
-        from .client import init
-    except DecodeError as e:
-        print(e, file=stderr)
-        exit(1)
+        from std2.pickle.types import DecodeError
+        from std2.sys import suicide
+
+        try:
+            from .client import init
+        except DecodeError as e:
+            print(e, file=stderr)
+            exit(1)
+        else:
+
+            async def main() -> None:
+                async with suicide(args.ppid):
+                    await init(args.socket)
+
+            arun(main())
+
     else:
+        assert False
 
-        async def main() -> None:
-            async with suicide(args.ppid):
-                await init(args.socket)
 
-        arun(main())
-
-else:
-    assert False
+if __name__ == "__main__":
+    main()
