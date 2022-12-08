@@ -151,13 +151,16 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
                 yield spec.uri, p1
 
                 if not p1.returncode and spec.call:
-                    p2 = await call(
-                        *spec.call,
-                        cwd=location,
-                        capture_stderr=False,
-                        check_returncode=set(),
-                    )
-                    yield "", p2
+                    arg0, *argv = spec.call
+                    if a0 := which(arg0):
+                        p2 = await call(
+                            a0,
+                            *argv,
+                            cwd=location,
+                            capture_stderr=False,
+                            check_returncode=set(),
+                        )
+                        yield "", p2
 
             return [rt async for rt in cont()]
 
