@@ -74,7 +74,7 @@ local l3 = function()
     "--ppid",
     vim.fn.getpid(),
     "--socket",
-    vim.v.servername
+    is_win and "localhost:0" or vim.v.servername
   }
   local params = {
     cwd = cwd,

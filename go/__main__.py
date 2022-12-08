@@ -4,7 +4,7 @@ from contextlib import nullcontext
 from pathlib import Path, PurePath
 from subprocess import check_call
 from sys import executable, exit, stderr
-from typing import Literal, Sequence, Union
+from typing import Literal, Sequence, Tuple, Union
 from venv import EnvBuilder
 
 from .consts import IS_WIN, REQUIREMENTS, RT_DIR, RT_PY, TOP_LEVEL
@@ -14,6 +14,14 @@ _EX = _EX.parent.resolve(strict=True) / _EX.name
 _LOCK_FILE = RT_DIR / "requirements.lock"
 
 
+def _socket(arg: str) -> Union[PurePath, Tuple[str, int]]:
+    if arg.startswith("localhost:"):
+        host, _, port = arg.rpartition(":")
+        return host, int(port)
+    else:
+        return PurePath(arg)
+
+
 def _parse_args() -> Namespace:
     parser = ArgumentParser()
 
@@ -21,7 +29,7 @@ def _parse_args() -> Namespace:
 
     with nullcontext(sub_parsers.add_parser("run")) as p:
         p.add_argument("--ppid", type=int)
-        p.add_argument("--socket", required=True, type=PurePath)
+        p.add_argument("--socket", required=True, type=_socket)
 
     with nullcontext(sub_parsers.add_parser("deps")) as p:
         p.add_argument("deps", nargs="*", default=())
