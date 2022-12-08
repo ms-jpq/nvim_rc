@@ -13,8 +13,9 @@ VIM_DIR = TOP_LEVEL / "pack" / "modules" / "start"
 VARS_DIR = TOP_LEVEL / "tmp"
 
 RT_DIR = VARS_DIR / "runtime"
-RT_BIN = RT_DIR / "bin"
-RT_PY = RT_BIN / "python3"
+_RT_SCRIPTS = "Scripts" if IS_WIN else "bin"
+_RT_BIN = RT_DIR / _RT_SCRIPTS
+RT_PY = _RT_BIN / "python3"
 
 
 REQUIREMENTS = TOP_LEVEL / "requirements.txt"
@@ -43,7 +44,7 @@ GEM_DIR = _MODULES_DIR / "rb_modules"
 NPM_DIR = _MODULES_DIR
 GO_DIR = _MODULES_DIR / "go_modules"
 
-PIP_BIN = PIP_DIR / ("scripts" if IS_WIN else "bin")
+_PIP_BIN = PIP_DIR / _RT_SCRIPTS
 
 PATH = environ["PATH"] = pathsep.join(
     map(
@@ -52,11 +53,11 @@ PATH = environ["PATH"] = pathsep.join(
             (
                 path
                 for path in map(PurePath, environ["PATH"].split(pathsep))
-                if path != RT_BIN
+                if path != _RT_BIN
             ),
             (
                 BIN_DIR,
-                PIP_BIN,
+                _PIP_BIN,
                 GEM_DIR / "bin",
                 NPM_DIR / "node_modules" / ".bin",
                 GO_DIR / "bin",

@@ -1,3 +1,4 @@
+local is_win = vim.fn.has("win32") == 1
 local t1 = vim.fn.localtime()
 local cwd = vim.fn.stdpath("config")
 
@@ -49,11 +50,18 @@ local l3 = function()
   end
 
   local main = function()
-    local vpy = cwd .. "/tmp/runtime/bin/python3"
+    local py = is_win and "python" or "python3"
+    local vpy = (function()
+      if is_win then
+        return cwd .. "/tmp/runtime/Scripts/" .. py
+      else
+        return cwd .. "/tmp/runtime/bin/" .. py
+      end
+    end)()
     if vim.fn.filereadable(vpy) == 1 then
       return vpy
     else
-      return "python3"
+      return py
     end
   end
 
