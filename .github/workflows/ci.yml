@@ -12,16 +12,14 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
 
       - name: Pip Packages
-        run: pip install -U mypy types-PyYAML
-
-      - name: Pip Packages 2
-        run: pip install -U -r requirements.txt
+        run: |-
+          pip install -U -r requirements.txt -- mypy types-PyYAML
 
       - name: Lint
         run: mypy -- .
@@ -31,7 +29,26 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Build
-        run: ./docker/build.sh
+        run: |-
+          ./docker/build.sh
+
+  install:
+    strategy:
+      matrix:
+        platform:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+
+    runs-on: $${{ matrix.platform }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install
+        run: |-
+          python -m go
