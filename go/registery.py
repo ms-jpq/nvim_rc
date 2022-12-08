@@ -6,6 +6,7 @@ from pynvim_pp.handler import RPC
 from pynvim_pp.keymap import Keymap
 from pynvim_pp.settings import Settings
 from pynvim_pp.types import Method, RPCallable
+from std2.platform import OS, os
 
 from .components.localization import load
 from .components.rtp import inst
@@ -22,6 +23,9 @@ settings = Settings()
 
 
 def drain() -> tuple[Atomic, Mapping[Method, RPCallable]]:
+    if os is OS.windows:
+        settings["shell"] = "cmd.exe"
+
     _atomic = Atomic()
     _atomic.call_function("setenv", ("PATH", PATH))
     _atomic.set_var("mapleader", " ")
