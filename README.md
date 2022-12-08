@@ -68,7 +68,7 @@ Will install NPM & PIP & go & git packages for you in their **private** namespac
 Only accessible from inside `neovim`.
 
 ```sh
-init.py --install-packages
+init.sh
 ```
 
 Will also remind you to update weekly. Runs inside `neovim` in a floating window.
@@ -80,7 +80,7 @@ Will also install runtime dependencies under their **private** namespace.
 The runtime is isolated from your other packages!
 
 ```sh
-init.py --install-runtime
+init.sh
 ```
 
 ### Extensive Built-ins

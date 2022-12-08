@@ -24,6 +24,7 @@ from venv import EnvBuilder
 from pynvim_pp.lib import decode
 from pynvim_pp.nvim import Nvim
 from std2.asyncio.subprocess import call
+from std2.pathlib import AnyPath
 from std2.platform import OS, os
 from std2.string import removeprefix
 
@@ -337,7 +338,10 @@ def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
             if os is OS.windows and (tramp := which("env")):
                 with path.open("r", encoding="ascii") as f:
                     l1 = next(f, "")
-                argv = (tramp, *split(removeprefix(l1, "#!/usr/bin/env")))
+                argv: Sequence[AnyPath] = (
+                    tramp,
+                    *split(removeprefix(l1, "#!/usr/bin/env")),
+                )
             else:
                 argv = (path,)
 
@@ -419,6 +423,5 @@ async def maybe_install() -> None:
             await open_term(
                 Path(executable).resolve(strict=True),
                 INSTALL_SCRIPT,
-                "deps",
                 "packages",
             )

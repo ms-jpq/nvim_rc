@@ -20,7 +20,7 @@ RT_PY = _RT_BIN / basename(executable)
 
 
 REQUIREMENTS = TOP_LEVEL / "requirements.txt"
-INSTALL_SCRIPT = TOP_LEVEL / "init.py"
+INSTALL_SCRIPT = TOP_LEVEL / "init.sh"
 
 LANG_ROOT = TOP_LEVEL / "locale"
 DEFAULT_LANG = "c"
