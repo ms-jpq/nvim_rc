@@ -4,7 +4,7 @@ from json import dumps, loads
 from os import environ, linesep, pathsep, sep
 from os.path import normcase
 from pathlib import Path, PurePath
-from shlex import join
+from shlex import join, split
 from shutil import get_terminal_size, which
 from subprocess import CompletedProcess
 from sys import executable, stderr
@@ -25,6 +25,7 @@ from pynvim_pp.lib import decode
 from pynvim_pp.nvim import Nvim
 from std2.asyncio.subprocess import call
 from std2.platform import OS, os
+from std2.string import removeprefix
 
 from ..config.fmt import fmt_specs
 from ..config.install import ScriptSpec
@@ -317,7 +318,7 @@ def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
 
     for bin, pkg in _script_specs():
 
-        async def cont(path: PurePath, bin: str, pkg: ScriptSpec) -> _SortOfMonoid:
+        async def cont(path: Path, bin: str, pkg: ScriptSpec) -> _SortOfMonoid:
             env = {
                 "PATH": pathsep.join(
                     (
@@ -328,8 +329,15 @@ def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
                 "BIN": normcase(BIN_DIR / bin),
                 "LIB": normcase(LIB_DIR / bin),
             }
+            if os is OS.windows and (tramp := which("env")):
+                with path.open("r", encoding="ascii") as f:
+                    l1 = next(f, "")
+                argv = (tramp, *split(removeprefix(l1, "#!/usr/bin/env")))
+            else:
+                argv = (path,)
+
             p = await call(
-                path,
+                *argv,
                 env={**env, **pkg.env},
                 cwd=TMP_DIR,
                 capture_stderr=False,
@@ -339,7 +347,7 @@ def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
 
         if pkg.file and all(map(which, pkg.required)):
             if s_path := which(INSTALL_SCRIPTS_DIR / pkg.file):
-                yield cont(PurePath(s_path), bin=bin, pkg=pkg)
+                yield cont(Path(s_path), bin=bin, pkg=pkg)
 
 
 async def install() -> int:
