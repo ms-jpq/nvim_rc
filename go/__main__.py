@@ -46,6 +46,19 @@ def main() -> None:
                 clear=True,
             )
             builder.create(RT_DIR)
+            print(
+                (
+                    RT_PY,
+                    "-m",
+                    "pip",
+                    "install",
+                    "--require-virtualenv",
+                    "--upgrade",
+                    "--force-reinstall",
+                    "--requirement",
+                    REQUIREMENTS,
+                )
+            )
             check_call(
                 (
                     RT_PY,

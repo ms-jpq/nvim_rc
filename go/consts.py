@@ -1,8 +1,7 @@
 from itertools import chain
 from os import environ, name, pathsep
-from os.path import normcase
+from os.path import basename, normcase
 from pathlib import Path, PurePath
-from posixpath import basename
 from sys import executable
 
 IS_WIN = name == "nt"
