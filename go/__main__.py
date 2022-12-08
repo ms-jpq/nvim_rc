@@ -111,4 +111,11 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except BaseException as e:
+        print(e, flush=True)
+        from time import sleep
+
+        sleep(1)
+        exit(1)
