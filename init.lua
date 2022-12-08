@@ -16,6 +16,7 @@ local l2 = function()
   vim.api.nvim_set_keymap("v", "QQ", "<cmd>quitall!<cr>", {noremap = true})
   vim.api.nvim_set_keymap("v", "Q", "<nop>", {noremap = true})
   vim.opt.shortmess:append("I")
+
   vim.api.nvim_create_user_command(
     "FTdetect",
     function()
