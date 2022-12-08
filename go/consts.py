@@ -3,6 +3,8 @@ from os import environ, name, pathsep
 from os.path import normcase
 from pathlib import Path, PurePath
 
+IS_WIN = name == "nt"
+
 DATE_FMT = "%Y-%m-%d %X"
 
 TOP_LEVEL = Path(__file__).resolve(strict=True).parent.parent
@@ -41,7 +43,7 @@ GEM_DIR = _MODULES_DIR / "rb_modules"
 NPM_DIR = _MODULES_DIR
 GO_DIR = _MODULES_DIR / "go_modules"
 
-PIP_BIN = PIP_DIR / ("scripts" if name == "nt" else "bin")
+PIP_BIN = PIP_DIR / ("scripts" if IS_WIN else "bin")
 
 PATH = environ["PATH"] = pathsep.join(
     map(

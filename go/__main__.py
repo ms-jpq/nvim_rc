@@ -7,7 +7,7 @@ from sys import executable, exit, stderr
 from typing import Literal, Sequence, Union
 from venv import EnvBuilder
 
-from .consts import REQUIREMENTS, RT_DIR, RT_PY, TOP_LEVEL
+from .consts import IS_WIN, REQUIREMENTS, RT_DIR, RT_PY, TOP_LEVEL
 
 _EX = Path(executable)
 _EX = _EX.parent.resolve(strict=True) / _EX.name
@@ -42,7 +42,7 @@ def main() -> None:
                 system_site_packages=False,
                 with_pip=True,
                 upgrade=True,
-                symlinks=True,
+                symlinks=not IS_WIN,
                 clear=True,
             )
             builder.create(RT_DIR)
