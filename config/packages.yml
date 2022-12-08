@@ -130,7 +130,7 @@
 - git:
     uri: https://github.com/github/copilot.vim
   lua: |-
-    if vim.fn.has("win32") != 1 then
+    if vim.fn.has("win32") ~= 1 then
       vim.g.copilot_node_command =
         vim.env.ASDF_DATA_DIR .. "/installs/nodejs/lts-gallium/bin/node"
     end
