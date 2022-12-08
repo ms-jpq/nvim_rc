@@ -130,7 +130,10 @@
 - git:
     uri: https://github.com/github/copilot.vim
   lua: |-
-    vim.g.copilot_node_command =  vim.env.ASDF_DATA_DIR .. '/installs/nodejs/lts-gallium/bin/node'
+    if vim.fn.has("win32") != 1 then
+      vim.g.copilot_node_command =
+        vim.env.ASDF_DATA_DIR .. "/installs/nodejs/lts-gallium/bin/node"
+    end
 
 - git:
     uri: https://github.com/junegunn/fzf
