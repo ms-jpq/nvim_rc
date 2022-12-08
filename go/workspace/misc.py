@@ -1,12 +1,10 @@
-from shutil import which
-
 from pynvim_pp.buffer import Buffer
 from std2.platform import OS, os
 
 from ..registery import NAMESPACE, atomic, rpc, settings
 
-if os is OS.windows and (cmd := which("cmd.exe")):
-    settings["shell"] = cmd
+if os is OS.windows:
+    settings["shell"] = "cmd.exe"
 
 # do not exec arbitrary code
 settings["nomodeline"] = True
