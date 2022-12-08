@@ -1,7 +1,6 @@
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
 from contextlib import nullcontext
-from os.path import basename
 from pathlib import Path, PurePath
 from subprocess import check_call
 from sys import executable, exit, stderr
@@ -66,7 +65,14 @@ def main() -> None:
         if not deps or "packages" in deps:
             if _EX != RT_PY:
                 code = check_call(
-                    (RT_PY, "-m", basename(__file__), "deps", "packages"), cwd=TOP_LEVEL
+                    (
+                        RT_PY,
+                        "-m",
+                        Path(__file__).resolve(strict=True).parent.name,
+                        "deps",
+                        "packages",
+                    ),
+                    cwd=TOP_LEVEL,
                 )
                 exit(code)
             else:
