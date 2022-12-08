@@ -114,6 +114,9 @@ if __name__ == "__main__":
     try:
         main()
     except BaseException as e:
+        from traceback import print_exception
+
+        print_exception(e)
         print("error ->", e, e.__traceback__, flush=True)
         from time import sleep
 
