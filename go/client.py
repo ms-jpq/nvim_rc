@@ -24,10 +24,12 @@ async def _default(msg: MsgType, method: Method, params: Sequence[Any]) -> None:
 
 async def init(socket: PurePath) -> None:
     async with conn(socket, default=_default) as client:
+        print("connected", flush=True)
         atomic, handlers = drain()
         for handler in handlers.values():
             client.register(handler)
         await atomic.commit(NoneType)
+        print("registered", flush=True)
 
         await maybe_install()
 

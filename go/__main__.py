@@ -100,11 +100,11 @@ def main() -> None:
             exit(1)
         else:
 
-            async def main() -> None:
+            async def m() -> None:
                 # async with suicide(args.ppid):
-                    await init(args.socket)
+                await init(args.socket)
 
-            arun(main())
+            arun(m())
 
     else:
         assert False
