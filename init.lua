@@ -61,7 +61,7 @@ local l3 = function()
     main(),
     "-u",
     "-m",
-    "python",
+    "go",
     "run",
     "--ppid",
     vim.fn.getpid(),
