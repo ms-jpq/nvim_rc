@@ -130,6 +130,7 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
                         "--no-tags",
                         *(("origin", spec.branch) if spec.branch else ()),
                         cwd=location,
+                        capture_stderr=False,
                         check_returncode=set(),
                     )
                 else:
@@ -143,6 +144,7 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
                         "--",
                         spec.uri,
                         location,
+                        capture_stderr=False,
                         check_returncode=set(),
                     )
                 yield spec.uri, p1
@@ -151,6 +153,7 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
                     p2 = await call(
                         *spec.call,
                         cwd=location,
+                        capture_stderr=False,
                         check_returncode=set(),
                     )
                     yield "", p2
@@ -181,6 +184,7 @@ def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
                 "--upgrade",
                 "--",
                 *specs,
+                capture_stderr=False,
                 check_returncode=set(),
             )
             return (("", p),)
@@ -206,6 +210,7 @@ def _gem() -> Iterator[Awaitable[_SortOfMonoid]]:
                 "--install-dir",
                 _GEMS,
                 *specs,
+                capture_stderr=False,
                 check_returncode=set(),
             )
             return (("", p),)
@@ -221,6 +226,7 @@ async def _binstub() -> _SortOfMonoid:
         _GEMS,
         "--dst",
         GEM_DIR / "bin",
+        capture_stderr=False,
         check_returncode=set(),
     )
     return (("", p),)
@@ -243,6 +249,7 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
                     "init",
                     "--yes",
                     cwd=NPM_DIR,
+                    capture_stderr=False,
                     check_returncode=set(),
                 )
                 p = CompletedProcess(
@@ -271,6 +278,7 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
                         "--no-package-lock",
                         "--upgrade",
                         cwd=NPM_DIR,
+                        capture_stderr=False,
                         check_returncode=set(),
                     )
                     yield ("", p2)
@@ -294,6 +302,7 @@ def _go() -> Iterator[Awaitable[_SortOfMonoid]]:
                 spec,
                 env={"GO111MODULE": "on", "GOPATH": normcase(GO_DIR)},
                 cwd=VARS_DIR,
+                capture_stderr=False,
                 check_returncode=set(),
             )
             return (("", p),)
@@ -323,6 +332,7 @@ def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
                 path,
                 env={**env, **pkg.env},
                 cwd=TMP_DIR,
+                capture_stderr=False,
                 check_returncode=set(),
             )
             return (("", p),)
