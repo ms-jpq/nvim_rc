@@ -109,6 +109,7 @@ def main() -> None:
         else:
 
             async def m() -> None:
+                print(args.socket)
                 # async with suicide(args.ppid):
                 await init(args.socket)
 
