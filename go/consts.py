@@ -2,6 +2,8 @@ from itertools import chain
 from os import environ, name, pathsep
 from os.path import normcase
 from pathlib import Path, PurePath
+from posixpath import basename
+from sys import executable
 
 IS_WIN = name == "nt"
 
@@ -15,7 +17,7 @@ VARS_DIR = TOP_LEVEL / "tmp"
 RT_DIR = VARS_DIR / "runtime"
 _RT_SCRIPTS = "Scripts" if IS_WIN else "bin"
 _RT_BIN = RT_DIR / _RT_SCRIPTS
-RT_PY = _RT_BIN / "python3"
+RT_PY = _RT_BIN / basename(executable)
 
 
 REQUIREMENTS = TOP_LEVEL / "requirements.txt"
