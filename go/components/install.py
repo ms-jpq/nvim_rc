@@ -175,11 +175,13 @@ def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
             clear=False,
         )
         builder.create(PIP_DIR)
-        pip = PIP_DIR / RT_SCRIPTS / "pip"
+        ex = PIP_DIR / RT_SCRIPTS / PurePath(executable).name
 
         async def cont() -> _SortOfMonoid:
             p = await call(
-                pip,
+                ex,
+                "-m",
+                "pip",
                 "install",
                 "--require-virtualenv",
                 "--upgrade",
