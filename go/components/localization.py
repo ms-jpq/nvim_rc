@@ -1,7 +1,9 @@
+from io import StringIO
 from locale import getdefaultlocale
 from string import Template
 from typing import Mapping, MutableMapping, Optional, Union
 
+from pynvim_pp.lib import decode
 from std2.pickle.decoder import new_decoder
 from yaml import safe_load
 
@@ -31,6 +33,8 @@ class Lang:
 
 def load(code: Optional[str]) -> Lang:
     lang = _get_lang(code, fallback=DEFAULT_LANG)
+    coder = new_decoder[Mapping[str, str]](Mapping[str, str])
+
     lang_path = (LANG_ROOT / lang).with_suffix(".yml")
     yml_path = (
         lang_path
@@ -38,7 +42,9 @@ def load(code: Optional[str]) -> Lang:
         else (LANG_ROOT / DEFAULT_LANG).with_suffix(".yml")
     )
 
-    specs = new_decoder[Mapping[str, str]](Mapping[str, str])(
-        safe_load(yml_path.open())
-    )
+    yml = decode(yml_path.read_bytes())
+    with StringIO() as io:
+        io.write(yml)
+        io.seek(0)
+        specs = coder(safe_load(io))
     return Lang(specs=specs)
