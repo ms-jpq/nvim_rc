@@ -18,6 +18,7 @@ RUN apt-get update && \
     apt-get install --no-install-recommends --yes -- \
     nodejs \
     npm \
+    clang \
     golang-go && \
     rm -rf -- /var/lib/apt/lists/*
 

@@ -8,4 +8,4 @@ shopt -s globstar nullglob
 cd -- "$(dirname -- "$0")" || exit 1
 
 
-exec -- python -m go deps "$@"
+exec -- python3 -m go deps "$@"

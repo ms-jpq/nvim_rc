@@ -93,7 +93,7 @@
       - "@prettier/plugin-php"
       - "@prettier/plugin-xml"
       - "@trivago/prettier-plugin-sort-imports"
-      # - prettier-plugin-awk
+      - prettier-plugin-awk
 
 - bin: rbprettier
   args:

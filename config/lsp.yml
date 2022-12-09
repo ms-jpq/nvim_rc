@@ -158,9 +158,10 @@
 
 - server: awk_ls
   bin: awk-language-server
-  # install:
-  #   npm:
-  #     - awk-language-server
+  install:
+    npm:
+      # requires clang?
+      - awk-language-server
 
 - server: powershell_es
   bin: powershell-ls
@@ -224,11 +225,11 @@
 # - server: typeprof
 #   bin: typeprof
 
-- server: ruby_ls
-  bin: ruby-lsp
-  install:
-    gem:
-      - ruby-lsp
+# - server: ruby_ls
+#   bin: ruby-lsp
+#   install:
+#     gem:
+#       - ruby-lsp
 
 - server: solargraph
   bin: solargraph
