@@ -20,7 +20,7 @@ RT_SCRIPTS = (
     else "bin"
 )
 _RT_BIN = RT_DIR / RT_SCRIPTS
-RT_PY = _RT_BIN / PurePath(executable).stem
+RT_PY = _RT_BIN / PurePath(executable)
 
 
 REQUIREMENTS = TOP_LEVEL / "requirements.txt"
