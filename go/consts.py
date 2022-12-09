@@ -1,6 +1,6 @@
 from itertools import chain
 from os import environ, name, pathsep
-from os.path import basename, normcase
+from os.path import normcase
 from pathlib import Path, PurePath
 from sys import executable
 
@@ -16,7 +16,7 @@ VARS_DIR = TOP_LEVEL / "tmp"
 RT_DIR = VARS_DIR / "runtime"
 RT_SCRIPTS = "Scripts" if IS_WIN else "bin"
 _RT_BIN = RT_DIR / RT_SCRIPTS
-RT_PY = _RT_BIN / basename(executable)
+RT_PY = _RT_BIN / PurePath(executable).stem
 
 
 REQUIREMENTS = TOP_LEVEL / "requirements.txt"
