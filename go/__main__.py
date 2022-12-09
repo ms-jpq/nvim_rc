@@ -54,7 +54,6 @@ def main() -> None:
                 clear=True,
             )
             builder.create(RT_DIR)
-            print(RT_PY)
             check_call(
                 (
                     RT_PY,

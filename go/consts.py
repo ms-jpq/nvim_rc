@@ -14,7 +14,12 @@ VIM_DIR = TOP_LEVEL / "pack" / "modules" / "start"
 VARS_DIR = TOP_LEVEL / "tmp"
 
 RT_DIR = VARS_DIR / "runtime"
-RT_SCRIPTS = "Scripts" if IS_WIN else "bin"
+RT_SCRIPTS = (
+    "Scripts"
+    if IS_WIN
+    and not ({"msys64", "bin"} & {Path(executable).resolve(strict=True).parents})
+    else "bin"
+)
 _RT_BIN = RT_DIR / RT_SCRIPTS
 RT_PY = _RT_BIN / PurePath(executable).stem
 
