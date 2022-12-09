@@ -16,11 +16,9 @@ VARS_DIR = TOP_LEVEL / "tmp"
 RT_DIR = VARS_DIR / "runtime"
 RT_SCRIPTS = (
     "Scripts"
-    if IS_WIN
-    and not ({"msys64", "bin"} & {Path(executable).resolve(strict=True).parents})
+    if IS_WIN and {"msys64", "bin"} <= {Path(executable).resolve(strict=True).parts}
     else "bin"
 )
-print({"msys64", "bin"} & {Path(executable).resolve(strict=True).parents})
 _RT_BIN = RT_DIR / RT_SCRIPTS
 RT_PY = _RT_BIN / PurePath(executable).stem
 
