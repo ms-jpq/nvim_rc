@@ -20,7 +20,7 @@ RT_SCRIPTS = (
     else "bin"
 )
 _RT_BIN = RT_DIR / RT_SCRIPTS
-RT_PY = _RT_BIN / PurePath(executable)
+RT_PY = _RT_BIN / PurePath(executable).name
 
 
 REQUIREMENTS = TOP_LEVEL / "requirements.txt"
