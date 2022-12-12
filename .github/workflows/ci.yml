@@ -22,7 +22,8 @@ jobs:
           pip install -U -r requirements.txt -- mypy types-PyYAML
 
       - name: Lint
-        run: mypy -- .
+        run: |-
+          mypy -- .
 
   docker:
     runs-on: ubuntu-latest
