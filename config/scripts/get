@@ -15,7 +15,7 @@ from typing import Iterator, Tuple, cast
 from urllib.parse import unquote, urlsplit
 from urllib.request import Request, build_opener
 
-_MB = 10 ** 6
+_MB = 10**6
 _OPEN = build_opener()
 
 
@@ -74,8 +74,7 @@ def main() -> None:
     stream = _fetch(src, timeout=args.timeout)
     dest.parent.mkdir(parents=True, exist_ok=True)
     with NamedTemporaryFile(dir=dest.parent, prefix=dest.name, delete=False) as fd:
-        for chunk in stream:
-            fd.write(chunk)
+        fd.writelines(stream)
 
     Path(fd.name).replace(dest)
     utime(dest, (mtime, mtime))

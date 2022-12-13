@@ -160,8 +160,8 @@
       maps:
         "<leader>O": ":Rg "
   lua: |-
-    local fzf_opts = vim.env.FZF_DEFAULT_OPTS
-    local new_opts = (fzf_opts or "") .. " --no-border"
+    local fzf_opts = vim.env.FZF_DEFAULT_OPTS or ""
+    local new_opts = fzf_opts .. " --no-border"
     vim.env.FZF_DEFAULT_OPTS = new_opts
 
 - git:

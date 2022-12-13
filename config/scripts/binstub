@@ -45,7 +45,6 @@ def main() -> None:
         )
         with NamedTemporaryFile(mode="w", encoding="utf-8", delete=False) as fd:
             fd.write(stub)
-            fd.flush()
 
         Path(fd.name).replace(bin)
         bin.chmod(_RWXR_XR_X)
