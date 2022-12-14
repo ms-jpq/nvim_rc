@@ -17,7 +17,7 @@ _STUB = """
 #!/usr/bin/env -S sh
 
 export GEM_PATH=$GEM_PATH
-exec -- $BIN "$$@"
+exec $BIN "$$@"
 """
 
 
