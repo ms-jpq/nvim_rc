@@ -95,28 +95,6 @@
 
   init_options:
     linters:
-      shellcheck:
-        sourceName: shellcheck
-        command: shellcheck
-        args:
-          - --format=json
-          - --exclude=SC1090
-          - "-"
-        rootPatterns:
-          - .shellcheckrc
-          - shellcheckrc
-        parseJson:
-          column: column
-          endColumn: endColumn
-          endLine: endLine
-          line: line
-          message: ${message} [${code}]
-          security: level
-        securities:
-          error: error
-          info: info
-          style: hint
-          warning: warning
       hadolint:
         sourceName: hadolint
         command: hadolint
@@ -140,9 +118,6 @@
           style: hint
 
     filetypes:
-      # sh: &sh
-      #   - shellcheck
-      # zsh: *sh
       dockerfile:
         - hadolint
 
