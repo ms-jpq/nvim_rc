@@ -4,7 +4,7 @@ from json import dumps, loads
 from os import environ, linesep, pathsep, sep
 from os.path import normcase
 from pathlib import Path, PurePath
-from shlex import join, split
+from shlex import join
 from shutil import get_terminal_size, which
 from subprocess import CompletedProcess
 from sys import executable, stderr
@@ -26,7 +26,6 @@ from pynvim_pp.nvim import Nvim
 from std2.asyncio.subprocess import call
 from std2.pathlib import AnyPath
 from std2.platform import OS, os
-from std2.string import removeprefix
 
 from ..config.fmt import fmt_specs
 from ..config.install import ScriptSpec
@@ -326,13 +325,15 @@ def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
                 "BIN": normcase(BIN_DIR / bin),
                 "LIB": normcase(LIB_DIR / bin),
             }
+
             if os is OS.windows and (tramp := which("env")):
-                with path.open("r", encoding="ascii") as f:
-                    l1 = next(f, "")
-                argv: Sequence[AnyPath] = (
-                    tramp,
-                    *split(removeprefix(l1, "#!/usr/bin/env")),
-                )
+                shebang = b"#!/usr/bin/env"
+                with path.open("rb") as f:
+                    if f.read(len(shebang)) == shebang:
+                        l1 = decode(next(f, b""))
+                        argv: Sequence[AnyPath] = (tramp, l1)
+                    else:
+                        argv = (path,)
             else:
                 argv = (path,)
 
