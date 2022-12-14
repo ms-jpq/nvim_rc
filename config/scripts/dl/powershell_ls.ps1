@@ -4,7 +4,7 @@ Set-StrictMode -Version 'Latest'
 $ErrorActionPreference = 'Stop'
 
 
-$tmp = Join-Path -- ([System.IO.Path]::GetTempPath()) ([System.Guid]::NewGuid())
+$tmp = Join-Path -- ([System.IO.Path]::GetTempPath()) New-Guid
 $out = Split-Path -Leaf -- "$Env:URI"
 
 New-Item -ItemType 'Directory' -- "$tmp"
