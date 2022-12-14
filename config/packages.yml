@@ -82,7 +82,13 @@
       keymap:
         repeat: "<leader>."
         eval_snips: "<leader>j"
-      # clients.tabnine.enabled: true
+  lua: |-
+    if vim.env.SSH_TTY or vim.env.T9 then
+      local cs = vim.g.coq_settings
+      cs["clients.tabnine.enabled"] = true
+      vim.g.coq_settings = cs
+    end
+
   keys:
     - modes: n
       maps:
