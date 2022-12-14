@@ -327,7 +327,7 @@ def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
             }
 
             if os is OS.windows and (tramp := which("env")):
-                shebang = b"#!/usr/bin/env"
+                shebang = b"#!/usr/bin/env "
                 with path.open("rb") as f:
                     if f.read(len(shebang)) == shebang:
                         args = split(decode(next(f, b"")))
