@@ -6,7 +6,7 @@ $PSNativeCommandUseErrorActionPreference = $true
 
 
 $lib = Join-Path -- (Split-Path -- "$PSScriptRoot") 'lib' 'powershell-ls.ps1'
-$cache = Join-Path -- ([System.IO.Path]::GetTempPath()) New-Guid
+$cache = Join-Path -- ([System.IO.Path]::GetTempPath()) (New-Guid)
 New-Item -ItemType 'Directory' -- "$cache" | Out-Null
 
 $argv = @(
