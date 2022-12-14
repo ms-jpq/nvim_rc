@@ -1,4 +1,4 @@
-#!/usr/bin/env julia
+#!/usr/bin/env -S julia
 
 using Pkg;
 

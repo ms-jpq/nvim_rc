@@ -4,7 +4,7 @@ from json import dumps, loads
 from os import environ, linesep, pathsep, sep
 from os.path import normcase
 from pathlib import Path, PurePath
-from shlex import join
+from shlex import join, split
 from shutil import get_terminal_size, which
 from subprocess import CompletedProcess
 from sys import executable, stderr
@@ -330,8 +330,8 @@ def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
                 shebang = b"#!/usr/bin/env"
                 with path.open("rb") as f:
                     if f.read(len(shebang)) == shebang:
-                        l1 = decode(next(f, b"").strip())
-                        argv: Sequence[AnyPath] = (tramp, l1)
+                        args = split(decode(next(f, b"")))
+                        argv: Sequence[AnyPath] = (tramp, *args, path)
                     else:
                         argv = (path,)
             else:
