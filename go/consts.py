@@ -16,8 +16,7 @@ VARS_DIR = TOP_LEVEL / "tmp"
 RT_DIR = VARS_DIR / "runtime"
 RT_SCRIPTS = (
     "Scripts"
-    if IS_WIN
-    and not ({"msys64", "bin"} <= {Path(executable).resolve(strict=True).parts})
+    if IS_WIN and not ({"msys64", "bin"} <= {Path(executable).resolve().parts})
     else "bin"
 )
 _RT_BIN = RT_DIR / RT_SCRIPTS
