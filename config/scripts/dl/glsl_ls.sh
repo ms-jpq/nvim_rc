@@ -19,7 +19,7 @@ VENV="$LOCATION/venv"
 VENV_BIN="$VENV/bin"
 NINJA="$VENV_BIN/ninja"
 
-export PATH="$VENV_BIN:$PATH"
+PATH="$VENV_BIN:$PATH"
 
 
 if [[ ! -x "$NINJA" ]]

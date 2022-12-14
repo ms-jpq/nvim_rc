@@ -39,7 +39,7 @@ fi
 if [[ ! -x "$BIN" ]]
 then
   (
-    export PATH="$VENV_BIN:$PATH"
+    PATH="$VENV_BIN:$PATH"
     cd -- "$REPO/3rd/luamake" || exit 1
 
     if [[ "$OSTYPE" =~ 'darwin' ]]
