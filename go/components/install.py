@@ -330,7 +330,7 @@ def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
                 shebang = b"#!/usr/bin/env"
                 with path.open("rb") as f:
                     if f.read(len(shebang)) == shebang:
-                        l1 = decode(next(f, b""))
+                        l1 = decode(next(f, b"").strip())
                         argv: Sequence[AnyPath] = (tramp, l1)
                     else:
                         argv = (path,)
