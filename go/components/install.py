@@ -412,7 +412,6 @@ async def maybe_install() -> None:
 
         if ans == 1:
             await open_term(
-                Path(executable).resolve(strict=True),
                 INSTALL_SCRIPT,
                 "packages",
             )
