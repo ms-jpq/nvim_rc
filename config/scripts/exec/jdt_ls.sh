@@ -2,7 +2,7 @@
 
 set -Eeu
 set -o pipefail
-shopt -s globstar failglob
+shopt -s failglob failglob
 
 
 LIB="$(dirname -- "$(dirname -- "$(realpath -- "$0")")")/lib/jdtls"
@@ -35,4 +35,4 @@ ARGS=(
   )
 
 
-exec java "${ARGS[@]}"
+exec -- java "${ARGS[@]}"

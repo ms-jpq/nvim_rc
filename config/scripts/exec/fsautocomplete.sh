@@ -16,4 +16,4 @@ then
 fi
 
 
-exec "$BIN" "$@"
+exec -- "$BIN" "$@"

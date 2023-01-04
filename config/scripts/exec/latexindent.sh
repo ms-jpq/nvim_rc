@@ -9,4 +9,4 @@ LIB="$(dirname -- "$(dirname -- "$(realpath -- "$0")")")/lib"
 
 
 export PERL5LIB="$LIB/_perl_/lib/perl5"
-exec "$LIB/latexindent/latexindent.pl" "$@"
+exec -- "$LIB/latexindent/latexindent.pl" "$@"

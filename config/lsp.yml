@@ -20,8 +20,9 @@
   install:
     script:
       env:
-        MAC_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-darwin-aarch64.gz
+        DARWIN_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-darwin-aarch64.gz
         LINUX_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz
+        NT_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-windows-x86_64.zip
       file: dl/taplo.sh
 
 - server: lemminx
@@ -30,7 +31,7 @@
   install:
     script:
       env:
-        MAC_URI: https://download.jboss.org/jbosstools/vscode/stable/lemminx-binary/0.19.1-541/lemminx-osx-x86_64.zip
+        DARWIN_URI: https://download.jboss.org/jbosstools/vscode/stable/lemminx-binary/0.19.1-541/lemminx-osx-x86_64.zip
         LINUX_URI: https://download.jboss.org/jbosstools/vscode/stable/lemminx-binary/0.19.1-541/lemminx-linux.zip
       file: dl/lemminx.sh
 
@@ -49,8 +50,9 @@
   install:
     script:
       env:
-        MAC_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-15.2.0-mac-x64.tar.gz
+        DARWIN_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-15.2.0-mac-x64.tar.gz
         LINUX_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-15.2.0-linux-x64.tar.gz
+        NT_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-15.2.0-windows-x64.zip
       file: dl/ltex.sh
 
 - server: texlab
@@ -78,10 +80,13 @@
   install:
     script:
       env:
-        MAC_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-macos.tar.gz
+        DARWIN_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-macos.tar.gz
         LINUX_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-linux.tar.gz
-        T_MAC_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.11.0/tectonic-0.11.0-x86_64-apple-darwin.tar.gz
+        NT_URI: https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-windows.zip
+
+        T_DARWIN_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.11.0/tectonic-0.11.0-x86_64-apple-darwin.tar.gz
         T_LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.11.0/tectonic-0.11.0-x86_64-unknown-linux-gnu.tar.gz
+        T_NT_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.11.0/tectonic-0.11.0-x86_64-pc-windows-msvc.zip
       file: dl/texlab.sh
 
 - server: diagnosticls
@@ -166,8 +171,9 @@
   install:
     script:
       env:
-        MAC_URI: https://downloads.haskell.org/~hls/haskell-language-server-1.8.0.0/haskell-language-server-1.8.0.0-aarch64-darwin.tar.xz
-        LINUX_URI: https://downloads.haskell.org/~hls/haskell-language-server-1.8.0.0/haskell-language-server-1.8.0.0-x86_64-linux-deb10.tar.xz
+        DARWIN_URI: https://downloads.haskell.org/~hls/haskell-language-server-1.9.0.0/haskell-language-server-1.9.0.0-aarch64-darwin.tar.xz
+        LINUX_URI: https://downloads.haskell.org/~hls/haskell-language-server-1.9.0.0/haskell-language-server-1.9.0.0-x86_64-linux-deb10.tar.xz
+        NT_URI: https://downloads.haskell.org/~hls/haskell-language-server-1.9.0.0/haskell-language-server-1.9.0.0-x86_64-windows.zip
       file: dl/haskell_language_server.sh
 
 - server: rust_analyzer
@@ -175,8 +181,9 @@
   install:
     script:
       env:
-        MAC_URI: https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-aarch64-apple-darwin.gz
+        DARWIN_URI: https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-aarch64-apple-darwin.gz
         LINUX_URI: https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz
+        NT_URI: https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-pc-windows-msvc.gz
       file: dl/rust_analyzer.sh
 
 - server: clangd
@@ -298,8 +305,9 @@
       required:
         - dotnet
       env:
-        MAC_URI: https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx-arm64-net6.0.tar.gz
+        DARWIN_URI: https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx-arm64-net6.0.tar.gz
         LINUX_URI: https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-linux-x64-net6.0.tar.gz
+        NT_URI: https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-win-x64-net6.0.zip
       file: dl/omnisharp.sh
 
 - server: jdtls

@@ -2,7 +2,7 @@
 
 set -Eeu
 set -o pipefail
-shopt -s globstar failglob
+shopt -s failglob failglob
 
 
 if [[ ! "$OSTYPE" =~ "linux" ]]
@@ -42,12 +42,18 @@ then
     PATH="$VENV_BIN:$PATH"
     cd -- "$REPO/3rd/luamake" || exit 1
 
-    if [[ "$OSTYPE" =~ 'darwin' ]]
-    then
-      NAME=macos
-    else
-      NAME=linux
-    fi
+    case "$OSTYPE"
+    in
+      darwin*)
+        NAME=macos
+        ;;
+      linux*)
+        NAME=linux
+        ;;
+      *)
+        NAME=msvc
+        ;;
+    esac
 
     ninja -f "$PWD/compile/ninja/$NAME.ninja"
     cd -- "$REPO" || exit 1

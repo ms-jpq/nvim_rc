@@ -2,11 +2,11 @@
 
 set -Eeu
 set -o pipefail
-shopt -s globstar failglob
+shopt -s failglob failglob
 
 
 BIN="$(dirname -- "$(dirname -- "$(realpath -- "$0")")")/lib/haskell-language-server-wrapper/bin"
 PATH="$BIN:$PATH"
 
 
-exec "$BIN/haskell-language-server-wrapper" "$@"
+exec -- "$BIN/haskell-language-server-wrapper"* "$@"

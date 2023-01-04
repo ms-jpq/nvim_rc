@@ -5,12 +5,18 @@ set -o pipefail
 shopt -s globstar failglob
 
 
-if [[ "$OSTYPE" =~ 'darwin' ]]
-then
-  URI="$MAC_URI"
-else
-  URI="$LINUX_URI"
-fi
+case "$OSTYPE"
+in
+  darwin*)
+    URI="$DARWIN_URI"
+    ;;
+  linux*)
+    URI="$LINUX_URI"
+    ;;
+  *)
+    URI="$NT_URI"
+    ;;
+esac
 
 
 TMP="$(mktemp --directory)"
