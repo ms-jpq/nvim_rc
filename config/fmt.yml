@@ -81,6 +81,7 @@
     - javascript*
     - json*
     - less
+    - liquid
     - markdown
     - php
     - scss
@@ -92,6 +93,7 @@
       - prettier
       - "@prettier/plugin-php"
       - "@prettier/plugin-xml"
+      - "@shopify/prettier-plugin-liquid"
       - "@trivago/prettier-plugin-sort-imports"
       - prettier-plugin-awk
 
