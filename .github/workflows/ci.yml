@@ -36,20 +36,20 @@ jobs:
         run: |-
           ./docker/build.sh
 
-  install:
-    strategy:
-      matrix:
-        platform:
-          - ubuntu-latest
-          - macos-latest
-          - windows-latest
+  # install:
+  #   strategy:
+  #     matrix:
+  #       platform:
+  #         - ubuntu-latest
+  #         - macos-latest
+  #         - windows-latest
 
-    runs-on: $${{ matrix.platform }}
+  #   runs-on: $${{ matrix.platform }}
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
 
-      - name: Install
-        run: |-
-          python -m go
+  #     - name: Install
+  #       run: |-
+  #         python -m go
