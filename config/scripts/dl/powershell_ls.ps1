@@ -16,4 +16,4 @@ if (Test-Path -- "$Env:LIB") {
 }
 
 Move-Item -- "$tmp" "$Env:LIB"
-Copy-Item -- (Join-Path -- (Split-Path -- "$PSScriptRoot") 'exec' 'powershell-ls.ps1') "$Env:BIN"
+Copy-Item -- (Join-Path -- (Split-Path -- "$PSScriptRoot") 'exec' 'powershell_ls.ps1') "$Env:BIN"

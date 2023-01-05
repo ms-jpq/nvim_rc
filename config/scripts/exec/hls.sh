@@ -5,7 +5,7 @@ set -o pipefail
 shopt -s failglob failglob
 
 
-BIN="$(dirname -- "$(dirname -- "$(realpath -- "$0")")")/lib/haskell-language-server-wrapper/bin"
+BIN="$(dirname -- "$0")/../lib/haskell-language-server-wrapper/bin"
 PATH="$BIN:$PATH"
 
 

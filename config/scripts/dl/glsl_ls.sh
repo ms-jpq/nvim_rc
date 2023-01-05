@@ -4,13 +4,6 @@ set -Eeu
 set -o pipefail
 shopt -s globstar failglob
 
-exit
-
-if [[ ! "$OSTYPE" =~ "linux" ]]
-then
-  exit
-fi
-
 
 LOCATION="$PWD/glsl-ls"
 REPO="$LOCATION/repo"
@@ -39,6 +32,11 @@ else
   git clone "${OPTS[@]}" "$URI" "$REPO"
 fi
 
+
+if [[ ! "$OSTYPE" =~ "linux" ]]
+then
+  exit
+fi
 
 if [[ ! -x "$BIN" ]]
 then
