@@ -377,6 +377,12 @@
       env:
         URI: https://github.com/svenstaro/glsl-language-server
       file: dl/glsl_ls.sh
+
+- server: theme_check
+  bin: theme-check-language-server
+  install:
+    gem:
+      - theme-check
 # - server: volar
 #   bin: vue-language-server
 #   install:
