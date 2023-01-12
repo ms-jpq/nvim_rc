@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from argparse import ArgumentParser, Namespace
-from os import linesep
+from os import linesep, name
 from os.path import commonpath, normcase
 from pathlib import Path
 from shlex import quote
@@ -16,6 +16,7 @@ _RWXR_XR_X = (S_IRUSR | S_IWUSR | S_IXUSR) | (S_IRGRP | S_IXGRP) | (S_IROTH | S_
 _STUB = """
 #!/usr/bin/env -S sh
 
+export MSYSTEM='MSYS'
 export GEM_PATH=$GEM_PATH
 exec $BIN "$$@"
 """
@@ -33,6 +34,7 @@ def main() -> None:
     src, dst = Path(args.src), Path(args.dst)
     template = Template(_STUB.lstrip())
     bins = src / "bin"
+    win = name == "nt"
 
     for path in (bins, dst):
         path.mkdir(parents=True, exist_ok=True)
@@ -48,6 +50,11 @@ def main() -> None:
 
         Path(fd.name).replace(bin)
         bin.chmod(_RWXR_XR_X)
+
+        if win:
+            sh = bin.with_suffix(".sh")
+            sh.unlink(missing_ok=True)
+            sh.symlink_to(bin)
 
         common = commonpath((path, bin))
         for m in map(
