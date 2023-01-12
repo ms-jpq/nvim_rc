@@ -11,15 +11,16 @@ _STDIN = PurePath("-")
 
 
 def _unpack_gz(source: str, destination: str) -> None:
-    if cmd := which("gzip"):
+    cmd = "gzip"
+    if gzip := which(cmd):
         dest = Path(destination) / PurePath(source).name
         with dest.open("wb") as fd:
             check_call(
-                (cmd, "--decompress", "--keep", "--force", "--stdout", "--", source),
+                (gzip, "--decompress", "--keep", "--force", "--stdout", "--", source),
                 stdout=fd,
             )
     else:
-        raise RuntimeError(f"No {cmd} found in PATH")
+        raise RuntimeError(f"No '{cmd}' found in $PATH")
 
 
 def _parse_args() -> Namespace:
