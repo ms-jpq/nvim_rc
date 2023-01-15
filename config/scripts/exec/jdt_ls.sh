@@ -9,9 +9,9 @@ LIB="$(dirname -- "$0")/../lib/jdtls"
 OS="$(uname | tr '[:upper:]' '[:lower:]')"
 
 CANDIDATES=("$LIB/plugins/org.eclipse.equinox.launcher_"*'.jar')
-export JAR="${CANDIDATES[0]}"
-export WORKSPACE="${WORKSPACE:="$PWD"}"
-# export GRADLE_HOME="$(which gradle | rg --color=never --passthru --replace '' -- '/bin/gradle$')"
+export -- JAR="${CANDIDATES[0]}"
+export -- WORKSPACE="${WORKSPACE:="$PWD"}"
+# export -- GRADLE_HOME="$(which gradle | rg --color=never --passthru --replace '' -- '/bin/gradle$')"
 
 ARGS=(
   -Declipse.application=org.eclipse.jdt.ls.core.id1

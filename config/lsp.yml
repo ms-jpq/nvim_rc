@@ -295,7 +295,7 @@
     script:
       required:
         - dotnet
-      file: dl/fsharp_ls.sh
+      file: dl/fsharp_ls.fsx
 
 - server: omnisharp
   bin: omnisharp
@@ -308,7 +308,7 @@
         DARWIN_URI: https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx-arm64-net6.0.tar.gz
         LINUX_URI: https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-linux-x64-net6.0.tar.gz
         NT_URI: https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-win-x64-net6.0.zip
-      file: dl/omnisharp.sh
+      file: dl/omnisharp.fsx
 
 - server: jdtls
   bin: jdt-ls

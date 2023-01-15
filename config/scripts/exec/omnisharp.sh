@@ -11,7 +11,7 @@ BIN="$LIB/omnisharp/OmniSharp"
 
 if hash asdf 2> /dev/null
 then
-  export DOTNET_ROOT=
+  export -- DOTNET_ROOT=
   DOTNET_ROOT="$(dirname -- "$(asdf which dotnet)")"
 fi
 

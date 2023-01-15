@@ -4,10 +4,9 @@ Set-StrictMode -Version 'Latest'
 $ErrorActionPreference = 'Stop'
 
 
-$tmp = Join-Path -- ([System.IO.Path]::GetTempPath()) (New-Guid)
+$tmp = [System.IO.Directory]::CreateTempSubdirectory()
 $out = Split-Path -Leaf -- "$Env:URI"
 
-New-Item -ItemType 'Directory' -- "$tmp"
 Invoke-WebRequest -Uri "$Env:URI" -OutFile "$out"
 Expand-Archive -DestinationPath "$tmp" -- "$out"
 
