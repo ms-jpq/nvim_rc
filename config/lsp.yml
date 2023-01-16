@@ -327,11 +327,10 @@
   install:
     script:
       required:
-        - java
-        - gradle
+        - kotlinc
       env:
         URI: https://github.com/fwcd/kotlin-language-server/releases/latest/download/server.zip
-      file: dl/kotlin.sh
+      file: dl/kotlin.kts
 
 - server: sqlls
   bin: sql-language-server

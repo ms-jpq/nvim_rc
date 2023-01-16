@@ -191,6 +191,21 @@
         - dotnet
       file: dl/fantomas.fsx
 
+- bin: ktfmt
+  type: fs
+  args:
+    - --
+    - ${tmpname}
+  filetypes:
+    - kotlin
+  install:
+    script:
+      required:
+        - kotlinc
+      env:
+        URI: https://repo1.maven.org/maven2/com/facebook/ktfmt
+      file: dl/ktfmt.kts
+
 - bin: r-fmt
   type: fs
   args:
