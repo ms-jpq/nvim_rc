@@ -7,20 +7,21 @@ open System.IO
 open System.Runtime.InteropServices
 
 
-let run arg0 argv input =
-  let start =
-    new ProcessStartInfo(FileName = arg0, RedirectStandardInput = true, RedirectStandardOutput = true)
-  argv |> Seq.iter start.ArgumentList.Add
+let run arg0 argv (input: 'a) =
+    let start =
+        new ProcessStartInfo(FileName = arg0, RedirectStandardInput = true, RedirectStandardOutput = true)
 
-  use proc = Process.Start(start)
+    argv |> Seq.iter start.ArgumentList.Add
 
-  do
-    use stdin = proc.StandardInput
-    input |> ValueOption.defaultValue "" |> stdin.Write
+    use proc = Process.Start(start)
 
-  proc.WaitForExit()
-  assert (proc.ExitCode = 0)
-  proc.StandardOutput.ReadToEnd()
+    do
+        use stdin = proc.StandardInput
+        stdin.Write input
+
+    proc.WaitForExit()
+    assert (proc.ExitCode = 0)
+    proc.StandardOutput.ReadToEnd()
 
 
 let tmp = Directory.CreateTempSubdirectory().FullName
@@ -29,27 +30,23 @@ let bin = Environment.GetEnvironmentVariable "BIN"
 let proxy = Path.Combine(__SOURCE_DIRECTORY__, "..", "exec", "omnisharp.sh")
 
 let uri =
-  let env =
-    if RuntimeInformation.IsOSPlatform(OSPlatform.OSX) then
-      "DARWIN_URI"
-    elif RuntimeInformation.IsOSPlatform(OSPlatform.Linux) then
-      "LINUX_URI"
-    else
-      "NT_URI"
+    let env =
+        if RuntimeInformation.IsOSPlatform(OSPlatform.OSX) then
+            "DARWIN_URI"
+        elif RuntimeInformation.IsOSPlatform(OSPlatform.Linux) then
+            "LINUX_URI"
+        else
+            "NT_URI"
 
-  env |> Environment.GetEnvironmentVariable
+    env |> Environment.GetEnvironmentVariable
 
 
-ValueNone
-|> run "get" [ "--"; uri ]
-|> voption.Some
-|> run "unpack" [ "--dest"; tmp ]
-|> Console.Write
+"" |> run "get" [ "--"; uri ] |> run "unpack" [ "--dest"; tmp ] |> Console.Write
 
 try
-  Directory.Delete(lib, true)
+    Directory.Delete(lib, true)
 with DirectoryNotFoundException ->
-  ()
+    ()
 
 File.Delete bin
 

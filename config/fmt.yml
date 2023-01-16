@@ -178,6 +178,19 @@
         URI: https://github.com/cmhughes/latexindent.pl/archive/V3.11.tar.gz
       file: dl/latex_format.sh
 
+- bin: fantomas
+  type: fs
+  args:
+    - --
+    - ${tmpname}
+  filetypes:
+    - fsharp
+  install:
+    script:
+      required:
+        - dotnet
+      file: dl/fantomas.fsx
+
 - bin: r-fmt
   type: fs
   args:
