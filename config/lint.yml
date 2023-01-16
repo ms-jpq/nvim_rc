@@ -87,7 +87,7 @@
       required:
         - Rscript
         - R
-      file: dl/rlint.sh
+      file: dl/rlint.r
 
 - bin: htmlhint
   type: fs
@@ -113,7 +113,7 @@
         - php
       env:
         URI: https://github.com/phan/phan/releases/latest/download/phan.phar
-      file: dl/phan.sh
+      file: dl/phan.php
 
 # - bin: sqlfluff
 #   type: fs
