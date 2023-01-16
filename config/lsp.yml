@@ -320,7 +320,7 @@
         - jshell
       env:
         URI: https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz
-      file: dl/jdtls.jsh
+      file: dl/jdtls.sh
 
 - server: kotlin_language_server
   bin: kotlin-language-server
