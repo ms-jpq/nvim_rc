@@ -1,7 +1,6 @@
 #!/usr/bin/env -S dotnet fsi
 
 open System
-open System.Collections.ObjectModel
 open System.Diagnostics
 open System.IO
 open System.Runtime.InteropServices

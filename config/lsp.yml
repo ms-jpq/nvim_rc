@@ -283,7 +283,7 @@
     script:
       required:
         - julia
-      file: dl/julia_ls.sh
+      file: dl/julia_ls.jl
 
 - server: intelephense
   bin: intelephense
