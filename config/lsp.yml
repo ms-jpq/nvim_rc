@@ -184,7 +184,7 @@
         DARWIN_URI: https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-aarch64-apple-darwin.gz
         LINUX_URI: https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz
         NT_URI: https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-pc-windows-msvc.gz
-      file: dl/rust_analyzer.sh
+      file: dl/rust_analyzer.rs
 
 - server: clangd
   bin: clangd
