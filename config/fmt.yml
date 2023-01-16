@@ -78,6 +78,7 @@
     - css
     - graphql
     - html
+    - java
     - javascript*
     - json*
     - less
@@ -95,7 +96,8 @@
       - "@prettier/plugin-xml"
       - "@shopify/prettier-plugin-liquid"
       - "@trivago/prettier-plugin-sort-imports"
-      - prettier-plugin-awk
+      - prettier-plugin-java
+      # - prettier-plugin-awk
 
 - bin: rbprettier
   args:

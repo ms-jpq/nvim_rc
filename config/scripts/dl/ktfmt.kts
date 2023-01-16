@@ -34,6 +34,6 @@ val file = Path(String(proc.getInputStream().readAllBytes()))
 
 lib.createDirectory()
 
-file.copyTo(Path(lib.toString(), file.getFileName().toString()))
+file.copyTo(lib.resolve(file.getFileName()))
 
 proxy.copyTo(bin, true)

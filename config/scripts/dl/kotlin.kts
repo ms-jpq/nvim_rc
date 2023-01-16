@@ -12,7 +12,7 @@ import kotlin.io.path.setPosixFilePermissions
 val lib = Path(System.getenv("LIB")!!)
 val ll = Path(lib.toString(), "bin", "kotlin-language-server")
 val bin = Path(System.getenv("BIN")!!)
-val tmp = createTempDir().getPath()
+val tmp = Path(createTempDir().getPath())
 
 val procs =
     ProcessBuilder.startPipeline(
@@ -28,7 +28,7 @@ for (proc in procs) {
 
 @OptIn(kotlin.io.path.ExperimentalPathApi::class) lib.deleteRecursively()
 
-Path(tmp, "server").moveTo(lib)
+tmp.resolve("server").moveTo(lib)
 
 ll.setPosixFilePermissions(setOf(PosixFilePermission.OWNER_EXECUTE))
 

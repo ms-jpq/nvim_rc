@@ -139,9 +139,9 @@
 - server: awk_ls
   bin: awk-language-server
   install:
-    npm:
+    npm: {}
       # requires clang?
-      - awk-language-server
+      # - awk-language-server
 
 - server: powershell_es
   bin: powershell-ls.ps1
@@ -313,16 +313,14 @@
       file: dl/omnisharp.fsx
 
 - server: jdtls
-  bin: jdt-ls
-  args: []
+  bin: jdtls
   install:
     script:
       required:
-        - java
+        - jshell
       env:
-        PREFIX: http://download.eclipse.org/jdtls/snapshots/
-        URI: http://download.eclipse.org/jdtls/snapshots/latest.txt
-      file: dl/jdt_ls.sh
+        URI: https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz
+      file: dl/jdtls.jsh
 
 - server: kotlin_language_server
   bin: kotlin-language-server

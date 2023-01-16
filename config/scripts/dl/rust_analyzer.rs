@@ -57,4 +57,3 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     Err(format!("{}", line!()).into())
 }
-
