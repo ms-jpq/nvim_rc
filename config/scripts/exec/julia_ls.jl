@@ -4,7 +4,9 @@ set -Eeu
 set -o pipefail
 shopt -s failglob failglob
 
-exec -- julia --project="$(dirname -- "$0")/../lib/julia-ls" "$0" "$@"
+LIB="$(dirname -- "$0")/../lib/julia-ls"
+export JULIA_DEPOT_PATH="$LIB/depot"
+exec -- julia --project="$LIB" "$0" "$@"
 =#
 
 using LanguageServer;
