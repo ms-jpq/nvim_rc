@@ -1,4 +1,28 @@
 #!/usr/bin/env -S awk -f
-!(NR == 1 && /^#/) { print }
+BEGIN {
+  DEDENT = -2
+  SKIPPED = 0
+}
+
+{
+  gsub(/^[[:space:]]/, " ")
+  gsub(/[[:space:]]+$/, "")
+}
+
+DEDENT == -2 && $0 {
+  match($0, /^[[:space:]]+/)
+  DEDENT = RLENGTH
+}
+
+!(NR == 1 && /^#/) {
+  if (!$0) { SKIPPED = 1 }
+  else {
+    if (SKIPPED) { print "" }
+
+    SKIPPED = 0
+
+    printf("\n%s", substr($0, DEDENT + 1))
+  }
+}
 
 END { print ";;" }
