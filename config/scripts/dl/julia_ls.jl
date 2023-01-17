@@ -2,7 +2,7 @@
 #=
 set -Eeu
 set -o pipefail
-shopt -s failglob failglob
+shopt -s globstar failglob
 
 export JULIA_DEPOT_PATH="$LIB/depot"
 mkdir --parents -- "$JULIA_DEPOT_PATH"

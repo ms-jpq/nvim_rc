@@ -2,7 +2,7 @@
 #=
 set -Eeu
 set -o pipefail
-shopt -s failglob failglob
+shopt -s globstar failglob
 
 LIB="$(dirname -- "$0")/../lib/julia-ls"
 export JULIA_DEPOT_PATH="$LIB/depot"
