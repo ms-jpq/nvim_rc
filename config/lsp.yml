@@ -296,6 +296,8 @@
     script:
       required:
         - dotnet
+      env:
+        URI: https://github.com/ionide/Ionide-vim.git
       file: dl/fsharp_ls.fsx
 
 - server: omnisharp
