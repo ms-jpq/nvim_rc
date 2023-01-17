@@ -139,9 +139,8 @@
 - server: awk_ls
   bin: awk-language-server
   install:
-    npm: {}
-      # requires clang?
-      # - awk-language-server
+    npm:
+      - awk-language-server
 
 - server: powershell_es
   bin: powershell-ls.ps1
@@ -382,6 +381,17 @@
   install:
     gem:
       - theme-check
+
+- server: emmet_ls
+  bin: emmet-ls
+  filetypes:
+    - css
+    - html
+    - liquid
+    - scss
+  install:
+    npm:
+      - emmet-ls
 # - server: volar
 #   bin: vue-language-server
 #   install:
