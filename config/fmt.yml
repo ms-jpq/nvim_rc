@@ -91,13 +91,14 @@
     - yaml*
   install:
     npm:
+      # - prettier-plugin-awk
       - prettier
       - "@prettier/plugin-php"
       - "@prettier/plugin-xml"
       - "@shopify/prettier-plugin-liquid"
       - "@trivago/prettier-plugin-sort-imports"
       - prettier-plugin-java
-      # - prettier-plugin-awk
+      # - prettier-plugin-tailwindcss
 
 - bin: rbprettier
   args:
