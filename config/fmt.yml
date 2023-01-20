@@ -96,22 +96,22 @@
       - "@prettier/plugin-php"
       - "@prettier/plugin-xml"
       - "@shopify/prettier-plugin-liquid"
-      - "@trivago/prettier-plugin-sort-imports"
       - prettier-plugin-java
+      - prettier-plugin-organize-imports
       # - prettier-plugin-tailwindcss
 
-- bin: rbprettier
+- bin: stree
   args:
-    - --stdin-filepath=${filename}
-    - --tab-width=${tabsize}
+    - format
     - --
+    - ${tmpname}
   type: stream
   filetypes:
     - rbs
     - ruby
   install:
     gem:
-      - prettier
+      - syntax_tree
 
 - bin: rubocop
   type: fs
