@@ -1,4 +1,5 @@
 #!/usr/bin/env -S php
+
 <?php
 $uri = getenv("URI");
 assert($uri);
@@ -25,6 +26,5 @@ $bin = getenv("BIN");
 assert($bin);
 copy("$d/../exec/phan.sh", $bin);
 chmod($bin, 0755);
-
 
 ?>
