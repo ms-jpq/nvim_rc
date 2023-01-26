@@ -9,10 +9,14 @@ vim.filetype.add {
           return
         else
           local rhs = string.sub(l1, #lhs + 1)
-          if #vim.fn.matchstr(rhs, [[\v.*(ba|z)?sh.*]]) > 1 then
-            return "sh"
-          elseif #vim.fn.matchstr(rhs, [[\v.*python3?.*]]) > 1 then
-            return "python"
+          local matches = {
+            sh = [[\v.*(ba|z)?sh.*]],
+            python = [[\v.*python3?.*]]
+          }
+          for ft, pattern in pairs(matches) do
+            if #vim.fn.matchstr(rhs, pattern) > 1 then
+              return ft
+            end
           end
         end
       end
