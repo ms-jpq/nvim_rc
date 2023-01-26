@@ -1,4 +1,4 @@
-#!/usr/bin/env -S -- python3
+#!/usr/bin/env -S -- PYTHONSAFEPATH= python3
 
 from argparse import ArgumentParser, Namespace
 from os import linesep, name
