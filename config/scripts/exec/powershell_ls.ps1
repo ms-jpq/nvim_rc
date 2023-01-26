@@ -1,4 +1,4 @@
-#!/usr/bin/env -S pwsh
+#!/usr/bin/env -S -- pwsh
 
 Set-StrictMode -Version 'Latest'
 $ErrorActionPreference = 'Stop'

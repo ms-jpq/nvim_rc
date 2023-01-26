@@ -1,4 +1,4 @@
-#!/usr/bin/env -S awk -f
+#!/usr/bin/env -S -- awk -f
 BEGIN {
   DEDENT = -2
   SKIPPED = 0

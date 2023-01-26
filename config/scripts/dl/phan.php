@@ -1,4 +1,4 @@
-#!/usr/bin/env -S php
+#!/usr/bin/env -S -- php
 
 <?php
 $uri = getenv("URI");

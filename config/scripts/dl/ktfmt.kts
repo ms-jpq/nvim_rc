@@ -1,4 +1,4 @@
-#!/usr/bin/env -S kotlinc -script
+#!/usr/bin/env -S -- kotlinc -script
 import java.lang.ProcessBuilder.Redirect
 import java.net.URI
 import javax.xml.parsers.DocumentBuilderFactory

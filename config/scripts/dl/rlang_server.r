@@ -1,4 +1,4 @@
-#!/usr/bin/env -S Rscript
+#!/usr/bin/env -S -- Rscript
 
 apt <- Sys.which("apt-get")
 if (apt != "") {

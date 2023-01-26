@@ -1,3 +1,3 @@
-#!/usr/bin/env -S Rscript
+#!/usr/bin/env -S -- Rscript
 
 styler::style_file(commandArgs(trailingOnly = TRUE))

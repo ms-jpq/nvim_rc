@@ -1,4 +1,4 @@
-#!/usr/bin/env -S awk -f
+#!/usr/bin/env -S -- awk -f
 BEGIN {
   ORS = " "
   COMMENTED = 1
