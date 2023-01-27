@@ -21,6 +21,19 @@
   filetypes:
     - toml
 
+- bin: perltidy
+  args:
+    - --indent-columns=2
+  type: stream
+  filetypes:
+    - perl
+  install:
+    script:
+      required:
+        - perl
+        - cpanm
+      file: dl/perltidy.pl
+
 - bin: dockerfile-utils
   args:
     - format

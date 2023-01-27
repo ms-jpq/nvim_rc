@@ -12,7 +12,7 @@ vim.filetype.add {
           local matches = {
             sh = [[\v.*(ba|z)?sh.*]],
             python = [[\v.*python3?.*]],
-            pl = [[\v.*perl.*]],
+            perl = [[\v.*perl.*]],
           }
           for ft, pattern in pairs(matches) do
             if #vim.fn.matchstr(rhs, pattern) > 1 then

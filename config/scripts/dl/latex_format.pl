@@ -10,17 +10,17 @@ use strict;
 use utf8;
 use warnings;
 
-my $bin = $ENV{BIN};
-my $lib = $ENV{LIB};
-my $uri = $ENV{URI};
+my $bin    = $ENV{BIN};
+my $lib    = $ENV{LIB};
+my $uri    = $ENV{URI};
+my $dir    = dirname(__FILE__);
+my $script = "$dir/../exec/latexindent.pl";
 
 if ( !-d $lib ) {
   my $tmp       = File::Temp->newdir();
   my $tmp_lib   = File::Temp->newdir();
   my $perl_libd = "$tmp_lib/_perl_";
   my @perl_libs = qw{YAML::Tiny File::HomeDir Unicode::GCString};
-  my $dir       = dirname(__FILE__);
-  my $script    = "$dir/../exec/latexindent.sh";
 
   my $filename = `get -- \Q$uri\E`;
   $? && die $?;
@@ -34,7 +34,7 @@ if ( !-d $lib ) {
 
   rmtree($lib);
   move( $tmp_lib, $lib );
-  copy( $script, $bin );
-  chmod( 0755, $bin );
 }
 
+copy( $script, $bin );
+chmod( 0755, $bin );
