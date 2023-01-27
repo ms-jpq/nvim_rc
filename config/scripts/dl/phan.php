@@ -27,4 +27,5 @@ assert($bin);
 copy("$d/../exec/phan.sh", $bin);
 chmod($bin, 0755);
 
+
 ?>
