@@ -18,7 +18,7 @@ if ( !-d $lib ) {
   my $tmp       = File::Temp->newdir();
   my $tmp_lib   = File::Temp->newdir();
   my $perl_libd = "$tmp_lib/_perl_";
-  my @perl_libs = ( 'YAML::Tiny', 'File::HomeDir', 'Unicode::GCString' );
+  my @perl_libs = qw{YAML::Tiny File::HomeDir Unicode::GCString};
   my $dir       = dirname(__FILE__);
   my $script    = "$dir/../exec/latexindent.sh";
 
@@ -37,3 +37,4 @@ if ( !-d $lib ) {
   copy( $script, $bin );
   chmod( 0755, $bin );
 }
+
