@@ -27,12 +27,6 @@
   type: stream
   filetypes:
     - perl
-  install:
-    script:
-      required:
-        - perl
-        - cpanm
-      file: dl/perltidy.pl
 
 - bin: dockerfile-utils
   args:

@@ -1,10 +1,10 @@
 #!/usr/bin/env -S -- perl
 
+use English;
 use File::Basename;
 use File::Copy;
 use File::Path;
 use File::Temp;
-use English;
 use autodie;
 use diagnostics;
 use strict;
@@ -26,11 +26,11 @@ if ( !-d $lib ) {
   my $filename = `get -- \Q$uri\E`;
   $CHILD_ERROR && croak $CHILD_ERROR;
 
-  system( 'unpack', '--dest', $tmp, '--', $filename ) && croak $CHILD_ERROR;
-  my @globbed = glob("\Q$tmp\E/*");
+  system( 'unpack', '--dest', $tmp, q{--}, $filename ) && croak $CHILD_ERROR;
+  my @globbed = glob "\Q$tmp\E/*";
   move( @globbed, $tmp_lib );
 
-  system( 'cpanm', '--local-lib', $perl_libd, '--', @perl_libs )
+  system( 'cpanm', '--local-lib', $perl_libd, q{--}, @perl_libs )
     && croak $CHILD_ERROR;
 
   rmtree($lib);
@@ -38,4 +38,4 @@ if ( !-d $lib ) {
 }
 
 copy( $script, $bin );
-chmod( 0755, $bin );
+chmod 0755, $bin;
