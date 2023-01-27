@@ -179,7 +179,7 @@
         - cpanm
       env:
         URI: https://github.com/cmhughes/latexindent.pl/archive/V3.11.tar.gz
-      file: dl/latex_format.sh
+      file: dl/latex_format.pl
 
 - bin: fantomas
   type: fs

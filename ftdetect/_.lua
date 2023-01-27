@@ -11,7 +11,8 @@ vim.filetype.add {
           local rhs = string.sub(l1, #lhs + 1)
           local matches = {
             sh = [[\v.*(ba|z)?sh.*]],
-            python = [[\v.*python3?.*]]
+            python = [[\v.*python3?.*]],
+            pl = [[\v.*perl.*]],
           }
           for ft, pattern in pairs(matches) do
             if #vim.fn.matchstr(rhs, pattern) > 1 then
