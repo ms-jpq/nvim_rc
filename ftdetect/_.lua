@@ -10,7 +10,7 @@ vim.filetype.add {
         else
           local rhs = string.sub(l1, #lhs + 1)
           local matches = {
-            sh = "(pw)@!(ba|z)sh",
+            sh = "(pw)@<!(ba|z)?sh",
             python = "python3?",
             perl = "perl"
           }
