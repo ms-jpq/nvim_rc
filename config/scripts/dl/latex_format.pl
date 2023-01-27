@@ -4,6 +4,7 @@ use File::Basename;
 use File::Copy;
 use File::Path;
 use File::Temp;
+use English;
 use autodie;
 use diagnostics;
 use strict;
@@ -23,14 +24,14 @@ if ( !-d $lib ) {
   my @perl_libs = qw{YAML::Tiny File::HomeDir Unicode::GCString};
 
   my $filename = `get -- \Q$uri\E`;
-  $? && die $?;
+  $CHILD_ERROR && croak $CHILD_ERROR;
 
-  system( 'unpack', '--dest', $tmp, '--', $filename ) && die $?;
+  system( 'unpack', '--dest', $tmp, '--', $filename ) && croak $CHILD_ERROR;
   my @globbed = glob("\Q$tmp\E/*");
   move( @globbed, $tmp_lib );
 
   system( 'cpanm', '--local-lib', $perl_libd, '--', @perl_libs )
-    && die $?;
+    && croak $CHILD_ERROR;
 
   rmtree($lib);
   move( $tmp_lib, $lib );

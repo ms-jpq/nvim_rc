@@ -12,4 +12,4 @@ my $lib = "$dir/../lib/perltidy";
 
 $ENV{PERL5LIB} = "$lib/lib/perl5";
 exec( "$lib/bin/perltidy", @ARGV );
-die;
+croak;

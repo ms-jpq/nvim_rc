@@ -4,6 +4,7 @@ use File::Basename;
 use File::Copy;
 use File::Path;
 use File::Temp;
+use English;
 use autodie;
 use diagnostics;
 use strict;
@@ -20,7 +21,7 @@ if ( !-d $lib ) {
   my $tmp = File::Temp->newdir();
 
   system( 'cpanm', '--local-lib', $tmp, '--', 'Perl::Tidy' )
-    && die $?;
+    && croak $CHILD_ERROR;
 
   rmtree($lib);
   move( $tmp, $lib );
