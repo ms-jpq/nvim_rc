@@ -1,6 +1,6 @@
 #!/usr/bin/env -S -- bash
 
-set -Eeu
+set -Eeux
 set -o pipefail
 shopt -s globstar failglob
 
