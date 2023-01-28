@@ -25,8 +25,17 @@ let run arg0 argv (input: 'a) =
 
 let tmp = Directory.CreateTempSubdirectory().FullName
 let lib = Environment.GetEnvironmentVariable "LIB"
-let bin = Environment.GetEnvironmentVariable "BIN"
 let proxy = Path.Combine(__SOURCE_DIRECTORY__, "..", "exec", "omnisharp.sh")
+
+
+let bin =
+    let ext =
+        if RuntimeInformation.IsOSPlatform(OSPlatform.Windows) then
+            ".sh"
+        else
+            null
+
+    (Environment.GetEnvironmentVariable "BIN", ext) |> Path.ChangeExtension
 
 let uri =
     let env =

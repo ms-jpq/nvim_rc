@@ -18,6 +18,10 @@ my $dir     = dirname(__FILE__);
 my $scripts = "$dir/../exec";
 my @names   = qw( perlcritic perltidy );
 
+if ( $OSNAME eq 'msys' ) {
+  $bin = "$bin.pl";
+}
+
 if ( !-d $lib ) {
   my $tmp = File::Temp->newdir();
 

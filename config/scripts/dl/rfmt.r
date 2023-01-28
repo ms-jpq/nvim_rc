@@ -7,6 +7,11 @@ if (!startsWith(location, "--file=")) {
 }
 
 parent <- dirname(sub("^--file=", "", location))
-r <- paste(parent, "/../exec/styler.r")
-bin <- Sys.getenv("BIN")
+r <- paste(parent, "/../exec/styler.r", sep = "")
+
+bin <- {
+  bin <- Sys.getenv("BIN")
+  if (.Platform$OS.type == "windows") paste(bin, ".r", sep = "") else bin
+}
+
 file.copy(r, bin, overwrite = TRUE)

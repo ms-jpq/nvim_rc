@@ -21,10 +21,13 @@ mkdir($lib, 0755, true);
 $basename = basename($file);
 copy($file, "$lib/$basename");
 
-$d = __DIR__;
 $bin = getenv("BIN");
 assert($bin);
-copy("$d/../exec/phan.sh", $bin);
+if (PHP_OS_FAMILY === "Windows") {
+  $bin .= ".php";
+}
+
+copy("{$__DIR__}/../exec/phan.php", $bin);
 chmod($bin, 0755);
 
 

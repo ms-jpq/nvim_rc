@@ -9,10 +9,17 @@ import kotlin.io.path.createDirectory
 import kotlin.io.path.deleteRecursively
 
 val lib = Path(System.getenv("LIB")!!)
-val bin = Path(System.getenv("BIN")!!)
 val proxy = Path("", "..", "..", "config", "scripts", "exec", "ktfmt.sh")
-
 val root = URI(System.getenv("URI")!! + "/")
+
+val bin = let {
+  val path = Path(System.getenv("BIN")!!)
+  if (System.getProperty("os.name").startsWith("Windows")) {
+    path.resolveSibling(Path(path.getFileName().toString() + ".sh"))
+  } else {
+    path
+  }
+}
 
 val version =
     XPathFactory.newInstance()

@@ -1,5 +1,6 @@
 #!/usr/bin/env -S -- kotlinc -script
 import java.lang.ProcessBuilder.Redirect
+import java.nio.file.Path
 import java.nio.file.attribute.PosixFilePermission
 import kotlin.io.createTempDir
 import kotlin.io.path.Path
@@ -9,10 +10,18 @@ import kotlin.io.path.deleteRecursively
 import kotlin.io.path.moveTo
 import kotlin.io.path.setPosixFilePermissions
 
+val suffix = { path: Path ->
+  if (System.getProperty("os.name").startsWith("Windows")) {
+    path.resolveSibling(Path(path.getFileName().toString() + ".sh"))
+  } else {
+    path
+  }
+}
+
 val lib = Path(System.getenv("LIB")!!)
-val ll = Path(lib.toString(), "bin", "kotlin-language-server")
-val bin = Path(System.getenv("BIN")!!)
 val tmp = Path(createTempDir().getPath())
+val ll = suffix(Path(lib.toString(), "bin", "kotlin-language-server"))
+val bin = suffix(Path(System.getenv("BIN")!!))
 
 val procs =
     ProcessBuilder.startPipeline(

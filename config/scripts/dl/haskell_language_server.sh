@@ -1,6 +1,6 @@
 #!/usr/bin/env -S -- bash
 
-set -Eeux
+set -Eeu
 set -o pipefail
 shopt -s globstar failglob
 
@@ -15,6 +15,7 @@ in
     ;;
   *)
     URI="$NT_URI"
+    BIN="$BIN.sh"
     ;;
 esac
 

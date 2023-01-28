@@ -3,12 +3,21 @@
 open System
 open System.Diagnostics
 open System.IO
+open System.Runtime.InteropServices
 
 
 let tmp = Directory.CreateTempSubdirectory().FullName
 let lib = Environment.GetEnvironmentVariable "LIB"
-let bin = Environment.GetEnvironmentVariable "BIN"
 let proxy = Path.Combine(__SOURCE_DIRECTORY__, "..", "exec", "fsautocomplete.sh")
+
+let bin =
+    let ext =
+        if RuntimeInformation.IsOSPlatform(OSPlatform.Windows) then
+            ".sh"
+        else
+            null
+
+    (Environment.GetEnvironmentVariable "BIN", ext) |> Path.ChangeExtension
 
 let run arg0 (argv: 'a) =
     use proc = Process.Start(arg0, argv)

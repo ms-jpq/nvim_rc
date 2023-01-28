@@ -21,6 +21,12 @@
   filetypes:
     - toml
 
+- bin: powershell-analyzer.ps1
+  args: []
+  type: stream
+  filetypes:
+    - ps1
+
 - bin: perltidy
   args:
     - --indent-columns=2

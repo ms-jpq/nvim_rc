@@ -6,6 +6,10 @@ shopt -s globstar failglob
 
 export JULIA_DEPOT_PATH="$LIB/depot"
 mkdir --parents -- "$JULIA_DEPOT_PATH"
+if [[ "$OSTYPE" =~ 'msys' ]]
+then
+  BIN="$BIN.jl"
+fi
 cp -- "$(dirname -- "$0")/../exec/julia_ls.jl" "$BIN"
 exec -- julia --project="$LIB" "$0" "$@"
 =#
