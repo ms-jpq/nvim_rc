@@ -15,6 +15,7 @@ in
     ;;
   *)
     URI="$NT_URI"
+    BIN="$BIN.exe"
     ;;
 esac
 
