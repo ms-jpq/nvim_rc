@@ -1,8 +1,8 @@
-#!/usr/bin/env -S -- pwsh -NonInteractive
+#!/usr/bin/env -S -- pwsh -NoProfile -NonInteractive
 
 Set-StrictMode -Version 'Latest'
 $ErrorActionPreference = 'Stop'
-$PSNativeCommandUseErrorActionPreference = $true
+$PSStyle.OutputRendering = 'PlainText'
 
 
 $lib = Join-Path -- (Split-Path -- "$PSScriptRoot") 'lib' 'powershell-ls.ps1'
@@ -41,4 +41,5 @@ $argv = @(
     Join-Path -- "$cache" 'powershell_es.session.json'
 )
 
-Switch-Process -- pwsh -NonInteractive -Command @argv
+$Env:NOCOLOR = "1"
+Switch-Process -- pwsh -NoProfile -NonInteractive -Command @argv

@@ -144,7 +144,7 @@
       - awk-language-server
 
 - server: powershell_es
-  bin: powershell-ls.ps1
+  bin: pwsh_es.ps1
   args: []
   install:
     script:
@@ -152,7 +152,7 @@
         - pwsh
       env:
         URI: https://github.com/PowerShell/PowerShellEditorServices/releases/latest/download/PowerShellEditorServices.zip
-      file: dl/powershell_ls.ps1
+      file: dl/pwsh_es.ps1
 
 - server: dockerls
   bin: docker-langserver

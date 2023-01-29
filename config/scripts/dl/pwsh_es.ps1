@@ -1,7 +1,8 @@
-#!/usr/bin/env -S -- pwsh -NonInteractive
+#!/usr/bin/env -S -- pwsh -NoProfile -NonInteractive
 
 Set-StrictMode -Version 'Latest'
 $ErrorActionPreference = 'Stop'
+$PSStyle.OutputRendering = 'PlainText'
 
 
 $tmp = [System.IO.Directory]::CreateTempSubdirectory()
@@ -17,5 +18,6 @@ if (Test-Path -- "$Env:LIB") {
 }
 
 Move-Item -- "$tmp" "$Env:LIB"
-Copy-Item -- (Join-Path -- "$exec" 'powershell_analyzer.ps1') (Join-Path -- (Split-Path -- "$bin") 'powershell-analyzer.ps1')
-Copy-Item -- (Join-Path -- "$exec" 'powershell_ls.ps1') "$bin"
+Copy-Item -- (Join-Path -- "$exec" 'pwsh_fmt.ps1') (Join-Path -- (Split-Path -- "$bin") 'pwsh-fmt.ps1')
+Copy-Item -- (Join-Path -- "$exec" 'pwsh_lint.ps1') (Join-Path -- (Split-Path -- "$bin") 'pwsh-lint.ps1')
+Copy-Item -- (Join-Path -- "$exec" 'pwsh_es.ps1') "$bin"

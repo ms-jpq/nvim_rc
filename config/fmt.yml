@@ -21,7 +21,7 @@
   filetypes:
     - toml
 
-- bin: powershell-analyzer.ps1
+- bin: pwsh-fmt.ps1
   args: []
   type: stream
   filetypes:

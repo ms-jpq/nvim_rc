@@ -1,8 +1,8 @@
-#!/usr/bin/env -S -- pwsh -NonInteractive
+#!/usr/bin/env -S -- pwsh -NoProfile -NonInteractive
 
 Set-StrictMode -Version 'Latest'
 $ErrorActionPreference = 'Stop'
-$PSNativeCommandUseErrorActionPreference = $true
+$PSStyle.OutputRendering = 'PlainText'
 
 $lib = Join-Path -- (Split-Path -- "$PSScriptRoot") 'lib' 'powershell-ls.ps1' 'PSScriptAnalyzer'
 $analyzer = Join-Path -- (Get-ChildItem -Path "$lib" -Filter '*') 'PSScriptAnalyzer.psm1'

@@ -41,6 +41,13 @@
         - cpanm
       file: dl/perlcritic.pl
 
+- bin: pwsh-lint.ps1
+  type: fs
+  args:
+    - ${tmpname}
+  filetypes:
+    - ps1
+
 - bin: mypy
   type: fs
   args:
