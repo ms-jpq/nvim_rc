@@ -5,7 +5,7 @@ $ErrorActionPreference = 'Stop'
 $PSStyle.OutputRendering = 'PlainText'
 
 
-$lib = Join-Path -- (Split-Path -- "$PSScriptRoot") 'lib' 'powershell-ls.ps1'
+$lib = Join-Path -- (Split-Path -- $PSScriptRoot) 'lib' 'pwsh_es.ps1'
 $cache = [System.IO.Directory]::CreateTempSubdirectory().FullName
 
 $argv = @(
