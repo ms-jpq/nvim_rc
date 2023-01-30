@@ -236,11 +236,9 @@
       file: dl/rfmt.r
 
 - bin: shfmt
-  type: fs
+  type: stream
   args:
     - --indent=${tabsize}
-    - -w
-    - ${tmpname}
   filetypes:
     - sh
     - zsh
