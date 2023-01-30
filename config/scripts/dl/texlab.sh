@@ -4,29 +4,25 @@ set -Eeu
 set -o pipefail
 shopt -s globstar failglob
 
-
 T_BIN="$(dirname -- "$BIN")/tectonic"
 
-
-case "$OSTYPE"
-in
-  darwin*)
-    URI="$DARWIN_URI"
-    T_URI="$T_DARWIN_URI"
-    ;;
-  linux*)
-    URI="$LINUX_URI"
-    T_URI="$T_LINUX_URI"
-    ;;
-  *)
-    # shellcheck disable=SC2153
-    URI="$NT_URI"
-    T_URI="$T_NT_URI"
-    BIN="$BIN.exe"
-    T_BIN="$T_BIN.exe"
-    ;;
+case "$OSTYPE" in
+darwin*)
+  URI="$DARWIN_URI"
+  T_URI="$T_DARWIN_URI"
+  ;;
+linux*)
+  URI="$LINUX_URI"
+  T_URI="$T_LINUX_URI"
+  ;;
+*)
+  # shellcheck disable=SC2153
+  URI="$NT_URI"
+  T_URI="$T_NT_URI"
+  BIN="$BIN.exe"
+  T_BIN="$T_BIN.exe"
+  ;;
 esac
-
 
 TMP="$(mktemp --directory)"
 get -- "$URI" | unpack --dest "$TMP"

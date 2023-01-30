@@ -4,21 +4,18 @@ set -Eeu
 set -o pipefail
 shopt -s globstar failglob
 
-
-case "$OSTYPE"
-in
-  darwin*)
-    URI="$DARWIN_URI"
-    ;;
-  linux*)
-    URI="$LINUX_URI"
-    ;;
-  *)
-    URI="$NT_URI"
-    BIN="$BIN.exe"
-    ;;
+case "$OSTYPE" in
+darwin*)
+  URI="$DARWIN_URI"
+  ;;
+linux*)
+  URI="$LINUX_URI"
+  ;;
+*)
+  URI="$NT_URI"
+  BIN="$BIN.exe"
+  ;;
 esac
-
 
 FILE="$(get -- "$URI")"
 rm --force -- "$BIN"

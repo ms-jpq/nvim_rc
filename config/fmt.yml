@@ -238,6 +238,7 @@
 - bin: shfmt
   type: fs
   args:
+    - --indent=${tabsize}
     - -w
     - ${tmpname}
   filetypes:

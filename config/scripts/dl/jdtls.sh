@@ -4,7 +4,6 @@ set -Eeu
 set -o pipefail
 shopt -s globstar failglob
 
-
 TMP="$(mktemp --directory)"
 get -- "$URI" | unpack --dest "$TMP"
 rm --recursive --force -- "$LIB"
