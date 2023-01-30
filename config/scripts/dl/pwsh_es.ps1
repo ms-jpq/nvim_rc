@@ -5,7 +5,7 @@ $ErrorActionPreference = 'Stop'
 $PSStyle.OutputRendering = 'PlainText'
 
 
-$tmp = [System.IO.Directory]::CreateTempSubdirectory()
+$tmp = [IO.Directory]::CreateTempSubdirectory()
 $out = Split-Path -Leaf -- $Env:URI
 $exec = Join-Path -- (Split-Path -- $PSScriptRoot) 'exec'
 $bin = $Env:BIN

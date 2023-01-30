@@ -8,4 +8,4 @@ $lib = Join-Path -- (Split-Path -- $PSScriptRoot) 'lib' 'pwsh_es.ps1' 'PSScriptA
 $analyzer = Join-Path -- (Get-ChildItem -Path $lib -Filter '*') 'PSScriptAnalyzer.psm1'
 
 Import-Module -- $analyzer
-Invoke-ScriptAnalyzer -EnableExit -IncludeDefaultRules -Path $args
+Invoke-ScriptAnalyzer -EnableExit -IncludeDefaultRules -Path "$args"

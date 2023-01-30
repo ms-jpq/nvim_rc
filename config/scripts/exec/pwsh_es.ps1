@@ -6,39 +6,20 @@ $PSStyle.OutputRendering = 'PlainText'
 
 
 $lib = Join-Path -- (Split-Path -- $PSScriptRoot) 'lib' 'pwsh_es.ps1'
-$cache = [System.IO.Directory]::CreateTempSubdirectory().FullName
+$cache = [IO.Directory]::CreateTempSubdirectory()
 
 $argv = @(
     Join-Path -- $lib 'PowerShellEditorServices' 'Start-EditorServices.ps1'
-
-    '-BundledModulesPath'
-    $lib
-
-    '-FeatureFlags'
-    '@()'
-
-    '-AdditionalModules'
-    '@()'
-
+    '-BundledModulesPath', $lib
+    '-FeatureFlags', '@()'
+    '-AdditionalModules', '@()'
     '-Stdio'
-
-    '-HostName'
-    'nvim'
-
-    '-HostProfileId'
-    '0'
-
-    '-HostVersion'
-    '1.0.0'
-
-    '-LogLevel'
-    'Normal'
-
-    '-LogPath'
-    Join-Path -- $cache 'powershell_es.log'
-
-    '-SessionDetailsPath'
-    Join-Path -- $cache 'powershell_es.session.json'
+    '-HostName', 'nvim'
+    '-HostProfileId', '0'
+    '-HostVersion', '1.0.0'
+    '-LogLevel', 'Normal'
+    '-LogPath', (Join-Path -- $cache 'powershell_es.log')
+    '-SessionDetailsPath', (Join-Path -- $cache 'powershell_es.session.json')
 )
 
 $Env:NOCOLOR = '1'
