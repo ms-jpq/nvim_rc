@@ -9,10 +9,10 @@ $lib = Join-Path -- (Split-Path -- "$PSScriptRoot") 'lib' 'powershell-ls.ps1'
 $cache = [System.IO.Directory]::CreateTempSubdirectory().FullName
 
 $argv = @(
-    Join-Path -- "$lib" 'PowerShellEditorServices' 'Start-EditorServices.ps1'
+    Join-Path -- $lib 'PowerShellEditorServices' 'Start-EditorServices.ps1'
 
     '-BundledModulesPath'
-    "$lib"
+    $lib
 
     '-FeatureFlags'
     '@()'
@@ -35,11 +35,11 @@ $argv = @(
     'Normal'
 
     '-LogPath'
-    Join-Path -- "$cache" 'powershell_es.log'
+    Join-Path -- $cache 'powershell_es.log'
 
     '-SessionDetailsPath'
-    Join-Path -- "$cache" 'powershell_es.session.json'
+    Join-Path -- $cache 'powershell_es.session.json'
 )
 
-$Env:NOCOLOR = "1"
+$Env:NOCOLOR = '1'
 Switch-Process -- pwsh -NoProfile -NonInteractive -Command @argv
