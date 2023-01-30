@@ -6,7 +6,6 @@ $PSStyle.OutputRendering = 'PlainText'
 
 $lib = Join-Path -- (Split-Path -- "$PSScriptRoot") 'lib' 'powershell-ls.ps1' 'PSScriptAnalyzer'
 $analyzer = Join-Path -- (Get-ChildItem -Path "$lib" -Filter '*') 'PSScriptAnalyzer.psm1'
-$def = [System.Console]::In.ReadToEnd()
 
 Import-Module -- "$analyzer"
-Invoke-Formatter -ScriptDefinition "$def"
+Invoke-Formatter -ScriptDefinition "$input"

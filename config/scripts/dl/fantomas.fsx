@@ -1,4 +1,4 @@
-#!/usr/bin/env -S -- dotnet fsi
+#!/usr/bin/env -S -- dotnet fsi --gui-
 
 open System
 open System.Diagnostics
