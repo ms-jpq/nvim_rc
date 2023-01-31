@@ -18,7 +18,8 @@ vim.filetype.add {
               python = "python3?",
               perl = "perl",
               ruby = "ruby",
-              r = "Rscript"
+              r = "Rscript",
+              prolog = "swipl"
             }
             for ft, pattern in pairs(matches) do
               local pat = [[\v^.{-}]] .. pattern .. ".{-}$"
