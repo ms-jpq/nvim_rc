@@ -36,8 +36,8 @@
 "missing_linter": |-
   ⁉️ Unable to find linter for ${filetype}
 
-"missing prettier": |-
-  ⁉️ Unable to find prettier for ${filetype}
+"basic prettier": |-
+  ${filetype} 👉 WS
 
 "prettier failed": |-
   ⛔️ Prettier Failed

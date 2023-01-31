@@ -115,7 +115,7 @@ async def run_fmt() -> None:
     prettiers = tuple(_fmts_for(ctx.filetype))
     if not prettiers:
         await trailing_ws()
-        await Nvim.write(LANG("missing prettier", filetype=ctx.filetype), error=True)
+        await Nvim.write(LANG("basic prettier", filetype=ctx.filetype))
     else:
         await Nvim.write(LANG("loading..."))
 

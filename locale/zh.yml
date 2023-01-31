@@ -36,8 +36,8 @@
 "missing_linter": |-
   ⁉️ 找不到 ${filetype} 的 linter
 
-"missing prettier": |-
-  ⁉️ 找不到 ${filetype} 的 prettier
+"basic prettier": |-
+  ${filetype} 👉 空白
 
 "prettier failed": |-
   ⛔️ 美化失败

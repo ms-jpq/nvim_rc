@@ -334,6 +334,15 @@
         URI: https://github.com/fwcd/kotlin-language-server/releases/latest/download/server.zip
       file: dl/kotlin.kts
 
+- server: prolog_ls
+  bin: prolog_ls
+  args: []
+  install:
+    script:
+      required:
+        - swipl
+      file: dl/prolog_ls.pro
+
 - server: sqlls
   bin: sql-language-server
   args:
