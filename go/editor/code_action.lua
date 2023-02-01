@@ -24,8 +24,17 @@
   local cancel = function()
   end
 
+  local error_codes = vim.lsp.protocol.ErrorCodes
+  local ignored_codes = {
+    [error_codes.ContentModified] = true,
+    [error_codes.InternalError] = true,
+    [error_codes.MethodNotFound] = true,
+    [error_codes.RequestCancelled] = true
+  }
+
   local callback = function(idx, row, error, resp)
-    if (error or {}).code ~= vim.lsp.protocol.ErrorCodes.MethodNotFound then
+    local err_code = (error or {}).code
+    if not ignored_codes[err_code] then
       local actionable = (function()
         local acc = {}
         for key, val in pairs(resp or {}) do

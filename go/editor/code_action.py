@@ -42,7 +42,7 @@ async def _on_code_action_notif(
         _NOW.val = uid
 
         if err := _DECODER(error):
-            await Nvim.write(linesep.join(err.message), error=True)
+            await Nvim.write(err.message, error=True)
 
         ns = await Nvim.create_namespace(_NS)
         buf = await Buffer.get_current()

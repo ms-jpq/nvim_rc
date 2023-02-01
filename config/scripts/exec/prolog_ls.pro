@@ -1,9 +1,9 @@
 #!/usr/bin/env -S -- swipl
 
-:- initialization(main, main).
+:- initialization(owo).
 :- use_module(library(prolog_pack)).
 
-main(_Argv) :-
+owo() :-
     current_prolog_flag(os_argv, [_, Arg0|_]),
     file_directory_name(Arg0, Parent),
     file_directory_name(Parent, GrandParent),
@@ -11,7 +11,10 @@ main(_Argv) :-
     directory_file_path(Lib, 'prolog_ls', PrologLS),
     directory_file_path(PrologLS, 'lsp_server', LSP),
 
+    set_prolog_flag(argv, [stdio]),
+    current_prolog_flag(argv, ArgV),
+    writeln(ArgV),
     pack_attach(LSP, []),
+    use_module(library(lsp_server)),
     lsp_server:main,
-
     halt.

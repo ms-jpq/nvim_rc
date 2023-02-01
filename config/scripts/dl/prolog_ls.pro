@@ -1,6 +1,6 @@
 #!/usr/bin/env -S -- swipl
 
-:- initialization(main, main).
+:- initialization(main).
 
 main(_Argv) :-
     current_prolog_flag(os_argv, [_, Arg0|_]),
