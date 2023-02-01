@@ -1,7 +1,7 @@
 from dataclasses import dataclass
+from functools import cache
 from itertools import count
 from operator import attrgetter
-from os import linesep
 from pathlib import Path
 from types import NoneType
 from typing import Any, Optional
@@ -32,6 +32,11 @@ _COUNTER = count()
 _NOW = RefCell(next(_COUNTER))
 
 
+@cache
+def prefix() -> str:
+    return LANG("code action")
+
+
 @rpc()
 async def _on_code_action_notif(
     uid: int, line: int, error: Optional[Any], actionable: bool
@@ -42,7 +47,8 @@ async def _on_code_action_notif(
         _NOW.val = uid
 
         if err := _DECODER(error):
-            await Nvim.write(err.message, error=True)
+            msg = f"{prefix()} {err.message}"
+            await Nvim.write(msg, error=True)
 
         ns = await Nvim.create_namespace(_NS)
         buf = await Buffer.get_current()
@@ -53,7 +59,7 @@ async def _on_code_action_notif(
             begin=(line, 0),
             end=None,
             meta={
-                "sign_text": LANG("code action"),
+                "sign_text": prefix(),
                 "hl_mode": "combine",
                 "sign_hl_group": _HL,
                 "number_hl_group": _HL,
