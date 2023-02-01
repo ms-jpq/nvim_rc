@@ -1,32 +1,36 @@
 #!/usr/bin/env -S -- swipl
 
-:- initialization(main).
+:- (initialization main).
 
 shebang(Stream, [Line]) :-
-    Bang = "#!",
+    Bang="#!",
     string_length(Bang, Len),
     peek_string(Stream, Len, Bang),
     read_line_to_string(Stream, Line).
 
 shebang(_, []).
 
-
-fmt_terms(Stream) :-
+fmt_terms(Stream, _) :-
     at_end_of_stream(Stream).
 
-fmt_terms(Stream) :-
-    read_term(Stream, Term, []),
-    portray_clause(Term),
-    fmt_terms(Stream).
+fmt_terms(Stream, _) :-
+    NL='\n',
+    peek_char(Stream, NL),
+    get_char(Stream, NL),
+    fmt_terms(Stream, [NL]).
 
+fmt_terms(Stream, Print) :-
+    read_term(Stream,
+              Term,
+              [variable_names(Names), comments(_)]),
+    maplist(write, Print),
+    portray_clause(user_output,
+                   Term,
+                   [variable_names(Names), quoted(true)]),
+    fmt_terms(Stream, []).
 
 main(_Argv) :-
-    current_prolog_flag(os_argv, [_, Arg0|_]),
-    file_directory_name(Arg0, Dir),
-    chdir(Dir),
-
     shebang(user_input, Line),
     maplist(writeln, Line),
-    fmt_terms(user_input),
-
+    fmt_terms(user_input, []),
     halt.
