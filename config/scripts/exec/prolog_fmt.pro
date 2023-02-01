@@ -10,6 +10,12 @@ shebang(Stream, [Line]) :-
 
 shebang(_, []).
 
+fmt_comments([]).
+
+fmt_comments([_-Comment|Comments]) :-
+    writeln(Comment),
+    fmt_comments(Comments).
+
 fmt_terms(Stream, _) :-
     at_end_of_stream(Stream).
 
@@ -22,8 +28,9 @@ fmt_terms(Stream, _) :-
 fmt_terms(Stream, Print) :-
     read_term(Stream,
               Term,
-              [variable_names(Names), comments(_)]),
+              [variable_names(Names), comments(Comments)]),
     maplist(write, Print),
+    fmt_comments(Comments),
     portray_clause(user_output,
                    Term,
                    [variable_names(Names), quoted(true)]),
