@@ -335,7 +335,7 @@
       file: dl/kotlin.kts
 
 - server: prolog_ls
-  bin: prolog_ls
+  bin: prolog-ls
   args: []
   install:
     script:
