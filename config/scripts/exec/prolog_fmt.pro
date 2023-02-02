@@ -1,6 +1,6 @@
 #!/usr/bin/env -S -- swipl
 
-:- initialization(main).
+:- initialization(main, main).
 
 shebang(Stream, [Line]) :-
     =(Bang, "#!"),
@@ -42,5 +42,4 @@ fmt_terms(Stream, Print) :-
 main(_Argv) :-
     shebang(user_input, Line),
     maplist(writeln, Line),
-    fmt_terms(user_input, []),
-    halt.
+    fmt_terms(user_input, []).

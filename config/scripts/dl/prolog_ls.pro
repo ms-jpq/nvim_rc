@@ -1,6 +1,6 @@
 #!/usr/bin/env -S -- swipl
 
-:- initialization(main).
+:- initialization(main, main).
 
 main(_Argv) :-
     current_prolog_flag(os_argv, [_, Arg0|_]),
@@ -34,5 +34,4 @@ main(_Argv) :-
                    ["--", URI],
                    [stdout(pipe(Out))]),
     read_string(Out, _, SynS),
-    copy_file(SynS, SynD),
-    halt.
+    copy_file(SynS, SynD).

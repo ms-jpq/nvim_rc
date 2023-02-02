@@ -1,6 +1,6 @@
 #!/usr/bin/env -S -- swipl
 
-:- initialization(main_tramp).
+:- initialization(main_tramp, main).
 
 :- use_module(library(prolog_pack)).
 
@@ -16,5 +16,4 @@ main_tramp() :-
     writeln(ArgV),
     pack_attach(LSP, []),
     use_module(library(lsp_server)),
-    :(lsp_server, main),
-    halt.
+    :(lsp_server, main).
