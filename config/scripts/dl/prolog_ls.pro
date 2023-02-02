@@ -1,6 +1,6 @@
 #!/usr/bin/env -S -- swipl
 
-:- (initialization main).
+:- initialization(main).
 
 main(_Argv) :-
     current_prolog_flag(os_argv, [_, Arg0|_]),
@@ -23,6 +23,6 @@ main(_Argv) :-
                  ]),
     copy_file(BinS, BinD),
     copy_file(BinFS, BinFD),
-    chmod(BinD, +x),
-    chmod(BinFD, +x),
+    chmod(BinD, +(x)),
+    chmod(BinFD, +(x)),
     halt.
