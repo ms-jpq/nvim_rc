@@ -122,8 +122,8 @@
         trigger: "!big"
       - src: cow
         trigger: "!cow"
-      - src: vimtex
-        short_name: vTEX
+      # - src: vimtex
+      #   short_name: vTEX
   lua: |-
     require("coq_3p")(vim.g.COQ3p)
 
@@ -200,8 +200,8 @@
   lua: |-
     require('gitsigns').setup(git_opts)
 
-- git:
-    uri: https://github.com/lervag/vimtex
-  vals:
-    vimtex_compiler_method: tectonic
-    vimtex_view_enabled: false
+# - git:
+#     uri: https://github.com/lervag/vimtex
+#   vals:
+#     vimtex_compiler_method: tectonic
+#     vimtex_view_enabled: false
