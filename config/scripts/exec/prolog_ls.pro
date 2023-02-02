@@ -2,8 +2,6 @@
 
 :- initialization(main_tramp, main).
 
-:- use_module(library(prolog_pack)).
-
 main_tramp() :-
     current_prolog_flag(os_argv, [_, Arg0|_]),
     file_directory_name(Arg0, Parent),

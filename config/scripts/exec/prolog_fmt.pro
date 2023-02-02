@@ -10,36 +10,36 @@ shebang(Stream, [Line]) :-
 
 shebang(_, []).
 
-fmt_comments([]).
+pprint_comments([]).
 
-fmt_comments([-(_, Comment)|Comments]) :-
+pprint_comments([-(_, Comment)|Comments]) :-
     writeln(Comment),
-    fmt_comments(Comments).
+    pprint_comments(Comments).
 
-fmt_terms(Stream, _) :-
+pprint(Stream, _) :-
     at_end_of_stream(Stream).
 
-fmt_terms(Stream, _) :-
+pprint(Stream, _) :-
     =(NL, '\n'),
     peek_char(Stream, NL),
     get_char(Stream, NL),
-    fmt_terms(Stream, [NL]).
+    pprint(Stream, [NL]).
 
-fmt_terms(Stream, Print) :-
+pprint(Stream, Print) :-
     read_term(Stream,
               Term,
               [variable_names(Names), comments(Comments)]),
     maplist(write, Print),
-    fmt_comments(Comments),
+    pprint_comments(Comments),
     portray_clause(user_output,
                    Term,
                    [ variable_names(Names),
                      quoted(true),
                      ignore_ops(true)
                    ]),
-    fmt_terms(Stream, []).
+    pprint(Stream, []).
 
 main(_Argv) :-
     shebang(user_input, Line),
     maplist(writeln, Line),
-    fmt_terms(user_input, []).
+    pprint(user_input, []).
