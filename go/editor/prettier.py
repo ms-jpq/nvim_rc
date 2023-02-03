@@ -34,22 +34,28 @@ async def _fmt_output(
             return LANG("missing", thing=attr.bin)
         else:
             stdin = temp.read_bytes() if attr.type is FmtType.stream else None
-            proc = await call(
-                attr.bin,
-                *args,
-                stdin=stdin,
-                cwd=cwd,
-                check_returncode=set(),
-            )
-            if attr.type is FmtType.stream:
-                temp.write_bytes(proc.stdout)
-
-            if proc.returncode == attr.exit_code:
-                return ""
-            else:
-                heading = LANG("proc failed", code=proc.returncode, args=arg_info)
-                print_out = ctx.linefeed.join((heading, decode(proc.stderr)))
+            try:
+                proc = await call(
+                    attr.bin,
+                    *args,
+                    stdin=stdin,
+                    cwd=cwd,
+                    check_returncode=set(),
+                )
+            except OSError as e:
+                heading = LANG("proc failed", code=-e.errno, args=arg_info)
+                print_out = ctx.linefeed.join((heading, str(e)))
                 return print_out
+            else:
+                if attr.type is FmtType.stream:
+                    temp.write_bytes(proc.stdout)
+
+                if proc.returncode == attr.exit_code:
+                    return ""
+                else:
+                    heading = LANG("proc failed", code=proc.returncode, args=arg_info)
+                    print_out = ctx.linefeed.join((heading, decode(proc.stderr)))
+                    return print_out
 
 
 async def _run(ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: PurePath) -> None:

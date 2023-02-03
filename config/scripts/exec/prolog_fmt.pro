@@ -16,20 +16,14 @@ pprint_comments([-(_, Comment)|Comments]) :-
     writeln(Comment),
     pprint_comments(Comments).
 
-pprint(Stream, _) :-
+pprint(Stream) :-
     at_end_of_stream(Stream).
 
-pprint(Stream, _) :-
-    =(NL, '\n'),
-    peek_char(Stream, NL),
-    get_char(Stream, NL),
-    pprint(Stream, [NL]).
-
-pprint(Stream, Print) :-
+pprint(Stream) :-
     read_term(Stream,
               Term,
               [variable_names(Names), comments(Comments)]),
-    maplist(write, Print),
+    nl,
     pprint_comments(Comments),
     portray_clause(user_output,
                    Term,
@@ -37,9 +31,9 @@ pprint(Stream, Print) :-
                      quoted(true),
                      ignore_ops(true)
                    ]),
-    pprint(Stream, []).
+    pprint(Stream).
 
 main(_Argv) :-
     shebang(user_input, Line),
     maplist(writeln, Line),
-    pprint(user_input, []).
+    pprint(user_input).
