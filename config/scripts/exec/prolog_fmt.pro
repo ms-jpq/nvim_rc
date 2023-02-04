@@ -2,6 +2,10 @@
 
 :- initialization(main, main).
 
+:- set_portray_text(enabled, true).
+
+:- set_portray_text(min_length, 1).
+
 shebang(Stream, [Line]) :-
     =(Bang, "#!"),
     string_length(Bang, Len),
@@ -28,8 +32,8 @@ pprint(Stream) :-
     portray_clause(user_output,
                    Term,
                    [ variable_names(Names),
-                     quoted(true),
-                     ignore_ops(true)
+                     ignore_ops(true),
+                     quoted(true)
                    ]),
     pprint(Stream).
 
