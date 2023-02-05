@@ -4,6 +4,21 @@
 
 :- use_module(library(/(dcg, basics))).
 
+uuid_gen(String, Placeholder) :-
+    =(Underscore, "_"),
+    string_length(String, SLen),
+    uuid(UUID),
+    split_string(UUID, "-", "", Parts),
+    atomics_to_string(Parts, Underscore, Prefix),
+    string_length(Prefix, PLen),
+    is(MinPadding, -(SLen, PLen)),
+    is(Padding, max(0, MinPadding)),
+    length(PS, Padding),
+    maplist(=(Underscore), PS),
+    atomics_to_string([Prefix|PS],
+                      "",
+                      Placeholder).
+
 p_not(CS, [X|XS]) -->
     [X],
     { maplist(dif(X), CS)
@@ -31,16 +46,27 @@ p_string_inner(Mark, [X|XS]) -->
 p_string_inner(_, []) -->
     [].
 
-p_string(Mark, str(String)) -->
+p_string(Mark, str(String, Placeholder)) -->
     [Mark],
     p_string_inner(Mark, XS),
     [Mark],
-    { string_codes(String, XS)
+    { append([Mark|XS], [Mark], Codes),
+      string_codes(String, Codes),
+      uuid_gen(String, Placeholder)
     }.
+
+p_strings(String) -->
+    p_string(96, String).
+
+p_strings(String) -->
+    p_string(39, String).
+
+p_strings(String) -->
+    p_string(34, String).
 
 p_grammar([Ignored, String1|String2]) -->
     p_nots([96, 39, 34], Ignored),
-    p_string(34, String1),
+    p_strings(String1),
     p_grammar(String2).
 
 p_grammar([Ignored]) -->
