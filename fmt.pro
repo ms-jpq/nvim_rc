@@ -34,7 +34,7 @@ p_other([X|XS]) -->
 p_other([]) -->
     [].
 
-p_others(no(String)) -->
+p_others([no(String)]) -->
     p_other(Codes),
     { string_codes(String, Codes)
     }.
@@ -70,13 +70,17 @@ p_strings(String) -->
 p_strings(String) -->
     p_string(34, String).
 
-p_grammar([Ignored, String1|String2]) -->
+p_grammar(Syntax) -->
     p_others(Ignored),
     p_strings(String1),
-    p_grammar(String2).
+    p_grammar(String2),
+    { append(Ignored,
+             [String1|String2],
+             Syntax)
+    }.
 
-p_grammar([Ignored]) -->
-    p_others(Ignored).
+p_grammar(Syntax) -->
+    p_others(Syntax).
 
 p_grammar([]) -->
     [].
