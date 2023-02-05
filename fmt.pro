@@ -9,15 +9,15 @@ uuid_gen(String, Placeholder) :-
     string_length(String, SLen),
     uuid(UUID),
     split_string(UUID, "-", "", Parts),
-    atomics_to_string(Parts, Underscore, Prefix),
+    atomics_to_string(["X"|Parts],
+                      Underscore,
+                      Prefix),
     string_length(Prefix, PLen),
-    is(MinPadding, -(SLen, PLen)),
-    is(Padding, max(0, MinPadding)),
+    is(Padding, max(0, -(-(SLen, PLen), 2))),
     length(PS, Padding),
     maplist(=(Underscore), PS),
-    atomics_to_string([Prefix|PS],
-                      "",
-                      Placeholder).
+    atomics_to_string([Prefix|PS], "", Holder),
+    atom_string(Placeholder, Holder).
 
 p_not(CS, [X|XS]) -->
     [X],
@@ -80,13 +80,32 @@ read_array(Input, Parsed, Unparsed) :-
     phrase(p_grammar(Parsed), Codes, Rest),
     string_codes(Unparsed, Rest).
 
-parse_line(Line) :-
-    read_array(Line, Parsed, ""),
-    writeln(Parsed).
+build_mapping([no(String)|StrIn], [String|StrOut], Map) :-
+    build_mapping(StrIn, StrOut, Map).
+
+build_mapping([str(String, Placeholder)|StrIn], [Slot|StrOut], [=(Placeholder, String)|Map]) :-
+    atomics_to_string(["{", Placeholder, "}"], "", Slot),
+    build_mapping(StrIn, StrOut, Map).
+
+build_mapping([], [], []).
+
+parse_text(TextIn) :-
+    read_array(TextIn, Parsed, ""),
+    build_mapping(Parsed, IR, Map),
+    atomics_to_string(IR, "", TextOut),
+    interpolate_string(TextOut,
+                       Interpolated,
+                       Map,
+                       []),
+    =(Interpolated, TextIn),
+    writeln("----------------------------------------------------------------------------"),
+    writeln(TextIn),
+    writeln(Interpolated),
+    writeln(Map).
 
 main() :-
     read_file_to_string("./test.txt", Txt, []),
     string_lines(Txt, Lines),
-    maplist(parse_line, Lines).
+    maplist(parse_text, Lines).
 
 end_of_file.
