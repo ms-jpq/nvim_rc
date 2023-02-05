@@ -80,28 +80,28 @@ read_array(Input, Parsed, Unparsed) :-
     phrase(p_grammar(Parsed), Codes, Rest),
     string_codes(Unparsed, Rest).
 
-build_mapping([no(String)|StrIn], [String|StrOut], Map) :-
-    build_mapping(StrIn, StrOut, Map).
+build_mapping([no(String)|StrIn], [String|StrOut], Mapping) :-
+    build_mapping(StrIn, StrOut, Mapping).
 
-build_mapping([str(String, Placeholder)|StrIn], [Slot|StrOut], [=(Placeholder, String)|Map]) :-
+build_mapping([str(String, Placeholder)|StrIn], [Slot|StrOut], [=(Placeholder, String)|Mapping]) :-
     atomics_to_string(["{", Placeholder, "}"], "", Slot),
-    build_mapping(StrIn, StrOut, Map).
+    build_mapping(StrIn, StrOut, Mapping).
 
 build_mapping([], [], []).
 
 parse_text(TextIn) :-
     read_array(TextIn, Parsed, ""),
-    build_mapping(Parsed, IR, Map),
+    build_mapping(Parsed, IR, Mapping),
     atomics_to_string(IR, "", TextOut),
     interpolate_string(TextOut,
                        Interpolated,
-                       Map,
+                       Mapping,
                        []),
     =(Interpolated, TextIn),
     writeln("----------------------------------------------------------------------------"),
     writeln(TextIn),
     writeln(Interpolated),
-    writeln(Map).
+    writeln(Mapping).
 
 main() :-
     read_file_to_string("./test.txt", Txt, []),
