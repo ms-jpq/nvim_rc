@@ -19,17 +19,23 @@ uuid_gen(String, Placeholder) :-
     atomics_to_string([Prefix|PS], "", Holder),
     atom_string(Placeholder, Holder).
 
-p_not(CS, [X|XS]) -->
-    [X],
-    { maplist(dif(X), CS)
+p_other([48, 39, X|XS]) -->
+    [48, 39, X],
+    { dif(X, 39)
     },
-    p_not(CS, XS).
+    p_other(XS).
 
-p_not(_, []) -->
+p_other([X|XS]) -->
+    [X],
+    { maplist(dif(X), [96, 39, 34])
+    },
+    p_other(XS).
+
+p_other([]) -->
     [].
 
-p_nots(CodePoints, no(String)) -->
-    p_not(CodePoints, Codes),
+p_others(no(String)) -->
+    p_other(Codes),
     { string_codes(String, Codes)
     }.
 
@@ -65,12 +71,12 @@ p_strings(String) -->
     p_string(34, String).
 
 p_grammar([Ignored, String1|String2]) -->
-    p_nots([96, 39, 34], Ignored),
+    p_others(Ignored),
     p_strings(String1),
     p_grammar(String2).
 
 p_grammar([Ignored]) -->
-    p_nots([96, 39, 34], Ignored).
+    p_others(Ignored).
 
 p_grammar([]) -->
     [].
