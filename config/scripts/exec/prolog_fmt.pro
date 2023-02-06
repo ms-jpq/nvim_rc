@@ -145,22 +145,31 @@ shebang(Stream, [Line]) :-
 
 shebang(_, []).
 
+p_comment_line_inner(Line, Parsed) :-
+    sub_string(Line, 0, 1, _, "*"),
+    string_concat(" ", Line, Parsed).
+
+p_comment_line_inner(Line, Line).
+
+p_comment_line(Line, Parsed) :-
+    normalize_space(string(ReIndented), Line),
+    p_comment_line_inner(ReIndented, Parsed).
+
 p_comments([], []).
 
-p_comments([-(Position, Line)|Comments], [-(Index, Line, comment)|LS]) :-
+p_comments([-(Position, Comment)|Comments], [-([Row, 0], Lines, comment)|LS]) :-
     stream_position_data(line_count, Position, Row),
-    is(Index, *(Row, 1000000)),
+    string_lines(Comment, CommentLines),
+    maplist(p_comment_line, CommentLines, Lines),
     p_comments(Comments, LS).
 
-p_terms_inner(Row, [Line|Lines], [-(Index, Line, term)|LS]) :-
+p_terms_inner(Row, [Line|Lines], [-([Row, 1], [Line], term)|LS]) :-
     is(R, +(Row, 1)),
-    is(Index, +(*(Row, 1000000), 1)),
     p_terms_inner(R, Lines, LS).
 
 p_terms_inner(_, [], []).
 
-p_term(Term, Names, Position, Parsed) :-
-    stream_position_data(line_count, Position, Row),
+p_term(Term, Names, Row, Parsed) :-
     with_output_to(string(String),
                    ( current_output(Stream),
                      portray_clause(Stream,
@@ -173,27 +182,9 @@ p_term(Term, Names, Position, Parsed) :-
     string_lines(String, Lines),
     p_terms_inner(Row, Lines, Parsed).
 
-pprint_commentlines(Stream, Indent, [Line|Lines]) :-
-    normalize_space(string(Dedented), Line),
-    string_concat(Indent, Dedented, Indented),
-    writeln(Stream, Indented),
-    pprint_commentlines(Stream, Indent, Lines).
-
-pprint_commentlines(_, _, []).
-
-pprint_rows(Stream, [-(_, Comment, comment), -(_, Term, _)|Lines]) :-
-    normalize_space(string(NoSpaces), Term),
-    string_concat(Spaces, NoSpaces, Term),
-    string_lines(Comment, CommentLines),
-    pprint_commentlines(Stream,
-                        Spaces,
-                        CommentLines),
-    writeln(Stream, Term),
-    pprint_rows(Stream, Lines).
-
-pprint_rows(Stream, [-(_, Line, _)|Lines]) :-
-    writeln(Stream, Line),
-    pprint_rows(Stream, Lines).
+pprint_rows(Stream, [-(_, Lines, _)|LS]) :-
+    maplist(writeln(Stream), Lines),
+    pprint_rows(Stream, LS).
 
 pprint_rows(_, []).
 
@@ -207,10 +198,8 @@ pprint(StreamIn, StreamOut) :-
                 term_position(Position),
                 comments(Comments)
               ]),
-    p_term(Term,
-           Names,
-           Position,
-           ParsedTerm),
+    stream_position_data(line_count, Position, Row),
+    p_term(Term, Names, Row, ParsedTerm),
     p_comments(Comments, ParsedComments),
     append(ParsedTerm, ParsedComments, Rows),
     sort(1, @=<, Rows, Sorted),
