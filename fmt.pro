@@ -106,7 +106,7 @@ build_mapping([no(String)|StrIn], [String|StrOut], Mapping) :-
     build_mapping(StrIn, StrOut, Mapping).
 
 build_mapping([str(String, Placeholder)|StrIn], [Slot|StrOut], [=(Placeholder, String)|Mapping]) :-
-    atomics_to_string(["\"{", Placeholder, "}\""], "", Slot),
+    atomics_to_string(['"{', Placeholder, '}"'], "", Slot),
     build_mapping(StrIn, StrOut, Mapping).
 
 build_mapping([], [], []).
@@ -117,11 +117,10 @@ parse_text(TextIn, Mapping, TextOut) :-
     atomics_to_string(IR, "", TextOut).
 
 unparse_text(TextIn, Mapping, TextOut) :-
-    re_replace('"(<key>\\{X[0-9a-fA-F]{32}_*})"',
-               "$key",
+    re_replace(/('"(\\{X[0-9a-f]{32}_*\\})"', g),
+               "$1",
                TextIn,
-               IR,
-               []),
+               IR),
     interpolate_string(IR, TextOut, Mapping, []).
 
 parse_many(Text1) :-
