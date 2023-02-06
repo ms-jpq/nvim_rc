@@ -14,30 +14,37 @@ shebang(Stream, [Line]) :-
 
 shebang(_, []).
 
-pprint_comments([]).
+pprint_comments(_, []).
 
-pprint_comments([-(_, Comment)|Comments]) :-
-    writeln(Comment),
-    pprint_comments(Comments).
+pprint_comments(Stream, [-(_, Comment)|Comments]) :-
+    writeln(Stream, Comment),
+    pprint_comments(Stream, Comments).
 
-pprint(Stream) :-
-    at_end_of_stream(Stream).
+pprint(StreamIn, _) :-
+    at_end_of_stream(StreamIn).
 
-pprint(Stream) :-
-    read_term(Stream,
+pprint(StreamIn, StreamOut) :-
+    read_term(StreamIn,
               Term,
               [variable_names(Names), comments(Comments)]),
     nl,
-    pprint_comments(Comments),
-    portray_clause(user_output,
+    pprint_comments(StreamOut, Comments),
+    portray_clause(StreamOut,
                    Term,
                    [ variable_names(Names),
                      ignore_ops(true),
                      quoted(true)
                    ]),
-    pprint(Stream).
+    pprint(StreamIn, StreamOut).
 
 main(_Argv) :-
-    shebang(user_input, Line),
-    maplist(writeln, Line),
-    pprint(user_input).
+    =(StreamIn, user_input),
+    setup_call_cleanup(tmp_file_stream(text, Tmp, StreamOut),
+                       ( shebang(StreamIn, Line),
+                         maplist(writeln(StreamOut), Line),
+                         pprint(StreamIn, StreamOut),
+                         seek(StreamOut, 0, bof, _)
+                       ),
+                       close(StreamOut)),
+    read_file_to_string(Tmp, Output, []),
+    write(Output).
