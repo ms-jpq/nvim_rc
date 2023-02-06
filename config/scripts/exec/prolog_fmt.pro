@@ -6,13 +6,8 @@
 
 x_uuid(UUID) :-
     uuid(ID),
-    split_string(ID,
-                 "-",
-                 "",
-                 Parts),
-    atomics_to_string(["X"|Parts],
-                      "",
-                      UUID).
+    split_string(ID, "-", "", Parts),
+    atomics_to_string(["X"|Parts], "", UUID).
 
 uuid_gen(String, Placeholder) :-
     string_length(String, SLen),
@@ -21,21 +16,33 @@ uuid_gen(String, Placeholder) :-
     is(Padding, max(0, -(-(SLen, PLen), 2))),
     length(PS, Padding),
     maplist(=("_"), PS),
-    atomics_to_string([Prefix|PS],
-                      "",
-                      Holder),
+    atomics_to_string([Prefix|PS], "", Holder),
     atom_string(Placeholder, Holder).
 
 p_other([str(String, Placeholder)|XS]) -->
-    [48, 39, X],
-    { string_codes(String, [48, 39, X]),
+    [48, 39, 92, 92],
+    { string_codes(String, [48, 39, 92, 92]),
+      uuid_gen(String, Placeholder)
+    },
+    p_other(XS).
+
+p_other([str(String, Placeholder)|XS]) -->
+    [ 0'0,
+      0'',
+      X
+    ],
+    { string_codes(String,
+                   [ 0'0,
+                     0'',
+                     X
+                   ]),
       uuid_gen(String, Placeholder)
     },
     p_other(XS).
 
 p_other([norm(X)|XS]) -->
     [X],
-    { maplist(dif(X), [96, 39, 34])
+    { maplist(dif(X), `\`'"`)
     },
     p_other(XS).
 
@@ -61,8 +68,8 @@ p_others(Syntax) -->
 p_others([]) -->
     [].
 
-p_string_inner(Mark, [92, Mark|X]) -->
-    [92, Mark],
+p_string_inner(Mark, [0'\\, Mark|X]) -->
+    [0'\\, Mark],
     p_string_inner(Mark, X).
 
 p_string_inner(Mark, [X|XS]) -->
@@ -74,7 +81,7 @@ p_string_inner(Mark, [X|XS]) -->
 p_string_inner(_, []) -->
     [].
 
-p_string(Mark, str(String, Placeholder)) -->
+p_codes(Mark, str(String, Placeholder)) -->
     [Mark],
     p_string_inner(Mark, XS),
     [Mark],
@@ -83,8 +90,16 @@ p_string(Mark, str(String, Placeholder)) -->
       uuid_gen(String, Placeholder)
     }.
 
+p_string(Mark, no(String)) -->
+    [Mark],
+    p_string_inner(Mark, XS),
+    [Mark],
+    { append([Mark|XS], [Mark], Codes),
+      string_codes(String, Codes)
+    }.
+
 p_strings([String]) -->
-    (   p_string(0'`, String)
+    (   p_codes(0'`, String)
     ;   p_string(0'', String)
     ;   p_string(0'", String)
     ).
@@ -107,12 +122,7 @@ build_mapping([no(String)|StrIn], [String|StrOut], Mapping) :-
     build_mapping(StrIn, StrOut, Mapping).
 
 build_mapping([str(String, Placeholder)|StrIn], [Slot|StrOut], [=(Placeholder, String)|Mapping]) :-
-    atomics_to_string([ '"{',
-                        Placeholder,
-                        '}"'
-                      ],
-                      "",
-                      Slot),
+    atomics_to_string(['"{', Placeholder, '}"'], "", Slot),
     build_mapping(StrIn, StrOut, Mapping).
 
 build_mapping([], [], []).
@@ -120,9 +130,7 @@ build_mapping([], [], []).
 parse_text(StreamIn, Mapping, TextOut) :-
     phrase_from_stream(p_grammar(Parsed), StreamIn),
     build_mapping(Parsed, IR, Mapping),
-    atomics_to_string(IR,
-                      "",
-                      TextOut).
+    atomics_to_string(IR, "", TextOut).
 
 unparse_text(TextIn, Mapping, TextOut) :-
     re_replace(/('"(\\{X[0-9a-f]{32}_*\\})"', g),
