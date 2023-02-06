@@ -52,6 +52,9 @@ p_others(Syntax) -->
     { p_others_inner(Tokens, [], Syntax)
     }.
 
+p_others([]) -->
+    [].
+
 p_string_inner(Mark, [92, Mark|X]) -->
     [92, Mark],
     p_string_inner(Mark, X).
@@ -74,25 +77,25 @@ p_string(Mark, str(String, Placeholder)) -->
       uuid_gen(String, Placeholder)
     }.
 
-p_strings(String) -->
+p_strings([String]) -->
     (   p_string(96, String)
     ;   p_string(39, String)
     ;   p_string(34, String)
     ).
 
-p_grammar(Syntax) -->
-    (   p_others(Ignored),
-        p_strings(String1),
-        p_grammar(String2),
-        { append(Ignored,
-                 [String1|String2],
-                 Syntax)
-        }
-    ;   p_others(Syntax)
-    ).
+p_strings([]) -->
+    [].
 
 p_grammar([]) -->
     [].
+
+p_grammar(Syntax) -->
+    p_others(Ignored),
+    p_strings(String1),
+    p_grammar(String2),
+    { append(String1, String2, Strings),
+      append(Ignored, Strings, Syntax)
+    }.
 
 read_array(Input, Parsed, Unparsed) :-
     string_codes(Input, Codes),
