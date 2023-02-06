@@ -9,7 +9,7 @@ x_uuid(UUID) :-
     split_string(ID, "-", "", Parts),
     atomics_to_string(["X"|Parts], "", UUID).
 
-uuid_gen(String, Placeholder) :-
+uuid_padded(String, Placeholder) :-
     x_uuid(Prefix),
     string_length(Prefix, PLen),
     string_length(String, SLen),
@@ -19,10 +19,9 @@ uuid_gen(String, Placeholder) :-
     atomics_to_string([Prefix|PS], "", Holder),
     atom_string(Placeholder, Holder).
 
-p_other([str(String, Placeholder)|XS]) -->
+p_other([str("0'\\\\", Placeholder)|XS]) -->
     `0'\\\\`,
-    { string_codes(String, `0'\\\\`),
-      uuid_gen(String, Placeholder)
+    { uuid_padded("", Placeholder)
     },
     p_other(XS).
 
@@ -36,7 +35,7 @@ p_other([str(String, Placeholder)|XS]) -->
                      0'',
                      X
                    ]),
-      uuid_gen(String, Placeholder)
+      uuid_padded(String, Placeholder)
     },
     p_other(XS).
 
@@ -68,13 +67,12 @@ p_others(Syntax) -->
 p_others([]) -->
     [].
 
-p_string_inner(Mark, [0'\\, 0'\\|X]) -->
-    `\\\\`,
-    p_string_inner(Mark, X).
-
-p_string_inner(Mark, [0'\\, Mark|X]) -->
-    [0'\\, Mark],
-    p_string_inner(Mark, X).
+p_string_inner(Mark, [0'\\, X|XS]) -->
+    [0'\\, X],
+    { memberchk(X,
+                [0'\\, Mark])
+    },
+    p_string_inner(Mark, XS).
 
 p_string_inner(Mark, [X|XS]) -->
     { dif(X, Mark)
@@ -91,7 +89,7 @@ p_codes(Mark, str(String, Placeholder)) -->
     [Mark],
     { append([Mark|XS], [Mark], Codes),
       string_codes(String, Codes),
-      uuid_gen(String, Placeholder)
+      uuid_padded(String, Placeholder)
     }.
 
 p_string(Mark, no(String)) -->
@@ -181,9 +179,11 @@ main(_Argv) :-
                        ( shebang(StreamIn, Line),
                          maplist(writeln(StreamOut), Line),
                          pprint(StreamIn, StreamOut),
-                         seek(StreamOut, 0, bof, _)
+                         flush_output(StreamOut)
                        ),
                        close(StreamOut)),
     read_file_to_string(Tmp, Prettied, []),
     unparse_text(Prettied, Mapping, Output),
-    write(Output).
+    writeln(user_error, "---"),
+    write(user_output, Output),
+    writeln(user_error, "---").
