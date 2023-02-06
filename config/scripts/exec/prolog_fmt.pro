@@ -152,8 +152,8 @@ p_comment_line_inner(Line, Parsed) :-
 p_comment_line_inner(Line, Line).
 
 p_comment_line(Line, Parsed) :-
-    normalize_space(string(ReIndented), Line),
-    p_comment_line_inner(ReIndented, Parsed).
+    normalize_space(string(NoSpaces), Line),
+    p_comment_line_inner(NoSpaces, Parsed).
 
 p_comments([], []).
 
@@ -163,7 +163,9 @@ p_comments([-(Position, Comment)|Comments], [-([Row, 0], Lines, comment)|LS]) :-
     maplist(p_comment_line, CommentLines, Lines),
     p_comments(Comments, LS).
 
-p_terms_inner(Row, [Line|Lines], [-([Row, 1], [Line], term)|LS]) :-
+p_terms_inner(Row, [Line|Lines], [-([Row, 1], Line, term(Indent))|LS]) :-
+    normalize_space(string(NoSpaces), Line),
+    string_length(NoSpaces, Indent),
     is(R, +(Row, 1)),
     p_terms_inner(R, Lines, LS).
 
@@ -182,11 +184,15 @@ p_term(Term, Names, Row, Parsed) :-
     string_lines(String, Lines),
     p_terms_inner(Row, Lines, Parsed).
 
-pprint_rows(Stream, [-(_, Lines, _)|LS]) :-
-    maplist(writeln(Stream), Lines),
-    pprint_rows(Stream, LS).
+pprint_rows(Indent, [-(_, Lines, comment)|LS], Adjusted) :-
+    reverse(Lines, RL),
+    append(RL, AS, Adjusted),
+    pprint_rows(Indent, LS, AS).
 
-pprint_rows(_, []).
+pprint_rows(_, [-(_, Line, term(Indent))|LS], [Line|AS]) :-
+    pprint_rows(Indent, LS, AS).
+
+pprint_rows(_, [], []).
 
 pprint(StreamIn, _) :-
     at_end_of_stream(StreamIn).
@@ -202,9 +208,11 @@ pprint(StreamIn, StreamOut) :-
     p_term(Term, Names, Row, ParsedTerm),
     p_comments(Comments, ParsedComments),
     append(ParsedTerm, ParsedComments, Rows),
-    sort(1, @=<, Rows, Sorted),
+    sort(1, @>=, Rows, Sorted),
     nl(StreamOut),
-    pprint_rows(StreamOut, Sorted),
+    pprint_rows(0, Sorted, Adjusted),
+    reverse(Adjusted, Lines),
+    maplist(writeln(StreamOut), Lines),
     pprint(StreamIn, StreamOut).
 
 main(_Argv) :-
