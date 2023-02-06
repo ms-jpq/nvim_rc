@@ -111,23 +111,28 @@ build_mapping([str(String, Placeholder)|StrIn], [Slot|StrOut], [=(Placeholder, S
 
 build_mapping([], [], []).
 
-parse_text(TextIn) :-
+parse_text(TextIn, Mapping, TextOut) :-
     read_array(TextIn, Parsed, ""),
     build_mapping(Parsed, IR, Mapping),
-    atomics_to_string(IR, "", TextOut),
-    interpolate_string(TextOut,
-                       Interpolated,
+    atomics_to_string(IR, "", TextOut).
+
+unparse_text(TextIn, Mapping, TextOut) :-
+    interpolate_string(TextIn,
+                       TextOut,
                        Mapping,
-                       []),
-    =(Interpolated, TextIn),
+                       []).
+
+parse_many(Text1) :-
+    parse_text(Text1, Mapping, Text2),
+    unparse_text(Text2, Mapping, Text3),
+    =(Text1, Text3),
     writeln("----------------------------------------------------------------------------"),
-    writeln(TextIn),
-    writeln(Interpolated),
+    writeln(Text3),
     writeln(Mapping).
 
 main() :-
     read_file_to_string("./test.txt", Txt, []),
     string_lines(Txt, Lines),
-    maplist(parse_text, Lines).
+    maplist(parse_many, Lines).
 
 end_of_file.
