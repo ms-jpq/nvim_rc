@@ -173,11 +173,21 @@ p_term(Term, Names, Position, Parsed) :-
     string_lines(String, Lines),
     p_terms_inner(Row, Lines, Parsed).
 
+pprint_commentlines(Stream, Indent, [Line|Lines]) :-
+    normalize_space(string(Dedented), Line),
+    string_concat(Indent, Dedented, Indented),
+    writeln(Stream, Indented),
+    pprint_commentlines(Stream, Indent, Lines).
+
+pprint_commentlines(_, _, []).
+
 pprint_rows(Stream, [-(_, Comment, comment), -(_, Term, _)|Lines]) :-
     normalize_space(string(NoSpaces), Term),
     string_concat(Spaces, NoSpaces, Term),
-    string_concat(Spaces, Comment, Indented),
-    writeln(Stream, Indented),
+    string_lines(Comment, CommentLines),
+    pprint_commentlines(Stream,
+                        Spaces,
+                        CommentLines),
     writeln(Stream, Term),
     pprint_rows(Stream, Lines).
 
