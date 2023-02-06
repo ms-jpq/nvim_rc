@@ -19,13 +19,15 @@ uuid_gen(String, Placeholder) :-
     atomics_to_string([Prefix|PS], "", Holder),
     atom_string(Placeholder, Holder).
 
-p_other([48, 39, X|XS]) -->
+p_other([str(String, Placeholder)|XS]) -->
     [48, 39, X],
-    { dif(X, 39)
+    { dif(X, 39),
+      string_codes(String, [48, 39, X]),
+      uuid_gen(String, Placeholder)
     },
     p_other(XS).
 
-p_other([X|XS]) -->
+p_other([norm(X)|XS]) -->
     [X],
     { maplist(dif(X), [96, 39, 34])
     },
@@ -34,9 +36,20 @@ p_other([X|XS]) -->
 p_other([]) -->
     [].
 
-p_others([no(String)]) -->
-    p_other(Codes),
-    { string_codes(String, Codes)
+p_others_inner([str(String, Placeholder)|Tokens], Codes, [no(Str), str(String, Placeholder)|Syntax]) :-
+    string_codes(Str, Codes),
+    p_others_inner(Tokens, [], Syntax).
+
+p_others_inner([norm(C)|Tokens], CS, Syntax) :-
+    append(CS, [C], Codes),
+    p_others_inner(Tokens, Codes, Syntax).
+
+p_others_inner([], Codes, [no(String)]) :-
+    string_codes(String, Codes).
+
+p_others(Syntax) -->
+    p_other(Tokens),
+    { p_others_inner(Tokens, [], Syntax)
     }.
 
 p_string_inner(Mark, [92, Mark|X]) -->
@@ -62,25 +75,21 @@ p_string(Mark, str(String, Placeholder)) -->
     }.
 
 p_strings(String) -->
-    p_string(96, String).
-
-p_strings(String) -->
-    p_string(39, String).
-
-p_strings(String) -->
-    p_string(34, String).
+    (   p_string(96, String)
+    ;   p_string(39, String)
+    ;   p_string(34, String)
+    ).
 
 p_grammar(Syntax) -->
-    p_others(Ignored),
-    p_strings(String1),
-    p_grammar(String2),
-    { append(Ignored,
-             [String1|String2],
-             Syntax)
-    }.
-
-p_grammar(Syntax) -->
-    p_others(Syntax).
+    (   p_others(Ignored),
+        p_strings(String1),
+        p_grammar(String2),
+        { append(Ignored,
+                 [String1|String2],
+                 Syntax)
+        }
+    ;   p_others(Syntax)
+    ).
 
 p_grammar([]) -->
     [].
