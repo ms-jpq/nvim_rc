@@ -155,15 +155,29 @@ p_comment_line(Line, Parsed) :-
     normalize_space(string(NoSpaces), Line),
     p_comment_line_inner(NoSpaces, Parsed).
 
-p_comments([], []).
+p_comment_pos(Row, H1, Lo, Row) :-
+    is(H1, -(Lo, 1)).
 
-p_comments([-(Position, Comment)|Comments], [-([Row, 0], Lines, comment)|LS]) :-
-    stream_position_data(line_count, Position, Row),
+p_comment_pos(_, _, Row, Row).
+
+p_comments(_, _, [], []).
+
+p_comments(Seen, -(L1, H1), [-(Position, Comment)|Comments], [-([Row, 0, Hi], Lines, comment([Seen, Lo, Hi, Row, H2]))|LS]) :-
+    stream_position_data(line_count, Position, Lo),
     string_lines(Comment, CommentLines),
     maplist(p_comment_line, CommentLines, Lines),
-    p_comments(Comments, LS).
+    length(Lines, Len),
+    is(Hi, -(+(Lo, Len), 1)),
+    p_comment_pos(L1, H1, Lo, R),
+    is(Row, -(R, Seen)),
+    is(S2, +(Seen, Len)),
+    is(H2, +(Row, -(Len, 1))),
+    p_comments(S2,
+               -(Row, H2),
+               Comments,
+               LS).
 
-p_terms_inner(Row, [Line|Lines], [-([Row, 1], Line, term(Indent))|LS]) :-
+p_terms_inner(Row, [Line|Lines], [-([Row, 1, 0], Line, term(Indent))|LS]) :-
     normalize_space(string(NoSpaces), Line),
     string_length(NoSpaces, L1),
     string_length(Line, L2),
@@ -189,7 +203,7 @@ p_term(Term, Names, Row, Parsed) :-
     string_lines(String, Lines),
     p_terms_inner(Row, Lines, Parsed).
 
-pprint_rows(Indent, [-(_, Lines, comment)|LS], Adjusted) :-
+pprint_rows(Indent, [-(_, Lines, comment(_))|LS], Adjusted) :-
     reverse(Lines, RL),
     maplist(string_concat(Indent), RL, IR),
     append(IR, AS, Adjusted),
@@ -212,10 +226,15 @@ pprint(StreamIn, StreamOut) :-
               ]),
     stream_position_data(line_count, Position, Row),
     p_term(Term, Names, Row, ParsedTerm),
-    p_comments(Comments, ParsedComments),
+    p_comments(0,
+               -(Row, Row),
+               Comments,
+               ParsedComments),
     append(ParsedTerm, ParsedComments, Rows),
     sort(1, @>=, Rows, Sorted),
     nl(StreamOut),
+    nl(user_error),
+    maplist(writeln(user_error), Sorted),
     pprint_rows("", Sorted, Adjusted),
     reverse(Adjusted, Lines),
     maplist(writeln(StreamOut), Lines),
