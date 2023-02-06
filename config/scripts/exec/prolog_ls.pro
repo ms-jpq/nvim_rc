@@ -1,8 +1,8 @@
 #!/usr/bin/env -S -- swipl
 
-:- initialization(main_tramp, main).
+:- initialization(main, main).
 
-main_tramp(_Argv) :-
+main(_Argv) :-
     current_prolog_flag(os_argv, [_, Arg0|_]),
     file_directory_name(Arg0, Parent),
     file_directory_name(Parent, GrandParent),
