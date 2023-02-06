@@ -10,9 +10,9 @@ x_uuid(UUID) :-
     atomics_to_string(["X"|Parts], "", UUID).
 
 uuid_gen(String, Placeholder) :-
-    string_length(String, SLen),
     x_uuid(Prefix),
     string_length(Prefix, PLen),
+    string_length(String, SLen),
     is(Padding, max(0, -(-(SLen, PLen), 2))),
     length(PS, Padding),
     maplist(=("_"), PS),
@@ -20,8 +20,8 @@ uuid_gen(String, Placeholder) :-
     atom_string(Placeholder, Holder).
 
 p_other([str(String, Placeholder)|XS]) -->
-    [48, 39, 92, 92],
-    { string_codes(String, [48, 39, 92, 92]),
+    `0'\\\\`,
+    { string_codes(String, `0'\\\\`),
       uuid_gen(String, Placeholder)
     },
     p_other(XS).
@@ -67,6 +67,10 @@ p_others(Syntax) -->
 
 p_others([]) -->
     [].
+
+p_string_inner(Mark, [0'\\, 0'\\|X]) -->
+    `\\\\`,
+    p_string_inner(Mark, X).
 
 p_string_inner(Mark, [0'\\, Mark|X]) -->
     [0'\\, Mark],
