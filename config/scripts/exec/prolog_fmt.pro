@@ -165,7 +165,12 @@ p_comments([-(Position, Comment)|Comments], [-([Row, 0], Lines, comment)|LS]) :-
 
 p_terms_inner(Row, [Line|Lines], [-([Row, 1], Line, term(Indent))|LS]) :-
     normalize_space(string(NoSpaces), Line),
-    string_length(NoSpaces, Indent),
+    string_length(NoSpaces, L1),
+    string_length(Line, L2),
+    is(L3, -(L2, L1)),
+    length(Indents, L3),
+    maplist(=(0' ), Indents),
+    string_codes(Indent, Indents),
     is(R, +(Row, 1)),
     p_terms_inner(R, Lines, LS).
 
@@ -186,7 +191,8 @@ p_term(Term, Names, Row, Parsed) :-
 
 pprint_rows(Indent, [-(_, Lines, comment)|LS], Adjusted) :-
     reverse(Lines, RL),
-    append(RL, AS, Adjusted),
+    maplist(string_concat(Indent), RL, IR),
+    append(IR, AS, Adjusted),
     pprint_rows(Indent, LS, AS).
 
 pprint_rows(_, [-(_, Line, term(Indent))|LS], [Line|AS]) :-
@@ -210,7 +216,7 @@ pprint(StreamIn, StreamOut) :-
     append(ParsedTerm, ParsedComments, Rows),
     sort(1, @>=, Rows, Sorted),
     nl(StreamOut),
-    pprint_rows(0, Sorted, Adjusted),
+    pprint_rows("", Sorted, Adjusted),
     reverse(Adjusted, Lines),
     maplist(writeln(StreamOut), Lines),
     pprint(StreamIn, StreamOut).
