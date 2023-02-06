@@ -4,18 +4,18 @@
 
 :- use_module(library(/(dcg, basics))).
 
+x_uuid(UUID) :-
+    uuid(ID),
+    split_string(ID, "-", "", Parts),
+    atomics_to_string(["X"|Parts], "", UUID).
+
 uuid_gen(String, Placeholder) :-
-    =(Underscore, "_"),
     string_length(String, SLen),
-    uuid(UUID),
-    split_string(UUID, "-", "", Parts),
-    atomics_to_string(["X"|Parts],
-                      Underscore,
-                      Prefix),
+    x_uuid(Prefix),
     string_length(Prefix, PLen),
     is(Padding, max(0, -(-(SLen, PLen), 2))),
     length(PS, Padding),
-    maplist(=(Underscore), PS),
+    maplist(=("_"), PS),
     atomics_to_string([Prefix|PS], "", Holder),
     atom_string(Placeholder, Holder).
 
@@ -106,7 +106,7 @@ build_mapping([no(String)|StrIn], [String|StrOut], Mapping) :-
     build_mapping(StrIn, StrOut, Mapping).
 
 build_mapping([str(String, Placeholder)|StrIn], [Slot|StrOut], [=(Placeholder, String)|Mapping]) :-
-    atomics_to_string(["{", Placeholder, "}"], "", Slot),
+    atomics_to_string(["\"{", Placeholder, "}\""], "", Slot),
     build_mapping(StrIn, StrOut, Mapping).
 
 build_mapping([], [], []).
@@ -117,18 +117,19 @@ parse_text(TextIn, Mapping, TextOut) :-
     atomics_to_string(IR, "", TextOut).
 
 unparse_text(TextIn, Mapping, TextOut) :-
-    interpolate_string(TextIn,
-                       TextOut,
-                       Mapping,
-                       []).
+    re_replace('"(<key>\\{X[0-9a-fA-F]{32}_*})"',
+               "$key",
+               TextIn,
+               IR,
+               []),
+    interpolate_string(IR, TextOut, Mapping, []).
 
 parse_many(Text1) :-
     parse_text(Text1, Mapping, Text2),
     unparse_text(Text2, Mapping, Text3),
-    =(Text1, Text3),
     writeln("----------------------------------------------------------------------------"),
-    writeln(Text3),
-    writeln(Mapping).
+    writeln(Text1),
+    writeln(Text3).
 
 main() :-
     read_file_to_string("./test.txt", Txt, []),
