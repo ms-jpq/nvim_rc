@@ -145,13 +145,47 @@ shebang(Stream, [Line]) :-
 
 shebang(_, []).
 
-pprint_comments(_, []).
+p_comments([], []).
 
-pprint_comments(Stream, [-(Position, Comment)|Comments]) :-
-    stream_position_data(line_count, Position, _Row),
-    stream_position_data(line_position, Position, _Col),
-    writeln(Stream, Comment),
-    pprint_comments(Stream, Comments).
+p_comments([-(Position, Line)|Comments], [-(Index, Line, comment)|LS]) :-
+    stream_position_data(line_count, Position, Row),
+    is(Index, *(Row, 1000000)),
+    p_comments(Comments, LS).
+
+p_terms_inner(Row, [Line|Lines], [-(Index, Line, term)|LS]) :-
+    is(R, +(Row, 1)),
+    is(Index, +(*(Row, 1000000), 1)),
+    p_terms_inner(R, Lines, LS).
+
+p_terms_inner(_, [], []).
+
+p_term(Term, Names, Position, Parsed) :-
+    stream_position_data(line_count, Position, Row),
+    with_output_to(string(String),
+                   ( current_output(Stream),
+                     portray_clause(Stream,
+                                    Term,
+                                    [ variable_names(Names),
+                                      ignore_ops(true),
+                                      quoted(true)
+                                    ])
+                   )),
+    string_lines(String, Lines),
+    p_terms_inner(Row, Lines, Parsed).
+
+pprint_rows(Stream, [-(_, Comment, comment), -(_, Term, _)|Lines]) :-
+    normalize_space(string(NoSpaces), Term),
+    string_concat(Spaces, NoSpaces, Term),
+    string_concat(Spaces, Comment, Indented),
+    writeln(Stream, Indented),
+    writeln(Stream, Term),
+    pprint_rows(Stream, Lines).
+
+pprint_rows(Stream, [-(_, Line, _)|Lines]) :-
+    writeln(Stream, Line),
+    pprint_rows(Stream, Lines).
+
+pprint_rows(_, []).
 
 pprint(StreamIn, _) :-
     at_end_of_stream(StreamIn).
@@ -160,31 +194,28 @@ pprint(StreamIn, StreamOut) :-
     read_term(StreamIn,
               Term,
               [ variable_names(Names),
-                term_position(_Position),
+                term_position(Position),
                 comments(Comments)
               ]),
+    p_term(Term,
+           Names,
+           Position,
+           ParsedTerm),
+    p_comments(Comments, ParsedComments),
+    append(ParsedTerm, ParsedComments, Rows),
+    sort(1, @=<, Rows, Sorted),
     nl(StreamOut),
-    pprint_comments(StreamOut, Comments),
-    portray_clause(StreamOut,
-                   Term,
-                   [ variable_names(Names),
-                     ignore_ops(true),
-                     quoted(true)
-                   ]),
+    pprint_rows(StreamOut, Sorted),
     pprint(StreamIn, StreamOut).
 
 main(_Argv) :-
     parse_text(user_input, Mapping, Preprocessed),
     open_string(Preprocessed, StreamIn),
-    setup_call_cleanup(tmp_file_stream(text, Tmp, StreamOut),
-                       ( shebang(StreamIn, Line),
-                         maplist(writeln(StreamOut), Line),
-                         pprint(StreamIn, StreamOut),
-                         flush_output(StreamOut)
-                       ),
-                       close(StreamOut)),
-    read_file_to_string(Tmp, Prettied, []),
+    shebang(StreamIn, Line),
+    with_output_to(string(Prettied),
+                   ( current_output(StreamOut),
+                     maplist(writeln(StreamOut), Line),
+                     pprint(StreamIn, StreamOut)
+                   )),
     unparse_text(Prettied, Mapping, Output),
-    writeln(user_error, "---"),
-    write(user_output, Output),
-    writeln(user_error, "---").
+    write(user_output, Output).
