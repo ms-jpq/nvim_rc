@@ -277,16 +277,25 @@ pprint(StreamIn, StreamOut) :-
     append(ParsedTerm, ParsedComments, Rows),
     sort(1, @>=, Rows, Sorted),
     nl(StreamOut),
-    nl(user_error),
-    maplist(writeln(user_error), Sorted),
     pprint_rows("", Sorted, Adjusted),
     reverse(Adjusted, Lines),
     maplist(writeln(StreamOut), Lines),
     pprint(StreamIn, StreamOut).
 
+not_empty(Line) :-
+    normalize_space(string(Stripped), Line),
+    dif(Stripped, "").
+
 main(_Argv) :-
+    with_output_to(string(NL),
+                   ( current_output(Stream),
+                     nl(Stream)
+                   )),
     parse_text(user_input, Mapping, Preprocessed),
-    open_string(Preprocessed, StreamIn),
+    string_lines(Preprocessed, Lines),
+    partition(not_empty, Lines, NonEmpty, _),
+    atomic_list_concat(NonEmpty, NL, Joined),
+    open_string(Joined, StreamIn),
     shebang(StreamIn, Line),
     with_output_to(string(Prettied),
                    ( current_output(StreamOut),
