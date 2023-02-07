@@ -171,14 +171,20 @@ p_comment_line_inner(Prefix) -->
     }.
 
 p_comment_line_inner(Prefix) -->
-    `/*`,
-    { =(Prefix, `/*`)
-    }.
-
-p_comment_line_inner(Prefix) -->
     [0'*, X],
     { maplist(dif(X), `/ `),
       =(Prefix, [0' , 0'*, 0' , X])
+    }.
+
+p_comment_line_inner(Prefix) -->
+    [0'%, X],
+    { dif(X, 0' ),
+      =(Prefix, [0'%, 0' , X])
+    }.
+
+p_comment_line_inner(Prefix) -->
+    `/*`,
+    { =(Prefix, `/*`)
     }.
 
 p_comment_line_inner(Prefix) -->
@@ -187,20 +193,14 @@ p_comment_line_inner(Prefix) -->
     }.
 
 p_comment_line_inner(Prefix) -->
-    [X],
-    { maplist(dif(X), `%*`),
-      =(Prefix, [0' , 0'*, 0' , X])
-    }.
-
-p_comment_line_inner(Prefix) -->
     `*/`,
     { =(Prefix, ` */`)
     }.
 
 p_comment_line_inner(Prefix) -->
-    [0'%, X],
-    { dif(X, 0' ),
-      =(Prefix, [0'%, 0' , X])
+    [X],
+    { maplist(dif(X), `%*`),
+      =(Prefix, [0' , 0'*, 0' , X])
     }.
 
 p_comment_line_inner([]) -->
@@ -220,9 +220,9 @@ p_comment_pos(-1, -1, _Lo, 0).
 p_comment_pos(L1, H1, _Lo, Delta) :-
     is(Delta, +(-(H1, L1), 1)).
 
-p_comments(_, _, _, [], []).
+p_comments(_, _, [], []).
 
-p_comments(Stripped, Floor, -(Seen1, L1, H1), [-(Position, Comment)|Comments], [-([Row, 0, Hi], Lines, comment(_))|LS]) :-
+p_comments(&(Stripped, Floor), #(Seen1, L1, H1), [-(Position, Comment)|Comments], [-([Row, 0, Hi], Lines, comment(_))|LS]) :-
     string_lines(Comment, CommentLines),
     maplist(p_comment_line, CommentLines, Lines),
     stream_position_data(line_count, Position, L),
@@ -232,9 +232,8 @@ p_comments(Stripped, Floor, -(Seen1, L1, H1), [-(Position, Comment)|Comments], [
     p_comment_pos(L1, H1, Lo, Delta),
     is(Seen2, -(Seen1, Delta)),
     is(Row, +(Seen2, Lo)),
-    p_comments(Stripped,
-               Floor,
-               -(Seen2, Lo, Hi),
+    p_comments(&(Stripped, Floor),
+               #(Seen2, Lo, Hi),
                Comments,
                LS).
 
@@ -287,9 +286,8 @@ pprint(StreamIn, StreamOut, Stripped) :-
               ]),
     stream_position_data(line_count, Position, Row),
     p_term(Term, Names, ParsedTerm),
-    p_comments(Stripped,
-               Row,
-               -(0, -1, -1),
+    p_comments(&(Stripped, Row),
+               #(0, -1, -1),
                Comments,
                ParsedComments),
     append(ParsedTerm, ParsedComments, Rows),
