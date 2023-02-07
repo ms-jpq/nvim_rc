@@ -145,35 +145,79 @@ shebang(Stream, [Line]) :-
 
 shebang(_, []).
 
-p_comment_line_inner(Line, Parsed) :-
-    sub_string(Line, 0, 1, _, "*"),
-    string_concat(" ", Line, Parsed).
+p_comment_line_inner(Prefix) -->
+    [ 0'/,
+      0'*,
+      X
+    ],
+    { maplist(dif(X), `/ `),
+      =(Prefix, [0'/, 0'*, 0' , X])
+    }.
 
-p_comment_line_inner(Line, Line).
+p_comment_line_inner(Prefix) -->
+    `/*`,
+    { =(Prefix, `/*`)
+    }.
+
+p_comment_line_inner(Prefix) -->
+    [0'*, X],
+    { maplist(dif(X), `/ `),
+      =(Prefix, [0' , 0'*, 0' , X])
+    }.
+
+p_comment_line_inner(Prefix) -->
+    `*`,
+    { =(Prefix, ` *`)
+    }.
+
+p_comment_line_inner(Prefix) -->
+    [X],
+    { maplist(dif(X), `%*`),
+      =(Prefix, [0' , 0'*, 0' , X])
+    }.
+
+p_comment_line_inner(Prefix) -->
+    `*/`,
+    { =(Prefix, ` */`)
+    }.
+
+p_comment_line_inner(Prefix) -->
+    [0'%, X],
+    { dif(X, 0' ),
+      =(Prefix, [0'%, 0' , X])
+    }.
+
+p_comment_line_inner([]) -->
+    [].
 
 p_comment_line(Line, Parsed) :-
     normalize_space(string(NoSpaces), Line),
-    p_comment_line_inner(NoSpaces, Parsed).
+    string_codes(NoSpaces, Codes),
+    phrase(p_comment_line_inner(Head),
+           Codes,
+           Tail),
+    append(Head, Tail, ParsedCodes),
+    string_codes(Parsed, ParsedCodes).
 
-p_comment_pos(Row, H1, Lo, Row) :-
-    is(H1, -(Lo, 1)).
+p_comment_pos(-1, -1, _Lo, 0).
 
-p_comment_pos(_, _, Row, Row).
+p_comment_pos(L1, H1, _Lo, Delta) :-
+    is(Delta, +(-(H1, L1), 1)).
 
 p_comments(_, _, [], []).
 
-p_comments(Seen, -(L1, H1), [-(Position, Comment)|Comments], [-([Row, 0, Hi], Lines, comment([Seen, Lo, Hi, Row, H2]))|LS]) :-
-    stream_position_data(line_count, Position, Lo),
+p_comments(Floor, -(Seen1, L1, H1), [-(Position, Comment)|Comments], [-([Row, 0, Hi], Lines, comment(_))|LS]) :-
     string_lines(Comment, CommentLines),
     maplist(p_comment_line, CommentLines, Lines),
+    stream_position_data(line_count, Position, L),
     length(Lines, Len),
+    is(Lo, -(L, Floor)),
     is(Hi, -(+(Lo, Len), 1)),
-    p_comment_pos(L1, H1, Lo, R),
-    is(Row, -(R, Seen)),
-    is(S2, +(Seen, Len)),
-    is(H2, +(Row, -(Len, 1))),
-    p_comments(S2,
-               -(Row, H2),
+    p_comment_pos(L1, H1, Lo, Delta),
+    is(Seen2, -(Seen1, Delta)),
+    is(Row, +(Seen2, Lo)),
+    p_comments(Floor,
+               -(Seen2, Lo, Hi),
                Comments,
                LS).
 
@@ -190,7 +234,7 @@ p_terms_inner(Row, [Line|Lines], [-([Row, 1, 0], Line, term(Indent))|LS]) :-
 
 p_terms_inner(_, [], []).
 
-p_term(Term, Names, Row, Parsed) :-
+p_term(Term, Names, Parsed) :-
     with_output_to(string(String),
                    ( current_output(Stream),
                      portray_clause(Stream,
@@ -201,7 +245,7 @@ p_term(Term, Names, Row, Parsed) :-
                                     ])
                    )),
     string_lines(String, Lines),
-    p_terms_inner(Row, Lines, Parsed).
+    p_terms_inner(0, Lines, Parsed).
 
 pprint_rows(Indent, [-(_, Lines, comment(_))|LS], Adjusted) :-
     reverse(Lines, RL),
@@ -225,9 +269,9 @@ pprint(StreamIn, StreamOut) :-
                 comments(Comments)
               ]),
     stream_position_data(line_count, Position, Row),
-    p_term(Term, Names, Row, ParsedTerm),
-    p_comments(0,
-               -(Row, Row),
+    p_term(Term, Names, ParsedTerm),
+    p_comments(Row,
+               -(0, -1, -1),
                Comments,
                ParsedComments),
     append(ParsedTerm, ParsedComments, Rows),
