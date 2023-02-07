@@ -17,9 +17,25 @@ uuid_padded(String, Placeholder) :-
     atomics_to_string([Prefix|PS], "", Holder),
     atom_string(Placeholder, Holder).
 
-p_other([str("0'\\\\", Placeholder)|XS]) -->
-    `0'\\\\`,
+p_other([str("````", Placeholder)|XS]) -->
+    `\`\`\`\``,
     { uuid_padded("", Placeholder)
+    },
+    p_other(XS).
+
+p_other([str(String, Placeholder)|XS]) -->
+    [ 0'0,
+      0'',
+      0'\\,
+      X
+    ],
+    { string_codes(String,
+                   [ 0'0,
+                     0'',
+                     0'\\,
+                     X
+                   ]),
+      uuid_padded(String, Placeholder)
     },
     p_other(XS).
 
@@ -204,9 +220,9 @@ p_comment_pos(-1, -1, _Lo, 0).
 p_comment_pos(L1, H1, _Lo, Delta) :-
     is(Delta, +(-(H1, L1), 1)).
 
-p_comments(_, _, [], []).
+p_comments(_, _, _, [], []).
 
-p_comments(Floor, -(Seen1, L1, H1), [-(Position, Comment)|Comments], [-([Row, 0, Hi], Lines, comment(_))|LS]) :-
+p_comments(Stripped, Floor, -(Seen1, L1, H1), [-(Position, Comment)|Comments], [-([Row, 0, Hi], Lines, comment(_))|LS]) :-
     string_lines(Comment, CommentLines),
     maplist(p_comment_line, CommentLines, Lines),
     stream_position_data(line_count, Position, L),
@@ -216,7 +232,8 @@ p_comments(Floor, -(Seen1, L1, H1), [-(Position, Comment)|Comments], [-([Row, 0,
     p_comment_pos(L1, H1, Lo, Delta),
     is(Seen2, -(Seen1, Delta)),
     is(Row, +(Seen2, Lo)),
-    p_comments(Floor,
+    p_comments(Stripped,
+               Floor,
                -(Seen2, Lo, Hi),
                Comments,
                LS).
@@ -258,10 +275,10 @@ pprint_rows(_, [-(_, Line, term(Indent))|LS], [Line|AS]) :-
 
 pprint_rows(_, [], []).
 
-pprint(StreamIn, _) :-
+pprint(StreamIn, _, _) :-
     at_end_of_stream(StreamIn).
 
-pprint(StreamIn, StreamOut) :-
+pprint(StreamIn, StreamOut, Stripped) :-
     read_term(StreamIn,
               Term,
               [ variable_names(Names),
@@ -270,7 +287,8 @@ pprint(StreamIn, StreamOut) :-
               ]),
     stream_position_data(line_count, Position, Row),
     p_term(Term, Names, ParsedTerm),
-    p_comments(Row,
+    p_comments(Stripped,
+               Row,
                -(0, -1, -1),
                Comments,
                ParsedComments),
@@ -280,11 +298,17 @@ pprint(StreamIn, StreamOut) :-
     pprint_rows("", Sorted, Adjusted),
     reverse(Adjusted, Lines),
     maplist(writeln(StreamOut), Lines),
-    pprint(StreamIn, StreamOut).
+    pprint(StreamIn, StreamOut, Stripped).
 
-not_empty(Line) :-
+non_empty([Line|Lines], [Line|LS], [Stripped|SS]) :-
     normalize_space(string(Stripped), Line),
-    dif(Stripped, "").
+    dif(Stripped, ""),
+    non_empty(Lines, LS, SS).
+
+non_empty([_|Lines], LS, SS) :-
+    non_empty(Lines, LS, SS).
+
+non_empty([], [], []).
 
 main(_Argv) :-
     with_output_to(string(NL),
@@ -293,14 +317,16 @@ main(_Argv) :-
                    )),
     parse_text(user_input, Mapping, Preprocessed),
     string_lines(Preprocessed, Lines),
-    partition(not_empty, Lines, NonEmpty, _),
+    non_empty(Lines, NonEmpty, Stripped),
     atomic_list_concat(NonEmpty, NL, Joined),
     open_string(Joined, StreamIn),
     shebang(StreamIn, Line),
     with_output_to(string(Prettied),
                    ( current_output(StreamOut),
                      maplist(writeln(StreamOut), Line),
-                     pprint(StreamIn, StreamOut)
+                     pprint(StreamIn,
+                            StreamOut,
+                            Stripped)
                    )),
     unparse_text(Prettied, Mapping, Output),
     write(user_output, Output).
