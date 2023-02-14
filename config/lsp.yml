@@ -355,7 +355,7 @@
     npm:
       - sql-language-server
 
-- server: sumneko_lua
+- server: lua_ls
   bin: lua-language-server
   settings:
     Lua:
@@ -368,8 +368,8 @@
         - python3
         - gcc
       env:
-        URI: https://github.com/sumneko/lua-language-server
-        TAG: "3.6.4"
+        URI: https://github.com/LuaLS/lua-language-server
+        TAG: "3.6.11"
       file: dl/sumneko_lua.sh
 
 - server: ansiblels
