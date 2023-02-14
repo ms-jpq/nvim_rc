@@ -6,18 +6,20 @@ shopt -s globstar failglob
 
 case "$OSTYPE" in
 darwin*)
-  URI="$DARWIN_URI"
+  BASENAME="$DARWIN"
   ;;
 linux*)
-  URI="$LINUX_URI"
+  BASENAME="$LINUX"
   ;;
 *)
-  URI="$NT_URI"
+  BASENAME="$NT"
   BIN="$BIN.exe"
   ;;
 esac
 
 TMP="$(mktemp --directory)"
+VERSION="$(curl --no-progress-meter --location "$BASE_URI" | htmlq --attribute href -- 'body > table > tbody > tr:nth-last-child(2) > td > a')"
+URI="$BASE_URI/$VERSION/$BASENAME"
 get -- "$URI" | unpack --dest "$TMP"
 mv -- "$TMP/lemminx"* "$BIN"
 chmod +x -- "$BIN"
