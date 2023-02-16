@@ -44,7 +44,7 @@ jobs:
   #         - macos-latest
   #         - windows-latest
 
-  #   runs-on: $${{ matrix.platform }}
+  #   runs-on: ${{ matrix.platform }}
 
   #   steps:
   #     - name: Checkout
@@ -52,4 +52,4 @@ jobs:
 
   #     - name: Install
   #       run: |-
-  #         python -m go
+  #         ./install.sh
