@@ -211,6 +211,7 @@ def _gem() -> Iterator[Awaitable[_SortOfMonoid]]:
                 "install",
                 "--install-dir",
                 _GEMS,
+                "--no-document",
                 *specs,
                 check_returncode=set(),
             )
