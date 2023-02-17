@@ -89,6 +89,7 @@
 - bin: rubocop
   type: stream
   args:
+    - --no-color
     - --
     - ${tmpname}
   filetypes:

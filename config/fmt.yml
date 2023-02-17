@@ -148,6 +148,7 @@
   type: fs
   args:
     - --fail-level=fatal
+    - --no-color
     - --autocorrect
     - --
     - ${tmpname}
