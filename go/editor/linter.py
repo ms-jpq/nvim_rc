@@ -4,7 +4,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from fnmatch import fnmatch
 from itertools import chain
-from os import close
+from os import close, write
+from os.path import normpath
 from pathlib import Path, PurePath
 from shlex import join
 from shutil import which
@@ -64,10 +65,14 @@ def arg_subst(args: Iterable[str], ctx: BufContext, tmp_name: str) -> Sequence[s
 
 
 @contextmanager
-def make_temp(path: Path) -> Iterator[Path]:
+def make_temp(path: Path, text: bytes) -> Iterator[Path]:
     prefix, suffix = f"{path.stem}_", f"_{path.suffix}"
-    fd, temp = mkstemp(prefix=prefix, suffix=suffix)
-    close(fd)
+    fd, temp = mkstemp(dir=path.parent, prefix=prefix, suffix=suffix)
+    try:
+        write(fd, text)
+    finally:
+        close(fd)
+
     new_path = Path(temp)
     try:
         yield new_path
@@ -86,7 +91,7 @@ async def _linter_output(
     arg_info = join(chain((attr.bin,), attr.args))
 
     try:
-        args = arg_subst(attr.args, ctx=ctx, tmp_name=str(temp))
+        args = arg_subst(attr.args, ctx=ctx, tmp_name=normpath(temp))
     except ParseError:
         return LANG("grammar error", text=arg_info)
     else:
@@ -118,8 +123,7 @@ async def _linter_output(
 async def _run(ctx: BufContext, attrs: Iterable[LinterAttrs], cwd: PurePath) -> None:
     body = encode(ctx.linefeed.join(ctx.lines))
     path = Path(ctx.filename)
-    with make_temp(path) as temp:
-        temp.write_bytes(body)
+    with make_temp(path, text=body) as temp:
         outputs = await gather(
             *(
                 _linter_output(attr, ctx=ctx, cwd=cwd, body=body, temp=temp)

@@ -61,8 +61,7 @@ async def _fmt_output(
 async def _run(ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: PurePath) -> None:
     body = encode(ctx.linefeed.join(ctx.lines))
     path = Path(ctx.filename)
-    with make_temp(path) as temp:
-        temp.write_bytes(body)
+    with make_temp(path, text=body) as temp:
         errs = [
             err
             async for err in aiterify(
