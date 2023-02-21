@@ -1,8 +1,4 @@
-#!/usr/bin/env -S -- bash
-
-set -Eeu
-set -o pipefail
-shopt -s globstar failglob
+#!/usr/bin/env -S -- bash -Eeuo pipefail -O failglob -O globstar
 
 TMP="$(mktemp --directory)"
 get -- "$URI" | unpack --dest "$TMP"

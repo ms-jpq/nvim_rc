@@ -1,10 +1,5 @@
-#!/usr/bin/env -S -- bash
+#!/usr/bin/env -S -- bash -Eeuo pipefail -O failglob -O globstar
 #=
-set -Eeu
-set -o pipefail
-shopt -s globstar failglob
-
-
 if [[ "$OSTYPE" =~ 'msys' ]]
 then
   BIN="$BIN.jl"
