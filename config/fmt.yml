@@ -45,6 +45,15 @@
   filetypes:
     - prolog
 
+- bin: systemd-fmt
+  type: stream
+  args: []
+  filetypes:
+    - systemd
+  install:
+    script:
+      file: dl/systemd-fmt.sh
+
 - bin: perltidy
   args:
     - --indent-columns=2
