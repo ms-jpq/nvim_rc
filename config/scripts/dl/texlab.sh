@@ -1,4 +1,4 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O failglob -O globstar
 
 T_BIN="$(dirname -- "$BIN")/tectonic"
 

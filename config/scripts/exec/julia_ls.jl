@@ -1,9 +1,5 @@
-#!/usr/bin/env -S -- bash
+#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O failglob -O globstar
 #=
-set -Eeu
-set -o pipefail
-shopt -s globstar failglob
-
 LIB="$(dirname -- "$0")/../lib/julia-ls"
 export JULIA_DEPOT_PATH="$LIB/depot"
 exec -- julia --project="$LIB" "$0" "$@"
