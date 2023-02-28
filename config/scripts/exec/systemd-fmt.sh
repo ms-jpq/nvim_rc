@@ -12,23 +12,47 @@ for LINE in "${LINES[@]}"; do
   fi
 done
 
+SKIP=0
 for LINE in "${LINES[@]}"; do
-  if [[ "$LINE" =~ ^[[:space:]]*#[[:space:]]*(.*)$ ]]; then
+  if ((SKIP)); then
+
+    case "$LINE" in
+    *\\\\)
+      SKIP=0
+      ;;
+    *\\)
+      SKIP=1
+      ;;
+    *)
+      SKIP=0
+      ;;
+    esac
+
+    printf -- '%s\n' "$LINE"
+  elif [[ "$LINE" =~ ^[[:space:]]*#[[:space:]]*(.*)$ ]]; then
     printf -- '%s\n' "# ${BASH_REMATCH[1]}"
   elif [[ "$LINE" =~ ^[[:space:]]*([^[:space:]]+)[[:space:]]*=[[:space:]]*(.*)[[:space:]]*$ ]]; then
     L="${#BASH_REMATCH[1]}"
-    M=$((MAX - L))
+    RHS="${BASH_REMATCH[2]}"
 
+    case "$RHS" in
+    *\\\\) ;;
+    *\\)
+      SKIP=1
+      ;;
+    esac
+
+    M=$((MAX - L))
     P=" "
     for ((i = 0; i < M; i++)); do
       P="$P "
     done
 
-    printf -- '%s\n' "${BASH_REMATCH[1]}${P}= ${BASH_REMATCH[2]}"
+    printf -- '%s\n' "${BASH_REMATCH[1]}${P}= ${RHS}"
   elif [[ "$LINE" =~ ^[[:space:]]*([^[:space:]]*)[[:space:]]*$ ]]; then
     printf -- '%s\n' "${BASH_REMATCH[1]}"
   else
-    printf -- '%s\n' "unexpected --> $LINE" 2>&1
+    printf -- '%s\n' "unexpected --> $LINE" >&2
     exit 1
   fi
 done
