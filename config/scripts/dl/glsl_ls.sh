@@ -16,7 +16,7 @@ fi
 
 if [[ -d "$REPO" ]]; then
   cd -- "$REPO" 
-  OPTS=(--recurse-submodules --no-tags)
+  OPTS=(--recurse-submodules --no-tags --force)
   git pull "${OPTS[@]}"
 else
   OPTS=(--depth=1 --recurse-submodules --shallow-submodules)
