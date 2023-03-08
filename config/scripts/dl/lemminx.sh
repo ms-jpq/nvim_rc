@@ -14,7 +14,7 @@ linux*)
 esac
 
 TMP="$(mktemp --directory)"
-VERSION="$(curl --no-progress-meter --location "$BASE_URI" | htmlq --attribute href -- 'body > table > tbody > tr:nth-last-child(2) > td > a')"
+VERSION="$(curl --fail --location --no-progress-meter --max-time 60 -- "$BASE_URI" | htmlq --attribute href -- 'body > table > tbody > tr:nth-last-child(2) > td > a')"
 URI="$BASE_URI/$VERSION/$BASENAME"
 get -- "$URI" | unpack --dest "$TMP"
 mv -- "$TMP/lemminx"* "$BIN"
