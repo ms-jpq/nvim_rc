@@ -145,6 +145,8 @@
     - format
     - --
     - ${tmpname}
+  env:
+    NO_COLOR: "1"
   type: stream
   filetypes:
     - rbs

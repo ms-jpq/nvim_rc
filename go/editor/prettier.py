@@ -38,6 +38,7 @@ async def _fmt_output(
                 proc = await call(
                     attr.bin,
                     *args,
+                    env=attr.env,
                     stdin=stdin,
                     cwd=cwd,
                     check_returncode=set(),

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import AbstractSet, Sequence
+from typing import AbstractSet, Sequence, Mapping, Optional
 
 from std2.pickle.decoder import new_decoder
 from yaml import safe_load
@@ -21,6 +21,7 @@ class FmtAttrs:
     type: FmtType
     filetypes: AbstractSet[str]
     args: Sequence[str] = ()
+    env: Optional[Mapping[str, str]] = None
     exit_code: int = 0
     install: InstallSpec = InstallSpec()
 
