@@ -50,9 +50,6 @@
   args: []
   filetypes:
     - systemd
-  install:
-    script:
-      file: dl/systemd-fmt.sh
 
 - bin: perltidy
   args:
