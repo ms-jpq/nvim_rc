@@ -42,13 +42,17 @@ for LINE in "${LINES[@]}"; do
       ;;
     esac
 
+    if [[ -n "$RHS" ]]; then
+      RHS=" $RHS"
+    fi
+
     M=$((MAX - L))
     P=" "
     for ((i = 0; i < M; i++)); do
       P="$P "
     done
 
-    printf -- '%s\n' "${BASH_REMATCH[1]}${P}= ${RHS}"
+    printf -- '%s\n' "${BASH_REMATCH[1]}${P}=${RHS}"
   elif [[ "$LINE" =~ ^[[:space:]]*([^[:space:]]*)[[:space:]]*$ ]]; then
     printf -- '%s\n' "${BASH_REMATCH[1]}"
   else
