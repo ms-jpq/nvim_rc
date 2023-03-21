@@ -54,9 +54,9 @@
   install:
     script:
       env:
-        DARWIN_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-15.2.0-mac-x64.tar.gz
-        LINUX_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-15.2.0-linux-x64.tar.gz
-        NT_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-15.2.0-windows-x64.zip
+        DARWIN_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-16.0.0-mac-x64.tar.gz
+        LINUX_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-16.0.0-linux-x64.tar.gz
+        NT_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-16.0.0-windows-x64.zip
       file: dl/ltex.sh
 
 - server: texlab
@@ -366,20 +366,20 @@
         version: "Lua 5.1"
   install:
     script:
+      env:
+        TAG: "3.6.11"
+        URI: https://github.com/LuaLS/lua-language-server
+      file: dl/sumneko_lua.sh
       required:
         - git
         - python3
         - gcc
-      env:
-        URI: https://github.com/LuaLS/lua-language-server
-        TAG: "3.6.11"
-      file: dl/sumneko_lua.sh
 
-- server: ansiblels
-  bin: ansible-language-server
+- bin: ansible-language-server
   install:
     npm:
       - ansible-language-server
+  server: ansiblels
 
 - server: glslls
   bin: glslls

@@ -35,6 +35,7 @@ def main() -> None:
     template = Template(_STUB.lstrip())
     bins = src / "bin"
     win = name == "nt"
+    tmp = Path(__file__).parent.parent.parent / "tmp" / "tmp"
 
     for path in (bins, dst):
         path.mkdir(parents=True, exist_ok=True)
@@ -45,7 +46,9 @@ def main() -> None:
             GEM_PATH=quote(normcase(src)),
             BIN=quote(normcase(path)),
         )
-        with NamedTemporaryFile(mode="w", encoding="utf-8", delete=False) as fd:
+        with NamedTemporaryFile(
+            mode="w", encoding="utf-8", dir=tmp, delete=False
+        ) as fd:
             fd.write(stub)
 
         Path(fd.name).replace(bin)
