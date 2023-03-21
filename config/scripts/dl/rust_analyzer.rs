@@ -1,17 +1,32 @@
 #!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O failglob -O globstar
-//usr/bin/true; rustc --edition=2021 -o "${TMPFILE:="$(mktemp)"}" -- "$0"; exec -- "$TMPFILE" "$@"
+//usr/bin/true; rustc --edition=2021 -o "${TMPFILE:="$(mktemp)"}" -- "$0"; exec -- "$TMPFILE" "$0" "$@"
 
 #![deny(clippy::all, clippy::cargo, clippy::pedantic)]
 
 use std::{
-    env::{temp_dir, var_os},
+    env::{args, var_os},
     error::Error,
     fs::{create_dir_all, read_dir, rename},
+    path::PathBuf,
     process::{Command, Stdio},
 };
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let tmp = temp_dir().join("rust-analyzer-dl");
+    let mut argv = args();
+    argv.next();
+    let arg0 = argv.next().ok_or(format!("{}", line!()))?;
+    let tmp = PathBuf::from(arg0)
+        .parent()
+        .ok_or(format!("{}", line!()))?
+        .parent()
+        .ok_or(format!("{}", line!()))?
+        .parent()
+        .ok_or(format!("{}", line!()))?
+        .parent()
+        .ok_or(format!("{}", line!()))?
+        .join("tmp")
+        .join("tmp")
+        .join("rust-analyzer-dl");
     create_dir_all(&tmp)?;
 
     #[cfg(target_os = "macos")]
@@ -33,6 +48,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .arg(&tmp)
         .stdin(proc.stdout.take().ok_or(format!("{}", line!()))?)
         .status()?;
+
     assert!(proc.wait()?.success());
     assert!(status.success());
 
