@@ -3,6 +3,7 @@
   vim.filetype.add(
     {
       extension = {
+        container = systemd,
         netdev = systemd,
         netdev = systemd,
         network = systemd,
