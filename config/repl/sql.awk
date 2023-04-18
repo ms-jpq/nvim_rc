@@ -3,6 +3,9 @@ BEGIN {
   ORS = " "
   COMMENTED = 1
   SKIPPED = 0
+
+  # <ctrl-c>
+  print("\x03")
 }
 
 {
