@@ -7,5 +7,5 @@ $0 { print }
 
 END {
   # <ctrl-q>
-  printf("%s", "\x11")
+  print("\x11")
 }
