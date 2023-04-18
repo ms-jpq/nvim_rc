@@ -9,17 +9,17 @@ BEGIN {
   gsub(/^[[:space:]]+|[[:space:]]+$/, "")
   COMMENTING = (/^--.*/)
 
-  if (COMMENTING && !COMMENTED) { printf("%s", "\n") }
+  if (COMMENTING && !COMMENTED) { print "" }
 
   if (!$0) { SKIPPED = 1 }
   else {
-    if (SKIPPED) { printf("%s", "\n") }
+    if (SKIPPED) { print "" }
 
     SKIPPED = 0
 
     print
 
-    if (COMMENTING) { printf("%s", "\n") }
+    if (COMMENTING) { print "" }
   }
 
   COMMENTED = COMMENTING
