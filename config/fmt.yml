@@ -267,7 +267,7 @@
     # - --uppercase
     # - --lines-between-queries=2
     # - --indent=${tabsize}
-    - --language=mysql
+    - --language=postgresql
     - --output=${tmpname}
     - --
     - ${tmpname}
