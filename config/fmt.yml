@@ -1,115 +1,114 @@
 ---
-- bin: sortd
-  args:
+- args:
     - ${filetype}
-  type: stream
+  bin: sortd
   filetypes:
     - cfg
     - json
   install:
     pip:
       - sortd
+  type: stream
 
-- bin: taplo
-  args:
+- args:
     - format
     - --option=align_entries=true
     - --option=array_trailing_comma=true
     - --option=reorder_keys=true
     - --
     - ${tmpname}
-  type: fs
+  bin: taplo
   filetypes:
     - toml
+  type: fs
 
-- bin: shfmt
-  type: stream
-  args:
+- args:
     - --indent=${tabsize}
+  bin: shfmt
   filetypes:
     - sh
     - zsh
   install:
     go:
       - mvdan.cc/sh/v3/cmd/shfmt@latest
-
-- bin: pwsh-fmt.ps1
-  args: []
   type: stream
+
+- args: []
+  bin: pwsh-fmt.ps1
   filetypes:
     - ps1
-
-- bin: prolog-fmt
   type: stream
-  args: []
+
+- args: []
+  bin: prolog-fmt
   filetypes:
     - prolog
-
-- bin: systemd-fmt
   type: stream
-  args: []
+
+- args: []
+  bin: systemd-fmt
   filetypes:
     - systemd
-
-- bin: perltidy
-  args:
-    - --indent-columns=2
   type: stream
+
+- args:
+    - --indent-columns=2
+  bin: perltidy
   filetypes:
     - perl
+  type: stream
 
-- bin: dockerfile-utils
-  args:
+- args:
     - format
     - --spaces
     - ${tabsize}
     - ${tmpname}
-  type: stream
+  bin: dockerfile-utils
   filetypes:
     - dockerfile
+  type: stream
 
-- bin: isort
-  args:
+- args:
     - --profile=black
     - --filename=${filename}
     - --
     - "-"
-  type: stream
+  bin: isort
   filetypes:
     - python
   install:
     pip:
       - isort
+  type: stream
 
-- bin: black
-  args:
+- args:
     - --stdin-filename=${filename}
     - --
     - "-"
-  type: stream
+  bin: black
   filetypes:
     - python
   install:
     pip:
       - black
+  type: stream
 
-- bin: csscomb
-  args:
+- args:
     - --
     - ${tmpname}
-  type: stream
+  bin: csscomb
   filetypes:
     - css
   install:
     npm:
       - csscomb
+  type: stream
 
-- bin: prettier
-  args:
+- args:
     - --stdin-filepath=${filename}
     - --tab-width=${tabsize}
     - --
-  type: stream
+  bin: prettier
   filetypes:
     - awk
     - css
@@ -136,134 +135,134 @@
       - prettier-plugin-java
       - prettier-plugin-organize-imports
       # - prettier-plugin-tailwindcss
+  type: stream
 
-- bin: stree
-  args:
+- args:
     - format
     - --
     - ${tmpname}
+  bin: stree
   env:
     NO_COLOR: "1"
-  type: stream
   filetypes:
     - rbs
     - ruby
   install:
     gem:
       - syntax_tree
+  type: stream
 
-- bin: rubocop
-  type: fs
-  args:
+- args:
     - --fail-level=fatal
     - --no-color
     - --autocorrect
     - --
     - ${tmpname}
+  bin: rubocop
   filetypes:
     - ruby
   install:
     gem:
       - rubocop
+  type: fs
 
-- bin: luafmt
-  args:
+- args:
     - --line-width=80
     - --indent-count=${tabsize}
     - --write-mode=replace
     - --
     - ${tmpname}
-  type: fs
+  bin: luafmt
   filetypes:
     - lua
   install:
     npm:
       - lua-fmt
+  type: fs
 
-- bin: rustfmt
-  args:
+- args:
     - --edition=2021
-  type: stream
+  bin: rustfmt
   filetypes:
     - rust
+  type: stream
 
-- bin: gofmt
-  args:
+- args:
     - -w
     - --
     - ${tmpname}
-  type: fs
+  bin: gofmt
   filetypes:
     - go
+  type: fs
 
-- bin: clang-format
-  args: []
-  type: stream
+- args: []
+  bin: clang-format
   filetypes:
     - c
     - cpp
+  type: stream
 
-- bin: latexindent
-  args:
+- args:
     - --overwrite
     - --
     - ${tmpname}
-  type: fs
+  bin: latexindent
   filetypes:
     - plaintex
     - tex
   install:
     script:
-      required:
-        - perl
-        - cpanm
       env:
         URI: https://github.com/cmhughes/latexindent.pl/archive/V3.11.tar.gz
       file: dl/latex_format.pl
-
-- bin: fantomas
+      required:
+        - perl
+        - cpanm
   type: fs
-  args:
+
+- args:
     - --
     - ${tmpname}
+  bin: fantomas
   filetypes:
     - fsharp
   install:
     script:
+      file: dl/fantomas.fsx
       required:
         - dotnet
-      file: dl/fantomas.fsx
-
-- bin: ktfmt
   type: fs
-  args:
+
+- args:
     - --
     - ${tmpname}
+  bin: ktfmt
   filetypes:
     - kotlin
   install:
     script:
-      required:
-        - kotlinc
       env:
         URI: https://repo1.maven.org/maven2/com/facebook/ktfmt
       file: dl/ktfmt.kts
-
-- bin: r-fmt
+      required:
+        - kotlinc
   type: fs
-  args:
+
+- args:
     - ${tmpname}
+  bin: r-fmt
   filetypes:
     - r
   install:
     script:
+      file: dl/rfmt.r
       required:
         - Rscript
         - R
-      file: dl/rfmt.r
+  type: fs
 
-- bin: sql-formatter
-  args:
+- args:
     # - --uppercase
     # - --lines-between-queries=2
     # - --indent=${tabsize}
@@ -271,9 +270,10 @@
     - --output=${tmpname}
     - --
     - ${tmpname}
-  type: fs
+  bin: sql-formatter
   filetypes:
     - sql
   install:
     npm:
       - sql-formatter
+  type: fs

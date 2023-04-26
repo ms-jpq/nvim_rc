@@ -1,6 +1,5 @@
 ---
 - git:
-    uri: https://github.com/nvim-treesitter/nvim-treesitter
     call:
       - nvim
       - --headless
@@ -10,6 +9,9 @@
       - +TSInstallSync all
       - +TSUpdateSync
       - +quitall
+    uri: https://github.com/nvim-treesitter/nvim-treesitter
+  lua: |-
+    require("nvim-treesitter.configs").setup(vim.g.ts_opts)
   vals:
     ts_opts:
       highlight:
@@ -18,32 +20,22 @@
         select:
           enable: True
           keymaps:
-            is: "@statement.outer"
-            as: "@statement.outer"
-
-            ib: "@block.inner"
-            ab: "@block.outer"
-
-            ia: "@parameter.inner"
             aa: "@parameter.outer"
-
-            ic: "@conditional.inner"
+            ab: "@block.outer"
             ac: "@conditional.outer"
-
-            iC: "@class.inner"
             aC: "@class.outer"
-
-            if: "@function.inner"
             af: "@function.outer"
-
-            iF: "@call.inner"
             aF: "@call.outer"
-
-            iL: "@loop.inner"
             aL: "@loop.outer"
-
-  lua: |-
-    require("nvim-treesitter.configs").setup(vim.g.ts_opts)
+            as: "@statement.outer"
+            ia: "@parameter.inner"
+            ib: "@block.inner"
+            ic: "@conditional.inner"
+            iC: "@class.inner"
+            if: "@function.inner"
+            iF: "@call.inner"
+            iL: "@loop.inner"
+            is: "@statement.outer"
 
 - git:
     uri: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
@@ -52,54 +44,55 @@
     uri: https://github.com/neovim/nvim-lspconfig
 
 - git:
-    uri: https://github.com/ms-jpq/chadtree
     call:
       - python3
       - -m
       - chadtree
       - deps
       - --nvim
+    uri: https://github.com/ms-jpq/chadtree
   # vals:
   #   chadtree_settings:
   #     theme.icon_glyph_set: ascii_hollow
   keys:
-    - modes: n
-      maps:
+    - maps:
         "<leader>v": "<cmd>CHADopen<cr>"
+      modes: n
 
 - git:
-    uri: https://github.com/ms-jpq/coq_nvim
     call:
       - python3
       - -m
       - coq
       - deps
-  vals:
-    coq_settings:
-      auto_start: True
-      clients.snippets.user_path: |-
-        ~/.config/nvim/pack/modules/start/snips
-      keymap:
-        repeat: "<leader>."
-        eval_snips: "<leader>j"
+    uri: https://github.com/ms-jpq/coq_nvim
+  keys:
+    - maps:
+        "<leader>z": "<cmd>COQnow<cr>"
+      modes: n
   lua: |-
     if vim.env.SSH_TTY or vim.env.T9 then
       local cs = vim.g.coq_settings
       cs["clients.tabnine.enabled"] = true
       vim.g.coq_settings = cs
     end
-
-  keys:
-    - modes: n
-      maps:
-        "<leader>z": "<cmd>COQnow<cr>"
+  vals:
+    coq_settings:
+      auto_start: True
+      clients.snippets.user_path: |-
+        ~/.config/nvim/pack/modules/start/snips
+      keymap:
+        eval_snips: "<leader>j"
+        repeat: "<leader>."
 
 - git:
     uri: https://github.com/ms-jpq/coq.thirdparty
+  lua: |-
+    require("coq_3p")(vim.g.COQ3p)
   vals:
     COQ3p:
-      - src: nvimlua
-        short_name: nLUA
+      - short_name: nLUA
+        src: nvimlua
 
       # - src: builtin/ada
       # - src: builtin/c
@@ -111,21 +104,19 @@
       # - src: builtin/php
       # - src: builtin/xml
 
-      - src: copilot
+      - accept_key: <c-f>
         short_name: COP
-        accept_key: <c-f>
+        src: copilot
       - src: repl
-      - src: bc
-        short_name: MATH
-      - src: figlet
-        short_name: BIG
+      - short_name: MATH
+        src: bc
+      - short_name: BIG
+        src: figlet
         trigger: "!big"
       - src: cow
         trigger: "!cow"
       # - src: vimtex
       #   short_name: vTEX
-  lua: |-
-    require("coq_3p")(vim.g.COQ3p)
 
 - git:
     uri: https://github.com/ms-jpq/snips
@@ -141,29 +132,29 @@
 
 - git:
     uri: https://github.com/junegunn/fzf.vim
-  vals:
-    fzf_buffers_jump: True
-    fzf_preview_window: right:wrap
-    fzf_layout:
-      window:
-        width: 0.9
-        height: 0.9
   keys:
-    - modes: n
-      maps:
+    - maps:
+        "<leader>m": "<cmd>Marks<cr>"
         "<leader>o": "<cmd>BLines<cr>"
         "<leader>p": "<cmd>Buffers<cr>"
         "<leader>P": "<cmd>Files<cr>"
-        "<leader>m": "<cmd>Marks<cr>"
-    - modes: n
+      modes: n
+    - maps:
+        "<leader>O": ":Rg "
+      modes: n
       opts:
         silent: False
-      maps:
-        "<leader>O": ":Rg "
   lua: |-
     local fzf_opts = vim.env.FZF_DEFAULT_OPTS or ""
     local new_opts = fzf_opts .. " --no-border"
     vim.env.FZF_DEFAULT_OPTS = new_opts
+  vals:
+    fzf_buffers_jump: True
+    fzf_layout:
+      window:
+        height: 0.9
+        width: 0.9
+    fzf_preview_window: right:wrap
 
 - git:
     uri: https://github.com/EdenEast/nightfox.nvim
@@ -183,23 +174,22 @@
 - git:
     uri: https://github.com/junegunn/vim-easy-align
   keys:
-    - modes: nv
+    - maps:
+        "ga": "<plug>(EasyAlign)"
+      modes: nv
       opts:
         noremap: False
-      maps:
-        "ga": "<plug>(EasyAlign)"
 
 - git:
     uri: https://github.com/tpope/vim-unimpaired
 
 - git:
     uri: https://github.com/lewis6991/gitsigns.nvim
+  lua: |-
+    require('gitsigns').setup(git_opts)
   vals:
     git_opts:
       word_diff: True
-  lua: |-
-    require('gitsigns').setup(git_opts)
-
 # - git:
 #     uri: https://github.com/lervag/vimtex
 #   vals:

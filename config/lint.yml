@@ -1,22 +1,21 @@
 ---
-- bin: vint
-  type: fs
-  args:
+- args:
     - --enable-neovim
     - --style-problem
     - --
     - ${tmpname}
+  bin: vint
   filetypes:
     - vim
   install:
     pip:
       - vim-vint
-
-- bin: shellcheck
   type: fs
-  args:
+
+- args:
     - --
     - ${tmpname}
+  bin: shellcheck
   filetypes:
     - sh
     - zsh
@@ -26,45 +25,45 @@
         DARWIN_URI: https://github.com/koalaman/shellcheck/releases/latest/download/shellcheck-v0.9.0.darwin.x86_64.tar.xz
         LINUX_URI: https://github.com/koalaman/shellcheck/releases/latest/download/shellcheck-v0.9.0.linux.x86_64.tar.xz
       file: dl/shellcheck.sh
+  type: fs
 
-- bin: perlcritic
-  type: stream
-  args:
+- args:
     - --brutal
     - --
+  bin: perlcritic
   filetypes:
     - perl
   install:
     script:
+      file: dl/perlcritic.pl
       required:
         - perl
         - cpanm
-      file: dl/perlcritic.pl
+  type: stream
 
-- bin: pwsh-lint.ps1
-  type: fs
-  args:
+- args:
     - ${tmpname}
+  bin: pwsh-lint.ps1
   filetypes:
     - ps1
-
-- bin: mypy
   type: fs
-  args:
+
+- args:
     - --
     - ${tmpname}
+  bin: mypy
   filetypes:
     - python
   install:
     pip:
       - mypy
-
-- bin: hadolint
   type: fs
-  args:
+
+- args:
     - --no-color
     - --
     - ${tmpname}
+  bin: hadolint
   filetypes:
     - dockerfile
   install:
@@ -74,68 +73,69 @@
         LINUX_URI: https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
         NT_URI: https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Windows-x86_64.exe
       file: dl/hadolint.sh
-
-- bin: actionlint
   type: fs
-  args:
+
+- args:
     - --
     - ${tmpname}
+  bin: actionlint
   filetypes:
     - yaml*
   install:
     go:
       - github.com/rhysd/actionlint/cmd/actionlint@latest
+  type: fs
 
-- bin: rubocop
-  type: stream
-  args:
+- args:
     - --no-color
     - --
     - ${tmpname}
+  bin: rubocop
   filetypes:
     - ruby
   install:
     gem:
       - rubocop
+  type: stream
 
-- bin: r-lint
-  type: fs
-  args:
+- args:
     - ${tmpname}
+  bin: r-lint
   filetypes:
     - r
   install:
     script:
+      file: dl/rlint.r
       required:
         - Rscript
         - R
-      file: dl/rlint.r
-
-- bin: htmlhint
   type: fs
-  args:
+
+- args:
     - --nocolor
     - --
     - ${tmpname}
+  bin: htmlhint
   filetypes:
     - html
   install:
     npm:
       - htmlhint
-
-- bin: phan
   type: fs
-  args:
+
+- args:
     - ${tmpname}
+  bin: phan
   filetypes:
     - php
   install:
     script:
-      required:
-        - php
       env:
         URI: https://github.com/phan/phan/releases/latest/download/phan.phar
       file: dl/phan.php
+      required:
+        - php
+  type: fs
 # - bin: sqlfluff
 #   type: fs
 #   args:

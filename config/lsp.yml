@@ -1,12 +1,11 @@
 ---
-- server: jsonls
-  bin: vscode-json-language-server
+- bin: vscode-json-language-server
   install:
     npm:
       - vscode-langservers-extracted
+  server: jsonls
 
-- server: yamlls
-  bin: yaml-language-server
+- bin: yaml-language-server
   filetypes:
     - yaml
     - yaml.ansible
@@ -14,9 +13,9 @@
   install:
     npm:
       - yaml-language-server
+  server: yamlls
 
-- server: taplo
-  bin: taplo
+- bin: taplo
   install:
     script:
       env:
@@ -24,33 +23,33 @@
         LINUX_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz
         NT_URI: https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-windows-x86_64.zip
       file: dl/taplo.sh
+  server: taplo
 
-- server: lemminx
+- args: []
   bin: lemminx
-  args: []
   install:
     script:
-      required:
-        - htmlq
       env:
         BASE_URI: https://download.jboss.org/jbosstools/vscode/stable/lemminx-binary
         DARWIN: lemminx-osx-x86_64.zip
         LINUX: lemminx-linux.zip
         NT: lemminx-win32.zip
       file: dl/lemminx.sh
+      required:
+        - htmlq
+  server: lemminx
 
-- server: markdown
-  bin: vscode-markdown-language-server
-  args:
+- args:
     - --stdio
+  bin: vscode-markdown-language-server
   filetypes:
     - markdown
   install:
     npm:
       - vscode-langservers-extracted
+  server: markdown
 
-- server: ltex
-  bin: ltex-ls
+- bin: ltex-ls
   install:
     script:
       env:
@@ -58,29 +57,9 @@
         LINUX_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-16.0.0-linux-x64.tar.gz
         NT_URI: https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-16.0.0-windows-x64.zip
       file: dl/ltex.sh
+  server: ltex
 
-- server: texlab
-  bin: texlab
-  settings:
-    texlab:
-      build:
-        executable: tectonic
-        args:
-          - --keep-logs
-          - --keep-intermediates
-          - --synctex
-          - --
-          - "%f"
-        # onSave: True
-        # forwardSearchAfter: True
-      # forwardSearch:
-      #   executable: evince-synctex
-      #   args:
-      #     - "-f"
-      #     - "%l"
-      #     - "%p"
-      #     - '"code -g %f:%l"'
-
+- bin: texlab
   install:
     script:
       env:
@@ -92,85 +71,101 @@
         T_LINUX_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.12.0/tectonic-0.12.0-x86_64-unknown-linux-gnu.tar.gz
         T_NT_URI: https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.12.0/tectonic-0.12.0-x86_64-pc-windows-msvc.zip
       file: dl/texlab.sh
+  server: texlab
+  settings:
+    texlab:
+      build:
+        args:
+          - --keep-logs
+          - --keep-intermediates
+          - --synctex
+          - --
+          - "%f"
+        executable: tectonic
+        # onSave: True
+        # forwardSearchAfter: True
+      # forwardSearch:
+      #   executable: evince-synctex
+      #   args:
+      #     - "-f"
+      #     - "%l"
+      #     - "%p"
+      #     - '"code -g %f:%l"'
 
-- server: diagnosticls
-  bin: diagnostic-languageserver
+- bin: diagnostic-languageserver
   filetypes:
     - dockerfile
     - sh
     - zsh
-  root:
-    fallback: cwd
-
   init_options:
+    filetypes:
+      dockerfile:
+        - hadolint
     linters:
       hadolint:
-        sourceName: hadolint
-        command: hadolint
         args:
           - --format
           - json
           - --
           - "%file"
+        command: hadolint
+        parseJson:
+          column: column
+          line: line
+          message: "${message} [${code}]"
+          security: level
         rootPatterns:
           - .hadolint.yml
           - .hadolint.yaml
-        parseJson:
-          line: line
-          column: column
-          security: level
-          message: "${message} [${code}]"
         securities:
           error: error
-          warning: warning
           info: info
           style: hint
-
-    filetypes:
-      dockerfile:
-        - hadolint
-
+          warning: warning
+        sourceName: hadolint
   install:
     npm:
       - diagnostic-languageserver
+  root:
+    fallback: cwd
+  server: diagnosticls
 
-- server: bashls
-  bin: bash-language-server
+- bin: bash-language-server
   install:
     npm:
       - bash-language-server
+  server: bashls
 
-- server: awk_ls
-  bin: awk-language-server
+- bin: awk-language-server
   install:
     npm:
       - awk-language-server
+  server: awk_ls
 
-- server: powershell_es
+- args: []
   bin: pwsh_es.ps1
-  args: []
   install:
     script:
-      required:
-        - pwsh
       env:
         URI: https://github.com/PowerShell/PowerShellEditorServices/releases/latest/download/PowerShellEditorServices.zip
       file: dl/pwsh_es.ps1
+      required:
+        - pwsh
+  server: powershell_es
 
-- server: dockerls
-  bin: docker-langserver
+- bin: docker-langserver
   install:
     npm:
       - dockerfile-language-server-nodejs
+  server: dockerls
 
-- server: pyright
-  bin: pyright-langserver
+- bin: pyright-langserver
   install:
     npm:
       - pyright
+  server: pyright
 
-- server: hls
-  bin: haskell-language-server-wrapper
+- bin: haskell-language-server-wrapper
   install:
     script:
       env:
@@ -178,36 +173,37 @@
         LINUX_URI: https://downloads.haskell.org/~hls/haskell-language-server-1.9.0.0/haskell-language-server-1.9.0.0-x86_64-linux-deb10.tar.xz
         NT_URI: https://downloads.haskell.org/~hls/haskell-language-server-1.9.0.0/haskell-language-server-1.9.0.0-x86_64-windows.zip
       file: dl/haskell_language_server.sh
+  server: hls
 
-- server: rust_analyzer
-  bin: rust-analyzer
+- bin: rust-analyzer
   install:
     script:
-      required:
-        - rustc
       env:
         DARWIN_URI: https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-aarch64-apple-darwin.gz
         LINUX_URI: https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz
         NT_URI: https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-pc-windows-msvc.gz
       file: dl/rust_analyzer.rs
+      required:
+        - rustc
+  server: rust_analyzer
 
-- server: clangd
-  bin: clangd
+- bin: clangd
+  server: clangd
 
-- server: gopls
-  bin: gopls
+- bin: gopls
   install:
     go:
       - golang.org/x/tools/gopls@latest
+  server: gopls
 
-- server: sourcekit
-  bin: sourcekit-lsp
+- bin: sourcekit-lsp
+  server: sourcekit
 
-- server: clangd
-  bin: clangd
+- bin: clangd
+  server: clangd
 
-- server: ccls
-  bin: ccls
+- bin: ccls
+  server: ccls
 
 # - server: typeprof
 #   bin: typeprof
@@ -218,152 +214,147 @@
 #     gem:
 #       - ruby-lsp
 
-- server: solargraph
-  bin: solargraph
+- bin: solargraph
   install:
     gem:
       - solargraph
+  server: solargraph
 
-- server: tsserver
-  bin: typescript-language-server
+- bin: typescript-language-server
   install:
     npm:
       - typescript
       - typescript-language-server
+  server: tsserver
 
-- server: eslint
-  bin: vscode-eslint-language-server
-  install:
-    npm:
-      - vscode-langservers-extracted
+# - server: eslint
+#   bin: vscode-eslint-language-server
+#   install:
+#     npm:
+#       - vscode-langservers-extracted
 
 # - server: denols
 #   bin: deno
 
-- server: html
-  bin: vscode-html-language-server
+- bin: vscode-html-language-server
   install:
     npm:
       - vscode-langservers-extracted
+  server: html
 
-- server: cssls
-  bin: vscode-css-language-server
+- bin: vscode-css-language-server
   install:
     npm:
       - vscode-langservers-extracted
+  server: cssls
 
-- server: tailwindcss
-  bin: tailwindcss-language-server
+- bin: tailwindcss-language-server
   install:
     npm:
       - "@tailwindcss/language-server"
+  server: tailwindcss
 
-- server: graphql
-  bin: graphql-lsp
+- bin: graphql-lsp
   install:
     npm:
       - graphql-language-service-cli
+  server: graphql
 
-- server: vimls
-  bin: vim-language-server
+- bin: vim-language-server
   install:
     npm:
       - vim-language-server
+  server: vimls
 
-- server: r_language_server
-  bin: R
+- bin: R
   install:
     script:
+      file: dl/rlang_server.r
       required:
         - Rscript
         - R
-      file: dl/rlang_server.r
+  server: r_language_server
 
-- server: julials
+- args: []
   bin: julia-lsp
-  args: []
   install:
     script:
+      file: dl/julia_ls.jl
       required:
         - julia
-      file: dl/julia_ls.jl
+  server: julials
 
-- server: intelephense
-  bin: intelephense
+- bin: intelephense
   install:
     npm:
       - intelephense
+  server: intelephense
 
-- server: fsautocomplete
-  bin: fsautocomplete
+- bin: fsautocomplete
   install:
     script:
-      required:
-        - dotnet
       env:
         URI: https://github.com/ionide/Ionide-vim.git
       file: dl/fsharp_ls.fsx
-
-- server: omnisharp
-  bin: omnisharp
-  args: []
-  install:
-    script:
       required:
         - dotnet
+  server: fsautocomplete
+
+- args: []
+  bin: omnisharp
+  install:
+    script:
       env:
         DARWIN_URI: https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx-arm64-net6.0.tar.gz
         LINUX_URI: https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-linux-x64-net6.0.tar.gz
         NT_URI: https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-win-x64-net6.0.zip
       file: dl/omnisharp.fsx
+      required:
+        - dotnet
+  server: omnisharp
 
-- server: jdtls
-  bin: jdtls
+- bin: jdtls
   install:
     script:
-      required:
-        - jshell
       env:
         URI: https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz
       file: dl/jdtls.sh
+      required:
+        - jshell
+  server: jdtls
 
-- server: kotlin_language_server
-  bin: kotlin-language-server
+- bin: kotlin-language-server
   install:
     script:
-      required:
-        - kotlinc
       env:
         URI: https://github.com/fwcd/kotlin-language-server/releases/latest/download/server.zip
       file: dl/kotlin.kts
+      required:
+        - kotlinc
+  server: kotlin_language_server
 
-- server: prolog_ls
+- args: []
   bin: prolog-ls
-  args: []
   install:
     script:
-      required:
-        - swipl
       env:
         URI: https://raw.githubusercontent.com/adimit/prolog.vim/master/syntax/prolog.vim
       file: dl/prolog_ls.pro
+      required:
+        - swipl
+  server: prolog_ls
 
-- server: sqlls
-  bin: sql-language-server
-  args:
+- args:
     - up
     - --method
     - stdio
+  bin: sql-language-server
   install:
     npm:
       - sql-language-server
+  server: sqlls
 
-- server: lua_ls
-  bin: lua-language-server
-  settings:
-    Lua:
-      runtime:
-        version: "Lua 5.1"
+- bin: lua-language-server
   install:
     script:
       env:
@@ -374,6 +365,11 @@
         - git
         - python3
         - gcc
+  server: lua_ls
+  settings:
+    Lua:
+      runtime:
+        version: "Lua 5.1"
 
 - bin: ansible-language-server
   install:
@@ -381,26 +377,25 @@
       - ansible-language-server
   server: ansiblels
 
-- server: glslls
-  bin: glslls
+- bin: glslls
   install:
     script:
+      env:
+        URI: https://github.com/svenstaro/glsl-language-server
+      file: dl/glsl_ls.sh
       required:
         - cmake
         - git
         - python3
-      env:
-        URI: https://github.com/svenstaro/glsl-language-server
-      file: dl/glsl_ls.sh
+  server: glslls
 
-- server: theme_check
-  bin: theme-check-language-server
+- bin: theme-check-language-server
   install:
     gem:
       - theme-check
+  server: theme_check
 
-- server: emmet_ls
-  bin: emmet-ls
+- bin: emmet-ls
   filetypes:
     - css
     - html
@@ -409,6 +404,7 @@
   install:
     npm:
       - emmet-ls
+  server: emmet_ls
 # - server: volar
 #   bin: vue-language-server
 #   install:
