@@ -11,7 +11,7 @@ DATE_FMT = "%Y-%m-%d %X"
 TOP_LEVEL = Path(__file__).resolve(strict=True).parent.parent
 
 VIM_DIR = TOP_LEVEL / "pack" / "modules" / "start"
-VARS_DIR = TOP_LEVEL / "tmp"
+VARS_DIR = TOP_LEVEL / "var"
 
 RT_DIR = VARS_DIR / "runtime"
 RT_SCRIPTS = (

@@ -54,9 +54,9 @@ local l3 = function()
     local py = is_win and "python.exe" or "python3"
     local vpy = (function()
       if is_win then
-        return cwd .. "/tmp/runtime/Scripts/" .. py
+        return cwd .. "/var/runtime/Scripts/" .. py
       else
-        return cwd .. "/tmp/runtime/bin/" .. py
+        return cwd .. "/var/runtime/bin/" .. py
       end
     end)()
     if vim.fn.filereadable(vpy) == 1 then

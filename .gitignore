@@ -1,5 +1,4 @@
 /.venv/
 /pack/
-/tmp/
+/var/
 __pycache__/
-/.vars
