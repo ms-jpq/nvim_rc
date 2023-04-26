@@ -21,7 +21,7 @@ from std2.asyncio.subprocess import call
 from std2.lex import ParseError, envsubst
 
 from ..config.linter import LinterAttrs, LinterType, linter_specs
-from ..consts import DATE_FMT
+from ..consts import DATE_FMT, TMP_DIR
 from ..registery import LANG, NAMESPACE, keymap, rpc
 
 
@@ -67,7 +67,7 @@ def arg_subst(args: Iterable[str], ctx: BufContext, tmp_name: str) -> Sequence[s
 @contextmanager
 def make_temp(path: Path, text: bytes) -> Iterator[Path]:
     prefix, suffix = f"{path.stem}_", f"_{path.suffix}"
-    fd, temp = mkstemp(dir=path.parent, prefix=prefix, suffix=suffix)
+    fd, temp = mkstemp(dir=TMP_DIR, prefix=prefix, suffix=suffix)
     try:
         write(fd, text)
     finally:
