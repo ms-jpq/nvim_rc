@@ -227,11 +227,11 @@
       - typescript-language-server
   server: tsserver
 
-# - server: eslint
-#   bin: vscode-eslint-language-server
-#   install:
-#     npm:
-#       - vscode-langservers-extracted
+- bin: vscode-eslint-language-server
+  install:
+    npm:
+      - vscode-langservers-extracted
+  server: eslint
 
 # - server: denols
 #   bin: deno
