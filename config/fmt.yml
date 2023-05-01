@@ -139,6 +139,7 @@
 
 - args:
     - format
+    - --plugins=plugin/single_quotes,plugin/trailing_comma
     - --
     - ${tmpname}
   bin: stree
@@ -152,19 +153,19 @@
       - syntax_tree
   type: stream
 
-- args:
-    - --fail-level=fatal
-    - --no-color
-    - --autocorrect
-    - --
-    - ${tmpname}
-  bin: rubocop
-  filetypes:
-    - ruby
-  install:
-    gem:
-      - rubocop
-  type: fs
+# - args:
+#     - --fail-level=fatal
+#     - --no-color
+#     - --autocorrect
+#     - --
+#     - ${tmpname}
+#   bin: rubocop
+#   filetypes:
+#     - ruby
+#   install:
+#     gem:
+#       - rubocop
+#   type: fs
 
 - args:
     - --line-width=80
