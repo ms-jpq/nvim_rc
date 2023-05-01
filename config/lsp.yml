@@ -49,6 +49,12 @@
       - vscode-langservers-extracted
   server: markdown
 
+- bin: docker-compose-langserver
+  install:
+    npm:
+      - "@microsoft/compose-language-service"
+  server: docker_compose_language_service
+
 - bin: ltex-ls
   install:
     script:
