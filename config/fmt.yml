@@ -153,19 +153,20 @@
       - syntax_tree
   type: stream
 
-# - args:
-#     - --fail-level=fatal
-#     - --no-color
-#     - --autocorrect
-#     - --
-#     - ${tmpname}
-#   bin: rubocop
-#   filetypes:
-#     - ruby
-#   install:
-#     gem:
-#       - rubocop
-#   type: fs
+- args:
+    - --fail-level=fatal
+    - --format=quiet
+    - --no-color
+    - --autocorrect
+    - --
+    - ${tmpname}
+  bin: rubocop
+  filetypes:
+    - ruby
+  install:
+    gem:
+      - rubocop
+  type: fs
 
 - args:
     - --line-width=80
