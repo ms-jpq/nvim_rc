@@ -4,10 +4,17 @@
   bin: sortd
   filetypes:
     - cfg
-    - json
   install:
     pip:
       - sortd
+  type: stream
+
+- args:
+    - json
+  bin: sortd
+  filetypes:
+    - json
+    - jsonc
   type: stream
 
 - args:
