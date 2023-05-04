@@ -224,6 +224,10 @@
   install:
     gem:
       - solargraph
+    script:
+      env:
+        INSTALL: t
+      file: dl/solargraph.rb
   server: solargraph
 
 - bin: typescript-language-server
