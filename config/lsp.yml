@@ -228,6 +228,8 @@
       env:
         INSTALL: t
       file: dl/solargraph.rb
+      required:
+        - ruby
   server: solargraph
 
 - bin: typescript-language-server
