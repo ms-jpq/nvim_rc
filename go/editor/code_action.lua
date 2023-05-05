@@ -59,8 +59,14 @@
       end
     end)()
     params.context = {diagnostics = vim.lsp.diagnostic.get_line_diagnostics()}
-
     local buf = vim.api.nvim_get_current_buf()
+
+    local ed = params.range["end"]
+    local line =
+      unpack(vim.api.nvim_buf_get_lines(buf, ed.line, ed.line + 1, true))
+    local l = vim.str_utfindex(line, ed.character) - 1
+    params.range["end"].character = math.min(l, ed.character)
+
     local clients = vim.lsp.get_active_clients({bufnr = buf})
     local row = unpack(vim.api.nvim_win_get_cursor(0))
     row = row - 1
