@@ -18,9 +18,9 @@ settings["nojoinspaces"] = True
 # spaces remove on deletion
 # manual indentation width
 _TAB_OPTIONS = ("tabstop", "softtabstop", "shiftwidth")
-tabsize_d = 2
+_tabsize_d = 2
 for option in _TAB_OPTIONS:
-    settings[option] = tabsize_d
+    settings[option] = _tabsize_d
 
 # insert spaces instead of tabs
 settings["expandtab"] = True
@@ -36,7 +36,7 @@ async def _set_tabsize(buf: Buffer, lines: Iterable[str]) -> None:
             if divibilty:
                 yield divibilty, tabsize
 
-    _, tabsize = next(iter(sorted(it(), reverse=True)), (-1, tabsize_d))
+    _, tabsize = next(iter(sorted(it(), reverse=True)), (-1, _tabsize_d))
 
     atomic = Atomic()
     for option in _TAB_OPTIONS:
@@ -48,6 +48,8 @@ async def _set_usetab(buf: Buffer, lines: Iterable[str]) -> None:
     first_chars = tuple(next(iter(line), "") for line in lines if lines)
     if first_chars.count("\t") > first_chars.count(" "):
         await buf.opts.set("expandtab", val=False)
+        for option in _TAB_OPTIONS:
+            await buf.opts.set(option, val=_tabsize_d)
 
 
 async def detect_tabs(buf: Buffer) -> None:
