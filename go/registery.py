@@ -22,7 +22,7 @@ rpc = RPC(NAMESPACE)
 settings = Settings()
 
 
-def drain() -> tuple[Atomic, Mapping[Method, RPCallable]]:
+def drain() -> tuple[Atomic, Mapping[Method, RPCallable[None]]]:
     if os is OS.windows:
         settings["shell"] = "cmd.exe"
 

@@ -20,7 +20,7 @@ from .registery import drain
 assert ____ or 1
 
 
-def _suicide(ppid: int) -> AbstractAsyncContextManager:
+def _suicide(ppid: int) -> AbstractAsyncContextManager[None]:
     if os is OS.windows:
         return nullacontext(None)
     else:

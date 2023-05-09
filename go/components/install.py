@@ -52,7 +52,7 @@ from ..registery import LANG
 from ..workspace.terminal import open_term
 from .rtp import p_name
 
-_SortOfMonoid = Sequence[Tuple[str, CompletedProcess]]
+_SortOfMonoid = Sequence[Tuple[str, CompletedProcess[bytes]]]
 
 
 class _PackagesJson(TypedDict):
@@ -120,7 +120,7 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
     if git := which("git"):
 
         async def cont(spec: GitPkgSpec) -> _SortOfMonoid:
-            async def cont() -> AsyncIterator[Tuple[str, CompletedProcess]]:
+            async def cont() -> AsyncIterator[Tuple[str, CompletedProcess[bytes]]]:
                 assert git
                 location = p_name(spec.uri)
                 if location.is_dir():
@@ -241,7 +241,7 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
     if which("node") and (npm := which("npm")) and (specs := {*_npm_specs()}):
 
         async def cont() -> _SortOfMonoid:
-            async def cont() -> AsyncIterator[Tuple[str, CompletedProcess]]:
+            async def cont() -> AsyncIterator[Tuple[str, CompletedProcess[bytes]]]:
                 assert npm
                 packages_json.unlink(missing_ok=True)
 
