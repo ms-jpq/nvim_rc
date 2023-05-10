@@ -146,7 +146,7 @@
 
 - args:
     - format
-    - --plugins=plugin/single_quotes,plugin/trailing_comma
+    # - --plugins=plugin/single_quotes,plugin/trailing_comma
     - --
     - ${tmpname}
   bin: stree
