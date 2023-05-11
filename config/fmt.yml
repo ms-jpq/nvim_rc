@@ -146,7 +146,7 @@
 
 - args:
     - format
-    # - --plugins=plugin/single_quotes,plugin/trailing_comma
+    - --plugins=plugin/single_quotes,plugin/trailing_comma
     - --
     - ${tmpname}
   bin: stree
@@ -160,20 +160,20 @@
       - syntax_tree
   type: stream
 
-- args:
-    - --fail-level=fatal
-    - --stderr
-    - --stdin
-    - --format=quiet
-    - --no-color
-    - --autocorrect
-  bin: rubocop
-  filetypes:
-    - ruby
-  install:
-    gem:
-      - rubocop
-  type: stream
+# - args:
+#     - --fail-level=fatal
+#     - --stderr
+#     - --stdin
+#     - --format=quiet
+#     - --no-color
+#     - --autocorrect
+#   bin: rubocop
+#   filetypes:
+#     - ruby
+#   install:
+#     gem:
+#       - rubocop
+#   type: stream
 
 - args:
     - --line-width=80
