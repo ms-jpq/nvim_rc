@@ -57,7 +57,6 @@ PATH = environ["PATH"] = pathsep.join(
         chain(
             (
                 BIN_DIR,
-                _PIP_BIN,
                 GEM_DIR / "bin",
                 NPM_DIR / "node_modules" / ".bin",
                 GO_DIR / "bin",
@@ -67,6 +66,7 @@ PATH = environ["PATH"] = pathsep.join(
                 for path in map(PurePath, environ["PATH"].split(pathsep))
                 if path != _RT_BIN
             ),
+            (_PIP_BIN,),
         ),
     )
 )
