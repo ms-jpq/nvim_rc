@@ -26,13 +26,13 @@ settings["wrap"] = True
 # line wrap follow indent
 settings["breakindent"] = True
 
+
 # open with scratch buffer, like emacs
 @rpc()
 async def _scratch_buffer() -> None:
     bufs = await Buffer.list(listed=False)
     for buf in bufs:
-        name = await buf.get_name()
-        if not name:
+        if not await buf.get_name():
             await buf.opts.set("buftype", val="nofile")
 
 

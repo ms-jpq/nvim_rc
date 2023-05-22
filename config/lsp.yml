@@ -14,6 +14,9 @@
     npm:
       - yaml-language-server
   server: yamlls
+  # settings:
+  #   yaml:
+  #     keyOrdering: false
 
 - bin: taplo
   install:
