@@ -29,7 +29,9 @@
     [error_codes.ContentModified] = true,
     [error_codes.InternalError] = true,
     [error_codes.MethodNotFound] = true,
-    [error_codes.RequestCancelled] = true
+    [error_codes.RequestCancelled] = true,
+    -- TODO: handle TSC errors
+    [1] = true
   }
 
   local callback = function(idx, row, error, resp)
