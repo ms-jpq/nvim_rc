@@ -113,6 +113,18 @@
   type: fs
 
 - args:
+    - run
+    - --
+    - ${tmpname}
+  bin: golangci-lint
+  filetypes:
+    - go
+  install:
+    go:
+      - github.com/golangci/golangci-lint/cmd/golangci-lint@master
+  type: fs
+
+- args:
     - --nocolor
     - --
     - ${tmpname}
