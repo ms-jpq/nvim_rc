@@ -37,9 +37,8 @@ if ( !-d $lib ) {
   system( 'cpanm', '--local-lib', $perl_libd, q{--}, @perl_libs )
     && croak $CHILD_ERROR;
 
-  rmtree($lib);
-  move( $tmp_lib, $lib );
+  system( "mv", "--force", "--", $tmp_lib, $lib ) && croak $CHILD_ERROR;
 }
 
 copy( $script, $bin );
-chmod 0755, $bin;
+chmod( 0755, $bin );

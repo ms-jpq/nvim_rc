@@ -13,3 +13,4 @@ my $lib = "$dir/../lib/latexindent";
 
 $ENV{PERL5LIB} = "$lib/_perl_/lib/perl5";
 exec( "$lib/latexindent.pl", @ARGV );
+die;

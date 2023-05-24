@@ -24,7 +24,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .ok_or(format!("{}", line!()))?
         .parent()
         .ok_or(format!("{}", line!()))?
-        .join("tmp")
+        .join("var")
         .join("tmp")
         .join("rust-analyzer-dl");
     create_dir_all(&tmp)?;

@@ -13,14 +13,9 @@ use warnings;
 
 my $bin     = dirname( $ENV{BIN} );
 my $lib     = $ENV{LIB};
-my $uri     = $ENV{URI};
 my $dir     = dirname(__FILE__);
 my $scripts = "$dir/../exec";
 my @names   = qw( perlcritic perltidy );
-
-if ( $OSNAME eq 'msys' ) {
-  $bin = "$bin.pl";
-}
 
 if ( !-d $lib ) {
   my $tmp = File::Temp->newdir();
@@ -28,14 +23,17 @@ if ( !-d $lib ) {
   system( 'cpanm', '--local-lib', $tmp, q{--}, 'Perl::Critic' )
     && croak $CHILD_ERROR;
 
-  rmtree($lib);
-  move( $tmp, $lib );
+  system( "mv", "--force", "--", $tmp, $lib ) && croak $CHILD_ERROR;
 }
 
 foreach my $name (@names) {
   my $src = "$scripts/$name.pl";
   my $dst = "$bin/$name";
 
+  if ( $OSNAME eq 'msys' ) {
+    $dst = "$dst.pl";
+  }
+
   copy( $src, $dst );
-  chmod 0755, $dst;
+  chmod( 0755, $dst );
 }

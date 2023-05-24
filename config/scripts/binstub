@@ -35,7 +35,7 @@ def main() -> None:
     template = Template(_STUB.lstrip())
     bins = src / "bin"
     win = name == "nt"
-    tmp = Path(__file__).parent.parent.parent / "tmp" / "tmp"
+    tmp = Path(__file__).parent.parent.parent / "var" / "tmp"
 
     for path in (bins, dst):
         path.mkdir(parents=True, exist_ok=True)
