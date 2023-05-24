@@ -15,5 +15,4 @@ esac
 
 TMP="$(mktemp --directory)"
 get -- "$URI" | unpack --dest "$TMP"
-mv --force -- "$TMP"/* "$BIN"
-chmod +x -- "$BIN"
+mv --force -- "$TMP/"*/golangci-lint "$BIN"

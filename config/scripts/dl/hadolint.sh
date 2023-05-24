@@ -14,6 +14,5 @@ linux*)
 esac
 
 FILE="$(get -- "$URI")"
-rm --force -- "$BIN"
-cp -- "$FILE" "$BIN"
+cp --force -- "$FILE" "$BIN"
 chmod +x -- "$BIN"

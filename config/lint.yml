@@ -82,8 +82,12 @@
   filetypes:
     - yaml*
   install:
-    go:
-      - github.com/rhysd/actionlint/cmd/actionlint@latest
+    script:
+      env:
+        DARWIN_URI: https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.52.2-darwin-arm64.tar.gz
+        LINUX_URI: https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.52.2-linux-amd64.tar.gz
+        NT_URI: https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.52.2-windows-amd64.zip
+      file: dl/golint.sh
   type: fs
 
 - args:

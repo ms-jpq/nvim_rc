@@ -23,6 +23,6 @@ esac
 TMP="$(mktemp --directory)"
 get -- "$URI" | unpack --dest "$TMP"
 get -- "$T_URI" | unpack --dest "$TMP"
-mv -- "$TMP/texlab"* "$BIN"
-mv -- "$TMP/tectonic"* "$T_BIN"
+mv --force -- "$TMP/texlab"* "$BIN"
+mv --force -- "$TMP/tectonic"* "$T_BIN"
 chmod +x -- "$BIN" "$T_BIN"
