@@ -145,6 +145,12 @@
       - bash-language-server
   server: bashls
 
+- bin: jq-lsp
+  install:
+    go:
+      - github.com/wader/jq-lsp@latest
+  server: jqls
+
 - bin: awk-language-server
   install:
     npm:
