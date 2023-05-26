@@ -4,8 +4,12 @@
         '[java.nio.file Files Paths StandardCopyOption]
         '[java.nio.file.attribute FileAttribute])
 
-(def bin (Paths/get (System/getenv "BIN")
-                    (into-array String [])))
+(def bin (let [b (System/getenv "BIN")
+               ext (case (System/getProperty "os.name")
+                     "Windows" ".exe"
+                     "")]
+           (Paths/get (str b ext) (into-array String []))))
+
 (def uri (System/getenv
           (case (System/getProperty "os.name")
             "Linux" "LINUX_URI"

@@ -4,11 +4,16 @@
         '[java.nio.file Files Paths StandardCopyOption]
         '[java.nio.file.attribute FileAttribute PosixFilePermissions])
 
-(def bin (Paths/get (System/getenv "BIN")
-                    (into-array String [])))
+(def os (System/getProperty "os.name"))
+
+(def bin (let [b (System/getenv "BIN")
+               ext (case os
+                     "Windows" ".exe"
+                     "")]
+           (Paths/get (str b ext) (into-array String []))))
 
 (def uri (System/getenv
-          (case (System/getProperty "os.name")
+          (case os
             "Linux" "LINUX_URI"
             "Darwin" "DARWIN_URI"
             "NT_URI")))
