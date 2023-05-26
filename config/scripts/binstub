@@ -16,8 +16,7 @@ _RWXR_XR_X = (S_IRUSR | S_IWUSR | S_IXUSR) | (S_IRGRP | S_IXGRP) | (S_IROTH | S_
 _STUB = """
 #!/usr/bin/env -S -- sh
 
-export MSYSTEM='MSYS'
-export GEM_PATH=$GEM_PATH
+export -- MSYSTEM='MSYS' GEM_PATH=$GEM_PATH
 exec $BIN "$$@"
 """
 

@@ -142,15 +142,3 @@
       required:
         - php
   type: fs
-# - bin: sqlfluff
-#   type: fs
-#   args:
-#     - lint
-#     - --dialect=sqlite
-#     - --
-#     - ${tmpname}
-#   filetypes:
-#     - sql
-#   install:
-#     pip:
-#       - sqlfluff
