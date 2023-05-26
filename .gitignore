@@ -2,3 +2,6 @@
 /pack/
 /var/
 __pycache__/
+
+*.lsp/
+*.clj-*

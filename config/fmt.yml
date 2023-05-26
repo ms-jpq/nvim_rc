@@ -101,6 +101,25 @@
   type: stream
 
 - args:
+    - fix
+    - --
+    - ${tmpname}
+  bin: cljfmt
+  filetypes:
+    - clojure
+    - edn
+  install:
+    script:
+      env:
+        DARWIN_URI: https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt-0.10.2-darwin-aarch64.tar.gz
+        LINUX_URI: https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt-0.10.2-linux-amd64-static.tar.gz
+        NT_URI: https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt-0.10.2-win-amd64.zip
+      file: dl/cljfmt.clj
+      required:
+        - clojure
+  type: fs
+
+- args:
     - --
     - ${tmpname}
   bin: csscomb
