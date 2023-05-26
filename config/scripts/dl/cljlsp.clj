@@ -16,12 +16,13 @@
 (let [tmp (Files/createTempDirectory "" (into-array FileAttribute []))]
   (try
     (doseq
-     [n (ProcessBuilder/startPipeline [(-> (ProcessBuilder. ["get", "--", uri])
-                                           (.redirectError ProcessBuilder$Redirect/INHERIT))
-                                       (->
-                                        (ProcessBuilder. ["unpack", "--dest", (.toString tmp)])
-                                        (.redirectOutput ProcessBuilder$Redirect/INHERIT)
-                                        (.redirectError ProcessBuilder$Redirect/INHERIT))])]
+     [n (ProcessBuilder/startPipeline
+         [(-> (ProcessBuilder. ["get", "--", uri])
+              (.redirectError ProcessBuilder$Redirect/INHERIT))
+          (->
+           (ProcessBuilder. ["unpack", "--dest", (.toString tmp)])
+           (.redirectOutput ProcessBuilder$Redirect/INHERIT)
+           (.redirectError ProcessBuilder$Redirect/INHERIT))])]
       (assert (== 0 (.waitFor n))))
 
     (Files/move (.resolve tmp "clojure-lsp")
