@@ -36,7 +36,6 @@ from ..config.tools import tool_specs
 from ..consts import (
     BIN_DIR,
     GEM_DIR,
-    GO_DIR,
     INSTALL_SCRIPT,
     INSTALL_SCRIPTS_DIR,
     LIB_DIR,
@@ -45,7 +44,6 @@ from ..consts import (
     RT_SCRIPTS,
     TMP_DIR,
     UPDATE_LOG,
-    VARS_DIR,
     VIM_DIR,
 )
 from ..registery import LANG
@@ -91,16 +89,6 @@ def _npm_specs() -> Iterator[str]:
     for f_spec in fmt_specs:
         yield from f_spec.install.npm
     yield from tool_specs.npm
-
-
-def _go_specs() -> Iterator[str]:
-    for l_spec in lsp_specs:
-        yield from l_spec.install.go
-    for i_spec in linter_specs:
-        yield from i_spec.install.go
-    for f_spec in fmt_specs:
-        yield from f_spec.install.go
-    yield from tool_specs.go
 
 
 def _script_specs() -> Iterator[Tuple[str, ScriptSpec]]:
@@ -287,28 +275,6 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
         yield cont()
 
 
-def _go() -> Iterator[Awaitable[_SortOfMonoid]]:
-    GO_DIR.mkdir(parents=True, exist_ok=True)
-
-    if (go := which("go")) and (specs := {*_go_specs()}):
-
-        async def cont(spec: str) -> _SortOfMonoid:
-            assert go
-            p = await call(
-                go,
-                "install",
-                "--",
-                spec,
-                env={"GO111MODULE": "on", "GOPATH": normcase(GO_DIR)},
-                cwd=VARS_DIR,
-                check_returncode=set(),
-            )
-            return (("", p),)
-
-        for spec in specs:
-            yield cont(spec)
-
-
 def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
     for path in (BIN_DIR, LIB_DIR, TMP_DIR):
         path.mkdir(parents=True, exist_ok=True)
@@ -356,7 +322,7 @@ async def install() -> int:
     sep = cols * "="
 
     errors: MutableSequence[str] = []
-    tasks = chain(_git(), _pip(), _gem(), _npm(), _go(), _script())
+    tasks = chain(_git(), _pip(), _gem(), _npm(), _script())
     for fut in chain(as_completed(tasks), (_binstub(),)):
         for debug, proc in await fut:
             args = join(map(str, proc.args))

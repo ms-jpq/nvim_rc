@@ -76,11 +76,12 @@
   type: fs
 
 - args:
+    - run
     - --
     - ${tmpname}
-  bin: actionlint
+  bin: golint
   filetypes:
-    - yaml*
+    - go
   install:
     script:
       env:
@@ -114,18 +115,6 @@
       required:
         - Rscript
         - R
-  type: fs
-
-- args:
-    - run
-    - --
-    - ${tmpname}
-  bin: golangci-lint
-  filetypes:
-    - go
-  # install:
-  #   go:
-  #     - github.com/golangci/golangci-lint/cmd/golangci-lint@master
   type: fs
 
 - args:

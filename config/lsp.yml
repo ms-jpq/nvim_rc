@@ -147,8 +147,8 @@
 
 - bin: jq-lsp
   install:
-    go:
-      - github.com/wader/jq-lsp@latest
+    script:
+      file: dl/jq_ls.sh
   server: jqls
 
 - bin: awk-language-server
@@ -207,8 +207,8 @@
 
 - bin: gopls
   install:
-    go:
-      - golang.org/x/tools/gopls@latest
+    script:
+      file: dl/gopls.sh
   server: gopls
 
 - bin: sourcekit-lsp

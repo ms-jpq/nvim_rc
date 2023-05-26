@@ -13,7 +13,6 @@ class ToolSpecs:
     pip: AbstractSet[str] = frozenset()
     gem: AbstractSet[str] = frozenset()
     npm: AbstractSet[str] = frozenset()
-    go: AbstractSet[str] = frozenset()
     script: Sequence[ScriptSpec] = ()
 
 

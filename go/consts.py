@@ -47,7 +47,6 @@ _MODULES_DIR = VARS_DIR / "modules"
 PIP_DIR = _MODULES_DIR / "py_modules"
 GEM_DIR = _MODULES_DIR / "rb_modules"
 NPM_DIR = _MODULES_DIR
-GO_DIR = _MODULES_DIR / "go_modules"
 
 _PIP_BIN = PIP_DIR / RT_SCRIPTS
 
@@ -59,7 +58,6 @@ PATH = environ["PATH"] = pathsep.join(
                 BIN_DIR,
                 GEM_DIR / "bin",
                 NPM_DIR / "node_modules" / ".bin",
-                GO_DIR / "bin",
             ),
             (
                 path

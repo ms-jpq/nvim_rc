@@ -36,8 +36,12 @@
     - sh
     - zsh
   install:
-    go:
-      - mvdan.cc/sh/v3/cmd/shfmt@latest
+    script:
+      env:
+        DARWIN_URI: https://github.com/mvdan/sh/releases/latest/download/shfmt_v3.6.0_darwin_arm64
+        LINUX_URI: https://github.com/mvdan/sh/releases/latest/download/shfmt_v3.6.0_linux_amd64
+        NT_URI: https://github.com/mvdan/sh/releases/latest/download/shfmt_v3.6.0_windows_amd64.exe
+      file: dl/shfmt.sh
   type: stream
 
 - args: []
