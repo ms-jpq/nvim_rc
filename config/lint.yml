@@ -60,6 +60,23 @@
   type: fs
 
 - args:
+    - --lint
+    - "-"
+  bin: clj-kondo
+  filetypes:
+    - clojure
+  install:
+    script:
+      env:
+        DARWIN_URI: https://github.com/clj-kondo/clj-kondo/releases/latest/download/clj-kondo-2023.05.26-macos-aarch64.zip
+        LINUX_URI: https://github.com/clj-kondo/clj-kondo/releases/latest/download/clj-kondo-2023.05.26-linux-static-amd64.zip
+        NT_URI: https://github.com/clj-kondo/clj-kondo/releases/latest/download/clj-kondo-2023.05.26-windows-amd64.zip
+      file: dl/clj_lint.clj
+      required:
+        - clojure
+  type: stream
+
+- args:
     - --no-color
     - --
     - ${tmpname}

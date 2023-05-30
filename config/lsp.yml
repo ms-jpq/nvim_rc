@@ -341,7 +341,7 @@
         DARWIN_URI: https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp-native-macos-aarch64.zip
         LINUX_URI: https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp-native-linux-amd64.zip
         NT_URI: https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp-native-windows-amd64.zip
-      file: dl/cljlsp.clj
+      file: dl/clj_lsp.clj
       required:
         - clojure
   server: clojure_lsp

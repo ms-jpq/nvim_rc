@@ -114,14 +114,13 @@
   bin: cljfmt
   filetypes:
     - clojure
-    - edn
   install:
     script:
       env:
         DARWIN_URI: https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt-0.10.4-darwin-aarch64.tar.gz
         LINUX_URI: https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt-0.10.4-linux-amd64-static.tar.gz
         NT_URI: https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt-0.10.4-win-amd64.zip
-      file: dl/cljfmt.clj
+      file: dl/clj_fmt.clj
       required:
         - clojure
   type: fs
