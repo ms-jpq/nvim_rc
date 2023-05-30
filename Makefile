@@ -1,0 +1,36 @@
+MAKEFLAGS += --jobs
+MAKEFLAGS += --no-builtin-rules
+MAKEFLAGS += --warn-undefined-variables
+SHELL := bash
+.DELETE_ON_ERROR:
+.ONESHELL:
+.SHELLFLAGS := -Eeuo pipefail -O dotglob -O failglob -O globstar -c
+
+patch:
+	python3 -m go deps packages
+
+install:
+	python3 -m go deps
+
+.PHONY: clean clobber
+
+clean:
+	rm -rf -- .clj-kondo/ .lsp/ .mypy_cache/ .venv/
+
+clobber: clean
+	sudo -- rm -rf -- pack/ var/
+
+.venv/bin/pip:
+	python3 -m venv -- .venv
+
+.venv/bin/mypy: .venv/bin/pip
+	'$<' install --upgrade --requirement requirements.txt -- mypy types-PyYAML isort black
+
+.PHONY: lint
+
+lint: .venv/bin/mypy
+	'$<' -- .
+
+fmt: .venv/bin/mypy
+	.venv/bin/isort --profile=black --gitignore -- .
+	.venv/bin/black --extend-exclude pack -- .

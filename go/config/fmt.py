@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import AbstractSet, Sequence, Mapping, Optional
+from typing import AbstractSet, Mapping, Optional, Sequence
 
 from std2.pickle.decoder import new_decoder
 from yaml import safe_load

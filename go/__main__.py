@@ -108,7 +108,7 @@ def main() -> None:
         else:
 
             async def m() -> None:
-                await init(args.socket, ppid= args.ppid)
+                await init(args.socket, ppid=args.ppid)
 
             arun(m())
 

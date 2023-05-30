@@ -71,6 +71,8 @@ _ = keymap.n("<leader>k") << "<cmd>wincmd T<cr>"
 
 # close tab
 _ = keymap.n("<leader>q") << "<cmd>tabclose<cr>"
+
+
 # create new tab
 @rpc()
 async def _new_tab() -> None:
