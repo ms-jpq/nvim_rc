@@ -106,6 +106,9 @@
 
 - args:
     - fix
+    - --remove-multiple-non-indenting-spaces
+    - --sort-ns-references
+    - --split-keypairs-over-multiple-lines
     - --
     - ${tmpname}
   bin: cljfmt
