@@ -31,6 +31,11 @@ clobber: clean
 lint: .venv/bin/mypy
 	'$<' -- .
 
+.PHONY: build
+
+build:
+	docker build --file docker/Dockerfile --tag nvim -- .
+
 fmt: .venv/bin/mypy
 	.venv/bin/isort --profile=black --gitignore -- .
 	.venv/bin/black --extend-exclude pack -- .
