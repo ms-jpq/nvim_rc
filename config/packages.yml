@@ -20,9 +20,9 @@
       incremental_selection:
         enable: True
         keymaps:
-          init_selection: ==
-          node_decremental: "-"
-          node_incremental: "="
+          init_selection: w
+          node_decremental: q
+          node_incremental: w
       indent:
         enable: true
       textobjects:

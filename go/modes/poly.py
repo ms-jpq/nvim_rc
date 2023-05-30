@@ -8,6 +8,11 @@ _ = keymap.nv("<down>") << "g<down>"
 _ = keymap.nv("{") << ("5g<up>")
 _ = keymap.nv("}") << ("5g<down>")
 
+# () search next paren
+_ = keymap.n("]", nowait=True) << (r"/)\|]\|}\|><CR>")
+_ = keymap.n("[", nowait=True) << (r"?(\|[\|{\|<<CR>")
+
+
 # add emacs key binds
 _ = keymap.i("<c-a>") << "<c-o>^"
 _ = keymap.i("<c-x><c-a>") << "<c-a>"
