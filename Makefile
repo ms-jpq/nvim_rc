@@ -6,11 +6,7 @@ SHELL := bash
 .ONESHELL:
 .SHELLFLAGS := -Eeuo pipefail -O dotglob -O failglob -O globstar -c
 
-patch:
-	python3 -m go deps packages
-
-install:
-	python3 -m go deps
+.DEFAULT_GOAL := help
 
 .PHONY: clean clobber
 
@@ -19,6 +15,12 @@ clean:
 
 clobber: clean
 	sudo -- rm -rf -- pack/ var/
+
+patch:
+	python3 -m go deps packages
+
+install:
+	python3 -m go deps
 
 .venv/bin/pip:
 	python3 -m venv -- .venv
