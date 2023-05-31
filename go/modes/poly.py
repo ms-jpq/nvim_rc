@@ -1,3 +1,5 @@
+from collections.abc import Iterator
+
 from ..registery import keymap
 
 # move w linewrap
@@ -8,9 +10,19 @@ _ = keymap.nv("<down>") << "g<down>"
 _ = keymap.nv("{") << ("5g<up>")
 _ = keymap.nv("}") << ("5g<down>")
 
+
+def _redraw(wrapped: str) -> Iterator[str]:
+    yield "<cmd>set lazyredraw<cr>"
+    yield "<cmd>set noincsearch<cr>"
+    yield wrapped
+    yield "<cmd>nohlsearch<cr>"
+    yield "<cmd>set incsearch<cr>"
+    yield "<cmd>set nolazyredraw<cr>"
+
+
 # () search next paren
-_ = keymap.nv(")") << (r"/)\|]\|}\|><CR>")
-_ = keymap.nv("(") << (r"?(\|[\|{\|<<CR>")
+_ = keymap.nv(")") << "".join(_redraw(r"/)\|]\|}<cr>"))
+_ = keymap.nv("(") << "".join(_redraw(r"?(\|[\|{<cr>"))
 
 
 # add emacs key binds
