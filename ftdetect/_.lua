@@ -11,7 +11,8 @@ local ftdetect = function(filename, bufnr)
       perl = "perl",
       ruby = "ruby",
       r = "Rscript",
-      prolog = "swipl"
+      prolog = "swipl",
+      javascript = "node"
     }
 
     for ft, pattern in pairs(matches) do
