@@ -2,7 +2,7 @@ from os import environ
 
 from pynvim_pp.window import Window
 
-from ..registery import NAMESPACE, atomic, keymap, rpc, settings
+from ..registery import NAMESPACE, atomic, autocmd, keymap, rpc, settings
 
 # waiting time within a key sequence
 settings["timeoutlen"] = 500
@@ -31,18 +31,38 @@ settings["virtualedit"] = _vcol
 _ = keymap.nv("$") << "$<right>"
 
 
+# show cursor
+settings["cursorline"] = True
+
+
+@rpc()
+async def _ins_cursor() -> None:
+    win = await Window.get_current()
+    await win.opts.set("virtualedit", ",".join(_vcol))
+    await win.opts.set("cursorline", False)
+    await win.opts.set("cursorcolumn", False)
+
+
+@rpc()
+async def _norm_cursor() -> None:
+    win = await Window.get_current()
+    await win.opts.set("cursorline", True)
+
+
 @rpc()
 async def _vedit() -> None:
     win = await Window.get_current()
     col = await win.opts.get(bool, "cursorcolumn")
     if col:
-        await win.opts.set("cursorcolumn", False)
         await win.opts.set("virtualedit", ",".join(_vcol))
+        await win.opts.set("cursorcolumn", False)
     else:
-        await win.opts.set("cursorcolumn", True)
         await win.opts.set("virtualedit", "all")
+        await win.opts.set("cursorcolumn", True)
 
 
+_ = autocmd("InsertEnter") << f"lua {NAMESPACE}.{_ins_cursor.method}()"
+_ = autocmd("InsertLeave") << f"lua {NAMESPACE}.{_norm_cursor.method}()"
 _ = keymap.n("<leader>f") << f"<cmd>lua {NAMESPACE}.{_vedit.method}()<cr>"
 
 

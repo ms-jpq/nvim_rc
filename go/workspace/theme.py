@@ -1,9 +1,8 @@
 from types import NoneType
 
 from pynvim_pp.nvim import Nvim
-from pynvim_pp.window import Window
 
-from ..registery import NAMESPACE, atomic, autocmd, keymap, rpc, settings
+from ..registery import NAMESPACE, atomic, autocmd, rpc, settings
 
 # use 256 colours
 settings["termguicolors"] = True
@@ -28,29 +27,11 @@ settings["fillchars"] = r"eob:\ "
 settings["breakindent"] = True
 # settings["showbreak"] = "↳"
 
-# show cursor
-settings["cursorline"] = True
 # constant cursor styling
 settings["guicursor"] = ""
 
 # completion menu transparency
 settings["pumblend"] = 5
-
-
-@rpc()
-async def _ins_cursor() -> None:
-    win = await Window.get_current()
-    await win.opts.set("cursorline", False)
-
-
-@rpc()
-async def _norm_cursor() -> None:
-    win = await Window.get_current()
-    await win.opts.set("cursorline", True)
-
-
-_ = autocmd("InsertEnter") << f"lua {NAMESPACE}.{_ins_cursor.method}()"
-_ = autocmd("InsertLeave") << f"lua {NAMESPACE}.{_norm_cursor.method}()"
 
 
 # highlight yank
