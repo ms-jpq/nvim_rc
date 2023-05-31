@@ -223,10 +223,26 @@
 - git:
     uri: https://github.com/lewis6991/gitsigns.nvim
   lua: |-
-    require('gitsigns').setup(git_opts)
+    require('gitsigns').setup(vim.g.git_opts)
+    local gs = package.loaded.gitsigns
+    for key, val in pairs(vim.g.git_keys) do
+      vim.keymap.set('n', key, gs[val])
+    end
   vals:
     git_opts:
+      current_line_blame: True
+      show_deleted: True
       word_diff: True
+    git_keys:
+      "g[": prev_hunk
+      "g]": next_hunk
+      <leader>s: stage_hunk
+      <leader>S: undo_stage_hunk
+      <leader>a: preview_hunk
+      <leader>A: diffthis
+      <leader>b: toggle_word_diff
+      <leader>B: toggle_deleted
+
 # - git:
 #     uri: https://github.com/lervag/vimtex
 #   vals:

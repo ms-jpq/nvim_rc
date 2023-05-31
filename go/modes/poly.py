@@ -9,8 +9,8 @@ _ = keymap.nv("{") << ("5g<up>")
 _ = keymap.nv("}") << ("5g<down>")
 
 # () search next paren
-_ = keymap.n("]", nowait=True) << (r"/)\|]\|}\|><CR>")
-_ = keymap.n("[", nowait=True) << (r"?(\|[\|{\|<<CR>")
+_ = keymap.n(")") << (r"/)\|]\|}\|><CR>")
+_ = keymap.n("(") << (r"?(\|[\|{\|<<CR>")
 
 
 # add emacs key binds
