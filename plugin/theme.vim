@@ -7,7 +7,7 @@ function s:colours()
   highlight! EndOfBuffer guibg=NONE ctermbg=NONE
   highlight! VertSplit   guibg=NONE ctermbg=NONE
   highlight! link WinSeparator LineNr
-  highlight! link MatchParen   Cursor
+  highlight! link MatchParen   Search
 endfunction
 
 autocmd ColorScheme * call s:colours()
