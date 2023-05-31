@@ -60,6 +60,8 @@
   type: fs
 
 - args:
+    - --filename
+    - ${filename}
     - --lint
     - "-"
   bin: clj-kondo
