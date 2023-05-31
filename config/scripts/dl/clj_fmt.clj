@@ -13,7 +13,7 @@
 (def uri (System/getenv
           (case (System/getProperty "os.name")
             "Linux" "LINUX_URI"
-            "Darwin" "DARWIN_URI"
+            "Mac OS X" "DARWIN_URI"
             "NT_URI")))
 
 (let [tmp (Files/createTempDirectory "" (into-array FileAttribute []))]
