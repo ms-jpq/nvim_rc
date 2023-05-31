@@ -12,12 +12,12 @@
     uri: https://github.com/nvim-treesitter/nvim-treesitter
   lua: |-
     local opts = vim.g.ts_opts
-    opts.rainbow = {
-      enable = true,
-      query = 'rainbow-parens',
-      strategy = require('ts-rainbow').strategy.global
-    }
     require("nvim-treesitter.configs").setup(opts)
+  # opts.rainbow = {
+  #   enable = true,
+  #   query = 'rainbow-parens',
+  #   strategy = require('ts-rainbow').strategy.global
+  # }
   vals:
     ts_opts:
       ensure_installed: all
@@ -199,16 +199,6 @@
         width: 0.9
     fzf_preview_window: right:wrap
 
-# - git:
-#     uri: https://github.com/EdenEast/nightfox.nvim
-#   lua: |-
-#     vim.cmd [[colorscheme dayfox]]
-
-- git:
-    uri: https://github.com/cocopon/iceberg.vim
-  lua: |-
-    vim.cmd [[colorscheme iceberg]]
-
 - git:
     uri: https://github.com/tpope/vim-repeat
 
@@ -251,8 +241,19 @@
       <leader>c: reset_hunk
       <leader>s: stage_hunk
 
+# - git:
+#     uri: https://github.com/EdenEast/nightfox.nvim
+#   lua: |-
+#     vim.cmd [[colorscheme dayfox]]
+
 - git:
-    uri: https://github.com/HiPhish/nvim-ts-rainbow2.git
+    uri: https://github.com/cocopon/iceberg.vim
+  lua: |-
+    vim.cmd [[colorscheme iceberg]]
+
+# - git:
+#     uri: https://github.com/HiPhish/nvim-ts-rainbow2.git
+
 # - git:
 #     uri: https://github.com/lervag/vimtex
 #   vals:
