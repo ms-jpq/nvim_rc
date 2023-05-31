@@ -26,6 +26,30 @@
       indent:
         enable: true
       textobjects:
+        lsp_interop:
+          enable: true
+          peek_definition_code:
+            glf: "@function.outer"
+            glc: "@class.outer"
+        select:
+          enable: True
+          keymaps:
+            aa: "@parameter.outer"
+            ab: "@block.outer"
+            ac: "@conditional.outer"
+            aC: "@class.outer"
+            af: "@function.outer"
+            aF: "@call.outer"
+            aL: "@loop.outer"
+            as: "@statement.outer"
+            ia: "@parameter.inner"
+            ib: "@block.inner"
+            ic: "@conditional.inner"
+            iC: "@class.inner"
+            if: "@function.inner"
+            iF: "@call.inner"
+            iL: "@loop.inner"
+            is: "@statement.outer"
         move:
           enable: true
           set_jumps: true
@@ -49,25 +73,6 @@
           swap_next:
             <leader><right>: "@statement.outer"
             <leader><down>: "@block.outer"
-        select:
-          enable: True
-          keymaps:
-            aa: "@parameter.outer"
-            ab: "@block.outer"
-            ac: "@conditional.outer"
-            aC: "@class.outer"
-            af: "@function.outer"
-            aF: "@call.outer"
-            aL: "@loop.outer"
-            as: "@statement.outer"
-            ia: "@parameter.inner"
-            ib: "@block.inner"
-            ic: "@conditional.inner"
-            iC: "@class.inner"
-            if: "@function.inner"
-            iF: "@call.inner"
-            iL: "@loop.inner"
-            is: "@statement.outer"
 
 - git:
     uri: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
