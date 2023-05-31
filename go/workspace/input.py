@@ -1,6 +1,8 @@
 from os import environ
 
-from ..registery import atomic, keymap, settings
+from pynvim_pp.window import Window
+
+from ..registery import NAMESPACE, atomic, keymap, rpc, settings
 
 # waiting time within a key sequence
 settings["timeoutlen"] = 500
@@ -23,9 +25,25 @@ settings["scrolloff"] = 0
 settings["sidescrolloff"] = 10
 
 
+_vcol = ("onemore", "block")
 # normalize cursor pos
-settings["virtualedit"] = ("onemore", "block")
+settings["virtualedit"] = _vcol
 _ = keymap.nv("$") << "$<right>"
+
+
+@rpc()
+async def _vedit() -> None:
+    win = await Window.get_current()
+    col = await win.opts.get(bool, "cursorcolumn")
+    if col:
+        await win.opts.set("cursorcolumn", False)
+        await win.opts.set("virtualedit", ",".join(_vcol))
+    else:
+        await win.opts.set("cursorcolumn", True)
+        await win.opts.set("virtualedit", "all")
+
+
+_ = keymap.n("<leader>f") << f"<cmd>lua {NAMESPACE}.{_vedit.method}()<cr>"
 
 
 # use system clipboard

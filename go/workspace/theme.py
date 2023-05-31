@@ -3,7 +3,7 @@ from types import NoneType
 from pynvim_pp.nvim import Nvim
 from pynvim_pp.window import Window
 
-from ..registery import NAMESPACE, atomic, autocmd, rpc, settings
+from ..registery import NAMESPACE, atomic, autocmd, keymap, rpc, settings
 
 # use 256 colours
 settings["termguicolors"] = True
