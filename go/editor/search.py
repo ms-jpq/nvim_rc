@@ -8,7 +8,6 @@ settings["grepprg"] = r"rg\ --vimgrep"
 
 # clear hlsearch result
 _ = keymap.n("<leader>i") << "<cmd>nohlsearch<cr>"
-_ = keymap.n("<leader><space>") << "<cmd>nohlsearch<cr>"
 
 
 # search without moving

@@ -11,7 +11,13 @@
       - +quitall
     uri: https://github.com/nvim-treesitter/nvim-treesitter
   lua: |-
-    require("nvim-treesitter.configs").setup(vim.g.ts_opts)
+    local opts = vim.g.ts_opts
+    opts.rainbow = {
+      enable = true,
+      query = 'rainbow-parens',
+      strategy = require('ts-rainbow').strategy.global
+    }
+    require("nvim-treesitter.configs").setup(opts)
   vals:
     ts_opts:
       ensure_installed: all
@@ -196,10 +202,6 @@
 - git:
     uri: https://github.com/EdenEast/nightfox.nvim
   lua: |-
-    vim.schedule(function() 
-      vim.cmd [[highlight Normal   guibg=NONE ctermbg=NONE]]
-      vim.cmd [[highlight NormalNC guibg=NONE ctermbg=NONE]]
-    end)
     vim.cmd [[colorscheme dayfox]]
 
 - git:
@@ -244,6 +246,8 @@
       <leader>c: reset_hunk
       <leader>s: stage_hunk
 
+- git:
+    uri: https://github.com/HiPhish/nvim-ts-rainbow2.git
 # - git:
 #     uri: https://github.com/lervag/vimtex
 #   vals:
