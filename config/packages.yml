@@ -199,15 +199,15 @@
         width: 0.9
     fzf_preview_window: right:wrap
 
-- git:
-    uri: https://github.com/EdenEast/nightfox.nvim
-  lua: |-
-    vim.cmd [[colorscheme dayfox]]
+# - git:
+#     uri: https://github.com/EdenEast/nightfox.nvim
+#   lua: |-
+#     vim.cmd [[colorscheme dayfox]]
 
 - git:
-    uri: https://github.com/EdenEast/nightfox.nvim
+    uri: https://github.com/cocopon/iceberg.vim
   lua: |-
-    vim.cmd [[colorscheme dayfox]]
+    vim.cmd [[colorscheme iceberg]]
 
 - git:
     uri: https://github.com/tpope/vim-repeat
