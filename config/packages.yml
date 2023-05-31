@@ -96,7 +96,7 @@
     uri: https://github.com/ms-jpq/chadtree
   # vals:
   #   chadtree_settings:
-  #     theme.icon_glyph_set: ascii_hollow
+  #     theme.icon_glyph_set: ascii
   keys:
     - maps:
         "<leader>v": "<cmd>CHADopen<cr>"
@@ -205,6 +205,11 @@
     vim.cmd [[colorscheme dayfox]]
 
 - git:
+    uri: https://github.com/EdenEast/nightfox.nvim
+  lua: |-
+    vim.cmd [[colorscheme dayfox]]
+
+- git:
     uri: https://github.com/tpope/vim-repeat
 
 - git:
@@ -234,15 +239,15 @@
     git_opts:
       current_line_blame: True
       show_deleted: True
-      word_diff: True
+      # word_diff: True
     git_keys:
       "g[": prev_hunk
       "g]": next_hunk
       <leader>A: diffthis
-      <leader>B: toggle_deleted
+      <leader>B: toggle_word_diff
       <leader>S: undo_stage_hunk
       <leader>a: preview_hunk
-      <leader>b: toggle_word_diff
+      <leader>b: toggle_deleted
       <leader>c: reset_hunk
       <leader>s: stage_hunk
 
