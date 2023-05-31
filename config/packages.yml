@@ -29,8 +29,8 @@
         lsp_interop:
           enable: true
           peek_definition_code:
-            gll: "@function.outer"
-            gLL: "@class.outer"
+            L: "@function.outer"
+            B: "@class.outer"
         select:
           enable: True
           keymaps:
