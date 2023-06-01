@@ -62,8 +62,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         {
             #[cfg(target_family = "unix")]
             {
-                use std::os::unix::fs::PermissionsExt;
-                entry.metadata()?.permissions().set_mode(0o755);
+                use std::{
+                    fs::{set_permissions, Permissions},
+                    os::unix::fs::PermissionsExt,
+                };
+                set_permissions(entry.path(), Permissions::from_mode(0o655))?;
             }
 
             rename(entry.path(), var_os("BIN").ok_or(format!("{}", line!()))?)?;
