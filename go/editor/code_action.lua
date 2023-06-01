@@ -67,7 +67,7 @@
     local line =
       unpack(vim.api.nvim_buf_get_lines(buf, ed.line, ed.line + 1, true))
     local l = vim.str_utfindex(line, ed.character) - 1
-    params.range["end"].character = math.min(l, ed.character)
+    params.range["end"].character = math.max(0, math.min(l, ed.character))
 
     local clients = vim.lsp.get_active_clients({bufnr = buf})
     local row = unpack(vim.api.nvim_win_get_cursor(0))
