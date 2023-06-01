@@ -26,7 +26,28 @@ install:
 	python3 -m venv -- .venv
 
 .venv/bin/mypy: .venv/bin/pip
-	'$<' install --upgrade --requirement requirements.txt -- mypy types-PyYAML isort black
+	'$<' install --upgrade --requirement requirements.txt
+
+	.venv/bin/python3 <<EOF
+	from itertools import chain
+	from os import execl
+	from sys import executable
+	from tomllib import load
+
+	toml = load(open("pyproject.toml", "rb"))
+	project = toml["project"]
+	execl(
+			executable,
+			executable,
+			"-m",
+			"pip",
+			"install",
+			"--upgrade",
+			"--",
+			*project.get("dependencies", ()),
+			*chain.from_iterable(project["optional-dependencies"].values()),
+	)
+	EOF
 
 .PHONY: lint
 
