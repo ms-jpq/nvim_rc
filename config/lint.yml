@@ -104,9 +104,9 @@
   install:
     script:
       env:
-        DARWIN_URI: https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.53.0-darwin-arm64.tar.gz
-        LINUX_URI: https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.53.0-linux-amd64.tar.gz
-        NT_URI: https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.53.0-windows-amd64.zip
+        DARWIN_URI: https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.53.2-darwin-arm64.tar.gz
+        LINUX_URI: https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.53.2-linux-amd64.tar.gz
+        NT_URI: https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.53.2-windows-amd64.zip
       file: dl/golint.sh
   type: fs
 
