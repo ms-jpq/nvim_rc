@@ -13,6 +13,7 @@
   type: fs
 
 - args:
+    - --enable=all
     - --
     - ${tmpname}
   bin: shellcheck
