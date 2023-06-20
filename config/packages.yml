@@ -228,7 +228,7 @@
   vals:
     git_opts:
       current_line_blame: True
-      show_deleted: True
+      # show_deleted: True
       # word_diff: True
     git_keys:
       "g[": prev_hunk
