@@ -11,7 +11,7 @@ from pynvim_pp.types import Method
 from std2.contextlib import nullacontext
 from std2.locale import si_prefixed_smol
 from std2.platform import OS, os
-from std2.sys import suicide
+from std2.sys import autodie
 
 from ._registery import ____
 from .components.install import maybe_install
@@ -20,11 +20,11 @@ from .registery import drain
 assert ____ or 1
 
 
-def _suicide(ppid: int) -> AbstractAsyncContextManager[None]:
+def _autodie(ppid: int) -> AbstractAsyncContextManager[None]:
     if os is OS.windows:
         return nullacontext(None)
     else:
-        return suicide(ppid)
+        return autodie(ppid)
 
 
 async def _default(msg: MsgType, method: Method, params: Sequence[Any]) -> None:
@@ -33,7 +33,7 @@ async def _default(msg: MsgType, method: Method, params: Sequence[Any]) -> None:
 
 
 async def init(socket: ServerAddr, ppid: int) -> None:
-    async with _suicide(ppid):
+    async with _autodie(ppid):
         async with conn(socket, default=_default) as client:
             atomic, handlers = drain()
             for handler in handlers.values():

@@ -8,7 +8,7 @@ SHELL := bash
 
 .DEFAULT_GOAL := help
 
-.PHONY: clean clobber
+.PHONY: clean clobber patch install lint build fmt
 
 clean:
 	rm -rf -- .clj-kondo/ .lsp/ .mypy_cache/ .venv/
@@ -49,12 +49,8 @@ install:
 	)
 	EOF
 
-.PHONY: lint
-
 lint: .venv/bin/mypy
 	'$<' -- .
-
-.PHONY: build
 
 build:
 	docker build --file docker/Dockerfile --tag nvim -- .
