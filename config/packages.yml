@@ -151,8 +151,8 @@
         short_name: COP
         src: copilot
       - src: repl
-      - short_name: MATH
-        src: bc
+      # - short_name: MATH
+      #   src: bc
       - short_name: BIG
         src: figlet
         trigger: "!big"
