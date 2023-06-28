@@ -113,15 +113,10 @@
     - maps:
         "<leader>z": "<cmd>COQnow<cr>"
       modes: n
-  lua: |-
-    if vim.env.SSH_TTY or vim.env.T9 then
-      local cs = vim.g.coq_settings
-      cs["clients.tabnine.enabled"] = true
-      vim.g.coq_settings = cs
-    end
   vals:
     coq_settings:
       auto_start: True
+      clients.tabnine.enabled: True
       clients.snippets.user_path: |-
         ~/.config/nvim/pack/modules/start/snips
       keymap:
