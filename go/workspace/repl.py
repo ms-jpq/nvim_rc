@@ -147,9 +147,9 @@ async def _pane(tmux: PurePath, buf: Buffer) -> Optional[str]:
                 def cont() -> Iterator[str]:
                     yield show
                     if local:
-                        yield "◉"
+                        yield "✱"
                     elif active:
-                        yield "<-"
+                        yield "◉"
 
                 if p_id != pane_id:
                     line = " ".join(cont())
