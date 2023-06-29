@@ -116,7 +116,9 @@
   vals:
     coq_settings:
       auto_start: True
-      clients.tabnine.enabled: True
+      clients:
+        tabnine.enabled: True
+        registers.lines: ["z"]
       clients.snippets.user_path: |-
         ~/.config/nvim/pack/modules/start/snips
       keymap:
