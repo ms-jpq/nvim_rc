@@ -144,9 +144,12 @@
       # - src: builtin/php
       # - src: builtin/xml
 
-      - accept_key: <c-f>
+      - accept_key: &cop <c-f>
         short_name: COP
         src: copilot
+      - accept_key: *cop
+        short_name: CODE
+        src: codeium
       - src: repl
       # - short_name: MATH
       #   src: bc
@@ -163,9 +166,6 @@
 
 - git:
     uri: https://github.com/ms-jpq/coq.artifacts
-
-- git:
-    uri: https://github.com/github/copilot.vim
 
 - git:
     uri: https://github.com/junegunn/fzf
@@ -248,6 +248,11 @@
   lua: |-
     vim.cmd [[colorscheme iceberg]]
 
+- git:
+    uri: https://github.com/github/copilot.vim
+
+- git:
+    uri: https://github.com/Exafunction/codeium.vim
 # - git:
 #     uri: https://github.com/HiPhish/nvim-ts-rainbow2.git
 
