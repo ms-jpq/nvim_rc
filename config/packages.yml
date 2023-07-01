@@ -253,6 +253,10 @@
 
 - git:
     uri: https://github.com/Exafunction/codeium.vim
+  vals:
+    codeium_no_map_tab: True
+    codeium_render: False
+
 # - git:
 #     uri: https://github.com/HiPhish/nvim-ts-rainbow2.git
 
