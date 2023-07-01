@@ -144,11 +144,10 @@
       # - src: builtin/php
       # - src: builtin/xml
 
-      - accept_key: &cop <c-f>
+      - accept_key: <c-f>
         short_name: COP
         src: copilot
-      - accept_key: *cop
-        short_name: CODE
+      - short_name: COD
         src: codeium
       - src: repl
       # - short_name: MATH
@@ -256,7 +255,6 @@
   vals:
     codeium_no_map_tab: True
     codeium_render: False
-
 # - git:
 #     uri: https://github.com/HiPhish/nvim-ts-rainbow2.git
 
