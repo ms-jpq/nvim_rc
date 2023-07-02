@@ -15,7 +15,7 @@ if [[ ! -x "$NINJA" ]]; then
 fi
 
 if [[ -d "$REPO" ]]; then
-  cd -- "$REPO" 
+  cd -- "$REPO"
   OPTS=(--recurse-submodules --no-tags --force)
   git pull "${OPTS[@]}"
 else
@@ -28,7 +28,7 @@ if [[ ! "$OSTYPE" =~ "linux" ]]; then
 fi
 
 if [[ ! -x "$BIN" ]]; then
-  cd -- "$REPO" 
+  cd -- "$REPO"
   make build
   ln --symbolic --force -- "$PWD/build/glslls" "$BIN"
 fi

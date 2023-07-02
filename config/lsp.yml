@@ -101,6 +101,9 @@
       #     - "%p"
       #     - '"code -g %f:%l"'
 
+- bin: digestif
+  server: digestif
+
 - bin: diagnostic-languageserver
   filetypes:
     - dockerfile
@@ -179,6 +182,12 @@
     npm:
       - pyright
   server: pyright
+
+- bin: ruff
+  install:
+    pip:
+      - ruff
+  server: ruff_lsp
 
 - bin: haskell-language-server-wrapper
   install:
@@ -302,6 +311,11 @@
       required:
         - julia
   server: julials
+
+- bin: phpactor
+  # https://phpactor.readthedocs.io/en/master/usage/standalone.html#global-installation
+  install: {}
+  server: phpactor
 
 - bin: intelephense
   install:
@@ -436,6 +450,27 @@
     npm:
       - emmet-ls
   server: emmet_ls
+
+- bin: terraform-ls
+  install:
+    script:
+      env:
+        BASE_URI: https://releases.hashicorp.com/terraform-ls
+      required:
+        - htmlq
+      file: dl/terraform_ls.sh
+  server: terraformls
+
+- bin: tflint
+  install:
+    script:
+      env:
+        DARWIN_URI: https://github.com/terraform-linters/tflint/releases/latest/download/tflint_darwin_arm64.zip
+        LINUX_URI: https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_amd64.zip
+        NT_URI: https://github.com/terraform-linters/tflint/releases/latest/download/tflint_windows_amd64.zip
+      file: dl/tflint.sh
+  server: tflint
+
 # - server: volar
 #   bin: vue-language-server
 #   install:

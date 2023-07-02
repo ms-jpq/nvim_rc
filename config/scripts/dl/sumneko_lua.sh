@@ -17,7 +17,7 @@ if [[ ! -x "$NINJA" ]]; then
 fi
 
 if [[ -d "$REPO" ]]; then
-  cd -- "$REPO" 
+  cd -- "$REPO"
   OPTS=(--recurse-submodules --no-tags)
   git pull "${OPTS[@]}" origin "refs/tags/$TAG:refs/tags/$TAG"
 else
@@ -28,7 +28,7 @@ fi
 if [[ ! -x "$BIN" ]]; then
   (
     PATH="$VENV_BIN:$PATH"
-    cd -- "$REPO/3rd/luamake" 
+    cd -- "$REPO/3rd/luamake"
 
     case "$OSTYPE" in
     darwin*)
@@ -43,7 +43,7 @@ if [[ ! -x "$BIN" ]]; then
     esac
 
     ninja -f "$PWD/compile/ninja/$NAME.ninja"
-    cd -- "$REPO" 
+    cd -- "$REPO"
     "$REPO/3rd/luamake/luamake" rebuild
   )
 
