@@ -223,19 +223,17 @@
 # - server: typeprof
 #   bin: typeprof
 
-# - server: ruby_ls
-#   bin: ruby-lsp
-#   install:
-#     gem:
-#       - ruby-lsp
+- server: ruby_ls
+  bin: ruby-lsp
+  install:
+    gem:
+      - ruby-lsp
 
 - bin: solargraph
   install:
     gem:
       - solargraph
     script:
-      env:
-        INSTALL: t
       file: dl/solargraph.rb
       required:
         - ruby
