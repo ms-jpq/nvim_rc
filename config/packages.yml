@@ -109,10 +109,6 @@
       - coq
       - deps
     uri: https://github.com/ms-jpq/coq_nvim
-  keys:
-    - maps:
-        "<leader>z": "<cmd>COQnow<cr>"
-      modes: n
   vals:
     coq_settings:
       auto_start: True
