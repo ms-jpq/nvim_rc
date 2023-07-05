@@ -211,9 +211,6 @@
         - rustc
   server: rust_analyzer
 
-- bin: clangd
-  server: clangd
-
 - bin: gopls
   install:
     script:
@@ -470,7 +467,6 @@
         NT_URI: https://github.com/terraform-linters/tflint/releases/latest/download/tflint_windows_amd64.zip
       file: dl/tflint.sh
   server: tflint
-
 # - server: volar
 #   bin: vue-language-server
 #   install:
