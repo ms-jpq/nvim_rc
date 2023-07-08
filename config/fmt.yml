@@ -161,10 +161,9 @@
     npm:
       # - prettier-plugin-awk
       - prettier
-      - "@prettier/plugin-php"
-      - "@prettier/plugin-xml"
-      - "@shopify/prettier-plugin-liquid"
-      - prettier-plugin-java
+      # - "@prettier/plugin-php"
+      # - "@prettier/plugin-xml"
+      # - prettier-plugin-java
       - prettier-plugin-organize-imports
       # - prettier-plugin-tailwindcss
   type: stream
