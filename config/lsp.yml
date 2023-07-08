@@ -273,11 +273,11 @@
       - vscode-langservers-extracted
   server: cssls
 
-- bin: tailwindcss-language-server
-  install:
-    npm:
-      - "@tailwindcss/language-server"
-  server: tailwindcss
+# - bin: tailwindcss-language-server
+#   install:
+#     npm:
+#       - "@tailwindcss/language-server"
+#   server: tailwindcss
 
 - bin: graphql-lsp
   install:
