@@ -106,11 +106,7 @@ def main() -> None:
             print(e, file=stderr)
             exit(1)
         else:
-
-            async def m() -> None:
-                await init(args.socket, ppid=args.ppid)
-
-            arun(m())
+            arun(init(args.socket, ppid=args.ppid))
 
     else:
         assert False
