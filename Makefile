@@ -8,13 +8,16 @@ SHELL := bash
 
 .DEFAULT_GOAL := help
 
-.PHONY: clean clobber patch install lint build fmt
+.PHONY: clean clobber runtime patch install lint build fmt
 
 clean:
 	rm -rf -- .clj-kondo/ .lsp/ .mypy_cache/ .venv/
 
 clobber: clean
 	sudo -- rm -rf -- pack/ var/
+
+runtime:
+	python3 -m go deps runtime
 
 patch:
 	python3 -m go deps packages
