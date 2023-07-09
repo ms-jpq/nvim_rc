@@ -55,8 +55,7 @@ async def _go_replace_line() -> None:
         row, _ = await win.get_cursor()
         body = await Nvim.fn.getreg(str)
         if new_lines := body.split(linefeed):
-            n = new_lines.pop()
-            if n:
+            if n := new_lines.pop():
                 new_lines.append(n)
 
         await buf.set_lines(lo=row, hi=row + 1, lines=new_lines)
