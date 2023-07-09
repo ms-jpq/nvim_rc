@@ -183,11 +183,11 @@
       - pyright
   server: pyright
 
-- bin: ruff
-  install:
-    pip:
-      - ruff
-  server: ruff_lsp
+# - bin: ruff
+#   install:
+#     pip:
+#       - ruff
+#   server: ruff_lsp
 
 - bin: haskell-language-server-wrapper
   install:
