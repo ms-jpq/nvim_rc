@@ -4,8 +4,8 @@ from pynvim_pp.atomic import Atomic
 from pynvim_pp.autocmd import AutoCMD
 from pynvim_pp.handler import RPC
 from pynvim_pp.keymap import Keymap
+from pynvim_pp.rpc_types import Method, RPCallable
 from pynvim_pp.settings import Settings
-from pynvim_pp.types import Method, RPCallable
 from std2.platform import OS, os
 
 from .components.localization import load

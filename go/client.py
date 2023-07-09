@@ -6,8 +6,7 @@ from typing import Any, Sequence
 
 from pynvim_pp.logging import suppress_and_log
 from pynvim_pp.nvim import conn
-from pynvim_pp.rpc import MsgType, ServerAddr
-from pynvim_pp.types import Method
+from pynvim_pp.rpc_types import Method, MsgType, ServerAddr
 from std2.contextlib import nullacontext
 from std2.locale import si_prefixed_smol
 from std2.platform import OS, os
