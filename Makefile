@@ -22,35 +22,37 @@ patch:
 install:
 	python3 -m go deps
 
-.venv/bin/pip:
+.venv/bin/python3:
 	python3 -m venv -- .venv
 
 define PYDEPS
 from itertools import chain
 from os import execl
 from sys import executable
-from tomllib import load
 
-toml = load(open("pyproject.toml", "rb"))
+from tomli import load
+
+with open("pyproject.toml", "rb") as fd:
+    toml = load(fd)
+
 project = toml["project"]
 execl(
-		executable,
-		executable,
-		"-m",
-		"pip",
-		"install",
-		"--upgrade",
-		"--",
-		*project.get("dependencies", ()),
-		*chain.from_iterable(project["optional-dependencies"].values()),
+    executable,
+    executable,
+    "-m",
+    "pip",
+    "install",
+    "--upgrade",
+    "--",
+    *project.get("dependencies", ()),
+    *chain.from_iterable(project["optional-dependencies"].values()),
 )
 endef
 export -- PYDEPS
 
-.venv/bin/mypy: .venv/bin/pip
-	'$<' install --upgrade --requirement requirements.txt
-
-	printf -- %s "$$PYDEPS" | .venv/bin/python3
+.venv/bin/mypy: .venv/bin/python3
+	'$<' -m pip install --requirement requirements.txt -- tomli
+	'$<' <<< "$$PYDEPS"
 
 lint: .venv/bin/mypy
 	'$<' -- .
@@ -61,3 +63,4 @@ build:
 fmt: .venv/bin/mypy
 	.venv/bin/isort --profile=black --gitignore -- .
 	.venv/bin/black --extend-exclude pack -- .
+
