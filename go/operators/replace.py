@@ -26,10 +26,8 @@ async def _go_replace(visual: VisualTypes) -> None:
         end = (r2, min(len(encode(t)), c2))
 
         text = await Nvim.fn.getreg(str)
-        new_lines = text.split(linefeed)
-        if new_lines:
-            n = new_lines.pop()
-            if n:
+        if new_lines := text.split(linefeed):
+            if n := new_lines.pop():
                 new_lines.append(n)
 
         undolevels = await Nvim.opts.get(int, "undolevels")
