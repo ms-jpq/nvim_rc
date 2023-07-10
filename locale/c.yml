@@ -30,10 +30,10 @@
   ✅ 👉 ${args}
 
 "missing": |-
-  ⁉️ Missing ${thing}
+  ⁉️  Missing ${thing}
 
 "missing_linter": |-
-  ⁉️ Unable to find linter for ${filetype}
+  ⁉️  Unable to find linter for ${filetype}
 
 "basic prettier": |-
   ${filetype} 👉 WS
