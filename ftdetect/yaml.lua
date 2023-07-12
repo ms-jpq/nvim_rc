@@ -1,7 +1,8 @@
 vim.filetype.add(
   {
     filename = {
-      ["gemrc"] = "yaml"
+      ["gemrc"] = "yaml",
+      ["user-data"] = "yaml"
     }
   }
 )
