@@ -1,3 +1,4 @@
+from contextlib import suppress
 from dataclasses import dataclass
 from functools import cache
 from itertools import count
@@ -9,6 +10,7 @@ from uuid import uuid4
 
 from pynvim_pp.buffer import Buffer, ExtMark, ExtMarker
 from pynvim_pp.nvim import Nvim
+from pynvim_pp.rpc_types import NvimError
 from std2.cell import RefCell
 from std2.pickle.decoder import new_decoder
 
@@ -69,7 +71,8 @@ async def _on_code_action_notif(
         extmarks = (sign,) if actionable else ()
         if uid > now:
             await buf.clear_namespace(ns)
-        await buf.set_extmarks(ns, extmarks=extmarks)
+        with suppress(NvimError):
+            await buf.set_extmarks(ns, extmarks=extmarks)
 
 
 atomic.exec_lua(_CODE_ACTION, (NAMESPACE, _on_code_action_notif.method))
