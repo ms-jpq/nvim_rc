@@ -4,6 +4,9 @@
 
 main(_Argv) :-
     current_prolog_flag(os_argv, [_, Arg0|_]),
+    getenv('LIB', Lib),
+    getenv('BIN', BinD),
+    getenv('URI', URI),
     file_directory_name(Arg0, Dl),
     file_directory_name(Dl, Scripts),
     file_directory_name(Scripts, Config),
@@ -13,9 +16,6 @@ main(_Argv) :-
     directory_file_path(Exec, "prolog_ls.pro", BinS),
     directory_file_path(Exec, "prolog_fmt.pro", BinFS),
     directory_file_path(Syntax, "prolog.vim", SynD),
-    getenv('LIB', Lib),
-    getenv('BIN', BinD),
-    getenv('URI', URI),
     file_directory_name(BinD, Bin),
     directory_file_path(Bin, 'prolog-fmt', BinFD),
     =(Pack, lsp_server),

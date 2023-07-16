@@ -154,11 +154,11 @@
       file: dl/jq_ls.sh
   server: jqls
 
-- bin: awk-language-server
-  install:
-    npm:
-      - awk-language-server
-  server: awk_ls
+# - bin: awk-language-server
+#   install:
+#     npm:
+#       - awk-language-server
+#   server: awk_ls
 
 - args: []
   bin: pwsh_es.ps1

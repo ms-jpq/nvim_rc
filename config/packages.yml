@@ -13,11 +13,6 @@
   lua: |-
     local opts = vim.g.ts_opts
     require("nvim-treesitter.configs").setup(opts)
-  # opts.rainbow = {
-  #   enable = true,
-  #   query = 'rainbow-parens',
-  #   strategy = require('ts-rainbow').strategy.global
-  # }
   vals:
     ts_opts:
       ensure_installed: all
@@ -251,9 +246,6 @@
   vals:
     codeium_no_map_tab: True
     codeium_render: False
-# - git:
-#     uri: https://github.com/HiPhish/nvim-ts-rainbow2.git
-
 # - git:
 #     uri: https://github.com/lervag/vimtex
 #   vals:
