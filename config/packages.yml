@@ -29,8 +29,8 @@
           init_selection: w
           node_decremental: q
           node_incremental: w
-      indent:
-        enable: true
+      # indent:
+      #   enable: true
       textobjects:
         lsp_interop:
           enable: true
