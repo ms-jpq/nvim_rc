@@ -4,7 +4,7 @@
 #![deny(clippy::all, clippy::cargo, clippy::pedantic)]
 
 use std::{
-    env::{args, var_os},
+    env::{args, consts::ARCH, var_os},
     error::Error,
     fs::{create_dir_all, read_dir, rename},
     path::PathBuf,
@@ -30,11 +30,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     create_dir_all(&tmp)?;
 
     #[cfg(target_os = "macos")]
-    let uri = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-aarch64-apple-darwin.gz";
+    let uri = format!("https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-{ARCH}-apple-darwin.gz");
     #[cfg(target_os = "linux")]
-    let uri = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz";
+    let uri = format!("https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-{ARCH}-unknown-linux-gnu.gz");
     #[cfg(target_os = "windows")]
-    let uri = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-pc-windows-msvc.gz";
+    let uri = format!("https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-{ARCH}-pc-windows-msvc.gz");
 
     let mut proc = Command::new("get.py")
         .arg("--")
@@ -64,7 +64,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                     fs::{set_permissions, Permissions},
                     os::unix::fs::PermissionsExt,
                 };
-                set_permissions(entry.path(), Permissions::from_mode(0o655))?;
+                set_permissions(entry.path(), Permissions::from_mode(0o755))?;
             }
 
             rename(entry.path(), var_os("BIN").ok_or(format!("{}", line!()))?)?;
