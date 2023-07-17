@@ -7,7 +7,7 @@ if (!startsWith(location, "--file=")) {
 }
 
 parent <- dirname(sub("^--file=", "", location))
-r <- paste(parent, "/../exec/lintr.r", sep = "")
+r <- paste(parent, "/lintr.ex.r", sep = "")
 
 bin <- {
   bin <- Sys.getenv("BIN")

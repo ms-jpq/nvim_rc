@@ -11,11 +11,10 @@ use strict;
 use utf8;
 use warnings;
 
-my $bin     = dirname( $ENV{BIN} );
-my $lib     = $ENV{LIB};
-my $dir     = dirname(__FILE__);
-my $scripts = "$dir/../exec";
-my @names   = qw( perlcritic perltidy );
+my $bin   = dirname( $ENV{BIN} );
+my $lib   = $ENV{LIB};
+my $dir   = dirname(__FILE__);
+my @names = qw( perlcritic perltidy );
 
 if ( !-d $lib ) {
   my $tmp = File::Temp->newdir();
@@ -27,7 +26,7 @@ if ( !-d $lib ) {
 }
 
 foreach my $name (@names) {
-  my $src = "$scripts/$name.pl";
+  my $src = "$dir/$name.ex.pl";
   my $dst = "$bin/$name";
 
   if ( $OSNAME eq 'msys' ) {

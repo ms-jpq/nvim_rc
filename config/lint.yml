@@ -116,7 +116,7 @@
     - r
   install:
     script:
-      file: dl/rlint.r
+      file: lintr.dl.r
       required:
         - Rscript
         - R
@@ -141,7 +141,7 @@
     - php
   install:
     script:
-      file: dl/phan.php
+      file: dl/phan.dl.php
       required:
         - php
   type: fs

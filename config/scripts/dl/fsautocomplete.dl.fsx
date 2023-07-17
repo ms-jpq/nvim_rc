@@ -8,7 +8,7 @@ open System.Runtime.InteropServices
 
 let tmp = Directory.CreateTempSubdirectory().FullName
 let lib = Environment.GetEnvironmentVariable "LIB"
-let proxy = Path.Combine(__SOURCE_DIRECTORY__, "..", "exec", "fsautocomplete.sh")
+let proxy = Path.Combine(__SOURCE_DIRECTORY__, "fsautocomplete.ex.sh")
 
 let bin =
     let ext =

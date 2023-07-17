@@ -239,7 +239,7 @@
     - tex
   install:
     script:
-      file: dl/latex_format.pl
+      file: dl/latexindent.dl.pl
       required:
         - perl
         - cpanm
@@ -253,7 +253,7 @@
     - fsharp
   install:
     script:
-      file: dl/fantomas.fsx
+      file: dl/fantomas.dl.fsx
       required:
         - dotnet
   type: fs
@@ -266,7 +266,7 @@
     - kotlin
   install:
     script:
-      file: dl/ktfmt.kts
+      file: dl/ktfmt.dl.kts
       required:
         - kotlinc
   type: fs
@@ -278,7 +278,7 @@
     - r
   install:
     script:
-      file: dl/rfmt.r
+      file: dl/styler.dl.r
       required:
         - Rscript
         - R

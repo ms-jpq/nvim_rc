@@ -143,7 +143,7 @@
   bin: pwsh_es.ps1
   install:
     script:
-      file: dl/pwsh_es.ps1
+      file: dl/pwsh_es.dl.ps1
       required:
         - pwsh
   server: powershell_es
@@ -169,7 +169,7 @@
 - bin: haskell-language-server-wrapper
   install:
     script:
-      file: dl/haskell_language_server.sh
+      file: dl/haskell_language_server.dl.sh
   server: hls
 
 - bin: rust-analyzer
@@ -209,7 +209,7 @@
     gem:
       - solargraph
     script:
-      file: dl/solargraph.rb
+      file: dl/solargraph.dl.rb
       required:
         - ruby
   server: solargraph
@@ -273,7 +273,7 @@
   bin: julia-lsp
   install:
     script:
-      file: dl/julia_ls.jl
+      file: dl/julia_ls.dl.jl
       required:
         - julia
   server: julials
@@ -292,7 +292,7 @@
 - bin: fsautocomplete
   install:
     script:
-      file: dl/fsharp_ls.fsx
+      file: dl/fsautocomplete.dl.fsx
       required:
         - dotnet
   server: fsautocomplete
@@ -301,7 +301,7 @@
   bin: omnisharp
   install:
     script:
-      file: dl/omnisharp.fsx
+      file: dl/omnisharp.dl.fsx
       required:
         - dotnet
   server: omnisharp
@@ -334,7 +334,7 @@
   bin: prolog-ls
   install:
     script:
-      file: dl/prolog_ls.pro
+      file: dl/prolog_ls.dl.pro
       required:
         - swipl
   server: prolog_ls

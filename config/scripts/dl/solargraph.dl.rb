@@ -5,7 +5,4 @@ Kernel.require("English")
 Kernel.require("fileutils")
 Kernel.require("pathname")
 
-FileUtils.cp(
-  Pathname(__dir__).parent.join("exec", "solargraph.rb"),
-  ENV.fetch("BIN"),
-)
+FileUtils.cp(Pathname(__dir__).join("solargraph.ex.rb"), ENV.fetch("BIN"))

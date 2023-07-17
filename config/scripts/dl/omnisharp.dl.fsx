@@ -25,7 +25,7 @@ let run arg0 argv (input: 'a) =
 
 let tmp = Directory.CreateTempSubdirectory().FullName
 let lib = Environment.GetEnvironmentVariable "LIB"
-let proxy = Path.Combine(__SOURCE_DIRECTORY__, "..", "exec", "omnisharp.sh")
+let proxy = Path.Combine(__SOURCE_DIRECTORY__, "omnisharp.ex.sh")
 
 
 let bin =

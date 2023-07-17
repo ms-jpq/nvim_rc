@@ -6,8 +6,8 @@ LIB="${0%/*}/../lib"
 BIN="$LIB/fantomas/fantomas"
 
 if hash asdf 2>/dev/null; then
-  export -- DOTNET_ROOT=
-  DOTNET_ROOT="$(dirname -- "$(asdf which dotnet)")"
+  DOTNET="$(asdf which dotnet)"
+  export -- DOTNET_ROOT="${DOTNET%/*}"
 fi
 
 exec -- "$BIN" "$@"

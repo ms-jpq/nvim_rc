@@ -15,7 +15,7 @@ my $uri    = "https://github.com/cmhughes/latexindent.pl/archive/V3.11.tar.gz";
 my $bin    = $ENV{BIN};
 my $lib    = $ENV{LIB};
 my $dir    = dirname(__FILE__);
-my $script = "$dir/../exec/latexindent.pl";
+my $script = "$dir/latexindent.ex.pl";
 
 if ( $OSNAME eq 'msys' ) {
   $bin = "$bin.pl";
