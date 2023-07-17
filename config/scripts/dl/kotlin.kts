@@ -18,6 +18,7 @@ val suffix = { path: Path, ext: String ->
   }
 }
 
+val uri = "https://github.com/fwcd/kotlin-language-server/releases/latest/download/server.zip"
 val lib = Path(System.getenv("LIB")!!)
 val tmp = Path(createTempDir().getPath())
 val ll = suffix(Path(lib.toString(), "bin", "kotlin-language-server"), ".bat")
@@ -26,7 +27,7 @@ val bin = suffix(Path(System.getenv("BIN")!!), ".bat")
 val procs =
     ProcessBuilder.startPipeline(
         listOf(
-            ProcessBuilder("get", "--", System.getenv("URI")!!).redirectError(Redirect.INHERIT),
+            ProcessBuilder("get", "--", uri).redirectError(Redirect.INHERIT),
             ProcessBuilder("unpack", "--dest", tmp.toString())
                 .redirectOutput(Redirect.INHERIT)
                 .redirectError(Redirect.INHERIT)))

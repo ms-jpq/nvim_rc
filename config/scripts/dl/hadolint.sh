@@ -1,14 +1,16 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeu -O dotglob -O nullglob -O extglob -O failglob -O globstar
+
+set -o pipefail
 
 case "$OSTYPE" in
 darwin*)
-  URI="$DARWIN_URI"
+  URI="https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Darwin-x86_64"
   ;;
 linux*)
-  URI="$LINUX_URI"
+  URI="https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64"
   ;;
 *)
-  URI="$NT_URI"
+  URI="https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Windows-x86_64.exe"
   BIN="$BIN.exe"
   ;;
 esac

@@ -1,14 +1,16 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeu -O dotglob -O nullglob -O extglob -O failglob -O globstar
+
+set -o pipefail
 
 case "$OSTYPE" in
 darwin*)
-  URI="$DARWIN_URI"
+  URI="https://downloads.haskell.org/~hls/haskell-language-server-1.9.0.0/haskell-language-server-1.9.0.0-aarch64-darwin.tar.xz"
   ;;
 linux*)
-  URI="$LINUX_URI"
+  URI="https://downloads.haskell.org/~hls/haskell-language-server-1.9.0.0/haskell-language-server-1.9.0.0-x86_64-linux-deb10.tar.xz"
   ;;
 *)
-  URI="$NT_URI"
+  URI="https://downloads.haskell.org/~hls/haskell-language-server-1.9.0.0/haskell-language-server-1.9.0.0-x86_64-windows.zip"
   BIN="$BIN.sh"
   ;;
 esac
@@ -18,4 +20,4 @@ get -- "$URI" | unpack --dest "$TMP"
 rm --recursive --force -- "$LIB"
 mkdir --parents -- "$LIB"
 mv -- "$TMP"/* "$LIB"
-cp --force -- "$(dirname -- "$0")/../exec/hls.sh" "$BIN"
+cp --force -- "${0%/*}/../exec/hls.sh" "$BIN"

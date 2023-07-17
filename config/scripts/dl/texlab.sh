@@ -1,19 +1,20 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeu -O dotglob -O nullglob -O extglob -O failglob -O globstar
+
+set -o pipefail
 
 T_BIN="$(dirname -- "$BIN")/tectonic"
 
 case "$OSTYPE" in
 darwin*)
-  URI="$DARWIN_URI"
-  T_URI="$T_DARWIN_URI"
+  URI="https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-macos.tar.gz"
+  T_URI="https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.13.1/tectonic-0.13.1-x86_64-apple-darwin.tar.gz"
   ;;
 linux*)
-  URI="$LINUX_URI"
-  T_URI="$T_LINUX_URI"
+  URI="https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-linux.tar.gz"
+  T_URI="https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.13.1/tectonic-0.13.1-x86_64-unknown-linux-gnu.tar.gz"
   ;;
 *)
-  # shellcheck disable=SC2153
-  URI="$NT_URI"
+  URI="https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.13.1/tectonic-0.13.1-x86_64-pc-windows-msvc.zip"
   T_URI="$T_NT_URI"
   BIN="$BIN.exe"
   T_BIN="$T_BIN.exe"

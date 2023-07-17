@@ -29,7 +29,7 @@ let run arg0 (argv: 'a) =
 run "dotnet" [ "tool"; "install"; "--tool-path"; tmp; "fsautocomplete" ]
 
 do
-    let uri = Environment.GetEnvironmentVariable "URI"
+    let uri = "https://github.com/ionide/Ionide-vim"
 
     let name =
         Path.Combine(Environment.CurrentDirectory, Path.GetFileNameWithoutExtension(uri))

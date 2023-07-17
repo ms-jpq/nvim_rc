@@ -1,4 +1,8 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeu -O dotglob -O nullglob -O extglob -O failglob -O globstar
+
+set -o pipefail
+
+URI='https://github.com/svenstaro/glsl-language-server'
 
 LOCATION="$PWD/glsl-ls"
 REPO="$LOCATION/repo"

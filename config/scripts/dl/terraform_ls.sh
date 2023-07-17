@@ -1,4 +1,8 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeu -O dotglob -O nullglob -O extglob -O failglob -O globstar
+
+set -o pipefail
+
+BASE_URI='https://releases.hashicorp.com/terraform-ls'
 
 HREF="$(curl --fail --location --no-progress-meter --max-time 60 -- "$BASE_URI" | htmlq --attribute href -- 'body > ul > li:nth-child(2) > a')"
 VERSION="${HREF%%/}"

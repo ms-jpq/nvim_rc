@@ -1,8 +1,7 @@
 #!/usr/bin/env -S -- php
 
 <?php
-$uri = getenv("URI");
-assert($uri);
+$uri = "https://github.com/phan/phan/releases/latest/download/phan.phar";
 
 $output = [];
 $code = -1;

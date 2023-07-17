@@ -40,11 +40,11 @@ let bin =
 let uri =
     let env =
         if RuntimeInformation.IsOSPlatform(OSPlatform.OSX) then
-            "DARWIN_URI"
+            "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx-arm64-net6.0.tar.gz"
         elif RuntimeInformation.IsOSPlatform(OSPlatform.Linux) then
-            "LINUX_URI"
+            "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-linux-x64-net6.0.tar.gz"
         else
-            "NT_URI"
+            "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-win-x64-net6.0.zip"
 
     env |> Environment.GetEnvironmentVariable
 

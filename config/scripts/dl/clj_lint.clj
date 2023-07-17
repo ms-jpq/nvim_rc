@@ -4,17 +4,17 @@
         '[java.nio.file Files Paths StandardCopyOption]
         '[java.nio.file.attribute FileAttribute PosixFilePermissions])
 
+(def uri
+  (case (System/getProperty "os.name")
+    "Linux" "https://github.com/clj-kondo/clj-kondo/releases/latest/download/clj-kondo-2023.07.13-linux-static-amd64.zip"
+    "Mac OS X" "https://github.com/clj-kondo/clj-kondo/releases/latest/download/clj-kondo-2023.07.13-macos-aarch64.zip"
+    "https://github.com/clj-kondo/clj-kondo/releases/latest/download/clj-kondo-2023.07.13-windows-amd64.zip"))
+
 (def bin (let [b (System/getenv "BIN")
                ext (case (System/getProperty "os.name")
                      "Windows" ".exe"
                      "")]
            (Paths/get (str b ext) (into-array String []))))
-
-(def uri (System/getenv
-          (case (System/getProperty "os.name")
-            "Linux" "LINUX_URI"
-            "Mac OS X" "DARWIN_URI"
-            "NT_URI")))
 
 (let [tmp (Files/createTempDirectory "" (into-array FileAttribute []))]
   (try

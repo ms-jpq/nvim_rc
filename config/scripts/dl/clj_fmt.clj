@@ -4,17 +4,17 @@
         '[java.nio.file Files Paths StandardCopyOption]
         '[java.nio.file.attribute FileAttribute])
 
+(def uri
+  (case (System/getProperty "os.name")
+    "Linux" "https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt-0.10.6-linux-amd64-static.tar.gz"
+    "Mac OS X" "https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt-0.10.6-darwin-aarch64.tar.gz"
+    "https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt-0.10.6-win-amd64.zip"))
+
 (def bin (let [b (System/getenv "BIN")
                ext (case (System/getProperty "os.name")
                      "Windows" ".exe"
                      "")]
            (Paths/get (str b ext) (into-array String []))))
-
-(def uri (System/getenv
-          (case (System/getProperty "os.name")
-            "Linux" "LINUX_URI"
-            "Mac OS X" "DARWIN_URI"
-            "NT_URI")))
 
 (let [tmp (Files/createTempDirectory "" (into-array FileAttribute []))]
   (try

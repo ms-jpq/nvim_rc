@@ -5,6 +5,7 @@ from contextlib import suppress
 from datetime import timezone
 from email.utils import parsedate_to_datetime
 from http.client import HTTPResponse
+from io import DEFAULT_BUFFER_SIZE
 from os import utime
 from pathlib import Path, PurePosixPath
 from posixpath import normcase
@@ -15,7 +16,6 @@ from typing import Iterator, Tuple, cast
 from urllib.parse import unquote, urlsplit
 from urllib.request import Request, build_opener
 
-_MB = 10**6
 _OPEN = build_opener()
 
 
@@ -38,7 +38,7 @@ def _meta(uri: str, timeout: float) -> Tuple[int, float]:
 def _fetch(uri: str, timeout: float) -> Iterator[bytes]:
     with _OPEN.open(uri, timeout=timeout) as resp:
         resp = cast(HTTPResponse, resp)
-        while buf := resp.read(_MB):
+        while buf := resp.read(DEFAULT_BUFFER_SIZE):
             yield buf
 
 

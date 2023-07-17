@@ -1,14 +1,16 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeu -O dotglob -O nullglob -O extglob -O failglob -O globstar
+
+set -o pipefail
 
 case "$OSTYPE" in
 darwin*)
-  URI="$DARWIN_URI"
+  URI="https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-16.0.0-mac-x64.tar.gz"
   ;;
 linux*)
-  URI="$LINUX_URI"
+  URI="https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-16.0.0-linux-x64.tar.gz"
   ;;
 *)
-  URI="$NT_URI"
+  URI="https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-16.0.0-windows-x64.zip"
   BIN="$BIN.bat"
   ;;
 esac

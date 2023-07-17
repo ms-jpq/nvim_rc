@@ -4,14 +4,15 @@ Set-StrictMode -Version 'Latest'
 $ErrorActionPreference = 'Stop'
 $PSStyle.OutputRendering = 'PlainText'
 
+$uri = 'https://github.com/PowerShell/PowerShellEditorServices/releases/latest/download/PowerShellEditorServices.zip'
 
 $tmp = [IO.Directory]::CreateTempSubdirectory()
-$out = Split-Path -Leaf -- $Env:URI
+$out = Split-Path -Leaf -- $uri
 $exec = Join-Path -- (Split-Path -- $PSScriptRoot) 'exec'
 $bin = $Env:BIN
 $bin_d = Split-Path -- $bin
 
-Invoke-WebRequest -Uri $Env:URI -OutFile $out
+Invoke-WebRequest -Uri $uri -OutFile $out
 Expand-Archive -Force -DestinationPath $tmp -Path $out
 
 if (Test-Path -- $Env:LIB) {

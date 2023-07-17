@@ -1,14 +1,16 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeu -O dotglob -O nullglob -O extglob -O failglob -O globstar
+
+set -o pipefail
 
 case "$OSTYPE" in
 darwin*)
-  URI="$DARWIN_URI"
+  URI="https://github.com/mvdan/sh/releases/latest/download/shfmt_v3.7.0_darwin_arm64"
   ;;
 linux*)
-  URI="$LINUX_URI"
+  URI="https://github.com/mvdan/sh/releases/latest/download/shfmt_v3.7.0_linux_amd64"
   ;;
 *)
-  URI="$NT_URI"
+  URI="https://github.com/mvdan/sh/releases/latest/download/shfmt_v3.7.0_windows_amd64.exe"
   BIN="$BIN.exe"
   ;;
 esac

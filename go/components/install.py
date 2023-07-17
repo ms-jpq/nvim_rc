@@ -37,8 +37,8 @@ from ..consts import (
     BIN_DIR,
     GEM_DIR,
     INSTALL_SCRIPT,
-    INSTALL_SCRIPTS_DIR,
     LIB_DIR,
+    LIBEXEC,
     NPM_DIR,
     PIP_DIR,
     RT_SCRIPTS,
@@ -212,7 +212,7 @@ def _gem() -> Iterator[Awaitable[_SortOfMonoid]]:
 async def _binstub() -> _SortOfMonoid:
     p = await call(
         executable,
-        INSTALL_SCRIPTS_DIR / "binstub",
+        LIBEXEC / "binstub.py",
         "--src",
         _GEMS,
         "--dst",
@@ -282,11 +282,11 @@ def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
 
     for bin, pkg in _script_specs():
 
-        async def cont(path: Path, bin: str, pkg: ScriptSpec) -> _SortOfMonoid:
+        async def cont(path: Path, bin: str) -> _SortOfMonoid:
             env = {
                 "PATH": pathsep.join(
                     (
-                        normcase(INSTALL_SCRIPTS_DIR),
+                        normcase(LIBEXEC),
                         environ["PATH"],
                     )
                 ),
@@ -307,15 +307,15 @@ def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
 
             p = await call(
                 *argv,
-                env={**env, **pkg.env},
+                env=env,
                 cwd=TMP_DIR,
                 check_returncode=set(),
             )
             return (("", p),)
 
         if pkg.file and all(map(which, pkg.required)):
-            if s_path := which(INSTALL_SCRIPTS_DIR / pkg.file):
-                yield cont(Path(s_path), bin=bin, pkg=pkg)
+            if s_path := which(LIBEXEC / pkg.file):
+                yield cont(Path(s_path), bin=bin)
 
 
 async def install() -> int:

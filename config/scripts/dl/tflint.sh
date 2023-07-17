@@ -1,14 +1,16 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeu -O dotglob -O nullglob -O extglob -O failglob -O globstar
+
+set -o pipefail
 
 case "$OSTYPE" in
 darwin*)
-  URI="$DARWIN_URI"
+  URI='https://github.com/terraform-linters/tflint/releases/latest/download/tflint_darwin_arm64.zip'
   ;;
 linux*)
-  URI="$LINUX_URI"
+  URI='https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_amd64.zip'
   ;;
 *)
-  URI="$NT_URI"
+  URI='https://github.com/terraform-linters/tflint/releases/latest/download/tflint_windows_amd64.zip'
   ;;
 esac
 

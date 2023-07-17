@@ -2,11 +2,13 @@
 
 :- initialization(main, main).
 
+uri("https://raw.githubusercontent.com/adimit/prolog.vim/master/syntax/prolog.vim").
+
 main(_Argv) :-
     current_prolog_flag(os_argv, [_, Arg0|_]),
     getenv('LIB', Lib),
     getenv('BIN', BinD),
-    getenv('URI', URI),
+    uri(URI),
     file_directory_name(Arg0, Dl),
     file_directory_name(Dl, Scripts),
     file_directory_name(Scripts, Config),

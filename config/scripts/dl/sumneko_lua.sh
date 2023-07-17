@@ -1,8 +1,13 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeu -O dotglob -O nullglob -O extglob -O failglob -O globstar
 
-if [[ ! "$OSTYPE" =~ "linux" ]]; then
+set -o pipefail
+
+if [[ ! "$OSTYPE" =~ "<>" ]]; then
   exit
 fi
+
+URI='https://github.com/LuaLS/lua-language-server'
+TAG='3.6.11'
 
 LOCATION="$PWD/lua-lsp"
 REPO="$LOCATION/repo"
@@ -47,7 +52,7 @@ if [[ ! -x "$BIN" ]]; then
     "$REPO/3rd/luamake/luamake" rebuild
   )
 
-  PREFIX="$(dirname -- "$BIN")"
+  PREFIX="${BIN%/*}"
   for file in "$REPO/bin/"*; do
     ln --symbolic --force -- "$file" "$PREFIX/$(basename -- "$file")"
   done

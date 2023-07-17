@@ -22,9 +22,6 @@
     - zsh
   install:
     script:
-      env:
-        DARWIN_URI: https://github.com/koalaman/shellcheck/releases/latest/download/shellcheck-v0.9.0.darwin.x86_64.tar.xz
-        LINUX_URI: https://github.com/koalaman/shellcheck/releases/latest/download/shellcheck-v0.9.0.linux.x86_64.tar.xz
       file: dl/shellcheck.sh
   type: fs
 
@@ -70,10 +67,6 @@
     - clojure
   install:
     script:
-      env:
-        DARWIN_URI: https://github.com/clj-kondo/clj-kondo/releases/latest/download/clj-kondo-2023.07.13-macos-aarch64.zip
-        LINUX_URI: https://github.com/clj-kondo/clj-kondo/releases/latest/download/clj-kondo-2023.07.13-linux-static-amd64.zip
-        NT_URI: https://github.com/clj-kondo/clj-kondo/releases/latest/download/clj-kondo-2023.07.13-windows-amd64.zip
       file: dl/clj_lint.clj
       required:
         - clojure
@@ -88,10 +81,6 @@
     - dockerfile
   install:
     script:
-      env:
-        DARWIN_URI: https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Darwin-x86_64
-        LINUX_URI: https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
-        NT_URI: https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Windows-x86_64.exe
       file: dl/hadolint.sh
   type: fs
 
@@ -104,10 +93,6 @@
     - go
   install:
     script:
-      env:
-        DARWIN_URI: https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.53.3-darwin-arm64.tar.gz
-        LINUX_URI: https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.53.3-linux-amd64.tar.gz
-        NT_URI: https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.53.3-windows-amd64.zip
       file: dl/golint.sh
   type: fs
 
@@ -156,8 +141,6 @@
     - php
   install:
     script:
-      env:
-        URI: https://github.com/phan/phan/releases/latest/download/phan.phar
       file: dl/phan.php
       required:
         - php

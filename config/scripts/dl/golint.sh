@@ -1,14 +1,16 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeu -O dotglob -O nullglob -O extglob -O failglob -O globstar
+
+set -o pipefail
 
 case "$OSTYPE" in
 darwin*)
-  URI="$DARWIN_URI"
+  URI="https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.53.3-darwin-arm64.tar.gz"
   ;;
 linux*)
-  URI="$LINUX_URI"
+  URI="https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.53.3-linux-amd64.tar.gz"
   ;;
 *)
-  URI="$NT_URI"
+  URI="https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.53.3-windows-amd64.zip"
   BIN="$BIN.exe"
   ;;
 esac

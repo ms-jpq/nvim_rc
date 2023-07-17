@@ -8,9 +8,9 @@ import kotlin.io.path.copyTo
 import kotlin.io.path.createDirectory
 import kotlin.io.path.deleteRecursively
 
+val root = URI("https://repo1.maven.org/maven2/com/facebook/ktfmt/")
 val lib = Path(System.getenv("LIB")!!)
 val proxy = Path("", "..", "..", "config", "scripts", "exec", "ktfmt.sh")
-val root = URI(System.getenv("URI")!! + "/")
 
 val bin = let {
   val path = Path(System.getenv("BIN")!!)

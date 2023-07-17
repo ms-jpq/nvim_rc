@@ -30,13 +30,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     create_dir_all(&tmp)?;
 
     #[cfg(target_os = "macos")]
-    let var = "DARWIN_URI";
+    let uri = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-aarch64-apple-darwin.gz";
     #[cfg(target_os = "linux")]
-    let var = "LINUX_URI";
+    let uri = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz";
     #[cfg(target_os = "windows")]
-    let var = "NT_URI";
-
-    let uri = var_os(var).ok_or(format!("{}", line!()))?;
+    let uri = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-pc-windows-msvc.gz";
 
     let mut proc = Command::new("get")
         .arg("--")

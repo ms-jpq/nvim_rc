@@ -19,10 +19,11 @@ clean:
 clobber: clean
 	sudo -- rm -rf -- pack/ var/
 
-runtime:
+runtime: var/runtime/requirements.lock
+var/runtime/requirements.lock:
 	python3 -m go deps runtime
 
-patch:
+patch: var/runtime/requirements.lock
 	python3 -m go deps packages
 
 install:

@@ -1,13 +1,12 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import PurePath
-from typing import AbstractSet, Mapping, Optional
+from typing import AbstractSet, Optional
 
 
 @dataclass(frozen=True)
 class ScriptSpec:
     file: Optional[PurePath] = None
     required: AbstractSet[str] = frozenset()
-    env: Mapping[str, str] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)

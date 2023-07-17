@@ -1,11 +1,13 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeu -O dotglob -O nullglob -O extglob -O failglob -O globstar
+
+set -o pipefail
 
 case "$OSTYPE" in
 darwin*)
-  URI="$DARWIN_URI"
+  URI="https://github.com/koalaman/shellcheck/releases/latest/download/shellcheck-v0.9.0.darwin.x86_64.tar.xz"
   ;;
 linux*)
-  URI="$LINUX_URI"
+  URI="https://github.com/koalaman/shellcheck/releases/latest/download/shellcheck-v0.9.0.linux.x86_64.tar.xz"
   ;;
 *)
   exit 0

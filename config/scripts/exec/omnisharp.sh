@@ -1,11 +1,13 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeu -O dotglob -O nullglob -O extglob -O failglob -O globstar
 
-LIB="$(dirname -- "$0")/../lib"
+set -o pipefail
+
+LIB="${0%/*}/../lib"
 BIN="$LIB/omnisharp/OmniSharp"
 
 if hash asdf 2>/dev/null; then
-  export -- DOTNET_ROOT=
-  DOTNET_ROOT="$(dirname -- "$(asdf which dotnet)")"
+  DOTNET="$(asdf which dotnet)"
+  export -- DOTNET_ROOT="${DOTNET%/*}"
 fi
 
 exec -- "$BIN" "$@"

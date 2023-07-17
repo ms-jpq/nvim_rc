@@ -1,14 +1,18 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeu -O dotglob -O nullglob -O extglob -O failglob -O globstar
+
+set -o pipefail
+
+BASE_URI='https://download.jboss.org/jbosstools/vscode/stable/lemminx-binary'
 
 case "$OSTYPE" in
 darwin*)
-  BASENAME="$DARWIN"
+  BASENAME='lemminx-osx-x86_64.zip'
   ;;
 linux*)
-  BASENAME="$LINUX"
+  BASENAME='lemminx-linux.zip'
   ;;
 *)
-  BASENAME="$NT"
+  BASENAME='lemminx-win32.zip'
   BIN="$BIN.exe"
   ;;
 esac

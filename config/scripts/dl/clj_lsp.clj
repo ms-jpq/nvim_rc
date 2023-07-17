@@ -6,17 +6,17 @@
 
 (def os (System/getProperty "os.name"))
 
+(def uri
+  (case os
+    "Linux" "https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp-native-linux-amd64.zip"
+    "Mac OS X" "https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp-native-macos-aarch64.zip"
+    "https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp-native-windows-amd64.zip"))
+
 (def bin (let [b (System/getenv "BIN")
                ext (case os
                      "Windows" ".exe"
                      "")]
            (Paths/get (str b ext) (into-array String []))))
-
-(def uri (System/getenv
-          (case os
-            "Linux" "LINUX_URI"
-            "Mac OS X" "DARWIN_URI"
-            "NT_URI")))
 
 (let [tmp (Files/createTempDirectory "" (into-array FileAttribute []))]
   (try

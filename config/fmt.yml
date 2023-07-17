@@ -37,10 +37,6 @@
     - zsh
   install:
     script:
-      env:
-        DARWIN_URI: https://github.com/mvdan/sh/releases/latest/download/shfmt_v3.7.0_darwin_arm64
-        LINUX_URI: https://github.com/mvdan/sh/releases/latest/download/shfmt_v3.7.0_linux_amd64
-        NT_URI: https://github.com/mvdan/sh/releases/latest/download/shfmt_v3.7.0_windows_amd64.exe
       file: dl/shfmt.sh
   type: stream
 
@@ -116,10 +112,6 @@
     - clojure
   install:
     script:
-      env:
-        DARWIN_URI: https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt-0.10.6-darwin-aarch64.tar.gz
-        LINUX_URI: https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt-0.10.6-linux-amd64-static.tar.gz
-        NT_URI: https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt-0.10.6-win-amd64.zip
       file: dl/clj_fmt.clj
       required:
         - clojure
@@ -247,8 +239,6 @@
     - tex
   install:
     script:
-      env:
-        URI: https://github.com/cmhughes/latexindent.pl/archive/V3.11.tar.gz
       file: dl/latex_format.pl
       required:
         - perl
@@ -276,8 +266,6 @@
     - kotlin
   install:
     script:
-      env:
-        URI: https://repo1.maven.org/maven2/com/facebook/ktfmt
       file: dl/ktfmt.kts
       required:
         - kotlinc
