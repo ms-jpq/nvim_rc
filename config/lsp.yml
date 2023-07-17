@@ -369,15 +369,15 @@
       - ansible-language-server
   server: ansiblels
 
-- bin: glslls
-  install:
-    script:
-      file: dl/glsl_ls.sh
-      required:
-        - cmake
-        - git
-        - python3
-  server: glslls
+#- bin: glslls
+#  install:
+#    script:
+#      file: dl/glsl_ls.sh
+#      required:
+#        - cmake
+#        - git
+#        - python3
+#  server: glslls
 
 - bin: theme-check-language-server
   install:

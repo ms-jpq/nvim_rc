@@ -17,8 +17,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v3
 
-      - name: Lint
-        run: |-
+      - run: |-
           make lint
 
   docker:
@@ -28,8 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build
-        run: |-
+      - run: |-
           make build
 
   # install:

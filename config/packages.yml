@@ -1,14 +1,14 @@
 ---
 - git:
-    call:
-      - nvim
-      - --headless
-      - -u
-      - NONE
-      - +packadd nvim-treesitter
-      - +TSInstallSync all
-      - +TSUpdateSync
-      - +quitall
+    # call:
+    #   - nvim
+    #   - --headless
+    #   - -u
+    #   - NONE
+    #   - +packadd nvim-treesitter
+    #   - +TSInstallSync all
+    #   - +TSUpdateSync
+    #   - +quitall
     uri: https://github.com/nvim-treesitter/nvim-treesitter
   lua: |-
     local opts = vim.g.ts_opts
