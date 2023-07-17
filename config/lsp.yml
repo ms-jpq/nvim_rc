@@ -317,7 +317,7 @@
 - bin: kotlin-language-server
   install:
     script:
-      file: dl/kotlin.kts
+      file: dl/kotlin_ls.kts
       required:
         - kotlinc
   server: kotlin_language_server

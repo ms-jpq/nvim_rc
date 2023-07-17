@@ -49,7 +49,7 @@ let uri =
     env |> Environment.GetEnvironmentVariable
 
 
-"" |> run "get" [ "--"; uri ] |> run "unpack" [ "--dest"; tmp ] |> Console.Write
+"" |> run "get.py" [ "--"; uri ] |> run "unpack.py" [ "--dest"; tmp ] |> Console.Write
 
 try
     Directory.Delete(lib, true)

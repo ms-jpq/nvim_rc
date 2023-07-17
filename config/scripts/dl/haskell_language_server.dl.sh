@@ -16,7 +16,7 @@ linux*)
 esac
 
 TMP="$(mktemp --directory)"
-get -- "$URI" | unpack --dest "$TMP"
+get.py -- "$URI" | unpack.py --dest "$TMP"
 rm --recursive --force -- "$LIB"
 mkdir --parents -- "$LIB"
 mv -- "$TMP"/* "$LIB"

@@ -15,6 +15,6 @@ linux*)
   ;;
 esac
 
-FILE="$(get -- "$URI")"
+FILE="$(get.py -- "$URI")"
 cp --force -- "$FILE" "$BIN"
 chmod +x -- "$BIN"

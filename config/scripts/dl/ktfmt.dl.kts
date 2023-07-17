@@ -31,7 +31,7 @@ val version =
                 .parse(root.resolve("maven-metadata.xml").toString()))
 
 val jar = root.resolve("$version/ktfmt-$version-jar-with-dependencies.jar").toString()
-val proc = ProcessBuilder("get", "--", jar).redirectError(Redirect.INHERIT).start()
+val proc = ProcessBuilder("get.py", "--", jar).redirectError(Redirect.INHERIT).start()
 
 assert(proc.waitFor() == 0)
 

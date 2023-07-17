@@ -27,8 +27,8 @@ val bin = suffix(Path(System.getenv("BIN")!!), ".bat")
 val procs =
     ProcessBuilder.startPipeline(
         listOf(
-            ProcessBuilder("get", "--", uri).redirectError(Redirect.INHERIT),
-            ProcessBuilder("unpack", "--dest", tmp.toString())
+            ProcessBuilder("get.py", "--", uri).redirectError(Redirect.INHERIT),
+            ProcessBuilder("unpack.py", "--dest", tmp.toString())
                 .redirectOutput(Redirect.INHERIT)
                 .redirectError(Redirect.INHERIT)))
 

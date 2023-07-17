@@ -22,6 +22,6 @@ esac
 
 URI="$BASE_URI/$VERSION/terraform-ls_${VERSION}_$NAME.zip"
 TMP="$(mktemp --directory)"
-get -- "$URI" | unpack --dest "$TMP"
+get.py -- "$URI" | unpack.py --dest "$TMP"
 mv --force -- "$TMP/terraform"* "$BIN"
 chmod +x -- "$BIN"

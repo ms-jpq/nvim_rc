@@ -27,10 +27,10 @@ if ( !-d $lib ) {
   my $perl_libd = "$tmp_lib/_perl_";
   my @perl_libs = qw{YAML::Tiny File::HomeDir Unicode::GCString};
 
-  my $filename = `get -- \Q$uri\E`;
+  my $filename = `get.py -- \Q$uri\E`;
   $CHILD_ERROR && croak $CHILD_ERROR;
 
-  system( 'unpack', '--dest', $tmp, q{--}, $filename ) && croak $CHILD_ERROR;
+  system( 'unpack.py', '--dest', $tmp, q{--}, $filename ) && croak $CHILD_ERROR;
   my @globbed = glob "\Q$tmp\E/*";
   move( @globbed, $tmp_lib );
 

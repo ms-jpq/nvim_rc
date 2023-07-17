@@ -28,7 +28,7 @@ main(_Argv) :-
                    upgrade(true),
                    interactive(false)
                  ]),
-    setup_call_cleanup(process_create(path("get"),
+    setup_call_cleanup(process_create(path("get.py"),
                                       ["--", URI],
                                       [stdout(pipe(P1))]),
                        read_string(P1, _, SynS),

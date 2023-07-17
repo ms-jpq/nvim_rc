@@ -36,12 +36,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     #[cfg(target_os = "windows")]
     let uri = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-pc-windows-msvc.gz";
 
-    let mut proc = Command::new("get")
+    let mut proc = Command::new("get.py")
         .arg("--")
         .arg(uri)
         .stdout(Stdio::piped())
         .spawn()?;
-    let status = Command::new("unpack")
+    let status = Command::new("unpack.py")
         .arg("--dest")
         .arg(&tmp)
         .stdin(proc.stdout.take().ok_or(format!("{}", line!()))?)

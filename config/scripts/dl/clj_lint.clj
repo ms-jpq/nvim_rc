@@ -20,10 +20,10 @@
   (try
     (doseq
      [n (ProcessBuilder/startPipeline
-         [(-> (ProcessBuilder. ["get", "--", uri])
+         [(-> (ProcessBuilder. ["get.py", "--", uri])
               (.redirectError ProcessBuilder$Redirect/INHERIT))
           (->
-           (ProcessBuilder. ["unpack", "--dest", (.toString tmp)])
+           (ProcessBuilder. ["unpack.py", "--dest", (.toString tmp)])
            (.redirectOutput ProcessBuilder$Redirect/INHERIT)
            (.redirectError ProcessBuilder$Redirect/INHERIT))])]
       (assert (== 0 (.waitFor n))))

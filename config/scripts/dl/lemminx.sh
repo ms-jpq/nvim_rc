@@ -20,6 +20,6 @@ esac
 TMP="$(mktemp --directory)"
 VERSION="$(curl --fail --location --no-progress-meter --max-time 60 -- "$BASE_URI" | htmlq --attribute href -- 'body > table > tbody > tr:nth-last-child(2) > td > a')"
 URI="$BASE_URI/$VERSION/$BASENAME"
-get -- "$URI" | unpack --dest "$TMP"
+get.py -- "$URI" | unpack.py --dest "$TMP"
 mv --force -- "$TMP/lemminx"* "$BIN"
 chmod +x -- "$BIN"

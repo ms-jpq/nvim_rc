@@ -22,8 +22,8 @@ linux*)
 esac
 
 TMP="$(mktemp --directory)"
-get -- "$URI" | unpack --dest "$TMP"
-get -- "$T_URI" | unpack --dest "$TMP"
+get.py -- "$URI" | unpack.py --dest "$TMP"
+get.py -- "$T_URI" | unpack.py --dest "$TMP"
 mv --force -- "$TMP/texlab"* "$BIN"
 mv --force -- "$TMP/tectonic"* "$T_BIN"
 chmod +x -- "$BIN" "$T_BIN"

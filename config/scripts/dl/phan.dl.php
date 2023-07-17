@@ -6,7 +6,7 @@ $uri = "https://github.com/phan/phan/releases/latest/download/phan.phar";
 $output = [];
 $code = -1;
 exec(
-  join(" ", array_map("escapeshellarg", ["get", "--", $uri])),
+  join(" ", array_map("escapeshellarg", ["get.py", "--", $uri])),
   $output,
   $code
 );
