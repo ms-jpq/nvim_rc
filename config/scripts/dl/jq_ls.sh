@@ -5,4 +5,4 @@ set -o pipefail
 mkdir --parents -- "$LIB"
 export -- GO111MODULE=on GOPATH GOPATH="$LIB"
 go install -- github.com/wader/jq-lsp@master
-ln --symbolic --force -- "$LIB/bin/${BIN##*/}" "$BIN"
+install -b -- "$LIB/bin/${BIN##*/}" "$BIN"

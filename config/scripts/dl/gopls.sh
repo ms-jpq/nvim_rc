@@ -5,4 +5,4 @@ set -o pipefail
 mkdir --parents -- "$LIB"
 export -- GO111MODULE=on GOPATH GOPATH="$LIB"
 go install -- golang.org/x/tools/gopls@latest
-ln --symbolic --force -- "$LIB/bin/$(basename -- "$BIN")" "$BIN"
+install -b -- "$LIB/bin/$(basename -- "$BIN")" "$BIN"
