@@ -26,7 +26,7 @@ if ( !-d $lib ) {
   my $perl_libd = "$tmp_lib/_perl_";
   my @perl_libs = qw{YAML::Tiny File::HomeDir Unicode::GCString};
 
-  my $tags = "https://api.github.com/repos/cmhughes/latexindent.pl/tags";
+  my $tags = 'https://api.github.com/repos/cmhughes/latexindent.pl/tags';
   my $json =
     `curl --fail --location --no-progress-meter --max-time 60 -- \Q$tags\E`;
   $CHILD_ERROR && croak $CHILD_ERROR;
@@ -48,7 +48,7 @@ if ( !-d $lib ) {
   system( 'cpanm', '--local-lib', $perl_libd, q{--}, @perl_libs )
     && croak $CHILD_ERROR;
 
-  system( "mv", "--force", "--", $tmp_lib, $lib ) && croak $CHILD_ERROR;
+  system( 'mv', '--force', '--', $tmp_lib, $lib ) && croak $CHILD_ERROR;
 }
 
 copy( $script, $bin );

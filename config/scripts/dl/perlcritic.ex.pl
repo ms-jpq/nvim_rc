@@ -13,4 +13,4 @@ my $lib = "$dir/../lib/perlcritic";
 
 $ENV{PERL5LIB} = "$lib/lib/perl5";
 exec( "$lib/bin/perlcritic", @ARGV );
-die;
+croak;
