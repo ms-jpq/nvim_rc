@@ -16,5 +16,4 @@ esac
 
 TMP="$(mktemp --directory)"
 get.py -- "$URI" | unpack.py --dest "$TMP"
-mv --force -- "$TMP/shellcheck"*'/shellcheck' "$BIN"
-chmod +x -- "$BIN"
+install -b -- "$TMP/shellcheck"*'/shellcheck' "$BIN"

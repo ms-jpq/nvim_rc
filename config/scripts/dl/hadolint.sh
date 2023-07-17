@@ -16,5 +16,4 @@ linux*)
 esac
 
 FILE="$(get.py -- "$URI")"
-cp --force -- "$FILE" "$BIN"
-chmod +x -- "$BIN"
+install -b -- "$FILE" "$BIN"

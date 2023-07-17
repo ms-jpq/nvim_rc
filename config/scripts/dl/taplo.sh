@@ -17,5 +17,4 @@ esac
 
 TMP="$(mktemp --directory)"
 get.py -- "$URI" | unpack.py --dest "$TMP"
-mv --force -- "$TMP"/* "$BIN"
-chmod +x -- "$BIN"
+install -b -- "$TMP"/* "$BIN"

@@ -17,4 +17,4 @@ esac
 
 TMP="$(mktemp --directory)"
 get.py -- "$URI" | unpack.py --dest "$TMP"
-mv --force -- "$TMP/"*/golangci-lint "$BIN"
+install -b -- "$TMP/"*/golangci-lint "$BIN"

@@ -14,8 +14,8 @@ linux*)
   T_URI="https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.13.1/tectonic-0.13.1-x86_64-unknown-linux-gnu.tar.gz"
   ;;
 *)
-  URI="https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.13.1/tectonic-0.13.1-x86_64-pc-windows-msvc.zip"
-  T_URI="$T_NT_URI"
+  URI="https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-windows.zip"
+  T_URI="https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.13.1/tectonic-0.13.1-x86_64-pc-windows-msvc.zip"
   BIN="$BIN.exe"
   T_BIN="$T_BIN.exe"
   ;;
@@ -24,6 +24,5 @@ esac
 TMP="$(mktemp --directory)"
 get.py -- "$URI" | unpack.py --dest "$TMP"
 get.py -- "$T_URI" | unpack.py --dest "$TMP"
-mv --force -- "$TMP/texlab"* "$BIN"
-mv --force -- "$TMP/tectonic"* "$T_BIN"
-chmod +x -- "$BIN" "$T_BIN"
+install -b -- "$TMP/texlab"* "$BIN"
+install -b -- "$TMP/tectonic"* "$T_BIN"
