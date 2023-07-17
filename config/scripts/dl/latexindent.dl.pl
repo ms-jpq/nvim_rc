@@ -11,7 +11,6 @@ use strict;
 use utf8;
 use warnings;
 
-my $tags    = "https://api.github.com/repos/cmhughes/latexindent.pl/tags";
 my $bin    = $ENV{BIN};
 my $lib    = $ENV{LIB};
 my $dir    = dirname(__FILE__);
@@ -27,12 +26,18 @@ if ( !-d $lib ) {
   my $perl_libd = "$tmp_lib/_perl_";
   my @perl_libs = qw{YAML::Tiny File::HomeDir Unicode::GCString};
 
-  my $json = `curl --fail --location --no-progress-meter --max-time 60 -- \Q$tags\E`;
+  my $tags = "https://api.github.com/repos/cmhughes/latexindent.pl/tags";
+  my $json =
+    `curl --fail --location --no-progress-meter --max-time 60 -- \Q$tags\E`;
   $CHILD_ERROR && croak $CHILD_ERROR;
+
   my $jq = '$json[0].name';
-  my $tag = `jq --exit-status --null-input --raw-output \Q$jq\E --argjson json \Q$json\E`;
+  my $tag =
+`jq --exit-status --null-input --raw-output \Q$jq\E --argjson json \Q$json\E`;
   $CHILD_ERROR && croak $CHILD_ERROR;
-  my $uri = "https://github.com/cmhughes/latexindent.pl/archive/refs/tags/$tag.tar.gz";
+
+  my $uri =
+    "https://github.com/cmhughes/latexindent.pl/archive/refs/tags/$tag.tar.gz";
   my $filename = `get.py -- \Q$uri\E`;
   $CHILD_ERROR && croak $CHILD_ERROR;
 

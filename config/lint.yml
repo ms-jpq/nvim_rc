@@ -33,7 +33,7 @@
     - perl
   install:
     script:
-      file: dl/perlcritic.pl
+      file: dl/perlcritic.dl.pl
       required:
         - perl
         - cpanm
