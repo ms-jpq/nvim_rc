@@ -1,5 +1,42 @@
 ---
 - git:
+    mvp: true
+    call:
+      - python3
+      - -m
+      - chadtree
+      - deps
+      - --nvim
+    uri: https://github.com/ms-jpq/chadtree
+  # vals:
+  #   chadtree_settings:
+  #     theme.icon_glyph_set: ascii
+  keys:
+    - maps:
+        "<leader>v": "<cmd>CHADopen<cr>"
+      modes: n
+
+- git:
+    mvp: true
+    call:
+      - python3
+      - -m
+      - coq
+      - deps
+    uri: https://github.com/ms-jpq/coq_nvim
+  vals:
+    coq_settings:
+      auto_start: True
+      clients:
+        tabnine.enabled: True
+        registers.lines: ["z"]
+      clients.snippets.user_path: |-
+        ~/.config/nvim/pack/modules/start/snips
+      keymap:
+        eval_snips: "<leader>j"
+        repeat: "<leader>."
+
+- git:
     # call:
     #   - nvim
     #   - --headless
@@ -80,41 +117,6 @@
 
 - git:
     uri: https://github.com/neovim/nvim-lspconfig
-
-- git:
-    call:
-      - python3
-      - -m
-      - chadtree
-      - deps
-      - --nvim
-    uri: https://github.com/ms-jpq/chadtree
-  # vals:
-  #   chadtree_settings:
-  #     theme.icon_glyph_set: ascii
-  keys:
-    - maps:
-        "<leader>v": "<cmd>CHADopen<cr>"
-      modes: n
-
-- git:
-    call:
-      - python3
-      - -m
-      - coq
-      - deps
-    uri: https://github.com/ms-jpq/coq_nvim
-  vals:
-    coq_settings:
-      auto_start: True
-      clients:
-        tabnine.enabled: True
-        registers.lines: ["z"]
-      clients.snippets.user_path: |-
-        ~/.config/nvim/pack/modules/start/snips
-      keymap:
-        eval_snips: "<leader>j"
-        repeat: "<leader>."
 
 - git:
     uri: https://github.com/ms-jpq/coq.thirdparty

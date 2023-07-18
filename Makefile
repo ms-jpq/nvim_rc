@@ -11,7 +11,7 @@ SHELL := bash
 
 .DEFAULT_GOAL := help
 
-.PHONY: clean clobber runtime patch install lint build fmt
+.PHONY: clean clobber lint build fmt runtime mvp patch install
 
 clean:
 	rm -rf -- .clj-kondo/ .lsp/ .mypy_cache/ .venv/
@@ -22,6 +22,11 @@ clobber: clean
 runtime: var/runtime/requirements.lock
 var/runtime/requirements.lock:
 	python3 -m go deps runtime
+
+pack/modules/start/chadtree:
+	python3 -m go deps packages mvp
+
+mvp: pack/modules/start/chadtree
 
 patch: var/runtime/requirements.lock
 	python3 -m go deps packages
@@ -63,7 +68,7 @@ lint: .venv/bin/mypy
 	'$<' -- .
 
 build:
-	docker build --file docker/Dockerfile --tag nvim -- .
+	docker build --progress plain --file docker/Dockerfile --tag nvim -- .
 
 fmt: .venv/bin/mypy
 	.venv/bin/isort --profile=black --gitignore -- .

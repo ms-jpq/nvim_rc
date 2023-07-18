@@ -78,7 +78,7 @@ def main() -> None:
                         "-m",
                         Path(__file__).resolve(strict=True).parent.name,
                         "deps",
-                        "packages",
+                        *({*deps} | {"packages"}),
                     ),
                     cwd=TOP_LEVEL,
                 )
@@ -86,7 +86,7 @@ def main() -> None:
             else:
                 from .components.install import install
 
-                if code := arun(install()):
+                if code := arun(install("mvp" in deps)):
                     exit(code)
 
     elif command == "run":

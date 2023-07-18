@@ -13,6 +13,7 @@ class GitPkgSpec:
     uri: str
     branch: Optional[str] = None
     call: Sequence[str] = ()
+    mvp: bool = False
 
 
 @dataclass(frozen=True)

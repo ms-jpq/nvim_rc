@@ -102,7 +102,7 @@ def _script_specs() -> Iterator[Tuple[str, ScriptSpec]]:
         yield "", t_spec
 
 
-def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
+def _git(mvp: bool) -> Iterator[Awaitable[_SortOfMonoid]]:
     VIM_DIR.mkdir(parents=True, exist_ok=True)
 
     if git := which("git"):
@@ -151,7 +151,8 @@ def _git() -> Iterator[Awaitable[_SortOfMonoid]]:
             return [rt async for rt in cont()]
 
         for spec in pkg_specs:
-            yield cont(spec.git)
+            if not mvp or spec.git.mvp:
+                yield cont(spec.git)
 
 
 def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
@@ -318,13 +319,16 @@ def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
                 yield cont(Path(s_path), bin=bin)
 
 
-async def install() -> int:
+async def install(mvp: bool) -> int:
     cols, _ = get_terminal_size()
     sep = cols * "="
 
     errors: MutableSequence[str] = []
-    tasks = chain(_git(), _pip(), _gem(), _npm(), _script())
-    for fut in chain(as_completed(tasks), (_binstub(),)):
+    tasks = (
+        chain(_git(mvp)) if mvp else chain(_git(mvp), _pip(), _gem(), _npm(), _script())
+    )
+    post = () if mvp else (_binstub(),)
+    for fut in chain(as_completed(tasks), post):
         for debug, proc in await fut:
             args = join(map(str, proc.args))
             if proc.returncode == 0:
