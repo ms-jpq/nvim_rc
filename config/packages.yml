@@ -15,7 +15,7 @@
     require("nvim-treesitter.configs").setup(opts)
   vals:
     ts_opts:
-      ensure_installed: all
+      # ensure_installed: all
       highlight:
         enable: True
       incremental_selection:
