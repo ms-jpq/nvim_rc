@@ -78,7 +78,7 @@ def main() -> None:
                         "-m",
                         Path(__file__).resolve(strict=True).parent.name,
                         "deps",
-                        *({*deps} | {"packages"}),
+                        *({*deps, "packages"} - {"runtime"}),
                     ),
                     cwd=TOP_LEVEL,
                 )
