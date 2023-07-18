@@ -356,13 +356,14 @@ async def install(mvp: bool) -> int:
 
     if errors:
         print(linesep.join(errors), file=stderr)
+    else:
+        UPDATE_LOG.parent.mkdir(parents=True, exist_ok=True)
+        UPDATE_LOG.write_text(str(time()))
 
     return bool(errors)
 
 
 async def maybe_install() -> None:
-    UPDATE_LOG.parent.mkdir(parents=True, exist_ok=True)
-
     try:
         coded = UPDATE_LOG.read_text()
     except FileNotFoundError:
@@ -370,8 +371,7 @@ async def maybe_install() -> None:
     else:
         before = float(coded)
 
-    now = time()
-    diff = now - before
+    diff = time() - before
     if diff > (7 * 24 * 3600):
         ans = await Nvim.confirm(
             question=LANG("update?"),
@@ -379,11 +379,7 @@ async def maybe_install() -> None:
             answer_key={1: 1, 2: 2},
         )
         if ans:
-            coded = str(now)
-            UPDATE_LOG.write_text(coded)
+            UPDATE_LOG.write_text(str(time()))
 
         if ans == 1:
-            await open_term(
-                INSTALL_SCRIPT,
-                "packages",
-            )
+            await open_term(INSTALL_SCRIPT, "packages")
