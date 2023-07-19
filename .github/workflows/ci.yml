@@ -26,13 +26,13 @@ jobs:
 
       - run: |-
           sudo -- apt-get update
-          sudo -- apt-get install --no-install-recommends --yes -- swi-prolog
+          sudo -- apt-get install --no-install-recommends --yes -- swi-prolog clojure
 
       - run: |-
           gmake lint
 
       - run: |-
-          gmake install
+          JAVA_HOME="$JAVA_HOME_17_X64" gmake install
 
   macos:
     runs-on: macos-latest
