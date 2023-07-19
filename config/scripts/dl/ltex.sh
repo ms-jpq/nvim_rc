@@ -15,9 +15,9 @@ linux*)
   ;;
 esac
 
-TMP="$(mktemp --directory)"
+TMP="$(mktemp -d)"
 get.py -- "$URI" | unpack.py --dest "$TMP"
-rm --recursive --force -- "$LIB"
-mkdir --parents -- "$LIB"
+rm -rf -- "$LIB"
+mkdir -p -- "$LIB"
 mv --force -- "$TMP"/*/* "$LIB/"
-ln --symbolic --force -- "$LIB/bin/${BIN##*/}" "$BIN"
+ln -sf -- "$LIB/bin/${BIN##*/}" "$BIN"

@@ -15,9 +15,9 @@ linux*)
   ;;
 esac
 
-TMP="$(mktemp --directory)"
+TMP="$(mktemp -d)"
 get.py -- "$URI" | unpack.py --dest "$TMP"
-rm --recursive --force -- "$LIB"
-mkdir --parents -- "$LIB"
+rm -rf -- "$LIB"
+mkdir -p -- "$LIB"
 mv -- "$TMP"/* "$LIB"
 install -b -- "${0%/*}/haskell_language_server.ex.sh" "$BIN"

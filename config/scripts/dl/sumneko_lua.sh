@@ -54,6 +54,6 @@ if [[ ! -x "$BIN" ]]; then
 
   PREFIX="${BIN%/*}"
   for file in "$REPO/bin/"*; do
-    ln --symbolic --force -- "$file" "$PREFIX/$(basename -- "$file")"
+    ln -sf -- "$file" "$PREFIX/$(basename -- "$file")"
   done
 fi

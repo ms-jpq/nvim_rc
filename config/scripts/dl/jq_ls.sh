@@ -2,7 +2,7 @@
 
 set -o pipefail
 
-mkdir --parents -- "$LIB"
+mkdir -p -- "$LIB"
 export -- GO111MODULE=on GOPATH GOPATH="$LIB"
 go install -- github.com/wader/jq-lsp@master
 install -b -- "$LIB/bin/${BIN##*/}" "$BIN"

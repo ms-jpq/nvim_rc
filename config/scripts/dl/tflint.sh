@@ -14,6 +14,6 @@ linux*)
   ;;
 esac
 
-TMP="$(mktemp --directory)"
+TMP="$(mktemp -d)"
 get.py -- "$URI" | unpack.py --dest "$TMP"
 install -b -- "$TMP/"* "$BIN"
