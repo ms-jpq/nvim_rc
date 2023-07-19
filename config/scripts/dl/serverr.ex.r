@@ -16,7 +16,5 @@ if (Sys.getenv("Rscript") != "Rscript") {
   env <- c(paste("R_LIBS_SITE", libs, sep = "="), "Rscript=Rscript")
   system2(arg0, commandArgs(trailingOnly = TRUE), env = env)
 } else {
-  errs <- lintr::lint(commandArgs(trailingOnly = TRUE))
-  code <- length(errs) != 0
-  quit(status = code)
+  languageserver::run()
 }

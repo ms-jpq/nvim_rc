@@ -264,7 +264,8 @@
       - vim-language-server
   server: vimls
 
-- bin: R
+- args: []
+  bin: serverr
   install:
     script:
       file: dl/serverr.dl.r

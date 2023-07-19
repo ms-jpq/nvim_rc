@@ -1,17 +1,20 @@
 #!/usr/bin/env -S -- Rscript
 
-if (!Sys.getenv("R_LIBS")) {
+if (Sys.getenv("Rscript") != "Rscript") {
   argv <- commandArgs()
   location <- argv[4]
   if (!startsWith(location, "--file=")) {
     stop()
   }
 
-  parent <- dirname(dirname(sub("^--file=", "", location)))
-  lib <- paste(parent, "lib", "R", sep = "/")
-  Sys.setenv(R_LIBS = lib)
-  system2(argv[1], argv[-1])
+  arg0 <- sub("^--file=", "", location)
+  libs <- Sys.getenv("R_LIBS_SITE")
+  parent <- dirname(dirname(arg0))
+  lib <- paste(getwd(), parent, "lib", "R", sep = "/")
+  libs <- paste(libs, lib, sep = ":")
+
+  env <- c(paste("R_LIBS_SITE", libs, sep = "="), "Rscript=Rscript")
+  system2(arg0, commandArgs(trailingOnly = TRUE), env = env)
 } else {
-  library(styler, lib.loc = c(lib))
   styler::style_file(commandArgs(trailingOnly = TRUE))
 }

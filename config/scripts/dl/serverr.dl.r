@@ -1,5 +1,16 @@
 #!/usr/bin/env -S -- Rscript
 
+argv <- commandArgs()
+location <- argv[4]
+if (!startsWith(location, "--file=")) {
+  stop()
+}
+
+parent <- dirname(sub("^--file=", "", location))
+r <- paste(parent, "serverr.ex.r", sep = "/")
+lib <- Sys.getenv("LIB")
+bin <- Sys.getenv("BIN")
+
 apt <- Sys.which("apt-get")
 if (apt != "") {
   system2("sudo", c(
@@ -18,7 +29,6 @@ if (apt != "") {
 repos <- c("https://cloud.r-project.org")
 pkgs <- c("ps", "languageserver")
 
-lib <- Sys.getenv("LIB")
 dir.create(lib, recursive = TRUE)
 
 for (pkg in pkgs) {
@@ -29,3 +39,5 @@ for (pkg in pkgs) {
   }
   library(pkg, lib.loc = c(lib), character.only = TRUE)
 }
+
+file.copy(r, bin, overwrite = TRUE)
