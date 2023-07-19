@@ -30,20 +30,18 @@ jobs:
       - run: |-
           make build
 
-  # install:
-  #   strategy:
-  #     matrix:
-  #       platform:
-  #         - ubuntu-latest
-  #         - macos-latest
-  #         - windows-latest
+  install:
+    strategy:
+      matrix:
+        platform:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
 
-  #   runs-on: ${{ matrix.platform }}
+    runs-on: ${{ matrix.platform }}
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+    steps:
+      - uses: actions/checkout@v3
 
-  #     - name: Install
-  #       run: |-
-  #         ./install.sh
+      - run: |-
+          make install
