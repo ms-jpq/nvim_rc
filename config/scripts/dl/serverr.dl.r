@@ -16,7 +16,7 @@ if (apt != "") {
 }
 
 repos <- c("https://cloud.r-project.org")
-pkgs <- c("languageserver", "httpgd")
+pkgs <- c("ps", "languageserver")
 
 lib <- Sys.getenv("LIB")
 dir.create(lib, recursive = TRUE)

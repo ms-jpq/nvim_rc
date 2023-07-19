@@ -267,7 +267,7 @@
 - bin: R
   install:
     script:
-      file: dl/rlang_server.r
+      file: dl/serverr.dl.r
       required:
         - Rscript
         - R
