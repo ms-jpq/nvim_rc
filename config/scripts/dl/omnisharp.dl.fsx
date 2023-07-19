@@ -38,18 +38,17 @@ let bin =
     (Environment.GetEnvironmentVariable "BIN", ext) |> Path.ChangeExtension
 
 let uri =
-    let env =
-        if RuntimeInformation.IsOSPlatform(OSPlatform.OSX) then
-            "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx-arm64-net6.0.tar.gz"
-        elif RuntimeInformation.IsOSPlatform(OSPlatform.Linux) then
-            "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-linux-x64-net6.0.tar.gz"
-        else
-            "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-win-x64-net6.0.zip"
+    if RuntimeInformation.IsOSPlatform(OSPlatform.OSX) then
+        "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx-arm64-net6.0.tar.gz"
+    elif RuntimeInformation.IsOSPlatform(OSPlatform.Linux) then
+        "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-linux-x64-net6.0.tar.gz"
+    else
+        "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-win-x64-net6.0.zip"
 
-    env |> Environment.GetEnvironmentVariable
-
-
-"" |> run "get.py" [ "--"; uri ] |> run "unpack.py" [ "--dest"; tmp ] |> Console.Write
+""
+|> run "get.py" [ "--"; uri ]
+|> run "unpack.py" [ "--dest"; tmp ]
+|> Console.Write
 
 try
     Directory.Delete(lib, true)

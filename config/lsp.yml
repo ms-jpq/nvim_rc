@@ -131,6 +131,8 @@
   install:
     script:
       file: dl/jq_ls.sh
+      required:
+        - go
   server: jqls
 
 # - bin: awk-language-server
@@ -184,6 +186,8 @@
   install:
     script:
       file: dl/gopls.sh
+      required:
+        - go
   server: gopls
 
 - bin: sourcekit-lsp

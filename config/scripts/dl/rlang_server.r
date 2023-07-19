@@ -2,7 +2,9 @@
 
 apt <- Sys.which("apt-get")
 if (apt != "") {
-  system2(apt, c(
+  system2("sudo", c(
+    "--",
+     apt,
     "install",
     "--yes",
     "--",
