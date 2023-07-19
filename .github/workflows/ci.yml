@@ -25,6 +25,10 @@ jobs:
       - uses: actions/setup-python@v3
 
       - run: |-
+          sudo -- apt-get update
+          sudo -- apt-get install --no-install-recommends --yes -- swi-prolog clojure
+
+      - run: |-
           gmake lint
 
       - run: |-
