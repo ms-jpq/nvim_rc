@@ -363,7 +363,7 @@ async def install(mvp: bool, match: AbstractSet[str]) -> int:
                     sep=linesep,
                 )
             else:
-                errors.append(args)
+                errors.append(f"!!! -- {args}")
                 msg = LANG("proc failed", code=proc.returncode, args=args)
                 print(
                     msg,
