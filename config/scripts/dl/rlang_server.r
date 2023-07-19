@@ -6,6 +6,7 @@ if (apt != "") {
     "--",
     apt,
     "install",
+    "--no-install-recommends",
     "--yes",
     "--",
     "libcurl4-openssl-dev",
