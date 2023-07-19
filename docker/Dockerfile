@@ -5,8 +5,8 @@ FROM ubuntu:latest
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install --no-install-recommends --yes -- \
-    software-properties-common gpg-agent \
-    make git python3 python3-venv python3-pip build-essential && \
+    software-properties-common gpg \
+    make git python3-venv && \
     add-apt-repository ppa:neovim-ppa/unstable && \
     apt-get update && \
     apt-get install --no-install-recommends --yes -- neovim && \

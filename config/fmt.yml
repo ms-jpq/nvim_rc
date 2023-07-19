@@ -273,7 +273,7 @@
 
 - args:
     - ${tmpname}
-  bin: r-fmt
+  bin: styler
   filetypes:
     - r
   install:

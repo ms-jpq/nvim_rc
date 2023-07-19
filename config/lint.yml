@@ -111,12 +111,12 @@
 
 - args:
     - ${tmpname}
-  bin: r-lint
+  bin: lintr
   filetypes:
     - r
   install:
     script:
-      file: lintr.dl.r
+      file: dl/lintr.dl.r
       required:
         - Rscript
         - R

@@ -45,8 +45,7 @@ jobs:
           gmake lint
 
       - run: |-
-          export -- JAVA_HOME="$JAVA_HOME_17_X64"
-          gmake install
+          JAVA_HOME="$JAVA_HOME_17_X64" gmake install
 
   windows:
     runs-on: macos-latest

@@ -4,7 +4,7 @@ apt <- Sys.which("apt-get")
 if (apt != "") {
   system2("sudo", c(
     "--",
-     apt,
+    apt,
     "install",
     "--yes",
     "--",
@@ -17,11 +17,14 @@ if (apt != "") {
 repos <- c("https://cloud.r-project.org")
 pkgs <- c("languageserver", "httpgd")
 
+lib <- Sys.getenv("LIB")
+dir.create(lib, recursive = TRUE)
+
 for (pkg in pkgs) {
-  if (!require(pkg, character.only = TRUE)) {
-    install.packages(c(pkg), repos = repos)
+  if (!require(pkg, lib.loc = c(lib), character.only = TRUE)) {
+    install.packages(c(pkg), lib = c(lib), repos = repos)
   } else {
-    update.packages(oldPkgs = c(pkg), repos = repos)
+    update.packages(c(lib), oldPkgs = c(pkg), repos = repos)
   }
-  library(pkg, character.only = TRUE)
+  library(pkg, lib.loc = c(lib), character.only = TRUE)
 }

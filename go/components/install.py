@@ -1,4 +1,5 @@
 from asyncio.tasks import as_completed
+from fnmatch import fnmatch
 from itertools import chain
 from json import dumps, loads
 from os import environ, linesep, pathsep, sep
@@ -10,6 +11,7 @@ from subprocess import CompletedProcess
 from sys import executable, stderr
 from time import time
 from typing import (
+    AbstractSet,
     AsyncIterator,
     Awaitable,
     Iterator,
@@ -19,6 +21,7 @@ from typing import (
     Tuple,
     TypedDict,
 )
+from urllib.parse import urlsplit
 from venv import EnvBuilder
 
 from pynvim_pp.lib import decode
@@ -102,7 +105,11 @@ def _script_specs() -> Iterator[Tuple[str, ScriptSpec]]:
         yield "", t_spec
 
 
-def _git(mvp: bool) -> Iterator[Awaitable[_SortOfMonoid]]:
+def _match(match: AbstractSet[str], name: str) -> bool:
+    return not match or any(fnmatch(name, m) for m in match)
+
+
+def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     VIM_DIR.mkdir(parents=True, exist_ok=True)
 
     if git := which("git"):
@@ -152,11 +159,13 @@ def _git(mvp: bool) -> Iterator[Awaitable[_SortOfMonoid]]:
 
         for spec in pkg_specs:
             if not mvp or spec.git.mvp:
-                yield cont(spec.git)
+                uri = urlsplit(spec.git.uri)
+                if _match(match, name=uri.path):
+                    yield cont(spec.git)
 
 
-def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
-    if specs := {*_pip_specs()}:
+def _pip(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
+    if specs := {*(spec for spec in _pip_specs() if _match(match, name=spec))}:
         builder = EnvBuilder(
             system_site_packages=False,
             with_pip=True,
@@ -184,10 +193,10 @@ def _pip() -> Iterator[Awaitable[_SortOfMonoid]]:
         yield cont()
 
 
-def _gem() -> Iterator[Awaitable[_SortOfMonoid]]:
+def _gem(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     if (
         (gem := which("gem"))
-        and (specs := {*_gem_specs()})
+        and (specs := {*(spec for spec in _gem_specs() if _match(match, name=spec))})
         and (
             os != OS.macos
             or not PurePath(gem).is_relative_to(PurePath(sep) / "usr" / "bin")
@@ -223,12 +232,16 @@ async def _binstub() -> _SortOfMonoid:
     return (("", p),)
 
 
-def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
+def _npm(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     NPM_DIR.mkdir(parents=True, exist_ok=True)
     packages_json = NPM_DIR / "package.json"
     package_lock = NPM_DIR / "package-lock.json"
 
-    if which("node") and (npm := which("npm")) and (specs := {*_npm_specs()}):
+    if (
+        which("node")
+        and (npm := which("npm"))
+        and (specs := {*(spec for spec in _npm_specs() if _match(match, name=spec))})
+    ):
 
         async def cont() -> _SortOfMonoid:
             async def cont() -> AsyncIterator[Tuple[str, CompletedProcess[bytes]]]:
@@ -277,7 +290,7 @@ def _npm() -> Iterator[Awaitable[_SortOfMonoid]]:
         yield cont()
 
 
-def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
+def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     for path in (BIN_DIR, LIB_DIR, TMP_DIR):
         path.mkdir(parents=True, exist_ok=True)
 
@@ -315,17 +328,25 @@ def _script() -> Iterator[Awaitable[_SortOfMonoid]]:
             return (("", p),)
 
         if pkg.file and all(map(which, pkg.required)):
-            if s_path := which(LIBEXEC / pkg.file):
+            if (s_path := which(LIBEXEC / pkg.file)) and _match(match, name=bin):
                 yield cont(Path(s_path), bin=bin)
 
 
-async def install(mvp: bool) -> int:
+async def install(mvp: bool, match: AbstractSet[str]) -> int:
     cols, _ = get_terminal_size()
     sep = cols * "="
 
     errors: MutableSequence[str] = []
     tasks = (
-        chain(_git(mvp)) if mvp else chain(_git(mvp), _pip(), _gem(), _npm(), _script())
+        chain(_git(mvp, match=match))
+        if mvp
+        else chain(
+            _git(mvp, match=match),
+            _pip(match),
+            _gem(match),
+            _npm(match),
+            _script(match),
+        )
     )
     post = () if mvp else (_binstub(),)
     for fut in chain(as_completed(tasks), post):

@@ -1,6 +1,7 @@
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
 from contextlib import nullcontext
+from os import environ
 from pathlib import Path, PurePath
 from subprocess import check_call
 from sys import executable, exit, stderr
@@ -86,7 +87,8 @@ def main() -> None:
             else:
                 from .components.install import install
 
-                if code := arun(install("mvp" in deps)):
+                match = {p} if (p := environ.get("PKG")) else set()
+                if code := arun(install("mvp" in deps, match=match)):
                     exit(code)
 
     elif command == "run":
