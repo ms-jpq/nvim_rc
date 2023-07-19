@@ -23,8 +23,8 @@ runtime: var/runtime/requirements.lock
 var/runtime/requirements.lock:
 	python3 -m go deps runtime
 
-pack/modules/start/chadtree: var/runtime/requirements.lock
-	python3 -m go deps packages mvp
+pack/modules/start/chadtree:
+	python3 -m go deps runtime packages mvp
 
 mvp: pack/modules/start/chadtree
 
