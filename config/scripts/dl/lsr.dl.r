@@ -29,9 +29,10 @@ if (apt != "") {
 }
 
 repos <- c("https://cloud.r-project.org")
-pkgs <- c("ps", "languageserver")
+pkgs <- c("languageserver")
 
 dir.create(lib, recursive = TRUE)
+.libPaths(c(.libPaths(), lib))
 
 for (pkg in pkgs) {
   if (!require(pkg, lib.loc = c(lib), character.only = TRUE)) {
