@@ -39,7 +39,7 @@ jobs:
       - uses: actions/setup-python@v3
 
       - run: |-
-          brew install -- bash htmlq
+          brew install -- bash make htmlq
 
       - run: |-
           gmake lint
@@ -55,5 +55,5 @@ jobs:
 
       - uses: actions/setup-python@v3
 
-      - run: |-
-          gmake install
+      # - run: |-
+      #     make install
