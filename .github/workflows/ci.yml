@@ -25,10 +25,10 @@ jobs:
       - uses: actions/setup-python@v3
 
       - run: |-
-          make lint
+          gmake lint
 
       - run: |-
-          make install
+          gmake install
 
   macos:
     runs-on: macos-latest
@@ -42,10 +42,10 @@ jobs:
           brew install -- bash htmlq
 
       - run: |-
-          make lint
+          gmake lint
 
       - run: |-
-          make install
+          gmake install
 
   windows:
     runs-on: macos-latest
@@ -56,4 +56,4 @@ jobs:
       - uses: actions/setup-python@v3
 
       - run: |-
-          make install
+          gmake install
