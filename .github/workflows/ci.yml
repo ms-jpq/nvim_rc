@@ -7,41 +7,53 @@ on:
     - cron: "0 0 * * *" # daily
 
 jobs:
-  mypy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup Python
-        uses: actions/setup-python@v3
-
-      - run: |-
-          make lint
-
   docker:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - run: |-
           make build
 
-  install:
-    strategy:
-      matrix:
-        platform:
-          - ubuntu-latest
-          - macos-latest
-          # - windows-latest
-
-    runs-on: ${{ matrix.platform }}
+  ubuntu:
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v3
+
+      - run: |-
+          make lint
+
+      - run: |-
+          make install
+
+  macos:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v3
+
+      - run: |-
+          brew install -- bash htmlq
+
+      - run: |-
+          make lint
+
+      - run: |-
+          make install
+
+  windows:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v3
 
       - run: |-
           make install
