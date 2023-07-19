@@ -8,7 +8,7 @@
   }
   arg0 <- sub("^--file=", "", location)
   parent <- dirname(dirname(arg0))
-  lib <- paste(parent, "lib", "serverr", sep = "/")
+  lib <- paste(parent, "lib", "lsr", sep = "/")
   .libPaths(c(.libPaths(), lib))
 }
 

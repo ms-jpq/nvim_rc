@@ -7,7 +7,7 @@ if (!startsWith(location, "--file=")) {
 }
 
 parent <- dirname(sub("^--file=", "", location))
-r <- paste(parent, "serverr.ex.r", sep = "/")
+r <- paste(parent, "lsr.ex.r", sep = "/")
 lib <- Sys.getenv("LIB")
 bin <- Sys.getenv("BIN")
 

@@ -265,10 +265,10 @@
   server: vimls
 
 - args: []
-  bin: serverr
+  bin: lsr
   install:
     script:
-      file: dl/serverr.dl.r
+      file: dl/lsr.dl.r
       required:
         - Rscript
         - R
