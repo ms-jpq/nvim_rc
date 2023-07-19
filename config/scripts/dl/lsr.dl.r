@@ -24,6 +24,8 @@ if (apt != "") {
     "libssl-dev",
     "libxml2-dev"
   ), env = c("DEBIAN_FRONTEND=noninteractive"))
+} else if (Sys.getenv("CI") != "") {
+  quit(status = 0)
 }
 
 repos <- c("https://cloud.r-project.org")
