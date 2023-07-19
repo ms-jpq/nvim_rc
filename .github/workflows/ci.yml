@@ -33,7 +33,7 @@ jobs:
           gmake lint
 
       - run: |-
-          JAVA_HOME="$JAVA_HOME_17_X64" gmake install
+          gmake install -- JAVA_HOME="$JAVA_HOME_17_X64"
 
   macos:
     runs-on: macos-latest
@@ -50,10 +50,10 @@ jobs:
           gmake lint
 
       - run: |-
-          JAVA_HOME="$JAVA_HOME_17_X64" gmake install
+          gmake install -- JAVA_HOME="$JAVA_HOME_17_X64"
 
   windows:
-    runs-on: macos-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v3
