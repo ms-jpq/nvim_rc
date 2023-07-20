@@ -41,7 +41,7 @@ if ( !-d $lib ) {
   my $filename = `get.py -- \Q$uri\E`;
   $CHILD_ERROR && croak $CHILD_ERROR;
 
-  system( 'unpack.py', '--dest', $tmp, q{--}, $filename ) && croak $CHILD_ERROR;
+  system( 'unpack.py', '--dst', $tmp, q{--}, $filename ) && croak $CHILD_ERROR;
   my @globbed = glob "\Q$tmp\E/*";
   move( @globbed, $tmp_lib );
 

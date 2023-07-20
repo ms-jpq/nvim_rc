@@ -31,6 +31,7 @@ if [[ ! "$OSTYPE" =~ "linux" ]]; then
   exit
 fi
 
+# shellcheck disable=2154
 if [[ ! -x "$BIN" ]]; then
   cd -- "$REPO"
   make build

@@ -30,6 +30,7 @@ else
   git clone "${OPTS[@]}" --branch "$TAG" "$URI" "$REPO"
 fi
 
+# shellcheck disable=2154
 if [[ ! -x "$BIN" ]]; then
   (
     PATH="$VENV_BIN:$PATH"

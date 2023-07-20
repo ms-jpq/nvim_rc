@@ -28,7 +28,7 @@ val procs =
     ProcessBuilder.startPipeline(
         listOf(
             ProcessBuilder("get.py", "--", uri).redirectError(Redirect.INHERIT),
-            ProcessBuilder("unpack.py", "--dest", tmp.toString())
+            ProcessBuilder("unpack.py", "--dst", tmp.toString())
                 .redirectOutput(Redirect.INHERIT)
                 .redirectError(Redirect.INHERIT)))
 

@@ -13,8 +13,8 @@ _STDIN = PurePath("-")
 def _unpack_gz(source: str, destination: str) -> None:
     cmd = "gzip"
     if gzip := which(cmd):
-        dest = Path(destination) / PurePath(source).name
-        with dest.open("wb") as fd:
+        dst = Path(destination) / PurePath(source).name
+        with dst.open("wb") as fd:
             check_call(
                 (gzip, "--decompress", "--keep", "--force", "--stdout", "--", source),
                 stdout=fd,
@@ -27,7 +27,7 @@ def _parse_args() -> Namespace:
     parser = ArgumentParser()
     parser.add_argument("src", nargs="?", type=Path, default=_STDIN)
     parser.add_argument("-f", "--format")
-    parser.add_argument("-d", "--dest", type=Path, default=Path.cwd())
+    parser.add_argument("-d", "--dst", type=Path, default=Path.cwd())
     return parser.parse_args()
 
 
@@ -39,10 +39,10 @@ def main() -> None:
     msg = f"""
     {src}
     -> -> ->
-    {args.dest}
+    {args.dst}
     """
 
-    unpack_archive(src, format=args.format, extract_dir=args.dest)
+    unpack_archive(src, format=args.format, extract_dir=args.dst)
     stderr.write(dedent(msg))
 
 

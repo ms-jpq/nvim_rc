@@ -20,5 +20,5 @@ esac
 TMP="$(mktemp -d)"
 VERSION="$(curl --fail --location --no-progress-meter --max-time 60 -- "$BASE_URI" | htmlq --attribute href -- 'body > table > tbody > tr:nth-last-child(2) > td > a')"
 URI="$BASE_URI/$VERSION/$BASENAME"
-get.py -- "$URI" | unpack.py --dest "$TMP"
+get.py -- "$URI" | unpack.py --dst "$TMP"
 install -b -- "$TMP/lemminx"* "$BIN"

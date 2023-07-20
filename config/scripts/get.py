@@ -45,7 +45,7 @@ def _fetch(uri: str, timeout: float) -> Iterator[bytes]:
 def _parse_args() -> Namespace:
     parser = ArgumentParser()
     parser.add_argument("src")
-    parser.add_argument("dest", nargs="?", default=None)
+    parser.add_argument("dst", nargs="?", default=None)
     parser.add_argument("--timeout", type=float, default=60.0)
     return parser.parse_args()
 
@@ -55,30 +55,30 @@ def main() -> None:
 
     src: str = args.src
     path = PurePosixPath(unquote(urlsplit(src).path))
-    dest = Path(args.dest if args.dest else path.name).resolve(strict=False)
+    dst = Path(args.dst if args.dst else path.name).resolve(strict=False)
 
     msg = f"""
     {src}
     >>>
-    {dest}
+    {dst}
     """
     stderr.write(dedent(msg))
 
     size, mtime = _meta(src, timeout=args.timeout)
     with suppress(FileNotFoundError):
-        stat = dest.stat()
+        stat = dst.stat()
         if size == stat.st_size and mtime == stat.st_mtime:
-            stdout.write(normcase(dest))
+            stdout.write(normcase(dst))
             return
 
     stream = _fetch(src, timeout=args.timeout)
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    with NamedTemporaryFile(dir=dest.parent, prefix=dest.name, delete=False) as fd:
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    with NamedTemporaryFile(dir=dst.parent, prefix=dst.name, delete=False) as fd:
         fd.writelines(stream)
 
-    Path(fd.name).replace(dest)
-    utime(dest, (mtime, mtime))
-    stdout.write(normcase(dest))
+    Path(fd.name).replace(dst)
+    utime(dst, (mtime, mtime))
+    stdout.write(normcase(dst))
 
 
 main()

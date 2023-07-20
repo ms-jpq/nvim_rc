@@ -6,7 +6,7 @@ T_BIN="$(dirname -- "$BIN")/tectonic"
 
 case "$OSTYPE" in
 darwin*)
-  URI="https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-macos.tar.gz"
+  URI="https://github.com/latex-lsp/texlab/releases/latest/download/texlab-aarch64-macos.tar.gz"
   T_URI="https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.13.1/tectonic-0.13.1-x86_64-apple-darwin.tar.gz"
   ;;
 linux*)
@@ -22,7 +22,7 @@ linux*)
 esac
 
 TMP="$(mktemp -d)"
-get.py -- "$URI" | unpack.py --dest "$TMP"
-get.py -- "$T_URI" | unpack.py --dest "$TMP"
+get.py -- "$URI" | unpack.py --dst "$TMP"
+get.py -- "$T_URI" | unpack.py --dst "$TMP"
 install -b -- "$TMP/texlab"* "$BIN"
 install -b -- "$TMP/tectonic"* "$T_BIN"

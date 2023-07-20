@@ -42,7 +42,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .stdout(Stdio::piped())
         .spawn()?;
     let status = Command::new("unpack.py")
-        .arg("--dest")
+        .arg("--dst")
         .arg(&tmp)
         .stdin(proc.stdout.take().ok_or(format!("{}", line!()))?)
         .status()?;

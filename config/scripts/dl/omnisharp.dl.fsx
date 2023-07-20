@@ -44,7 +44,7 @@ let uri =
 
 ""
 |> run "get.py" [ "--"; uri ]
-|> run "unpack.py" [ "--dest"; tmp ]
+|> run "unpack.py" [ "--dst"; tmp ]
 |> Console.Write
 
 try
