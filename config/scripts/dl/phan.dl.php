@@ -27,7 +27,5 @@ if (PHP_OS_FAMILY === "Windows") {
 }
 
 copy("{$__DIR__}/../exec/phan.php", $bin);
-chmod($bin, 0755);
-
 
 ?>
