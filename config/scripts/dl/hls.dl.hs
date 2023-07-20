@@ -1,7 +1,7 @@
 #!/usr/bin/env -S -- runhaskell
 
-import           System.Directory   (getCurrentDirectory, removePathForcibly,
-                                     renameDirectory)
+import           System.Directory   (copyFileWithMetadata, getCurrentDirectory,
+                                     removePathForcibly, renameDirectory)
 import           System.Environment (getEnv)
 import           System.FilePath    (takeDirectory, (</>))
 import           System.Info        (os)
@@ -31,5 +31,5 @@ main = do
   putStr out
   _ <- removePathForcibly lib
   _ <- renameDirectory srv lib
-  _ <- callProcess "install" ["-b", "--", tramp, bin]
+  _ <- copyFileWithMetadata tramp bin
   pure ()

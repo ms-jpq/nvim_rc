@@ -1,5 +1,6 @@
 #!/usr/bin/env -S -- runhaskell
 
+import           System.Directory      (copyFileWithMetadata)
 import           System.Environment    (getEnv)
 import           System.FilePath       ((</>))
 import           System.FilePath.Posix (takeBaseName)
@@ -21,5 +22,5 @@ main = do
   tz <- readProcess "get.py" ["--", link] ""
   out <- readProcess "unpack.py" ["--dst", tmp] tz
   putStr out
-  _ <- callProcess "install" ["-b", "--", srv, bin]
+  _ <- copyFileWithMetadata srv bin
   pure ()
