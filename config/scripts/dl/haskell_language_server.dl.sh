@@ -2,15 +2,17 @@
 
 set -o pipefail
 
+VERSION='2.0.0.1'
+
 case "$OSTYPE" in
 darwin*)
-  URI="https://downloads.haskell.org/~hls/haskell-language-server-1.9.0.0/haskell-language-server-1.9.0.0-aarch64-darwin.tar.xz"
+  URI="https://github.com/haskell/haskell-language-server/releases/latest/download/haskell-language-server-$VERSION-aarch64-apple-darwin.tar.xz"
   ;;
 linux*)
-  URI="https://downloads.haskell.org/~hls/haskell-language-server-1.9.0.0/haskell-language-server-1.9.0.0-x86_64-linux-deb10.tar.xz"
+  URI="https://github.com/haskell/haskell-language-server/releases/latest/download/haskell-language-server-$VERSION-x86_64-linux-ubuntu22.04.tar.xz"
   ;;
 *)
-  URI="https://downloads.haskell.org/~hls/haskell-language-server-1.9.0.0/haskell-language-server-1.9.0.0-x86_64-windows.zip"
+  URI="https://github.com/haskell/haskell-language-server/releases/latest/download/haskell-language-server-$VERSION-x86_64-mingw64.zip"
   BIN="$BIN.sh"
   ;;
 esac
