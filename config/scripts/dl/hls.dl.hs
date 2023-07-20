@@ -1,5 +1,6 @@
 #!/usr/bin/env -S -- runhaskell
 
+import           Data.Functor       ((<&>))
 import           System.Directory   (copyFileWithMetadata, getCurrentDirectory,
                                      removePathForcibly, renameDirectory)
 import           System.Environment (getEnv)
@@ -14,22 +15,24 @@ base = "https://github.com/haskell/haskell-language-server/releases/latest/downl
 uri "darwin" = printf "%s-%s-aarch64-apple-darwin.tar.xz"     base
 uri "linux"  = printf "%s-%s-x86_64-linux-ubuntu22.04.tar.xz" base
 uri "nt"     = printf "%s-%s-x86_64-mingw64.zip"              base
-link = uri os version
 
 suffix "nt" = ".exe"
 suffix _    = ""
 
 main = do
   lib <- getEnv "LIB"
-  bin <- getEnv "BIN"
-  cwd <- getCurrentDirectory
-  let tramp = (takeDirectory . takeDirectory) cwd </> "config" </> "scripts" </> "dl" </> "hls.ex.sh"
+  cwd <-  getCurrentDirectory <&> takeDirectory . takeDirectory
   tmp <- readProcess "mktemp" ["-d"] ""
+
+  let tramp = cwd </> "config" </> "scripts" </> "dl" </> "hls.ex.sh"
   let srv = tmp </> (printf "haskell-language-server-%s" version)
-  tz <- readProcess "get.py" ["--", link] ""
-  out <- readProcess "unpack.py" ["--dst", tmp] tz
-  putStr out
+  let link = uri os version
+
+  _ <- readProcess "get.py" ["--", link] ""
+    >>= readProcess "unpack.py" ["--dst", tmp]
+    >>= putStr
+
   _ <- removePathForcibly lib
   _ <- renameDirectory srv lib
-  _ <- copyFileWithMetadata tramp bin
+  _ <- getEnv "BIN" >>= copyFileWithMetadata tramp
   pure ()
