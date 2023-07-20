@@ -5,7 +5,6 @@ open System.Diagnostics
 open System.IO
 open System.Runtime.InteropServices
 
-
 let tmp = Directory.CreateTempSubdirectory().FullName
 let lib = Environment.GetEnvironmentVariable "LIB"
 let proxy = Path.Combine(__SOURCE_DIRECTORY__, "fantomas.ex.sh")
@@ -28,10 +27,9 @@ do
 
 try
     Directory.Delete(lib, true)
-with DirectoryNotFoundException ->
+with :? DirectoryNotFoundException ->
     ()
 
 File.Delete bin
-
 Directory.Move(tmp, lib)
 File.Copy(proxy, bin)

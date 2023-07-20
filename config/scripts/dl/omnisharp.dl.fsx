@@ -5,7 +5,6 @@ open System.Diagnostics
 open System.IO
 open System.Runtime.InteropServices
 
-
 let run arg0 argv (input: 'a) =
     let start =
         new ProcessStartInfo(FileName = arg0, RedirectStandardInput = true, RedirectStandardOutput = true)
@@ -22,11 +21,9 @@ let run arg0 argv (input: 'a) =
     assert (proc.ExitCode = 0)
     proc.StandardOutput.ReadToEnd()
 
-
 let tmp = Directory.CreateTempSubdirectory().FullName
 let lib = Environment.GetEnvironmentVariable "LIB"
 let proxy = Path.Combine(__SOURCE_DIRECTORY__, "omnisharp.ex.sh")
-
 
 let bin =
     let ext =
@@ -52,10 +49,9 @@ let uri =
 
 try
     Directory.Delete(lib, true)
-with DirectoryNotFoundException ->
+with :? DirectoryNotFoundException ->
     ()
 
 File.Delete bin
-
 Directory.Move(tmp, lib)
 File.Copy(proxy, bin)

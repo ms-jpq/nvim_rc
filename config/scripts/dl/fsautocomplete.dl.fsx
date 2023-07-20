@@ -51,7 +51,7 @@ do
 
 try
     Directory.Delete(lib, true)
-with DirectoryNotFoundException ->
+with :? DirectoryNotFoundException ->
     ()
 
 File.Delete bin
