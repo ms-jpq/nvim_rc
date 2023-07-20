@@ -171,7 +171,9 @@
 - bin: haskell-language-server-wrapper
   install:
     script:
-      file: dl/haskell_language_server.dl.sh
+      file: dl/hls.dl.hs
+      required:
+        - runhaskell
   server: hls
 
 - bin: rust-analyzer

@@ -328,7 +328,9 @@ def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
             return (("", p),)
 
         if pkg.file and all(map(which, pkg.required)):
-            if (s_path := which(LIBEXEC / pkg.file)) and _match(match, name=bin):
+            if (s_path := which(LIBEXEC / pkg.file)) and _match(
+                match, name=pkg.file.name
+            ):
                 yield cont(Path(s_path), bin=bin)
 
 

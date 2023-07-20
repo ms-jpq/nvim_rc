@@ -6,13 +6,14 @@ local ftdetect = function(filename, bufnr)
   else
     local rhs = string.sub(l1, #lhs + 1)
     local matches = {
-      sh = "(pw)@<!(ba|z)?sh",
-      python = "python3?",
+      haskell = "run(ghc|haskell)|stack",
+      javascript = "node",
       perl = "perl",
-      ruby = "ruby",
-      r = "Rscript",
       prolog = "swipl",
-      javascript = "node"
+      python = "python3?",
+      r = "Rscript",
+      ruby = "ruby",
+      sh = "(pw)@<!(ba|z)?sh"
     }
 
     for ft, pattern in pairs(matches) do

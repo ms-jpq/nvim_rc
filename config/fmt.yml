@@ -53,6 +53,17 @@
   type: stream
 
 - args: []
+  bin: stylish-haskell
+  filetypes:
+    - haskell
+  install:
+    script:
+      file: dl/stylish.dl.hs
+      required:
+        - runhaskell
+  type: stream
+
+- args: []
   bin: systemd-fmt
   filetypes:
     - systemd
