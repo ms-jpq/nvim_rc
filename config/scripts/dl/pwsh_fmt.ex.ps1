@@ -8,4 +8,4 @@ $lib = Join-Path -- (Split-Path -- $PSScriptRoot) 'lib' 'pwsh_es.ps1' 'PSScriptA
 $analyzer = Join-Path -- (Get-ChildItem -Path $lib -Filter '*') 'PSScriptAnalyzer.psm1'
 
 Import-Module -- $analyzer
-Invoke-Formatter -ScriptDefinition ($input | Join-String -Separator ([Environment]::NewLine))
+Invoke-Formatter -ScriptDefinition ($input | ForEach-Object { $_.TrimEnd() } | Join-String -Separator ([Environment]::NewLine))
