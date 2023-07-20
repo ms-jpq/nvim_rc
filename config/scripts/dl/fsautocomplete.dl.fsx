@@ -36,7 +36,7 @@ do
 
     if Directory.Exists name then
         Directory.SetCurrentDirectory name
-        run "git" [ "pull" ]
+        run "git" [ "pull"; "--force" ]
     else
         run "git" [ "clone"; "--depth"; "1"; "--"; uri; name ]
 
