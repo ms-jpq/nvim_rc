@@ -142,6 +142,10 @@
 - args:
     - --stdin-filepath=${filename}
     - --tab-width=${tabsize}
+    # - --plugin=@prettier/plugin-xml
+    # - --plugin=prettier-plugin-java
+    # - --plugin=prettier-plugin-tailwindcss
+    - --plugin=prettier-plugin-organize-imports
     - --
   bin: prettier
   filetypes:
@@ -162,13 +166,13 @@
     - yaml*
   install:
     npm:
-      # - prettier-plugin-awk
-      - prettier
       # - "@prettier/plugin-php"
-      # - "@prettier/plugin-xml"
-      # - prettier-plugin-java
-      - prettier-plugin-organize-imports
+      # - prettier-plugin-awk
       # - prettier-plugin-tailwindcss
+      - "@prettier/plugin-xml"
+      - prettier
+      - prettier-plugin-java
+      - prettier-plugin-organize-imports
   type: stream
 
 - args:
