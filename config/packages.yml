@@ -68,7 +68,7 @@
           enable: true
           peek_definition_code:
             L: "@function.outer"
-            B: "@class.outer"
+            M: "@class.outer"
         select:
           enable: True
           keymaps:
