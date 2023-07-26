@@ -11,7 +11,7 @@
 (def uri
   (str base "-"
        (case (System/getProperty "os.name")
-         "Linux" "linux-static-amd64.zip"
+         "Linux" "static-linux-amd64.zip"
          "Mac OS X" "macos-aarch64.zip"
          "windows-amd64.zip")))
 
