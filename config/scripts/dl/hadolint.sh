@@ -2,15 +2,17 @@
 
 set -o pipefail
 
+BASE='https://github.com/hadolint/hadolint/releases/latest/download/hadolint'
+
 case "$OSTYPE" in
 darwin*)
-  URI="https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Darwin-x86_64"
+  URI="$BASE-Darwin-x86_64"
   ;;
 linux*)
-  URI="https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64"
+  URI="$BASE-Linux-x86_64"
   ;;
 *)
-  URI="https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Windows-x86_64.exe"
+  URI="$BASE-Windows-x86_64.exe"
   BIN="$BIN.exe"
   ;;
 esac

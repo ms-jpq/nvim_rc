@@ -4,18 +4,21 @@ set -o pipefail
 
 T_BIN="$(dirname -- "$BIN")/tectonic"
 
+BASE='https://github.com/latex-lsp/texlab/releases/latest/download/texlab'
+T_BASE='https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.13.1/tectonic-0.13.1'
+
 case "$OSTYPE" in
 darwin*)
-  URI="https://github.com/latex-lsp/texlab/releases/latest/download/texlab-aarch64-macos.tar.gz"
-  T_URI="https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.13.1/tectonic-0.13.1-x86_64-apple-darwin.tar.gz"
+  URI="$BASE-aarch64-macos.tar.gz"
+  T_URI="$T_BASE-x86_64-apple-darwin.tar.gz"
   ;;
 linux*)
-  URI="https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-linux.tar.gz"
-  T_URI="https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.13.1/tectonic-0.13.1-x86_64-unknown-linux-gnu.tar.gz"
+  URI="$BASE-x86_64-linux.tar.gz"
+  T_URI="$T_BASE-x86_64-unknown-linux-gnu.tar.gz"
   ;;
 *)
-  URI="https://github.com/latex-lsp/texlab/releases/latest/download/texlab-x86_64-windows.zip"
-  T_URI="https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.13.1/tectonic-0.13.1-x86_64-pc-windows-msvc.zip"
+  URI="$BASE-x86_64-windows.zip"
+  T_URI="$T_BASE-x86_64-pc-windows-msvc.zip"
   BIN="$BIN.exe"
   T_BIN="$T_BIN.exe"
   ;;

@@ -145,7 +145,7 @@
     # - --plugin=@prettier/plugin-xml
     # - --plugin=prettier-plugin-java
     # - --plugin=prettier-plugin-tailwindcss
-    - --plugin=prettier-plugin-organize-imports
+    # - --plugin=prettier-plugin-organize-imports
     - --
   bin: prettier
   filetypes:

@@ -2,15 +2,18 @@
 
 set -o pipefail
 
+BASE='https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls'
+VERSION='16.0.0'
+
 case "$OSTYPE" in
 darwin*)
-  URI="https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-16.0.0-mac-x64.tar.gz"
+  URI="$BASE-$VERSION.tar.gz"
   ;;
 linux*)
-  URI="https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-16.0.0-linux-x64.tar.gz"
+  URI="$BASE-$VERSION.tar.gz"
   ;;
 *)
-  URI="https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls-16.0.0-windows-x64.zip"
+  URI="$BASE-$VERSION-windows-x64.zip"
   BIN="$BIN.bat"
   ;;
 esac

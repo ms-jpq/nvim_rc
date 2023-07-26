@@ -2,15 +2,17 @@
 
 set -o pipefail
 
+BASE='https://github.com/tamasfe/taplo/releases/latest/download/taplo-full'
+
 case "$OSTYPE" in
 darwin*)
-  URI='https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-darwin-aarch64.gz'
+  URI="$BASE-darwin-aarch64.gz"
   ;;
 linux*)
-  URI='https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-linux-x86_64.gz'
+  URI="$BASE-linux-x86_64.gz"
   ;;
 *)
-  URI='https://github.com/tamasfe/taplo/releases/latest/download/taplo-full-windows-x86_64.zip'
+  URI="$BASE-windows-x86_64.zip"
   BIN="$BIN.exe"
   ;;
 esac

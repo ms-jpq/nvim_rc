@@ -29,12 +29,14 @@ fn main() -> Result<(), Box<dyn Error>> {
         .join("rust-analyzer-dl");
     create_dir_all(&tmp)?;
 
+    let base = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer";
+
     #[cfg(target_os = "macos")]
-    let uri = format!("https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-{ARCH}-apple-darwin.gz");
+    let uri = format!("{base}-{ARCH}-apple-darwin.gz");
     #[cfg(target_os = "linux")]
-    let uri = format!("https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-{ARCH}-unknown-linux-gnu.gz");
+    let uri = format!("{base}-{ARCH}-unknown-linux-gnu.gz");
     #[cfg(target_os = "windows")]
-    let uri = format!("https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-{ARCH}-pc-windows-msvc.gz");
+    let uri = format!("{base}-{ARCH}-pc-windows-msvc.gz");
 
     let mut proc = Command::new("get.py")
         .arg("--")

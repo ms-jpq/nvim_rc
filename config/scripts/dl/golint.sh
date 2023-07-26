@@ -2,15 +2,18 @@
 
 set -o pipefail
 
+BASE='https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint'
+VERSION='1.53.3'
+
 case "$OSTYPE" in
 darwin*)
-  URI="https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.53.3-darwin-arm64.tar.gz"
+  URI="$BASE-$VERSION-darwin-arm64.tar.gz"
   ;;
 linux*)
-  URI="https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.53.3-linux-amd64.tar.gz"
+  URI="$BASE-$VERSION-linux-amd64.tar.gz"
   ;;
 *)
-  URI="https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint-1.53.3-windows-amd64.zip"
+  URI="$BASE-$VERSION-windows-amd64.zip"
   BIN="$BIN.exe"
   ;;
 esac

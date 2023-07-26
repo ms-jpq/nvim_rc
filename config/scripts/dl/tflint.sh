@@ -2,15 +2,17 @@
 
 set -o pipefail
 
+BASE='https://github.com/terraform-linters/tflint/releases/latest/download/tflint'
+
 case "$OSTYPE" in
 darwin*)
-  URI='https://github.com/terraform-linters/tflint/releases/latest/download/tflint_darwin_arm64.zip'
+  URI="${BASE}_darwin_arm64.zip"
   ;;
 linux*)
-  URI='https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_amd64.zip'
+  URI="${BASE}_linux_amd64.zip"
   ;;
 *)
-  URI='https://github.com/terraform-linters/tflint/releases/latest/download/tflint_windows_amd64.zip'
+  URI="${BASE}_windows_amd64.zip"
   ;;
 esac
 

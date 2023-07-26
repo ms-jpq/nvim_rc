@@ -156,6 +156,12 @@
       - dockerfile-language-server-nodejs
   server: dockerls
 
+- bin: docker-compose-langserver
+  install:
+    npm:
+      - "@microsoft/compose-language-service"
+  server: docker_compose_language_service
+
 - bin: pyright-langserver
   install:
     npm:
@@ -395,16 +401,11 @@
       - theme-check
   server: theme_check
 
-- bin: emmet-ls
-  filetypes:
-    - css
-    - html
-    - liquid
-    - scss
+- bin: emmet-language-server
   install:
     npm:
-      - emmet-ls
-  server: emmet_ls
+      - "@olrtg/emmet-language-server"
+  server: emmet_language_server
 
 - bin: terraform-ls
   install:
@@ -419,6 +420,12 @@
     script:
       file: dl/tflint.sh
   server: tflint
+
+- bin: cobol-language-support
+  install:
+    script:
+      file: dl/cobol_ls.sh
+  server: cobol_ls
 # - server: volar
 #   bin: vue-language-server
 #   install:

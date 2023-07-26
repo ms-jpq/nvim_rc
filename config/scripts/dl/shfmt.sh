@@ -2,15 +2,18 @@
 
 set -o pipefail
 
+BASE='https://github.com/mvdan/sh/releases/latest/download/shfmt'
+VERSION='v3.7.0'
+
 case "$OSTYPE" in
 darwin*)
-  URI="https://github.com/mvdan/sh/releases/latest/download/shfmt_v3.7.0_darwin_arm64"
+  URI="${BASE}_${VERSION}_darwin_arm64"
   ;;
 linux*)
-  URI="https://github.com/mvdan/sh/releases/latest/download/shfmt_v3.7.0_linux_amd64"
+  URI="${BASE}_${VERSION}_linux_amd64"
   ;;
 *)
-  URI="https://github.com/mvdan/sh/releases/latest/download/shfmt_v3.7.0_windows_amd64.exe"
+  URI="${BASE}_${VERSION}_windows_amd64.exe"
   BIN="$BIN.exe"
   ;;
 esac

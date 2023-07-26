@@ -6,11 +6,14 @@
 
 (def os (System/getProperty "os.name"))
 
+(def base "https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp-native")
+
 (def uri
-  (case os
-    "Linux" "https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp-native-linux-amd64.zip"
-    "Mac OS X" "https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp-native-macos-aarch64.zip"
-    "https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp-native-windows-amd64.zip"))
+  (str base "-"
+       (case (System/getProperty "os.name")
+         "Linux" "linux-static-amd64.zip"
+         "Mac OS X" "macos-aarch64.zip"
+         "windows-amd64.zip")))
 
 (def bin (let [b (System/getenv "BIN")
                ext (case os

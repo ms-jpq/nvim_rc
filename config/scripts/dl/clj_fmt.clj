@@ -3,12 +3,18 @@
 (import '[java.lang ProcessBuilder ProcessBuilder$Redirect]
         '[java.nio.file Files Paths StandardCopyOption]
         '[java.nio.file.attribute FileAttribute])
+(require
+ '[clojure.string :refer [join]])
+
+(def base "https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt")
+(def version "0.10.6")
 
 (def uri
-  (case (System/getProperty "os.name")
-    "Linux" "https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt-0.10.6-linux-amd64-static.tar.gz"
-    "Mac OS X" "https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt-0.10.6-darwin-aarch64.tar.gz"
-    "https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt-0.10.6-win-amd64.zip"))
+  (join "-" [base version
+             (case (System/getProperty "os.name")
+               "Linux" "linux-amd64-static.tar.gz"
+               "Mac OS X" "darwin-aarch64.tar.gz"
+               "win-amd64.zip")]))
 
 (def bin (let [b (System/getenv "BIN")
                ext (case (System/getProperty "os.name")

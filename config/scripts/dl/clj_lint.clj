@@ -3,12 +3,18 @@
 (import '[java.lang ProcessBuilder ProcessBuilder$Redirect]
         '[java.nio.file Files Paths StandardCopyOption]
         '[java.nio.file.attribute FileAttribute PosixFilePermissions])
+(require
+ '[clojure.string :refer [join]])
+
+(def base "https://github.com/clj-kondo/clj-kondo/releases/latest/download/clj-kondo")
+(def version "2023.07.13")
 
 (def uri
-  (case (System/getProperty "os.name")
-    "Linux" "https://github.com/clj-kondo/clj-kondo/releases/latest/download/clj-kondo-2023.07.13-linux-static-amd64.zip"
-    "Mac OS X" "https://github.com/clj-kondo/clj-kondo/releases/latest/download/clj-kondo-2023.07.13-macos-aarch64.zip"
-    "https://github.com/clj-kondo/clj-kondo/releases/latest/download/clj-kondo-2023.07.13-windows-amd64.zip"))
+  (join "-" [base version
+             (case (System/getProperty "os.name")
+               "Linux" "linux-static-amd64.zip"
+               "Mac OS X" "macos-aarch64.zip"
+               "windows-amd64.zip")]))
 
 (def bin (let [b (System/getenv "BIN")
                ext (case (System/getProperty "os.name")
