@@ -18,7 +18,7 @@ def _magic_escape(text: str) -> str:
         "\r": "\\",
         "\t": "\\",
     }
-    return "".join(lex_esc(text, replace=False, escape=rules))
+    return "".join(lex_esc(text, escape=rules))
 
 
 async def _hl_text(text: str) -> None:
