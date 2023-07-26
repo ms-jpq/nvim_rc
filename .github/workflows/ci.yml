@@ -33,7 +33,8 @@ jobs:
           gmake lint
 
       - run: |-
-          gmake install -- JAVA_HOME="$JAVA_HOME_17_X64"
+          eval -- "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          # gmake install -- JAVA_HOME="$JAVA_HOME_17_X64"
 
   macos:
     runs-on: macos-latest
