@@ -5,7 +5,7 @@ set -o pipefail
 T_BIN="$(dirname -- "$BIN")/tectonic"
 
 BASE='https://github.com/latex-lsp/texlab/releases/latest/download/texlab'
-T_BASE='https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%40'
+T_BASE='https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic@'
 T_VERSION='0.14.1'
 
 case "$OSTYPE" in

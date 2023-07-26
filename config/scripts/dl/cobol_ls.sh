@@ -19,5 +19,5 @@ linux*)
 esac
 
 TMP="$(mktemp -d)"
-# get.py -- "$URI" | unpack.py --dst "$TMP"
-# install -b -- "$TMP/"*/golangci-lint "$BIN"
+get.py -- "$URI" | unpack.py --format zip --dst "$TMP"
+install -b -- "$TMP/extension/server/native/server-"* "$BIN"
