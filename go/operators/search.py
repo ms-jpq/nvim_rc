@@ -10,15 +10,16 @@ from ..registery import NAMESPACE, keymap, rpc
 
 # search and highlight
 def _magic_escape(text: str) -> str:
-    rules = {
-        "\\": r"\\",
-        "/": r"\/",
-        "\n": r"\n",
-        "\r": r"\r",
-        "\t": r"\t",
-    }
-    print(rules)
-    return text.translate(str.maketrans(rules))
+    rules = str.maketrans(
+        {
+            "\\": r"\\",
+            "/": r"\/",
+            "\n": r"\n",
+            "\r": r"\r",
+            "\t": r"\t",
+        }
+    )
+    return text.translate(rules)
 
 
 async def _hl_text(text: str) -> None:
