@@ -26,7 +26,8 @@ jobs:
 
       - run: |-
           sudo -- apt-get update
-          sudo -- apt-get install --no-install-recommends --yes -- swi-prolog haskell-platform clojure cpanminus
+          sudo -- apt-get install --no-install-recommends --yes -- swi-prolog cpanminus
+          /home/linuxbrew/.linuxbrew/bin/brew install -- clojure/tools/clojure
 
       - run: |-
           gmake lint

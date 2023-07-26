@@ -1,4 +1,4 @@
-#!/usr/bin/env -S -- clojure
+#!/usr/bin/env -S -- clojure -M
 
 (import '[java.lang ProcessBuilder ProcessBuilder$Redirect]
         '[java.nio.file Files Paths StandardCopyOption]
