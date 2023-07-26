@@ -4,7 +4,6 @@ from types import NoneType
 from pynvim_pp.buffer import Buffer
 from pynvim_pp.nvim import Nvim
 from pynvim_pp.operators import VisualTypes, operator_marks
-from std2.lex import escape as lex_esc
 
 from ..registery import NAMESPACE, keymap, rpc
 
@@ -12,13 +11,14 @@ from ..registery import NAMESPACE, keymap, rpc
 # search and highlight
 def _magic_escape(text: str) -> str:
     rules = {
-        "\\": "\\",
-        "/": "\\",
-        "\n": "\\",
-        "\r": "\\",
-        "\t": "\\",
+        "\\": r"\\",
+        "/": r"\/",
+        "\n": r"\n",
+        "\r": r"\r",
+        "\t": r"\t",
     }
-    return "".join(lex_esc(text, escape=rules))
+    print(rules)
+    return text.translate(str.maketrans(rules))
 
 
 async def _hl_text(text: str) -> None:
