@@ -207,6 +207,12 @@
 - server: ccls
   bin: ccls
 
+- server: fortls
+  bin: fortls
+  install:
+    pip:
+      - fortls
+
 # - server: typeprof
 #   bin: typeprof
 

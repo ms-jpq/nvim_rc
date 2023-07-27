@@ -144,9 +144,8 @@
     - --stdin-filepath=${filename}
     - --tab-width=${tabsize}
     # - --plugin=@prettier/plugin-xml
-    # - --plugin=prettier-plugin-java
     # - --plugin=prettier-plugin-tailwindcss
-    - --plugin=prettier-plugin-organize-imports
+    # - --plugin=prettier-plugin-organize-imports
     - --
   type: stream
   filetypes:
@@ -154,7 +153,6 @@
     - css
     - graphql
     - html
-    - java
     - javascript*
     - json*
     - less
@@ -172,7 +170,6 @@
       # - prettier-plugin-tailwindcss
       - "@prettier/plugin-xml"
       - prettier
-      - prettier-plugin-java
       - prettier-plugin-organize-imports
 
 - bin: stree
@@ -244,6 +241,15 @@
     - c
     - cpp
 
+- bin: fprettify
+  args: []
+  type: stream
+  filetypes:
+    - fortran
+  install:
+    pip:
+      - fprettify
+
 - bin: latexindent
   args:
     - --overwrite
@@ -285,6 +291,16 @@
       file: ktfmt.dl.kts
       required:
         - kotlinc
+
+- bin: javafmt
+  args:
+    - "-"
+  type: stream
+  filetypes:
+    - java
+  install:
+    script:
+      file: javafmt.dl.sh
 
 - bin: styler
   args:
