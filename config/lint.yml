@@ -23,6 +23,9 @@
     - zsh
   install:
     script:
+      required:
+        - curl
+        - jq
       file: shellcheck.sh
 
 - bin: perlcritic
@@ -34,10 +37,10 @@
     - perl
   install:
     script:
-      file: perlcritic.dl.pl
       required:
         - perl
         - cpanm
+      file: perlcritic.dl.pl
 
 - bin: pwsh-lint.ps1
   args:
@@ -68,9 +71,9 @@
     - clojure
   install:
     script:
-      file: clj_lint.clj
       required:
         - clojure
+      file: clj_lint.clj
 
 - bin: hadolint
   args:
@@ -94,6 +97,9 @@
     - go
   install:
     script:
+      required:
+        - curl
+        - jq
       file: golint.sh
 
 - bin: rubocop
@@ -117,10 +123,10 @@
     - r
   install:
     script:
-      file: lintr.dl.r
       required:
         - Rscript
         - R
+      file: lintr.dl.r
 
 - bin: htmlhint
   args:
@@ -142,6 +148,6 @@
     - php
   install:
     script:
-      file: phan.dl.php
       required:
         - php
+      file: phan.dl.php

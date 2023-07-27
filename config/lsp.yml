@@ -29,9 +29,9 @@
   args: []
   install:
     script:
-      file: lemminx.sh
       required:
         - htmlq
+      file: lemminx.sh
 
 - server: markdown
   bin: vscode-markdown-language-server
@@ -131,9 +131,9 @@
   bin: jq-lsp
   install:
     script:
-      file: jq_ls.sh
       required:
         - go
+      file: jq_ls.sh
 
 # - server: awk_ls
 #   bin: awk-language-server
@@ -146,9 +146,9 @@
   args: []
   install:
     script:
-      file: pwsh_es.dl.ps1
       required:
         - pwsh
+      file: pwsh_es.dl.ps1
 
 - server: dockerls
   bin: docker-langserver
@@ -178,25 +178,25 @@
   bin: haskell-language-server-wrapper
   install:
     script:
-      file: hls.dl.hs
       required:
         - runhaskell
+      file: hls.dl.hs
 
 - server: rust_analyzer
   bin: rust-analyzer
   install:
     script:
-      file: rust_analyzer.rs
       required:
         - rustc
+      file: rust_analyzer.rs
 
 - server: gopls
   bin: gopls
   install:
     script:
-      file: gopls.sh
       required:
         - go
+      file: gopls.sh
 
 - server: sourcekit
   bin: sourcekit-lsp
@@ -228,9 +228,9 @@
     gem:
       - solargraph
     script:
-      file: solargraph.dl.rb
       required:
         - ruby
+      file: solargraph.dl.rb
 
 - server: tsserver
   bin: typescript-language-server
@@ -283,27 +283,27 @@
   args: []
   install:
     script:
-      file: lsr.dl.r
       required:
         - Rscript
         - R
+      file: lsr.dl.r
 
 - server: julials
   bin: julia-lsp
   args: []
   install:
     script:
-      file: julia_ls.dl.jl
       required:
         - julia
+      file: julia_ls.dl.jl
 
 - server: phpactor
   bin: phpactor
   install:
     script:
-      file: phpactor.dl.php
       required:
         - php
+      file: phpactor.dl.php
 
 - server: intelephense
   bin: intelephense
@@ -315,51 +315,51 @@
   bin: fsautocomplete
   install:
     script:
-      file: fsautocomplete.dl.fsx
       required:
         - dotnet
+      file: fsautocomplete.dl.fsx
 
 - server: omnisharp
   bin: omnisharp
   args: []
   install:
     script:
-      file: omnisharp.dl.fsx
       required:
         - dotnet
+      file: omnisharp.dl.fsx
 
 - server: clojure_lsp
   bin: clojure-lsp
   install:
     script:
-      file: clj_lsp.clj
       required:
         - clojure
+      file: clj_lsp.clj
 
 - server: kotlin_language_server
   bin: kotlin-language-server
   install:
     script:
-      file: kotlin_ls.kts
       required:
         - kotlinc
+      file: kotlin_ls.kts
 
 - server: jdtls
   bin: jdtls
   install:
     script:
-      file: jdtls.sh
       required:
         - jshell
+      file: jdtls.sh
 
 - server: prolog_ls
   bin: prolog-ls
   args: []
   install:
     script:
-      file: prolog_ls.dl.pro
       required:
         - swipl
+      file: prolog_ls.dl.pro
 
 - server: sqlls
   bin: sql-language-server
@@ -379,6 +379,9 @@
         version: "Lua 5.1"
   install:
     script:
+      required:
+        - curl
+        - jq
       file: lua_ls.dl.sh
 
 - server: ansiblels
@@ -413,9 +416,9 @@
   bin: terraform-ls
   install:
     script:
+      file: terraform_ls.sh
       required:
         - htmlq
-      file: terraform_ls.sh
 
 - server: tflint
   bin: tflint
@@ -427,7 +430,11 @@
   bin: cobol-language-support
   install:
     script:
+      required:
+        - curl
+        - jq
       file: cobol_ls.sh
+
 # - server: volar
 #   bin: vue-language-server
 #   install:

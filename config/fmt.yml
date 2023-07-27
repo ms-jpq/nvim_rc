@@ -38,6 +38,9 @@
     - zsh
   install:
     script:
+      required:
+        - curl
+        - jq
       file: shfmt.sh
 
 - bin: pwsh-fmt.ps1
@@ -59,9 +62,9 @@
     - haskell
   install:
     script:
-      file: stylish.dl.hs
       required:
         - runhaskell
+      file: stylish.dl.hs
 
 - bin: systemd-fmt
   args: []
@@ -124,9 +127,9 @@
     - clojure
   install:
     script:
-      file: clj_fmt.clj
       required:
         - clojure
+      file: clj_fmt.clj
 
 - bin: csscomb
   args:
@@ -261,10 +264,12 @@
   type: fs
   install:
     script:
-      file: latexindent.dl.pl
       required:
-        - perl
         - cpanm
+        - curl
+        - jq
+        - perl
+      file: latexindent.dl.pl
 
 - bin: fantomas
   args:
@@ -275,9 +280,9 @@
     - fsharp
   install:
     script:
-      file: fantomas.dl.fsx
       required:
         - dotnet
+      file: fantomas.dl.fsx
 
 - bin: ktfmt
   args:
@@ -288,9 +293,9 @@
     - kotlin
   install:
     script:
-      file: ktfmt.dl.kts
       required:
         - kotlinc
+      file: ktfmt.dl.kts
 
 - bin: javafmt
   args:
@@ -300,6 +305,9 @@
     - java
   install:
     script:
+      required:
+        - curl
+        - jq
       file: javafmt.dl.sh
 
 - bin: styler
@@ -310,10 +318,10 @@
     - r
   install:
     script:
-      file: styler.dl.r
       required:
         - Rscript
         - R
+      file: styler.dl.r
 
 - bin: sql-formatter
   args:
