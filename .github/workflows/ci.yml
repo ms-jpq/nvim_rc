@@ -32,7 +32,9 @@ jobs:
       - run: |-
           gmake lint
 
-      - run: |-
+      - env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |-
           eval -- "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           gmake install -- JAVA_HOME="$JAVA_HOME_17_X64"
 
@@ -50,7 +52,9 @@ jobs:
       - run: |-
           gmake lint
 
-      - run: |-
+      - env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |-
           gmake install -- JAVA_HOME="$JAVA_HOME_17_X64"
 
   windows:

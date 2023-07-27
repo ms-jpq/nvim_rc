@@ -11,8 +11,16 @@ if ! [[ -f "$CACHE" ]]; then
     --location
     --no-progress-meter
     --max-time 60
+  )
+  if [[ -v GH_TOKEN ]]; then
+    CURL+=(
+      --header "Authorization: Bearer $GH_TOKEN"
+    )
+  fi
+  CURL+=(
     -- "https://api.github.com/repos/$REPO/releases/latest"
   )
+
   JQ=(
     jq --exit-status
     --raw-output '.tag_name'
