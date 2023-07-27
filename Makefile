@@ -14,7 +14,7 @@ SHELL := bash
 .PHONY: clean clobber lint build fmt runtime mvp patch install
 
 clean:
-	rm -rf -- .clj-kondo/ .lsp/ .mypy_cache/ .venv/
+	rm -rf -- .clj-kondo/ .lsp/ .mypy_cache/ .venv/ var/tmp/*.cache
 
 clobber: clean
 	sudo -- rm -rf -- pack/ var/

@@ -3,19 +3,24 @@
 set -o pipefail
 
 REPO="$1"
+CACHE="$PWD/${REPO/\//.}.cache"
 
-CURL=(
-  curl --fail
-  --location
-  --no-progress-meter
-  --max-time 60
-  -- "https://api.github.com/repos/$REPO/releases/latest"
-)
-JQ=(
-  jq --exit-status
-  --raw-output '.tag_name'
-)
+if ! [[ -f "$CACHE" ]]; then
+  CURL=(
+    curl --fail
+    --location
+    --no-progress-meter
+    --max-time 60
+    -- "https://api.github.com/repos/$REPO/releases/latest"
+  )
+  JQ=(
+    jq --exit-status
+    --raw-output '.tag_name'
+  )
 
-LINES="$("${CURL[@]}" | "${JQ[@]}")"
-readarray -t -d $'\n' -- TAGS <<<"$LINES"
-printf -- '%s' "${TAGS[0]}"
+  LINES="$("${CURL[@]}" | "${JQ[@]}")"
+  readarray -t -d $'\n' -- TAGS <<<"$LINES"
+  printf -- '%s' "${TAGS[0]}" >"$CACHE"
+fi
+
+exec -- cat -- "$CACHE"
