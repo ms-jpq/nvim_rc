@@ -4,11 +4,16 @@
         '[java.nio.file Files Paths StandardCopyOption]
         '[java.nio.file.attribute FileAttribute])
 (require
- '[clojure.string :refer [join]])
+ '[clojure.string :refer [join]]
+ '[clojure.java.shell :refer [sh]])
 
 (def repo "weavejester/cljfmt")
 (def base (str "https://github.com/" repo "/releases/latest/download/cljfmt"))
-(def version "0.10.6")
+(def version
+  (let [{:keys [exit err out]} (sh "gh-latest.sh" repo)]
+    (print err)
+    (assert (zero? exit))
+    out))
 
 (def uri
   (join "-" [base version
@@ -26,14 +31,14 @@
 (let [tmp (Files/createTempDirectory "" (into-array FileAttribute []))]
   (try
     (doseq
-     [n (ProcessBuilder/startPipeline
-         [(-> (ProcessBuilder. ["get.py", "--", uri])
-              (.redirectError ProcessBuilder$Redirect/INHERIT))
-          (->
-           (ProcessBuilder. ["unpack.py", "--dst", (.toString tmp)])
-           (.redirectOutput ProcessBuilder$Redirect/INHERIT)
-           (.redirectError ProcessBuilder$Redirect/INHERIT))])]
-      (assert (== 0 (.waitFor n))))
+     [proc (ProcessBuilder/startPipeline
+            [(-> (ProcessBuilder. ["get.py", "--", uri])
+                 (.redirectError ProcessBuilder$Redirect/INHERIT))
+             (->
+              (ProcessBuilder. ["unpack.py", "--dst", (.toString tmp)])
+              (.redirectOutput ProcessBuilder$Redirect/INHERIT)
+              (.redirectError ProcessBuilder$Redirect/INHERIT))])]
+      (-> proc .waitFor zero? assert))
 
     (Files/move (.resolve tmp "cljfmt")
                 bin

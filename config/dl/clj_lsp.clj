@@ -24,14 +24,14 @@
 (let [tmp (Files/createTempDirectory "" (into-array FileAttribute []))]
   (try
     (doseq
-     [n (ProcessBuilder/startPipeline
-         [(-> (ProcessBuilder. ["get.py", "--", uri])
-              (.redirectError ProcessBuilder$Redirect/INHERIT))
-          (->
-           (ProcessBuilder. ["unpack.py", "--dst", (.toString tmp)])
-           (.redirectOutput ProcessBuilder$Redirect/INHERIT)
-           (.redirectError ProcessBuilder$Redirect/INHERIT))])]
-      (assert (== 0 (.waitFor n))))
+     [proc (ProcessBuilder/startPipeline
+            [(-> (ProcessBuilder. ["get.py", "--", uri])
+                 (.redirectError ProcessBuilder$Redirect/INHERIT))
+             (->
+              (ProcessBuilder. ["unpack.py", "--dst", (.toString tmp)])
+              (.redirectOutput ProcessBuilder$Redirect/INHERIT)
+              (.redirectError ProcessBuilder$Redirect/INHERIT))])]
+      (-> proc .waitFor zero? assert))
 
     (Files/move (.resolve tmp "clojure-lsp")
                 bin
