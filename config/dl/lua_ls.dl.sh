@@ -2,18 +2,19 @@
 
 set -o pipefail
 
-BASE='https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls'
-VERSION='16.0.0'
+REPO='LuaLS/lua-language-server'
+BASE="https://github.com/$REPO/releases/latest/download/lua-language-server"
+VERSION="$(gh-latest.sh "$REPO")"
 
 case "$OSTYPE" in
 darwin*)
-  URI="$BASE-$VERSION-mac-x64.tar.gz"
+  URI="$BASE-$VERSION-darwin-arm64.tar.gz"
   ;;
 linux*)
   URI="$BASE-$VERSION-linux-x64.tar.gz"
   ;;
 *)
-  URI="$BASE-$VERSION-windows-x64.zip"
+  URI="$BASE-$VERSION-win32-x64.zip"
   BIN="$BIN.bat"
   ;;
 esac
@@ -22,7 +23,5 @@ TMP="$(mktemp -d)"
 get.py -- "$URI" | unpack.py --dst "$TMP"
 # shellcheck disable=2154
 rm -rf -- "$LIB"
-mkdir -p -- "$LIB"
-mv -f -- "$TMP"/*/* "$LIB/"
-ln -sf -- "$LIB/bin/${BIN##*/}" "$BIN"
-rm -fr -- "$TMP"
+mv -f -- "$TMP" "$LIB"
+install -b -- "${0%/*}/lua_ls.ex.sh" "$BIN"

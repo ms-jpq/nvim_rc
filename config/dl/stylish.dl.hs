@@ -2,7 +2,7 @@
 
 import           Data.Function         ((&))
 import           System.Directory      (copyFileWithMetadata, getPermissions,
-                                        setOwnerExecutable, setPermissions)
+                                        removePathForcibly, setOwnerExecutable, setPermissions)
 import           System.Environment    (getEnv, getExecutablePath)
 import           System.FilePath       ((</>))
 import           System.FilePath.Posix (dropExtension, takeBaseName)

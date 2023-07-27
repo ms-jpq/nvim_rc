@@ -379,11 +379,7 @@
         version: "Lua 5.1"
   install:
     script:
-      file: sumneko_lua.sh
-      required:
-        - git
-        - python3
-        - gcc
+      file: lua_ls.dl.sh
 
 - server: ansiblels
   bin: ansible-language-server

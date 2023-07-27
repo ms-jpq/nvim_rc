@@ -2,8 +2,9 @@
 
 set -o pipefail
 
-BASE='https://github.com/eclipse-che4z/che-che4z-lsp-for-cobol/releases/latest/download/cobol-language-support'
-VERSION='2.0.1'
+REPO='eclipse-che4z/che-che4z-lsp-for-cobol'
+BASE="https://github.com/$REPO/releases/latest/download/cobol-language-support"
+VERSION="$(gh-latest.sh "$REPO")"
 
 case "$OSTYPE" in
 darwin*)

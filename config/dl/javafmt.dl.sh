@@ -2,8 +2,10 @@
 
 set -o pipefail
 
-VERSION='1.17.0'
-URI="https://github.com/google/google-java-format/releases/latest/download/google-java-format-$VERSION-all-deps.jar"
+REPO='google/google-java-format'
+VERSION="$(gh-latest.sh "$REPO")"
+VERSION="${VERSION##v}"
+URI="https://github.com/$REPO/releases/latest/download/google-java-format-$VERSION-all-deps.jar"
 
 # shellcheck disable=SC2154
 FMT="$LIB/google-java-format.jar"

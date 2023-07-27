@@ -2,8 +2,10 @@
 
 set -o pipefail
 
-BASE='https://github.com/golangci/golangci-lint/releases/latest/download/golangci-lint'
-VERSION='1.53.3'
+REPO='golangci/golangci-lint'
+BASE="https://github.com/$REPO/releases/latest/download/golangci-lint"
+VERSION="$(gh-latest.sh "$REPO")"
+VERSION="${VERSION##v}"
 
 case "$OSTYPE" in
 darwin*)

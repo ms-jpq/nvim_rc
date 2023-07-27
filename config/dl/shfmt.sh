@@ -2,8 +2,9 @@
 
 set -o pipefail
 
-BASE='https://github.com/mvdan/sh/releases/latest/download/shfmt'
-VERSION='v3.7.0'
+REPO='mvdan/sh'
+BASE="https://github.com/$REPO/releases/latest/download/shfmt"
+VERSION="$(gh-latest.sh "$REPO")"
 
 case "$OSTYPE" in
 darwin*)
