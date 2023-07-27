@@ -24,7 +24,7 @@ main = do
   cwd <- getCurrentDirectory <&> takeDirectory
   tmp <- readProcess "mktemp" ["-d"] ""
 
-  let tramp = cwd </> "config" </> "scripts" </> "dl" </> "hls.ex.sh"
+  let tramp = cwd </> "config" </> "dl" </> "hls.ex.sh"
   let srv = tmp </> printf "haskell-language-server-%s" version
   let link = uri os version
 

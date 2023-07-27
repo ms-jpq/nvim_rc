@@ -25,6 +25,18 @@ let tmp = Directory.CreateTempSubdirectory().FullName
 let lib = Environment.GetEnvironmentVariable "LIB"
 let proxy = Path.Combine(__SOURCE_DIRECTORY__, "omnisharp.ex.sh")
 
+let base_uri =
+    "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp"
+
+let uri =
+    if RuntimeInformation.IsOSPlatform(OSPlatform.OSX) then
+        sprintf "%s-%s" base_uri "osx-arm64-net6.0.tar.gz"
+    elif RuntimeInformation.IsOSPlatform(OSPlatform.Linux) then
+        sprintf "%s-%s" base_uri "linux-x64-net6.0.tar.gz"
+    else
+        sprintf "%s-%s" base_uri "win-x64-net6.0.zip"
+
+
 let bin =
     let ext =
         if RuntimeInformation.IsOSPlatform(OSPlatform.Windows) then
@@ -34,13 +46,6 @@ let bin =
 
     (Environment.GetEnvironmentVariable "BIN", ext) |> Path.ChangeExtension
 
-let uri =
-    if RuntimeInformation.IsOSPlatform(OSPlatform.OSX) then
-        "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-osx-arm64-net6.0.tar.gz"
-    elif RuntimeInformation.IsOSPlatform(OSPlatform.Linux) then
-        "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-linux-x64-net6.0.tar.gz"
-    else
-        "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp-win-x64-net6.0.zip"
 
 ""
 |> run "get.py" [ "--"; uri ]
