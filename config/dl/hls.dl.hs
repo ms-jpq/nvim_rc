@@ -1,6 +1,5 @@
 #!/usr/bin/env -S -- runhaskell
 
-import           Control.Arrow      ((>>>))
 import           Data.Functor       ((<&>))
 import           System.Directory   (copyFileWithMetadata, getCurrentDirectory,
                                      removePathForcibly, renameDirectory)
@@ -22,7 +21,7 @@ suffix _    = ""
 
 main = do
   lib <- getEnv "LIB"
-  cwd <- getCurrentDirectory <&> (takeDirectory >>> takeDirectory)
+  cwd <- getCurrentDirectory <&> takeDirectory
   tmp <- readProcess "mktemp" ["-d"] ""
 
   let tramp = cwd </> "config" </> "scripts" </> "dl" </> "hls.ex.sh"

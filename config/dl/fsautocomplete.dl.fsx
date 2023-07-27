@@ -44,7 +44,7 @@ do
     let src = Path.Combine(name, "syntax", "fsharp.vim")
 
     let dst =
-        Path.Combine(__SOURCE_DIRECTORY__, "..", "..", "..", "syntax", Path.GetFileName src)
+        Path.Combine(__SOURCE_DIRECTORY__, "..", "..", "syntax", Path.GetFileName src)
 
     File.Delete(dst)
     File.CreateSymbolicLink(dst, src) |> ignore
