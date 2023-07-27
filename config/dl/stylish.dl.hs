@@ -32,4 +32,5 @@ main = do
 
   _ <- getExecutablePath >>= getPermissions >>= setPermissions srv
   _ <- getEnv "BIN" >>= copyFileWithMetadata srv
+  _ <- removePathForcibly tmp
   pure ()

@@ -36,4 +36,5 @@ main = do
   _ <- removePathForcibly lib
   _ <- renameDirectory srv lib
   _ <- getEnv "BIN" >>= copyFileWithMetadata tramp
+  _ <- removePathForcibly tmp
   pure ()

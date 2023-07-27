@@ -1,5 +1,5 @@
 #!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
-//usr/bin/true; rustc --edition=2021 -o "${TMPFILE:="$(mktemp)"}" -- "$0"; exec -- "$TMPFILE" "$0" "$@"
+//usr/bin/true && rustc --edition=2021 -o "${TMPFILE:="$(mktemp)"}" -- "$0" && "$TMPFILE" "$0" "$@" && exec -- rm -fr -- "$TMPFILE"
 
 #![deny(clippy::all, clippy::cargo, clippy::pedantic)]
 

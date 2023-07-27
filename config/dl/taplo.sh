@@ -20,3 +20,4 @@ esac
 TMP="$(mktemp -d)"
 get.py -- "$URI" | unpack.py --dst "$TMP"
 install -b -- "$TMP"/* "$BIN"
+rm -fr -- "$TMP"

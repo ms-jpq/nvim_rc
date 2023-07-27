@@ -49,6 +49,8 @@ if ( !-d $lib ) {
     && croak $CHILD_ERROR;
 
   system( 'mv', '--force', '--', $tmp_lib, $lib ) && croak $CHILD_ERROR;
+
+  rmtree( $tmp );
 }
 
 copy( $script, $bin );

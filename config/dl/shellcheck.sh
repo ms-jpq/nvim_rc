@@ -21,3 +21,4 @@ TMP="$(mktemp -d)"
 get.py -- "$URI" | unpack.py --dst "$TMP"
 # shellcheck disable=2154
 install -b -- "$TMP/shellcheck"*'/shellcheck' "$BIN"
+rm -fr -- "$TMP"

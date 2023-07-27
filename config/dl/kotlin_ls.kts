@@ -45,3 +45,5 @@ ll.setPosixFilePermissions(setOf(PosixFilePermission.OWNER_EXECUTE))
 bin.deleteIfExists()
 
 bin.createSymbolicLinkPointingTo(ll)
+
+@OptIn(kotlin.io.path.ExperimentalPathApi::class) tmp.deleteRecursively()
