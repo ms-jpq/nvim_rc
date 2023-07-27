@@ -1,34 +1,35 @@
 ---
-- args:
+- bin: vint
+  args:
     - --enable-neovim
     - --style-problem
     - --
     - ${tmpname}
-  bin: vint
+  type: fs
   filetypes:
     - vim
   install:
     pip:
       - vim-vint
-  type: fs
 
-- args:
+- bin: shellcheck
+  args:
     - --enable=all
     - --
     - ${tmpname}
-  bin: shellcheck
+  type: fs
   filetypes:
     - sh
     - zsh
   install:
     script:
       file: dl/shellcheck.sh
-  type: fs
 
-- args:
+- bin: perlcritic
+  args:
     - --brutal
     - --
-  bin: perlcritic
+  type: stream
   filetypes:
     - perl
   install:
@@ -37,32 +38,32 @@
       required:
         - perl
         - cpanm
-  type: stream
 
-- args:
+- bin: pwsh-lint.ps1
+  args:
     - ${tmpname}
-  bin: pwsh-lint.ps1
+  type: fs
   filetypes:
     - ps1
-  type: fs
 
-- args:
+- bin: mypy
+  args:
     - --
     - ${tmpname}
-  bin: mypy
+  type: fs
   filetypes:
     - python
   install:
     pip:
       - mypy
-  type: fs
 
-- args:
+- bin: clj-kondo
+  args:
     - --filename
     - ${filename}
     - --lint
     - "-"
-  bin: clj-kondo
+  type: stream
   filetypes:
     - clojure
   install:
@@ -70,48 +71,48 @@
       file: dl/clj_lint.clj
       required:
         - clojure
-  type: stream
 
-- args:
+- bin: hadolint
+  args:
     - --no-color
     - --
     - ${tmpname}
-  bin: hadolint
+  type: fs
   filetypes:
     - dockerfile
   install:
     script:
       file: dl/hadolint.sh
-  type: fs
 
-- args:
+- bin: golint
+  args:
     - run
     - --
     - ${tmpname}
-  bin: golint
+  type: fs
   filetypes:
     - go
   install:
     script:
       file: dl/golint.sh
-  type: fs
 
-- args:
+- bin: rubocop
+  args:
     - --no-color
     - --stderr
     - --
     - ${tmpname}
-  bin: rubocop
+  type: stream
   filetypes:
     - ruby
   install:
     gem:
       - rubocop
-  type: stream
 
-- args:
+- bin: lintr
+  args:
     - ${tmpname}
-  bin: lintr
+  type: fs
   filetypes:
     - r
   install:
@@ -120,23 +121,23 @@
       required:
         - Rscript
         - R
-  type: fs
 
-- args:
+- bin: htmlhint
+  args:
     - --nocolor
     - --
     - ${tmpname}
-  bin: htmlhint
+  type: fs
   filetypes:
     - html
   install:
     npm:
       - htmlhint
-  type: fs
 
-- args:
+- bin: phan
+  args:
     - ${tmpname}
-  bin: phan
+  type: fs
   filetypes:
     - php
   install:
@@ -144,4 +145,3 @@
       file: dl/phan.dl.php
       required:
         - php
-  type: fs

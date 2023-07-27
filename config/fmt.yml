@@ -1,59 +1,60 @@
 ---
-- args:
+- bin: sortd
+  args:
     - ${filetype}
-  bin: sortd
+  type: stream
   filetypes:
     - cfg
   install:
     pip:
       - sortd
-  type: stream
 
-- args:
+- bin: sortd
+  args:
     - json
-  bin: sortd
+  type: stream
   filetypes:
     - json
     - jsonc
-  type: stream
 
-- args:
+- bin: taplo
+  args:
     - format
     - --option=align_entries=true
     - --option=array_trailing_comma=true
     - --option=reorder_keys=true
     - --
     - ${tmpname}
-  bin: taplo
+  type: fs
   filetypes:
     - toml
-  type: fs
 
-- args:
+- bin: shfmt
+  args:
     - --indent=${tabsize}
-  bin: shfmt
+  type: stream
   filetypes:
     - sh
     - zsh
   install:
     script:
       file: dl/shfmt.sh
-  type: stream
 
-- args: []
-  bin: pwsh-fmt.ps1
+- bin: pwsh-fmt.ps1
+  args: []
+  type: stream
   filetypes:
     - ps1
-  type: stream
 
-- args: []
-  bin: prolog-fmt
+- bin: prolog-fmt
+  args: []
+  type: stream
   filetypes:
     - prolog
-  type: stream
 
-- args: []
-  bin: stylish-haskell
+- bin: stylish-haskell
+  args: []
+  type: stream
   filetypes:
     - haskell
   install:
@@ -61,64 +62,64 @@
       file: dl/stylish.dl.hs
       required:
         - runhaskell
-  type: stream
 
-- args: []
-  bin: systemd-fmt
+- bin: systemd-fmt
+  args: []
+  type: stream
   filetypes:
     - systemd
-  type: stream
 
-- args:
+- bin: perltidy
+  args:
     - --indent-columns=2
-  bin: perltidy
+  type: stream
   filetypes:
     - perl
-  type: stream
 
-- args:
+- bin: dockerfile-utils
+  args:
     - format
     - --spaces
     - ${tabsize}
     - ${tmpname}
-  bin: dockerfile-utils
+  type: stream
   filetypes:
     - dockerfile
-  type: stream
 
-- args:
+- bin: isort
+  args:
     - --profile=black
     - --filename=${filename}
     - --
     - "-"
-  bin: isort
+  type: stream
   filetypes:
     - python
   install:
     pip:
       - isort
-  type: stream
 
-- args:
+- bin: black
+  args:
     - --stdin-filename=${filename}
     - --
     - "-"
-  bin: black
+  type: stream
   filetypes:
     - python
   install:
     pip:
       - black
-  type: stream
 
-- args:
+- bin: cljfmt
+  args:
     - fix
     - --remove-multiple-non-indenting-spaces
     - --sort-ns-references
     - --split-keypairs-over-multiple-lines
     - --
     - ${tmpname}
-  bin: cljfmt
+  type: fs
   filetypes:
     - clojure
   install:
@@ -126,28 +127,28 @@
       file: dl/clj_fmt.clj
       required:
         - clojure
-  type: fs
 
-- args:
+- bin: csscomb
+  args:
     - --
     - ${tmpname}
-  bin: csscomb
+  type: stream
   filetypes:
     - css
   install:
     npm:
       - csscomb
-  type: stream
 
-- args:
+- bin: prettier
+  args:
     - --stdin-filepath=${filename}
     - --tab-width=${tabsize}
     # - --plugin=@prettier/plugin-xml
     # - --plugin=prettier-plugin-java
     # - --plugin=prettier-plugin-tailwindcss
-    # - --plugin=prettier-plugin-organize-imports
+    - --plugin=prettier-plugin-organize-imports
     - --
-  bin: prettier
+  type: stream
   filetypes:
     - awk
     - css
@@ -173,15 +174,15 @@
       - prettier
       - prettier-plugin-java
       - prettier-plugin-organize-imports
-  type: stream
 
-- args:
+- bin: stree
+  args:
     - format
     # plugin/single_quotes,
     - --plugins=plugin/trailing_comma
     - --
     - ${tmpname}
-  bin: stree
+  type: stream
   env:
     NO_COLOR: "1"
   filetypes:
@@ -190,80 +191,80 @@
   install:
     gem:
       - syntax_tree
+
+- bin: rubocop
+  args:
+    - --fail-level=fatal
+    - --stderr
+    - --stdin
+    - --format=quiet
+    - --no-color
+    - --autocorrect
   type: stream
+  filetypes:
+    - ruby
+  install:
+    gem:
+      - rubocop
 
-# - args:
-#     - --fail-level=fatal
-#     - --stderr
-#     - --stdin
-#     - --format=quiet
-#     - --no-color
-#     - --autocorrect
-#   bin: rubocop
-#   filetypes:
-#     - ruby
-#   install:
-#     gem:
-#       - rubocop
-#   type: stream
-
-- args:
+- bin: luafmt
+  args:
     - --line-width=80
     - --indent-count=${tabsize}
     - --write-mode=replace
     - --
     - ${tmpname}
-  bin: luafmt
+  type: fs
   filetypes:
     - lua
   install:
     npm:
       - lua-fmt
-  type: fs
 
-- args:
+- bin: rustfmt
+  args:
     - --edition=2021
-  bin: rustfmt
+  type: stream
   filetypes:
     - rust
-  type: stream
 
-- args:
+- bin: gofmt
+  args:
     - -w
     - --
     - ${tmpname}
-  bin: gofmt
+  type: fs
   filetypes:
     - go
-  type: fs
 
-- args: []
-  bin: clang-format
+- bin: clang-format
+  args: []
+  type: stream
   filetypes:
     - c
     - cpp
-  type: stream
 
-- args:
+- bin: latexindent
+  args:
     - --overwrite
     - --
     - ${tmpname}
-  bin: latexindent
   filetypes:
     - plaintex
     - tex
+  type: fs
   install:
     script:
       file: dl/latexindent.dl.pl
       required:
         - perl
         - cpanm
-  type: fs
 
-- args:
+- bin: fantomas
+  args:
     - --
     - ${tmpname}
-  bin: fantomas
+  type: fs
   filetypes:
     - fsharp
   install:
@@ -271,12 +272,12 @@
       file: dl/fantomas.dl.fsx
       required:
         - dotnet
-  type: fs
 
-- args:
+- bin: ktfmt
+  args:
     - --
     - ${tmpname}
-  bin: ktfmt
+  type: fs
   filetypes:
     - kotlin
   install:
@@ -284,11 +285,11 @@
       file: dl/ktfmt.dl.kts
       required:
         - kotlinc
-  type: fs
 
-- args:
+- bin: styler
+  args:
     - ${tmpname}
-  bin: styler
+  type: fs
   filetypes:
     - r
   install:
@@ -297,9 +298,9 @@
       required:
         - Rscript
         - R
-  type: fs
 
-- args:
+- bin: sql-formatter
+  args:
     # - --uppercase
     # - --lines-between-queries=2
     # - --indent=${tabsize}
@@ -307,10 +308,9 @@
     - --output=${tmpname}
     - --
     - ${tmpname}
-  bin: sql-formatter
+  type: fs
   filetypes:
     - sql
   install:
     npm:
       - sql-formatter
-  type: fs

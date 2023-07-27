@@ -1,11 +1,12 @@
 ---
-- bin: vscode-json-language-server
+- server: jsonls
+  bin: vscode-json-language-server
   install:
     npm:
       - vscode-langservers-extracted
-  server: jsonls
 
-- bin: yaml-language-server
+- server: yamlls
+  bin: yaml-language-server
   filetypes:
     - yaml
     - yaml.ansible
@@ -13,53 +14,49 @@
   install:
     npm:
       - yaml-language-server
-  server: yamlls
   # settings:
   #   yaml:
   #     keyOrdering: false
 
-- bin: taplo
+- server: taplo
+  bin: taplo
   install:
     script:
       file: dl/taplo.sh
-  server: taplo
 
-- args: []
+- server: lemminx
   bin: lemminx
+  args: []
   install:
     script:
       file: dl/lemminx.sh
       required:
         - htmlq
-  server: lemminx
 
-- args:
-    - --stdio
+- server: markdown
   bin: vscode-markdown-language-server
+  args:
+    - --stdio
   filetypes:
     - markdown
   install:
     npm:
       - vscode-langservers-extracted
-  server: markdown
 
-- bin: docker-compose-langserver
+- server: docker_compose_language_service
+  bin: docker-compose-langserver
   install:
     npm:
       - "@microsoft/compose-language-service"
-  server: docker_compose_language_service
 
-- bin: ltex-ls
+- server: ltex
+  bin: ltex-ls
   install:
     script:
       file: dl/ltex.sh
-  server: ltex
 
-- bin: texlab
-  install:
-    script:
-      file: dl/texlab.sh
-  server: texlab
+- server: texlab
+  bin: texlab
   settings:
     texlab:
       build:
@@ -79,15 +76,21 @@
       #     - "%l"
       #     - "%p"
       #     - '"code -g %f:%l"'
+  install:
+    script:
+      file: dl/texlab.sh
 
-- bin: digestif
-  server: digestif
+- server: digestif
+  bin: digestif
 
-- bin: diagnostic-languageserver
+- server: diagnosticls
+  bin: diagnostic-languageserver
   filetypes:
     - dockerfile
     - sh
     - zsh
+  root:
+    fallback: cwd
   init_options:
     filetypes:
       dockerfile:
@@ -117,95 +120,92 @@
   install:
     npm:
       - diagnostic-languageserver
-  root:
-    fallback: cwd
-  server: diagnosticls
 
-- bin: bash-language-server
+- server: bashls
+  bin: bash-language-server
   install:
     npm:
       - bash-language-server
-  server: bashls
 
-- bin: jq-lsp
+- server: jqls
+  bin: jq-lsp
   install:
     script:
       file: dl/jq_ls.sh
       required:
         - go
-  server: jqls
 
-# - bin: awk-language-server
+# - server: awk_ls
+#   bin: awk-language-server
 #   install:
 #     npm:
 #       - awk-language-server
-#   server: awk_ls
 
-- args: []
+- server: powershell_es
   bin: pwsh_es.ps1
+  args: []
   install:
     script:
       file: dl/pwsh_es.dl.ps1
       required:
         - pwsh
-  server: powershell_es
 
-- bin: docker-langserver
+- server: dockerls
+  bin: docker-langserver
   install:
     npm:
       - dockerfile-language-server-nodejs
-  server: dockerls
 
-- bin: docker-compose-langserver
+- server: docker_compose_language_service
+  bin: docker-compose-langserver
   install:
     npm:
       - "@microsoft/compose-language-service"
-  server: docker_compose_language_service
 
-- bin: pyright-langserver
+- server: pyright
+  bin: pyright-langserver
   install:
     npm:
       - pyright
-  server: pyright
 
-# - bin: ruff
+# - server: ruff_lsp
+#   bin: ruff
 #   install:
 #     pip:
 #       - ruff
-#   server: ruff_lsp
 
-- bin: haskell-language-server-wrapper
+- server: hls
+  bin: haskell-language-server-wrapper
   install:
     script:
       file: dl/hls.dl.hs
       required:
         - runhaskell
-  server: hls
 
-- bin: rust-analyzer
+- server: rust_analyzer
+  bin: rust-analyzer
   install:
     script:
       file: dl/rust_analyzer.rs
       required:
         - rustc
-  server: rust_analyzer
 
-- bin: gopls
+- server: gopls
+  bin: gopls
   install:
     script:
       file: dl/gopls.sh
       required:
         - go
-  server: gopls
 
-- bin: sourcekit-lsp
-  server: sourcekit
+- server: sourcekit
+  bin: sourcekit-lsp
 
-- bin: clangd
-  server: clangd
+- server: clangd
+  bin: clangd
 
-- bin: ccls
-  server: ccls
+- server: ccls
+  bin: ccls
 
 # - server: typeprof
 #   bin: typeprof
@@ -216,7 +216,8 @@
 #     gem:
 #       - ruby-lsp
 
-- bin: solargraph
+- server: solargraph
+  bin: solargraph
   install:
     gem:
       - solargraph
@@ -224,148 +225,152 @@
       file: dl/solargraph.dl.rb
       required:
         - ruby
-  server: solargraph
 
-- bin: typescript-language-server
+- server: tsserver
+  bin: typescript-language-server
   install:
     npm:
       - typescript
       - typescript-language-server
-  server: tsserver
 
-- bin: vscode-eslint-language-server
+- server: eslint
+  bin: vscode-eslint-language-server
   install:
     npm:
       - vscode-langservers-extracted
-  server: eslint
 
 # - server: denols
 #   bin: deno
 
-- bin: vscode-html-language-server
+- server: html
+  bin: vscode-html-language-server
   install:
     npm:
       - vscode-langservers-extracted
-  server: html
 
-- bin: vscode-css-language-server
+- server: cssls
+  bin: vscode-css-language-server
   install:
     npm:
       - vscode-langservers-extracted
-  server: cssls
 
-# - bin: tailwindcss-language-server
+# - server: tailwindcss
+#   bin: tailwindcss-language-server
 #   install:
 #     npm:
 #       - "@tailwindcss/language-server"
-#   server: tailwindcss
 
-- bin: graphql-lsp
+- server: graphql
+  bin: graphql-lsp
   install:
     npm:
       - graphql-language-service-cli
-  server: graphql
 
-- bin: vim-language-server
+- server: vimls
+  bin: vim-language-server
   install:
     npm:
       - vim-language-server
-  server: vimls
 
-- args: []
+- server: r_language_server
   bin: lsr
+  args: []
   install:
     script:
       file: dl/lsr.dl.r
       required:
         - Rscript
         - R
-  server: r_language_server
 
-- args: []
+- server: julials
   bin: julia-lsp
+  args: []
   install:
     script:
       file: dl/julia_ls.dl.jl
       required:
         - julia
-  server: julials
 
-- bin: phpactor
+- server: phpactor
+  bin: phpactor
   install:
     script:
       file: dl/phpactor.dl.php
       required:
         - php
-  server: phpactor
 
-- bin: intelephense
+- server: intelephense
+  bin: intelephense
   install:
     npm:
       - intelephense
-  server: intelephense
 
-- bin: fsautocomplete
+- server: fsautocomplete
+  bin: fsautocomplete
   install:
     script:
       file: dl/fsautocomplete.dl.fsx
       required:
         - dotnet
-  server: fsautocomplete
 
-- args: []
+- server: omnisharp
   bin: omnisharp
+  args: []
   install:
     script:
       file: dl/omnisharp.dl.fsx
       required:
         - dotnet
-  server: omnisharp
 
-- bin: clojure-lsp
+- server: clojure_lsp
+  bin: clojure-lsp
   install:
     script:
       file: dl/clj_lsp.clj
       required:
         - clojure
-  server: clojure_lsp
 
-- bin: kotlin-language-server
+- server: kotlin_language_server
+  bin: kotlin-language-server
   install:
     script:
       file: dl/kotlin_ls.kts
       required:
         - kotlinc
-  server: kotlin_language_server
 
-- bin: jdtls
+- server: jdtls
+  bin: jdtls
   install:
     script:
       file: dl/jdtls.sh
       required:
         - jshell
-  server: jdtls
 
-- args: []
+- server: prolog_ls
   bin: prolog-ls
+  args: []
   install:
     script:
       file: dl/prolog_ls.dl.pro
       required:
         - swipl
-  server: prolog_ls
 
-- args:
+- server: sqlls
+  bin: sql-language-server
+  args:
     - up
     - --method
     - stdio
-  bin: sql-language-server
   install:
     npm:
       - sql-language-server
-  server: sqlls
 
-- bin: lua-language-server
+- server: lua_ls
+  bin: lua-language-server
+  settings:
+    Lua:
+      runtime:
+        version: "Lua 5.1"
   install:
     script:
       file: dl/sumneko_lua.sh
@@ -373,59 +378,54 @@
         - git
         - python3
         - gcc
-  server: lua_ls
-  settings:
-    Lua:
-      runtime:
-        version: "Lua 5.1"
 
-- bin: ansible-language-server
+- server: ansiblels
+  bin: ansible-language-server
   install:
     npm:
       - ansible-language-server
-  server: ansiblels
 
-#- bin: glslls
-#  install:
-#    script:
-#      file: dl/glsl_ls.sh
-#      required:
-#        - cmake
-#        - git
-#        - python3
-#  server: glslls
+# - server: glslls
+#   bin: glslls
+#   install:
+#     script:
+#       file: dl/glsl_ls.sh
+#       required:
+#         - cmake
+#         - git
+#         - python3
 
-- bin: theme-check-language-server
+- server: theme_check
+  bin: theme-check-language-server
   install:
     gem:
       - theme-check
-  server: theme_check
 
-- bin: emmet-language-server
+- server: emmet_language_server
+  bin: emmet-language-server
   install:
     npm:
       - "@olrtg/emmet-language-server"
-  server: emmet_language_server
 
-- bin: terraform-ls
+- server: terraformls
+  bin: terraform-ls
   install:
     script:
       required:
         - htmlq
       file: dl/terraform_ls.sh
-  server: terraformls
 
-- bin: tflint
+- server: tflint
+  bin: tflint
   install:
     script:
       file: dl/tflint.sh
-  server: tflint
 
-- bin: cobol-language-support
+- server: cobol_ls
+  bin: cobol-language-support
   install:
     script:
       file: dl/cobol_ls.sh
-  server: cobol_ls
 # - server: volar
 #   bin: vue-language-server
 #   install:
