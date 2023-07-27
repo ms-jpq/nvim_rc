@@ -11,6 +11,7 @@ from sys import stderr
 from tempfile import NamedTemporaryFile
 
 _RWXR_XR_X = (S_IRUSR | S_IWUSR | S_IXUSR) | (S_IRGRP | S_IXGRP) | (S_IROTH | S_IXOTH)
+_TMP = Path(__file__).resolve(strict=True).parent.parent / "var" / "tmp"
 
 
 _STUB = """
@@ -34,7 +35,6 @@ def main() -> None:
     template = Template(_STUB.lstrip())
     bins = src / "bin"
     win = name == "nt"
-    tmp = Path(__file__).parent.parent.parent / "var" / "tmp"
 
     for path in (bins, dst):
         path.mkdir(parents=True, exist_ok=True)
@@ -46,7 +46,7 @@ def main() -> None:
             BIN=quote(normcase(path)),
         )
         with NamedTemporaryFile(
-            mode="w", encoding="utf-8", dir=tmp, delete=False
+            mode="w", encoding="utf-8", dir=_TMP, delete=False
         ) as fd:
             fd.write(stub)
 

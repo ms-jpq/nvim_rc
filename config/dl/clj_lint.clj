@@ -1,22 +1,23 @@
-#!/usr/bin/env -S -- clojure -M
+#!/usr/bin/env -S -- clojure.sh -M
 
 (import '[java.lang ProcessBuilder ProcessBuilder$Redirect]
         '[java.nio.file Files Paths StandardCopyOption]
         '[java.nio.file.attribute FileAttribute PosixFilePermissions])
+(require
+ '[clojure.string :refer [join]])
 
-(def os (System/getProperty "os.name"))
-
-(def base "https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp-native")
+(def base "https://github.com/clj-kondo/clj-kondo/releases/latest/download/clj-kondo")
+(def version "2023.07.13")
 
 (def uri
-  (str base "-"
-       (case (System/getProperty "os.name")
-         "Linux" "static-linux-amd64.zip"
-         "Mac OS X" "macos-aarch64.zip"
-         "windows-amd64.zip")))
+  (join "-" [base version
+             (case (System/getProperty "os.name")
+               "Linux" "linux-static-amd64.zip"
+               "Mac OS X" "macos-aarch64.zip"
+               "windows-amd64.zip")]))
 
 (def bin (let [b (System/getenv "BIN")
-               ext (case os
+               ext (case (System/getProperty "os.name")
                      "Windows" ".exe"
                      "")]
            (Paths/get (str b ext) (into-array String []))))
@@ -33,7 +34,7 @@
            (.redirectError ProcessBuilder$Redirect/INHERIT))])]
       (assert (== 0 (.waitFor n))))
 
-    (Files/move (.resolve tmp "clojure-lsp")
+    (Files/move (.resolve tmp "clj-kondo")
                 bin
                 (into-array [StandardCopyOption/REPLACE_EXISTING]))
 

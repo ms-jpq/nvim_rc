@@ -38,7 +38,8 @@ CONF_FMT = CONF_DIR / "fmt.yml"
 CONF_TOOL = CONF_DIR / "tools.yml"
 
 
-LIBEXEC = CONF_DIR / "scripts"
+LIBEXEC = TOP_LEVEL / "libexec"
+DLEXEC = CONF_DIR / "dl"
 BIN_DIR = VARS_DIR / "bin"
 LIB_DIR = VARS_DIR / "lib"
 

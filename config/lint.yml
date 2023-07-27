@@ -23,7 +23,7 @@
     - zsh
   install:
     script:
-      file: dl/shellcheck.sh
+      file: shellcheck.sh
 
 - bin: perlcritic
   args:
@@ -34,7 +34,7 @@
     - perl
   install:
     script:
-      file: dl/perlcritic.dl.pl
+      file: perlcritic.dl.pl
       required:
         - perl
         - cpanm
@@ -68,7 +68,7 @@
     - clojure
   install:
     script:
-      file: dl/clj_lint.clj
+      file: clj_lint.clj
       required:
         - clojure
 
@@ -82,7 +82,7 @@
     - dockerfile
   install:
     script:
-      file: dl/hadolint.sh
+      file: hadolint.sh
 
 - bin: golint
   args:
@@ -94,7 +94,7 @@
     - go
   install:
     script:
-      file: dl/golint.sh
+      file: golint.sh
 
 - bin: rubocop
   args:
@@ -117,7 +117,7 @@
     - r
   install:
     script:
-      file: dl/lintr.dl.r
+      file: lintr.dl.r
       required:
         - Rscript
         - R
@@ -142,6 +142,6 @@
     - php
   install:
     script:
-      file: dl/phan.dl.php
+      file: phan.dl.php
       required:
         - php

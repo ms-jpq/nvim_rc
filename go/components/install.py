@@ -38,6 +38,7 @@ from ..config.pkgs import GitPkgSpec, pkg_specs
 from ..config.tools import tool_specs
 from ..consts import (
     BIN_DIR,
+    DLEXEC,
     GEM_DIR,
     INSTALL_SCRIPT,
     LIB_DIR,
@@ -328,7 +329,7 @@ def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
             return (("", p),)
 
         if pkg.file and all(map(which, pkg.required)):
-            if (s_path := which(LIBEXEC / pkg.file)) and _match(
+            if (s_path := which(DLEXEC / pkg.file)) and _match(
                 match, name=pkg.file.name
             ):
                 yield cont(Path(s_path), bin=bin)

@@ -22,14 +22,14 @@
   bin: taplo
   install:
     script:
-      file: dl/taplo.sh
+      file: taplo.sh
 
 - server: lemminx
   bin: lemminx
   args: []
   install:
     script:
-      file: dl/lemminx.sh
+      file: lemminx.sh
       required:
         - htmlq
 
@@ -53,7 +53,7 @@
   bin: ltex-ls
   install:
     script:
-      file: dl/ltex.sh
+      file: ltex.sh
 
 - server: texlab
   bin: texlab
@@ -78,7 +78,7 @@
       #     - '"code -g %f:%l"'
   install:
     script:
-      file: dl/texlab.sh
+      file: texlab.sh
 
 - server: digestif
   bin: digestif
@@ -131,7 +131,7 @@
   bin: jq-lsp
   install:
     script:
-      file: dl/jq_ls.sh
+      file: jq_ls.sh
       required:
         - go
 
@@ -146,7 +146,7 @@
   args: []
   install:
     script:
-      file: dl/pwsh_es.dl.ps1
+      file: pwsh_es.dl.ps1
       required:
         - pwsh
 
@@ -178,7 +178,7 @@
   bin: haskell-language-server-wrapper
   install:
     script:
-      file: dl/hls.dl.hs
+      file: hls.dl.hs
       required:
         - runhaskell
 
@@ -186,7 +186,7 @@
   bin: rust-analyzer
   install:
     script:
-      file: dl/rust_analyzer.rs
+      file: rust_analyzer.rs
       required:
         - rustc
 
@@ -194,7 +194,7 @@
   bin: gopls
   install:
     script:
-      file: dl/gopls.sh
+      file: gopls.sh
       required:
         - go
 
@@ -222,7 +222,7 @@
     gem:
       - solargraph
     script:
-      file: dl/solargraph.dl.rb
+      file: solargraph.dl.rb
       required:
         - ruby
 
@@ -277,7 +277,7 @@
   args: []
   install:
     script:
-      file: dl/lsr.dl.r
+      file: lsr.dl.r
       required:
         - Rscript
         - R
@@ -287,7 +287,7 @@
   args: []
   install:
     script:
-      file: dl/julia_ls.dl.jl
+      file: julia_ls.dl.jl
       required:
         - julia
 
@@ -295,7 +295,7 @@
   bin: phpactor
   install:
     script:
-      file: dl/phpactor.dl.php
+      file: phpactor.dl.php
       required:
         - php
 
@@ -309,7 +309,7 @@
   bin: fsautocomplete
   install:
     script:
-      file: dl/fsautocomplete.dl.fsx
+      file: fsautocomplete.dl.fsx
       required:
         - dotnet
 
@@ -318,7 +318,7 @@
   args: []
   install:
     script:
-      file: dl/omnisharp.dl.fsx
+      file: omnisharp.dl.fsx
       required:
         - dotnet
 
@@ -326,7 +326,7 @@
   bin: clojure-lsp
   install:
     script:
-      file: dl/clj_lsp.clj
+      file: clj_lsp.clj
       required:
         - clojure
 
@@ -334,7 +334,7 @@
   bin: kotlin-language-server
   install:
     script:
-      file: dl/kotlin_ls.kts
+      file: kotlin_ls.kts
       required:
         - kotlinc
 
@@ -342,7 +342,7 @@
   bin: jdtls
   install:
     script:
-      file: dl/jdtls.sh
+      file: jdtls.sh
       required:
         - jshell
 
@@ -351,7 +351,7 @@
   args: []
   install:
     script:
-      file: dl/prolog_ls.dl.pro
+      file: prolog_ls.dl.pro
       required:
         - swipl
 
@@ -373,7 +373,7 @@
         version: "Lua 5.1"
   install:
     script:
-      file: dl/sumneko_lua.sh
+      file: sumneko_lua.sh
       required:
         - git
         - python3
@@ -389,7 +389,7 @@
 #   bin: glslls
 #   install:
 #     script:
-#       file: dl/glsl_ls.sh
+#       file: glsl_ls.sh
 #       required:
 #         - cmake
 #         - git
@@ -413,19 +413,19 @@
     script:
       required:
         - htmlq
-      file: dl/terraform_ls.sh
+      file: terraform_ls.sh
 
 - server: tflint
   bin: tflint
   install:
     script:
-      file: dl/tflint.sh
+      file: tflint.sh
 
 - server: cobol_ls
   bin: cobol-language-support
   install:
     script:
-      file: dl/cobol_ls.sh
+      file: cobol_ls.sh
 # - server: volar
 #   bin: vue-language-server
 #   install:

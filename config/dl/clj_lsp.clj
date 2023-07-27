@@ -1,23 +1,22 @@
-#!/usr/bin/env -S -- clojure -M
+#!/usr/bin/env -S -- clojure.sh -M
 
 (import '[java.lang ProcessBuilder ProcessBuilder$Redirect]
         '[java.nio.file Files Paths StandardCopyOption]
-        '[java.nio.file.attribute FileAttribute])
-(require
- '[clojure.string :refer [join]])
+        '[java.nio.file.attribute FileAttribute PosixFilePermissions])
 
-(def base "https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt")
-(def version "0.10.6")
+(def os (System/getProperty "os.name"))
+
+(def base "https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp-native")
 
 (def uri
-  (join "-" [base version
-             (case (System/getProperty "os.name")
-               "Linux" "linux-amd64-static.tar.gz"
-               "Mac OS X" "darwin-aarch64.tar.gz"
-               "win-amd64.zip")]))
+  (str base "-"
+       (case (System/getProperty "os.name")
+         "Linux" "static-linux-amd64.zip"
+         "Mac OS X" "macos-aarch64.zip"
+         "windows-amd64.zip")))
 
 (def bin (let [b (System/getenv "BIN")
-               ext (case (System/getProperty "os.name")
+               ext (case os
                      "Windows" ".exe"
                      "")]
            (Paths/get (str b ext) (into-array String []))))
@@ -34,9 +33,13 @@
            (.redirectError ProcessBuilder$Redirect/INHERIT))])]
       (assert (== 0 (.waitFor n))))
 
-    (Files/move (.resolve tmp "cljfmt")
+    (Files/move (.resolve tmp "clojure-lsp")
                 bin
                 (into-array [StandardCopyOption/REPLACE_EXISTING]))
 
     (finally
       (Files/delete tmp))))
+
+(Files/setPosixFilePermissions
+ bin
+ (PosixFilePermissions/fromString "rwxrwxr-x"))
