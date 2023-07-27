@@ -5,7 +5,7 @@ set -o pipefail
 LIB="${0%/*}/../lib"
 BIN="$LIB/fsautocomplete/fsautocomplete"
 
-if hash asdf 2>/dev/null; then
+if command -v -- asdf >/dev/null; then
   DOTNET="$(asdf which dotnet)"
   export -- DOTNET_ROOT="${DOTNET%/*}"
 fi
