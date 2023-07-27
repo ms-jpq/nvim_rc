@@ -6,7 +6,8 @@
 (require
  '[clojure.string :refer [join]])
 
-(def base "https://github.com/clj-kondo/clj-kondo/releases/latest/download/clj-kondo")
+(def repo "clj-kondo/clj-kondo")
+(def base (str "https://github.com/" repo "/releases/latest/download/clj-kondo"))
 (def version "2023.07.13")
 
 (def uri

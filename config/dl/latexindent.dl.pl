@@ -26,7 +26,7 @@ if ( !-d $lib ) {
   my $perl_libd = "$tmp_lib/_perl_";
   my @perl_libs = qw{YAML::Tiny File::HomeDir Unicode::GCString};
 
-  my $repo = 'cmhughes/latexindent.pl'
+  my $repo = 'cmhughes/latexindent.pl';
   my $tag = `gh-latest.sh \Q$repo\E`;
   $CHILD_ERROR && croak $CHILD_ERROR;
 

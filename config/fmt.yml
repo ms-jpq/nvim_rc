@@ -63,6 +63,8 @@
   install:
     script:
       required:
+        - curl
+        - jq
         - runhaskell
       file: stylish.dl.hs
 

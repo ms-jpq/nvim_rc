@@ -9,11 +9,11 @@ CURL=(
   --location
   --no-progress-meter
   --max-time 60
-  -- "https://api.github.com/repos/$REPO/tags"
+  -- "https://api.github.com/repos/$REPO/releases/latest"
 )
 JQ=(
   jq --exit-status
-  --raw-output '.[].name'
+  --raw-output '.tag_name'
 )
 
 LINES="$("${CURL[@]}" | "${JQ[@]}")"

@@ -10,7 +10,7 @@ import           System.Info        (os)
 import           System.Process     (callProcess, readProcess)
 import           Text.Printf        (printf)
 
-version = "2.0.0.1"
+repo = "haskell/haskell-language-server"
 base = "https://github.com/haskell/haskell-language-server/releases/latest/download/haskell-language-server"
 
 uri "darwin" = printf "%s-%s-aarch64-apple-darwin.tar.xz" base
@@ -24,6 +24,7 @@ main = do
   lib <- getEnv "LIB"
   cwd <- getCurrentDirectory <&> (takeDirectory >>> takeDirectory)
   tmp <- readProcess "mktemp" ["-d"] ""
+  version <- readProcess "gh-latest.sh" [repo] ""
 
   let tramp = cwd </> "config" </> "dl" </> "hls.ex.sh"
   let srv = tmp </> printf "haskell-language-server-%s" version

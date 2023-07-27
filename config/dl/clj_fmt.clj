@@ -6,7 +6,8 @@
 (require
  '[clojure.string :refer [join]])
 
-(def base "https://github.com/weavejester/cljfmt/releases/latest/download/cljfmt")
+(def repo "weavejester/cljfmt")
+(def base (str "https://github.com/" repo "/releases/latest/download/cljfmt"))
 (def version "0.10.6")
 
 (def uri
