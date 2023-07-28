@@ -5,7 +5,7 @@ set -o pipefail
 REPO='golangci/golangci-lint'
 BASE="https://github.com/$REPO/releases/latest/download/golangci-lint"
 VERSION="$(gh-latest.sh "$REPO")"
-VERSION="${VERSION##v}"
+VERSION="${VERSION#v}"
 
 case "$OSTYPE" in
 darwin*)
