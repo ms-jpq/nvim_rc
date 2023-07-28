@@ -6,7 +6,6 @@ use File::Copy;
 use File::Path;
 use File::Temp;
 use autodie;
-use diagnostics;
 use strict;
 use utf8;
 use warnings;

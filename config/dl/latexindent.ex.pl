@@ -3,7 +3,6 @@
 use English;
 use File::Basename;
 use autodie;
-use diagnostics;
 use strict;
 use utf8;
 use warnings;
