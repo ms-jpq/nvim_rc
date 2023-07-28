@@ -8,7 +8,6 @@ use File::Temp;
 use autodie;
 use strict;
 use utf8;
-use warnings;
 
 my $bin    = $ENV{BIN};
 my $lib    = $ENV{LIB};
