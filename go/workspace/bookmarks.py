@@ -1,9 +1,11 @@
 from asyncio import gather
 from collections.abc import Iterator
+from contextlib import suppress
 from uuid import uuid4
 
 from pynvim_pp.buffer import Buffer, ExtMark, ExtMarker
 from pynvim_pp.nvim import Nvim
+from pynvim_pp.rpc_types import NvimError
 
 from ..registery import NAMESPACE, atomic, autocmd, rpc
 
@@ -43,7 +45,8 @@ async def _bookmark_signs() -> None:
 
     ns = await Nvim.create_namespace(_NS)
     await buf.clear_namespace(ns)
-    await buf.set_extmarks(ns, extmarks=c2())
+    with suppress(NvimError):
+        await buf.set_extmarks(ns, extmarks=c2())
 
 
 _ = (
