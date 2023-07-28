@@ -1,4 +1,4 @@
-#!/usr/bin/env -S -- perl -CASD
+#!/usr/bin/env -S -- perl -CASD -w
 
 use English;
 use File::Basename;

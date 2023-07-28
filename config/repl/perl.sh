@@ -5,6 +5,7 @@ set -o pipefail
 SH=(
   perl
   -CASD
+  -w
   -e
   "$(</dev/stdin)"
 )
