@@ -24,4 +24,4 @@ get.py -- "$URI" | unpack.py --dst "$TMP"
 # shellcheck disable=2154
 rm -rf -- "$LIB"
 mv -f -- "$TMP" "$LIB"
-install -b -- "${0%/*}/lua_ls.ex.sh" "$BIN"
+install -v -b -- "${0%/*}/lua_ls.ex.sh" "$BIN"

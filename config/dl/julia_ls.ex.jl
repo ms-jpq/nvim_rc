@@ -1,6 +1,6 @@
 #!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
 #=
-LIB="$(dirname -- "$0")/../lib/julia-ls"
+LIB="${0%/*}/../lib/julia-ls"
 export -- JULIA_DEPOT_PATH="$LIB/depot"
 exec -- julia --project="$LIB" "$0" "$@"
 =#

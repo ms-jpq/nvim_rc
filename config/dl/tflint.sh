@@ -19,5 +19,5 @@ esac
 TMP="$(mktemp -d)"
 get.py -- "$URI" | unpack.py --dst "$TMP"
 # shellcheck disable=2154
-install -b -- "$TMP/"* "$BIN"
+install -v -b -- "$TMP/"* "$BIN"
 rm -fr -- "$TMP"

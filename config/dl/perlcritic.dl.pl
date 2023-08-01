@@ -20,7 +20,7 @@ if ( !-d $lib ) {
   system( 'cpanm', '--local-lib', $tmp, q{--}, 'Perl::Critic' )
     && croak $CHILD_ERROR;
 
-  system( "mv", "--force", "--", $tmp, $lib ) && croak $CHILD_ERROR;
+  system( 'mv', '-v', '-f', '--', $tmp, $lib ) && croak $CHILD_ERROR;
 }
 
 foreach my $name (@names) {

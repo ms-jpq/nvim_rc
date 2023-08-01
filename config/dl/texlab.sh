@@ -2,7 +2,7 @@
 
 set -o pipefail
 
-T_BIN="$(dirname -- "$BIN")/tectonic"
+T_BIN="${BIN%/*}/tectonic"
 
 BASE='https://github.com/latex-lsp/texlab/releases/latest/download/texlab'
 T_BASE='https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic@'
@@ -28,6 +28,6 @@ esac
 TMP="$(mktemp -d)"
 get.py -- "$URI" | unpack.py --dst "$TMP"
 get.py -- "$T_URI" | unpack.py --dst "$TMP"
-install -b -- "$TMP/texlab"* "$BIN"
-install -b -- "$TMP/tectonic"* "$T_BIN"
+install -v -b -- "$TMP/texlab"* "$BIN"
+install -v -b -- "$TMP/tectonic"* "$T_BIN"
 rm -fr -- "$TMP"

@@ -6,8 +6,8 @@ then
 fi
 
 export -- JULIA_DEPOT_PATH="$LIB/depot"
-mkdir -p -- "$JULIA_DEPOT_PATH"
-cp -f -- "${0%/*}/julia_ls.ex.jl" "$BIN"
+mkdir -v -p -- "$JULIA_DEPOT_PATH"
+cp -v -f -- "${0%/*}/julia_ls.ex.jl" "$BIN"
 exec -- julia --project="$LIB" "$0" "$@"
 =#
 

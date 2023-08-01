@@ -11,7 +11,7 @@ URI="https://github.com/$REPO/releases/latest/download/google-java-format-$VERSI
 FMT="$LIB/google-java-format.jar"
 JAR="$(get.py -- "$URI")"
 
-mkdir -p -- "$LIB"
-cp -f -- "$JAR" "$FMT"
+mkdir -v -p -- "$LIB"
+cp -v -f -- "$JAR" "$FMT"
 # shellcheck disable=SC2154
-install -b -- "${0%/*}/javafmt.ex.sh" "$BIN"
+install -v -b -- "${0%/*}/javafmt.ex.sh" "$BIN"

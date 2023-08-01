@@ -35,5 +35,5 @@ fi
 if [[ ! -x "$BIN" ]]; then
   cd -- "$REPO"
   make build
-  ln -sf -- "$PWD/build/glslls" "$BIN"
+  ln -v -sf -- "$PWD/build/glslls" "$BIN"
 fi

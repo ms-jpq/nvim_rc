@@ -21,8 +21,8 @@ esac
 TMP="$(mktemp -d)"
 get.py -- "$URI" | unpack.py --dst "$TMP"
 # shellcheck disable=2154
-rm -rf -- "$LIB"
-mkdir -p -- "$LIB"
-mv -f -- "$TMP"/*/* "$LIB/"
-ln -sf -- "$LIB/bin/${BIN##*/}" "$BIN"
-rm -fr -- "$TMP"
+rm -v -rf -- "$LIB"
+mkdir -v -p -- "$LIB"
+mv -v -f -- "$TMP"/*/* "$LIB/"
+ln -v -sf -- "$LIB/bin/${BIN##*/}" "$BIN"
+rm -v -fr -- "$TMP"

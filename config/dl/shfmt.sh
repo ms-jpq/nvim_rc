@@ -20,4 +20,4 @@ linux*)
 esac
 
 FILE="$(get.py -- "$URI")"
-install -b -- "$FILE" "$BIN"
+install -v -b -- "$FILE" "$BIN"
