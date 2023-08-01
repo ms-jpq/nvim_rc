@@ -7,7 +7,7 @@ URI='https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar
 TMP="$(mktemp -d)"
 get.py -- "$URI" | unpack.py --dst "$TMP"
 # shellcheck disable=2154
-rm -v -rf -- "$LIB"
+rm -rf -- "$LIB"
 mv -v -f -- "$TMP" "$LIB"
 # shellcheck disable=2154
 ln -v -sf -- "$LIB/bin/jdtls" "$BIN"

@@ -10,7 +10,7 @@ RUN apt-get update && \
     add-apt-repository ppa:neovim-ppa/unstable && \
     apt-get update && \
     apt-get install --no-install-recommends --yes -- neovim && \
-    rm --recursive --force -- /var/lib/apt/lists/*
+    rm -v --recursive --force -- /var/lib/apt/lists/*
 
 
 # Dependencies
@@ -20,7 +20,7 @@ RUN apt-get update && \
     npm \
     clang \
     golang-go && \
-    rm --recursive --force -- /var/lib/apt/lists/*
+    rm -v --recursive --force -- /var/lib/apt/lists/*
 
 
 # INSTALL

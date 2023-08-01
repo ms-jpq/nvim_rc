@@ -22,4 +22,4 @@ esac
 TMP="$(mktemp -d)"
 get.py -- "$URI" | unpack.py --format zip --dst "$TMP"
 install -v -b -- "$TMP/extension/server/native/server-"* "$BIN"
-rm -fr -- "$TMP"
+rm -v -fr -- "$TMP"

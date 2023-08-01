@@ -22,4 +22,4 @@ VERSION="$(curl --fail --location --no-progress-meter --max-time 60 -- "$BASE_UR
 URI="$BASE_URI/$VERSION/$BASENAME"
 get.py -- "$URI" | unpack.py --dst "$TMP"
 install -v -b -- "$TMP/lemminx"* "$BIN"
-rm -fr -- "$TMP"
+rm -v -fr -- "$TMP"
