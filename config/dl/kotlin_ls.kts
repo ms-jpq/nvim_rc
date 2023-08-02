@@ -1,14 +1,12 @@
 #!/usr/bin/env -S -- kotlinc -script
 import java.lang.ProcessBuilder.Redirect
 import java.nio.file.Path
-import java.nio.file.attribute.PosixFilePermission
 import kotlin.io.createTempDir
 import kotlin.io.path.Path
 import kotlin.io.path.createSymbolicLinkPointingTo
 import kotlin.io.path.deleteIfExists
 import kotlin.io.path.deleteRecursively
 import kotlin.io.path.moveTo
-import kotlin.io.path.setPosixFilePermissions
 
 val suffix = { path: Path, ext: String ->
   if (System.getProperty("os.name").startsWith("Windows")) {
@@ -40,7 +38,9 @@ for (proc in procs) {
 
 tmp.resolve("server").moveTo(lib)
 
-ll.setPosixFilePermissions(setOf(PosixFilePermission.OWNER_EXECUTE))
+val proc = Runtime.getRuntime().exec(arrayOf("chmod", "-v", "+x", ll.toString()))
+
+assert(proc.waitFor() == 0)
 
 bin.deleteIfExists()
 
