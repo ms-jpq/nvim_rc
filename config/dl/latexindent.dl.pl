@@ -21,8 +21,14 @@ if ( $OSNAME eq 'msys' ) {
 if ( !-d $lib ) {
   my $tmp       = File::Temp->newdir();
   my $tmp_lib   = File::Temp->newdir();
-  my $perl_libd = "$tmp_lib/_perl_";
+  my $perl_libd = "$tmp_lib/perl";
   my @perl_libs = qw{YAML::Tiny File::HomeDir Unicode::GCString};
+
+  $ENV{HOME}                = $perl_libd;
+  $ENV{PERL_LOCAL_LIB_ROOT} = $perl_libd;
+  $ENV{PERL_MB_OPT}         = "--install_base $perl_libd";
+  $ENV{PERL_MM_OPT}         = "INSTALL_BASE=$perl_libd";
+  $ENV{PERL5LIB}            = "$perl_libd/lib/perl5";
 
   my $repo = 'cmhughes/latexindent.pl';
   my $tag  = `gh-latest.sh \Q$repo\E`;
@@ -36,10 +42,10 @@ if ( !-d $lib ) {
   my @globbed = glob "\Q$tmp\E/*";
   move( @globbed, $tmp_lib );
 
-  system( 'cpanm', '--local-lib', $perl_libd, q{--}, @perl_libs )
+  system( 'cpan', '-T', '-I', '-i', @perl_libs )
     && croak $CHILD_ERROR;
 
-  system( 'mv', '-v', '-f', '--', $tmp_lib, $lib ) && croak $CHILD_ERROR;
+  system( 'mv', '-v', '-f', q{--}, $tmp_lib, $lib ) && croak $CHILD_ERROR;
 
   rmtree($tmp);
 }

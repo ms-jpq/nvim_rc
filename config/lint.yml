@@ -39,7 +39,7 @@
     script:
       required:
         - perl
-        - cpanm
+        - cpan
       file: perlcritic.dl.pl
 
 - bin: pwsh-lint.ps1

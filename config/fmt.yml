@@ -267,7 +267,7 @@
   install:
     script:
       required:
-        - cpanm
+        - cpan
         - curl
         - jq
         - perl

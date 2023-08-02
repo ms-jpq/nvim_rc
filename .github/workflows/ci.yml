@@ -26,7 +26,7 @@ jobs:
 
       - run: |-
           sudo -- apt-get update
-          sudo -- apt-get install --no-install-recommends --yes -- swi-prolog cpanminus
+          sudo -- apt-get install --no-install-recommends --yes -- swi-prolog
           /home/linuxbrew/.linuxbrew/bin/brew install -- clojure/tools/clojure
           eval -- "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           CLJ="$(command -v -- clojure)"
@@ -35,7 +35,8 @@ jobs:
       - run: |-
           gmake lint
 
-      - env: {}
+      - env:
+          {}
           # GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |-
           gmake install -- JAVA_HOME="$JAVA_HOME_17_X64"
