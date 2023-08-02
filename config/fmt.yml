@@ -269,6 +269,7 @@
       required:
         - cpan
         - curl
+        - gcc
         - jq
         - perl
       file: latexindent.dl.pl
