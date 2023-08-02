@@ -6,17 +6,9 @@ open System.IO
 open System.Runtime.InteropServices
 
 let tmp = Directory.CreateTempSubdirectory().FullName
-let lib = Environment.GetEnvironmentVariable "LIB"
 let proxy = Path.Combine(__SOURCE_DIRECTORY__, "fantomas.ex.sh")
-
-let bin =
-    let ext =
-        if RuntimeInformation.IsOSPlatform(OSPlatform.Windows) then
-            ".sh"
-        else
-            null
-
-    (Environment.GetEnvironmentVariable "BIN", ext) |> Path.ChangeExtension
+let lib = Environment.GetEnvironmentVariable "LIB"
+let bin = Environment.GetEnvironmentVariable "BIN"
 
 do
     let args = [ "tool"; "install"; "--tool-path"; tmp; "fantomas" ]

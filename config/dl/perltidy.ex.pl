@@ -7,7 +7,7 @@ use strict;
 use utf8;
 
 my $dir = dirname(__FILE__);
-my $lib = "$dir/../lib/perlcritic";
+my $lib = "$dir/../lib/perlcritic.pl";
 
 $ENV{PERL5LIB} = "$lib/lib/perl5";
 exec "$lib/bin/perltidy", @ARGV;

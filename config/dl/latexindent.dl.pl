@@ -14,10 +14,6 @@ my $lib    = $ENV{LIB};
 my $dir    = dirname(__FILE__);
 my $script = "$dir/latexindent.ex.pl";
 
-if ( $OSNAME eq 'msys' ) {
-  $bin = "$bin.pl";
-}
-
 if ( !-d $lib ) {
   my $tmp       = File::Temp->newdir();
   my $tmp_lib   = File::Temp->newdir();

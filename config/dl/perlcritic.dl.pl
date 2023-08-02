@@ -31,11 +31,7 @@ if ( !-d $lib ) {
 
 foreach my $name (@names) {
   my $src = "$dir/$name.ex.pl";
-  my $dst = "$bin/$name";
-
-  if ( $OSNAME eq 'msys' ) {
-    $dst = "$dst.pl";
-  }
+  my $dst = "$bin/$name.pl";
 
   copy( $src, $dst );
   chmod( 0755, $dst );

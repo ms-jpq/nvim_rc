@@ -28,7 +28,7 @@
         - jq
       file: shellcheck.sh
 
-- bin: perlcritic
+- bin: perlcritic.pl
   args:
     - --brutal
     - --
@@ -115,7 +115,7 @@
     gem:
       - rubocop
 
-- bin: lintr
+- bin: lintr.r
   args:
     - ${tmpname}
   type: fs

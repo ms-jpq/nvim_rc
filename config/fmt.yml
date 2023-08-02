@@ -49,7 +49,7 @@
   filetypes:
     - ps1
 
-- bin: prolog-fmt
+- bin: prolog-fmt.pro
   args: []
   type: stream
   filetypes:
@@ -74,7 +74,7 @@
   filetypes:
     - systemd
 
-- bin: perltidy
+- bin: perltidy.pl
   args:
     - --indent-columns=2
   type: stream
@@ -144,14 +144,10 @@
     npm:
       - csscomb
 
-- bin: prettier
+- bin: prettier.mjs
   args:
     - --stdin-filepath=${filename}
     - --tab-width=${tabsize}
-    # - --plugin=@prettier/plugin-xml
-    # - --plugin=prettier-plugin-tailwindcss
-    # - --plugin=prettier-plugin-organize-imports
-    - --
   type: stream
   filetypes:
     - awk
@@ -176,6 +172,10 @@
       - "@prettier/plugin-xml"
       - prettier
       - prettier-plugin-organize-imports
+    script:
+      required:
+        - node
+      file: prettier.dl.mjs
 
 - bin: stree
   args:
@@ -255,7 +255,7 @@
     pip:
       - fprettify
 
-- bin: latexindent
+- bin: latexindent.pl
   args:
     - --overwrite
     - --
@@ -274,7 +274,7 @@
         - perl
       file: latexindent.dl.pl
 
-- bin: fantomas
+- bin: fantomas.sh
   args:
     - --
     - ${tmpname}
@@ -287,7 +287,7 @@
         - dotnet
       file: fantomas.dl.fsx
 
-- bin: ktfmt
+- bin: ktfmt.sh
   args:
     - --
     - ${tmpname}
@@ -300,7 +300,7 @@
         - kotlinc
       file: ktfmt.dl.kts
 
-- bin: javafmt
+- bin: javafmt.sh
   args:
     - "-"
   type: stream
@@ -313,7 +313,7 @@
         - jq
       file: javafmt.dl.sh
 
-- bin: styler
+- bin: styler.r
   args:
     - ${tmpname}
   type: fs
