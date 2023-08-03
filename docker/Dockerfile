@@ -16,8 +16,6 @@ RUN apt-get update && \
 # Dependencies
 RUN apt-get update && \
     apt-get install --no-install-recommends --yes -- \
-    nodejs \
-    npm \
     clang \
     golang-go && \
     rm -v --recursive --force -- /var/lib/apt/lists/*
