@@ -71,3 +71,8 @@ jobs:
       - shell: bash
         run: |-
           gmake mvp
+
+      - shell: bash
+        run: |-
+          gmake patch || true
+

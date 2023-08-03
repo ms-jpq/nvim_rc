@@ -11,24 +11,22 @@ const bin = join(node_modules, ".bin", "prettier");
 
 const [, , filetype, filename, tabsize] = argv;
 
-const plugins = (function* () {
-  if (filetype === "xml") {
-    yield join("@prettier", "plugin-xml");
-  }
-  if (filetype.match(/^(html|((java|type)scriptreact))$/)) {
-    yield join("prettier-plugin-tailwindcss", "dist", "index.js");
-  }
-  if (filetype.match(/^(java|type)script/)) {
-    yield join("prettier-plugin-organize-imports", "index.js");
-  }
-})();
+const plugins = {
+  [join("@prettier", "plugin-xml")]: /^xml$/,
+  [join("prettier-plugin-tailwindcss", "dist", "index.js")]:
+    /^(html|((java|type)scriptreact))$/,
+  [join("prettier-plugin-organize-imports", "index.js")]: /^(java|type)script/,
+};
 
 const args = (function* () {
   yield `--stdin-filepath=${filename}`;
   yield `--tab-width=${tabsize}`;
-  for (const plugin of plugins) {
-    yield `--plugin=${join(node_modules, plugin)}`;
+  for (const [plugin, re] of Object.entries(plugins)) {
+    if (filetype.match(re)) {
+      yield `--plugin=${join(node_modules, plugin)}`;
+    }
   }
+  yield "--";
 })();
 
 const { error, status, signal } = spawnSync(bin, [...args], {
