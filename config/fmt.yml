@@ -24,9 +24,10 @@
     - --option=array_trailing_comma=true
     - --option=reorder_keys=true
     - --
-    - ${tmpname}
-  type: fs
+    - "-"
+  type: stream
   filetypes:
+    - gitconfig
     - toml
 
 - bin: shfmt
