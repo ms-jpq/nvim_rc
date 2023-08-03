@@ -1,6 +1,6 @@
 from asyncio.tasks import as_completed
 from fnmatch import fnmatch
-from itertools import chain
+from itertools import chain, repeat
 from json import dumps, loads
 from os import environ, linesep, pathsep, sep
 from os.path import normcase
@@ -8,7 +8,7 @@ from pathlib import Path, PurePath
 from shlex import join, split
 from shutil import get_terminal_size, which
 from subprocess import CompletedProcess
-from sys import executable, stderr
+from sys import executable, stderr, stdout
 from time import time
 from typing import (
     AbstractSet,
@@ -24,7 +24,7 @@ from typing import (
 from urllib.parse import urlsplit
 from venv import EnvBuilder
 
-from pynvim_pp.lib import decode
+from pynvim_pp.lib import decode, encode
 from pynvim_pp.nvim import Nvim
 from std2.asyncio.subprocess import call
 from std2.pathlib import AnyPath
@@ -125,6 +125,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                         "pull",
                         "--recurse-submodules",
                         "--no-tags",
+                        "--jobs=0",
                         "--force",
                         *(("origin", spec.branch) if spec.branch else ()),
                         cwd=location,
@@ -337,9 +338,11 @@ def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
 
 async def install(mvp: bool, match: AbstractSet[str]) -> int:
     cols, _ = get_terminal_size()
-    sep = cols * "="
+    sep = cols * b"="
+    l = encode(linesep)
+    ls = repeat(l)
 
-    errors: MutableSequence[str] = []
+    errors: MutableSequence[bytes] = []
     tasks = (
         chain(_git(mvp, match=match))
         if mvp
@@ -357,29 +360,22 @@ async def install(mvp: bool, match: AbstractSet[str]) -> int:
             args = join(map(str, proc.args))
             if proc.returncode == 0:
                 msg = LANG("proc succeeded", args=args)
-                print(
-                    msg,
-                    debug,
-                    decode(proc.stderr),
-                    decode(proc.stdout),
-                    sep,
-                    sep=linesep,
+                lines = chain.from_iterable(
+                    zip((encode(msg), encode(debug), proc.stderr, proc.stdout, sep), ls)
                 )
+                stdout.buffer.writelines(lines)
+                stdout.buffer.flush()
             else:
-                errors.append(f"!!! -- {args}")
+                errors.append(b"!!! -- " + encode(args))
                 msg = LANG("proc failed", code=proc.returncode, args=args)
-                print(
-                    msg,
-                    debug,
-                    decode(proc.stderr),
-                    decode(proc.stdout),
-                    sep,
-                    sep=linesep,
-                    file=stderr,
+                lines = chain.from_iterable(
+                    zip((encode(msg), encode(debug), proc.stderr, proc.stdout, sep), ls)
                 )
+                stderr.buffer.writelines(lines)
+                stderr.buffer.flush()
 
     if errors:
-        print(linesep.join(errors), file=stderr)
+        stderr.buffer.write(l.join(errors))
     else:
         UPDATE_LOG.parent.mkdir(parents=True, exist_ok=True)
         UPDATE_LOG.write_text(str(time()))

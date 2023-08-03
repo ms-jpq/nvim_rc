@@ -4,7 +4,7 @@ from time import time
 from types import NoneType
 from typing import Any, Sequence
 
-from pynvim_pp.logging import suppress_and_log
+from pynvim_pp.logging import log, suppress_and_log
 from pynvim_pp.nvim import conn
 from pynvim_pp.rpc_types import Method, MsgType, ServerAddr
 from std2.contextlib import nullacontext
@@ -45,4 +45,4 @@ async def init(socket: ServerAddr, ppid: int) -> None:
                 t1 = int(environ["_VIM_START_TIME"])
                 t2 = time()
                 span = si_prefixed_smol(t2 - t1)
-                print(f"{span}s", flush=True)
+                log.warn("%s", f"{span}s")
