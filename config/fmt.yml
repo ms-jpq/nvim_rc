@@ -147,8 +147,9 @@
 
 - bin: prettier.mjs
   args:
-    - --stdin-filepath=${filename}
-    - --tab-width=${tabsize}
+    - ${filetype}
+    - ${filename}
+    - ${tabsize}
   type: stream
   filetypes:
     - awk
@@ -169,10 +170,10 @@
     npm:
       # - "@prettier/plugin-php"
       # - prettier-plugin-awk
-      # - prettier-plugin-tailwindcss
       - "@prettier/plugin-xml"
       - prettier
       - prettier-plugin-organize-imports
+      - prettier-plugin-tailwindcss
     script:
       required:
         - node
