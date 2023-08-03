@@ -137,6 +137,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                         "clone",
                         "--recurse-submodules",
                         "--depth=1",
+                        "--jobs=0",
                         "--shallow-submodules",
                         *(("--branch", spec.branch) if spec.branch else ()),
                         "--",
