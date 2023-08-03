@@ -28,7 +28,14 @@ local l2 = function()
     "Ndeps",
     function()
       vim.fn.termopen(
-        {"gmake", "--directory", vim.fn.stdpath("config"), "--", "mvp"}
+        {
+          "gmake",
+          "--directory",
+          vim.fn.stdpath("config"),
+          "--always-make",
+          "--",
+          "mvp"
+        }
       )
     end,
     {}
