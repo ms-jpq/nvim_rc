@@ -70,5 +70,4 @@ jobs:
 
       - shell: bash
         run: |-
-          # make install
-          true
+          gmake mvp
