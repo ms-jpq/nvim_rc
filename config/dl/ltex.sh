@@ -8,13 +8,15 @@ VERSION='16.0.0'
 case "$OSTYPE" in
 darwin*)
   URI="$BASE-$VERSION-mac-x64.tar.gz"
+  SUFFIX=''
   ;;
 linux*)
   URI="$BASE-$VERSION-linux-x64.tar.gz"
+  SUFFIX=''
   ;;
 *)
   URI="$BASE-$VERSION-windows-x64.zip"
-  BIN="$BIN.bat"
+  SUFFIX='.bat'
   ;;
 esac
 
@@ -24,5 +26,6 @@ get.py -- "$URI" | unpack.py --dst "$TMP"
 rm -rf -- "$LIB"
 mkdir -v -p -- "$LIB"
 mv -v -f -- "$TMP"/*/* "$LIB/"
-ln -v -sf -- "$LIB/bin/$(basename -- "$BIN")" "$BIN"
+# shellcheck disable=2154
+ln -v -sf -- "$LIB/bin/$(basename -- "$BIN")" "$BIN$SUFFIX"
 rm -v -fr -- "$TMP"

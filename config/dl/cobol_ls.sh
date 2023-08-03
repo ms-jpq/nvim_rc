@@ -22,7 +22,7 @@ esac
 TMP="$(mktemp -d)"
 get.py -- "$URI" | unpack.py --format zip --dst "$TMP"
 
-NATIVE="$$TMP/extension/server/native"
+NATIVE="$TMP/extension/server/native"
 case "$OSTYPE" in
 msys*)
   INSTALL=("$NATIVE"/*.exe)
