@@ -25,7 +25,8 @@ get.py -- "$URI" | unpack.py --dst "$TMP"
 # shellcheck disable=2154
 rm -rf -- "$LIB"
 mkdir -v -p -- "$LIB"
-mv -v -f -- "$TMP"/*/* "$LIB/"
+mv -f -- "$TMP"/*/* "$LIB/"
+set -x
 # shellcheck disable=2154
 ln -v -sf -- "$LIB/bin/$(basename -- "$BIN")" "$BIN$SUFFIX"
 rm -v -fr -- "$TMP"

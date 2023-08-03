@@ -2,7 +2,7 @@
 
 set -o pipefail
 
-T_BIN="${BIN%/*}/tectonic"
+T_BIN="$(dirname -- "$BIN")/tectonic"
 
 BASE='https://github.com/latex-lsp/texlab/releases/latest/download/texlab'
 T_BASE='https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic@'
