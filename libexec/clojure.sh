@@ -2,6 +2,6 @@
 
 set -o pipefail
 
-M2="${0%/*}/../var/modules/m2"
+M2="$(dirname -- "$0")/../var/modules/m2"
 
 exec -- clojure -Sdeps "{:mvn/local-repo \"$M2\"}" "$@"

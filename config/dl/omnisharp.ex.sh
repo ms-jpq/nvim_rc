@@ -2,7 +2,7 @@
 
 set -o pipefail
 
-LIB="${0%/*}/../lib"
+LIB="$(dirname -- "$0")/../lib"
 BIN="$LIB/omnisharp/OmniSharp"
 
 if command -v -- asdf >/dev/null; then

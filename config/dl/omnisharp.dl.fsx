@@ -58,5 +58,5 @@ with :? DirectoryNotFoundException ->
     ()
 
 File.Delete bin
-Directory.Move(tmp, lib)
+"" |> run "mv" [ "-v"; "-f"; tmp; lib ] |> Console.Write
 File.Copy(proxy, bin)

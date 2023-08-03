@@ -2,8 +2,8 @@
 
 set -o pipefail
 
-LIB="${0%/*}/../lib"
-BIN="$LIB/fantomas/fantomas"
+LIB="$(dirname -- "$0")/../lib"
+BIN="$LIB/fantomas.sh/fantomas"
 
 if command -v -- asdf >/dev/null; then
   DOTNET="$(asdf which dotnet)"

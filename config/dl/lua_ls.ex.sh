@@ -2,4 +2,4 @@
 
 set -o pipefail
 
-exec -- "${0%/*}/../lib/lua-language-server/bin/lua-language-server" "$@"
+exec -- "$(dirname -- "$0")/../lib/lua-language-server/bin/lua-language-server" "$@"

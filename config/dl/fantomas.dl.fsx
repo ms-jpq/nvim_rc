@@ -10,12 +10,13 @@ let proxy = Path.Combine(__SOURCE_DIRECTORY__, "fantomas.ex.sh")
 let lib = Environment.GetEnvironmentVariable "LIB"
 let bin = Environment.GetEnvironmentVariable "BIN"
 
-do
-    let args = [ "tool"; "install"; "--tool-path"; tmp; "fantomas" ]
-    use proc = Process.Start("dotnet", args)
+let run arg0 (argv: 'a) =
+    use proc = Process.Start(arg0, argv)
 
     proc.WaitForExit()
     assert (proc.ExitCode = 0)
+
+run "dotnet" [ "tool"; "install"; "--tool-path"; tmp; "fantomas" ]
 
 try
     Directory.Delete(lib, true)
@@ -23,5 +24,5 @@ with :? DirectoryNotFoundException ->
     ()
 
 File.Delete bin
-Directory.Move(tmp, lib)
+run "mv" [ "-v"; "-f"; tmp; lib ]
 File.Copy(proxy, bin)

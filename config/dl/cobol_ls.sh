@@ -14,7 +14,7 @@ linux*)
   URI="$BASE-linux-x64-$VERSION.vsix"
   ;;
 *)
-  URI="$BASE-win32-x64-$VERSION.vsix"
+  URI="$BASE-win32-x64-$VERSION-signed.vsix"
   BIN="$BIN.exe"
   ;;
 esac

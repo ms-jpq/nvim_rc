@@ -14,4 +14,4 @@ JAR="$(get.py -- "$URI")"
 mkdir -v -p -- "$LIB"
 cp -v -f -- "$JAR" "$FMT"
 # shellcheck disable=SC2154
-install -v -b -- "${0%/*}/javafmt.ex.sh" "$BIN"
+install -v -b -- "$(dirname -- "$0")/javafmt.ex.sh" "$BIN"

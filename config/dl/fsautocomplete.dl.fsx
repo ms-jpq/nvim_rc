@@ -25,7 +25,6 @@ let run arg0 (argv: 'a) =
     proc.WaitForExit()
     assert (proc.ExitCode = 0)
 
-
 run "dotnet" [ "tool"; "install"; "--tool-path"; tmp; "fsautocomplete" ]
 
 do
@@ -55,6 +54,5 @@ with :? DirectoryNotFoundException ->
     ()
 
 File.Delete bin
-
-Directory.Move(tmp, lib)
+run "mv" [ "-v"; "-f"; tmp; lib ]
 File.Copy(proxy, bin)

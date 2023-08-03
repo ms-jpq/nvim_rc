@@ -2,4 +2,4 @@
 
 set -o pipefail
 
-exec -- java -jar "${0%/*}/../lib/ktfmt"/*.jar "$@"
+exec -- java -jar "$(dirname -- "$0")/../lib/ktfmt"/*.jar "$@"
