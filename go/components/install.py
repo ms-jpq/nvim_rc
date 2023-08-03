@@ -2,6 +2,7 @@ from asyncio.tasks import as_completed
 from fnmatch import fnmatch
 from itertools import chain, repeat
 from json import dumps, loads
+from multiprocessing import cpu_count
 from os import environ, linesep, pathsep, sep
 from os.path import normcase
 from pathlib import Path, PurePath
@@ -119,13 +120,14 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
             async def cont() -> AsyncIterator[Tuple[str, CompletedProcess[bytes]]]:
                 assert git
                 location = p_name(spec.uri)
+                jobs = f"--jobs={cpu_count()}"
                 if location.is_dir():
                     p1 = await call(
                         git,
                         "pull",
                         "--recurse-submodules",
                         "--no-tags",
-                        "--jobs=0",
+                        jobs,
                         "--force",
                         *(("origin", spec.branch) if spec.branch else ()),
                         cwd=location,
@@ -136,9 +138,9 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                         git,
                         "clone",
                         "--recurse-submodules",
-                        "--depth=1",
-                        "--jobs=0",
                         "--shallow-submodules",
+                        "--depth=1",
+                        jobs,
                         *(("--branch", spec.branch) if spec.branch else ()),
                         "--",
                         spec.uri,
