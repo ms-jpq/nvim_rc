@@ -245,7 +245,7 @@ def _npm(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     if (
         which("node")
         and (npm := which("npm"))
-        and (specs := {*(spec for spec in _npm_specs() if _match(match, name=spec))})
+        and (specs := ({*(_npm_specs())} if _match(match, name="npm") else ()))
     ):
 
         async def cont() -> _SortOfMonoid:
