@@ -154,6 +154,7 @@
       #   short_name: vTEX
 
 - git:
+    mvp: true
     uri: https://github.com/ms-jpq/snips
 
 - git:
