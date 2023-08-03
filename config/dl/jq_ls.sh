@@ -7,4 +7,4 @@ mkdir -v -p -- "$LIB"
 export -- GO111MODULE=on GOPATH GOPATH="$LIB"
 go install -- github.com/wader/jq-lsp@master
 # shellcheck disable=2154
-install -v -b -- "$LIB/bin/${BIN##*/}" "$BIN"
+install -v -b -- "$LIB/bin/$(basename -- "$BIN")" "$BIN"

@@ -74,5 +74,5 @@ jobs:
 
       - shell: bash
         run: |-
-          gmake patch || true
+          gmake patch -- JAVA_HOME="$JAVA_HOME_17_X64" || true
 
