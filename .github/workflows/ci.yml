@@ -68,11 +68,9 @@ jobs:
 
       - uses: actions/setup-python@v3
 
-      - shell: bash
-        run: |-
+      - run: |-
           gmake mvp
 
-      - shell: bash
-        run: |-
-          gmake patch -- JAVA_HOME="$JAVA_HOME_17_X64" || true
+      - run: |-
+          gmake patch -- JAVA_HOME="$JAVA_HOME_17_X64" || $true
 
