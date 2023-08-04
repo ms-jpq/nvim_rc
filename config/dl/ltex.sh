@@ -28,5 +28,5 @@ mkdir -v -p -- "$LIB"
 mv -f -- "$TMP"/*/* "$LIB/"
 set -x
 # shellcheck disable=2154
-ln -v -sf -- "$LIB/bin/$(basename -- "$BIN")" "$BIN$SUFFIX"
+ln -v -sf -- "$LIB/bin/$(basename -- "$BIN")$SUFFIX" "$BIN$SUFFIX"
 rm -v -fr -- "$TMP"
