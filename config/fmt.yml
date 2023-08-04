@@ -274,6 +274,7 @@
         - gcc
         - jq
         - perl
+        - timeout
       file: latexindent.dl.pl
 
 - bin: fantomas.sh
