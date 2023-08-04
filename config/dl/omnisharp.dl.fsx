@@ -6,7 +6,9 @@ open System.IO
 open System.Runtime.InteropServices
 
 let run arg0 argv (input: 'a) =
-    let start = new ProcessStartInfo(FileName = arg0, UseShellExecute = true)
+    let start =
+        new ProcessStartInfo(FileName = arg0, RedirectStandardInput = true, RedirectStandardOutput = true)
+
     argv |> Seq.iter start.ArgumentList.Add
 
     use proc = Process.Start(start)
