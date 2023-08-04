@@ -58,7 +58,7 @@ jobs:
       - env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |-
-          gmake install -- JAVA_HOME="$JAVA_HOME_17_X64"
+          gmake install -- JAVA_HOME="$JAVA_HOME_17_X64" NO_R=1
 
   windows:
     runs-on: windows-latest

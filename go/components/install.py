@@ -209,37 +209,32 @@ def _gem(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     ):
 
         async def cont() -> _SortOfMonoid:
-            assert gem
-            p = await call(
-                gem,
-                "install",
-                "--install-dir",
-                _GEMS,
-                "--no-document",
-                *specs,
-                check_returncode=set(),
-            )
-            return (("", p),)
+            async def cont() -> AsyncIterator[Tuple[str, CompletedProcess[bytes]]]:
+                assert gem
+                p1 = await call(
+                    gem,
+                    "install",
+                    "--install-dir",
+                    _GEMS,
+                    "--no-document",
+                    *specs,
+                    check_returncode=set(),
+                )
+                yield ("", p1)
+                if not p1.returncode:
+                    p2 = await call(
+                        executable,
+                        LIBEXEC / "binstub.py",
+                        "--src",
+                        _GEMS,
+                        "--dst",
+                        GEM_DIR / "bin",
+                        check_returncode=set(),
+                    )
+                    yield ("", p2)
 
-        yield cont()
+            return [rt async for rt in cont()]
 
-
-def _binstub(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
-    name = "binstub.py"
-
-    async def cont() -> _SortOfMonoid:
-        p = await call(
-            executable,
-            LIBEXEC / name,
-            "--src",
-            _GEMS,
-            "--dst",
-            GEM_DIR / "bin",
-            check_returncode=set(),
-        )
-        return (("", p),)
-
-    if _match(match, name=name):
         yield cont()
 
 
@@ -364,7 +359,7 @@ async def install(mvp: bool, match: AbstractSet[str]) -> int:
             _script(match),
         )
     )
-    for fut in chain(as_completed(tasks), _binstub(match)):
+    for fut in as_completed(tasks):
         for debug, proc in await fut:
             args = join(map(str, proc.args))
             if proc.returncode == 0:

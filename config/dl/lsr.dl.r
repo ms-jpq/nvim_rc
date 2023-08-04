@@ -34,6 +34,10 @@ pkgs <- c("languageserver")
 dir.create(lib, recursive = TRUE)
 .libPaths(c(.libPaths(), lib))
 
+if (Sys.getenv("NO_R") != "") {
+  quit()
+}
+
 if (Sys.getenv("CI") != "" && sample(1:100, 1) >= c(10)) {
   quit()
 }
