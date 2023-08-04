@@ -4,6 +4,7 @@ use English;
 use File::Basename;
 use File::Copy;
 use File::Path;
+use File::Spec::Functions;
 use File::Temp;
 use autodie;
 use strict;
@@ -12,7 +13,7 @@ use utf8;
 my $bin    = $ENV{BIN};
 my $lib    = $ENV{LIB};
 my $dir    = dirname(__FILE__);
-my $script = "$dir/latexindent.ex.pl";
+my $script = catfile( $dir, 'latexindent.ex.pl' );
 
 if ( !-d $lib ) {
   my $tmp       = File::Temp->newdir();
@@ -24,7 +25,7 @@ if ( !-d $lib ) {
   $ENV{PERL_LOCAL_LIB_ROOT} = $perl_libd;
   $ENV{PERL_MB_OPT}         = "--install_base $perl_libd";
   $ENV{PERL_MM_OPT}         = "INSTALL_BASE=$perl_libd";
-  $ENV{PERL5LIB}            = "$perl_libd/lib/perl5";
+  $ENV{PERL5LIB}            = catfile( $perl_libd, 'lib', 'perl5' );
 
   my $repo = 'cmhughes/latexindent.pl';
   my $tag  = `gh-latest.sh \Q$repo\E`;

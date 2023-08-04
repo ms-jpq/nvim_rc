@@ -2,13 +2,14 @@
 
 use English;
 use File::Basename;
+use File::Spec::Functions;
 use autodie;
 use strict;
 use utf8;
 
 my $dir = dirname(__FILE__);
-my $lib = "$dir/../lib/perlcritic.pl";
+my $lib = catfile( $dir, '..', 'lib', 'perlcritic.pl' );
 
-$ENV{PERL5LIB} = "$lib/lib/perl5";
-exec "$lib/bin/perltidy", @ARGV;
+$ENV{PERL5LIB} = catfile( $lib, 'lib', 'perl5' );
+exec catfile( $lib, 'bin', 'perltidy' ), @ARGV;
 croak $ERRNO;

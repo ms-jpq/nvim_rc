@@ -4,6 +4,7 @@ use English;
 use File::Basename;
 use File::Copy;
 use File::Path;
+use File::Spec::Functions;
 use File::Temp;
 use autodie;
 use strict;
@@ -21,7 +22,7 @@ if ( !-d $lib ) {
   $ENV{PERL_LOCAL_LIB_ROOT} = $tmp;
   $ENV{PERL_MB_OPT}         = "--install_base $tmp";
   $ENV{PERL_MM_OPT}         = "INSTALL_BASE=$tmp";
-  $ENV{PERL5LIB}            = "$tmp/lib/perl5";
+  $ENV{PERL5LIB}            = catfile( $tmp, 'lib', 'perl5' );
 
   system( 'cpan', '-T', '-I', '-i', 'Perl::Critic' )
     && croak $CHILD_ERROR;
@@ -30,8 +31,8 @@ if ( !-d $lib ) {
 }
 
 foreach my $name (@names) {
-  my $src = "$dir/$name.ex.pl";
-  my $dst = "$bin/$name.pl";
+  my $src = catfile( $dir, "$name.ex.pl" );
+  my $dst = catfile( $bin, "$name.pl" );
 
   copy( $src, $dst );
   chmod( 0755, $dst );
