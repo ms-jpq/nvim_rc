@@ -224,28 +224,35 @@ def _gem(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
         yield cont()
 
 
-async def _binstub() -> _SortOfMonoid:
-    p = await call(
-        executable,
-        LIBEXEC / "binstub.py",
-        "--src",
-        _GEMS,
-        "--dst",
-        GEM_DIR / "bin",
-        check_returncode=set(),
-    )
-    return (("", p),)
+def _binstub(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
+    name = "binstub.py"
+
+    async def cont() -> _SortOfMonoid:
+        p = await call(
+            executable,
+            LIBEXEC / name,
+            "--src",
+            _GEMS,
+            "--dst",
+            GEM_DIR / "bin",
+            check_returncode=set(),
+        )
+        return (("", p),)
+
+    if _match(match, name=name):
+        yield cont()
 
 
 def _npm(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     NPM_DIR.mkdir(parents=True, exist_ok=True)
     packages_json = NPM_DIR / "package.json"
     package_lock = NPM_DIR / "package-lock.json"
+    name = "npm"
 
     if (
         which("node")
-        and (npm := which("npm"))
-        and (specs := ({*(_npm_specs())} if _match(match, name="npm") else ()))
+        and (npm := which(name))
+        and (specs := ({*(_npm_specs())} if _match(match, name=name) else ()))
     ):
 
         async def cont() -> _SortOfMonoid:
@@ -357,8 +364,7 @@ async def install(mvp: bool, match: AbstractSet[str]) -> int:
             _script(match),
         )
     )
-    post = () if mvp else (_binstub(),)
-    for fut in chain(as_completed(tasks), post):
+    for fut in chain(as_completed(tasks), _binstub(match)):
         for debug, proc in await fut:
             args = join(map(str, proc.args))
             if proc.returncode == 0:

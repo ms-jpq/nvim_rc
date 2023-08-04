@@ -8,15 +8,13 @@ VERSION='16.0.0'
 case "$OSTYPE" in
 darwin*)
   URI="$BASE-$VERSION-mac-x64.tar.gz"
-  SUFFIX=''
   ;;
 linux*)
   URI="$BASE-$VERSION-linux-x64.tar.gz"
-  SUFFIX=''
   ;;
 *)
   URI="$BASE-$VERSION-windows-x64.zip"
-  SUFFIX='.bat'
+  BIN="$BIN.bat"
   ;;
 esac
 
@@ -27,6 +25,5 @@ rm -rf -- "$LIB"
 mkdir -v -p -- "$LIB"
 mv -f -- "$TMP"/*/* "$LIB/"
 set -x
-# shellcheck disable=2154
-ln -v -sf -- "$LIB/bin/$(basename -- "$BIN")$SUFFIX" "$BIN$SUFFIX"
+ln -v -sf -- "$LIB/bin/$(basename -- "$BIN")" "$BIN"
 rm -v -fr -- "$TMP"
