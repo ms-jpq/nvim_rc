@@ -1,5 +1,6 @@
 #!/usr/bin/env -S -- perl -CASD -w
 
+use Config;
 use English;
 use File::Basename;
 use File::Copy;
@@ -15,6 +16,10 @@ my $cpan   = catfile( dirname( $Config{perlpath} ), 'cpan' );
 my $bin    = $ENV{BIN};
 my $lib    = $ENV{LIB};
 my $script = catfile( $dir, 'latexindent.ex.pl' );
+
+if ( $OSNAME eq 'MSWin32' ) {
+  $cpan = '$cpan.bat';
+}
 
 if ( !-d $lib ) {
   my $tmp       = File::Temp->newdir();
@@ -43,7 +48,7 @@ if ( !-d $lib ) {
   system( $cpan, '-T', '-I', '-i', @perl_libs )
     && croak $CHILD_ERROR;
 
-  system( 'mv', '-v', '-f', q{--}, $tmp_lib, $lib ) && croak $CHILD_ERROR;
+  move( $tmp_lib, $lib );
 
   rmtree($tmp);
 }

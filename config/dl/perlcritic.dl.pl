@@ -17,6 +17,10 @@ my $bin   = dirname( $ENV{BIN} );
 my $lib   = $ENV{LIB};
 my @names = qw( perlcritic perltidy );
 
+if ( $OSNAME eq 'MSWin32' ) {
+  $cpan = '$cpan.bat';
+}
+
 if ( !-d $lib ) {
   my $tmp = File::Temp->newdir();
 
@@ -29,7 +33,7 @@ if ( !-d $lib ) {
   system( $cpan, '-T', '-I', '-i', 'Perl::Critic' )
     && croak $CHILD_ERROR;
 
-  system( 'mv', '-v', '-f', q{--}, $tmp, $lib ) && croak $CHILD_ERROR;
+  move( $tmp, $lib );
 }
 
 foreach my $name (@names) {
