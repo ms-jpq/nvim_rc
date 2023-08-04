@@ -400,11 +400,11 @@
 #         - git
 #         - python3
 
-- server: theme_check
-  bin: theme-check-language-server
-  install:
-    gem:
-      - theme-check
+# - server: theme_check
+#   bin: theme-check-language-server
+#   install:
+#     gem:
+#       - theme-check
 
 - server: emmet_language_server
   bin: emmet-language-server

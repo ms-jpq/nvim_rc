@@ -21,6 +21,10 @@ if ( $OSNAME eq 'MSWin32' ) {
   $cpan = '$cpan.bat';
 }
 
+if ( !-x $cpan ) {
+  exit;
+}
+
 if ( !-d $lib ) {
   my $tmp = File::Temp->newdir();
 
