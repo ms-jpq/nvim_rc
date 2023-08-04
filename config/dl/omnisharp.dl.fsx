@@ -5,21 +5,6 @@ open System.Diagnostics
 open System.IO
 open System.Runtime.InteropServices
 
-let run arg0 argv (input: 'a) =
-    let start =
-        new ProcessStartInfo(FileName = arg0, RedirectStandardInput = true, RedirectStandardOutput = true)
-
-    argv |> Seq.iter start.ArgumentList.Add
-
-    use proc = Process.Start(start)
-
-    do
-        use stdin = proc.StandardInput
-        stdin.Write input
-
-    proc.WaitForExit()
-    assert (proc.ExitCode = 0)
-    proc.StandardOutput.ReadToEnd()
 
 let tmp = Directory.CreateTempSubdirectory().FullName
 let lib = Environment.GetEnvironmentVariable "LIB"
@@ -36,7 +21,6 @@ let uri =
     else
         sprintf "%s-%s" base_uri "win-x64-net6.0.zip"
 
-
 let bin =
     let ext =
         if RuntimeInformation.IsOSPlatform(OSPlatform.Windows) then
@@ -46,17 +30,33 @@ let bin =
 
     (Environment.GetEnvironmentVariable "BIN", ext) |> Path.ChangeExtension
 
+let run arg0 argv (input: 'a) =
+    let start =
+        new ProcessStartInfo(FileName = arg0, RedirectStandardInput = true, RedirectStandardOutput = true)
+
+    argv |> Seq.iter start.ArgumentList.Add
+
+    use proc = Process.Start(start)
+
+    do
+        use stdin = proc.StandardInput
+        stdin.Write input
+
+    proc.WaitForExit()
+    assert (proc.ExitCode = 0)
+    proc.StandardOutput.ReadToEnd()
 
 ""
 |> run "get.py" [ "--"; uri ]
 |> run "unpack.py" [ "--dst"; tmp ]
 |> Console.Write
 
+File.Delete bin
+
 try
     Directory.Delete(lib, true)
 with :? DirectoryNotFoundException ->
     ()
 
-File.Delete bin
 "" |> run "mv" [ "-v"; "-f"; tmp; lib ] |> Console.Write
 File.Copy(proxy, bin)
