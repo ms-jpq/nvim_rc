@@ -24,5 +24,5 @@ with :? DirectoryNotFoundException ->
     ()
 
 File.Delete bin
-run "mv" [ "-v"; "-f"; tmp; lib ]
+run "mv" [ "-f"; tmp; lib ]
 File.Copy(proxy, bin)

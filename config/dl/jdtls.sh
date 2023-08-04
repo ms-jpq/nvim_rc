@@ -8,6 +8,6 @@ TMP="$(mktemp -d)"
 get.py -- "$URI" | unpack.py --dst "$TMP"
 # shellcheck disable=2154
 rm -rf -- "$LIB"
-mv -v -f -- "$TMP" "$LIB"
+mv -f -- "$TMP" "$LIB"
 # shellcheck disable=2154
 ln -v -sf -- "$LIB/bin/jdtls" "$BIN"
