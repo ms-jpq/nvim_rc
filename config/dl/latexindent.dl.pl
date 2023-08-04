@@ -10,9 +10,10 @@ use autodie;
 use strict;
 use utf8;
 
+my $dir    = dirname(__FILE__);
+my $cpan   = catfile( dirname( $Config{perlpath} ), 'cpan' );
 my $bin    = $ENV{BIN};
 my $lib    = $ENV{LIB};
-my $dir    = dirname(__FILE__);
 my $script = catfile( $dir, 'latexindent.ex.pl' );
 
 if ( !-d $lib ) {
@@ -39,7 +40,7 @@ if ( !-d $lib ) {
   my @globbed = glob "\Q$tmp\E/*";
   move( @globbed, $tmp_lib );
 
-  system( 'cpan', '-T', '-I', '-i', @perl_libs )
+  system( $cpan, '-T', '-I', '-i', @perl_libs )
     && croak $CHILD_ERROR;
 
   system( 'mv', '-v', '-f', q{--}, $tmp_lib, $lib ) && croak $CHILD_ERROR;

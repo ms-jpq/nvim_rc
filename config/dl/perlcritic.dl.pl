@@ -1,5 +1,6 @@
 #!/usr/bin/env -S -- perl -CASD -w
 
+use Config;
 use English;
 use File::Basename;
 use File::Copy;
@@ -10,9 +11,10 @@ use autodie;
 use strict;
 use utf8;
 
+my $dir   = dirname(__FILE__);
+my $cpan  = catfile( dirname( $Config{perlpath} ), 'cpan' );
 my $bin   = dirname( $ENV{BIN} );
 my $lib   = $ENV{LIB};
-my $dir   = dirname(__FILE__);
 my @names = qw( perlcritic perltidy );
 
 if ( !-d $lib ) {
@@ -24,7 +26,7 @@ if ( !-d $lib ) {
   $ENV{PERL_MM_OPT}         = "INSTALL_BASE=$tmp";
   $ENV{PERL5LIB}            = catfile( $tmp, 'lib', 'perl5' );
 
-  system( 'cpan', '-T', '-I', '-i', 'Perl::Critic' )
+  system( $cpan, '-T', '-I', '-i', 'Perl::Critic' )
     && croak $CHILD_ERROR;
 
   system( 'mv', '-v', '-f', q{--}, $tmp, $lib ) && croak $CHILD_ERROR;
