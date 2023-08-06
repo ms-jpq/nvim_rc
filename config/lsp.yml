@@ -179,6 +179,9 @@
   install:
     script:
       required:
+        - TODO
+        - curl
+        - jq
         - runhaskell
       file: hls.dl.hs
 
@@ -327,6 +330,7 @@
     script:
       required:
         - dotnet
+        - TODO
       file: omnisharp.dl.fsx
 
 - server: clojure_lsp

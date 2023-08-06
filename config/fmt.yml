@@ -64,6 +64,7 @@
   install:
     script:
       required:
+        - TODO
         - curl
         - jq
         - runhaskell
