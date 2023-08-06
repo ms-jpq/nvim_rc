@@ -24,7 +24,7 @@ main = do
   lib <- getEnv "LIB"
   cwd <- getCurrentDirectory <&> (takeDirectory >>> takeDirectory)
   tmp <- readProcess "mktemp" ["-d"] ""
-  version <- readProcess "sh" ["-c", "gh-latest.sh", "--", repo] ""
+  version <- readProcess "sh" ["-c", "gh-latest.sh", "", repo] ""
 
   let tramp = cwd </> "config" </> "dl" </> "hls.ex.sh"
   let srv = tmp </> printf "haskell-language-server-%s" version

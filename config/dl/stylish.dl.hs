@@ -21,7 +21,7 @@ nameof _       = id
 
 main = do
   tmp <- readProcess "mktemp" ["-d"] ""
-  version <- readProcess "sh" ["-c", "gh-latest.sh", "--", repo] ""
+  version <- readProcess "sh" ["-c", "gh-latest.sh", "", repo] ""
 
   let link = uri os version
   let name = nameof os link & takeBaseName
