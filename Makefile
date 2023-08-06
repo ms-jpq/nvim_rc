@@ -20,29 +20,27 @@ clobber: clean
 	sudo -- rm -v -rf -- pack/ var/
 
 ifeq ($(origin USERPROFILE), command line)
-HOME := $(USERPROFILE)
-$(warning <<<<<<<<<<<<< $(USERPROFILE))
-export -- HOME
+ENVS := 'HOME=$(USERPROFILE)' 'USERPROFILE=$(USERPROFILE)'
+else
+ENVS :=
 endif
 
-$(warning ->>>>>>> $(USERPROFILE))
-$(warning ->>>>>>> $(HOME))
 
 runtime: var/runtime/requirements.lock
 var/runtime/requirements.lock:
-	python3 -m go deps runtime
+	$(ENVS) python3 -m go deps runtime
 
 pack/modules/start/chadtree:
-	env
-	python3 -m go deps runtime packages mvp
+	$(ENVS) env
+	$(ENVS) python3 -m go deps runtime packages mvp
 
 mvp: pack/modules/start/chadtree
 
 patch: var/runtime/requirements.lock
-	python3 -m go deps packages
+	$(ENVS) python3 -m go deps packages
 
 install:
-	python3 -m go deps
+	$(ENVS) python3 -m go deps
 
 .venv/bin/python3:
 	python3 -m venv -- .venv
