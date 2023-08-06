@@ -23,6 +23,7 @@ USERPROFILE ?=
 ifdef $(USERPROFILE)
 HOME := $(USERPROFILE)
 export -- HOME
+$(warning ->>>>>>> $(HOME))
 endif
 
 runtime: var/runtime/requirements.lock
