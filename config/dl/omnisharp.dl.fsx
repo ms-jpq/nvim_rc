@@ -6,9 +6,11 @@ open System.IO
 open System.Runtime.InteropServices
 
 
-let tmp = Directory.CreateTempSubdirectory().FullName
+let py = Environment.GetEnvironmentVariable "PYTHON"
 let lib = Environment.GetEnvironmentVariable "LIB"
+let libexec = Environment.GetEnvironmentVariable "LIBEXEC"
 let proxy = Path.Combine(__SOURCE_DIRECTORY__, "omnisharp.ex.sh")
+let tmp = Directory.CreateTempSubdirectory().FullName
 
 let base_uri =
     "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp"
@@ -47,8 +49,8 @@ let run arg0 argv (input: 'a) =
     proc.StandardOutput.ReadToEnd()
 
 ""
-|> run "get.py" [ "--"; uri ]
-|> run "unpack.py" [ "--dst"; tmp ]
+|> run py [ Path.Combine(libexec, "get.py"); "--"; uri ]
+|> run py [ Path.Combine(libexec, "unpack.py"); "--dst"; tmp ]
 |> Console.Write
 
 File.Delete bin

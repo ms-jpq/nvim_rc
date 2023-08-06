@@ -298,6 +298,7 @@ def _npm(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
 
 
 def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
+    libexec = normcase(LIBEXEC)
     for path in (BIN_DIR, LIB_DIR, TMP_DIR):
         path.mkdir(parents=True, exist_ok=True)
 
@@ -305,14 +306,11 @@ def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
 
         async def cont(path: Path, bin: str) -> _SortOfMonoid:
             env = {
-                "PATH": pathsep.join(
-                    (
-                        normcase(LIBEXEC),
-                        environ["PATH"],
-                    )
-                ),
+                "PATH": pathsep.join((libexec, environ["PATH"])),
+                "PYTHON": executable,
                 "BIN": normcase(BIN_DIR / bin),
                 "LIB": normcase(LIB_DIR / bin),
+                "LIBEXEC": libexec,
             }
 
             if os is OS.windows and (tramp := which("env")):

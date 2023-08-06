@@ -73,8 +73,14 @@ jobs:
           Get-Command -- perl
 
       - run: |-
-          gmake mvp
+          $pacman = Join-Path -Path $Env:GHCUP_MSYS2 'usr' 'bin' 'pacman'
+          $argv = @('--sync', '--refresh', '--noconfirm', '--', 'make')
+          & $pacman @argv
 
-      - shell: bash
-        run: |-
-          gmake patch -- JAVA_HOME="$JAVA_HOME_17_X64" || true
+      - run: |-
+          $make = Join-Path -Path $Env:GHCUP_MSYS2 'usr' 'bin' 'make'
+          & $make 'mvp'
+
+      - run: |-
+          $make = Join-Path -Path $Env:GHCUP_MSYS2 'usr' 'bin' 'make'
+          & $make patch -- JAVA_HOME="$JAVA_HOME_17_X64"
