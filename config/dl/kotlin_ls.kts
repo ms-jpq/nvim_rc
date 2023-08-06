@@ -6,7 +6,8 @@ import kotlin.io.path.Path
 import kotlin.io.path.createSymbolicLinkPointingTo
 import kotlin.io.path.deleteIfExists
 import kotlin.io.path.deleteRecursively
-import kotlin.io.path.moveTo
+
+val rt = Runtime.getRuntime()
 
 val suffix = { path: Path, ext: String ->
   if (System.getProperty("os.name").startsWith("Windows")) {
@@ -39,11 +40,13 @@ for (proc in procs) {
 
 @OptIn(kotlin.io.path.ExperimentalPathApi::class) lib.deleteRecursively()
 
-tmp.resolve("server").moveTo(lib)
+val p1 = rt.exec(arrayOf("mv", "-v", "-f", "--", tmp.resolve("server").toString(), lib.toString()))
 
-val proc = Runtime.getRuntime().exec(arrayOf("chmod", "-v", "+x", ll.toString()))
+assert(p1.waitFor() == 0)
 
-assert(proc.waitFor() == 0)
+val p2 = rt.exec(arrayOf("chmod", "-v", "+x", ll.toString()))
+
+assert(p2.waitFor() == 0)
 
 bin.deleteIfExists()
 
