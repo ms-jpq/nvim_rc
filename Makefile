@@ -19,7 +19,7 @@ clean:
 clobber: clean
 	sudo -- rm -v -rf -- pack/ var/
 
-ifeq ($(origin USERPROFILE), environment)
+ifeq ($(origin USERPROFILE), command line)
 HOME := $(USERPROFILE)
 $(warning <<<<<<<<<<<<< $(USERPROFILE))
 export -- HOME
