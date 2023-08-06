@@ -141,7 +141,7 @@
     npm:
       - htmlhint
 
-- bin: phan
+- bin: phan.php
   args:
     - ${tmpname}
   type: fs
