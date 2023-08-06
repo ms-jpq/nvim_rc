@@ -18,7 +18,7 @@ exec(
 assert($code === 0, join(PHP_EOL, $output));
 $file = join(PHP_EOL, $output);
 
-copy($file, $bin);
-chmod($bin, 0755);
+assert(copy($file, $bin));
+assert(chmod($bin, 0755));
 
 ?>

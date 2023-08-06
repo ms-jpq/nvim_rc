@@ -22,14 +22,14 @@ $file = join(PHP_EOL, $output);
 mkdir($lib, 0755, true);
 
 $basename = basename($file);
-copy($file, "$lib/$basename");
+assert(copy($file, "$lib/$basename"));
 
 if (PHP_OS_FAMILY === "Windows") {
   $bin .= ".php";
 }
 
 $dir = dirname(__FILE__);
-copy("{$dir}/phan.ex.php", $bin);
+assert(copy("{$dir}/phan.ex.php", $bin));
 
 
 ?>

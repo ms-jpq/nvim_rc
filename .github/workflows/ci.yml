@@ -79,8 +79,4 @@ jobs:
 
       - run: |-
           $make = Join-Path -Path $Env:GHCUP_MSYS2 'usr' 'bin' 'make'
-          & $make 'mvp'
-
-      - run: |-
-          $make = Join-Path -Path $Env:GHCUP_MSYS2 'usr' 'bin' 'make'
           & $make patch -- JAVA_HOME="$JAVA_HOME_17_X64"
