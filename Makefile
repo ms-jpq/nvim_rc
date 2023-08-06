@@ -20,7 +20,7 @@ clobber: clean
 	sudo -- rm -v -rf -- pack/ var/
 
 ifeq ($(origin USERPROFILE), command line)
-ENVS := 'HOME=$(USERPROFILE)' 'USERPROFILE=$(USERPROFILE)'
+ENVS := env -- 'HOME=$(USERPROFILE)' 'USERPROFILE=$(USERPROFILE)'
 else
 ENVS :=
 endif
