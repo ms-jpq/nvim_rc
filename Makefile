@@ -19,6 +19,12 @@ clean:
 clobber: clean
 	sudo -- rm -v -rf -- pack/ var/
 
+USERPROFILE ?=
+ifdef $(USERPROFILE)
+HOME := $(USERPROFILE)
+export -- HOME
+endif
+
 runtime: var/runtime/requirements.lock
 var/runtime/requirements.lock:
 	python3 -m go deps runtime
