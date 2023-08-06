@@ -364,7 +364,6 @@
   install:
     script:
       required:
-        - TODO
         - swipl
       file: prolog_ls.dl.pro
 
