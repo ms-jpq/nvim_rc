@@ -19,9 +19,9 @@ clean:
 clobber: clean
 	sudo -- rm -v -rf -- pack/ var/
 
-USERPROFILE ?=
-ifdef $(USERPROFILE)
+ifeq ($(origin USERPROFILE), environment)
 HOME := $(USERPROFILE)
+$(warning <<<<<<<<<<<<< $(USERPROFILE))
 export -- HOME
 endif
 
