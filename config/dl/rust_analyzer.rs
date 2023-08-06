@@ -1,5 +1,5 @@
 #!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
-// || rustc --edition=2021 -o "${TMPFILE:="$(mktemp).exe"}" -- "$0" && "$TMPFILE" "$0" "$@" && exec -- rm -v -fr -- "$TMPFILE"
+// || rustc --edition=2021 -o "${TMPFILE:="$(mktemp)"}" -- "$0" && "$TMPFILE" "$0" "$@" && exec -- rm -v -fr -- "$TMPFILE"
 
 #![deny(clippy::all, clippy::cargo, clippy::pedantic)]
 
@@ -38,12 +38,19 @@ fn main() -> Result<(), Box<dyn Error>> {
     #[cfg(target_os = "windows")]
     let uri = format!("{base}-{ARCH}-pc-windows-msvc.gz");
 
-    let mut proc = Command::new("get.py")
+    let py = var_os("PYTHON").ok_or(format!("{}", line!()))?;
+    let libexec = var_os("LIBEXEC")
+        .ok_or(format!("{}", line!()))
+        .map(PathBuf::from)?;
+
+    let mut proc = Command::new(&py)
+        .arg(libexec.join("get.py"))
         .arg("--")
         .arg(uri)
         .stdout(Stdio::piped())
         .spawn()?;
-    let status = Command::new("unpack.py")
+    let status = Command::new(&py)
+        .arg(libexec.join("unpack.py"))
         .arg("--dst")
         .arg(&tmp)
         .stdin(proc.stdout.take().ok_or(format!("{}", line!()))?)
