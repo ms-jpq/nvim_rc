@@ -23,14 +23,17 @@ USERPROFILE ?=
 ifdef $(USERPROFILE)
 HOME := $(USERPROFILE)
 export -- HOME
-$(warning ->>>>>>> $(HOME))
 endif
+
+$(warning ->>>>>>> $(USERPROFILE))
+$(warning ->>>>>>> $(HOME))
 
 runtime: var/runtime/requirements.lock
 var/runtime/requirements.lock:
 	python3 -m go deps runtime
 
 pack/modules/start/chadtree:
+	env
 	python3 -m go deps runtime packages mvp
 
 mvp: pack/modules/start/chadtree
