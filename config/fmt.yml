@@ -126,8 +126,8 @@
     - --sort-ns-references
     - --split-keypairs-over-multiple-lines
     - --
-    - ${tmpname}
-  type: fs
+    - "-"
+  type: stream
   filetypes:
     - clojure
   install:
@@ -258,14 +258,11 @@
       - fprettify
 
 - bin: latexindent.pl
-  args:
-    - --overwrite
-    - --
-    - ${tmpname}
+  args: []
   filetypes:
     - plaintex
     - tex
-  type: fs
+  type: stream
   install:
     script:
       required:

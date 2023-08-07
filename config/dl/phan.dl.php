@@ -30,6 +30,7 @@ if (PHP_OS_FAMILY === "Windows") {
 
 $dir = dirname(__FILE__);
 assert(copy("{$dir}/phan.ex.php", $bin));
+assert(chmod($bin, 0755));
 
 
 ?>

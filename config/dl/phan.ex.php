@@ -1,8 +1,9 @@
 #!/usr/bin/env -S -- php
 <?php
+$dir = dirname(__FILE__);
 $prefix = [
   "php",
-  "{$__DIR__}/../lib/phan/phan.phar",
+  "{$dir}/../lib/phan/phan.phar",
   "--allow-polyfill-parser",
   "--no-progress-bar",
   "--strict-type-checking",
