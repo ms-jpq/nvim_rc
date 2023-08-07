@@ -31,7 +31,6 @@ var/runtime/requirements.lock:
 	$(ENVS) python3 -m go deps runtime
 
 pack/modules/start/chadtree:
-	$(ENVS) env
 	$(ENVS) python3 -m go deps runtime packages mvp
 
 mvp: pack/modules/start/chadtree
