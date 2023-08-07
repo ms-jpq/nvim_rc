@@ -35,6 +35,7 @@
     - --indent=${tabsize}
   type: stream
   filetypes:
+    - env
     - sh
     - zsh
   install:
@@ -216,10 +217,8 @@
   args:
     - --line-width=80
     - --indent-count=${tabsize}
-    - --write-mode=replace
-    - --
-    - ${tmpname}
-  type: fs
+    - --stdin
+  type: stream
   filetypes:
     - lua
   install:
@@ -294,8 +293,8 @@
 - bin: ktfmt.sh
   args:
     - --
-    - ${tmpname}
-  type: fs
+    - "-"
+  type: stream
   filetypes:
     - kotlin
   install:
@@ -336,10 +335,7 @@
     # - --lines-between-queries=2
     # - --indent=${tabsize}
     - --language=postgresql
-    - --output=${tmpname}
-    - --
-    - ${tmpname}
-  type: fs
+  type: stream
   filetypes:
     - sql
   install:
