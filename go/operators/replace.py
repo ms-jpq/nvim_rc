@@ -1,3 +1,5 @@
+from textwrap import dedent
+
 from pynvim_pp.buffer import Buffer
 from pynvim_pp.lib import encode
 from pynvim_pp.nvim import Nvim
@@ -52,7 +54,9 @@ async def _go_replace_line() -> None:
         linefeed = await buf.linefeed()
         row, _ = await win.get_cursor()
         body = await Nvim.fn.getreg(str)
-        if new_lines := body.split(linefeed):
+        dedented = dedent(body)
+
+        if new_lines := dedented.split(linefeed):
             if n := new_lines.pop():
                 new_lines.append(n)
 
