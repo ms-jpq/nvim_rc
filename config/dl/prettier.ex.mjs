@@ -12,10 +12,12 @@ const bin = join(node_modules, ".bin", "prettier");
 const [, , filetype, filename, tabsize] = argv;
 
 const plugins = {
+  [join("@prettier", "plugin-php", "src", "plugin.js")]: /^php$/,
   [join("@prettier", "plugin-xml", "src", "plugin.js")]: /^xml$/,
+  [join("prettier-plugin-awk")]: /^awk$/,
+  [join("prettier-plugin-organize-imports", "index.js")]: /^(java|type)script/,
   [join("prettier-plugin-tailwindcss", "dist", "index.js")]:
     /^(html|((java|type)scriptreact))$/,
-  [join("prettier-plugin-organize-imports", "index.js")]: /^(java|type)script/,
 };
 
 const args = (function* () {
