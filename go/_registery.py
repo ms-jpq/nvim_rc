@@ -5,10 +5,21 @@ from .modes import command, normal, poly, terminal, visual
 from .operators import case, casing, comment, move, replace, search, sort
 from .text_objects import entire, indent, line, word
 from .version_control import git
-from .workspace import bookmarks, input, misc, navigation, repl, statusline, theme, wm
+from .workspace import (
+    bm,
+    bookmarks,
+    input,
+    misc,
+    navigation,
+    repl,
+    statusline,
+    theme,
+    wm,
+)
 
 assert auto_comp
 assert auto_save
+assert bm
 assert bookmarks
 assert case
 assert casing
