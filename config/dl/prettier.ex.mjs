@@ -2,7 +2,7 @@
 
 import { spawnSync } from "node:child_process";
 import { dirname, join } from "node:path";
-import { argv, exit } from "node:process";
+import { argv, execPath, exit } from "node:process";
 import { fileURLToPath } from "node:url";
 
 const dir = dirname(fileURLToPath(import.meta.url));
@@ -31,7 +31,7 @@ const args = (function* () {
   yield "--";
 })();
 
-const { error, status, signal } = spawnSync(bin, [...args], {
+const { error, status, signal } = spawnSync(execPath, [bin, ...args], {
   stdio: "inherit",
 });
 
