@@ -170,7 +170,14 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
 
 
 def _pip(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
-    if specs := {*(spec for spec in _pip_specs() if _match(match, name=spec))}:
+    name = "pip"
+    if specs := {
+        *(
+            spec
+            for spec in _pip_specs()
+            if _match(match, name=name) or _match(match, name=spec)
+        )
+    }:
         builder = EnvBuilder(
             system_site_packages=False,
             with_pip=True,
@@ -185,7 +192,7 @@ def _pip(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
             p = await call(
                 ex,
                 "-m",
-                "pip",
+                name,
                 "install",
                 "--require-virtualenv",
                 "--upgrade",
@@ -199,9 +206,18 @@ def _pip(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
 
 
 def _gem(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
+    name = "gem"
     if (
-        (gem := which("gem"))
-        and (specs := {*(spec for spec in _gem_specs() if _match(match, name=spec))})
+        (gem := which(name))
+        and (
+            specs := {
+                *(
+                    spec
+                    for spec in _gem_specs()
+                    if _match(match, name=name) or _match(match, name=spec)
+                )
+            }
+        )
         and (
             os != OS.macos
             or not PurePath(gem).is_relative_to(PurePath(sep) / "usr" / "bin")

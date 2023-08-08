@@ -234,6 +234,7 @@
 
 - bin: gofmt
   args:
+    - -s
     - -w
     - --
     - ${tmpname}

@@ -5,6 +5,7 @@
     - --style-problem
     - --
     - ${tmpname}
+  # https://github.com/Vimjas/vint/issues/369
   type: fs
   filetypes:
     - vim
@@ -91,6 +92,7 @@
 - bin: golint
   args:
     - run
+    - --enable-all
     - --
     - ${tmpname}
   type: fs
