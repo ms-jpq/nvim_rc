@@ -14,14 +14,14 @@ import           Text.Printf        (printf)
 repo = "haskell/haskell-language-server"
 base = "https://github.com/haskell/haskell-language-server/releases/latest/download/haskell-language-server"
 
-uri "darwin" = printf "%s-%s-aarch64-apple-darwin.tar.xz" base
-uri "linux"  = printf "%s-%s-x86_64-linux-ubuntu22.04.tar.xz" base
-uri "nt"     = printf "%s-%s-x86_64-mingw64.zip" base
+uri "darwin"  = printf "%s-%s-aarch64-apple-darwin.tar.xz" base
+uri "linux"   = printf "%s-%s-x86_64-linux-ubuntu22.04.tar.xz" base
+uri "mingw32" = printf "%s-%s-x86_64-mingw64.zip" base
 
-suffix "nt" = ".exe"
-suffix _    = ""
+suffix "mingw32" = ".exe"
+suffix _         = ""
 
-run "nt" = exitSuccess
+run "mingw32" = exitSuccess
 run os = do
   lib <- getEnv "LIB"
   cwd <- getCurrentDirectory <&> (takeDirectory >>> takeDirectory)

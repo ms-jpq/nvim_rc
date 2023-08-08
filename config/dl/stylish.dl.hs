@@ -22,7 +22,7 @@ uri "linux"  = printf "%s-%s-linux-x86_64.tar.gz" base
 nameof "linux" = dropExtension
 nameof _       = id
 
-run "nt" = exitSuccess
+run "mingw32" = exitSuccess
 run os = do
   tmp <- readProcess "mktemp" ["-d"] ""
   version <- readProcess "gh-latest.sh" [repo] ""

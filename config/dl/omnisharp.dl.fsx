@@ -12,6 +12,13 @@ let libexec = Environment.GetEnvironmentVariable "LIBEXEC"
 let proxy = Path.Combine(__SOURCE_DIRECTORY__, "omnisharp.ex.sh")
 let tmp = Directory.CreateTempSubdirectory().FullName
 
+let win = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+
+match win with
+| true -> System.Environment.Exit 0
+| _ -> ()
+
+
 let base_uri =
     "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp"
 
@@ -24,12 +31,7 @@ let uri =
         sprintf "%s-%s" base_uri "win-x64-net6.0.zip"
 
 let bin =
-    let ext =
-        if RuntimeInformation.IsOSPlatform(OSPlatform.Windows) then
-            ".sh"
-        else
-            null
-
+    let ext = if win then ".sh" else null
     (Environment.GetEnvironmentVariable "BIN", ext) |> Path.ChangeExtension
 
 let run arg0 argv (input: 'a) =

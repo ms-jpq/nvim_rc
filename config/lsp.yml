@@ -329,7 +329,6 @@
     script:
       required:
         - dotnet
-        - TODO
       file: omnisharp.dl.fsx
 
 - server: clojure_lsp
@@ -345,7 +344,6 @@
   install:
     script:
       required:
-        - TODO
         - kotlinc
       file: kotlin_ls.kts
 

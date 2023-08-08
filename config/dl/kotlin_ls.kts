@@ -8,9 +8,14 @@ import kotlin.io.path.deleteIfExists
 import kotlin.io.path.deleteRecursively
 
 val rt = Runtime.getRuntime()
+val win = System.getProperty("os.name").startsWith("Windows")
+
+if (win) {
+  System.exit(0)
+}
 
 val suffix = { path: Path, ext: String ->
-  if (System.getProperty("os.name").startsWith("Windows")) {
+  if (win) {
     path.resolveSibling(Path(path.getFileName().toString() + ext))
   } else {
     path
