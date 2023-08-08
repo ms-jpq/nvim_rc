@@ -5,6 +5,7 @@ import           Data.Functor       ((<&>))
 import           System.Directory   (copyFileWithMetadata, getCurrentDirectory,
                                      removePathForcibly, renameDirectory)
 import           System.Environment (getEnv)
+import           System.Exit        (exitSuccess)
 import           System.FilePath    (takeDirectory, (</>))
 import           System.Info        (os)
 import           System.Process     (callProcess, readProcess)
@@ -20,11 +21,12 @@ uri "nt"     = printf "%s-%s-x86_64-mingw64.zip" base
 suffix "nt" = ".exe"
 suffix _    = ""
 
-main = do
+run "nt" = exitSuccess
+run os = do
   lib <- getEnv "LIB"
   cwd <- getCurrentDirectory <&> (takeDirectory >>> takeDirectory)
   tmp <- readProcess "mktemp" ["-d"] ""
-  version <- readProcess "sh" ["-c", "gh-latest.sh", "", repo] ""
+  version <- readProcess "gh-latest.sh" [repo] ""
 
   let tramp = cwd </> "config" </> "dl" </> "hls.ex.sh"
   let srv = tmp </> printf "haskell-language-server-%s" version
@@ -38,4 +40,6 @@ main = do
   _ <- renameDirectory srv lib
   _ <- getEnv "BIN" >>= copyFileWithMetadata tramp
   _ <- removePathForcibly tmp
-  pure ()
+  exitSuccess
+
+main = run os

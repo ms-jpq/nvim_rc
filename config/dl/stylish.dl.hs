@@ -2,13 +2,16 @@
 
 import           Data.Function         ((&))
 import           System.Directory      (copyFileWithMetadata, getPermissions,
-                                        removePathForcibly, setOwnerExecutable, setPermissions)
+                                        removePathForcibly, setOwnerExecutable,
+                                        setPermissions)
 import           System.Environment    (getEnv, getExecutablePath)
+import           System.Exit           (exitSuccess)
 import           System.FilePath       ((</>))
 import           System.FilePath.Posix (dropExtension, takeBaseName)
 import           System.Info           (os)
 import           System.Process        (callProcess, readProcess)
 import           Text.Printf           (printf)
+
 
 repo = "haskell/stylish-haskell"
 base = "https://github.com/haskell/stylish-haskell/releases/latest/download/stylish-haskell"
@@ -19,9 +22,10 @@ uri "linux"  = printf "%s-%s-linux-x86_64.tar.gz" base
 nameof "linux" = dropExtension
 nameof _       = id
 
-main = do
+run "nt" = exitSuccess
+run os = do
   tmp <- readProcess "mktemp" ["-d"] ""
-  version <- readProcess "sh" ["-c", "gh-latest.sh", "", repo] ""
+  version <- readProcess "gh-latest.sh" [repo] ""
 
   let link = uri os version
   let name = nameof os link & takeBaseName
@@ -34,4 +38,6 @@ main = do
   _ <- getExecutablePath >>= getPermissions >>= setPermissions srv
   _ <- getEnv "BIN" >>= copyFileWithMetadata srv
   _ <- removePathForcibly tmp
-  pure ()
+  exitSuccess
+
+main = run os
