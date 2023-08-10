@@ -1,4 +1,5 @@
 #!/usr/bin/env -S -- php
+
 <?php
 $dir = dirname(__FILE__);
 $prefix = [
