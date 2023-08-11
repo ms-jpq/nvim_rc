@@ -5,11 +5,11 @@ $ErrorActionPreference = 'Stop'
 $PSStyle.OutputRendering = 'PlainText'
 
 
-$lib = Join-Path -- (Split-Path -- $PSScriptRoot) 'lib' 'pwsh_es.ps1'
+$lib = Join-Path -Path (Split-Path -Path $PSScriptRoot) 'lib' 'pwsh_es.ps1'
 $cache = [IO.Directory]::CreateTempSubdirectory()
 
 $argv = @(
-    Join-Path -- $lib 'PowerShellEditorServices' 'Start-EditorServices.ps1'
+    Join-Path -Path $lib 'PowerShellEditorServices' 'Start-EditorServices.ps1'
     '-BundledModulesPath', $lib
     '-FeatureFlags', '@()'
     '-AdditionalModules', '@()'
@@ -18,8 +18,8 @@ $argv = @(
     '-HostProfileId', '0'
     '-HostVersion', '1.0.0'
     '-LogLevel', 'Normal'
-    '-LogPath', (Join-Path -- $cache 'powershell_es.log')
-    '-SessionDetailsPath', (Join-Path -- $cache 'powershell_es.session.json')
+    '-LogPath', (Join-Path -Path $cache 'powershell_es.log')
+    '-SessionDetailsPath', (Join-Path -Path $cache 'powershell_es.session.json')
 )
 
 $Env:NOCOLOR = '1'

@@ -4,8 +4,8 @@ Set-StrictMode -Version 'Latest'
 $ErrorActionPreference = 'Stop'
 $PSStyle.OutputRendering = 'PlainText'
 
-$lib = Join-Path -- (Split-Path -- $PSScriptRoot) 'lib' 'pwsh_es.ps1' 'PSScriptAnalyzer'
-$analyzer = Join-Path -- (Get-ChildItem -Path $lib -Filter '*') 'PSScriptAnalyzer.psm1'
+$lib = Join-Path -Path (Split-Path -Path $PSScriptRoot) 'lib' 'pwsh_es.ps1' 'PSScriptAnalyzer'
+$analyzer = Join-Path -Path (Get-ChildItem -Path $lib -Filter '*') 'PSScriptAnalyzer.psm1'
 
 Import-Module -- $analyzer
 Invoke-ScriptAnalyzer -EnableExit -IncludeDefaultRules -Path "$args"
