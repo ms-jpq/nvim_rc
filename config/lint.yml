@@ -107,6 +107,7 @@
 
 - bin: rubocop.rb
   args:
+    - ${filename}
     - --no-color
     - --stdin
     - --stderr

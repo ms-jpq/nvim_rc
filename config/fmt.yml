@@ -199,6 +199,7 @@
 
 - bin: rubocop.rb
   args:
+    - ${filename}
     - --fail-level=fatal
     - --stderr
     - --stdin
