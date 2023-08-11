@@ -1,6 +1,7 @@
 from contextlib import suppress
 from fnmatch import fnmatch
 from itertools import chain
+from os.path import normcase
 from pathlib import Path, PurePath
 from shlex import join
 from shutil import which
@@ -16,7 +17,7 @@ from std2.lex import ParseError
 
 from ..config.fmt import FmtAttrs, FmtType, fmt_specs
 from ..registery import LANG, NAMESPACE, keymap, rpc
-from .linter import BufContext, arg_subst, current_ctx, make_temp, set_preview_content
+from .linter import BufContext, arg_subst, current_ctx, mktemp, set_preview_content
 from .whitespace import detect_tabs, trailing_ws
 
 
@@ -26,7 +27,7 @@ async def _fmt_output(
     arg_info = join(chain((attr.bin,), attr.args))
 
     try:
-        args = arg_subst(attr.args, ctx=ctx, tmp_name=str(temp))
+        args = arg_subst(attr.args, ctx=ctx, tmp_name=normcase(temp))
     except ParseError:
         return LANG("grammar error", text=arg_info)
     else:
@@ -62,7 +63,7 @@ async def _fmt_output(
 async def _run(ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: PurePath) -> None:
     body = encode(ctx.linefeed.join(ctx.lines))
     path = Path(ctx.filename)
-    with make_temp(path, text=body) as temp:
+    with mktemp(path, text=body) as temp:
         errs = [
             err
             async for err in aiterify(

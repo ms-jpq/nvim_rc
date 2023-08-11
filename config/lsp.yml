@@ -238,6 +238,7 @@
   bin: typescript-language-server
   install:
     npm:
+      - "@types/node"
       - typescript
       - typescript-language-server
 

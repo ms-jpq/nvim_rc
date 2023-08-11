@@ -4,12 +4,11 @@ from dataclasses import dataclass
 from datetime import datetime
 from fnmatch import fnmatch
 from itertools import chain
-from os import close, write
 from os.path import normpath
 from pathlib import Path, PurePath
 from shlex import join
 from shutil import which
-from tempfile import mkstemp
+from tempfile import NamedTemporaryFile
 from typing import Iterable, Iterator, Sequence, Tuple
 
 from pynvim_pp.buffer import Buffer
@@ -21,7 +20,7 @@ from std2.asyncio.subprocess import call
 from std2.lex import ParseError, envsubst
 
 from ..config.linter import LinterAttrs, LinterType, linter_specs
-from ..consts import DATE_FMT, TMP_DIR
+from ..consts import DATE_FMT
 from ..registery import LANG, NAMESPACE, keymap, rpc
 
 
@@ -65,19 +64,16 @@ def arg_subst(args: Iterable[str], ctx: BufContext, tmp_name: str) -> Sequence[s
 
 
 @contextmanager
-def make_temp(path: Path, text: bytes) -> Iterator[Path]:
-    prefix, suffix = f"{path.stem}_", f"_{path.suffix}"
-    fd, temp = mkstemp(dir=TMP_DIR, prefix=prefix, suffix=suffix)
-    try:
-        write(fd, text)
-    finally:
-        close(fd)
-
-    new_path = Path(temp)
-    try:
-        yield new_path
-    finally:
-        new_path.unlink(missing_ok=True)
+def mktemp(path: Path, text: bytes) -> Iterator[Path]:
+    prefix, suffix = f"{path.stem}-", f"-{path.suffix}"
+    with NamedTemporaryFile(prefix=prefix, suffix=suffix, delete=False) as temp:
+        temp.write(text)
+        temp.close()
+        tmp = Path(temp.name)
+        try:
+            yield tmp
+        finally:
+            tmp.unlink()
 
 
 async def set_preview_content(text: str) -> None:
@@ -124,7 +120,7 @@ async def _linter_output(
 async def _run(ctx: BufContext, attrs: Iterable[LinterAttrs], cwd: PurePath) -> None:
     body = encode(ctx.linefeed.join(ctx.lines))
     path = Path(ctx.filename)
-    with make_temp(path, text=body) as temp:
+    with mktemp(path, text=body) as temp:
         outputs = await gather(
             *(
                 _linter_output(attr, ctx=ctx, cwd=cwd, body=body, temp=temp)

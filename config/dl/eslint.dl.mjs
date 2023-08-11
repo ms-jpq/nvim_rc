@@ -6,5 +6,5 @@ import { env } from "node:process";
 import { fileURLToPath } from "node:url";
 
 const dir = dirname(fileURLToPath(import.meta.url));
-const run = join(dir, "prettier.ex.mts");
+const run = join(dir, "eslint.ex.mts");
 await copyFile(run, env.BIN);

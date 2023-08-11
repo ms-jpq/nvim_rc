@@ -338,3 +338,17 @@
   install:
     npm:
       - sql-formatter
+
+- bin: eslint.mjs
+  args:
+    - ${filename}
+    - ${tmpname}
+  type: fs
+  filetypes:
+    - javascript*
+    - typescript*
+  install:
+    script:
+      required:
+        - node
+      file: eslint.dl.mjs
