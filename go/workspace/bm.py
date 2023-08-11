@@ -10,8 +10,10 @@ from ..registery import NAMESPACE, keymap, rpc
 @rpc()
 async def _reset_buffer() -> None:
     win = await Window.get_current()
+
     buf = await win.get_buf()
     path = await buf.get_name()
+    cursor = await win.get_cursor()
 
     scratch = await Buffer.create(
         listed=False, scratch=True, wipe=True, nofile=True, noswap=True
@@ -22,6 +24,7 @@ async def _reset_buffer() -> None:
     if path:
         escaped = await Nvim.fn.fnameescape(str, normpath(path))
         await Nvim.exec(f"edit! {escaped}")
+        await win.set_cursor(*cursor)
 
 
 _ = keymap.n("<leader>r") << f"<cmd>lua {NAMESPACE}.{_reset_buffer.method}()<cr>"
