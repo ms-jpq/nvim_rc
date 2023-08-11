@@ -197,7 +197,7 @@
     gem:
       - syntax_tree
 
-- bin: rubocop
+- bin: rubocop.rb
   args:
     - --fail-level=fatal
     - --stderr
@@ -208,9 +208,6 @@
   type: stream
   filetypes:
     - ruby
-  install:
-    gem:
-      - rubocop
 
 - bin: luafmt
   args:

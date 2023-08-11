@@ -3,4 +3,4 @@
 
 ::Kernel.require('fileutils')
 
-::FileUtils.cp(::File.join(__dir__, 'solargraph.ex.rb'), ::ENV.fetch('BIN'))
+::FileUtils.cp(::File.join(__dir__, 'rubocop.ex.rb'), ::ENV.fetch('BIN'))

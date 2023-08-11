@@ -105,18 +105,21 @@
         - jq
       file: golint.sh
 
-- bin: rubocop
+- bin: rubocop.rb
   args:
     - --no-color
+    - --stdin
     - --stderr
-    - --
-    - ${tmpname}
   type: stream
   filetypes:
     - ruby
   install:
     gem:
       - rubocop
+    script:
+      required:
+        - ruby
+      file: rubocop.dl.rb
 
 - bin: lintr.r
   args:
