@@ -2,4 +2,4 @@
 
 set -o pipefail
 
-exec -- java -jar "$(dirname -- "$0")/../lib/javafmt/"*.jar "$@"
+exec -- java -jar "$(dirname -- "$0")/../lib/javafmt.sh/"*.jar "$@"
