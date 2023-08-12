@@ -1,7 +1,9 @@
+local cfg = "cfg"
 vim.filetype.add(
   {
     filename = {
-      [".wslconfig"] = "cfg"
+      [".wslconfig"] = cfg,
+      ["wsl.conf"] = cfg
     }
   }
 )
