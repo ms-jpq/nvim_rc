@@ -2,7 +2,7 @@
 
 import { spawnSync } from "node:child_process";
 import { randomBytes } from "node:crypto";
-import { copyFileSync, existsSync, openSync, rmSync } from "node:fs";
+import { closeSync, copyFileSync, existsSync, openSync, rmSync } from "node:fs";
 import { basename, dirname, extname, join } from "node:path";
 import { argv, cwd, execPath } from "node:process";
 
@@ -41,15 +41,22 @@ for (const path of _parents()) {
     const [, , filename, tempname] = argv;
     for (const tmp of _tmp(filename)) {
       copyFileSync(tempname, tmp);
-      const fd = openSync(tmp, "r");
 
-      const { error, status, signal } = spawnSync(
-        execPath,
-        [eslint, "--exit-on-fatal-error", "--fix", "--", tmp],
-        {
-          stdio: [fd, "inherit", "inherit"],
-        },
-      );
+      const { error, status, signal } = (() => {
+        const fd = openSync(tmp, "r");
+        try {
+          return spawnSync(
+            execPath,
+            [eslint, "--exit-on-fatal-error", "--fix", "--", tmp],
+            {
+              stdio: [fd, "inherit", "inherit"],
+            },
+          );
+        } finally {
+          closeSync(fd);
+        }
+      })();
+
       if (error) {
         throw error;
       } else {
