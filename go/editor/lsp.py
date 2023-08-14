@@ -39,6 +39,9 @@ _ = (
 )
 
 
+_ = keymap.n("<leader>z") << "<cmd>LspRestart<cr>"
+
+
 @rpc()
 async def _rename() -> None:
     win = await Window.get_current()
