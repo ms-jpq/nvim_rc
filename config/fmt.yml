@@ -70,7 +70,7 @@
         - runhaskell
       file: stylish.dl.hs
 
-- bin: systemd-fmt
+- bin: systemd-fmt.sh
   args: []
   type: stream
   filetypes:
