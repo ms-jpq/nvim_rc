@@ -106,12 +106,11 @@ local l4 = function()
   vim.cmd("source " .. man)
 
   vim.cmd("source " .. cwd .. "/plugin/theme.vim")
+  vim.cmd("source " .. cwd .. "/plugin/rt-fix.vim")
 
   local parens =
     unpack(vim.api.nvim_get_runtime_file("plugin/matchparen.vim", true))
   vim.cmd("source " .. parens)
-
-  vim.g.omni_sql_no_default_maps = 1
 end
 
 l1()
