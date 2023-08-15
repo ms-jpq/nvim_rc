@@ -5,6 +5,10 @@ set -o pipefail
 REPO="$1"
 CACHE="$PWD/${REPO/\//.}.cache"
 
+if ! [[ -v LOCKED ]] && command -v -- flock >/dev/null; then
+  LOCKED=1 exec -- flock "$0" "$0" "$@"
+fi
+
 if ! [[ -f "$CACHE" ]]; then
   CURL=(
     curl --fail

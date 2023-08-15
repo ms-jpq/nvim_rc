@@ -50,7 +50,7 @@ jobs:
       - uses: actions/setup-python@v3
 
       - run: |-
-          brew install -- bash make htmlq
+          brew install -- bash make htmlq flock
 
       - run: |-
           gmake lint
