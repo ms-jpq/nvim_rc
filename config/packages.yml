@@ -1,6 +1,6 @@
 ---
 - git:
-    mvp: true
+    mvp: True
     call:
       - python3
       - -m
@@ -17,7 +17,7 @@
       modes: n
 
 - git:
-    mvp: true
+    mvp: True
     call:
       - python3
       - -m
@@ -52,6 +52,7 @@
     require("nvim-treesitter.configs").setup(opts)
   vals:
     ts_opts:
+      auto_install: True
       # ensure_installed: all
       highlight:
         enable: True
@@ -62,10 +63,10 @@
           node_decremental: q
           node_incremental: w
       # indent:
-      #   enable: true
+      #   enable: True
       textobjects:
         lsp_interop:
-          enable: true
+          enable: True
           peek_definition_code:
             L: "@function.outer"
             M: "@class.outer"
@@ -89,8 +90,8 @@
             iL: "@loop.inner"
             is: "@statement.outer"
         move:
-          enable: true
-          set_jumps: true
+          enable: True
+          set_jumps: True
           goto_next_start:
             "][": "@statement.outer"
             "]m": "@block.outer"
@@ -104,7 +105,7 @@
             "[]": "@statement.outer"
             "[M": "@block.outer"
         swap:
-          enable: true
+          enable: True
           swap_previous:
             <leader><left>: "@statement.outer"
             <leader><up>: "@block.outer"
@@ -114,6 +115,9 @@
 
 - git:
     uri: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+
+- git:
+    uri: https://github.com/nvim-treesitter/nvim-treesitter-context
 
 - git:
     uri: https://github.com/neovim/nvim-lspconfig
@@ -154,7 +158,7 @@
       #   short_name: vTEX
 
 - git:
-    mvp: true
+    mvp: True
     uri: https://github.com/ms-jpq/snips
 
 - git:

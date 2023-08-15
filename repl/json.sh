@@ -1,1 +1,1 @@
-graphql.sh
+text.sh

@@ -1,3 +1,4 @@
 ---
 npm:
+  - tree-sitter-cli
   - diff2html-cli
