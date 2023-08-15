@@ -4,7 +4,7 @@ set -o pipefail
 
 BASE_URI='https://releases.hashicorp.com/terraform-ls'
 
-HREF="$(curl --fail --location --no-progress-meter --max-time 60 -- "$BASE_URI" | htmlq --attribute href -- 'body > ul > li:nth-child(2) > a')"
+HREF="$(curl --fail-with-body --location --no-progress-meter --max-time 60 -- "$BASE_URI" | htmlq --attribute href -- 'body > ul > li:nth-child(2) > a')"
 VERSION="${HREF%%/}"
 VERSION="${VERSION##*/}"
 
