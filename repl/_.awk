@@ -24,3 +24,5 @@ DEDENT == -2 && $0 {
     print substr($0, DEDENT + 1)
   }
 }
+
+END { printf("%c", 0) }
