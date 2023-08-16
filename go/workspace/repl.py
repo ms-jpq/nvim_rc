@@ -216,7 +216,10 @@ async def _highlight(
 
 @cache
 def _scripts() -> Mapping[str, PurePath]:
-    return {path.stem: path for path in _REPL_SCRIPTS.iterdir()}
+    return {
+        "" if path.stem == path.name else path.stem: path
+        for path in _REPL_SCRIPTS.iterdir()
+    }
 
 
 async def _process(filetype: str, lines: Sequence[str]) -> Optional[bytes]:
