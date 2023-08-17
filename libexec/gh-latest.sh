@@ -18,9 +18,7 @@ if ! [[ -f "$CACHE" ]]; then
     --max-time 60
   )
   if [[ -v GH_TOKEN ]]; then
-    CURL+=(
-      --header "Authorization: Bearer $GH_TOKEN"
-    )
+    CURL+=(--oauth2-bearer "$GH_TOKEN")
   fi
   CURL+=(
     -- "https://api.github.com/repos/$REPO/releases/latest"
