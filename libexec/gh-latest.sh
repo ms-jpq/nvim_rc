@@ -30,7 +30,7 @@ if ! [[ -f "$CACHE" ]]; then
   )
 
   LINES="$("${CURL[@]}" | "${JQ[@]}")"
-  readarray -t -d $'\n' -- TAGS <<<"$LINES"
+  readarray -t -- TAGS <<<"$LINES"
   printf -- '%s' "${TAGS[0]}" >"$CACHE"
 fi
 
