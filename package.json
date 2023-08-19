@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "devDependencies": {
+    "@types/node": "*",
+    "typescript": "*"
+  },
+  "type": "module"
+}
