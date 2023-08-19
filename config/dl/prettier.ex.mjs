@@ -6,8 +6,11 @@ import { dirname, join } from "node:path";
 import { argv, execPath, exit } from "node:process";
 import { fileURLToPath } from "node:url";
 
-const dir = dirname(fileURLToPath(import.meta.url));
-const node_modules = join(dirname(dir), "modules", "node_modules");
+const node_modules = join(
+  dirname(dirname(fileURLToPath(import.meta.url))),
+  "modules",
+  "node_modules",
+);
 const bin = join(node_modules, ".bin", "prettier");
 
 const [, , filetype, filename, tabsize] = argv;

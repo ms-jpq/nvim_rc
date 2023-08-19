@@ -39,15 +39,15 @@
     script:
       file: marksman.sh
 
-- server: markdown
-  bin: vscode-markdown-language-server
-  args:
-    - --stdio
-  filetypes:
-    - markdown
-  install:
-    npm:
-      - vscode-langservers-extracted
+# - server: markdown
+#   bin: vscode-markdown-language-server
+#   args:
+#     - --stdio
+#   filetypes:
+#     - markdown
+#   install:
+#     npm:
+#       - vscode-langservers-extracted
 
 - server: docker_compose_language_service
   bin: docker-compose-langserver

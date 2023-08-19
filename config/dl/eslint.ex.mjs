@@ -39,38 +39,42 @@ const _tmp = function* (filename = "") {
   }
 };
 
+const _eslint = (eslint = "", filename = "", tempname = "") => {
+  for (const tmp of _tmp(filename)) {
+    copyFileSync(tempname, tmp);
+
+    const { error, status, signal } = (() => {
+      const fd = openSync(tmp, "r");
+      try {
+        return spawnSync(
+          execPath,
+          [eslint, "--exit-on-fatal-error", "--fix", "--", tmp],
+          {
+            stdio: [fd, "inherit", "inherit"],
+          },
+        );
+      } finally {
+        closeSync(fd);
+      }
+    })();
+
+    if (error) {
+      throw error;
+    } else {
+      process.exitCode = status ?? -(signal ?? -1);
+      if (!process.exitCode) {
+        copyFileSync(tmp, tempname);
+      }
+    }
+  }
+};
+
+const [, , filename, tempname] = argv;
+ok(tempname);
 for (const path of _parents()) {
   const eslint = join(path, "node_modules", ".bin", "eslint");
   if (existsSync(eslint)) {
-    const [, , filename, tempname] = argv;
-    ok(tempname);
-    for (const tmp of _tmp(filename)) {
-      copyFileSync(tempname, tmp);
-
-      const { error, status, signal } = (() => {
-        const fd = openSync(tmp, "r");
-        try {
-          return spawnSync(
-            execPath,
-            [eslint, "--exit-on-fatal-error", "--fix", "--", tmp],
-            {
-              stdio: [fd, "inherit", "inherit"],
-            },
-          );
-        } finally {
-          closeSync(fd);
-        }
-      })();
-
-      if (error) {
-        throw error;
-      } else {
-        process.exitCode = status ?? -(signal ?? -1);
-        if (!process.exitCode) {
-          copyFileSync(tmp, tempname);
-        }
-        break;
-      }
-    }
+    _eslint(eslint, filename, tempname);
+    break;
   }
 }
