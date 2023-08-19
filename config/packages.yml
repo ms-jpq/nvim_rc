@@ -1,6 +1,6 @@
 ---
 - git:
-    mvp: True
+    mvp: &mvp True
     call:
       - python3
       - -m
@@ -17,7 +17,7 @@
       modes: n
 
 - git:
-    mvp: True
+    mvp: *mvp
     call:
       - python3
       - -m
@@ -37,6 +37,7 @@
         repeat: "<leader>."
 
 - git:
+    mvp: *mvp
     # call:
     #   - nvim
     #   - --headless
@@ -120,9 +121,11 @@
     uri: https://github.com/nvim-treesitter/nvim-treesitter-context
 
 - git:
+    mvp: *mvp
     uri: https://github.com/neovim/nvim-lspconfig
 
 - git:
+    mvp: *mvp
     uri: https://github.com/ms-jpq/coq.thirdparty
   lua: |-
     require("coq_3p")(vim.g.COQ3p)
@@ -158,16 +161,19 @@
       #   short_name: vTEX
 
 - git:
-    mvp: True
+    mvp: *mvp
     uri: https://github.com/ms-jpq/snips
 
 - git:
+    mvp: *mvp
     uri: https://github.com/ms-jpq/coq.artifacts
 
 - git:
+    mvp: *mvp
     uri: https://github.com/junegunn/fzf
 
 - git:
+    mvp: *mvp
     uri: https://github.com/junegunn/fzf.vim
   keys:
     - maps:
@@ -194,12 +200,15 @@
     fzf_preview_window: right:wrap
 
 - git:
+    mvp: *mvp
     uri: https://github.com/tpope/vim-repeat
 
 - git:
+    mvp: *mvp
     uri: https://github.com/tpope/vim-surround
 
 - git:
+    mvp: *mvp
     uri: https://github.com/junegunn/vim-easy-align
   keys:
     - maps:
@@ -209,6 +218,7 @@
         noremap: False
 
 - git:
+    mvp: *mvp
     uri: https://github.com/tpope/vim-unimpaired
 
 - git:
@@ -241,6 +251,7 @@
 #     vim.cmd [[colorscheme dayfox]]
 
 - git:
+    mvp: *mvp
     uri: https://github.com/cocopon/iceberg.vim
   lua: |-
     vim.cmd [[colorscheme iceberg]]

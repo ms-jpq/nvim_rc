@@ -1,0 +1,4 @@
+{:parallel? true
+ :remove-multiple-non-indenting-spaces? true
+ :sort-ns-references? true
+ :split-keypairs-over-multiple-lines? true}

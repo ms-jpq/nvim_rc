@@ -41,7 +41,6 @@
   install:
     script:
       required:
-        - curl
         - jq
       file: shfmt.sh
 
@@ -65,7 +64,6 @@
   install:
     script:
       required:
-        - curl
         - jq
         - runhaskell
       file: stylish.dl.hs
@@ -169,8 +167,8 @@
     - yaml*
   install:
     npm:
-      # - "@prettier/plugin-php"
       # - prettier-plugin-awk
+      - "@prettier/plugin-php"
       - "@prettier/plugin-xml"
       - prettier
       - prettier-plugin-organize-imports
@@ -265,7 +263,6 @@
     script:
       required:
         - cpan
-        - curl
         - gcc
         - jq
         - perl
@@ -307,7 +304,6 @@
   install:
     script:
       required:
-        - curl
         - jq
       file: javafmt.dl.sh
 

@@ -25,7 +25,6 @@
   install:
     script:
       required:
-        - curl
         - jq
       file: shellcheck.sh
 
@@ -101,7 +100,6 @@
   install:
     script:
       required:
-        - curl
         - jq
       file: golint.sh
 

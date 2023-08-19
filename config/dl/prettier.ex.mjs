@@ -14,7 +14,7 @@ const [, , filetype, filename, tabsize] = argv;
 ok(filetype);
 
 const plugins = {
-  [join("@prettier", "plugin-php", "src", "plugin.js")]: /^php$/,
+  [join("@prettier", "plugin-php", "src", "index.js")]: /^php$/,
   [join("@prettier", "plugin-xml", "src", "plugin.js")]: /^xml$/,
   [join("prettier-plugin-awk")]: /^awk$/,
   [join("prettier-plugin-organize-imports", "index.js")]: /^(java|type)script/,

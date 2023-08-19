@@ -33,6 +33,12 @@
         - htmlq
       file: lemminx.sh
 
+- server: marksman
+  bin: marksman
+  install:
+    script:
+      file: marksman.sh
+
 - server: markdown
   bin: vscode-markdown-language-server
   args:
@@ -179,7 +185,6 @@
   install:
     script:
       required:
-        - curl
         - jq
         - runhaskell
       file: hls.dl.hs
@@ -384,7 +389,6 @@
   install:
     script:
       required:
-        - curl
         - jq
       file: lua_ls.dl.sh
 
@@ -435,10 +439,8 @@
   install:
     script:
       required:
-        - curl
         - jq
       file: cobol_ls.sh
-
 # - server: volar
 #   bin: vue-language-server
 #   install:
