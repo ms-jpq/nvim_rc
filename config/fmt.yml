@@ -238,11 +238,15 @@
     - go
 
 - bin: clang-format
-  args: []
+  args:
+    - --Werror
+    - --assume-filename=${filename}
   type: stream
   filetypes:
     - c
     - cpp
+    - cs
+    - objc
 
 - bin: fprettify
   args: []
