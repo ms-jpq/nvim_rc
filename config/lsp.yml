@@ -436,6 +436,11 @@
 
 - server: cobol_ls
   bin: cobol-language-support
+  args:
+    - pipeEnabled
+    - '-Dline.separator=\r\n'
+    - -Dlogback.statusListenerClass=ch.qos.logback.core.status.NopStatusListener
+    - -DserverType=NATIVE
   install:
     script:
       required:
