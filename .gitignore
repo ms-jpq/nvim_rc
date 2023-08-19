@@ -1,7 +1,7 @@
 /.venv/
+*.clj-*
+*.lsp/
 /pack/
 /var/
 __pycache__/
-
-*.lsp/
-*.clj-*
+package-lock.json

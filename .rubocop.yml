@@ -2,10 +2,6 @@
 inherit_gem:
   syntax_tree: config/rubocop.yml
 
-require:
-  - rubocop-performance
-  - rubocop-thread_safety
-
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.2

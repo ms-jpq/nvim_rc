@@ -1,5 +1,6 @@
 #!/usr/bin/env -S -- node
 
+import { ok } from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { argv, execPath, exit } from "node:process";
@@ -10,6 +11,7 @@ const node_modules = join(dirname(dir), "modules", "node_modules");
 const bin = join(node_modules, ".bin", "prettier");
 
 const [, , filetype, filename, tabsize] = argv;
+ok(filetype);
 
 const plugins = {
   [join("@prettier", "plugin-php", "src", "plugin.js")]: /^php$/,

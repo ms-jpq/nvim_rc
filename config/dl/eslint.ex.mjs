@@ -1,11 +1,15 @@
 #!/usr/bin/env -S -- node
 
+import { ok } from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { randomBytes } from "node:crypto";
 import { closeSync, copyFileSync, existsSync, openSync, rmSync } from "node:fs";
 import { basename, dirname, extname, join } from "node:path";
 import { argv, cwd, execPath } from "node:process";
 
+/**
+ * @return {IterableIterator<string>}
+ */
 const _parents = function* (path = cwd()) {
   const parent = dirname(path);
   yield path;
@@ -39,6 +43,7 @@ for (const path of _parents()) {
   const eslint = join(path, "node_modules", ".bin", "eslint");
   if (existsSync(eslint)) {
     const [, , filename, tempname] = argv;
+    ok(tempname);
     for (const tmp of _tmp(filename)) {
       copyFileSync(tempname, tmp);
 
