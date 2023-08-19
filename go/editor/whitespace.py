@@ -62,7 +62,8 @@ async def detect_tabs(buf: Buffer) -> None:
 @rpc()
 async def _detect_tabs() -> None:
     buf = await Buffer.get_current()
-    await detect_tabs(buf=buf)
+    if not await buf.vars.get(bool, "noindent"):
+        await detect_tabs(buf=buf)
 
 
 _ = autocmd("FileType") << f"lua {NAMESPACE}.{_detect_tabs.method}()"

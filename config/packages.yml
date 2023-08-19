@@ -73,6 +73,7 @@
             M: "@class.outer"
         select:
           enable: True
+          lookahead: True
           keymaps:
             aa: "@parameter.outer"
             ab: "@block.outer"
