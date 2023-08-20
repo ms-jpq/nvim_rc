@@ -22,7 +22,6 @@ from typing import (
     Tuple,
     TypedDict,
 )
-from urllib.parse import urlsplit
 from venv import EnvBuilder
 
 from pynvim_pp.lib import decode, encode
@@ -116,10 +115,9 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
 
     if git := which("git"):
 
-        async def cont(spec: GitPkgSpec) -> _SortOfMonoid:
+        async def cont(spec: GitPkgSpec, location: Path) -> _SortOfMonoid:
             async def cont() -> AsyncIterator[Tuple[str, CompletedProcess[bytes]]]:
                 assert git
-                location = p_name(spec.uri)
                 jobs = f"--jobs={cpu_count()}"
                 if location.is_dir():
                     p1 = await call(
@@ -164,9 +162,9 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
 
         for spec in pkg_specs:
             if not mvp or spec.git.mvp:
-                uri = urlsplit(spec.git.uri)
-                if _match(match, name=uri.path):
-                    yield cont(spec.git)
+                location = p_name(spec.git.uri)
+                if _match(match, name=location.name):
+                    yield cont(spec.git, location=location)
 
 
 def _pip(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
