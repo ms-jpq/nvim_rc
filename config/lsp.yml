@@ -445,7 +445,8 @@
     script:
       required:
         - jq
-      file: cobol_ls.sh
+        - cobc
+      file: cobol_ls.cob
 # - server: volar
 #   bin: vue-language-server
 #   install:
