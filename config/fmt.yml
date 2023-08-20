@@ -350,3 +350,11 @@
       required:
         - node
       file: eslint.dl.mjs
+
+- bin: terraform
+  args:
+    - fmt
+    - "-"
+  type: stream
+  filetypes:
+    - hcl
