@@ -10,6 +10,7 @@ vim.filetype.add(
       socket = systemd
     },
     pattern = {
+      [".*/.*%.service.d/.*%.conf"] = systemd,
       [".*/repart.d/.*%.conf"] = systemd,
       [".*/systemd/.*%.conf"] = systemd
     }
