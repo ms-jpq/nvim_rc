@@ -160,6 +160,7 @@
     - less
     - liquid
     - markdown
+    - nginx
     - php
     - scss
     - typescript*
@@ -171,6 +172,7 @@
       - "@prettier/plugin-php"
       - "@prettier/plugin-xml"
       - prettier
+      - prettier-plugin-nginx
       - prettier-plugin-organize-imports
       - prettier-plugin-tailwindcss
     script:
