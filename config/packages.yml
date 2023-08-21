@@ -37,7 +37,6 @@
         repeat: "<leader>."
 
 - git:
-    mvp: *mvp
     # call:
     #   - nvim
     #   - --headless
