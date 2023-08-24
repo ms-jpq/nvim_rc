@@ -35,6 +35,7 @@ def _comm(
     assert len((lhs + rhs).splitlines()) == 1
     assert lhs.lstrip() == lhs and rhs.rstrip() == rhs
     l, r = len(lhs), len(rhs)
+    ll, rr = lhs.rstrip(), rhs.lstrip()
 
     indents = {front: back for front, back in _p_indents(lines)}
     indent_f = next(iter(sorted(indents.keys(), key=len)), "")
@@ -46,7 +47,7 @@ def _comm(
         else:
             significant = line[len(indent_f) : len(line) - len(indent_b)]
 
-            is_comment = significant.startswith(lhs) and significant.endswith(rhs)
+            is_comment = significant.startswith(ll) and significant.endswith(rr)
             added = indent_f + lhs + significant + rhs + indent_b[r:]
             stripped = indent_f + significant[l : len(significant) - r] + indent_b
 
