@@ -34,8 +34,10 @@ def _comm(
 ) -> Iterator[Tuple[Optional[bool], str, str, str]]:
     assert len((lhs + rhs).splitlines()) == 1
     assert lhs.lstrip() == lhs and rhs.rstrip() == rhs
-    l, r = len(lhs), len(rhs)
+
     ll, rr = lhs.rstrip(), rhs.lstrip()
+    len_l, len_r = len(lhs), len(rhs)
+    len_ll, len_rr = len(ll), len(rr)
 
     indents = {front: back for front, back in _p_indents(lines)}
     indent_f = next(iter(sorted(indents.keys(), key=len)), "")
@@ -47,9 +49,15 @@ def _comm(
         else:
             significant = line[len(indent_f) : len(line) - len(indent_b)]
 
-            is_comment = significant.startswith(ll) and significant.endswith(rr)
-            added = indent_f + lhs + significant + rhs + indent_b[r:]
-            stripped = indent_f + significant[l : len(significant) - r] + indent_b
+            ls, rs = significant.startswith(lhs), significant.endswith(rhs)
+            lls, rrs = significant.startswith(ll), significant.endswith(rr)
+
+            is_comment = (ls or lls) and (rs or rrs)
+            added = indent_f + lhs + significant + rhs + indent_b[len_r:]
+
+            lo = len_ll if (lls and not ls) else len_l
+            hi = len_rr if (rrs and not rs) else len_r
+            stripped = indent_f + significant[lo : len(significant) - hi] + indent_b
 
             yield is_comment, line, added, stripped
 
