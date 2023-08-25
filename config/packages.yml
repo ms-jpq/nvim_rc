@@ -195,8 +195,8 @@
     fzf_buffers_jump: True
     fzf_layout:
       window:
-        height: 0.9
-        width: 0.9
+        height: 0.96
+        width: 0.96
     fzf_preview_window: right:wrap
 
 - git:
