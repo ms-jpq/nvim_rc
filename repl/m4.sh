@@ -2,5 +2,8 @@
 
 set -o pipefail
 
-printf -- '\n'
-exec -- "${0%/*}/.awk"
+M4="$(</dev/stdin)"$'\n'
+
+printf -- '%q ' printf -- '%s' "$M4"
+printf -- '%s ' '|'
+printf -- '%q ' m4 --prefix-builtins
