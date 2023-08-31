@@ -13,7 +13,7 @@ bin <- Sys.getenv("BIN")
 
 apt <- Sys.which("apt-get")
 if (apt != "") {
-  system2("sudo", c(
+  code <- system2("sudo", c(
     "--",
     apt,
     "install",
@@ -24,8 +24,13 @@ if (apt != "") {
     "libssl-dev",
     "libxml2-dev"
   ), env = c("DEBIAN_FRONTEND=noninteractive"))
-} else if (Sys.getenv("CI") != "") {
-  quit(status = 0)
+  if (code != 0) {
+    stop()
+  }
+}
+
+if (Sys.getenv("CI") != "" || Sys.getenv("NO_R") != "") {
+  quit()
 }
 
 repos <- c("https://cloud.r-project.org")
@@ -34,13 +39,6 @@ pkgs <- c("languageserver")
 dir.create(lib, recursive = TRUE)
 .libPaths(c(.libPaths(), lib))
 
-if (Sys.getenv("NO_R") != "") {
-  quit()
-}
-
-if (Sys.getenv("CI") != "" && sample(1:100, 1) >= c(10)) {
-  quit()
-}
 
 for (pkg in pkgs) {
   if (!require(pkg, lib.loc = c(lib), character.only = TRUE)) {
