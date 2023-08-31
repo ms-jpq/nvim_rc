@@ -8,7 +8,7 @@ import           System.Environment (getEnv)
 import           System.Exit        (exitSuccess)
 import           System.FilePath    (takeDirectory, (</>))
 import           System.Info        (os)
-import           System.Process     (callProcess, readProcess)
+import           System.Process     (readProcess)
 import           Text.Printf        (printf)
 
 repo = "haskell/haskell-language-server"

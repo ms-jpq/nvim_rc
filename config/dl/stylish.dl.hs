@@ -9,7 +9,7 @@ import           System.Exit           (exitSuccess)
 import           System.FilePath       ((</>))
 import           System.FilePath.Posix (dropExtension, takeBaseName)
 import           System.Info           (os)
-import           System.Process        (callProcess, readProcess)
+import           System.Process        (readProcess)
 import           Text.Printf           (printf)
 
 

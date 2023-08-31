@@ -9,7 +9,8 @@ import kotlin.io.path.createDirectory
 import kotlin.io.path.deleteRecursively
 
 val root = URI("https://repo1.maven.org/maven2/com/facebook/ktfmt/")
-val proxy = Path("", "..", "..", "config", "dl", "ktfmt.ex.sh")
+val path = System.getProperty("sun.java.command").split(" ").last()
+val proxy = Path(path).getParent().resolve("ktfmt.ex.sh")
 val py = System.getenv("PYTHON")!!
 val libexec = System.getenv("LIBEXEC")!!
 val lib = Path(System.getenv("LIB")!!)
