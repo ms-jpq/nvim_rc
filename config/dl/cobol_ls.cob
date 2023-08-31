@@ -1,4 +1,4 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeuo pipefail
        *> . || cobc -Wall -x "$0" -o "${T:="$(mktemp)"}" && exec -a "$0" -- "$T" "$@"
        >>SOURCE FORMAT FREE
 

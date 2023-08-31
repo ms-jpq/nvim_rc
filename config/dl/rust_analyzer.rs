@@ -1,10 +1,10 @@
-#!/usr/bin/env -S -- bash -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar
+#!/usr/bin/env -S -- bash -Eeuo pipefail
 // || rustc --edition=2021 -o "${T:="$(mktemp)"}" -- "$0" && exec -a "$0" -- "$T" "$0" "$@"
 
 #![deny(clippy::all, clippy::cargo, clippy::pedantic)]
 
 use std::{
-  env::{args, consts::ARCH, var_os},
+  env::{args_os, consts::ARCH, var_os},
   error::Error,
   fs::{create_dir_all, read_dir, rename},
   path::PathBuf,
@@ -12,9 +12,7 @@ use std::{
 };
 
 fn main() -> Result<(), Box<dyn Error>> {
-  let mut argv = args();
-  argv.next();
-  let arg0 = argv.next().ok_or(format!("{}", line!()))?;
+  let arg0 = args_os().next().ok_or(format!("{}", line!()))?;
   let tmp = PathBuf::from(arg0)
     .parent()
     .ok_or(format!("{}", line!()))?
