@@ -17,7 +17,7 @@ main(_Argv) :-
     directory_file_path(Dl, "prolog_fmt.ex.pro", BinFS),
     directory_file_path(Syntax, "prolog.vim", SynD),
     file_directory_name(BinD, Bin),
-    directory_file_path(Bin, 'prolog-fmt', BinFD),
+    directory_file_path(Bin, 'prolog-fmt.pro', BinFD),
     =(Pack, lsp_server),
     directory_file_path(Lib, Pack, Path),
     make_directory_path(Path),
