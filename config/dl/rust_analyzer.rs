@@ -40,6 +40,7 @@ fn main() -> Result<(), Box<dyn Error>> {
   let libexec = var_os("LIBEXEC")
     .ok_or(format!("{}", line!()))
     .map(PathBuf::from)?;
+  let bin = var_os("BIN").ok_or(format!("{}", line!()))?;
 
   let mut proc = Command::new(&py)
     .arg(libexec.join("get.py"))
@@ -72,9 +73,14 @@ fn main() -> Result<(), Box<dyn Error>> {
           os::unix::fs::PermissionsExt,
         };
         set_permissions(entry.path(), Permissions::from_mode(0o755))?;
+        rename(entry.path(), bin)?;
       }
 
-      rename(entry.path(), var_os("BIN").ok_or(format!("{}", line!()))?)?;
+      #[cfg(target_os = "windows")]
+      {
+        return Ok(());
+      }
+
       return Ok(());
     }
   }
