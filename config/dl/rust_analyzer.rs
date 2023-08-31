@@ -4,55 +4,65 @@
 #![deny(clippy::all, clippy::cargo, clippy::pedantic)]
 
 use std::{
+  backtrace::Backtrace,
   env::{args_os, consts::ARCH, var_os},
   error::Error,
   fs::{create_dir_all, read_dir, rename},
-  path::PathBuf,
+  path::{Path, PathBuf},
   process::{Command, Stdio},
 };
 
 fn main() -> Result<(), Box<dyn Error>> {
-  let arg0 = args_os().next().ok_or(format!("{}", line!()))?;
-  let tmp = PathBuf::from(arg0)
+  let uri = {
+    let base = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer";
+    #[cfg(target_os = "macos")]
+    {
+      format!("{base}-{ARCH}-apple-darwin.gz")
+    }
+    #[cfg(target_os = "linux")]
+    {
+      format!("{base}-{ARCH}-unknown-linux-gnu.gz")
+    }
+    #[cfg(target_os = "windows")]
+    {
+      format!("{base}-{ARCH}-pc-windows-msvc.gz")
+    }
+  };
+
+  let tmp = args_os()
+    .next()
+    .map(PathBuf::from)
+    .ok_or_else(|| format!("{}", Backtrace::capture()))?
     .parent()
-    .ok_or(format!("{}", line!()))?
-    .parent()
-    .ok_or(format!("{}", line!()))?
-    .parent()
-    .ok_or(format!("{}", line!()))?
-    .parent()
-    .ok_or(format!("{}", line!()))?
+    .and_then(Path::parent)
+    .and_then(Path::parent)
+    .and_then(Path::parent)
+    .ok_or_else(|| format!("{}", Backtrace::capture()))?
     .join("var")
     .join("tmp")
     .join("rust-analyzer-dl");
-  create_dir_all(&tmp)?;
-
-  let base = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer";
-
-  #[cfg(target_os = "macos")]
-  let uri = format!("{base}-{ARCH}-apple-darwin.gz");
-  #[cfg(target_os = "linux")]
-  let uri = format!("{base}-{ARCH}-unknown-linux-gnu.gz");
-  #[cfg(target_os = "windows")]
-  let uri = format!("{base}-{ARCH}-pc-windows-msvc.gz");
-
-  let py = var_os("PYTHON").ok_or(format!("{}", line!()))?;
+  let py = var_os("PYTHON").ok_or_else(|| format!("{}", Backtrace::capture()))?;
   let libexec = var_os("LIBEXEC")
-    .ok_or(format!("{}", line!()))
-    .map(PathBuf::from)?;
-  let bin = var_os("BIN").ok_or(format!("{}", line!()))?;
+    .map(PathBuf::from)
+    .ok_or_else(|| format!("{}", Backtrace::capture()))?;
+  let bin = var_os("BIN").ok_or_else(|| format!("{}", Backtrace::capture()))?;
 
+  create_dir_all(&tmp)?;
   let mut proc = Command::new(&py)
     .arg(libexec.join("get.py"))
     .arg("--")
     .arg(uri)
     .stdout(Stdio::piped())
     .spawn()?;
+  let stdin = proc
+    .stdout
+    .take()
+    .ok_or_else(|| format!("{}", Backtrace::capture()))?;
   let status = Command::new(&py)
     .arg(libexec.join("unpack.py"))
     .arg("--dst")
     .arg(&tmp)
-    .stdin(proc.stdout.take().ok_or(format!("{}", line!()))?)
+    .stdin(stdin)
     .status()?;
 
   assert!(proc.wait()?.success());
