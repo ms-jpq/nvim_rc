@@ -1,13 +1,14 @@
 vim.filetype.add(
   {
     extension = {
-      env = "env"
+      env = "env",
+      var = "env"
     },
     filename = {
       [".env"] = "env"
     },
     pattern = {
-      [".*/etc/default/.*"] = "env",
+      [".*/etc/default/.*"] = "env"
     }
   }
 )
