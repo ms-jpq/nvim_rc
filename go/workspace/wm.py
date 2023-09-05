@@ -114,6 +114,11 @@ async def _toggle_preview() -> None:
 _ = keymap.n("<leader>h") << f"<cmd>lua {NAMESPACE}.{_toggle_preview.method}()<cr>"
 
 
+# locallist
+_ = keymap.n("<c-p>") << "<cmd>lprevious<cr>"
+_ = keymap.n("<c-n>") << "<cmd>lnext<cr>"
+
+
 # quickfix
 _ = keymap.n("<c-j>") << "<cmd>cprevious<cr>"
 _ = keymap.n("<c-k>") << "<cmd>cnext<cr>"

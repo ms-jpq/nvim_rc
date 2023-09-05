@@ -28,6 +28,7 @@ _ = keymap.n("K") << "<cmd>lua vim.lsp.buf.hover()<cr>"
 _ = keymap.n("gm") << "<cmd>lua vim.lsp.buf.document_symbol()<cr>"
 _ = keymap.n("gM") << "<cmd>lua vim.lsp.buf.workspace_symbol()<cr>"
 
+_ = keymap.n("<leader>d") << "<cmd>lua vim.diagnostic.setloclist()<cr>"
 
 _ = (
     keymap.n("<c-p>")
