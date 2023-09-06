@@ -414,11 +414,11 @@
 #     gem:
 #       - theme-check
 
-- server: emmet_language_server
-  bin: emmet-language-server
-  install:
-    npm:
-      - "@olrtg/emmet-language-server"
+# - server: emmet_language_server
+#   bin: emmet-language-server
+#   install:
+#     npm:
+#       - "@olrtg/emmet-language-server"
 
 - server: terraformls
   bin: terraform-ls
