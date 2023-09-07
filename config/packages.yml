@@ -117,8 +117,8 @@
 - git:
     uri: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 
-- git:
-    uri: https://github.com/nvim-treesitter/nvim-treesitter-context
+# - git:
+#     uri: https://github.com/nvim-treesitter/nvim-treesitter-context
 
 - git:
     mvp: *mvp
