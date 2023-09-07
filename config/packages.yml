@@ -238,10 +238,8 @@
       "g[": prev_hunk
       "g]": next_hunk
       <leader>A: diffthis
-      <leader>B: toggle_word_diff
       <leader>S: undo_stage_hunk
       <leader>a: preview_hunk
-      <leader>b: toggle_deleted
       <leader>c: reset_hunk
       <leader>s: stage_hunk
 
