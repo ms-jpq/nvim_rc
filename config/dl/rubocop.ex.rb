@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 Kernel.require("English")
-Kernel.require("Pathname")
+Kernel.require("pathname")
 
 $ARGV => [filename, *argv]
 
