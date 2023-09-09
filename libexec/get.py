@@ -1,6 +1,7 @@
 #!/usr/bin/env -S -- PYTHONSAFEPATH= python3
 
 from argparse import ArgumentParser, Namespace
+from contextlib import suppress
 from pathlib import Path, PurePosixPath
 from posixpath import normcase
 from shlex import join
@@ -63,9 +64,10 @@ def main() -> None:
         etag.unlink(missing_ok=True)
     try:
         check_call(argv, stdout=stderr.fileno())
-        if tmp.is_file():
+        with suppress(FileNotFoundError):
             tmp.rename(dst)
-        ttag.rename(etag)
+        with suppress(FileNotFoundError):
+            ttag.rename(etag)
     finally:
         tmp.unlink(missing_ok=True)
         ttag.unlink(missing_ok=True)
