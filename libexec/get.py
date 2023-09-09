@@ -63,7 +63,8 @@ def main() -> None:
         etag.unlink(missing_ok=True)
     try:
         check_call(argv, stdout=stderr.fileno())
-        tmp.rename(dst)
+        if tmp.is_file():
+            tmp.rename(dst)
         ttag.rename(etag)
     finally:
         tmp.unlink(missing_ok=True)
