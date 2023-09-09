@@ -1,41 +1,21 @@
 #!/usr/bin/env -S -- PYTHONSAFEPATH= python3
 
 from argparse import ArgumentParser, Namespace
-from collections.abc import Iterator
-from pathlib import Path, PurePath, PurePosixPath
+from pathlib import Path, PurePosixPath
 from posixpath import normcase
+from shlex import join
 from shutil import which
 from subprocess import check_call
 from sys import stderr, stdout
 from textwrap import dedent
-from typing import Union
 from urllib.parse import unquote, urlsplit
-
-
-def _curl(
-    etag: PurePath, src: str, ttag: PurePath, tmp: PurePath, timeout: float
-) -> Iterator[Union[PurePath, str]]:
-    curl = which("curl")
-    assert curl
-    yield curl
-    yield from ("--fail", "--location", "--remote-time", "--no-progress-meter")
-    yield "--max-time"
-    yield str(timeout)
-    yield "--etag-compare"
-    yield etag
-    yield "--etag-save"
-    yield ttag
-    yield "--output"
-    yield tmp
-    yield "--"
-    yield src
 
 
 def _parse_args() -> Namespace:
     parser = ArgumentParser()
     parser.add_argument("src")
     parser.add_argument("dst", nargs="?", default=None)
-    parser.add_argument("--timeout", type=float, default=60.0)
+    parser.add_argument("--timeout", type=float, default=600.0)
     return parser.parse_args()
 
 
@@ -49,17 +29,40 @@ def main() -> None:
     etag = dst.with_name(f"{dst.name}.etag")
     ttag = dst.with_name(f"{dst.name}.ttag")
     tmp = dst.with_name(f"{dst.name}.tmp")
-    curl = tuple(_curl(etag, src=src, ttag=ttag, tmp=tmp, timeout=args.timeout))
+
+    curl = which("curl")
+    assert curl
+    argv = (
+        curl,
+        "--fail",
+        "--location",
+        "--remote-time",
+        "--no-progress-meter",
+        "--max-time",
+        str(args.timeout),
+        "--etag-compare",
+        etag,
+        "--etag-save",
+        ttag,
+        "--output",
+        tmp,
+        "--",
+        src,
+    )
 
     msg = f"""
     {src}
     >>>
     {dst}
     """
-    stderr.write(dedent(msg))
 
+    stderr.write(dedent(msg))
+    stderr.write(join(map(str, argv)))
+
+    if not dst.is_file():
+        etag.unlink(missing_ok=True)
     try:
-        check_call(curl)
+        check_call(argv, stdout=stderr.fileno())
         tmp.rename(dst)
         ttag.rename(etag)
     finally:
