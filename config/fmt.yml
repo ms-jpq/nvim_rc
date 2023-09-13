@@ -133,16 +133,16 @@
         - clojure
       file: clj_fmt.clj
 
-- bin: csscomb
-  args:
-    - --
-    - ${tmpname}
-  type: stream
-  filetypes:
-    - css
-  install:
-    npm:
-      - csscomb
+# - bin: csscomb
+#   args:
+#     - --
+#     - ${tmpname}
+#   type: stream
+#   filetypes:
+#     - css
+#   install:
+#     npm:
+#       - csscomb
 
 - bin: prettier.mjs
   args:
