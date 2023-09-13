@@ -174,17 +174,17 @@
     npm:
       - pyright
 
-- server: pylyzer
-  bin: pylyzer
-  install:
-    pip:
-      - pylyzer
+# - server: pylyzer
+#   bin: pylyzer
+#   install:
+#     pip:
+#       - pylyzer
 
 - server: ruff_lsp
   bin: ruff
   install:
     pip:
-      - ruff
+      - ruff-lsp
 
 - server: hls
   bin: haskell-language-server-wrapper
