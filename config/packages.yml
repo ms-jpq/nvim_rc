@@ -33,7 +33,7 @@
       clients.snippets.user_path: |-
         ~/.config/nvim/pack/modules/start/snips
       keymap:
-        eval_snips: "<leader>j"
+        eval_snips: "<leader>b"
         repeat: "<leader>."
 
 - git:
