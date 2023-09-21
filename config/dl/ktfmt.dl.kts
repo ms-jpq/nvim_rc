@@ -6,6 +6,7 @@ import javax.xml.xpath.XPathFactory
 import kotlin.io.path.Path
 import kotlin.io.path.copyTo
 import kotlin.io.path.createDirectory
+import kotlin.io.path.deleteIfExists
 import kotlin.io.path.deleteRecursively
 
 val root = URI("https://repo1.maven.org/maven2/com/facebook/ktfmt/")
@@ -41,4 +42,5 @@ lib.createDirectory()
 
 file.copyTo(lib.resolve(file.getFileName()))
 
+bin.deleteIfExists()
 proxy.copyTo(bin, true)
