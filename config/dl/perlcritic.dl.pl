@@ -34,7 +34,7 @@ if ( !-d $lib ) {
   $ENV{PERL_MM_OPT}         = "INSTALL_BASE=$tmp";
   $ENV{PERL5LIB}            = catfile( $tmp, 'lib', 'perl5' );
 
-  system( 'timeout', '15m', $cpan, '-T', '-I', '-i', 'Perl::Critic' )
+  system( $cpan, '-T', '-I', '-i', 'Perl::Critic' )
     && croak $CHILD_ERROR;
 
   move( $tmp, $lib );

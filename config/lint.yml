@@ -40,7 +40,6 @@
       required:
         - cpan
         - perl
-        - timeout
       file: perlcritic.dl.pl
 
 - bin: pwsh-lint.ps1

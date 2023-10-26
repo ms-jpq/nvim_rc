@@ -1,4 +1,5 @@
-from asyncio.tasks import as_completed
+from asyncio import create_task
+from asyncio.tasks import as_completed, wait
 from fnmatch import fnmatch
 from itertools import chain, repeat
 from json import dumps, loads
@@ -38,6 +39,7 @@ from ..config.pkgs import GitPkgSpec, pkg_specs
 from ..config.tools import tool_specs
 from ..consts import (
     BIN_DIR,
+    DEADLINE,
     DLEXEC,
     GEM_DIR,
     INSTALL_SCRIPT,
@@ -110,6 +112,25 @@ def _match(match: AbstractSet[str], name: str) -> bool:
     return not match or any(fnmatch(name, m) for m in match)
 
 
+async def _run(
+    *argv: str | PurePath,
+    env: Mapping[str, str] | None = None,
+    cwd: PurePath | None = None,
+) -> CompletedProcess[bytes]:
+    p = call(
+        *argv,
+        env=env,
+        cwd=cwd,
+        check_returncode=set(),
+    )
+    t = create_task(p)
+    done, _ = await wait((t,), timeout=DEADLINE)
+    if done:
+        return await t
+    else:
+        raise TimeoutError(argv)
+
+
 def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     VIM_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -120,7 +141,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                 assert git
                 jobs = f"--jobs={cpu_count()}"
                 if location.is_dir():
-                    p1 = await call(
+                    p1 = await _run(
                         git,
                         "pull",
                         "--recurse-submodules",
@@ -129,10 +150,9 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                         "--force",
                         *(("origin", spec.branch) if spec.branch else ()),
                         cwd=location,
-                        check_returncode=set(),
                     )
                 else:
-                    p1 = await call(
+                    p1 = await _run(
                         git,
                         "clone",
                         "--recurse-submodules",
@@ -143,18 +163,16 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                         "--",
                         spec.uri,
                         location,
-                        check_returncode=set(),
                     )
                 yield spec.uri, p1
 
                 if not p1.returncode and spec.call:
                     arg0, *argv = spec.call
                     if a0 := which(arg0):
-                        p2 = await call(
+                        p2 = await _run(
                             a0,
                             *argv,
                             cwd=location,
-                            check_returncode=set(),
                         )
                         yield "", p2
 
@@ -187,7 +205,7 @@ def _pip(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
         ex = PIP_DIR / RT_SCRIPTS / PurePath(executable).name
 
         async def cont() -> _SortOfMonoid:
-            p = await call(
+            p = await _run(
                 ex,
                 "-m",
                 name,
@@ -196,7 +214,6 @@ def _pip(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
                 "--upgrade",
                 "--",
                 *specs,
-                check_returncode=set(),
             )
             return (("", p),)
 
@@ -207,6 +224,7 @@ def _gem(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     name = "gem"
     if (
         (gem := which(name))
+        and (os != OS.macos or gem != "/usr/bin/gem")
         and (
             specs := {
                 *(
@@ -225,25 +243,23 @@ def _gem(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
         async def cont() -> _SortOfMonoid:
             async def cont() -> AsyncIterator[Tuple[str, CompletedProcess[bytes]]]:
                 assert gem
-                p1 = await call(
+                p1 = await _run(
                     gem,
                     "install",
                     "--install-dir",
                     _GEMS,
                     "--no-document",
                     *specs,
-                    check_returncode=set(),
                 )
                 yield ("", p1)
                 if not p1.returncode:
-                    p2 = await call(
+                    p2 = await _run(
                         executable,
                         LIBEXEC / "binstub.py",
                         "--src",
                         _GEMS,
                         "--dst",
                         GEM_DIR / "bin",
-                        check_returncode=set(),
                     )
                     yield ("", p2)
 
@@ -269,12 +285,11 @@ def _npm(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
                 assert npm
                 packages_json.unlink(missing_ok=True)
 
-                p1 = await call(
+                p1 = await _run(
                     npm,
                     "init",
                     "--yes",
                     cwd=NPM_DIR,
-                    check_returncode=set(),
                 )
                 p = CompletedProcess(
                     args=p1.args,
@@ -296,13 +311,12 @@ def _npm(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
                         dumps(json, check_circular=False, ensure_ascii=False, indent=2)
                     )
 
-                    p2 = await call(
+                    p2 = await _run(
                         npm,
                         "install",
                         "--no-package-lock",
                         "--upgrade",
                         cwd=NPM_DIR,
-                        check_returncode=set(),
                     )
                     yield ("", p2)
 
@@ -338,11 +352,10 @@ def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
             else:
                 argv = (path,)
 
-            p = await call(
+            p = await _run(
                 *argv,
                 env=env,
                 cwd=TMP_DIR,
-                check_returncode=set(),
             )
             return (("", p),)
 

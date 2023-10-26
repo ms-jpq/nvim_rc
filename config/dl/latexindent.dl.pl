@@ -45,7 +45,7 @@ if ( !-d $lib ) {
   my $filename = `get.py -- \Q$uri\E`;
   $CHILD_ERROR && croak $CHILD_ERROR;
 
-  system( 'timeout', '15m', $cpan, '-T', '-I', '-i', @perl_libs )
+  system( $cpan, '-T', '-I', '-i', @perl_libs )
     && croak $CHILD_ERROR;
   system( 'unpack.py', '--dst', $tmp, q{--}, $filename ) && croak $CHILD_ERROR;
 

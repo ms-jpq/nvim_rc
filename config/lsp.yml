@@ -309,7 +309,6 @@
     script:
       required:
         - julia
-        - timeout
       file: julia_ls.dl.jl
 
 - server: phpactor
