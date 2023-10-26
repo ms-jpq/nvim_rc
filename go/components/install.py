@@ -4,7 +4,7 @@ from fnmatch import fnmatch
 from itertools import chain, repeat
 from json import dumps, loads
 from multiprocessing import cpu_count
-from os import environ, linesep, pathsep, sep
+from os import PathLike, environ, linesep, pathsep, sep
 from os.path import normcase
 from pathlib import Path, PurePath
 from shlex import join, split
@@ -14,6 +14,7 @@ from sys import executable, stderr, stdout
 from time import time
 from typing import (
     AbstractSet,
+    Any,
     AsyncIterator,
     Awaitable,
     Iterator,
@@ -113,7 +114,7 @@ def _match(match: AbstractSet[str], name: str) -> bool:
 
 
 async def _run(
-    *argv: str | PurePath,
+    *argv: str | PathLike[Any],
     env: Mapping[str, str] | None = None,
     cwd: PurePath | None = None,
 ) -> CompletedProcess[bytes]:
