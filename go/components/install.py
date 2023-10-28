@@ -20,9 +20,11 @@ from typing import (
     Iterator,
     Mapping,
     MutableSequence,
+    Optional,
     Sequence,
     Tuple,
     TypedDict,
+    Union,
 )
 from venv import EnvBuilder
 
@@ -114,9 +116,9 @@ def _match(match: AbstractSet[str], name: str) -> bool:
 
 
 async def _run(
-    *argv: str | PathLike[Any],
-    env: Mapping[str, str] | None = None,
-    cwd: PurePath | None = None,
+    *argv: Union[str, PathLike[Any]],
+    env: Optional[Mapping[str, str]] = None,
+    cwd: Optional[PurePath] = None,
 ) -> CompletedProcess[bytes]:
     p = call(
         *argv,
