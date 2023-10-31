@@ -129,7 +129,10 @@ async def _run(
     t = create_task(p)
     done, _ = await wait((t,), timeout=DEADLINE)
     if done:
-        return await t
+        try:
+            return await t
+        except OSError as e:
+            raise RuntimeError(argv) from e
     else:
         raise TimeoutError(argv)
 
