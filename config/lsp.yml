@@ -366,14 +366,14 @@
         - jshell
       file: jdtls.sh
 
-- server: prolog_ls
-  bin: prolog-ls
-  args: []
-  install:
-    script:
-      required:
-        - swipl
-      file: prolog_ls.dl.pro
+# - server: prolog_ls
+#   bin: prolog-ls
+#   args: []
+#   install:
+#     script:
+#       required:
+#         - swipl
+#       file: prolog_ls.dl.pro
 
 - server: sqlls
   bin: sql-language-server
