@@ -1,6 +1,5 @@
-from types import NoneType
-
 from pynvim_pp.nvim import Nvim
+from pynvim_pp.types import NoneType
 
 from ..registery import NAMESPACE, atomic, autocmd, rpc, settings
 

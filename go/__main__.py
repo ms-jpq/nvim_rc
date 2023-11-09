@@ -6,11 +6,11 @@ from pathlib import Path, PurePath
 from subprocess import check_call
 from sys import executable, exit, stderr
 from typing import Literal, Sequence, Tuple, Union
-from venv import EnvBuilder
 
 from .consts import IS_WIN, REQUIREMENTS, RT_DIR, RT_PY, TOP_LEVEL
 
-_EX = Path(executable)
+_EXEC = PurePath(executable)
+_EX = Path(executable if IS_WIN else "/usr/bin/python3")
 _EX = _EX.parent.resolve(strict=True) / _EX.name
 _LOCK_FILE = RT_DIR / "requirements.lock"
 
@@ -47,14 +47,7 @@ def main() -> None:
         deps: Sequence[str] = args.deps
 
         if not deps or "runtime" in deps:
-            builder = EnvBuilder(
-                system_site_packages=False,
-                with_pip=True,
-                upgrade=True,
-                symlinks=not IS_WIN,
-                clear=True,
-            )
-            builder.create(RT_DIR)
+            check_call((_EX, "-m", "venv", "--clear", "--", RT_DIR))
             check_call(
                 (
                     RT_PY,
@@ -72,7 +65,7 @@ def main() -> None:
             _LOCK_FILE.write_bytes(req)
 
         if not deps or "packages" in deps:
-            if _EX != RT_PY:
+            if _EXEC != RT_PY:
                 code = check_call(
                     (
                         RT_PY,
@@ -97,7 +90,7 @@ def main() -> None:
         except Exception:
             lock = b""
 
-        assert _EX == RT_PY
+        assert _EXEC == RT_PY
         assert lock == req
 
         from std2.pickle.types import DecodeError

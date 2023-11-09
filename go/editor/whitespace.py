@@ -1,11 +1,11 @@
 from asyncio import gather
-from types import NoneType
 from typing import Iterable, Iterator, Tuple
 
 from pynvim_pp.atomic import Atomic
 from pynvim_pp.buffer import Buffer
 from pynvim_pp.lib import decode, encode
 from pynvim_pp.operators import p_indent
+from pynvim_pp.types import NoneType
 from pynvim_pp.window import Window
 
 from ..registery import NAMESPACE, autocmd, rpc, settings

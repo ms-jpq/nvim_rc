@@ -1,11 +1,11 @@
 from contextlib import suppress
-from types import NoneType
 
 from pynvim_pp.buffer import Buffer
 from pynvim_pp.nvim import Nvim
 from pynvim_pp.preview import preview_windows
 from pynvim_pp.rpc_types import NvimError
 from pynvim_pp.tabpage import Tabpage
+from pynvim_pp.types import NoneType
 from pynvim_pp.window import Window
 
 from ..registery import NAMESPACE, keymap, rpc, settings

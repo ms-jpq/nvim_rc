@@ -4,13 +4,13 @@ from functools import cache
 from itertools import count
 from operator import attrgetter
 from pathlib import Path
-from types import NoneType
 from typing import Any, Optional
 from uuid import uuid4
 
 from pynvim_pp.buffer import Buffer, ExtMark, ExtMarker
 from pynvim_pp.nvim import Nvim
 from pynvim_pp.rpc_types import NvimError
+from pynvim_pp.types import NoneType
 from std2.cell import RefCell
 from std2.pickle.decoder import new_decoder
 

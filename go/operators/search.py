@@ -1,9 +1,9 @@
 from re import escape
-from types import NoneType
 
 from pynvim_pp.buffer import Buffer
 from pynvim_pp.nvim import Nvim
 from pynvim_pp.operators import VisualTypes, operator_marks
+from pynvim_pp.types import NoneType
 
 from ..registery import NAMESPACE, keymap, rpc
 

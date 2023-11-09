@@ -1,13 +1,13 @@
 from fnmatch import fnmatch
 from pathlib import Path
 from shutil import which
-from types import NoneType
 from typing import Any, Mapping, MutableMapping, Optional
 
 from pynvim_pp.handler import GLOBAL_NS
 from pynvim_pp.lib import decode, encode
 from pynvim_pp.nvim import Nvim
 from pynvim_pp.text_object import gen_split
+from pynvim_pp.types import NoneType
 from pynvim_pp.window import Window
 from std2.pickle.decoder import new_decoder
 from std2.pickle.encoder import new_encoder
