@@ -24,6 +24,12 @@
     script:
       file: taplo.sh
 
+- server: typos_lsp
+  bin: typos-lsp
+  install:
+    script:
+      file: typos_ls.sh
+
 - server: lemminx
   bin: lemminx
   args: []

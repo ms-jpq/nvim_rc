@@ -113,7 +113,7 @@ And many setting changes akin to `emacs`' `CUA` mode.
 
 - ...
 
-### Comparion between Vim style thinking and a saner approach with a saner language
+### Comparison between Vim style thinking and a saner approach with a saner language
 
 Prefix: I am not ragging on any of the other plugin authors. In fact I use alot of the plugins written in a VimL style. However, I do think the old way of doing things is a bit insane, as you will see in my comparison.
 
