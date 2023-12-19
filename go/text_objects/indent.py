@@ -9,13 +9,12 @@ from ..registry import NAMESPACE, keymap, rpc
 
 
 def _p_inside(init_lv: int, tabsize: int, lines: Iterable[str]) -> int:
-    n = 0
     for n, line in enumerate(lines):
         lv = p_indent(line, tabsize=tabsize)
         if line and lv < init_lv:
             return n
     else:
-        return n + 1 if n else 0
+        return 1
 
 
 @rpc()
@@ -31,7 +30,7 @@ async def _indent() -> None:
     init_lv = p_indent(curr, tabsize=tabsize)
 
     top = row - _p_inside(init_lv, tabsize=tabsize, lines=reversed(before))
-    btm = row + _p_inside(init_lv, tabsize=tabsize, lines=after)
+    btm = min(len(lines) - 1, row + _p_inside(init_lv, tabsize=tabsize, lines=after))
 
     lines = deque(await buf.get_lines(lo=top, hi=btm + 1))
     while lines:
