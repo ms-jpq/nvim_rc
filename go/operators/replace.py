@@ -6,7 +6,7 @@ from pynvim_pp.nvim import Nvim
 from pynvim_pp.operators import VisualTypes, operator_marks
 from pynvim_pp.window import Window
 
-from ..registery import NAMESPACE, keymap, rpc
+from ..registry import NAMESPACE, keymap, rpc
 
 
 @rpc()

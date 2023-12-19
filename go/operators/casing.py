@@ -3,7 +3,7 @@ from re import RegexFlag, compile
 from pynvim_pp.buffer import Buffer
 from pynvim_pp.operators import VisualTypes, operator_marks
 
-from ..registery import NAMESPACE, keymap, rpc
+from ..registry import NAMESPACE, keymap, rpc
 
 
 @rpc()

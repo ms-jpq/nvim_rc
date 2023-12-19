@@ -1,4 +1,4 @@
-from ..registery import settings
+from ..registry import settings
 
 # ui for cmd auto complete
 settings["wildmenu"] = True

@@ -1,6 +1,6 @@
 from pynvim_pp.buffer import Buffer
 
-from ..registery import NAMESPACE, atomic, rpc, settings
+from ..registry import NAMESPACE, atomic, rpc, settings
 
 # do not exec arbitrary code
 settings["nomodeline"] = True

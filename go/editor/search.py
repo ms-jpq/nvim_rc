@@ -1,4 +1,4 @@
-from ..registery import keymap, settings
+from ..registry import keymap, settings
 
 # search results shown on side
 settings["inccommand"] = "nosplit"

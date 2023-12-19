@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from ..registery import atomic
+from ..registry import atomic
 
 _status = Path(__file__).with_suffix(".lua").read_text("UTF-8")
 

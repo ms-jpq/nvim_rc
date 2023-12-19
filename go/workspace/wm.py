@@ -8,7 +8,7 @@ from pynvim_pp.tabpage import Tabpage
 from pynvim_pp.types import NoneType
 from pynvim_pp.window import Window
 
-from ..registery import NAMESPACE, keymap, rpc, settings
+from ..registry import NAMESPACE, keymap, rpc, settings
 
 # hide background buffers
 settings["hidden"] = True

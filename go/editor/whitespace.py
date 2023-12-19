@@ -8,7 +8,7 @@ from pynvim_pp.operators import p_indent
 from pynvim_pp.types import NoneType
 from pynvim_pp.window import Window
 
-from ..registery import NAMESPACE, autocmd, rpc, settings
+from ..registry import NAMESPACE, autocmd, rpc, settings
 
 # join only add 1 space
 settings["nojoinspaces"] = True

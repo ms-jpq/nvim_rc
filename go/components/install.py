@@ -55,7 +55,7 @@ from ..consts import (
     UPDATE_LOG,
     VIM_DIR,
 )
-from ..registery import LANG
+from ..registry import LANG
 from ..workspace.terminal import open_term
 from .rtp import p_name
 

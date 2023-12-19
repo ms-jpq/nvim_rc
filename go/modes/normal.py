@@ -2,7 +2,7 @@ from uuid import uuid4
 
 from pynvim_pp.window import Window
 
-from ..registery import NAMESPACE, autocmd, rpc
+from ..registry import NAMESPACE, autocmd, rpc
 
 # fix cursor pos moving 1 back
 _BUF_VAR_NAME = f"buf_cursor_pos_{uuid4().hex}"

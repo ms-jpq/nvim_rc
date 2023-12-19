@@ -12,9 +12,9 @@ from std2.locale import si_prefixed_smol
 from std2.platform import OS, os
 from std2.sys import autodie
 
-from ._registery import ____
+from ._registry import ____
 from .components.install import maybe_install
-from .registery import drain
+from .registry import drain
 
 assert ____ or 1
 

@@ -5,7 +5,7 @@ from pynvim_pp.lib import encode
 from pynvim_pp.operators import p_indent, set_visual_selection
 from pynvim_pp.window import Window
 
-from ..registery import NAMESPACE, keymap, rpc
+from ..registry import NAMESPACE, keymap, rpc
 
 
 def _p_inside(init_lv: int, tabsize: int, lines: Iterable[str]) -> int:

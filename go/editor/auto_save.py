@@ -1,7 +1,7 @@
 from pynvim_pp.buffer import Buffer
 from pynvim_pp.nvim import Nvim
 
-from ..registery import NAMESPACE, autocmd, keymap, rpc, settings
+from ..registry import NAMESPACE, autocmd, keymap, rpc, settings
 
 # auto load changes
 settings["autoread"] = True

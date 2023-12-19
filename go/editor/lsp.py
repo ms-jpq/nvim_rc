@@ -14,7 +14,7 @@ from std2.pickle.encoder import new_encoder
 from std2.types import never
 
 from ..config.lsp import LspAttrs, RootPattern, RPFallback, lsp_specs
-from ..registery import LANG, NAMESPACE, atomic, keymap, rpc
+from ..registry import LANG, NAMESPACE, atomic, keymap, rpc
 from ..text_objects.word import UNIFIYING_CHARS
 
 _LSP_INIT = (Path(__file__).resolve(strict=True).parent / "lsp.lua").read_text("UTF-8")

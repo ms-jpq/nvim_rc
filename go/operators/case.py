@@ -4,7 +4,7 @@ from typing import Iterator
 from pynvim_pp.lib import decode, encode
 from pynvim_pp.window import Window
 
-from ..registery import NAMESPACE, keymap, rpc
+from ..registry import NAMESPACE, keymap, rpc
 
 _PAIRS = {"-": "_"}
 

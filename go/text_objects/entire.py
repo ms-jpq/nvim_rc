@@ -2,7 +2,7 @@ from pynvim_pp.lib import encode
 from pynvim_pp.operators import set_visual_selection
 from pynvim_pp.window import Window
 
-from ..registery import NAMESPACE, keymap, rpc
+from ..registry import NAMESPACE, keymap, rpc
 
 
 @rpc()

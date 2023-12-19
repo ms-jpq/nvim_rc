@@ -4,7 +4,7 @@ from pynvim_pp.buffer import Buffer
 from pynvim_pp.operators import VisualTypes, operator_marks
 from pynvim_pp.window import Window
 
-from ..registery import NAMESPACE, keymap, rpc, settings
+from ..registry import NAMESPACE, keymap, rpc, settings
 
 settings["commentstring"] = r"#\ %s"
 

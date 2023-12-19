@@ -16,7 +16,7 @@ from std2.asyncio.subprocess import call
 from std2.lex import ParseError
 
 from ..config.fmt import FmtAttrs, FmtType, fmt_specs
-from ..registery import LANG, NAMESPACE, keymap, rpc
+from ..registry import LANG, NAMESPACE, keymap, rpc
 from .linter import BufContext, arg_subst, current_ctx, mktemp, set_preview_content
 from .whitespace import detect_tabs, trailing_ws
 

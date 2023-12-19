@@ -1,4 +1,4 @@
-from ..registery import keymap
+from ..registry import keymap
 
 # dont shift move too much
 _ = keymap.v("<s-up>") << "g<up>"

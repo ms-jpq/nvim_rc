@@ -1,6 +1,6 @@
 from shutil import which
 
-from ..registery import NAMESPACE, keymap, rpc
+from ..registry import NAMESPACE, keymap, rpc
 from ..workspace.terminal import open_term
 
 

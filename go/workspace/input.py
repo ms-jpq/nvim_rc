@@ -2,7 +2,7 @@ from os import environ
 
 from pynvim_pp.window import Window
 
-from ..registery import NAMESPACE, atomic, autocmd, keymap, rpc, settings
+from ..registry import NAMESPACE, atomic, autocmd, keymap, rpc, settings
 
 # waiting time within a key sequence
 settings["timeoutlen"] = 500

@@ -4,7 +4,7 @@ from shutil import which
 from pynvim_pp.nvim import Nvim
 from std2.asyncio.subprocess import call
 
-from ..registery import LANG, NAMESPACE, atomic, keymap, rpc
+from ..registry import LANG, NAMESPACE, atomic, keymap, rpc
 
 
 @rpc()

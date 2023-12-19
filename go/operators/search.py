@@ -5,7 +5,7 @@ from pynvim_pp.nvim import Nvim
 from pynvim_pp.operators import VisualTypes, operator_marks
 from pynvim_pp.types import NoneType
 
-from ..registery import NAMESPACE, keymap, rpc
+from ..registry import NAMESPACE, keymap, rpc
 
 
 # search and highlight

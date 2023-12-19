@@ -7,7 +7,7 @@ from pynvim_pp.buffer import Buffer, ExtMark, ExtMarker
 from pynvim_pp.nvim import Nvim
 from pynvim_pp.rpc_types import NvimError
 
-from ..registery import NAMESPACE, atomic, autocmd, rpc
+from ..registry import NAMESPACE, atomic, autocmd, rpc
 
 _NS = uuid4()
 

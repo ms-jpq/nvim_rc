@@ -1,6 +1,6 @@
 from collections.abc import Iterator
 
-from ..registery import keymap
+from ..registry import keymap
 
 # move w linewrap
 _ = keymap.nv("<up>") << "g<up>"

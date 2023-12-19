@@ -3,7 +3,7 @@ from pynvim_pp.operators import set_visual_selection
 from pynvim_pp.text_object import gen_split
 from pynvim_pp.window import Window
 
-from ..registery import NAMESPACE, keymap, rpc
+from ..registry import NAMESPACE, keymap, rpc
 
 UNIFIYING_CHARS = frozenset(("_", "-"))
 

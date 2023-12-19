@@ -21,7 +21,7 @@ from std2.lex import ParseError, envsubst
 
 from ..config.linter import LinterAttrs, LinterType, linter_specs
 from ..consts import DATE_FMT
-from ..registery import LANG, NAMESPACE, keymap, rpc
+from ..registry import LANG, NAMESPACE, keymap, rpc
 
 
 @dataclass(frozen=True)

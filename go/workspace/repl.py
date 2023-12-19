@@ -20,7 +20,7 @@ from pynvim_pp.window import Window
 from std2.asyncio.subprocess import call
 
 from ..consts import TOP_LEVEL
-from ..registery import LANG, NAMESPACE, keymap, rpc
+from ..registry import LANG, NAMESPACE, keymap, rpc
 
 _REPL_SCRIPTS = TOP_LEVEL / "repl"
 

@@ -2,7 +2,7 @@ from pynvim_pp.nvim import Nvim
 from pynvim_pp.operators import operator_marks, set_visual_selection
 from pynvim_pp.window import Window
 
-from ..registery import NAMESPACE, keymap, rpc
+from ..registry import NAMESPACE, keymap, rpc
 
 
 @rpc()

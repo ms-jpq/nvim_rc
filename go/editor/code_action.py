@@ -14,7 +14,7 @@ from pynvim_pp.types import NoneType
 from std2.cell import RefCell
 from std2.pickle.decoder import new_decoder
 
-from ..registery import LANG, NAMESPACE, atomic, autocmd, keymap, rpc
+from ..registry import LANG, NAMESPACE, atomic, autocmd, keymap, rpc
 
 _NS = uuid4()
 _HL = "LspDiagnosticsDefaultInformation"
