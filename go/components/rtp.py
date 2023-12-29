@@ -12,15 +12,15 @@ from ..config.pkgs import PkgAttrs, pkg_specs
 from ..consts import VIM_DIR
 
 
-def p_name(manual: bool, uri: str) -> Path:
-    return VIM_DIR / {True: "opt", False: "start"}[manual] / uri_path(uri).name
+def p_name(opt: bool, uri: str) -> Path:
+    return VIM_DIR / {True: "opt", False: "start"}[opt] / uri_path(uri).name
 
 
-def _inst(packages: Iterable[PkgAttrs]) -> Atomic:
+def _inst(packages: Iterable[PkgAttrs], cmds: Iterable[str]) -> Atomic:
     pkgs = {
         path: spec
         for path, spec in (
-            (p_name(spec.manual, uri=spec.git.uri), spec) for spec in packages
+            (p_name(spec.opt, uri=spec.git.uri), spec) for spec in packages
         )
         if path.exists()
     }
@@ -37,7 +37,8 @@ def _inst(packages: Iterable[PkgAttrs]) -> Atomic:
             atomic1.set_var(lhs, rhs)
 
     atomic2 = Atomic()
-    atomic2.command("packloadall")
+    for cmd in cmds:
+        atomic2.command(cmd)
 
     for spec in pkgs.values():
         if code := spec.lua:
@@ -69,10 +70,11 @@ def _inst(packages: Iterable[PkgAttrs]) -> Atomic:
 
 
 def inst() -> Atomic:
-    pkgs = (spec for spec in pkg_specs if not spec.manual)
-    return _inst(pkgs)
+    pkgs = (spec for spec in pkg_specs if not spec.opt)
+    return _inst(pkgs, cmds=("packloadall",))
 
 
 def inst_later() -> Atomic:
-    pkgs = (spec for spec in pkg_specs if spec.manual)
-    return _inst(pkgs)
+    pkgs = tuple(spec for spec in pkg_specs if spec.opt)
+    cmds = (f"packadd {uri_path(pkg.git.uri).name}" for pkg in pkgs)
+    return _inst(pkgs, cmds=cmds)

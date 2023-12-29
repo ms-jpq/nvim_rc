@@ -163,10 +163,12 @@
 - git:
     mvp: *mvp
     uri: https://github.com/ms-jpq/snips
+  opt: true
 
 - git:
     mvp: *mvp
     uri: https://github.com/ms-jpq/coq.artifacts
+  opt: true
 
 - git:
     mvp: *mvp
@@ -229,7 +231,7 @@
 
 - git:
     uri: https://github.com/lewis6991/gitsigns.nvim
-  manual: true
+  opt: true
   lua: |-
     require('gitsigns').setup(vim.g.git_opts)
     local gs = package.loaded.gitsigns
@@ -257,18 +259,18 @@
 
 - git:
     uri: https://github.com/github/copilot.vim
-  manual: true
+  opt: true
 
 - git:
     uri: https://github.com/Exafunction/codeium.vim
-  manual: true
+  opt: true
   vals:
     codeium_no_map_tab: True
     codeium_render: False
 
 - git:
     uri: https://github.com/TabbyML/vim-tabby
-  manual: true
+  opt: true
   vals:
     tabby_trigger_mode: manual
   viml: call tabby#OnVimEnter()

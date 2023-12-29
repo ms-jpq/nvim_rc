@@ -187,7 +187,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
 
         for spec in pkg_specs:
             if not mvp or spec.git.mvp:
-                location = p_name(spec.manual, uri=spec.git.uri)
+                location = p_name(spec.opt, uri=spec.git.uri)
                 if _match(match, name=location.name):
                     yield cont(spec.git, location=location)
 
