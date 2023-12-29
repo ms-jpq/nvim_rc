@@ -144,11 +144,14 @@
       # - src: builtin/php
       # - src: builtin/xml
 
-      # - accept_key: <c-f>
-      #   short_name: COP
-      #   src: copilot
+      - accept_key: <c-f>
+        short_name: COP
+        src: copilot
       - short_name: COD
         src: codeium
+      - short_name: TAB
+        src: tabby
+
       - src: repl
       # - short_name: MATH
       #   src: bc
@@ -271,8 +274,6 @@
 - git:
     uri: https://github.com/TabbyML/vim-tabby
   opt: true
-  vals:
-    tabby_trigger_mode: manual
   lua: |-
     vim.fn["tabby#OnVimEnter"]()
 
