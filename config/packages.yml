@@ -144,9 +144,9 @@
       # - src: builtin/php
       # - src: builtin/xml
 
-      - accept_key: <c-f>
-        short_name: COP
-        src: copilot
+      # - accept_key: <c-f>
+      #   short_name: COP
+      #   src: copilot
       - short_name: COD
         src: codeium
       - src: repl
@@ -222,7 +222,14 @@
     uri: https://github.com/tpope/vim-unimpaired
 
 - git:
+    mvp: *mvp
+    uri: https://github.com/cocopon/iceberg.vim
+  lua: |-
+    vim.cmd [[colorscheme iceberg]]
+
+- git:
     uri: https://github.com/lewis6991/gitsigns.nvim
+  manual: true
   lua: |-
     require('gitsigns').setup(vim.g.git_opts)
     local gs = package.loaded.gitsigns
@@ -249,19 +256,22 @@
 #     vim.cmd [[colorscheme dayfox]]
 
 - git:
-    mvp: *mvp
-    uri: https://github.com/cocopon/iceberg.vim
-  lua: |-
-    vim.cmd [[colorscheme iceberg]]
-
-- git:
     uri: https://github.com/github/copilot.vim
+  manual: true
 
 - git:
     uri: https://github.com/Exafunction/codeium.vim
+  manual: true
   vals:
     codeium_no_map_tab: True
     codeium_render: False
+
+- git:
+    uri: https://github.com/TabbyML/vim-tabby
+  manual: true
+  vals:
+    tabby_trigger_mode: manual
+  viml: call tabby#OnVimEnter()
 # - git:
 #     uri: https://github.com/lervag/vimtex
 #   vals:

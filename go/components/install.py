@@ -138,7 +138,8 @@ async def _run(
 
 
 def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
-    VIM_DIR.mkdir(parents=True, exist_ok=True)
+    for dir in ("start", "opt"):
+        (VIM_DIR / dir).mkdir(parents=True, exist_ok=True)
 
     if git := which("git"):
 
@@ -186,7 +187,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
 
         for spec in pkg_specs:
             if not mvp or spec.git.mvp:
-                location = p_name(spec.git.uri)
+                location = p_name(spec.manual, uri=spec.git.uri)
                 if _match(match, name=location.name):
                     yield cont(spec.git, location=location)
 

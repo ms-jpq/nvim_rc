@@ -11,15 +11,17 @@ from ..config.pkgs import pkg_specs
 from ..consts import VIM_DIR
 
 
-def p_name(uri: str) -> Path:
-    return VIM_DIR / uri_path(uri).name
+def p_name(manual: bool, uri: str) -> Path:
+    return VIM_DIR / {True: "opt", False: "start"}[manual] / uri_path(uri).name
 
 
 def inst() -> Atomic:
     pkgs = {
         path: spec
-        for path, spec in ((p_name(spec.git.uri), spec) for spec in pkg_specs)
-        if path.exists()
+        for path, spec in (
+            (p_name(spec.manual, uri=spec.git.uri), spec) for spec in pkg_specs
+        )
+        if not spec.manual and path.exists()
     }
 
     atomic1 = Atomic()
@@ -52,7 +54,7 @@ def inst() -> Atomic:
             atomic2.exec_lua(dedent(lua), ())
 
         if code := spec.viml:
-            lua = f"""
+            lua = """
             (function(viml)
             local _, err = pcall(vim.cmd, viml)
             if err then
