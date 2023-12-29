@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from dataclasses import asdict
 from operator import attrgetter
 from pathlib import Path
@@ -7,7 +8,7 @@ from pynvim_pp.atomic import Atomic
 from pynvim_pp.keymap import Keymap
 from std2.urllib import uri_path
 
-from ..config.pkgs import pkg_specs
+from ..config.pkgs import PkgAttrs, pkg_specs
 from ..consts import VIM_DIR
 
 
@@ -15,13 +16,13 @@ def p_name(manual: bool, uri: str) -> Path:
     return VIM_DIR / {True: "opt", False: "start"}[manual] / uri_path(uri).name
 
 
-def inst() -> Atomic:
+def _inst(packages: Iterable[PkgAttrs]) -> Atomic:
     pkgs = {
         path: spec
         for path, spec in (
-            (p_name(spec.manual, uri=spec.git.uri), spec) for spec in pkg_specs
+            (p_name(spec.manual, uri=spec.git.uri), spec) for spec in packages
         )
-        if not spec.manual and path.exists()
+        if path.exists()
     }
 
     atomic1 = Atomic()
@@ -65,3 +66,13 @@ def inst() -> Atomic:
             atomic2.exec_lua(dedent(lua), (code,))
 
     return atomic1 + keymap.drain(buf=None) + atomic2
+
+
+def inst() -> Atomic:
+    pkgs = (spec for spec in pkg_specs if not spec.manual)
+    return _inst(pkgs)
+
+
+def inst_later() -> Atomic:
+    pkgs = (spec for spec in pkg_specs if spec.manual)
+    return _inst(pkgs)
