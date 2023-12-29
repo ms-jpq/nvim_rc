@@ -273,7 +273,9 @@
   opt: true
   vals:
     tabby_trigger_mode: manual
-  viml: call tabby#OnVimEnter()
+  lua: |-
+    vim.fn["tabby#OnVimEnter"]()
+
 # - git:
 #     uri: https://github.com/lervag/vimtex
 #   vals:
