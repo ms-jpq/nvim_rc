@@ -166,12 +166,10 @@
 - git:
     mvp: *mvp
     uri: https://github.com/ms-jpq/snips
-  opt: true
 
 - git:
     mvp: *mvp
     uri: https://github.com/ms-jpq/coq.artifacts
-  opt: true
 
 - git:
     mvp: *mvp
