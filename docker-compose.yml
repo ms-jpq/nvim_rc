@@ -1,0 +1,23 @@
+---
+services:
+  srv:
+    image: docker.io/tabbyml/tabby:latest
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
+    command:
+      - serve
+      - --model
+      - TabbyML/StarCoder-1B
+      - --device
+      - cuda
+    ports:
+      - "8080:8080"
+    volumes:
+      - /mnt/tabby:/data
