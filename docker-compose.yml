@@ -14,7 +14,7 @@ services:
     command:
       - serve
       - --model
-      - TabbyML/StarCoder-1B
+      - TabbyML/DeepseekCoder-6.7B
       - --device
       - cuda
     ports:
