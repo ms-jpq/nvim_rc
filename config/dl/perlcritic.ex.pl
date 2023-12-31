@@ -11,5 +11,5 @@ my $dir = dirname(__FILE__);
 my $lib = catfile( $dir, '..', 'lib', 'perlcritic.pl' );
 
 $ENV{PERL5LIB} = catfile( $lib, 'lib', 'perl5' );
-exec catfile( $lib, 'bin', 'perlcritic' ), @ARGV;
+exec 'perl', '-CASD', catfile( $lib, 'bin', 'perlcritic' ), @ARGV;
 croak $ERRNO;
