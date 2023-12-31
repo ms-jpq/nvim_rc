@@ -23,5 +23,6 @@ TMP="$(mktemp -d)"
 get.py -- "$URI" | unpack.py --dst "$TMP"
 # shellcheck disable=2154
 rm -rf -- "$LIB"
+chmod +x "$TMP"/*/{bin/*,jre/bin/*}
 mv -f -- "$TMP"/* "$LIB"
 rm -rf -- "$TMP"
