@@ -73,8 +73,10 @@
     texlab:
       build:
         args:
-          - --keep-logs
+          - -X
+          - compile
           - --keep-intermediates
+          - --keep-logs
           - --synctex
           - --
           - "%f"

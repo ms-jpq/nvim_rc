@@ -160,8 +160,8 @@
         trigger: "!big"
       - src: cow
         trigger: "!cow"
-      # - src: vimtex
-      #   short_name: vTEX
+      - src: vimtex
+        short_name: vTEX
 
 - git:
     mvp: *mvp
@@ -275,8 +275,9 @@
   lua: |-
     vim.fn["tabby#OnVimEnter"]()
 
-# - git:
-#     uri: https://github.com/lervag/vimtex
-#   vals:
-#     vimtex_compiler_method: tectonic
-#     vimtex_view_enabled: false
+- git:
+    uri: https://github.com/lervag/vimtex
+  opt: true
+  vals:
+    vimtex_compiler_method: tectonic
+    vimtex_view_enabled: false
