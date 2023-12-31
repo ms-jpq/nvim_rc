@@ -18,15 +18,17 @@ services:
       - --device
       - cuda
     ports:
-      - "8080:8080"
+      - 8080:8080
     volumes:
       - /mnt/tabby:/data
 
-  # sonarqube:
-  #   image: docker.io/library/sonarqube:community
-  #   restart: unless-stopped
-  #   ports:
-  #     - 9000:9000
-  #   volumes:
-  #     - /mnt/sonarqube/data:/opt/sonarqube/data
-  #     - /mnt/sonarqube/logs:/opt/sonarqube/logs
+  sonarqube:
+    image: docker.io/library/sonarqube:latest
+    restart: unless-stopped
+    environment:
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: true
+    ports:
+      - 9000:9000
+    volumes:
+      - /mnt/sonarqube/data:/opt/sonarqube/data
+      - /mnt/sonarqube/logs:/opt/sonarqube/logs
