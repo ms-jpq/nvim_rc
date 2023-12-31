@@ -8,16 +8,23 @@ NAME="$(basename -- "$PWD")"
 KEY="$(jq --raw-input --raw-output '@uri' <<<"$NAME")"
 
 export -- SONAR_USER_HOME="${XDG_CACHE_HOME:-"$HOME/.cache"}/sonar"
+VARS="$SONAR_USER_HOME/vars"
+
+if ! [[ -f "$VARS" ]]; then
+  # shellcheck disable=SC2154
+  "$EDITOR" "$VARS"
+fi
+
+# shellcheck disable=1090
+source -- "$VARS"
 
 EXEC=(
   "$BIN"
   --define sonar.projectKey="$KEY"
   --define sonar.projectName="$NAME"
-  --define sonar.login=admin
-  --define sonar.host.url="$1"
-  --define sonar.password="$2"
+  --define sonar.login="${SONAR_LOGIN:-"admin"}"
+  --define sonar.host.url="$SONAR_HOST_URL"
+  --define sonar.password="$SONAR_PASSWORD"
 )
-
-shift -- 2
 
 exec -- "${EXEC[@]}" "$@"
