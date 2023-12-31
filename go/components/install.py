@@ -108,7 +108,8 @@ def _script_specs() -> Iterator[Tuple[str, ScriptSpec]]:
     for f_spec in fmt_specs:
         yield f_spec.bin, f_spec.install.script
     for t_spec in tool_specs.script:
-        yield "", t_spec
+        if file := t_spec.file:
+            yield file.stem, t_spec
 
 
 def _match(match: AbstractSet[str], name: str) -> bool:

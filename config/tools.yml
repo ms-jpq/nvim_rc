@@ -1,3 +1,6 @@
 ---
 npm:
   - tree-sitter-cli
+
+script:
+  - file: sonar-scanner.sh
