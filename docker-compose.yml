@@ -1,6 +1,6 @@
 ---
 services:
-  srv:
+  tabby:
     image: docker.io/tabbyml/tabby:latest
     restart: unless-stopped
     deploy:
@@ -21,3 +21,12 @@ services:
       - "8080:8080"
     volumes:
       - /mnt/tabby:/data
+
+  # sonarqube:
+  #   image: docker.io/library/sonarqube:community
+  #   restart: unless-stopped
+  #   ports:
+  #     - 9000:9000
+  #   volumes:
+  #     - /mnt/sonarqube/data:/opt/sonarqube/data
+  #     - /mnt/sonarqube/logs:/opt/sonarqube/logs
