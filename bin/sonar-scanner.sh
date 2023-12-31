@@ -7,6 +7,8 @@ BIN="$(dirname "$REAL")/../var/lib/sonar-scanner/bin/sonar-scanner"
 NAME="$(basename -- "$PWD")"
 KEY="$(jq --raw-input --raw-output '@uri' <<<"$NAME")"
 
+export -- SONAR_USER_HOME="${XDG_CACHE_HOME:-"$HOME/.cache"}/sonar"
+
 EXEC=(
   "$BIN"
   --define sonar.projectKey="$KEY"
