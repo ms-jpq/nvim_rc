@@ -29,6 +29,7 @@ if ( !-d $lib ) {
   my $tmp       = File::Temp->newdir();
   my $tmp_lib   = File::Temp->newdir();
   my $perl_libd = "$tmp_lib/perl";
+  my $tar_libd  = "$tmp_lib/lib";
   my @perl_libs = qw{YAML::Tiny File::HomeDir Unicode::GCString};
 
   $ENV{HOME}                = $perl_libd;
@@ -50,7 +51,7 @@ if ( !-d $lib ) {
   system( 'unpack.py', '--dst', $tmp, q{--}, $filename ) && croak $CHILD_ERROR;
 
   my @globbed = glob "\Q$tmp\E/*";
-  move( @globbed, $tmp_lib );
+  move( @globbed, $tar_libd );
   move( $tmp_lib, $lib );
 
   rmtree($tmp);

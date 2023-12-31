@@ -11,5 +11,5 @@ my $dir = dirname(__FILE__);
 my $lib = catfile( $dir, '..', 'lib', 'latexindent.pl' );
 
 $ENV{PERL5LIB} = catfile( $lib, 'perl', 'lib', 'perl5' );
-exec catfile( $lib, 'latexindent.pl' ), @ARGV;
+exec catfile( $lib, 'lib', 'latexindent.pl' ), @ARGV;
 croak $ERRNO;
