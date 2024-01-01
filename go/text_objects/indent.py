@@ -9,16 +9,13 @@ from ..registry import NAMESPACE, keymap, rpc
 
 
 def _p_inside(init_lv: int, tabsize: int, lines: Sequence[str]) -> int:
-    if init_lv == 0:
-        return len(lines)
+    n = 0
+    for n, line in enumerate(lines, start=1):
+        lv = p_indent(line, tabsize=tabsize)
+        if line and lv < init_lv:
+            return n - 1
     else:
-        n = 0
-        for n, line in enumerate(lines):
-            lv = p_indent(line, tabsize=tabsize)
-            if line and lv < init_lv:
-                return n
-        else:
-            return n + 1 if n else 0
+        return n
 
 
 @rpc()
