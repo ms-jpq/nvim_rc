@@ -20,8 +20,12 @@
         end
       end
 
-      cfg = coq.lsp_ensure_capabilities(cfg)
-      cfg = chad.lsp_ensure_capabilities(cfg)
+      if coq ~= nil then
+        cfg = coq.lsp_ensure_capabilities(cfg)
+      end
+      if chad ~= nil then
+        cfg = chad.lsp_ensure_capabilities(cfg)
+      end
 
       if has_server then
         lsp[server].setup(cfg)

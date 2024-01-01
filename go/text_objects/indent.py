@@ -1,5 +1,5 @@
 from collections import deque
-from typing import Iterable
+from collections.abc import Sequence
 
 from pynvim_pp.lib import encode
 from pynvim_pp.operators import p_indent, set_visual_selection
@@ -8,13 +8,17 @@ from pynvim_pp.window import Window
 from ..registry import NAMESPACE, keymap, rpc
 
 
-def _p_inside(init_lv: int, tabsize: int, lines: Iterable[str]) -> int:
-    for n, line in enumerate(lines):
-        lv = p_indent(line, tabsize=tabsize)
-        if line and lv < init_lv:
-            return n
+def _p_inside(init_lv: int, tabsize: int, lines: Sequence[str]) -> int:
+    if init_lv == 0:
+        return len(lines)
     else:
-        return 1
+        n = 0
+        for n, line in enumerate(lines):
+            lv = p_indent(line, tabsize=tabsize)
+            if line and lv < init_lv:
+                return n
+        else:
+            return n + 1 if n else 0
 
 
 @rpc()
@@ -29,7 +33,7 @@ async def _indent() -> None:
     before, curr, after = lines[:row], lines[row], lines[row + 1 :]
     init_lv = p_indent(curr, tabsize=tabsize)
 
-    top = row - _p_inside(init_lv, tabsize=tabsize, lines=reversed(before))
+    top = row - _p_inside(init_lv, tabsize=tabsize, lines=tuple(reversed(before)))
     btm = min(len(lines) - 1, row + _p_inside(init_lv, tabsize=tabsize, lines=after))
 
     lines = deque(await buf.get_lines(lo=top, hi=btm + 1))
