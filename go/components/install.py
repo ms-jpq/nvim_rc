@@ -179,7 +179,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                     a00 = (
                         Path(executable).resolve(strict=True)
                         if arg0 in {"python", "python3"}
-                        else arg0
+                        else Path(arg0)
                     )
                     if a0 := which(a00):
                         p2 = await _run(

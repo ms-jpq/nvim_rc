@@ -1,3 +1,4 @@
+import sys
 from asyncio import Task, create_task, sleep
 from os.path import normcase, normpath
 from pathlib import Path
@@ -10,7 +11,12 @@ from std2.cell import RefCell
 
 from ..registry import NAMESPACE, autocmd, rpc, settings
 
-_CELL = RefCell[Optional[Task]](None)
+if sys.version_info >= (3, 9):
+    _T = Task[None]
+else:
+    _T = Task
+
+_CELL = RefCell[Optional[_T]](None)
 
 settings["sessionoptions"] -= ("blank", "buffers")
 settings["sessionoptions"] += ("skiprtp",)
