@@ -176,7 +176,11 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
 
                 if not p1.returncode and spec.call:
                     arg0, *argv = spec.call
-                    a00 = executable if arg0 in {"python", "python3"} else arg0
+                    a00 = (
+                        Path(executable).resolve(strict=True)
+                        if arg0 in {"python", "python3"}
+                        else arg0
+                    )
                     if a0 := which(a00):
                         p2 = await _run(
                             a0,
