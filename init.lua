@@ -7,6 +7,9 @@ local l1 = function()
   vim.opt.modeline = false
   vim.opt.secure = true
   vim.opt.termguicolors = true
+  if not is_win then
+    vim.g.python3_host_prog = "/usr/bin/python3"
+  end
 end
 
 local l2 = function()

@@ -8,9 +8,12 @@ from pynvim_pp.nvim import Nvim
 from std2.asyncio import cancel
 from std2.cell import RefCell
 
-from ..registry import NAMESPACE, autocmd, rpc
+from ..registry import NAMESPACE, autocmd, rpc, settings
 
 _CELL = RefCell[Optional[Task]](None)
+
+settings["sessionoptions"] -= ("blank", "buffers")
+settings["sessionoptions"] += ("skiprtp",)
 
 
 async def _session_path() -> Tuple[Path, str]:
