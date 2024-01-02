@@ -1,10 +1,13 @@
 import sys
 from asyncio import Task, create_task, sleep
+from contextlib import suppress
+from os import environ
 from os.path import normcase, normpath
 from pathlib import Path
 from typing import Optional, Tuple
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 
+from pynvim_pp.buffer import Buffer
 from pynvim_pp.nvim import Nvim
 from std2.asyncio import cancel
 from std2.cell import RefCell
@@ -33,9 +36,18 @@ async def _session_path() -> Tuple[Path, str]:
 
 @rpc(schedule=True)
 async def restore() -> None:
-    path, vim = await _session_path()
-    if path.is_file():
-        await Nvim.exec(f"source {vim}")
+    if "CLEAN" not in environ:
+        bufs = await Buffer.list(False)
+        for buf in bufs:
+            if name := await buf.get_name():
+                with suppress(ValueError):
+                    uri = urlsplit(name)
+                    if uri.scheme == "man":
+                        break
+        else:
+            path, vim = await _session_path()
+            if path.is_file():
+                await Nvim.exec(f"source {vim}")
 
 
 @rpc()
