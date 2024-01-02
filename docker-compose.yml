@@ -13,10 +13,10 @@ services:
                 - gpu
     command:
       - serve
-      - --model
-      - TabbyML/DeepseekCoder-6.7B
       - --device
       - cuda
+      - --model
+      - TabbyML/DeepseekCoder-6.7B
     ports:
       - 8080:8080
     volumes:
