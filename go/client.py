@@ -1,10 +1,11 @@
 from contextlib import AbstractAsyncContextManager
+from operator import attrgetter
 from os import environ
 from time import time
 from typing import Any, Sequence
 
 from pynvim_pp.logging import log, suppress_and_log
-from pynvim_pp.nvim import conn
+from pynvim_pp.nvim import Nvim, conn
 from pynvim_pp.rpc_types import Method, MsgType, ServerAddr
 from pynvim_pp.types import NoneType
 from std2.contextlib import nullacontext
@@ -37,7 +38,7 @@ async def _default(msg: MsgType, method: Method, params: Sequence[Any]) -> None:
 async def _once() -> None:
     atomic = inst_later()
     await atomic.commit(NoneType)
-    await restore()
+    await attrgetter(restore.method)(attrgetter(NAMESPACE)(Nvim.lua))(NoneType)
 
 
 _ = (

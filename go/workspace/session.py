@@ -22,6 +22,7 @@ async def _session_path() -> Tuple[Path, str]:
     return vim, escaped
 
 
+@rpc(schedule=True)
 async def restore() -> None:
     path, vim = await _session_path()
     if path.is_file():
