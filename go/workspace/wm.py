@@ -61,9 +61,9 @@ _ = keymap.n("<leader>-") << f"<cmd>lua {NAMESPACE}.{_new_window.method}(false)<
 # kill current buf
 _ = keymap.n("<leader>x") << "<cmd>bwipeout!<cr>"
 # close self
-_ = keymap.n("<leader>w") << f"<cmd>close<cr>"
+_ = keymap.n("<leader>w") << "<cmd>close<cr>"
 # close others
-_ = keymap.n("<leader>W") << f"<cmd>wincmd o<cr>"
+_ = keymap.n("<leader>W") << "<cmd>wincmd o<cr>"
 
 
 # break window into tab

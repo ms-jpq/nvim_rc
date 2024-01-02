@@ -6,11 +6,10 @@ from pynvim_pp.handler import RPC
 from pynvim_pp.keymap import Keymap
 from pynvim_pp.rpc_types import Method, RPCallable
 from pynvim_pp.settings import Settings
-from pynvim_pp.types import NoneType
 from std2.platform import OS, os
 
 from .components.localization import load
-from .components.rtp import inst, inst_later
+from .components.rtp import inst
 from .consts import PATH
 
 NAMESPACE = "__INIT__"
@@ -23,16 +22,6 @@ rpc = RPC(NAMESPACE)
 settings = Settings()
 
 
-@rpc()
-async def _once() -> None:
-    atomic = inst_later()
-    await atomic.commit(NoneType)
-
-
-_ = (
-    autocmd("CursorHold", modifiers=("*", "++once"))
-    << f"lua {NAMESPACE}.{_once.method}()"
-)
 
 
 def drain() -> tuple[Atomic, Mapping[Method, RPCallable[None]]]:

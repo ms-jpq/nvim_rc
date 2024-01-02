@@ -11,9 +11,6 @@ settings["secure"] = True
 # use bash as shell
 settings["shell"] = "bash"
 
-# vim session state
-settings["shada"] += "!"
-
 # min lines changed to report
 settings["report"] = 0
 

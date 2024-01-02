@@ -14,7 +14,9 @@ from std2.sys import autodie
 
 from ._registry import ____
 from .components.install import maybe_install
-from .registry import drain
+from .components.rtp import inst_later
+from .registry import NAMESPACE, autocmd, drain, rpc
+from .workspace.session import restore
 
 assert ____ or 1
 
@@ -29,6 +31,19 @@ def _autodie(ppid: int) -> AbstractAsyncContextManager[None]:
 async def _default(msg: MsgType, method: Method, params: Sequence[Any]) -> None:
     with suppress_and_log():
         assert False, (msg, method, params)
+
+
+@rpc()
+async def _once() -> None:
+    atomic = inst_later()
+    await atomic.commit(NoneType)
+    await restore()
+
+
+_ = (
+    autocmd("CursorHold", modifiers=("*", "++once"))
+    << f"lua {NAMESPACE}.{_once.method}()"
+)
 
 
 async def init(socket: ServerAddr, ppid: int) -> None:

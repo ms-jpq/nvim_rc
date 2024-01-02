@@ -12,6 +12,7 @@ from .workspace import (
     misc,
     navigation,
     repl,
+    session,
     statusline,
     theme,
     wm,
@@ -43,6 +44,7 @@ assert prettier
 assert repl
 assert replace
 assert search
+assert session
 assert sort
 assert statusline
 assert terminal
