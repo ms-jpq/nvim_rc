@@ -28,7 +28,7 @@ async def _session_path() -> Tuple[Path, str]:
     state = await Nvim.fn.stdpath(str, "state")
     cwd = await Nvim.getcwd()
     path = Path(state) / "sessions" / quote(normcase(cwd.as_posix()), safe="")
-    vim = path.with_suffix(".vim")
+    vim = Path(f"{path}.vim")
     escaped = await Nvim.fn.fnameescape(str, normpath(vim))
     return vim, escaped
 
