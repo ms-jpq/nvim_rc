@@ -93,11 +93,14 @@ local l3 = function()
     server
   }
   local params = {
-    cwd = cwd,
     on_exit = on_exit,
     on_stdout = on_stdout,
     on_stderr = on_stderr,
-    env = {_VIM_START_TIME = tostring(t1)}
+    env = {
+      _VIM_START_TIME = tostring(t1),
+      PYTHONSAFEPATH = "1",
+      PYTHONPATH = cwd
+    }
   }
   vim.fn.jobstart(args, params)
 end
