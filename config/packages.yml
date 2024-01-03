@@ -277,6 +277,16 @@
   opt: true
   lua: |-
     vim.fn["tabby#OnVimEnter"]()
+    vim.fn.jobstart(
+      {"timeout", "1", "nslookp", "example.com"},
+      {
+        on_exit = function(_, code)
+          if code ~= 0 then
+            vim.cmd [[augroup! tabby]]
+          end
+        end
+      }
+    )
 
 - git:
     uri: https://github.com/lervag/vimtex
