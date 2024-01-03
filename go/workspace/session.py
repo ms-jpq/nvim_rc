@@ -20,7 +20,7 @@ else:
 
 _CELL = RefCell[Optional[_T]](None)
 
-settings["sessionoptions"] -= ("blank", "buffers")
+settings["sessionoptions"] -= ("blank", "buffers", "curdir")
 settings["sessionoptions"] += ("skiprtp",)
 
 
