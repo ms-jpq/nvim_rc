@@ -43,7 +43,7 @@ async def restore() -> None:
         else:
             path, vim = await _session_path()
             if path.is_file():
-                await Nvim.exec(f"source {vim}")
+                await Nvim.exec(f"silent source {vim}")
 
 
 @rpc()
