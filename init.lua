@@ -93,6 +93,7 @@ local l3 = function()
     server
   }
   local params = {
+    cwd = cwd,
     on_exit = on_exit,
     on_stdout = on_stdout,
     on_stderr = on_stderr,
