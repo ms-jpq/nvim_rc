@@ -4,16 +4,16 @@
         '[java.nio.file Files Paths StandardCopyOption]
         '[java.nio.file.attribute FileAttribute PosixFilePermissions])
 
+(def arch (System/getProperty "os.arch"))
 (def os (System/getProperty "os.name"))
-
 (def base "https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp-native")
 
 (def uri
   (str base "-"
        (case (System/getProperty "os.name")
-         "Linux" "static-linux-amd64.zip"
-         "Mac OS X" "macos-aarch64.zip"
-         "windows-amd64.zip")))
+         "Linux" (str "static-linux-" arch ".zip")
+         "Mac OS X" (str "macos-" arch ".zip")
+         (str "windows-" arch ".zip"))))
 
 (def bin (let [b (System/getenv "BIN")
                ext (case os

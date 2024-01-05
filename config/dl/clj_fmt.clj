@@ -7,6 +7,7 @@
  '[clojure.string :refer [join]]
  '[clojure.java.shell :refer [sh]])
 
+(def arch (System/getProperty "os.arch"))
 (def repo "weavejester/cljfmt")
 (def base (str "https://github.com/" repo "/releases/latest/download/cljfmt"))
 (def version
@@ -18,9 +19,9 @@
 (def uri
   (join "-" [base version
              (case (System/getProperty "os.name")
-               "Linux" "linux-amd64-static.tar.gz"
-               "Mac OS X" "darwin-aarch64.tar.gz"
-               "win-amd64.zip")]))
+               "Linux" (str "linux-" arch "-static.tar.gz")
+               "Mac OS X" (str "darwin-" arch ".tar.gz")
+               (str "win-" arch ".zip"))]))
 
 (def bin (let [b (System/getenv "BIN")
                ext (case (System/getProperty "os.name")

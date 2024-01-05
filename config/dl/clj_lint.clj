@@ -7,6 +7,7 @@
  '[clojure.string :refer [join replace]]
  '[clojure.java.shell :refer [sh]])
 
+(def arch (System/getProperty "os.arch"))
 (def repo "clj-kondo/clj-kondo")
 (def base (str "https://github.com/" repo "/releases/latest/download/clj-kondo"))
 (def version
@@ -18,9 +19,9 @@
 (def uri
   (join "-" [base version
              (case (System/getProperty "os.name")
-               "Linux" "linux-static-amd64.zip"
-               "Mac OS X" "macos-aarch64.zip"
-               "windows-amd64.zip")]))
+               "Linux" (str "linux-static-" arch ".zip")
+               "Mac OS X" (str "macos-" arch ".zip")
+               (str "windows-" arch ".zip"))]))
 
 (def bin (let [b (System/getenv "BIN")
                ext (case (System/getProperty "os.name")
