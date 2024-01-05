@@ -8,15 +8,24 @@ HREF="$(curl --fail-with-body --location --no-progress-meter --max-time 60 -- "$
 VERSION="${HREF%%/}"
 VERSION="${VERSION##*/}"
 
-case "$OSTYPE" in
-darwin*)
-  NAME=darwin_arm64
-  ;;
-linux*)
-  NAME=linux_amd64
+case "$HOSTTYPE" in
+aarch64)
+  HT='arm64'
   ;;
 *)
-  NAME=windows_amd64
+  HT='amd64'
+  ;;
+esac
+
+case "$OSTYPE" in
+darwin*)
+  NAME="darwin_$HT"
+  ;;
+linux*)
+  NAME="linux_$HT"
+  ;;
+*)
+  NAME="windows_$HT"
   ;;
 esac
 

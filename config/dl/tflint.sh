@@ -4,15 +4,24 @@ set -o pipefail
 
 BASE='https://github.com/terraform-linters/tflint/releases/latest/download/tflint'
 
-case "$OSTYPE" in
-darwin*)
-  URI="${BASE}_darwin_arm64.zip"
-  ;;
-linux*)
-  URI="${BASE}_linux_amd64.zip"
+case "$HOSTTYPE" in
+aarch64)
+  HT='arm64'
   ;;
 *)
-  URI="${BASE}_windows_amd64.zip"
+  HT='amd64'
+  ;;
+esac
+
+case "$OSTYPE" in
+darwin*)
+  URI="${BASE}_darwin_$HT.zip"
+  ;;
+linux*)
+  URI="${BASE}_linux_$HT.zip"
+  ;;
+*)
+  URI="${BASE}_windows_$HT.zip"
   ;;
 esac
 

@@ -7,15 +7,24 @@ BASE="https://github.com/$REPO/releases/latest/download/golangci-lint"
 VERSION="$(gh-latest.sh "$REPO")"
 VERSION="${VERSION#v}"
 
-case "$OSTYPE" in
-darwin*)
-  URI="$BASE-$VERSION-darwin-arm64.tar.gz"
-  ;;
-linux*)
-  URI="$BASE-$VERSION-linux-amd64.tar.gz"
+case "$HOSTTYPE" in
+aarch64)
+  HT='arm64'
   ;;
 *)
-  URI="$BASE-$VERSION-windows-amd64.zip"
+  HT='amd64'
+  ;;
+esac
+
+case "$OSTYPE" in
+darwin*)
+  URI="$BASE-$VERSION-darwin-$HT.tar.gz"
+  ;;
+linux*)
+  URI="$BASE-$VERSION-linux-$HT.tar.gz"
+  ;;
+*)
+  URI="$BASE-$VERSION-windows-$HT.zip"
   BIN="$BIN.exe"
   ;;
 esac

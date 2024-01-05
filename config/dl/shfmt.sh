@@ -6,15 +6,24 @@ REPO='mvdan/sh'
 BASE="https://github.com/$REPO/releases/latest/download/shfmt"
 VERSION="$(gh-latest.sh "$REPO")"
 
-case "$OSTYPE" in
-darwin*)
-  URI="${BASE}_${VERSION}_darwin_arm64"
-  ;;
-linux*)
-  URI="${BASE}_${VERSION}_linux_amd64"
+case "$HOSTTYPE" in
+aarch64)
+  HT='arm64'
   ;;
 *)
-  URI="${BASE}_${VERSION}_windows_amd64.exe"
+  HT='amd64'
+  ;;
+esac
+
+case "$OSTYPE" in
+darwin*)
+  URI="${BASE}_${VERSION}_darwin_$HT"
+  ;;
+linux*)
+  URI="${BASE}_${VERSION}_linux_$HT"
+  ;;
+*)
+  URI="${BASE}_${VERSION}_windows_$HT.exe"
   BIN="$BIN.exe"
   ;;
 esac
