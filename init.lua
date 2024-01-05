@@ -1,15 +1,14 @@
 local is_win = vim.fn.has("win32") == 1
 local t1 = vim.fn.localtime()
 local cwd = vim.fn.stdpath("config")
+local py = is_win and "python.exe" or "/usr/bin/python3"
 
 local l1 = function()
   vim.opt.loadplugins = false
   vim.opt.modeline = false
   vim.opt.secure = true
   vim.opt.termguicolors = true
-  if not is_win then
-    vim.g.python3_host_prog = "/usr/bin/python3"
-  end
+  vim.g.python3_host_prog = py
 end
 
 local l2 = function()
@@ -63,12 +62,12 @@ local l3 = function()
   end
 
   local main = function()
-    local py = is_win and "python.exe" or "python3"
     local vpy = (function()
+      local py2 = is_win and "python.exe" or "python3"
       if is_win then
-        return cwd .. "/var/runtime/Scripts/" .. py
+        return cwd .. "/var/runtime/Scripts/" .. py2
       else
-        return cwd .. "/var/runtime/bin/" .. py
+        return cwd .. "/var/runtime/bin/" .. py2
       end
     end)()
     if vim.fn.filereadable(vpy) == 1 then

@@ -25,21 +25,27 @@ else
 ENVS :=
 endif
 
+OS := $(shell printf -- '%s' "$$OSTYPE")
+ifeq ($(OS), msys)
+PY := python.exe
+else
+PY := /usr/bin/python3
+endif
 
 runtime: var/runtime/requirements.lock
 var/runtime/requirements.lock:
-	$(ENVS) python3 -m go deps runtime
+	$(ENVS) $(PY) -m go deps runtime
 
 pack/modules/start/chadtree:
-	$(ENVS) python3 -m go deps runtime packages mvp
+	$(ENVS) $(PY) -m go deps runtime packages mvp
 
 mvp: pack/modules/start/chadtree
 
 patch: var/runtime/requirements.lock
-	$(ENVS) python3 -m go deps packages
+	$(ENVS) $(PY) -m go deps packages
 
 install:
-	$(ENVS) python3 -m go deps
+	$(ENVS) $(PY) -m go deps
 
 .venv/bin/python3:
 	python3 -m venv -- .venv
