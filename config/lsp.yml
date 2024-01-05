@@ -411,15 +411,11 @@
     npm:
       - ansible-language-server
 
-# - server: glslls
-#   bin: glslls
-#   install:
-#     script:
-#       file: glsl_ls.sh
-#       required:
-#         - cmake
-#         - git
-#         - python3
+- server: glsl_analyzer
+  bin: glsl_analyzer
+  install:
+    script:
+      file: glsl_analyzer.sh
 
 # - server: theme_check
 #   bin: theme-check-language-server
