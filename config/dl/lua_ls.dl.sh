@@ -6,15 +6,24 @@ REPO='LuaLS/lua-language-server'
 BASE="https://github.com/$REPO/releases/latest/download/lua-language-server"
 VERSION="$(gh-latest.sh "$REPO")"
 
-case "$OSTYPE" in
-darwin*)
-  URI="$BASE-$VERSION-darwin-arm64.tar.gz"
-  ;;
-linux*)
-  URI="$BASE-$VERSION-linux-x64.tar.gz"
+case "$HOSTTYPE" in
+aarch64)
+  HT='arm64'
   ;;
 *)
-  URI="$BASE-$VERSION-win32-x64.zip"
+  HT='x64'
+  ;;
+esac
+
+case "$OSTYPE" in
+darwin*)
+  URI="$BASE-$VERSION-darwin-$HT.tar.gz"
+  ;;
+linux*)
+  URI="$BASE-$VERSION-linux-$HT.tar.gz"
+  ;;
+*)
+  URI="$BASE-$VERSION-win32-$HT.zip"
   BIN="$BIN.bat"
   ;;
 esac

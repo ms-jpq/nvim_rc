@@ -12,6 +12,7 @@ let libexec = Environment.GetEnvironmentVariable "LIBEXEC"
 let proxy = Path.Combine(__SOURCE_DIRECTORY__, "omnisharp.ex.sh")
 let tmp = Directory.CreateTempSubdirectory().FullName
 
+let arch = Runtime.InteropServices.Architecture()
 let win = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
 
 match win with
@@ -26,9 +27,9 @@ let uri =
     if RuntimeInformation.IsOSPlatform(OSPlatform.OSX) then
         sprintf "%s-%s" base_uri "osx-arm64-net6.0.tar.gz"
     elif RuntimeInformation.IsOSPlatform(OSPlatform.Linux) then
-        sprintf "%s-%s" base_uri "linux-x64-net6.0.tar.gz"
+        sprintf "%s-%s-%A-%s" base_uri "linux-" arch "-net6.0.tar.gz"
     else
-        sprintf "%s-%s" base_uri "win-x64-net6.0.zip"
+        sprintf "%s-%s-%A-%s" base_uri "win-" arch "-net6.0.zip"
 
 let bin =
     let ext = if win then ".sh" else null
