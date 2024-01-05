@@ -237,11 +237,11 @@
 # - server: typeprof
 #   bin: typeprof
 
-- server: ruby_ls
-  bin: ruby-lsp
-  install:
-    gem:
-      - ruby-lsp
+# - server: ruby_ls
+#   bin: ruby-lsp
+#   install:
+#     gem:
+#       - ruby-lsp
 
 # - server: solargraph
 #   bin: solargraph
