@@ -4,15 +4,24 @@ set -o pipefail
 
 BASE='https://github.com/hadolint/hadolint/releases/latest/download/hadolint'
 
+case "$HOSTTYPE" in
+aarch64)
+  HT='arm64'
+  ;;
+*)
+  HT="$HOSTTYPE"
+  ;;
+esac
+
 case "$OSTYPE" in
 darwin*)
   URI="$BASE-Darwin-x86_64"
   ;;
 linux*)
-  URI="$BASE-Linux-x86_64"
+  URI="$BASE-Linux-$HT"
   ;;
 *)
-  URI="$BASE-Windows-x86_64.exe"
+  URI="$BASE-Windows-$HT.exe"
   BIN="$BIN.exe"
   ;;
 esac

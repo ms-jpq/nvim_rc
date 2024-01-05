@@ -6,13 +6,13 @@ BASE='https://github.com/tamasfe/taplo/releases/latest/download/taplo-full'
 
 case "$OSTYPE" in
 darwin*)
-  URI="$BASE-darwin-aarch64.gz"
+  URI="$BASE-darwin-$HOSTTYPE.gz"
   ;;
 linux*)
-  URI="$BASE-linux-x86_64.gz"
+  URI="$BASE-linux-$HOSTTYPE.gz"
   ;;
 *)
-  URI="$BASE-windows-x86_64.zip"
+  URI="$BASE-windows-$HOSTTYPE.zip"
   BIN="$BIN.exe"
   ;;
 esac

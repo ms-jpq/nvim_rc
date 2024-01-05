@@ -8,13 +8,13 @@ VERSION="$(gh-latest.sh "$REPO")"
 
 case "$OSTYPE" in
 darwin*)
-  URI="$BASE-$VERSION-aarch64-apple-darwin.tar.gz"
+  URI="$BASE-$VERSION-$HOSTTYPE-apple-darwin.tar.gz"
   ;;
 linux*)
-  URI="$BASE-$VERSION-x86_64-unknown-linux-gnu.tar.gz"
+  URI="$BASE-$VERSION-$HOSTTYPE-unknown-linux-gnu.tar.gz"
   ;;
 *)
-  URI="$BASE-$VERSION-x86_64-pc-windows-msvc.zip"
+  URI="$BASE-$VERSION-$HOSTTYPE-pc-windows-msvc.zip"
   ;;
 esac
 

@@ -11,7 +11,7 @@ darwin*)
   URI="$BASE-$VERSION.darwin.x86_64.tar.xz"
   ;;
 linux*)
-  URI="$BASE-$VERSION.linux.x86_64.tar.xz"
+  URI="$BASE-$VERSION.linux.$HOSTTYPE.tar.xz"
   ;;
 *)
   exit 0

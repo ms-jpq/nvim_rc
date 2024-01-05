@@ -7,17 +7,20 @@ BASE='https://github.com/nolanderc/glsl_analyzer/releases/latest/download'
 case "$OSTYPE" in
 darwin*)
   URI="$BASE/$HOSTTYPE-macos.zip"
+  EXT=''
   ;;
 linux*)
   URI="$BASE/$HOSTTYPE-linux-musl.zip"
+  EXT=''
   ;;
 *)
   URI="$BASE/$HOSTTYPE-windows.zip"
-  BIN="$BIN.exe"
+  EXT='.exe'
   ;;
 esac
+BIN="$BIN$EXT"
 
 TMP="$(mktemp -d)"
 get.py -- "$URI" | unpack.py --dst "$TMP"
-install -v -b -- "$TMP/"*/glsl_analyzer* "$BIN"
+install -v -b -- "$TMP/bin/glsl_analyzer$EXT" "$BIN"
 rm -v -fr -- "$TMP"
