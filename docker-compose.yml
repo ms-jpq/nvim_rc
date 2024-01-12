@@ -21,6 +21,3 @@ services:
       - 8080:8080
     volumes:
       - /mnt/tabby:/data
-
-volumes:
-  logs:
