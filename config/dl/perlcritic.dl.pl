@@ -37,7 +37,7 @@ if ( !-d $lib ) {
   system( $cpan, '-T', '-I', '-i', 'Perl::Critic' )
     && croak $CHILD_ERROR;
 
-  move( $tmp, $lib );
+  system( "mv", "--", $tmp, $lib ) && croak $CHILD_ERROR;
 }
 
 foreach my $name (@names) {

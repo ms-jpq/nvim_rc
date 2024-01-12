@@ -51,8 +51,8 @@ if ( !-d $lib ) {
   system( 'unpack.py', '--dst', $tmp, q{--}, $filename ) && croak $CHILD_ERROR;
 
   my @globbed = glob "\Q$tmp\E/*";
-  move( @globbed, $tar_libd );
-  move( $tmp_lib, $lib );
+  system( 'mv', '-f', "--", @globbed, $tar_libd ) && croak $CHILD_ERROR;
+  system( 'mv', '-f', "--", $tmp_lib, $lib )      && croak $CHILD_ERROR;
 
   rmtree($tmp);
 }
