@@ -37,7 +37,7 @@ run os = do
     >>= putStr
 
   _ <- removePathForcibly lib
-  _ <- renameDirectory srv lib
+  _ <- readProcess "mv" ["-v", "-f", "--", srv, lib] ""
   _ <- getEnv "BIN" >>= copyFileWithMetadata tramp
   _ <- removePathForcibly tmp
   exitSuccess
