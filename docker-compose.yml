@@ -22,15 +22,5 @@ services:
     volumes:
       - /mnt/tabby:/data
 
-  sonarqube:
-    image: docker.io/library/sonarqube:latest
-    restart: unless-stopped
-    ports:
-      - 9000:9000
-    volumes:
-      - /mnt/sonarqube/data:/opt/sonarqube/data
-      - /mnt/sonarqube/extensions:/opt/sonarqube/extensions
-      - logs:/opt/sonarqube/logs
-
 volumes:
   logs:
