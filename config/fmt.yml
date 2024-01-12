@@ -17,6 +17,13 @@
     - json
     - jsonc
 
+# - bin: sortd
+#   args:
+#     - toml
+#   type: stream
+#   filetypes:
+#     - gitconfig
+
 - bin: taplo
   args:
     - format
