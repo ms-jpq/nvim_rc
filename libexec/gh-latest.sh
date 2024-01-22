@@ -2,11 +2,16 @@
 
 set -o pipefail
 
-REPO="$1"
-CACHE="$PWD/${REPO/\//.}.cache"
+TMP="$1"
+REPO="$2"
+NAME="${REPO/\//.}"
+CACHE="$TMP/$NAME.cache"
+
+mkdir -v -p -- "$TMP" >&2
 
 if ! [[ -v LOCKED ]] && command -v -- flock >/dev/null; then
-  LOCKED=1 exec -- flock "$0" "$0" "$@"
+  LOCK="$TMP/$NAME.lock"
+  LOCKED=1 exec -- flock "$LOCK" "$0" "$@"
 fi
 
 if [[ -f "$CACHE" ]]; then

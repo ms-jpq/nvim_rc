@@ -86,7 +86,7 @@
            MOVE SPACES TO SH.
            MOVE SPACES TO TMP.
 
-           STRING "gh-latest.sh" " " REPO " " SPIT
+           STRING "gh-latest.sh" " . " REPO " " SPIT
            DELIMITED SIZE INTO SH.
            CALL "SYSTEM" USING SH RETURNING RETVAL.
            IF RETVAL NOT = 0

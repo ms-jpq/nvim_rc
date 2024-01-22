@@ -25,7 +25,7 @@ nameof _       = id
 run "mingw32" = exitSuccess
 run os = do
   tmp <- readProcess "mktemp" ["-d"] ""
-  version <- readProcess "gh-latest.sh" [repo] ""
+  version <- readProcess "gh-latest.sh" [".", repo] ""
 
   let link = uri os version
   let name = nameof os link & takeBaseName

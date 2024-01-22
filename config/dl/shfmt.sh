@@ -4,7 +4,7 @@ set -o pipefail
 
 REPO='mvdan/sh'
 BASE="https://github.com/$REPO/releases/latest/download/shfmt"
-VERSION="$(gh-latest.sh "$REPO")"
+VERSION="$(gh-latest.sh . "$REPO")"
 
 case "$HOSTTYPE" in
 aarch64)

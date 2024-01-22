@@ -4,7 +4,7 @@ set -o pipefail
 
 REPO='tekumara/typos-vscode'
 BASE="https://github.com/$REPO/releases/latest/download/typos-lsp"
-VERSION="$(gh-latest.sh "$REPO")"
+VERSION="$(gh-latest.sh . "$REPO")"
 
 case "$OSTYPE" in
 darwin*)

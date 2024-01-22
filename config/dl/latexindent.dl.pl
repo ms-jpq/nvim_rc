@@ -39,7 +39,7 @@ if ( !-d $lib ) {
   $ENV{PERL5LIB}            = catfile( $perl_libd, 'lib', 'perl5' );
 
   my $repo = 'cmhughes/latexindent.pl';
-  my $tag  = `gh-latest.sh \Q$repo\E`;
+  my $tag  = `gh-latest.sh . \Q$repo\E`;
   $CHILD_ERROR && croak $CHILD_ERROR;
 
   my $uri      = "https://github.com/$repo/archive/refs/tags/$tag.tar.gz";

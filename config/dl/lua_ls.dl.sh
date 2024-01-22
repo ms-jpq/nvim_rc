@@ -4,7 +4,7 @@ set -o pipefail
 
 REPO='LuaLS/lua-language-server'
 BASE="https://github.com/$REPO/releases/latest/download/lua-language-server"
-VERSION="$(gh-latest.sh "$REPO")"
+VERSION="$(gh-latest.sh . "$REPO")"
 
 case "$HOSTTYPE" in
 aarch64)

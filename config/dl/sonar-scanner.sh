@@ -4,7 +4,7 @@ set -o pipefail
 
 REPO='SonarSource/sonar-scanner-cli'
 BASE='https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli'
-VERSION="$(gh-latest.sh "$REPO")"
+VERSION="$(gh-latest.sh . "$REPO")"
 
 case "$OSTYPE" in
 darwin*)

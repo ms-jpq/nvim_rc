@@ -4,7 +4,7 @@ set -o pipefail
 
 REPO='koalaman/shellcheck'
 BASE="https://github.com/$REPO/releases/latest/download/shellcheck"
-VERSION="$(gh-latest.sh "$REPO")"
+VERSION="$(gh-latest.sh . "$REPO")"
 
 case "$OSTYPE" in
 darwin*)

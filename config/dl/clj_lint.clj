@@ -11,7 +11,7 @@
 (def repo "clj-kondo/clj-kondo")
 (def base (str "https://github.com/" repo "/releases/latest/download/clj-kondo"))
 (def version
-  (let [{:keys [exit err out]} (sh "gh-latest.sh" repo)]
+  (let [{:keys [exit err out]} (sh "gh-latest.sh" "." repo)]
     (print err)
     (assert (zero? exit))
     (replace out #"^v" "")))

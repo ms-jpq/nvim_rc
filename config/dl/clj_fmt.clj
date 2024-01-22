@@ -11,7 +11,7 @@
 (def repo "weavejester/cljfmt")
 (def base (str "https://github.com/" repo "/releases/latest/download/cljfmt"))
 (def version
-  (let [{:keys [exit err out]} (sh "gh-latest.sh" repo)]
+  (let [{:keys [exit err out]} (sh "gh-latest.sh" "." repo)]
     (print err)
     (assert (zero? exit))
     out))
