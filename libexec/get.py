@@ -2,6 +2,7 @@
 
 from argparse import ArgumentParser, Namespace
 from contextlib import suppress
+from datetime import datetime, timedelta, timezone
 from pathlib import Path, PurePosixPath
 from posixpath import normcase
 from shlex import join
@@ -62,6 +63,14 @@ def main() -> None:
 
     if not dst.is_file():
         etag.unlink(missing_ok=True)
+
+    with suppress(FileNotFoundError):
+        st = etag.stat()
+        date = datetime.fromtimestamp(st.st_mtime, tz=timezone.utc)
+        now = datetime.now(timezone.utc)
+        if (now - date) >= timedelta(hours=1):
+            etag.unlink(missing_ok=True)
+
     try:
         check_call(argv, stdout=stderr.fileno())
         with suppress(FileNotFoundError):
