@@ -68,7 +68,7 @@ def main() -> None:
         st = etag.stat()
         date = datetime.fromtimestamp(st.st_mtime, tz=timezone.utc)
         now = datetime.now(timezone.utc)
-        if (now - date) >= timedelta(hours=1):
+        if abs(now - date) >= timedelta(hours=1):
             etag.unlink(missing_ok=True)
 
     try:
