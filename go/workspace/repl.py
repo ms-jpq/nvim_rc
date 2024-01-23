@@ -45,6 +45,8 @@ async def _marks_clear(visual: bool) -> None:
         await buf.clear_namespace(ns)
         await buf.vars.set(str(_NS), val=None)
 
+    await Nvim.write(LANG("cls"))
+
 
 _ = keymap.n("<leader>E") << f"<cmd>lua {NAMESPACE}.{_marks_clear.method}(false)<cr>"
 _ = (
