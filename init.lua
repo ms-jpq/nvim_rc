@@ -12,11 +12,12 @@ local l1 = function()
 end
 
 local l2 = function()
-  vim.api.nvim_set_keymap("n", "q", "<nop>", {noremap = true})
-  vim.api.nvim_set_keymap("n", "Q", "<esc>", {noremap = true})
-  vim.api.nvim_set_keymap("n", "QQ", "<cmd>quitall!<cr>", {noremap = true})
-  vim.api.nvim_set_keymap("v", "QQ", "<cmd>quitall!<cr>", {noremap = true})
-  vim.api.nvim_set_keymap("v", "Q", "<nop>", {noremap = true})
+  for _, mode in pairs({"n", "v"}) do
+    vim.api.nvim_set_keymap(mode, "Q", "<nop>", {noremap = true})
+    vim.api.nvim_set_keymap(mode, "q", "<nop>", {noremap = true})
+    vim.api.nvim_set_keymap(mode, "qq", "<cmd>%bwipeout<cr>", {noremap = true})
+    vim.api.nvim_set_keymap(mode, "QQ", "<cmd>quitall!<cr>", {noremap = true})
+  end
   vim.opt.shortmess:append("I")
 
   vim.api.nvim_create_user_command(
