@@ -4,7 +4,8 @@ vim.filetype.add(
       tfstate = "json"
     },
     filename = {
-      [".swcrc"] = "json"
+      [".swcrc"] = "json",
+      ["terraform.tfstate.backup"] = "json"
     }
   }
 )
