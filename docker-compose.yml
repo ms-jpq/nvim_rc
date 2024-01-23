@@ -18,6 +18,6 @@ services:
       - --model
       - TabbyML/DeepseekCoder-6.7B
     ports:
-      - 8080:8080
+      - 6060:8080
     volumes:
       - /mnt/tabby:/data
