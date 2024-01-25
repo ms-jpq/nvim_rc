@@ -1,8 +1,21 @@
 ---
 services:
+  watchtower:
+    image: docker.io/containrrr/watchtower:latest
+    restart: unless-stopped
+    labels:
+      com.centurylinklabs.watchtower.enable: true
+    environment:
+      WATCHTOWER_CLEANUP: true
+      WATCHTOWER_LABEL_ENABLE: true
+    volumes:
+      - /run/docker.sock:/var/run/docker.sock:ro
+
   tabby:
     image: docker.io/tabbyml/tabby:latest
     restart: unless-stopped
+    labels:
+      com.centurylinklabs.watchtower.enable: true
     deploy:
       resources:
         reservations:
