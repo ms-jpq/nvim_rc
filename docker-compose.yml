@@ -29,7 +29,7 @@ services:
       - --device
       - cuda
       - --model
-      - TabbyML/DeepseekCoder-6.7B
+      - TabbyML/CodeLlama-7B
     ports:
       - 6060:8080
     volumes:
