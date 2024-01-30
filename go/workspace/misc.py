@@ -4,6 +4,8 @@ from ..registry import NAMESPACE, atomic, keymap, rpc, settings
 
 # Prevent goto tags
 _ = keymap.nv("<c-]>") << "<cmd>%bwipeout<cr>"
+
+# Prevent macro recording
 _ = keymap.n("q") << "<nop>"
 
 # do not exec arbitrary code
