@@ -14,8 +14,6 @@ end
 local l2 = function()
   for _, mode in pairs({"n", "v"}) do
     vim.api.nvim_set_keymap(mode, "Q", "<nop>", {noremap = true})
-    vim.api.nvim_set_keymap(mode, "q", "<nop>", {noremap = true})
-    vim.api.nvim_set_keymap(mode, "qq", "<cmd>%bwipeout<cr>", {noremap = true})
     vim.api.nvim_set_keymap(mode, "QQ", "<cmd>quitall!<cr>", {noremap = true})
   end
   vim.opt.shortmess:append("I")

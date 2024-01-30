@@ -3,7 +3,7 @@ from pynvim_pp.buffer import Buffer
 from ..registry import NAMESPACE, atomic, keymap, rpc, settings
 
 # Prevent goto tags
-_ = keymap.nv("<c-]>") << "<nop>"
+_ = keymap.nv("<c-]>") << "<cmd>%bwipeout<cr>"
 
 # do not exec arbitrary code
 settings["nomodeline"] = True
