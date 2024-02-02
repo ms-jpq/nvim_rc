@@ -29,15 +29,12 @@
       auto_start: True
       clients:
         registers.lines: ["z"]
-      clients.snippets.user_path: |-
-        ~/.config/nvim/pack/modules/start/snips
+        snippets.user_path: |-
+          ~/.config/nvim/pack/modules/start/snips
+        tabnine.enabled: true
       keymap:
         eval_snips: "<leader>b"
         repeat: "<leader>."
-  lua: |-
-    if vim.env.SSH_TTY then
-      vim.g.coq_settings["tabnine.enabled"] = true
-    end
 
 - git:
     call:
