@@ -31,10 +31,15 @@
         registers.lines: ["z"]
         snippets.user_path: |-
           ~/.config/nvim/pack/modules/start/snips
-        tabnine.enabled: true
       keymap:
         eval_snips: "<leader>b"
         repeat: "<leader>."
+  lua: |-
+    if vim.env.SSH_TTY then
+      local v = vim.g.coq_settings
+      v["clients.tabnine.enabled"] = true
+      vim.g.coq_settings = v
+    end
 
 - git:
     call:
@@ -233,7 +238,7 @@
 - git:
     uri: https://github.com/lewis6991/gitsigns.nvim
   opt: true
-  lua: |-
+  lub: |-
     require('gitsigns').setup(vim.g.git_opts)
     local gs = package.loaded.gitsigns
     for key, val in pairs(vim.g.git_keys) do
@@ -272,7 +277,7 @@
 - git:
     uri: https://github.com/TabbyML/vim-tabby
   opt: true
-  lua: |-
+  lub: |-
     vim.fn["tabby#OnVimEnter"]()
 
 - git:

@@ -30,6 +30,7 @@ class PkgAttrs:
     keys: Sequence[KeymapSpec] = ()
     vals: Mapping[str, Any] = field(default_factory=dict)
     lua: str = ""
+    lub: str = ""
     viml: str = ""
 
 

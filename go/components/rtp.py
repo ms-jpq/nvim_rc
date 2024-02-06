@@ -2,7 +2,7 @@ from collections.abc import Iterable
 from dataclasses import asdict
 from operator import attrgetter
 from pathlib import Path
-from textwrap import dedent, indent
+from string import Template
 
 from pynvim_pp.atomic import Atomic
 from pynvim_pp.keymap import Keymap
@@ -10,6 +10,26 @@ from std2.urllib import uri_path
 
 from ..config.pkgs import PkgAttrs, pkg_specs
 from ..consts import VIM_DIR
+
+_LUA = """
+(function()
+local _, err = pcall(function()
+${code}
+end)
+if err then
+  vim.api.nvim_err_writeln(err)
+end
+end)()
+"""
+
+_VIML = """
+(function(viml)
+local _, err = pcall(vim.cmd, viml)
+if err then
+vim.api.nvim_err_writeln(err)
+end
+end)(...)
+"""
 
 
 def p_name(opt: bool, uri: str) -> Path:
@@ -37,34 +57,23 @@ def _inst(packages: Iterable[PkgAttrs], cmds: Iterable[str]) -> Atomic:
             atomic1.set_var(lhs, rhs)
 
     atomic2 = Atomic()
+
+    lua = Template(_LUA)
+    for spec in pkgs.values():
+        if code := spec.lua:
+            body = lua.substitute(code=code)
+            atomic2.exec_lua(body, ())
+
+        if code := spec.viml:
+            atomic2.exec_lua(_VIML, (code,))
+
     for cmd in cmds:
         atomic2.command(cmd)
 
     for spec in pkgs.values():
-        if code := spec.lua:
-            body = indent(code, " " * 2)
-            lua = f"""
-            (function()
-            local _, err = pcall(function()
-            {body}
-            end)
-            if err then
-              vim.api.nvim_err_writeln(err)
-            end
-            end)()
-            """
-            atomic2.exec_lua(dedent(lua), ())
-
-        if code := spec.viml:
-            lua = """
-            (function(viml)
-            local _, err = pcall(vim.cmd, viml)
-            if err then
-              vim.api.nvim_err_writeln(err)
-            end
-            end)(...)
-            """
-            atomic2.exec_lua(dedent(lua), (code,))
+        if code := spec.lub:
+            body = lua.substitute(code=code)
+            atomic2.exec_lua(body, ())
 
     return atomic1 + keymap.drain(buf=None) + atomic2
 
