@@ -24,7 +24,7 @@ if ! [[ -f "$CACHE" ]]; then
     --fail-with-body
     --location
     --no-progress-meter
-    --max-time 60
+    --max-time 600
   )
   if [[ -v GH_TOKEN ]]; then
     CURL+=(--oauth2-bearer "$GH_TOKEN")
