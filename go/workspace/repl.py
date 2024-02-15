@@ -24,7 +24,7 @@ from ..registry import LANG, NAMESPACE, keymap, rpc
 
 _REPL_SCRIPTS = TOP_LEVEL / "repl"
 
-_SEP = "\x1f"
+_SEP = "∪"
 
 _NS = uuid4()
 _HNS = uuid4()
