@@ -11,7 +11,7 @@ from pynvim_pp.nvim import Nvim
 from std2.asyncio import cancel
 from std2.cell import RefCell
 
-from ..registry import NAMESPACE, autocmd, rpc, settings
+from ..registry import NAMESPACE, autocmd, keymap, rpc, settings
 
 if sys.version_info >= (3, 9):
     _T = Task[None]
@@ -62,3 +62,13 @@ async def _save_session() -> None:
 
 
 _ = autocmd("CursorHold") << f"lua {NAMESPACE}.{_save_session.method}()"
+
+
+@rpc()
+async def _die_session() -> None:
+    await Nvim.exec("%bwipeout")
+    await _save_session()
+
+
+# Prevent goto tags
+_ = keymap.nv("<c-]>") << f"<cmd>lua {NAMESPACE}.{_die_session.method}()<cr>"
