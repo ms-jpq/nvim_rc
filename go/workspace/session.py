@@ -57,6 +57,7 @@ async def _save_session() -> None:
         path, vim = await _session_path()
         path.parent.mkdir(parents=True, exist_ok=True)
         await Nvim.exec(f"mksession! {vim}")
+        await Nvim.exec("doautocmd User CHADSave")
 
     _CELL.val = create_task(cont())
 
