@@ -46,6 +46,13 @@ async def restore() -> None:
                 await Nvim.exec(f"silent source {vim}")
 
 
+async def _mksession() -> None:
+    path, vim = await _session_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    await Nvim.exec(f"mksession! {vim}")
+    await Nvim.exec("doautocmd User CHADSave")
+
+
 @rpc()
 async def _save_session() -> None:
     if task := _CELL.val:
@@ -54,10 +61,7 @@ async def _save_session() -> None:
 
     async def cont() -> None:
         await sleep(1.0)
-        path, vim = await _session_path()
-        path.parent.mkdir(parents=True, exist_ok=True)
-        await Nvim.exec(f"mksession! {vim}")
-        await Nvim.exec("doautocmd User CHADSave")
+        await _mksession()
 
     _CELL.val = create_task(cont())
 
@@ -68,7 +72,7 @@ _ = autocmd("CursorHold") << f"lua {NAMESPACE}.{_save_session.method}()"
 @rpc()
 async def _die_session() -> None:
     await Nvim.exec("%bwipeout")
-    await _save_session()
+    await _mksession()
 
 
 # Prevent goto tags
