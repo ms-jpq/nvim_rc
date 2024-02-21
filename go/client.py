@@ -38,7 +38,6 @@ async def _default(msg: MsgType, method: Method, params: Sequence[Any]) -> None:
 async def _once() -> None:
     atomic = inst_later()
     await atomic.commit(NoneType)
-    await attrgetter(restore.method)(attrgetter(NAMESPACE)(Nvim.lua))(NoneType)
 
 
 _ = (
@@ -56,6 +55,7 @@ async def init(socket: ServerAddr, ppid: int) -> None:
             await atomic.commit(NoneType)
 
             await maybe_install()
+            await attrgetter(restore.method)(attrgetter(NAMESPACE)(Nvim.lua))(NoneType)
 
             if "NVIM_DEBUG" in environ:
                 t1 = int(environ["_VIM_START_TIME"])
