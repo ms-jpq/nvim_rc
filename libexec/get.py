@@ -35,7 +35,7 @@ def main() -> None:
     assert curl
     argv = (
         curl,
-        "--fail",
+        "--fail-with-body",
         "--location",
         "--remote-time",
         "--no-progress-meter",
