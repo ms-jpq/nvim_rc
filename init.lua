@@ -81,6 +81,7 @@ local l3 = function()
 
   local args = {
     main(),
+    "-s",
     "-u",
     "-m",
     "go",

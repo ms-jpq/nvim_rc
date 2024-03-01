@@ -4,6 +4,7 @@ vim.filetype.add(
     extension = {
       automount = systemd,
       container = systemd,
+      dnssd = systemd,
       mount = systemd,
       netdev = systemd,
       network = systemd,
