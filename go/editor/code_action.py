@@ -20,8 +20,8 @@ _NS = uuid4()
 _HL = "LspDiagnosticsDefaultInformation"
 
 _CODE_ACTION = (
-    Path(__file__).resolve(strict=True).parent / "code_action.lua"
-).read_text("UTF-8")
+    Path(__file__).resolve(strict=True).with_name("code_action.lua").read_text("UTF-8")
+)
 
 
 @dataclass(frozen=True)
