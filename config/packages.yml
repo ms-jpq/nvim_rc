@@ -274,11 +274,18 @@
     codeium_no_map_tab: True
     codeium_render: False
 
-# - git:
-#     uri: https://github.com/TabbyML/vim-tabby
-#   opt: true
-#   lub: |-
-#     vim.fn["tabby#OnVimEnter"]()
+- git:
+    uri: https://github.com/TabbyML/vim-tabby
+  opt: true
+  lub: |-
+    vim.cmd [[
+    augroup tabby
+      autocmd! 
+    augroup END
+    ]]
+    if vim.env.SSH_TTY then
+      vim.fn["tabby#OnVimEnter"]()
+    end
 
 - git:
     uri: https://github.com/lervag/vimtex
