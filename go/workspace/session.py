@@ -71,7 +71,7 @@ _ = autocmd("CursorHold") << f"lua {NAMESPACE}.{_save_session.method}()"
 
 @rpc()
 async def _die_session() -> None:
-    await Nvim.exec("%bwipeout")
+    await Nvim.exec("%bwipeout!")
     await _mksession()
 
 

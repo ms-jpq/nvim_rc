@@ -280,7 +280,7 @@
   lub: |-
     vim.cmd [[
     augroup tabby
-      autocmd! 
+      autocmd!
     augroup END
     ]]
     if vim.env.SSH_TTY then
