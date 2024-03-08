@@ -56,7 +56,7 @@
            MOVE SPACES TO SH.
            MOVE SPACES TO TMP.
 
-           STRING "mktemp -d | tr -d '\n'" " " SPIT
+           STRING "mktemp -d | tr -d -- '\n'" " " SPIT
            DELIMITED SIZE INTO SH.
            CALL "SYSTEM" USING SH RETURNING RETVAL.
            IF RETVAL NOT = 0
