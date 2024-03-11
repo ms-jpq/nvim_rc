@@ -264,6 +264,11 @@
 #     vim.cmd [[colorscheme dayfox]]
 
 - git:
+    call:
+      - sh
+      - -c
+      - |-
+        printf -- %s '{}' >./package.json
     uri: https://github.com/github/copilot.vim
   opt: true
 
