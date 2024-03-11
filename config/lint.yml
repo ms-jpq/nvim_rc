@@ -155,3 +155,15 @@
       required:
         - php
       file: phan.dl.php
+
+- bin: lint-openapi
+  args:
+    - --
+    - ${tmpname}
+  type: fs
+  filetypes:
+    - openapi.json
+    - openapi.yaml
+  install:
+    npm:
+      - ibm-openapi-validator
