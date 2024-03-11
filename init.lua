@@ -86,8 +86,6 @@ local l3 = function()
     "-m",
     "go",
     "run",
-    "--ppid",
-    vim.fn.getpid(),
     "--socket",
     server
   }

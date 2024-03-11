@@ -29,7 +29,6 @@ def _parse_args() -> Namespace:
     sub_parsers = parser.add_subparsers(dest="command", required=True)
 
     with nullcontext(sub_parsers.add_parser("run")) as p:
-        p.add_argument("--ppid", type=int)
         p.add_argument("--socket", required=True, type=_socket)
 
     with nullcontext(sub_parsers.add_parser("deps")) as p:
@@ -108,7 +107,7 @@ def main() -> None:
             print(e, file=stderr)
             exit(1)
         else:
-            arun(init(args.socket, ppid=args.ppid))
+            arun(init(args.socket))
 
     else:
         assert False
