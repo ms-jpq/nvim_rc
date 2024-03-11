@@ -151,7 +151,7 @@
 #     npm:
 #       - csscomb
 
-- bin: prettier.mjs
+- bin: prettier.js
   args:
     - ${filetype}
     - ${filename}
@@ -185,7 +185,7 @@
     script:
       required:
         - node
-      file: prettier.dl.mjs
+      file: prettier.dl.js
 
 - bin: stree
   args:
@@ -345,7 +345,7 @@
     npm:
       - sql-formatter
 
-- bin: eslint.mjs
+- bin: eslint.js
   args:
     - ${filename}
     - ${tmpname}
@@ -357,7 +357,7 @@
     script:
       required:
         - node
-      file: eslint.dl.mjs
+      file: eslint.dl.js
 
 - bin: terraform
   args:

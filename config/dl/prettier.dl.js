@@ -8,5 +8,5 @@ import { fileURLToPath } from "node:url";
 
 ok(env.BIN);
 const dir = dirname(fileURLToPath(import.meta.url));
-const run = join(dir, "prettier.ex.mjs");
+const run = join(dir, "prettier.ex.js");
 await copyFile(run, env.BIN);

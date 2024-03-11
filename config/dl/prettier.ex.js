@@ -22,7 +22,7 @@ const plugins = {
   [join("prettier-plugin-awk")]: /^awk$/,
   [join("prettier-plugin-nginx", "dist", "index.js")]: /^nginx$/,
   [join("prettier-plugin-organize-imports", "index.js")]: /^(java|type)script/,
-  [join("prettier-plugin-tailwindcss", "dist", "index.mjs")]:
+  [join("prettier-plugin-tailwindcss", "dist", "index.js")]:
     /^(html|((java|type)scriptreact))$/,
 };
 
