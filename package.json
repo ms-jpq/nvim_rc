@@ -3,5 +3,6 @@
   "devDependencies": {
     "@types/node": "*",
     "typescript": "*"
-  }
+  },
+  "type": "module"
 }
