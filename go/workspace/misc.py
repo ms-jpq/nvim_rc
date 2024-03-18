@@ -23,8 +23,8 @@ settings["noswapfile"] = True
 # wrap
 settings["wrap"] = True
 
-# line wrap follow indent
-settings["breakindent"] = True
+# no hex or binary parsing
+settings["nrformats"] = ""
 
 
 # open with scratch buffer, like emacs

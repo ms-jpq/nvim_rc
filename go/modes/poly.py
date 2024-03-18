@@ -3,12 +3,16 @@ from collections.abc import Iterator
 from ..registry import keymap
 
 # move w linewrap
-_ = keymap.nv("<up>") << "g<up>"
-_ = keymap.nv("<down>") << "g<down>"
+for key in ("<up>", "<down>", "j", "k"):
+    _ = keymap.nv(key, expr=True) << f"(v:count ? \"m'\" . v:count : 'g') . '{key}'"
 
 # {} scroll fixed lines
-_ = keymap.nv("{") << ("5g<up>")
-_ = keymap.nv("}") << ("5g<down>")
+_ = keymap.nv("{") << ("5g<up>zz")
+_ = keymap.nv("}") << ("5g<down>zz")
+
+# re-center
+for key in ("n", "N", "[c", "]c"):
+    _ = keymap.nv(key) << f"{key}zz"
 
 
 def _redraw(wrapped: str) -> Iterator[str]:

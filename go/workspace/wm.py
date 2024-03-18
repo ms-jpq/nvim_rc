@@ -8,7 +8,7 @@ from pynvim_pp.tabpage import Tabpage
 from pynvim_pp.types import NoneType
 from pynvim_pp.window import Window
 
-from ..registry import NAMESPACE, keymap, rpc, settings
+from ..registry import NAMESPACE, autocmd, keymap, rpc, settings
 
 # hide background buffers
 settings["hidden"] = True
@@ -42,6 +42,9 @@ _ = keymap.n("<s-left>") << "<cmd>wincmd <<cr>"
 _ = keymap.n("<s-right>") << "<cmd>wincmd ><cr>"
 _ = keymap.n("<s-up>") << "<cmd>wincmd +<cr>"
 _ = keymap.n("<s-down>") << "<cmd>wincmd -<cr>"
+
+
+_ = autocmd("VimResized") << "wincmd ="
 
 
 @rpc()

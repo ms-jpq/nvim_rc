@@ -15,7 +15,7 @@ settings["showtabline"] = 2
 
 
 # always show issues column
-settings["signcolumn"] = "yes"
+settings["signcolumn"] = "number"
 # show line count
 settings["number"] = True
 # dont show eob lines
@@ -24,7 +24,8 @@ settings["fillchars"] = r"eob:\ "
 
 # keep wrapped text indent
 settings["breakindent"] = True
-# settings["showbreak"] = "↳"
+settings["showbreak"] = "↳"
+
 
 # constant cursor styling
 settings["guicursor"] = ""
