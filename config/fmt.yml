@@ -1,10 +1,12 @@
 ---
 - bin: sortd
   args:
-    - ${filetype}
+    - cfg
   type: stream
   filetypes:
     - cfg
+    - confini
+    - ini
   install:
     pip:
       - sortd
