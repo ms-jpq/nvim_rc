@@ -7,6 +7,7 @@
   local error_codes = vim.lsp.protocol.ErrorCodes
   local ignored_codes = {
     [error_codes.InternalError] = true,
+    [error_codes.InvalidRequest] = true,
     [error_codes.MethodNotFound] = true,
     [error_codes.RequestCancelled] = true
   }
