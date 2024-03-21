@@ -10,6 +10,7 @@ from typing import AsyncIterator, Iterable, Iterator, Tuple
 from pynvim_pp.lib import decode, encode
 from pynvim_pp.nvim import Nvim
 from pynvim_pp.rpc_types import NvimError
+from pynvim_pp.types import NoneType
 from pynvim_pp.window import Window
 from std2.aitertools import aiterify
 from std2.asyncio.subprocess import call
@@ -19,6 +20,10 @@ from ..config.fmt import FmtAttrs, FmtType, fmt_specs
 from ..registry import LANG, NAMESPACE, keymap, rpc
 from .linter import BufContext, arg_subst, current_ctx, mktemp, set_preview_content
 from .whitespace import detect_tabs, trailing_ws
+
+_LSP_NOTIFY = (
+    Path(__file__).resolve(strict=True).with_name("lsp_notify.lua").read_text("UTF-8")
+)
 
 
 async def _fmt_output(
@@ -128,6 +133,8 @@ async def run_fmt() -> None:
 
         await ctx.buf.opts.set("modifiable", False)
         await _run(ctx, attrs=prettiers, cwd=cwd)
+
+    await Nvim.api.execute_lua(NoneType, _LSP_NOTIFY, (ctx.linefeed,))
 
 
 _ = keymap.n("gq", nowait=True) << f"<cmd>lua {NAMESPACE}.{run_fmt.method}()<cr>"

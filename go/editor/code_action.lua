@@ -79,7 +79,7 @@
     for _, client in pairs(clients) do
       local go, handle =
         client.request(
-        "textDocument/codeAction",
+        vim.lsp.protocol.Methods.textDocument_codeAction,
         params,
         function(error, resp)
           callback(idx, row, error, resp)
@@ -97,7 +97,7 @@
     end
     cancel = function()
       for _, handle in pairs(cancels) do
-        handle()
+        pcall(handle)
       end
     end
   end
