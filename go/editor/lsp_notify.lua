@@ -22,17 +22,16 @@
     }
   }
   for _, client in pairs(clients) do
-    break
-    client.notify(
-      vim.lsp.protocol.Methods.textDocument_didChange,
-      params,
-      function(error, resp)
-        local err_code = (error or {}).code
-        if not ignored_codes[err_code] then
-          vim.print {error = error, params = params, resp = resp}
-        end
-      end,
-      buf
-    )
+    -- client.notify(
+    --   vim.lsp.protocol.Methods.textDocument_didChange,
+    --   params,
+    --   function(error, resp)
+    --     local err_code = (error or {}).code
+    --     if not ignored_codes[err_code] then
+    --       vim.print {error = error, params = params, resp = resp}
+    --     end
+    --   end,
+    --   buf
+    -- )
   end
 end)(...)
