@@ -6,10 +6,9 @@
 
   local error_codes = vim.lsp.protocol.ErrorCodes
   local ignored_codes = {
-    [error_codes.InternalError] = true,
-    [error_codes.InvalidRequest] = true,
-    [error_codes.MethodNotFound] = true,
-    [error_codes.RequestCancelled] = true
+    -- [error_codes.InternalError] = true,
+    -- [error_codes.InvalidRequest] = true,
+    [error_codes.MethodNotFound] = true
   }
 
   local text = table.concat(vim.api.nvim_buf_get_lines(buf, 0, -1, true), eol)
@@ -23,7 +22,8 @@
     }
   }
   for _, client in pairs(clients) do
-    client.request(
+    break
+    client.notify(
       vim.lsp.protocol.Methods.textDocument_didChange,
       params,
       function(error, resp)
