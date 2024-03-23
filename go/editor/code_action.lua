@@ -79,7 +79,8 @@
     for _, client in pairs(clients) do
       local go, handle =
         client.request(
-        vim.lsp.protocol.Methods.textDocument_codeAction,
+        -- vim.lsp.protocol.Methods.textDocument_codeAction,
+        "textDocument/codeAction",
         params,
         function(error, resp)
           callback(idx, row, error, resp)
