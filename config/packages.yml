@@ -34,6 +34,8 @@
       keymap:
         eval_snips: "<leader>b"
         repeat: "<leader>."
+      limits:
+        completion_auto_timeout: 0.33
   lua: |-
     if vim.env.SSH_TTY then
       local v = vim.g.coq_settings
@@ -154,19 +156,19 @@
         src: copilot
       - short_name: COD
         src: codeium
-      - short_name: TAB
-        src: tabby
+      # - short_name: TAB
+      #   src: tabby
 
       - src: repl
       # - short_name: MATH
       #   src: bc
-      - short_name: BIG
-        src: figlet
-        trigger: "!big"
-      - src: cow
-        trigger: "!cow"
-      - src: vimtex
-        short_name: vTEX
+      # - short_name: BIG
+      #   src: figlet
+      #   trigger: "!big"
+      # - src: cow
+      #   trigger: "!cow"
+      # - src: vimtex
+      #   short_name: vTEX
 
 - git:
     mvp: *mvp
