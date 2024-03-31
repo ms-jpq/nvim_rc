@@ -34,9 +34,9 @@
   bin: lemminx
   args: []
   install:
+    requires:
+      - htmlq
     script:
-      required:
-        - htmlq
       file: lemminx.sh
 
 - server: marksman
@@ -144,9 +144,9 @@
 - server: jqls
   bin: jq-lsp
   install:
+    requires:
+      - go
     script:
-      required:
-        - go
       file: jq_ls.sh
 
 # - server: awk_ls
@@ -159,9 +159,9 @@
   bin: pwsh_es.ps1
   args: []
   install:
+    requires:
+      - pwsh
     script:
-      required:
-        - pwsh
       file: pwsh_es.dl.ps1
 
 - server: dockerls
@@ -197,26 +197,26 @@
 - server: hls
   bin: haskell-language-server-wrapper
   install:
+    requires:
+      - jq
+      - runhaskell
     script:
-      required:
-        - jq
-        - runhaskell
       file: hls.dl.hs
 
 - server: rust_analyzer
   bin: rust-analyzer
   install:
+    requires:
+      - rustc
     script:
-      required:
-        - rustc
       file: rust_analyzer.rs
 
 - server: gopls
   bin: gopls
   install:
+    requires:
+      - go
     script:
-      required:
-        - go
       file: gopls.sh
 
 - server: sourcekit
@@ -248,9 +248,9 @@
 #   install:
 #     gem:
 #       - solargraph
+#     requires:
+#       - ruby
 #     script:
-#       required:
-#         - ruby
 #       file: solargraph.dl.rb
 
 - server: mdx_analyzer
@@ -310,27 +310,27 @@
   bin: lsr
   args: []
   install:
+    requires:
+      - Rscript
+      - R
     script:
-      required:
-        - Rscript
-        - R
       file: lsr.dl.r
 
 - server: julials
   bin: julia-lsp
   args: []
   install:
+    requires:
+      - julia
     script:
-      required:
-        - julia
       file: julia_ls.dl.jl
 
 - server: phpactor
   bin: phpactor
   install:
+    requires:
+      - php
     script:
-      required:
-        - php
       file: phpactor.dl.php
 
 - server: intelephense
@@ -342,51 +342,51 @@
 - server: fsautocomplete
   bin: fsautocomplete
   install:
+    requires:
+      - dotnet
     script:
-      required:
-        - dotnet
       file: fsautocomplete.dl.fsx
 
 - server: omnisharp
   bin: omnisharp
   args: []
   install:
+    requires:
+      - dotnet
     script:
-      required:
-        - dotnet
       file: omnisharp.dl.fsx
 
 - server: clojure_lsp
   bin: clojure-lsp
   install:
+    requires:
+      - clojure
     script:
-      required:
-        - clojure
       file: clj_lsp.clj
 
 - server: kotlin_language_server
   bin: kotlin-language-server
   install:
+    requires:
+      - kotlinc
     script:
-      required:
-        - kotlinc
       file: kotlin_ls.kts
 
 - server: jdtls
   bin: jdtls
   install:
+    requires:
+      - jshell
     script:
-      required:
-        - jshell
       file: jdtls.sh
 
 # - server: prolog_ls
 #   bin: prolog-ls
 #   args: []
 #   install:
+#     requires:
+#       - swipl
 #     script:
-#       required:
-#         - swipl
 #       file: prolog_ls.dl.pro
 
 - server: sqlls
@@ -406,9 +406,9 @@
       runtime:
         version: "Lua 5.1"
   install:
+    requires:
+      - jq
     script:
-      required:
-        - jq
       file: lua_ls.dl.sh
 
 - server: ansiblels
@@ -438,10 +438,10 @@
 - server: terraformls
   bin: terraform-ls
   install:
+    requires:
+      - htmlq
     script:
       file: terraform_ls.sh
-      required:
-        - htmlq
 
 - server: tflint
   bin: tflint
@@ -457,10 +457,10 @@
     - -Dlogback.statusListenerClass=ch.qos.logback.core.status.NopStatusListener
     - -DserverType=NATIVE
   install:
+    requires:
+      - jq
+      - cobc
     script:
-      required:
-        - jq
-        - cobc
       file: cobol_ls.cob
 # - server: volar
 #   bin: vue-language-server

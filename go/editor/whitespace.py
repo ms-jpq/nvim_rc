@@ -77,9 +77,11 @@ async def _set_trimmed(win: Window, buf: Buffer) -> None:
     row, col = await win.get_cursor()
     lines = await buf.get_lines(lo=0, hi=-1)
     new_lines = [
-        decode(encode(line)[:col]) + decode(encode(line)[col:]).rstrip()
-        if r == row
-        else line.rstrip()
+        (
+            decode(encode(line)[:col]) + decode(encode(line)[col:]).rstrip()
+            if r == row
+            else line.rstrip()
+        )
         for r, line in enumerate(lines)
     ]
 

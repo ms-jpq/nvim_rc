@@ -6,11 +6,11 @@ from typing import AbstractSet, Optional
 @dataclass(frozen=True)
 class ScriptSpec:
     file: Optional[PurePath] = None
-    required: AbstractSet[str] = frozenset()
 
 
 @dataclass(frozen=True)
 class InstallSpec:
+    requires: AbstractSet[str] = frozenset()
     pip: AbstractSet[str] = frozenset()
     gem: AbstractSet[str] = frozenset()
     npm: AbstractSet[str] = frozenset()

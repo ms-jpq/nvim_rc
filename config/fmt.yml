@@ -48,9 +48,9 @@
     - sh
     - zsh
   install:
+    requires:
+      - jq
     script:
-      required:
-        - jq
       file: shfmt.sh
 
 - bin: pwsh-fmt.ps1
@@ -71,10 +71,10 @@
   filetypes:
     - haskell
   install:
+    requires:
+      - jq
+      - runhaskell
     script:
-      required:
-        - jq
-        - runhaskell
       file: stylish.dl.hs
 
 - bin: systemd-fmt.sh
@@ -137,9 +137,9 @@
   filetypes:
     - clojure
   install:
+    requires:
+      - clojure
     script:
-      required:
-        - clojure
       file: clj_fmt.clj
 
 # - bin: csscomb
@@ -184,9 +184,9 @@
       - prettier-plugin-nginx
       - prettier-plugin-organize-imports
       - prettier-plugin-tailwindcss
+    requires:
+      - node
     script:
-      required:
-        - node
       file: prettier.dl.js
 
 - bin: stree
@@ -275,12 +275,12 @@
     - tex
   type: stream
   install:
+    requires:
+      - cpan
+      - gcc
+      - jq
+      - perl
     script:
-      required:
-        - cpan
-        - gcc
-        - jq
-        - perl
       file: latexindent.dl.pl
 
 - bin: fantomas.sh
@@ -291,9 +291,9 @@
   filetypes:
     - fsharp
   install:
+    requires:
+      - dotnet
     script:
-      required:
-        - dotnet
       file: fantomas.dl.fsx
 
 - bin: ktfmt.sh
@@ -304,9 +304,9 @@
   filetypes:
     - kotlin
   install:
+    requires:
+      - kotlinc
     script:
-      required:
-        - kotlinc
       file: ktfmt.dl.kts
 
 - bin: javafmt.sh
@@ -316,9 +316,9 @@
   filetypes:
     - java
   install:
+    requires:
+      - jq
     script:
-      required:
-        - jq
       file: javafmt.dl.sh
 
 - bin: styler.r
@@ -328,10 +328,10 @@
   filetypes:
     - r
   install:
+    requires:
+      - Rscript
+      - R
     script:
-      required:
-        - Rscript
-        - R
       file: styler.dl.r
 
 - bin: sql-formatter
@@ -356,9 +356,9 @@
     - javascript*
     - typescript*
   install:
+    requires:
+      - node
     script:
-      required:
-        - node
       file: eslint.dl.js
 
 - bin: terraform

@@ -23,9 +23,9 @@
     - sh
     - zsh
   install:
+    requires:
+      - jq
     script:
-      required:
-        - jq
       file: shellcheck.sh
 
 - bin: perlcritic.pl
@@ -36,10 +36,10 @@
   filetypes:
     - perl
   install:
+    requires:
+      - cpan
+      - perl
     script:
-      required:
-        - cpan
-        - perl
       file: perlcritic.dl.pl
 
 - bin: pwsh-lint.ps1
@@ -70,9 +70,9 @@
   filetypes:
     - clojure
   install:
+    requires:
+      - clojure
     script:
-      required:
-        - clojure
       file: clj_lint.clj
 
 - bin: hadolint
@@ -97,9 +97,9 @@
   filetypes:
     - go
   install:
+    requires:
+      - jq
     script:
-      required:
-        - jq
       file: golint.sh
 
 - bin: rubocop.rb
@@ -114,9 +114,9 @@
   install:
     gem:
       - rubocop
+    requires:
+      - ruby
     script:
-      required:
-        - ruby
       file: rubocop.dl.rb
 
 - bin: lintr.r
@@ -126,10 +126,10 @@
   filetypes:
     - r
   install:
+    requires:
+      - Rscript
+      - R
     script:
-      required:
-        - Rscript
-        - R
       file: lintr.dl.r
 
 - bin: htmlhint
@@ -151,9 +151,9 @@
   filetypes:
     - php
   install:
+    requires:
+      - php
     script:
-      required:
-        - php
       file: phan.dl.php
 
 - bin: lint-openapi

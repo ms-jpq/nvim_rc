@@ -100,16 +100,16 @@ def _npm_specs() -> Iterator[str]:
     yield from tool_specs.npm
 
 
-def _script_specs() -> Iterator[Tuple[str, ScriptSpec]]:
+def _script_specs() -> Iterator[Tuple[str, ScriptSpec, AbstractSet[str]]]:
     for l_spec in lsp_specs:
-        yield l_spec.bin, l_spec.install.script
+        yield l_spec.bin, l_spec.install.script, l_spec.install.requires
     for i_spec in linter_specs:
-        yield i_spec.bin, i_spec.install.script
+        yield i_spec.bin, i_spec.install.script, i_spec.install.requires
     for f_spec in fmt_specs:
-        yield f_spec.bin, f_spec.install.script
+        yield f_spec.bin, f_spec.install.script, f_spec.install.requires
     for t_spec in tool_specs.script:
         if file := t_spec.file:
-            yield file.stem, t_spec
+            yield file.stem, t_spec, frozenset()
 
 
 def _match(match: AbstractSet[str], name: str) -> bool:
@@ -343,7 +343,7 @@ def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     for path in (BIN_DIR, LIB_DIR, TMP_DIR):
         path.mkdir(parents=True, exist_ok=True)
 
-    for bin, pkg in _script_specs():
+    for bin, pkg, required in _script_specs():
 
         async def cont(path: Path, bin: str) -> _SortOfMonoid:
             env = {
@@ -372,7 +372,7 @@ def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
             )
             return (("", p),)
 
-        if pkg.file and all(map(which, pkg.required)):
+        if pkg.file and all(map(which, required)):
             if (s_path := which(DLEXEC / pkg.file)) and _match(
                 match, name=pkg.file.name
             ):
