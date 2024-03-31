@@ -31,7 +31,7 @@ class LspAttrs(HasInstall):
     root: Optional[RootPattern] = None
     init_options: Mapping[str, Any] = field(default_factory=dict)
     settings: Mapping[str, Any] = field(default_factory=dict)
-    install = InstallSpec()
+    install: InstallSpec = InstallSpec()
 
 
 LspSpecs = Sequence[LspAttrs]

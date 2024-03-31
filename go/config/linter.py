@@ -22,7 +22,7 @@ class LinterAttrs(HasInstall):
     args: Sequence[str] = ()
     env: Optional[Mapping[str, str]] = None
     exit_code: int = 0
-    install = InstallSpec()
+    install: InstallSpec = InstallSpec()
 
 
 LinterSpecs = Sequence[LinterAttrs]
