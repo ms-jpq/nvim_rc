@@ -94,8 +94,8 @@ async def _run(ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: PurePath) -> Non
             saved = {win: pos async for win, pos in it()}
 
             if lines := temp.read_text().splitlines():
-                if l := lines.pop():
-                    lines.append(l)
+                if line := lines.pop():
+                    lines.append(line)
 
             await ctx.buf.opts.set("modifiable", True)
             await ctx.buf.set_lines(lo=0, hi=-1, lines=lines)
@@ -113,7 +113,7 @@ async def _run(ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: PurePath) -> Non
 
 
 def _fmts_for(filetype: str) -> Iterator[FmtAttrs]:
-    for attr in fmt_specs:
+    for attr in fmt_specs():
         for pat in attr.filetypes:
             if fnmatch(filetype, pat=pat):
                 yield attr

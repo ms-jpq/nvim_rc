@@ -1,6 +1,7 @@
 from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import Enum, auto
+from functools import cache
 from typing import AbstractSet, Optional, Sequence
 
 from std2.pickle.decoder import new_decoder
@@ -26,4 +27,9 @@ class LinterAttrs(HasInstall):
 
 
 LinterSpecs = Sequence[LinterAttrs]
-linter_specs = new_decoder[LinterSpecs](LinterSpecs)(safe_load(CONF_LINT.open()))
+
+
+@cache
+def linter_specs() -> LinterSpecs:
+    p = new_decoder[LinterSpecs](LinterSpecs)
+    return p(safe_load(CONF_LINT.open()))

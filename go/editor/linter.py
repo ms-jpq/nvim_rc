@@ -134,7 +134,7 @@ async def _run(ctx: BufContext, attrs: Iterable[LinterAttrs], cwd: PurePath) -> 
 
 
 def _linters_for(filetype: str) -> Iterator[LinterAttrs]:
-    for attr in linter_specs:
+    for attr in linter_specs():
         for pat in attr.filetypes:
             if fnmatch(filetype, pat=pat):
                 yield attr

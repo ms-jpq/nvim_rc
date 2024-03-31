@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum, auto
+from functools import cache
 from typing import AbstractSet, Any, Mapping, Optional, Sequence
 
 from std2.pickle.decoder import new_decoder
@@ -35,4 +36,9 @@ class LspAttrs(HasInstall):
 
 
 LspSpecs = Sequence[LspAttrs]
-lsp_specs = new_decoder[LspSpecs](LspSpecs)(safe_load(CONF_LSP.open()))
+
+
+@cache
+def lsp_specs() -> LspSpecs:
+    p = new_decoder[LspSpecs](LspSpecs)
+    return p(safe_load(CONF_LSP.open()))

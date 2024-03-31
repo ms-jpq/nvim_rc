@@ -1,4 +1,5 @@
 from fnmatch import fnmatch
+from os.path import normcase
 from pathlib import Path
 from shutil import which
 from typing import Any, Mapping, MutableMapping, Optional
@@ -104,7 +105,7 @@ async def _on_attach(_: str) -> None:
 def _encode_spec(spec: LspAttrs) -> Mapping[str, Any]:
     config: MutableMapping[str, Any] = {}
     if spec.args is not None:
-        config["cmd"] = (spec.bin, *spec.args)
+        config["cmd"] = (normcase(spec.bin), *spec.args)
     if spec.filetypes:
         config["filetypes"] = tuple(spec.filetypes)
     if spec.init_options:
@@ -117,17 +118,18 @@ def _encode_spec(spec: LspAttrs) -> Mapping[str, Any]:
 
 _ENCODER = new_encoder[Optional[RootPattern]](Optional[RootPattern])
 
-for spec in lsp_specs:
+for spec in lsp_specs():
     if which(spec.bin):
         config = _encode_spec(spec)
         args = (
             GLOBAL_NS,
             str(_find_root.uuid),
             str(_on_attach.uuid),
-            spec.server,
+            normcase(spec.server),
             config,
             _ENCODER(spec.root),
         )
         atomic.exec_lua(_LSP_INIT, args)
+
 
 atomic.command("doautoall Filetype")

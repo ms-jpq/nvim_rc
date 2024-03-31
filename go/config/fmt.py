@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum, auto
+from functools import cache
 from typing import AbstractSet, Mapping, Optional, Sequence
 
 from std2.pickle.decoder import new_decoder
@@ -26,4 +27,9 @@ class FmtAttrs(HasInstall):
 
 
 FmtSpecs = Sequence[FmtAttrs]
-fmt_specs = new_decoder[FmtSpecs](FmtSpecs)(safe_load(CONF_FMT.open()))
+
+
+@cache
+def fmt_specs() -> FmtSpecs:
+    p = new_decoder[FmtSpecs](FmtSpecs)
+    return p(safe_load(CONF_FMT.open()))
