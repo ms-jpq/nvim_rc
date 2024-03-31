@@ -272,7 +272,6 @@ def _gem(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
 def _npm(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     NPM_DIR.mkdir(parents=True, exist_ok=True)
     packages_json = NPM_DIR / "package.json"
-    package_lock = NPM_DIR / "package-lock.json"
     name = "npm"
 
     if (
@@ -285,41 +284,19 @@ def _npm(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
             async def cont() -> AsyncIterator[Tuple[str, CompletedProcess[bytes]]]:
                 assert npm
                 packages_json.unlink(missing_ok=True)
+                json = {"devDependencies": {key: "*" for key in specs}}
+                packages_json.write_text(
+                    dumps(json, check_circular=False, ensure_ascii=False, indent=2)
+                )
 
-                p1 = await _run(
+                p2 = await _run(
                     npm,
-                    "init",
-                    "--yes",
+                    "install",
+                    "--no-package-lock",
+                    "--upgrade",
                     cwd=NPM_DIR,
                 )
-                p = CompletedProcess(
-                    args=p1.args,
-                    returncode=p1.returncode,
-                    stdout=b"",
-                    stderr=p1.stderr,
-                )
-                yield "", p
-
-                if not p.returncode:
-                    package_lock.unlink(missing_ok=True)
-                    json: _PackagesJson = loads(packages_json.read_text())
-                    json["dependencies"] = {}
-                    json["devDependencies"] = {
-                        key: "*"
-                        for key in chain(json.get("devDependencies", {}), specs)
-                    }
-                    packages_json.write_text(
-                        dumps(json, check_circular=False, ensure_ascii=False, indent=2)
-                    )
-
-                    p2 = await _run(
-                        npm,
-                        "install",
-                        "--no-package-lock",
-                        "--upgrade",
-                        cwd=NPM_DIR,
-                    )
-                    yield ("", p2)
+                yield "", p2
 
             return [rt async for rt in cont()]
 

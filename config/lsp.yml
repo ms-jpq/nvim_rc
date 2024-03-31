@@ -152,8 +152,6 @@
 # - server: awk_ls
 #   bin: awk-language-server
 #   install:
-#     requires:
-#       - systemd-notify
 #     npm:
 #       - awk-language-server
 

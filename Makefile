@@ -9,7 +9,7 @@ SHELL := bash
 .ONESHELL:
 .SHELLFLAGS := --norc --noprofile -Eeuo pipefail -O dotglob -O nullglob -O extglob -O failglob -O globstar -c
 
-.DEFAULT_GOAL := help
+.DEFAULT_GOAL := mvp
 
 .PHONY: clean clobber lint build fmt runtime mvp patch install
 
