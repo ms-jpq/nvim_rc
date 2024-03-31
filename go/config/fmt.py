@@ -6,7 +6,7 @@ from std2.pickle.decoder import new_decoder
 from yaml import safe_load
 
 from ..consts import CONF_FMT
-from .install import InstallSpec
+from .install import HasInstall, InstallSpec
 
 
 class FmtType(Enum):
@@ -16,14 +16,13 @@ class FmtType(Enum):
 
 
 @dataclass(frozen=True)
-class FmtAttrs:
-    bin: str
+class FmtAttrs(HasInstall):
     type: FmtType
     filetypes: AbstractSet[str]
     args: Sequence[str] = ()
     env: Optional[Mapping[str, str]] = None
     exit_code: int = 0
-    install: InstallSpec = InstallSpec()
+    install = InstallSpec()
 
 
 FmtSpecs = Sequence[FmtAttrs]

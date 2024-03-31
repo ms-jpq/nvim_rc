@@ -15,3 +15,9 @@ class InstallSpec:
     gem: AbstractSet[str] = frozenset()
     npm: AbstractSet[str] = frozenset()
     script: ScriptSpec = ScriptSpec()
+
+
+@dataclass(frozen=True)
+class HasInstall:
+    bin: PurePath
+    install: InstallSpec

@@ -1,7 +1,7 @@
 from contextlib import suppress
 from fnmatch import fnmatch
 from itertools import chain
-from os.path import normcase
+from os.path import normcase, normpath
 from pathlib import Path, PurePath
 from shlex import join
 from shutil import which
@@ -29,7 +29,7 @@ _LSP_NOTIFY = (
 async def _fmt_output(
     attr: FmtAttrs, ctx: BufContext, cwd: PurePath, temp: Path
 ) -> str:
-    arg_info = join(chain((attr.bin,), attr.args))
+    arg_info = join(chain((attr.bin.as_posix(),), attr.args))
 
     try:
         args = arg_subst(attr.args, ctx=ctx, tmp_name=normcase(temp))
@@ -37,7 +37,7 @@ async def _fmt_output(
         return LANG("grammar error", text=arg_info)
     else:
         if not which(attr.bin):
-            return LANG("missing", thing=attr.bin)
+            return LANG("missing", thing=normpath(attr.bin))
         else:
             stdin = temp.read_bytes() if attr.type is FmtType.stream else None
             try:
@@ -107,7 +107,7 @@ async def _run(ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: PurePath) -> Non
 
             await detect_tabs(ctx.buf)
 
-            prettiers = LANG("step join sep").join(attr.bin for attr in attrs)
+            prettiers = LANG("step join sep").join(normpath(attr.bin) for attr in attrs)
             nice = LANG("prettier succeeded", prettiers=prettiers)
             await Nvim.write(nice)
 

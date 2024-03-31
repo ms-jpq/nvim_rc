@@ -71,45 +71,33 @@ _GEMS = GEM_DIR / "gems"
 
 
 def _pip_specs() -> Iterator[str]:
-    for l_spec in lsp_specs:
-        yield from l_spec.install.pip
-    for i_spec in linter_specs:
-        yield from i_spec.install.pip
-    for f_spec in fmt_specs:
-        yield from f_spec.install.pip
+    for spec in chain(lsp_specs, linter_specs, fmt_specs):
+        if all(map(which, spec.install.requires)):
+            yield from spec.install.pip
     yield from tool_specs.pip
 
 
 def _gem_specs() -> Iterator[str]:
-    for l_spec in lsp_specs:
-        yield from l_spec.install.gem
-    for i_spec in linter_specs:
-        yield from i_spec.install.gem
-    for f_spec in fmt_specs:
-        yield from f_spec.install.gem
+    for spec in chain(lsp_specs, linter_specs, fmt_specs):
+        if all(map(which, spec.install.requires)):
+            yield from spec.install.gem
     yield from tool_specs.gem
 
 
 def _npm_specs() -> Iterator[str]:
-    for l_spec in lsp_specs:
-        yield from l_spec.install.npm
-    for i_spec in linter_specs:
-        yield from i_spec.install.npm
-    for f_spec in fmt_specs:
-        yield from f_spec.install.npm
+    for spec in chain(lsp_specs, linter_specs, fmt_specs):
+        if all(map(which, spec.install.requires)):
+            yield from spec.install.npm
     yield from tool_specs.npm
 
 
-def _script_specs() -> Iterator[Tuple[str, ScriptSpec, AbstractSet[str]]]:
-    for l_spec in lsp_specs:
-        yield l_spec.bin, l_spec.install.script, l_spec.install.requires
-    for i_spec in linter_specs:
-        yield i_spec.bin, i_spec.install.script, i_spec.install.requires
-    for f_spec in fmt_specs:
-        yield f_spec.bin, f_spec.install.script, f_spec.install.requires
+def _script_specs() -> Iterator[Tuple[PurePath, ScriptSpec]]:
+    for spec in chain(lsp_specs, linter_specs, fmt_specs):
+        if all(map(which, spec.install.requires)):
+            yield spec.bin, spec.install.script
     for t_spec in tool_specs.script:
         if file := t_spec.file:
-            yield file.stem, t_spec, frozenset()
+            yield PurePath(file.stem), t_spec
 
 
 def _match(match: AbstractSet[str], name: str) -> bool:
@@ -343,9 +331,9 @@ def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     for path in (BIN_DIR, LIB_DIR, TMP_DIR):
         path.mkdir(parents=True, exist_ok=True)
 
-    for bin, pkg, required in _script_specs():
+    for bin, pkg in _script_specs():
 
-        async def cont(path: Path, bin: str) -> _SortOfMonoid:
+        async def cont(path: Path, bin: PurePath) -> _SortOfMonoid:
             env = {
                 "PATH": pathsep.join((libexec, environ["PATH"])),
                 "PYTHON": executable,
@@ -372,11 +360,12 @@ def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
             )
             return (("", p),)
 
-        if pkg.file and all(map(which, required)):
-            if (s_path := which(DLEXEC / pkg.file)) and _match(
-                match, name=pkg.file.name
-            ):
-                yield cont(Path(s_path), bin=bin)
+        if (
+            pkg.file
+            and (s_path := which(DLEXEC / pkg.file))
+            and _match(match, name=pkg.file.name)
+        ):
+            yield cont(Path(s_path), bin=bin)
 
 
 async def install(mvp: bool, match: AbstractSet[str]) -> int:

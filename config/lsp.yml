@@ -149,11 +149,13 @@
     script:
       file: jq_ls.sh
 
-# - server: awk_ls
-#   bin: awk-language-server
-#   install:
-#     npm:
-#       - awk-language-server
+- server: awk_ls
+  bin: awk-language-server
+  install:
+    requires:
+      - systemd-notify
+    npm:
+      - awk-language-server
 
 - server: powershell_es
   bin: pwsh_es.ps1

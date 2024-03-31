@@ -6,7 +6,7 @@ from std2.pickle.decoder import new_decoder
 from yaml import safe_load
 
 from ..consts import CONF_LSP
-from .install import InstallSpec
+from .install import HasInstall, InstallSpec
 
 
 class RPFallback(Enum):
@@ -24,15 +24,14 @@ class RootPattern:
 
 
 @dataclass(frozen=True)
-class LspAttrs:
+class LspAttrs(HasInstall):
     server: str
-    bin: str
     args: Optional[Sequence[str]] = None
     filetypes: AbstractSet[str] = frozenset()
     root: Optional[RootPattern] = None
     init_options: Mapping[str, Any] = field(default_factory=dict)
     settings: Mapping[str, Any] = field(default_factory=dict)
-    install: InstallSpec = InstallSpec()
+    install = InstallSpec()
 
 
 LspSpecs = Sequence[LspAttrs]

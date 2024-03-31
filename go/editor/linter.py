@@ -84,7 +84,7 @@ async def set_preview_content(text: str) -> None:
 async def _linter_output(
     attr: LinterAttrs, ctx: BufContext, cwd: PurePath, body: bytes, temp: Path
 ) -> str:
-    arg_info = join(chain((attr.bin,), attr.args))
+    arg_info = join(chain((attr.bin.as_posix(),), attr.args))
 
     try:
         args = arg_subst(attr.args, ctx=ctx, tmp_name=normpath(temp))
@@ -92,7 +92,7 @@ async def _linter_output(
         return LANG("grammar error", text=arg_info)
     else:
         if not which(attr.bin):
-            return LANG("missing", thing=attr.bin)
+            return LANG("missing", thing=normpath(attr.bin))
         else:
             stdin = body if attr.type is LinterType.stream else None
             proc = await call(
