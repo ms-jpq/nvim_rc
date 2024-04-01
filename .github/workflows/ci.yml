@@ -71,11 +71,12 @@ jobs:
       - uses: actions/setup-python@v3
 
       - run: |-
-          git clone --depth=1 -- https://github.com/ms-jpq/shell_rc sh
-          & powershell.exe .\sh\layers\nt\winget.ps1
+          git clone '--depth=1' -- https://github.com/ms-jpq/shell_rc sh
+          powershell.exe .\sh\layers\nt\winget.ps1
 
       - run: |-
-          & winget.exe install --disable-interactivity --accept-source-agreements --accept-package-agreements --exact --id 'ezwinports.make'
+          winget.exe source update '--force'
+          winget.exe install '--disable-interactivity' '--accept-source-agreements' '--accept-package-agreements' '--exact' '--id' 'ezwinports.make'
 
       - run: |-
-          & make patch -- JAVA_HOME="$Env:JAVA_HOME_17_X64" NO_R=1
+          make patch -- JAVA_HOME="$Env:JAVA_HOME_17_X64" NO_R=1
