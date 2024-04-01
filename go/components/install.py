@@ -387,6 +387,7 @@ async def install(mvp: bool, match: AbstractSet[str]) -> int:
 
 
 async def maybe_install() -> None:
+    UPDATE_LOG.parent.mkdir(parents=True, exist_ok=True)
     try:
         coded = UPDATE_LOG.read_text()
     except FileNotFoundError:

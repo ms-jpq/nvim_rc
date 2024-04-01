@@ -3,12 +3,13 @@ from shutil import which
 
 from pynvim_pp.nvim import Nvim
 from std2.asyncio.subprocess import call
+from std2.pathlib import AnyPath
 
 from ..registry import LANG, NAMESPACE, atomic, keymap, rpc
 
 
 @rpc()
-async def open_term(*args: str) -> None:
+async def open_term(*args: AnyPath) -> None:
     if "TMUX" in environ and (tmux := which("tmux")):
         cwd = await Nvim.getcwd()
         await call(
