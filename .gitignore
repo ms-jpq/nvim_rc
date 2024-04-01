@@ -1,6 +1,7 @@
-/.venv/
 *.clj-*
+*.isort
 *.lsp/
+/.venv/
 /pack/
 /var/
 __pycache__/
