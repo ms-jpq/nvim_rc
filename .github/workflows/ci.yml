@@ -70,20 +70,10 @@ jobs:
 
       - run: |-
           git clone --depth=1 -- https://github.com/ms-jpq/shell_rc sh
-          & .\sh\layers\nt\winget.ps1
+          & powershell.exe .\sh\layers\nt\winget.ps1
 
       - run: |-
           & winget.exe install --disable-interactivity --accept-source-agreements --accept-package-agreements --exact --id 'ezwinports.make'
 
       - run: |-
-          Get-Command -- cpan
-          Get-Command -- perl
-
-      - run: |-
-          $pacman = Join-Path -Path $Env:GHCUP_MSYS2 'usr' 'bin' 'pacman'
-          $argv = @('--sync', '--refresh', '--noconfirm', '--', 'make')
-          & $pacman @argv
-
-      - run: |-
-          $make = Join-Path -Path $Env:GHCUP_MSYS2 'usr' 'bin' 'make'
-          & $make patch -- JAVA_HOME="$Env:JAVA_HOME_17_X64" NO_R=1
+          & make patch -- JAVA_HOME="$Env:JAVA_HOME_17_X64" NO_R=1
