@@ -2,6 +2,7 @@ from asyncio import create_task
 from asyncio.tasks import as_completed, wait
 from fnmatch import fnmatch
 from itertools import chain, repeat
+from json import dumps
 from multiprocessing import cpu_count
 from os import PathLike, environ, linesep, pathsep, sep
 from os.path import normcase
