@@ -2,7 +2,6 @@ from asyncio import create_task
 from asyncio.tasks import as_completed, wait
 from fnmatch import fnmatch
 from itertools import chain, repeat
-from json import dumps, loads
 from multiprocessing import cpu_count
 from os import PathLike, environ, linesep, pathsep, sep
 from os.path import normcase
@@ -23,7 +22,6 @@ from typing import (
     Optional,
     Sequence,
     Tuple,
-    TypedDict,
     Union,
 )
 from venv import EnvBuilder
@@ -62,11 +60,6 @@ from .rtp import p_name
 _SortOfMonoid = Sequence[Tuple[str, CompletedProcess[bytes]]]
 
 
-class _PackagesJson(TypedDict):
-    dependencies: Mapping[str, str]
-    devDependencies: Mapping[str, str]
-
-
 _GEMS = GEM_DIR / "gems"
 
 
@@ -78,10 +71,11 @@ def _pip_specs() -> Iterator[str]:
 
 
 def _gem_specs() -> Iterator[str]:
-    for spec in chain(lsp_specs(), linter_specs(), fmt_specs()):
-        if all(map(which, spec.install.requires)):
-            yield from spec.install.gem
-    yield from tool_specs.gem
+    if os is OS.linux:
+        for spec in chain(lsp_specs(), linter_specs(), fmt_specs()):
+            if all(map(which, spec.install.requires)):
+                yield from spec.install.gem
+        yield from tool_specs.gem
 
 
 def _npm_specs() -> Iterator[str]:
