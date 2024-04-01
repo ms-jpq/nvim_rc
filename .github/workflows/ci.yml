@@ -27,6 +27,8 @@ jobs:
       - run: |-
           sudo -- apt-get update
           sudo -- apt-get install --no-install-recommends --yes -- swi-prolog gnucobol
+
+      - run: |-
           /home/linuxbrew/.linuxbrew/bin/brew install -- clojure/tools/clojure
           eval -- "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           CLJ="$(command -v -- clojure)"
