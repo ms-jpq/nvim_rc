@@ -41,8 +41,12 @@ fi
 
 if "${CURL[@]}" >&2; then
   {
-    mv -f -- "$TMP" "$DST"
-    mv -f -- "$TTAG" "$ETAG"
+    if [[ -f "$TMP" ]]; then
+      mv -f -- "$TMP" "$DST"
+    fi
+    if [[ -f "$TTAG" ]]; then
+      mv -f -- "$TTAG" "$ETAG"
+    fi
   } >&2
   printf -- '%s' "$DST"
 else

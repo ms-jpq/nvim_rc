@@ -4,15 +4,14 @@
 $uri =
   "https://github.com/phpactor/phpactor/releases/latest/download/phpactor.phar";
 
-$py = getenv("PYTHON");
 $bin = getenv("BIN");
 $libexec = getenv("LIBEXEC");
-assert($py && $libexec && $bin);
+assert($libexec && $bin);
 
 $output = [];
 $code = -1;
 exec(
-  join(" ", array_map("escapeshellarg", [$py, "{$libexec}/get.sh", $uri])),
+  join(" ", array_map("escapeshellarg", ["{$libexec}/get.sh", $uri])),
   $output,
   $code
 );

@@ -3,18 +3,17 @@
 <?php
 $uri = "https://github.com/phan/phan/releases/latest/download/phan.phar";
 
-$py = getenv("PYTHON");
 $libexec = getenv("LIBEXEC");
 $lib = getenv("LIB");
 $bin = getenv("BIN");
-assert($py && $libexec && $lib && $bin);
+assert($libexec && $lib && $bin);
 
 $output = [];
 $code = -1;
 exec(
   join(
     " ",
-    array_map("escapeshellarg", [$py, "{$libexec}/get.sh", $uri])
+    array_map("escapeshellarg", ["{$libexec}/get.sh", $uri])
   ),
   $output,
   $code

@@ -33,7 +33,7 @@ val bin = suffix(Path(System.getenv("BIN")!!), ".bat")
 val procs =
     ProcessBuilder.startPipeline(
         listOf(
-            ProcessBuilder(py, Path(libexec, "get.sh").toString(), uri)
+            ProcessBuilder(Path(libexec, "get.sh").toString(), uri)
                 .redirectError(Redirect.INHERIT),
             ProcessBuilder(py, Path(libexec, "unpack.py").toString(), "--dst", tmp.toString())
                 .redirectOutput(Redirect.INHERIT)

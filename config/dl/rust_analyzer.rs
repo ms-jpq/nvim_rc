@@ -48,8 +48,7 @@ fn main() -> Result<(), Box<dyn Error>> {
   let bin = var_os("BIN").ok_or_else(|| format!("{}", Backtrace::capture()))?;
 
   create_dir_all(&tmp)?;
-  let mut proc = Command::new(&py)
-    .arg(libexec.join("get.sh"))
+  let mut proc = Command::new(libexec.join("get.sh"))
     .arg(uri)
     .stdout(Stdio::piped())
     .spawn()?;
