@@ -2,7 +2,7 @@
 
 set -o pipefail
 
-DST="${1%%'\n'}"
+DST="$1"
 SRC="${2:-"$(</dev/fd/0)"}"
 FMT="${FMT:-"$SRC"}"
 
