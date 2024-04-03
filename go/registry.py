@@ -1,4 +1,5 @@
 from collections.abc import Mapping
+from os import environ
 
 from pynvim_pp.atomic import Atomic
 from pynvim_pp.autocmd import AutoCMD
@@ -6,7 +7,6 @@ from pynvim_pp.handler import RPC
 from pynvim_pp.keymap import Keymap
 from pynvim_pp.rpc_types import Method, RPCallable
 from pynvim_pp.settings import Settings
-from std2.platform import OS, os
 
 from .components.localization import load
 from .components.rtp import inst
@@ -23,8 +23,8 @@ settings = Settings()
 
 
 def drain() -> tuple[Atomic, Mapping[Method, RPCallable[None]]]:
-    if os is OS.windows:
-        settings["shell"] = "cmd.exe"
+    if shell := environ.get("COMSPEC"):
+        settings["shell"] = shell
 
     _atomic = Atomic()
     _atomic.call_function("setenv", ("PATH", PATH))
