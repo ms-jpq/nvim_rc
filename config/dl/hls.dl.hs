@@ -1,7 +1,9 @@
 #!/usr/bin/env -S -- runhaskell
 
 import           Control.Arrow      ((>>>))
+import           Data.Char          (isSpace)
 import           Data.Functor       ((<&>))
+import           Data.List          (dropWhileEnd)
 import           System.Directory   (copyFileWithMetadata, getCurrentDirectory,
                                      removePathForcibly, renameDirectory)
 import           System.Environment (getEnv)
@@ -21,11 +23,13 @@ uri "mingw32" = printf "%s-%s-x86_64-mingw64.zip" base
 suffix "mingw32" = ".exe"
 suffix _         = ""
 
+trim = dropWhileEnd isSpace . dropWhile isSpace
+
 run "mingw32" = exitSuccess
 run os = do
   lib <- getEnv "LIB"
   cwd <- getCurrentDirectory <&> (takeDirectory >>> takeDirectory)
-  tmp <- readProcess "mktemp" ["-d"] ""
+  tmp <- readProcess "mktemp" ["-d"] "" <&> trim
   version <- readProcess "gh-latest.sh" [".", repo] ""
 
   let tramp = cwd </> "config" </> "dl" </> "hls.ex.sh"
