@@ -6,7 +6,12 @@ DST="$1"
 SRC="${2:-"$(</dev/stdin)"}"
 FMT="${FMT:-"$SRC"}"
 
-TAR=(tar --extract --file "$SRC" --directory "$DST")
+if [[ "$OSTYPE" == darwin* ]]; then
+  T='/usr/bin/tar'
+else
+  T='tar'
+fi
+TAR=("$T" --extract --file "$SRC" --directory "$DST")
 if [[ "$OSTYPE" == linux* ]]; then
   TAR+=(--no-same-owner)
 fi
