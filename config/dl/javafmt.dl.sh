@@ -9,7 +9,7 @@ URI="https://github.com/$REPO/releases/latest/download/google-java-format-$VERSI
 
 # shellcheck disable=SC2154
 FMT="$LIB/google-java-format.jar"
-JAR="$(get.py -- "$URI")"
+JAR="$(get.sh "$URI")"
 
 mkdir -v -p -- "$LIB"
 cp -v -f -- "$JAR" "$FMT"

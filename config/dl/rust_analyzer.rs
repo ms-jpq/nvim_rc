@@ -49,8 +49,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
   create_dir_all(&tmp)?;
   let mut proc = Command::new(&py)
-    .arg(libexec.join("get.py"))
-    .arg("--")
+    .arg(libexec.join("get.sh"))
     .arg(uri)
     .stdout(Stdio::piped())
     .spawn()?;

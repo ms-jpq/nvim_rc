@@ -29,7 +29,7 @@ linux*)
 esac
 
 TMP="$(mktemp -d)"
-get.py -- "$URI" | unpack.py --dst "$TMP"
+get.sh "$URI" | unpack.py --dst "$TMP"
 # shellcheck disable=2154
 rm -rf -- "$LIB"
 mv -f -- "$TMP" "$LIB"

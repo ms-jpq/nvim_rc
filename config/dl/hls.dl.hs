@@ -32,7 +32,7 @@ run os = do
   let srv = tmp </> printf "haskell-language-server-%s" version
   let link = uri os version
 
-  _ <- readProcess "get.py" ["--", link] ""
+  _ <- readProcess "get.sh" [link] ""
     >>= readProcess "unpack.py" ["--dst", tmp]
     >>= putStr
 

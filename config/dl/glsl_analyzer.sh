@@ -21,6 +21,6 @@ esac
 BIN="$BIN$EXT"
 
 TMP="$(mktemp -d)"
-get.py -- "$URI" | unpack.py --dst "$TMP"
+get.sh "$URI" | unpack.py --dst "$TMP"
 install -v -b -- "$TMP/bin/glsl_analyzer$EXT" "$BIN"
 rm -v -fr -- "$TMP"

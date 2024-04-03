@@ -19,7 +19,7 @@ linux*)
 esac
 
 TMP="$(mktemp -d)"
-get.py -- "$URI" | unpack.py --dst "$TMP"
+get.sh "$URI" | unpack.py --dst "$TMP"
 # shellcheck disable=2154
 install -v -b -- "$TMP/"**'/typos-lsp'* "$BIN"
 rm -v -fr -- "$TMP"

@@ -52,7 +52,7 @@ let run arg0 argv (input: 'a) =
     proc.StandardOutput.ReadToEnd()
 
 ""
-|> run py [ Path.Combine(libexec, "get.py"); "--"; uri ]
+|> run py [ Path.Combine(libexec, "get.sh"); uri ]
 |> run py [ Path.Combine(libexec, "unpack.py"); "--dst"; tmp ]
 |> Console.Write
 

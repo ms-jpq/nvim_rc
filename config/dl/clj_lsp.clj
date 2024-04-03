@@ -25,7 +25,7 @@
   (try
     (doseq
      [proc (ProcessBuilder/startPipeline
-            [(-> (ProcessBuilder. ["get.py", "--", uri])
+            [(-> (ProcessBuilder. ["get.sh", uri])
                  (.redirectError ProcessBuilder$Redirect/INHERIT))
              (->
               (ProcessBuilder. ["unpack.py", "--dst", (.toString tmp)])

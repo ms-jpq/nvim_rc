@@ -43,7 +43,7 @@ if ( !-d $lib ) {
   $CHILD_ERROR && croak $CHILD_ERROR;
 
   my $uri      = "https://github.com/$repo/archive/refs/tags/$tag.tar.gz";
-  my $filename = `get.py -- \Q$uri\E`;
+  my $filename = `get.sh \Q$uri\E`;
   $CHILD_ERROR && croak $CHILD_ERROR;
 
   system( $cpan, '-T', '-I', '-i', @perl_libs )

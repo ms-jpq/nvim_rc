@@ -31,7 +31,7 @@ run os = do
   let name = nameof os link & takeBaseName
   let srv = tmp </> name </> "stylish-haskell"
 
-  _ <- readProcess "get.py" ["--", link] ""
+  _ <- readProcess "get.sh" [link] ""
     >>= readProcess "unpack.py" ["--dst", tmp]
     >>= putStr
 

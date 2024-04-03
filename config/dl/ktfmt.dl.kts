@@ -28,7 +28,7 @@ val version =
 
 val jar = root.resolve("$version/ktfmt-$version-jar-with-dependencies.jar").toString()
 val proc =
-    ProcessBuilder(py, Path(libexec, "get.py").toString(), "--", jar)
+    ProcessBuilder(py, Path(libexec, "get.sh").toString(), jar)
         .redirectError(Redirect.INHERIT)
         .start()
 

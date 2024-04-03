@@ -12,10 +12,7 @@ assert($py && $libexec && $bin);
 $output = [];
 $code = -1;
 exec(
-  join(
-    " ",
-    array_map("escapeshellarg", [$py, "{$libexec}/get.py", "--", $uri])
-  ),
+  join(" ", array_map("escapeshellarg", [$py, "{$libexec}/get.sh", $uri])),
   $output,
   $code
 );
