@@ -12,7 +12,7 @@ from ..consts import CONF_PKGS
 class GitPkgSpec:
     uri: str
     branch: Optional[str] = None
-    call: Sequence[str] = ()
+    call: Sequence[Sequence[str]] = ()
     mvp: bool = False
 
 

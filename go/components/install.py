@@ -159,20 +159,23 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                     )
                 yield spec.uri, p1
 
-                if not p1.returncode and spec.call:
-                    arg0, *argv = spec.call
-                    a00 = (
-                        Path(executable).resolve(strict=True)
-                        if arg0 in {"python", "python3"}
-                        else Path(arg0)
-                    )
-                    if a0 := which(a00):
-                        p2 = await _run(
-                            a0,
-                            *argv,
-                            cwd=location,
+                if not p1.returncode:
+                    for call in spec.call:
+                        arg0, *argv = call
+                        a00 = (
+                            Path(executable).resolve(strict=True)
+                            if arg0 in {"python", "python3"}
+                            else Path(arg0)
                         )
-                        yield "", p2
+                        if a0 := which(a00):
+                            p2 = await _run(
+                                a0,
+                                *argv,
+                                cwd=location,
+                            )
+                            yield "", p2
+                            if p2.returncode:
+                                break
 
             return [rt async for rt in cont()]
 

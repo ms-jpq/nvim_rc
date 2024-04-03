@@ -2,11 +2,15 @@
 - git:
     mvp: &mvp True
     call:
-      - python3
-      - -m
-      - chadtree
-      - deps
-      - --nvim
+      - - rm
+        - -fr
+        - --
+        - .vars/runtime
+      - - python3
+        - -m
+        - chadtree
+        - deps
+        - --nvim
     uri: https://github.com/ms-jpq/chadtree
   # vals:
   #   chadtree_settings:
@@ -19,10 +23,14 @@
 - git:
     mvp: *mvp
     call:
-      - python3
-      - -m
-      - coq
-      - deps
+      - - rm
+        - -fr
+        - --
+        - .vars/runtime
+      - - python3
+        - -m
+        - coq
+        - deps
     uri: https://github.com/ms-jpq/coq_nvim
   vals:
     coq_settings:
@@ -45,14 +53,14 @@
 
 - git:
     call:
-      - nvim
-      - --headless
-      - -u
-      - NONE
-      - +packadd nvim-treesitter
-      # - +TSInstallSync all
-      - +TSUpdateSync
-      - +quitall
+      - - nvim
+        - --headless
+        - -u
+        - NONE
+        - +packadd nvim-treesitter
+        # - +TSInstallSync all
+        - +TSUpdateSync
+        - +quitall
     uri: https://github.com/nvim-treesitter/nvim-treesitter
   lua: |-
     local opts = vim.g.ts_opts
@@ -267,10 +275,10 @@
 
 - git:
     call:
-      - sh
-      - -c
-      - |-
-        printf -- %s '{}' >./package.json
+      - - sh
+        - -c
+        - |-
+          printf -- %s '{}' >./package.json
     uri: https://github.com/github/copilot.vim
   opt: true
 
