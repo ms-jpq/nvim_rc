@@ -22,6 +22,7 @@ linux*)
   ;;
 *)
   URI="${BASE}_windows_$HT.zip"
+  BIN="$BIN.exe"
   ;;
 esac
 
