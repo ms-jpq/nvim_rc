@@ -23,13 +23,11 @@ uri "mingw32" = printf "%s-%s-x86_64-mingw64.zip" base
 suffix "mingw32" = ".exe"
 suffix _         = ""
 
-trim = dropWhileEnd isSpace . dropWhile isSpace
-
 run "mingw32" = exitSuccess
 run os = do
   lib <- getEnv "LIB"
   cwd <- getCurrentDirectory <&> (takeDirectory >>> takeDirectory)
-  tmp <- readProcess "mktemp" ["-d"] "" <&> trim
+  tmp <- readProcess "mktemp" ["-d"] "" <&> dropWhileEnd isSpace
   version <- readProcess "gh-latest.sh" [".", repo] ""
 
   let tramp = cwd </> "config" </> "dl" </> "hls.ex.sh"

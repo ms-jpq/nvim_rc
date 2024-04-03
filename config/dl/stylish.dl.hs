@@ -25,11 +25,9 @@ uri "linux"  = printf "%s-%s-linux-x86_64.tar.gz" base
 nameof "linux" = dropExtension
 nameof _       = id
 
-trim = dropWhileEnd isSpace . dropWhile isSpace
-
 run "mingw32" = exitSuccess
 run os = do
-  tmp <- readProcess "mktemp" ["-d"] "" <&> trim
+  tmp <- readProcess "mktemp" ["-d"] "" <&> dropWhileEnd isSpace
   version <- readProcess "gh-latest.sh" [".", repo] ""
 
   let link = uri os version

@@ -29,6 +29,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
   };
 
+  #[cfg(target_os = "windows")]
+  {
+    return Ok(());
+  }
+
   let tmp = args_os()
     .next()
     .map(PathBuf::from)
@@ -82,11 +87,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         };
         set_permissions(entry.path(), Permissions::from_mode(0o755))?;
         rename(entry.path(), bin)?;
-      }
-
-      #[cfg(target_os = "windows")]
-      {
-        return Ok(());
       }
 
       return Ok(());
