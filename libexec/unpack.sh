@@ -3,7 +3,7 @@
 set -o pipefail
 
 DST="${1%%'\n'}"
-SRC="${2:-"$(</dev/stdin)"}"
+SRC="${2:-"$(</dev/fd/0)"}"
 FMT="${FMT:-"$SRC"}"
 
 case "$OSTYPE" in
