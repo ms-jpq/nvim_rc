@@ -24,6 +24,5 @@ get.sh "$URI" | unpack.sh "$TMP"
 rm -rf -- "$LIB"
 mkdir -v -p -- "$LIB"
 mv -f -- "$TMP"/*/* "$LIB/"
-set -x
 ln -v -sf -- "$LIB/bin/$(basename -- "$BIN")" "$BIN"
 rm -v -fr -- "$TMP"
