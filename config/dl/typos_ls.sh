@@ -15,11 +15,11 @@ linux*)
   ;;
 *)
   URI="$BASE-$VERSION-$HOSTTYPE-pc-windows-msvc.zip"
+  BIN="$BIN.exe"
   ;;
 esac
 
 TMP="$(mktemp -d)"
 get.sh "$URI" | unpack.sh "$TMP"
-# shellcheck disable=2154
 install -v -b -- "$TMP/"**'/typos-lsp'* "$BIN"
 rm -v -fr -- "$TMP"
