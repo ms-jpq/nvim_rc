@@ -36,7 +36,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     .parent()
     .and_then(Path::parent)
     .and_then(Path::parent)
-    .and_then(Path::parent)
     .ok_or_else(|| format!("{}", Backtrace::capture()))?
     .join("var")
     .join("tmp")

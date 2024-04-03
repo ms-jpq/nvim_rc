@@ -40,7 +40,8 @@ case "$FMT" in
   fi
   ;;
 *.gz | *.xz)
-  gzip --decompress --keep --force --stdout -- "$SRC" >"$DST"
+  NAME="$DST/$(basename -- "$SRC")"
+  gzip --decompress --keep --force --stdout -- "$SRC" >"$NAME"
   ;;
 *)
   set -x
