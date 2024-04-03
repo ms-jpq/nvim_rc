@@ -5,7 +5,7 @@ FROM ubuntu:latest
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install --no-install-recommends --yes -- \
-    software-properties-common gpg-agent unzip \
+    software-properties-common gpg-agent unzip xz-utils \
     make git curl jq python3-venv && \
     add-apt-repository ppa:neovim-ppa/unstable && \
     apt-get update && \
