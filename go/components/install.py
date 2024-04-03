@@ -310,7 +310,6 @@ def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
         async def cont(path: Path, bin: PurePath) -> _SortOfMonoid:
             env = {
                 "PATH": pathsep.join((libexec, environ["PATH"])),
-                "PYTHON": executable,
                 "BIN": normcase(BIN_DIR / bin),
                 "LIB": normcase(LIB_DIR / bin),
                 "LIBEXEC": libexec,

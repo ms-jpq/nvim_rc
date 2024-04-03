@@ -26,8 +26,8 @@ linux*)
 esac
 
 TMP="$(mktemp -d)"
-get.sh "$URI" | unpack.py --dst "$TMP"
-get.sh "$T_URI" | unpack.py --dst "$TMP"
+get.sh "$URI" | unpack.sh "$TMP"
+get.sh "$T_URI" | unpack.sh "$TMP"
 install -v -b -- "$TMP/texlab"* "$BIN"
 install -v -b -- "$TMP/tectonic"* "$T_BIN"
 rm -v -fr -- "$TMP"

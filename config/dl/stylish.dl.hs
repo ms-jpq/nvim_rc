@@ -32,7 +32,7 @@ run os = do
   let srv = tmp </> name </> "stylish-haskell"
 
   _ <- readProcess "get.sh" [link] ""
-    >>= readProcess "unpack.py" ["--dst", tmp]
+    >>= readProcess "unpack.sh" [tmp]
     >>= putStr
 
   _ <- getExecutablePath >>= getPermissions >>= setPermissions srv

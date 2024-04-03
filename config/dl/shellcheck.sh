@@ -19,7 +19,7 @@ linux*)
 esac
 
 TMP="$(mktemp -d)"
-get.sh "$URI" | unpack.py --dst "$TMP"
+get.sh "$URI" | unpack.sh "$TMP"
 # shellcheck disable=2154
 install -v -b -- "$TMP/shellcheck"*'/shellcheck' "$BIN"
 rm -v -fr -- "$TMP"

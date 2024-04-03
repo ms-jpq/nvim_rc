@@ -20,7 +20,7 @@ linux*)
 esac
 
 TMP="$(mktemp -d)"
-get.sh "$URI" | unpack.py --dst "$TMP"
+get.sh "$URI" | unpack.sh "$TMP"
 # shellcheck disable=2154
 rm -rf -- "$LIB"
 chmod +x "$TMP"/*/{bin/*,jre/bin/*}

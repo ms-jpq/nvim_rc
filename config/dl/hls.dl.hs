@@ -33,7 +33,7 @@ run os = do
   let link = uri os version
 
   _ <- readProcess "get.sh" [link] ""
-    >>= readProcess "unpack.py" ["--dst", tmp]
+    >>= readProcess "unpack.sh" [tmp]
     >>= putStr
 
   _ <- removePathForcibly lib

@@ -23,7 +23,6 @@ val suffix = { path: Path, ext: String ->
 }
 
 val uri = "https://github.com/fwcd/kotlin-language-server/releases/latest/download/server.zip"
-val py = System.getenv("PYTHON")!!
 val libexec = System.getenv("LIBEXEC")!!
 val lib = Path(System.getenv("LIB")!!)
 val tmp = Path(createTempDir().getPath())
@@ -35,7 +34,7 @@ val procs =
         listOf(
             ProcessBuilder(Path(libexec, "get.sh").toString(), uri)
                 .redirectError(Redirect.INHERIT),
-            ProcessBuilder(py, Path(libexec, "unpack.py").toString(), "--dst", tmp.toString())
+            ProcessBuilder(Path(libexec, "unpack.sh").toString(), tmp.toString())
                 .redirectOutput(Redirect.INHERIT)
                 .redirectError(Redirect.INHERIT)))
 

@@ -6,7 +6,6 @@ open System.IO
 open System.Runtime.InteropServices
 
 
-let py = Environment.GetEnvironmentVariable "PYTHON"
 let lib = Environment.GetEnvironmentVariable "LIB"
 let libexec = Environment.GetEnvironmentVariable "LIBEXEC"
 let proxy = Path.Combine(__SOURCE_DIRECTORY__, "omnisharp.ex.sh")
@@ -53,7 +52,7 @@ let run arg0 argv (input: 'a) =
 
 ""
 |> run (Path.Combine(libexec, "get.sh")) [ uri ]
-|> run py [ Path.Combine(libexec, "unpack.py"); "--dst"; tmp ]
+|> run (Path.Combine(libexec, "unpack.sh")) [ tmp ]
 |> Console.Write
 
 File.Delete bin

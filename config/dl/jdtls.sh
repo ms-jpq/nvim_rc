@@ -5,7 +5,7 @@ set -o pipefail
 URI='https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz'
 
 TMP="$(mktemp -d)"
-get.sh "$URI" | unpack.py --dst "$TMP"
+get.sh "$URI" | unpack.sh "$TMP"
 # shellcheck disable=2154
 rm -rf -- "$LIB"
 mv -f -- "$TMP" "$LIB"

@@ -132,7 +132,7 @@
            MOVE SPACES TO SH.
 
            STRING "get.sh " URI
-           " |  unpack.py --format zip --dst "
+           " | FMT=zip unpack.sh "
            TMPD DELIMITED BY SIZE INTO SH.
            CALL "SYSTEM" USING SH RETURNING RETVAL.
            IF RETVAL NOT = 0

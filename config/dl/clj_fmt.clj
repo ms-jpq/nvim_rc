@@ -36,7 +36,7 @@
             [(-> (ProcessBuilder. ["get.sh", uri])
                  (.redirectError ProcessBuilder$Redirect/INHERIT))
              (->
-              (ProcessBuilder. ["unpack.py", "--dst", (.toString tmp)])
+              (ProcessBuilder. ["unpack.sh", (.toString tmp)])
               (.redirectOutput ProcessBuilder$Redirect/INHERIT)
               (.redirectError ProcessBuilder$Redirect/INHERIT))])]
       (-> proc .waitFor zero? assert))

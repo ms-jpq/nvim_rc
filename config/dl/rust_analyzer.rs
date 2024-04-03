@@ -41,7 +41,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     .join("var")
     .join("tmp")
     .join("rust-analyzer-dl");
-  let py = var_os("PYTHON").ok_or_else(|| format!("{}", Backtrace::capture()))?;
   let libexec = var_os("LIBEXEC")
     .map(PathBuf::from)
     .ok_or_else(|| format!("{}", Backtrace::capture()))?;
@@ -58,9 +57,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     .stdout
     .take()
     .ok_or_else(|| format!("{}", Backtrace::capture()))?;
-  let status = Command::new(&py)
-    .arg(libexec.join("unpack.py"))
-    .arg("--dst")
+  let status = Command::new("env")
+    .arg("--")
+    .arg(libexec.join("unpack.sh"))
     .arg(&tmp)
     .stdin(stdin)
     .status()?;

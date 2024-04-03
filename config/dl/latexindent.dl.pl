@@ -48,7 +48,7 @@ if ( !-d $lib ) {
 
   system( $cpan, '-T', '-I', '-i', @perl_libs )
     && croak $CHILD_ERROR;
-  system( 'unpack.py', '--dst', $tmp, q{--}, $filename ) && croak $CHILD_ERROR;
+  system( 'unpack.sh', $filename, $tmp ) && croak $CHILD_ERROR;
 
   my @globbed = glob "\Q$tmp\E/*";
   system( 'mv', '-f', "--", @globbed, $tar_libd ) && croak $CHILD_ERROR;

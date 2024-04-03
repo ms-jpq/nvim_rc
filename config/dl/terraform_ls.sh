@@ -31,7 +31,7 @@ esac
 
 URI="$BASE_URI/$VERSION/terraform-ls_${VERSION}_$NAME.zip"
 TMP="$(mktemp -d)"
-get.sh "$URI" | unpack.py --dst "$TMP"
+get.sh "$URI" | unpack.sh "$TMP"
 # shellcheck disable=2154
 install -v -b -- "$TMP/terraform"* "$BIN"
 rm -v -fr -- "$TMP"
