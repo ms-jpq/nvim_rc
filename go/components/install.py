@@ -146,6 +146,8 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                     p1 = await _run(
                         git,
                         "clone",
+                        "--config",
+                        "core.symlinks=true",
                         "--recurse-submodules",
                         "--shallow-submodules",
                         "--depth=1",
