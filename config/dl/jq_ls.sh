@@ -2,9 +2,16 @@
 
 set -o pipefail
 
+case "$OSTYPE" in
+msys)
+  BIN="$BIN.exe"
+  ;;
+*) ;;
+esac
+
 # shellcheck disable=2154
 mkdir -v -p -- "$LIB"
-export -- GO111MODULE=on GOPATH GOPATH="$LIB"
+export -- GO111MODULE=on GOPATH="$LIB"
 go install -- github.com/wader/jq-lsp@master
 # shellcheck disable=2154
 install -v -b -- "$LIB/bin/$(basename -- "$BIN")" "$BIN"

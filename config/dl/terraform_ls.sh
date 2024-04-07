@@ -26,6 +26,7 @@ linux*)
   ;;
 *)
   NAME="windows_$HT"
+  BIN="$BIN.exe"
   ;;
 esac
 

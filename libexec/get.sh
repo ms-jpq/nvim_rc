@@ -30,11 +30,6 @@ $SRC
 $DST
 EOF
 
-{
-  printf -- '%q ' "${CURL[@]}"
-  printf -- '\n'
-} >&2
-
 if ! [[ -f "$DST" ]]; then
   rm -fr -- "$ETAG" "$TTAG" >&2
 fi
