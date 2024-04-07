@@ -42,8 +42,6 @@
       keymap:
         eval_snips: "<leader>b"
         repeat: "<leader>."
-      limits:
-        completion_auto_timeout: 0.33
   lua: |-
     if vim.env.SSH_TTY then
       local v = vim.g.coq_settings
@@ -302,9 +300,9 @@
 #       vim.fn["tabby#OnVimEnter"]()
 #     end
 
-- git:
-    uri: https://github.com/lervag/vimtex
-  opt: true
-  vals:
-    vimtex_compiler_method: tectonic
-    vimtex_view_enabled: false
+# - git:
+#     uri: https://github.com/lervag/vimtex
+#   opt: true
+#   vals:
+#     vimtex_compiler_method: tectonic
+#     vimtex_view_enabled: false
