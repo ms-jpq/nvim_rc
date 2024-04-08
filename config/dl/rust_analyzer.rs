@@ -7,7 +7,8 @@ use std::{
   backtrace::Backtrace,
   env::{args_os, consts::ARCH, var_os},
   error::Error,
-  fs::{create_dir_all, read_dir, rename},
+  fs::{copy, create_dir_all, read_dir, remove_dir_all, rename},
+  io::ErrorKind,
   path::{Path, PathBuf},
   process::{Command, Stdio},
 };
@@ -28,11 +29,6 @@ fn main() -> Result<(), Box<dyn Error>> {
       format!("{base}-{ARCH}-pc-windows-msvc.gz")
     }
   };
-
-  #[cfg(target_os = "windows")]
-  {
-    return Ok(());
-  }
 
   let tmp = args_os()
     .next()
@@ -79,19 +75,28 @@ fn main() -> Result<(), Box<dyn Error>> {
       .map_err(|p| format!("{p:?}"))?
       .starts_with("rust-analyzer-")
     {
+      let path = entry.path();
       #[cfg(target_family = "unix")]
       {
         use std::{
           fs::{set_permissions, Permissions},
           os::unix::fs::PermissionsExt,
         };
-        set_permissions(entry.path(), Permissions::from_mode(0o755))?;
-        rename(entry.path(), bin)?;
+        set_permissions(&path, Permissions::from_mode(0o755))?;
+      }
+
+      if let Err(e) = rename(&path, &bin) {
+        // TODO: CrossesDevices::CrossesDevices
+        if e.kind() != ErrorKind::Unsupported {
+          return Err(e.into());
+        }
+        copy(path, bin)?;
       }
 
       return Ok(());
     }
   }
 
+  remove_dir_all(tmp)?;
   Err(format!("{}", line!()).into())
 }
