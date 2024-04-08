@@ -21,7 +21,7 @@ public class javafmt {
           "https://github.com/"
               + repo
               + "/releases/latest/download/google-java-format-"
-              + version.replaceFirst("v", "")
+              + version.replaceFirst("^v", "")
               + "-all-deps.jar";
       final var p2 = new ProcessBuilder("get.sh", uri).redirectError(Redirect.INHERIT).start();
       assert p2.waitFor() == 0;
