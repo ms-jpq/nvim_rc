@@ -94,8 +94,8 @@ fn main() -> Result<(), Box<dyn Error>> {
       set_permissions(&path, Permissions::from_mode(0o755))?;
 
       if let Err(e) = rename(&path, &bin) {
-        // TODO: CrossesDevices::CrossesDevices
-        if e.kind() != ErrorKind::Unsupported {
+        // TODO: ErrorKind::CrossesDevices
+        if e.raw_os_error() != Some(17) {
           return Err(e.into());
         }
         copy(path, bin)?;
