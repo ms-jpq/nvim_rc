@@ -319,7 +319,7 @@ def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
             }
 
             if tramp := which("env"):
-                argv = (tramp, "--", path)
+                argv: Sequence[AnyPath] = (tramp, "--", path)
             else:
                 argv = (path,)
 
