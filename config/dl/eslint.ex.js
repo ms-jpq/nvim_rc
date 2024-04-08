@@ -39,32 +39,33 @@ const _tmp = function* (filename = "") {
   }
 }
 
-const _eslint = (eslint = "", filename = "", tempname = "") => {
-  for (const tmp of _tmp(filename)) {
-    symlinkSync(tempname, tmp, "file")
-    const { error, status, signal } = spawnSync(
-      execPath,
-      [eslint, "--exit-on-fatal-error", "--fix", "--", tmp],
-      {
-        stdio: "inherit",
-      },
-    )
-    if (error) {
-      throw error
-    } else if (signal) {
-      throw signal
-    } else if (status && status !== 1) {
-      process.exitCode = status
-    }
+const _eslint = (eslint = "", tmp = "") => {
+  const { error, status, signal } = spawnSync(
+    execPath,
+    [eslint, "--exit-on-fatal-error", "--fix", "--", tmp],
+    {
+      stdio: "inherit",
+    },
+  )
+  if (error) {
+    throw error
+  } else if (signal) {
+    throw signal
+  } else if (status && status !== 1) {
+    process.exitCode = status
   }
 }
 
 const [, , filename, tempname] = argv
 ok(tempname)
+
 for (const path of _parents()) {
   const eslint = join(path, "node_modules", ".bin", "eslint")
   if (existsSync(eslint)) {
-    _eslint(eslint, filename, tempname)
+    for (const tmp of _tmp(filename)) {
+      symlinkSync(tempname, tmp, "file")
+      _eslint(eslint, tmp)
+    }
     break
   }
 }
