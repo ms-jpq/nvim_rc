@@ -13,6 +13,13 @@ use std::{
   process::{Command, Stdio},
 };
 
+#[cfg(target_family = "unix")]
+use std::{
+  ffi::OsString,
+  fs::{set_permissions, Permissions},
+  os::unix::{ffi::OsStringExt, fs::PermissionsExt},
+};
+
 fn main() -> Result<(), Box<dyn Error>> {
   let uri = {
     let base = "https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer";
@@ -45,26 +52,33 @@ fn main() -> Result<(), Box<dyn Error>> {
     .map(PathBuf::from)
     .ok_or_else(|| format!("{}", Backtrace::capture()))?;
   let bin = var_os("BIN").ok_or_else(|| format!("{}", Backtrace::capture()))?;
+  #[cfg(target_family = "windows")]
+  let bin = {
+    let mut bin = PathBuf::from(bin);
+    bin.set_extension("exe");
+    bin
+  };
 
   create_dir_all(&tmp)?;
-  let mut proc = Command::new("env")
+  let output = Command::new("env")
     .arg("--")
     .arg(libexec.join("get.sh"))
     .arg(uri)
     .stdout(Stdio::piped())
-    .spawn()?;
-  let stdin = proc
-    .stdout
-    .take()
-    .ok_or_else(|| format!("{}", Backtrace::capture()))?;
+    .output()?;
+  assert!(output.status.success());
+
+  #[cfg(target_family = "unix")]
+  let os_str = OsString::from_vec(output.stdout);
+  #[cfg(target_family = "windows")]
+  let os_str = String::from_utf8(output.stdout)?;
+
   let status = Command::new("env")
     .arg("--")
     .arg(libexec.join("unpack.sh"))
     .arg(&tmp)
-    .stdin(stdin)
+    .arg(os_str)
     .status()?;
-
-  assert!(proc.wait()?.success());
   assert!(status.success());
 
   for entry in read_dir(&tmp)? {
@@ -77,13 +91,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     {
       let path = entry.path();
       #[cfg(target_family = "unix")]
-      {
-        use std::{
-          fs::{set_permissions, Permissions},
-          os::unix::fs::PermissionsExt,
-        };
-        set_permissions(&path, Permissions::from_mode(0o755))?;
-      }
+      set_permissions(&path, Permissions::from_mode(0o755))?;
 
       if let Err(e) = rename(&path, &bin) {
         // TODO: CrossesDevices::CrossesDevices
