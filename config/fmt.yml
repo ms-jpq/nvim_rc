@@ -317,6 +317,8 @@
     - java
   install:
     requires:
+      - TODO
+      - java
       - jq
     script:
       file: javafmt.java
