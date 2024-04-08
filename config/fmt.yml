@@ -319,7 +319,7 @@
     requires:
       - jq
     script:
-      file: javafmt.dl.sh
+      file: javafmt.java
 
 - bin: styler.r
   args:
