@@ -20,9 +20,9 @@
 
 - server: taplo
   bin: taplo
-  # install:
-  #   script:
-  #     file: taplo.sh
+  install:
+    script:
+      file: taplo.sh
 
 - server: typos_lsp
   bin: typos-lsp
