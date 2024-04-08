@@ -3,7 +3,7 @@
 import { ok } from "node:assert/strict"
 import { spawnSync } from "node:child_process"
 import { randomBytes } from "node:crypto"
-import { closeSync, copyFileSync, existsSync, openSync, rmSync } from "node:fs"
+import { closeSync, existsSync, openSync, rmSync, symlinkSync } from "node:fs"
 import { basename, dirname, extname, join } from "node:path"
 import { argv, cwd, execPath } from "node:process"
 
@@ -41,8 +41,7 @@ const _tmp = function* (filename = "") {
 
 const _eslint = (eslint = "", filename = "", tempname = "") => {
   for (const tmp of _tmp(filename)) {
-    copyFileSync(tempname, tmp)
-
+    symlinkSync(tempname, tmp, "file")
     const { error, status, signal } = (() => {
       const fd = openSync(tmp, "r")
       try {
@@ -62,9 +61,6 @@ const _eslint = (eslint = "", filename = "", tempname = "") => {
       throw error
     } else {
       process.exitCode = status ?? -(signal ?? -1)
-      if (!process.exitCode) {
-        copyFileSync(tmp, tempname)
-      }
     }
   }
 }
