@@ -1,4 +1,4 @@
-from collections.abc import AsyncIterator, Mapping
+from collections.abc import AsyncIterator, Mapping, Sequence
 from itertools import chain
 from os import environ
 from os.path import normcase
@@ -15,8 +15,19 @@ from pynvim_pp.window import Window
 from std2 import anext
 from std2.asyncio.subprocess import call
 from std2.pathlib import AnyPath
+from std2.platform import OS, os
 
 from ..registry import LANG, NAMESPACE, atomic, autocmd, keymap, rpc
+
+_BUF_VAR_NAME = uuid4()
+
+
+class TermOpts(TypedDict, total=False):
+    env: Mapping[str, str]
+    on_exit: RPCallable[None]
+    on_stdout: RPCallable[None]
+    on_stderr: RPCallable[None]
+
 
 if "TMUX" in environ:
 
@@ -48,8 +59,6 @@ if "TMUX" in environ:
 
 else:
 
-    _BUF_VAR_NAME = uuid4()
-
     async def _list_marked_bufs() -> AsyncIterator[Buffer]:
         bufs = await Buffer.list(listed=True)
         for buf in bufs:
@@ -66,11 +75,13 @@ else:
             await buf.vars.set(str(_BUF_VAR_NAME), True)
             return buf
 
-    class TermOpts(TypedDict, total=False):
-        env: Mapping[str, str]
-        on_exit: RPCallable[None]
-        on_stdout: RPCallable[None]
-        on_stderr: RPCallable[None]
+    async def _sh() -> Sequence[str]:
+        if os == OS.windows:
+            sh = "bash.exe"
+        else:
+            sh = await Nvim.fn.getenv(str, "SHELL")
+
+        return (sh,)
 
     @rpc()
     async def _term_open(prog: AnyPath, *args: AnyPath, opts: TermOpts = {}) -> None:
@@ -88,7 +99,7 @@ else:
 
     @rpc()
     async def open_term(*args: AnyPath, opts: TermOpts = {}) -> None:
-        argv = args or (await Nvim.fn.getenv(str, "SHELL"),)
+        argv = args or await _sh()
         prog, *_ = argv
 
         if not which(prog):
@@ -102,22 +113,18 @@ else:
 
             await _term_open(*argv, opts=opts)
 
-    atomic.command(
-        f"command! -nargs=* FCmd lua {NAMESPACE}.{open_term.method}(<f-args>)"
-    )
-
     @rpc()
-    async def toggle_floating(*args: str) -> None:
+    async def _toggle_floating(*args: str) -> None:
         curr_win = await Window.get_current()
         float_wins = frozenset([win async for win in list_floatwins(_BUF_VAR_NAME)])
         if curr_win in float_wins:
             for win in float_wins:
                 await win.close()
         else:
-            argv = args or (await Nvim.fn.getenv(str, "SHELL"),)
+            argv = args or await _sh()
             await _term_open(*argv)
 
-    _ = keymap.n("<leader>u") << f"<cmd>lua {NAMESPACE}.{toggle_floating.method}()<cr>"
+    _ = keymap.n("<leader>u") << f"<cmd>lua {NAMESPACE}.{_toggle_floating.method}()<cr>"
 
     @rpc()
     async def _on_resized() -> None:
@@ -126,6 +133,8 @@ else:
         ):
             for win in float_wins:
                 await win.close()
-            await toggle_floating()
+            await _toggle_floating()
 
     _ = autocmd("VimResized") << f"lua {NAMESPACE}.{_on_resized.method}()"
+
+atomic.command(f"command! -nargs=* FCmd lua {NAMESPACE}.{open_term.method}(<f-args>)")
