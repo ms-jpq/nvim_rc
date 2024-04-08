@@ -318,14 +318,8 @@ def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
                 "LIBEXEC": libexec,
             }
 
-            if os is OS.windows and (tramp := which("env")):
-                shebang = b"#!/usr/bin/env "
-                with path.open("rb") as f:
-                    if f.read(len(shebang)) == shebang:
-                        args = split(decode(next(f, b"")))
-                        argv: Sequence[AnyPath] = (tramp, *args, path)
-                    else:
-                        argv = (path,)
+            if tramp := which("env"):
+                argv = (tramp, "--", path)
             else:
                 argv = (path,)
 

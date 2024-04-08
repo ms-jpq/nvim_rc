@@ -217,7 +217,7 @@
     requires:
       - go
     script:
-      file: gopls.sh
+      file: gopls.go
 
 - server: sourcekit
   bin: sourcekit-lsp
