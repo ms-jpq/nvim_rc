@@ -3,7 +3,7 @@
 import { ok } from "node:assert/strict"
 import { spawnSync } from "node:child_process"
 import { dirname, join } from "node:path"
-import { argv, execPath, exit } from "node:process"
+import { argv, execPath } from "node:process"
 import { fileURLToPath } from "node:url"
 
 const node_modules = join(
@@ -43,6 +43,8 @@ const { error, status, signal } = spawnSync(execPath, [bin, ...args], {
 
 if (error) {
   throw error
+} else if (signal) {
+  throw signal
 } else {
-  exit(status ?? -(signal ?? -1))
+  process.exitCode = status ?? undefined
 }
