@@ -16,13 +16,20 @@ func main() {
 	}
 	name := filepath.Base(bin)
 	dst := filepath.Join(lib, "bin", name)
+
 	cmd := exec.Command("go", "install", "--", "golang.org/x/tools/gopls@latest")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	cmd.Env = append(os.Environ(), "GO111MODULE=on", "GOPATH="+lib)
 	err := cmd.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = exec.Command("install", "-v", "-b", "--", dst, bin).Run()
+
+	cmd = exec.Command("install", "-v", "-b", "--", dst, bin)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err = cmd.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
