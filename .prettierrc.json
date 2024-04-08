@@ -1,0 +1,4 @@
+{
+  "$schema": "https://github.com/SchemaStore/schemastore/blob/master/src/schemas/json/prettierrc.json",
+  "semi": false
+}

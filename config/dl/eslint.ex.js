@@ -1,50 +1,50 @@
 #!/usr/bin/env -S -- node
 
-import { ok } from "node:assert/strict";
-import { spawnSync } from "node:child_process";
-import { randomBytes } from "node:crypto";
-import { closeSync, copyFileSync, existsSync, openSync, rmSync } from "node:fs";
-import { basename, dirname, extname, join } from "node:path";
-import { argv, cwd, execPath } from "node:process";
+import { ok } from "node:assert/strict"
+import { spawnSync } from "node:child_process"
+import { randomBytes } from "node:crypto"
+import { closeSync, copyFileSync, existsSync, openSync, rmSync } from "node:fs"
+import { basename, dirname, extname, join } from "node:path"
+import { argv, cwd, execPath } from "node:process"
 
 /**
  * @return {IterableIterator<string>}
  */
 const _parents = function* (path = cwd()) {
-  const parent = dirname(path);
-  yield path;
+  const parent = dirname(path)
+  yield path
   if (parent !== path) {
-    yield* _parents(parent);
+    yield* _parents(parent)
   }
-};
+}
 
 const _tmp = function* (filename = "") {
-  const ext = extname(filename);
-  const base = basename(filename, ext);
+  const ext = extname(filename)
+  const base = basename(filename, ext)
 
   while (true) {
-    const name = `${base}.${randomBytes(16).toString("hex")}${ext}`;
-    const tmp = join(dirname(filename), name);
+    const name = `${base}.${randomBytes(16).toString("hex")}${ext}`
+    const tmp = join(dirname(filename), name)
     if (!existsSync(tmp)) {
       try {
-        yield tmp;
+        yield tmp
       } finally {
         try {
-          rmSync(tmp, { recursive: true, force: true });
+          rmSync(tmp, { recursive: true, force: true })
         } finally {
-          break;
+          break
         }
       }
     }
   }
-};
+}
 
 const _eslint = (eslint = "", filename = "", tempname = "") => {
   for (const tmp of _tmp(filename)) {
-    copyFileSync(tempname, tmp);
+    copyFileSync(tempname, tmp)
 
     const { error, status, signal } = (() => {
-      const fd = openSync(tmp, "r");
+      const fd = openSync(tmp, "r")
       try {
         return spawnSync(
           execPath,
@@ -52,29 +52,29 @@ const _eslint = (eslint = "", filename = "", tempname = "") => {
           {
             stdio: [fd, "inherit", "inherit"],
           },
-        );
+        )
       } finally {
-        closeSync(fd);
+        closeSync(fd)
       }
-    })();
+    })()
 
     if (error) {
-      throw error;
+      throw error
     } else {
-      process.exitCode = status ?? -(signal ?? -1);
+      process.exitCode = status ?? -(signal ?? -1)
       if (!process.exitCode) {
-        copyFileSync(tmp, tempname);
+        copyFileSync(tmp, tempname)
       }
     }
   }
-};
+}
 
-const [, , filename, tempname] = argv;
-ok(tempname);
+const [, , filename, tempname] = argv
+ok(tempname)
 for (const path of _parents()) {
-  const eslint = join(path, "node_modules", ".bin", "eslint");
+  const eslint = join(path, "node_modules", ".bin", "eslint")
   if (existsSync(eslint)) {
-    _eslint(eslint, filename, tempname);
-    break;
+    _eslint(eslint, filename, tempname)
+    break
   }
 }

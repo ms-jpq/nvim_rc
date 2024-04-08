@@ -1,20 +1,20 @@
 #!/usr/bin/env -S -- node
 
-import { ok } from "node:assert/strict";
-import { spawnSync } from "node:child_process";
-import { dirname, join } from "node:path";
-import { argv, execPath, exit } from "node:process";
-import { fileURLToPath } from "node:url";
+import { ok } from "node:assert/strict"
+import { spawnSync } from "node:child_process"
+import { dirname, join } from "node:path"
+import { argv, execPath, exit } from "node:process"
+import { fileURLToPath } from "node:url"
 
 const node_modules = join(
   dirname(dirname(fileURLToPath(import.meta.url))),
   "modules",
   "node_modules",
-);
-const bin = join(node_modules, ".bin", "prettier");
+)
+const bin = join(node_modules, ".bin", "prettier")
 
-const [, , filetype, filename, tabsize] = argv;
-ok(filetype);
+const [, , filetype, filename, tabsize] = argv
+ok(filetype)
 
 const plugins = {
   [join("@prettier", "plugin-php", "src", "index.js")]: /^php$/,
@@ -24,25 +24,25 @@ const plugins = {
   [join("prettier-plugin-organize-imports", "index.js")]: /^(java|type)script/,
   [join("prettier-plugin-tailwindcss", "dist", "index.mjs")]:
     /^(html|((java|type)scriptreact))$/,
-};
+}
 
 const args = (function* () {
-  yield `--stdin-filepath=${filename}`;
-  yield `--tab-width=${tabsize}`;
+  yield `--stdin-filepath=${filename}`
+  yield `--tab-width=${tabsize}`
   for (const [plugin, re] of Object.entries(plugins)) {
     if (filetype.match(re)) {
-      yield `--plugin=${join(node_modules, plugin)}`;
+      yield `--plugin=${join(node_modules, plugin)}`
     }
   }
-  yield "--";
-})();
+  yield "--"
+})()
 
 const { error, status, signal } = spawnSync(execPath, [bin, ...args], {
   stdio: "inherit",
-});
+})
 
 if (error) {
-  throw error;
+  throw error
 } else {
-  exit(status ?? -(signal ?? -1));
+  exit(status ?? -(signal ?? -1))
 }
