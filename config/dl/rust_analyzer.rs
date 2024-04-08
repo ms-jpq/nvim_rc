@@ -95,9 +95,9 @@ fn main() -> Result<(), Box<dyn Error>> {
 
       if let Err(e) = rename(&path, &bin) {
         // TODO: ErrorKind::CrossesDevices
-        if e.raw_os_error() != Some(17) {
-          return Err(e.into());
-        }
+        // if e.kind() != ErrorKind::CrossesDevices {
+        //   return Err(e.into());
+        // }
         copy(path, bin)?;
       }
 
