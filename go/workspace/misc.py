@@ -1,3 +1,5 @@
+from os import environ
+
 from pynvim_pp.buffer import Buffer
 
 from ..registry import NAMESPACE, atomic, keymap, rpc, settings
@@ -12,7 +14,7 @@ settings["nomodeline"] = True
 settings["secure"] = True
 
 # use bash as shell
-settings["shell"] = "bash"
+settings["shell"] = environ.get("COMSPEC", "bash")
 
 # min lines changed to report
 settings["report"] = 0

@@ -1,5 +1,4 @@
 from collections.abc import Mapping
-from os import environ
 
 from pynvim_pp.atomic import Atomic
 from pynvim_pp.autocmd import AutoCMD
@@ -23,9 +22,6 @@ settings = Settings()
 
 
 def drain() -> tuple[Atomic, Mapping[Method, RPCallable[None]]]:
-    if shell := environ.get("COMSPEC"):
-        settings["shell"] = shell
-
     _atomic = Atomic()
     _atomic.call_function("setenv", ("PATH", PATH))
     _atomic.set_var("mapleader", " ")
