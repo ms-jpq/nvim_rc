@@ -35,7 +35,8 @@ val procs =
             ProcessBuilder(Path(libexec, "get.sh").toString(), uri)
                 .redirectError(Redirect.INHERIT),
             ProcessBuilder(Path(libexec, "unpack.sh").toString(), tmp.toString())
-                .inheritIO()))
+                .redirectOutput(Redirect.INHERIT)
+                .redirectError(Redirect.INHERIT)))
 
 for (proc in procs) {
   assert(proc.waitFor() == 0)
