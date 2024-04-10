@@ -5,11 +5,10 @@
 
 use std::{
   backtrace::Backtrace,
-  env::{args_os, consts::ARCH, var_os},
+  env::{consts::ARCH, var_os},
   error::Error,
-  fs::{copy, create_dir_all, read_dir, remove_dir_all, rename},
-  io::ErrorKind,
-  path::{Path, PathBuf},
+  fs::{read_dir, rename},
+  path::PathBuf,
   process::{Command, Stdio},
 };
 
@@ -37,21 +36,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
   };
 
-  let tmp = args_os()
-    .next()
+  let tmp = var_os("TMP")
     .map(PathBuf::from)
-    .ok_or_else(|| format!("{}", Backtrace::capture()))?
-    .parent()
-    .and_then(Path::parent)
-    .and_then(Path::parent)
-    .ok_or_else(|| format!("{}", Backtrace::capture()))?
-    .join("var")
-    .join("tmp")
-    .join("rust-analyzer-dl");
+    .ok_or_else(|| format!("{}", Backtrace::capture()))?;
 
   let bin = var_os("BIN")
     .map(PathBuf::from)
     .ok_or_else(|| format!("{}", Backtrace::capture()))?;
+
   #[cfg(target_family = "windows")]
   let bin = {
     let mut bin = bin;
@@ -59,7 +51,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     bin
   };
 
-  create_dir_all(&tmp)?;
   let output = Command::new("env")
     .arg("--")
     .arg("get.sh")
@@ -93,18 +84,10 @@ fn main() -> Result<(), Box<dyn Error>> {
       #[cfg(target_family = "unix")]
       set_permissions(&path, Permissions::from_mode(0o755))?;
 
-      if let Err(e) = rename(&path, &bin) {
-        // TODO: ErrorKind::CrossesDevices
-        // if e.kind() != ErrorKind::CrossesDevices {
-        //   return Err(e.into());
-        // }
-        copy(path, bin)?;
-      }
-
+      rename(&path, &bin)?;
       return Ok(());
     }
   }
 
-  remove_dir_all(tmp)?;
   Err(format!("{}", line!()).into())
 }

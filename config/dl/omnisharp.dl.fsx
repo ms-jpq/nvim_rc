@@ -56,5 +56,5 @@ try
 with :? DirectoryNotFoundException ->
     ()
 
-"" |> run "mv" [ "-v"; "-f"; tmp; lib ] |> Console.Write
+Directory.Move(tmp, lib)
 File.Copy(proxy, bin)
