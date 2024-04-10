@@ -31,7 +31,7 @@ public class javafmt {
 
       Files.createDirectories(lib);
       Files.copy(Paths.get(jar), dst, StandardCopyOption.REPLACE_EXISTING);
-      Files.copy(self.resolveSibling("javafmt.ex.sh"), bin, StandardCopyOption.REPLACE_EXISTING);
+      Files.copy(self.resolveSibling("javafmt.ex.java"), bin, StandardCopyOption.REPLACE_EXISTING);
     } catch (Exception e) {
       e.printStackTrace();
       System.exit(1);

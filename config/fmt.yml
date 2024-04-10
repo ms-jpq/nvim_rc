@@ -308,7 +308,7 @@
     script:
       file: ktfmt.dl.kts
 
-- bin: javafmt.sh
+- bin: javafmt.java
   args:
     - "-"
   type: stream
@@ -319,7 +319,7 @@
       - java
       - jq
     script:
-      file: javafmt.java
+      file: javafmt.dl.java
 
 - bin: styler.r
   args:

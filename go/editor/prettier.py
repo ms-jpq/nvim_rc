@@ -42,6 +42,8 @@ async def _fmt_output(
             stdin = temp.read_bytes() if attr.type is FmtType.stream else None
             try:
                 proc = await call(
+                    "env",
+                    "--",
                     attr.bin,
                     *args,
                     env=attr.env,
