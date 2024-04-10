@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class javafmt {
-  public static void main(String args[]) {
+  public static void main(String args[]) throws Exception {
     final var self = Paths.get(System.getProperty("program.name"));
     final var jar =
         self.getParent()
@@ -17,12 +17,7 @@ public class javafmt {
                 Arrays.stream(new String[] {"java", "-jar", jar.toString()}), Arrays.stream(args))
             .toArray(String[]::new);
 
-    try {
-      final var proc = new ProcessBuilder(argv).inheritIO().start();
-      assert proc.waitFor() == 0;
-    } catch (Exception e) {
-      e.printStackTrace();
-      System.exit(1);
-    }
+    final var proc = new ProcessBuilder(argv).inheritIO().start();
+    assert proc.waitFor() == 0;
   }
 }
