@@ -1,12 +1,14 @@
 // ; exec java -ea -Dprogram.name="$0" "$0" "$@"
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Comparator;
+import java.util.function.Consumer;
 
 public class jdtls {
   public static void main(String args[]) throws Exception {
@@ -36,7 +38,18 @@ public class jdtls {
       }
     }
 
-    Files.move(tmp, lib, StandardCopyOption.REPLACE_EXISTING);
+    Consumer<Path> cp =
+        p -> {
+          try {
+            Files.copy(p, lib.resolve(tmp.relativize(p)), StandardCopyOption.REPLACE_EXISTING);
+          } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+          }
+        };
+    try (final var st = Files.walk(tmp)) {
+      st.forEach(cp);
+    }
     Files.createSymbolicLink(bin, src);
   }
 }
