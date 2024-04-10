@@ -20,4 +20,4 @@ esac
 
 # shellcheck disable=SC2154
 get.sh "$URI" | unpack.sh "$TMP"
-install -v -b -- "$TMP"/* "$BIN"
+mv -v -f -- "$TMP"/* "$BIN"

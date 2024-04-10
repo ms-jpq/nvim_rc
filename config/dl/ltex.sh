@@ -23,5 +23,5 @@ get.sh "$URI" | unpack.sh "$TMP"
 # shellcheck disable=2154
 rm -rf -- "$LIB"
 mkdir -v -p -- "$LIB"
-mv -f -- "$TMP"/*/* "$LIB/"
+mv -v -f -- "$TMP"/*/* "$LIB/"
 ln -v -sf -- "$LIB/bin/$(basename -- "$BIN")" "$BIN"

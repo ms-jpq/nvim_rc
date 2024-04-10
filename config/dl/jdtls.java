@@ -6,7 +6,6 @@ import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Comparator;
 import java.util.function.Consumer;
 
@@ -41,10 +40,9 @@ public class jdtls {
     Consumer<Path> cp =
         p -> {
           try {
-            Files.copy(p, lib.resolve(tmp.relativize(p)), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(p, lib.resolve(tmp.relativize(p)));
           } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
+            throw new RuntimeException(e);
           }
         };
     try (final var st = Files.walk(tmp)) {
