@@ -11,6 +11,7 @@ from shlex import join
 from shutil import get_terminal_size
 from subprocess import CompletedProcess
 from sys import executable, stderr, stdout
+from tempfile import TemporaryDirectory
 from time import time
 from typing import (
     AbstractSet,
@@ -307,24 +308,26 @@ def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     for bin, pkg in _script_specs():
 
         async def cont(path: Path, bin: PurePath) -> _SortOfMonoid:
-            env = {
-                "PATH": pathsep.join((libexec, environ["PATH"])),
-                "BIN": normcase(BIN_DIR / bin),
-                "LIB": normcase(LIB_DIR / bin),
-                "LIBEXEC": libexec,
-            }
+            with TemporaryDirectory() as tmp:
+                env = {
+                    "PATH": pathsep.join((libexec, environ["PATH"])),
+                    "BIN": normcase(BIN_DIR / bin),
+                    "LIB": normcase(LIB_DIR / bin),
+                    "LIBEXEC": libexec,
+                    "TMP": tmp,
+                }
 
-            if tramp := which("env"):
-                argv: Sequence[AnyPath] = (tramp, "--", path)
-            else:
-                argv = (path,)
+                if tramp := which("env"):
+                    argv: Sequence[AnyPath] = (tramp, "--", path)
+                else:
+                    argv = (path,)
 
-            p = await _run(
-                *argv,
-                env=env,
-                cwd=TMP_DIR,
-            )
-            return (("", p),)
+                p = await _run(
+                    *argv,
+                    env=env,
+                    cwd=TMP_DIR,
+                )
+                return (("", p),)
 
         if (
             pkg.file
