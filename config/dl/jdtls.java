@@ -1,15 +1,14 @@
 // ; exec java -Dprogram.name="$0" "$0" "$@"
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.function.Consumer;
 
 public class jdtls {
@@ -40,21 +39,6 @@ public class jdtls {
         }
       }
 
-      final var die =
-          new SimpleFileVisitor<Path>() {
-            @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-                throws IOException {
-              Files.delete(file);
-              return FileVisitResult.CONTINUE;
-            }
-
-            @Override
-            public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
-              Files.delete(dir);
-              return FileVisitResult.CONTINUE;
-            }
-          };
       Consumer<Path> cp =
           p -> {
             try {
@@ -67,12 +51,16 @@ public class jdtls {
 
       Files.deleteIfExists(bin);
       if (Files.exists(lib)) {
-        Files.walkFileTree(lib, die);
+        try (final var st = Files.walk(lib)) {
+          st.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+        }
       }
       try (final var st = Files.walk(tmp)) {
         st.forEach(cp);
       }
-      Files.walkFileTree(tmp, die);
+      try (final var st = Files.walk(tmp)) {
+        st.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+      }
       Files.createSymbolicLink(bin, src);
     } catch (Exception e) {
       e.printStackTrace();
