@@ -10,6 +10,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
+import java.util.function.Consumer;
 
 public class jdtls {
   public static void main(String args[]) {
@@ -32,18 +33,11 @@ public class jdtls {
                   new ProcessBuilder("unpack.sh", tmp.toString())
                       .redirectOutput(Redirect.INHERIT)
                       .redirectError(Redirect.INHERIT)));
-      while (true) {
-        var dead = 0;
-        for (final var proc : procs) {
-          assert proc.waitFor() == 0;
-          if (!proc.isAlive()) {
-            dead++;
-          }
+      for (final var proc : procs) {
+        final var code = proc.waitFor();
+        if (code != 0) {
+          System.exit(code);
         }
-        if (dead == procs.size()) {
-          break;
-        }
-        Thread.sleep(100);
       }
 
       final var die =
@@ -61,21 +55,22 @@ public class jdtls {
               return FileVisitResult.CONTINUE;
             }
           };
+      Consumer<Path> cp =
+          p -> {
+            try {
+              Files.copy(p, lib.resolve(tmp.relativize(p)), StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+              e.printStackTrace();
+              System.exit(1);
+            }
+          };
 
       Files.deleteIfExists(bin);
       if (Files.exists(lib)) {
         Files.walkFileTree(lib, die);
       }
       try (final var st = Files.walk(tmp)) {
-        st.forEach(
-            p -> {
-              try {
-                Files.copy(p, lib.resolve(tmp.relativize(p)), StandardCopyOption.REPLACE_EXISTING);
-              } catch (IOException e) {
-                e.printStackTrace();
-                System.exit(1);
-              }
-            });
+        st.forEach(cp);
       }
       Files.walkFileTree(tmp, die);
       Files.createSymbolicLink(bin, src);

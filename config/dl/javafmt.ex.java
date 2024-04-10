@@ -19,7 +19,8 @@ public class javafmt {
 
     try {
       final var proc = new ProcessBuilder(argv).inheritIO().start();
-      assert proc.waitFor() == 0 && !proc.isAlive();
+      final var code = proc.waitFor();
+      System.exit(code);
     } catch (Exception e) {
       e.printStackTrace();
       System.exit(1);
