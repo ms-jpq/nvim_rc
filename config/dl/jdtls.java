@@ -1,22 +1,17 @@
 // ; exec java -ea -Dprogram.name="$0" "$0" "$@"
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.function.Consumer;
 
 public class jdtls {
   public static void main(String args[]) {
     final var uri =
         "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz";
     final var lib = Paths.get(System.getenv("LIB"));
-    final var libexec = Paths.get(System.getenv("LIBEXEC"));
     var bin = Paths.get(System.getenv("BIN"));
     if (System.getProperty("os.name").contains("Windows")) {
       bin.resolveSibling("jdtls.bat");
@@ -26,26 +21,14 @@ public class jdtls {
     try {
       final var tmp = Files.createTempDirectory("");
 
-      final var procs =
-          ProcessBuilder.startPipeline(
-              Arrays.asList(
-                  new ProcessBuilder("env", "--", "get.sh", uri).redirectError(Redirect.INHERIT),
-                  new ProcessBuilder("env", "--", "unpack.sh", tmp.toString())
-                      .redirectOutput(Redirect.INHERIT)
-                      .redirectError(Redirect.INHERIT)));
-      for (final var proc : procs) {
-        assert proc.waitFor() == 0;
-      }
+      final var p1 =
+          new ProcessBuilder("env", "--", "get.sh", uri).redirectError(Redirect.INHERIT).start();
+      assert p1.waitFor() == 0;
+      final var dst = new String(p1.getInputStream().readAllBytes());
 
-      Consumer<Path> cp =
-          p -> {
-            try {
-              Files.copy(p, lib.resolve(tmp.relativize(p)), StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-              e.printStackTrace();
-              System.exit(1);
-            }
-          };
+      final var p2 =
+          new ProcessBuilder("env", "--", "unpack.sh", tmp.toString(), dst).inheritIO().start();
+      assert p2.waitFor() == 0;
 
       Files.deleteIfExists(bin);
       if (Files.exists(lib)) {
@@ -53,12 +36,10 @@ public class jdtls {
           st.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
         }
       }
-      try (final var st = Files.walk(tmp)) {
-        st.forEach(cp);
-      }
-      try (final var st = Files.walk(tmp)) {
-        st.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
-      }
+      final var p3 =
+          new ProcessBuilder("mv", "-f", "--", tmp.toString(), lib.toString()).inheritIO().start();
+      assert p3.waitFor() == 0;
+
       Files.createSymbolicLink(bin, src);
     } catch (Exception e) {
       e.printStackTrace();

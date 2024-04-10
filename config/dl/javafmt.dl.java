@@ -8,7 +8,6 @@ public class javafmt {
   public static void main(String args[]) {
     final var self = Paths.get(System.getProperty("program.name"));
     final var lib = Paths.get(System.getenv("LIB"));
-    final var libexec = Paths.get(System.getenv("LIBEXEC"));
     final var bin = Paths.get(System.getenv("BIN"));
     final var dst = lib.resolve("google-java-format.jar");
     final var repo = "google/google-java-format";
@@ -19,15 +18,14 @@ public class javafmt {
               .redirectError(Redirect.INHERIT)
               .start();
       assert p1.waitFor() == 0;
-
       final var version = new String(p1.getInputStream().readAllBytes());
+
       final var uri =
           "https://github.com/"
               + repo
               + "/releases/latest/download/google-java-format-"
               + version.replaceFirst("^v", "")
               + "-all-deps.jar";
-
       final var p2 =
           new ProcessBuilder("env", "--", "get.sh", uri).redirectError(Redirect.INHERIT).start();
       assert p2.waitFor() == 0;
