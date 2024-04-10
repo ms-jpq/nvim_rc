@@ -17,7 +17,7 @@ public class jdtls {
       bin.resolveSibling("jdtls.bat");
     }
     final var src = lib.resolve("bin").resolve(bin.getFileName().toString());
-    final var tmp = Files.createTempDirectory("");
+    final var tmp = Paths.get(System.getenv("TMP"));
 
     final var p1 =
         new ProcessBuilder("env", "--", "get.sh", uri).redirectError(Redirect.INHERIT).start();

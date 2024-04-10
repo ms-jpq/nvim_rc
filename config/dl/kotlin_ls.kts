@@ -1,7 +1,6 @@
 #!/usr/bin/env -S -- kotlinc -script
 import java.lang.ProcessBuilder.Redirect
 import java.nio.file.Path
-import kotlin.io.createTempDir
 import kotlin.io.path.Path
 import kotlin.io.path.createSymbolicLinkPointingTo
 import kotlin.io.path.deleteIfExists
@@ -23,17 +22,16 @@ val suffix = { path: Path, ext: String ->
 }
 
 val uri = "https://github.com/fwcd/kotlin-language-server/releases/latest/download/server.zip"
-val libexec = System.getenv("LIBEXEC")!!
+val tmp = Path(System.getenv("TMP")!!)
 val lib = Path(System.getenv("LIB")!!)
-val tmp = Path(createTempDir().getPath())
 val ll = suffix(Path(lib.toString(), "bin", "kotlin-language-server"), ".bat")
 val bin = suffix(Path(System.getenv("BIN")!!), ".bat")
 
 val procs =
     ProcessBuilder.startPipeline(
         listOf(
-            ProcessBuilder(Path(libexec, "get.sh").toString(), uri).redirectError(Redirect.INHERIT),
-            ProcessBuilder(Path(libexec, "unpack.sh").toString(), tmp.toString())
+            ProcessBuilder("env", "--", "get.sh", uri).redirectError(Redirect.INHERIT),
+            ProcessBuilder("env", "--", "unpack.sh", tmp.toString())
                 .redirectOutput(Redirect.INHERIT)
                 .redirectError(Redirect.INHERIT)))
 
@@ -46,12 +44,8 @@ for (proc in procs) {
 
 tmp.resolve("server").toFile().copyRecursively(lib.toFile())
 
-@OptIn(kotlin.io.path.ExperimentalPathApi::class) tmp.deleteRecursively()
-
 ll.toFile().setExecutable(true)
 
 bin.deleteIfExists()
 
 bin.createSymbolicLinkPointingTo(ll)
-
-@OptIn(kotlin.io.path.ExperimentalPathApi::class) tmp.deleteRecursively()

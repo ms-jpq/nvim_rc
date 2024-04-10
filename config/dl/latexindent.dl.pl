@@ -26,7 +26,7 @@ if ( !-x $cpan ) {
 }
 
 if ( !-d $lib ) {
-  my $tmp       = File::Temp->newdir();
+  my $tmp       = $ENV{TMP};
   my $tmp_lib   = File::Temp->newdir();
   my $perl_libd = "$tmp_lib/perl";
   my $tar_libd  = "$tmp_lib/lib";

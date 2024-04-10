@@ -5,16 +5,11 @@ $uri =
   "https://github.com/phpactor/phpactor/releases/latest/download/phpactor.phar";
 
 $bin = getenv("BIN");
-$libexec = getenv("LIBEXEC");
-assert($libexec && $bin);
+assert($bin);
 
 $output = [];
 $code = -1;
-exec(
-  join(" ", array_map("escapeshellarg", ["{$libexec}/get.sh", $uri])),
-  $output,
-  $code
-);
+exec(join(" ", array_map("escapeshellarg", ["get.sh", $uri])), $output, $code);
 assert($code === 0, join(PHP_EOL, $output));
 $file = join(PHP_EOL, $output);
 

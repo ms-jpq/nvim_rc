@@ -29,7 +29,6 @@ linux*)
   ;;
 esac
 
-TMP="$(mktemp -d)"
+# shellcheck disable=SC2154
 get.sh "$URI" | unpack.sh "$TMP"
 install -v -b -- "$TMP/"*/golangci-lint "$BIN"
-rm -v -fr -- "$TMP"

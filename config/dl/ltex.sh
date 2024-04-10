@@ -18,11 +18,10 @@ linux*)
   ;;
 esac
 
-TMP="$(mktemp -d)"
+# shellcheck disable=SC2154
 get.sh "$URI" | unpack.sh "$TMP"
 # shellcheck disable=2154
 rm -rf -- "$LIB"
 mkdir -v -p -- "$LIB"
 mv -f -- "$TMP"/*/* "$LIB/"
 ln -v -sf -- "$LIB/bin/$(basename -- "$BIN")" "$BIN"
-rm -v -fr -- "$TMP"

@@ -5,11 +5,10 @@ open System.Diagnostics
 open System.IO
 open System.Runtime.InteropServices
 
-
+let tmp = Environment.GetEnvironmentVariable "TMP"
 let lib = Environment.GetEnvironmentVariable "LIB"
 let libexec = Environment.GetEnvironmentVariable "LIBEXEC"
 let proxy = Path.Combine(__SOURCE_DIRECTORY__, "omnisharp.ex.sh")
-let tmp = Directory.CreateTempSubdirectory().FullName
 
 let arch = Runtime.InteropServices.Architecture()
 let win = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)

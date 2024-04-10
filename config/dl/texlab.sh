@@ -27,9 +27,8 @@ linux*)
   ;;
 esac
 
-TMP="$(mktemp -d)"
+# shellcheck disable=SC2154
 get.sh "$URI" | unpack.sh "$TMP"
 get.sh "$T_URI" | unpack.sh "$TMP"
 install -v -b -- "$TMP/texlab"* "$BIN"
 install -v -b -- "$TMP/tectonic"* "$T_BIN"
-rm -v -fr -- "$TMP"

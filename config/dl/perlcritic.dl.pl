@@ -26,7 +26,7 @@ if ( !-x $cpan ) {
 }
 
 if ( !-d $lib ) {
-  my $tmp = File::Temp->newdir();
+  my $tmp = $ENV{TMP};
 
   $ENV{HOME}                = $tmp;
   $ENV{PERL_LOCAL_LIB_ROOT} = $tmp;

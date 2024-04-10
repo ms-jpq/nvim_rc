@@ -7,7 +7,7 @@ $PSStyle.OutputRendering = 'PlainText'
 
 $uri = 'https://github.com/PowerShell/PowerShellEditorServices/releases/latest/download/PowerShellEditorServices.zip'
 
-$tmp = $Env:CI ? (New-Item -ItemType Directory -Path ([Guid]::NewGuid())) : [IO.Directory]::CreateTempSubdirectory()
+$tmp = $Env:TMP
 $out = Split-Path -Leaf -Path $uri
 $bin = $Env:BIN
 $bin_d = Split-Path -Path $bin
