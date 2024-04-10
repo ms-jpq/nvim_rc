@@ -16,6 +16,7 @@ public class jdtls {
     final var uri =
         "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz";
     final var lib = Paths.get(System.getenv("LIB"));
+    final var libexec = Paths.get(System.getenv("LIBEXEC"));
     var bin = Paths.get(System.getenv("BIN"));
     if (System.getProperty("os.name").contains("Windows")) {
       bin.resolveSibling("jdtls.bat");
@@ -28,8 +29,9 @@ public class jdtls {
       final var procs =
           ProcessBuilder.startPipeline(
               Arrays.asList(
-                  new ProcessBuilder("get.sh", uri).redirectError(Redirect.INHERIT),
-                  new ProcessBuilder("unpack.sh", tmp.toString())
+                  new ProcessBuilder(libexec.resolve("get.sh").toString(), uri)
+                      .redirectError(Redirect.INHERIT),
+                  new ProcessBuilder(libexec.resolve("unpack.sh").toString(), tmp.toString())
                       .redirectOutput(Redirect.INHERIT)
                       .redirectError(Redirect.INHERIT)));
       for (final var proc : procs) {

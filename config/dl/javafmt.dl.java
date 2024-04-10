@@ -8,13 +8,16 @@ public class javafmt {
   public static void main(String args[]) {
     final var self = Paths.get(System.getProperty("program.name"));
     final var lib = Paths.get(System.getenv("LIB"));
+    final var libexec = Paths.get(System.getenv("LIBEXEC"));
     final var bin = Paths.get(System.getenv("BIN"));
     final var dst = lib.resolve("google-java-format.jar");
     final var repo = "google/google-java-format";
 
     try {
       final var p1 =
-          new ProcessBuilder("gh-latest.sh", ".", repo).redirectError(Redirect.INHERIT).start();
+          new ProcessBuilder(libexec.resolve("gh-latest.sh").toString(), ".", repo)
+              .redirectError(Redirect.INHERIT)
+              .start();
       assert p1.waitFor() == 0;
 
       final var version = new String(p1.getInputStream().readAllBytes());
