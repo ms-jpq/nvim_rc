@@ -31,7 +31,7 @@ public class javafmt {
     final var jar = new String(p2.getInputStream().readAllBytes());
 
     Files.createDirectories(lib);
-    Files.copy(Paths.get(jar), dst, StandardCopyOption.REPLACE_EXISTING);
+    Files.move(Paths.get(jar), dst, StandardCopyOption.REPLACE_EXISTING);
     Files.copy(self.resolveSibling("javafmt.ex.java"), bin, StandardCopyOption.REPLACE_EXISTING);
   }
 }

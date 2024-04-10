@@ -1,13 +1,16 @@
 #!/usr/bin/env -S -- clojure.sh -M
 
 (import '[java.lang ProcessBuilder ProcessBuilder$Redirect]
-        '[java.nio.file Files Paths StandardCopyOption]
-        '[java.nio.file.attribute FileAttribute])
+        '[java.nio.file Files Paths StandardCopyOption])
 (require
  '[clojure.string :refer [join]]
  '[clojure.java.shell :refer [sh]])
 
 (def arch (System/getProperty "os.arch"))
+(def tmp (-> "TMP"
+             (System/getenv)
+             (Paths/get (into-array String []))))
+
 (def repo "weavejester/cljfmt")
 (def base (str "https://github.com/" repo "/releases/latest/download/cljfmt"))
 (def version
@@ -29,21 +32,16 @@
                      "")]
            (Paths/get (str b ext) (into-array String []))))
 
-(let [tmp (Files/createTempDirectory "" (into-array FileAttribute []))]
-  (try
-    (doseq
-     [proc (ProcessBuilder/startPipeline
-            [(-> (ProcessBuilder. ["get.sh", uri])
-                 (.redirectError ProcessBuilder$Redirect/INHERIT))
-             (->
-              (ProcessBuilder. ["unpack.sh", (.toString tmp)])
-              (.redirectOutput ProcessBuilder$Redirect/INHERIT)
-              (.redirectError ProcessBuilder$Redirect/INHERIT))])]
-      (-> proc .waitFor zero? assert))
+(doseq
+ [proc (ProcessBuilder/startPipeline
+        [(-> (ProcessBuilder. ["get.sh", uri])
+             (.redirectError ProcessBuilder$Redirect/INHERIT))
+         (->
+          (ProcessBuilder. ["unpack.sh", (.toString tmp)])
+          (.redirectOutput ProcessBuilder$Redirect/INHERIT)
+          (.redirectError ProcessBuilder$Redirect/INHERIT))])]
+  (-> proc .waitFor zero? assert))
 
-    (Files/move (.resolve tmp "cljfmt")
-                bin
-                (into-array [StandardCopyOption/REPLACE_EXISTING]))
-
-    (finally
-      (Files/delete tmp))))
+(Files/move (.resolve tmp "cljfmt")
+            bin
+            (into-array [StandardCopyOption/REPLACE_EXISTING]))

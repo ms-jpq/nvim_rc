@@ -5,6 +5,7 @@ import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Comparator;
 
 public class jdtls {
@@ -34,10 +35,8 @@ public class jdtls {
         st.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
       }
     }
-    final var p3 =
-        new ProcessBuilder("mv", "-f", "--", tmp.toString(), lib.toString()).inheritIO().start();
-    assert p3.waitFor() == 0;
 
+    Files.move(tmp, lib, StandardCopyOption.REPLACE_EXISTING);
     Files.createSymbolicLink(bin, src);
   }
 }

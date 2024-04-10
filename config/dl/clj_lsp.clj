@@ -2,10 +2,14 @@
 
 (import '[java.lang ProcessBuilder ProcessBuilder$Redirect]
         '[java.nio.file Files Paths StandardCopyOption]
-        '[java.nio.file.attribute FileAttribute PosixFilePermissions])
+        '[java.nio.file.attribute PosixFilePermissions])
 
 (def arch (System/getProperty "os.arch"))
 (def os (System/getProperty "os.name"))
+(def tmp (-> "TMP"
+             (System/getenv)
+             (Paths/get (into-array String []))))
+
 (def base "https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp-native")
 
 (def uri
@@ -21,25 +25,20 @@
                      "")]
            (Paths/get (str b ext) (into-array String []))))
 
-(let [tmp (Files/createTempDirectory "" (into-array FileAttribute []))]
-  (try
-    (doseq
-     [proc (ProcessBuilder/startPipeline
-            [(-> (ProcessBuilder. ["get.sh", uri])
-                 (.redirectError ProcessBuilder$Redirect/INHERIT))
-             (->
-              (ProcessBuilder. ["unpack.sh", (.toString tmp)])
-              (.redirectOutput ProcessBuilder$Redirect/INHERIT)
-              (.redirectError ProcessBuilder$Redirect/INHERIT))])]
-      (-> proc .waitFor zero? assert))
+(doseq
+ [proc (ProcessBuilder/startPipeline
+        [(-> (ProcessBuilder. ["get.sh", uri])
+             (.redirectError ProcessBuilder$Redirect/INHERIT))
+         (->
+          (ProcessBuilder. ["unpack.sh", (.toString tmp)])
+          (.redirectOutput ProcessBuilder$Redirect/INHERIT)
+          (.redirectError ProcessBuilder$Redirect/INHERIT))])]
+  (-> proc .waitFor zero? assert))
 
-    (Files/move (.resolve tmp "clojure-lsp")
-                bin
-                (into-array [StandardCopyOption/REPLACE_EXISTING]))
+(Files/move (.resolve tmp "clojure-lsp")
+            bin
+            (into-array [StandardCopyOption/REPLACE_EXISTING]))
 
-    (finally
-      (Files/delete tmp))))
-
-(Files/setPosixFilePermissions
- bin
- (PosixFilePermissions/fromString "rwxrwxr-x"))
+(->> "rwxrwxr-x"
+     (PosixFilePermissions/fromString)
+     (Files/setPosixFilePermissions bin))

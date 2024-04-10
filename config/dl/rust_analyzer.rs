@@ -48,13 +48,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     .join("var")
     .join("tmp")
     .join("rust-analyzer-dl");
-  let libexec = var_os("LIBEXEC")
+
+  let bin = var_os("BIN")
     .map(PathBuf::from)
     .ok_or_else(|| format!("{}", Backtrace::capture()))?;
-  let bin = var_os("BIN").ok_or_else(|| format!("{}", Backtrace::capture()))?;
   #[cfg(target_family = "windows")]
   let bin = {
-    let mut bin = PathBuf::from(bin);
+    let mut bin = bin;
     bin.set_extension("exe");
     bin
   };
@@ -62,7 +62,7 @@ fn main() -> Result<(), Box<dyn Error>> {
   create_dir_all(&tmp)?;
   let output = Command::new("env")
     .arg("--")
-    .arg(libexec.join("get.sh"))
+    .arg("get.sh")
     .arg(uri)
     .stdout(Stdio::piped())
     .output()?;
@@ -75,7 +75,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
   let status = Command::new("env")
     .arg("--")
-    .arg(libexec.join("unpack.sh"))
+    .arg("unpack.sh")
     .arg(&tmp)
     .arg(os_str)
     .status()?;

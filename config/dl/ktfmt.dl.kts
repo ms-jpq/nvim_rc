@@ -12,7 +12,6 @@ import kotlin.io.path.deleteRecursively
 val root = URI("https://repo1.maven.org/maven2/com/facebook/ktfmt/")
 val path = System.getProperty("sun.java.command").split(" ").last()
 val proxy = Path(path).getParent().resolve("ktfmt.ex.java")
-val libexec = System.getenv("LIBEXEC")!!
 val lib = Path(System.getenv("LIB")!!)
 val bin = Path(System.getenv("BIN")!!)
 
@@ -26,10 +25,7 @@ val version =
                 .parse(root.resolve("maven-metadata.xml").toString()))
 
 val jar = root.resolve("$version/ktfmt-$version-jar-with-dependencies.jar").toString()
-val proc =
-    ProcessBuilder("env", "--", Path(libexec, "get.sh").toString(), jar)
-        .redirectError(Redirect.INHERIT)
-        .start()
+val proc = ProcessBuilder("env", "--", "get.sh", jar).redirectError(Redirect.INHERIT).start()
 
 assert(proc.waitFor() == 0)
 
