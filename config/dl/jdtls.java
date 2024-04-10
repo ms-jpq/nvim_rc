@@ -46,28 +46,38 @@ public class jdtls {
         Thread.sleep(100);
       }
 
+      final var die =
+          new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                throws IOException {
+              Files.delete(file);
+              return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException e) throws IOException {
+              Files.delete(dir);
+              return FileVisitResult.CONTINUE;
+            }
+          };
+
       Files.deleteIfExists(bin);
       if (Files.exists(lib)) {
-        Files.walkFileTree(
-            lib,
-            new SimpleFileVisitor<Path>() {
-              @Override
-              public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
-                  throws IOException {
-                Files.delete(file);
-                return FileVisitResult.CONTINUE;
-              }
-
-              @Override
-              public FileVisitResult postVisitDirectory(Path dir, IOException e)
-                  throws IOException {
-                Files.delete(dir);
-                return FileVisitResult.CONTINUE;
+        Files.walkFileTree(lib, die);
+      }
+      try (final var st = Files.walk(tmp)) {
+        st.forEach(
+            p -> {
+              try {
+                Files.copy(p, lib.resolve(tmp.relativize(p)), StandardCopyOption.REPLACE_EXISTING);
+              } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(1);
               }
             });
       }
-
-      Files.copy(tmp, lib, StandardCopyOption.REPLACE_EXISTING);
+      Files.walkFileTree(tmp, die);
       Files.createSymbolicLink(bin, src);
     } catch (Exception e) {
       e.printStackTrace();
