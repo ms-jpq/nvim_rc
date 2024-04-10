@@ -295,7 +295,7 @@
     script:
       file: fantomas.dl.fsx
 
-- bin: ktfmt.sh
+- bin: ktfmt.java
   args:
     - --
     - "-"
