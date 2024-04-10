@@ -17,7 +17,6 @@ public class jdtls {
       bin.resolveSibling("jdtls.bat");
     }
     final var src = lib.resolve("bin").resolve(bin.getFileName().toString());
-
     final var tmp = Files.createTempDirectory("");
 
     final var p1 =
