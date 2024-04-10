@@ -1,4 +1,4 @@
-#!/usr/bin/env -S -- dotnet fsi --gui-
+#!/usr/bin/env -S -- dotnet fsi --
 
 open System
 open System.Diagnostics
@@ -8,7 +8,7 @@ open System.Runtime.InteropServices
 
 let lib = Environment.GetEnvironmentVariable "LIB"
 let libexec = Environment.GetEnvironmentVariable "LIBEXEC"
-let proxy = Path.Combine(__SOURCE_DIRECTORY__, "omnisharp.ex.sh")
+let proxy = Path.Combine(__SOURCE_DIRECTORY__, "omnisharp.ex.fsx")
 let tmp = Directory.CreateTempSubdirectory().FullName
 
 let arch = Runtime.InteropServices.Architecture()
@@ -17,7 +17,6 @@ let win = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
 match win with
 | true -> System.Environment.Exit 0
 | _ -> ()
-
 
 let base_uri =
     "https://github.com/OmniSharp/omnisharp-roslyn/releases/latest/download/omnisharp"

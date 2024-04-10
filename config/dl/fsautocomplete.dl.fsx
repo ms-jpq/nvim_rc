@@ -1,4 +1,4 @@
-#!/usr/bin/env -S -- dotnet fsi --gui-
+#!/usr/bin/env -S -- dotnet fsi --
 
 open System
 open System.Diagnostics
@@ -8,13 +8,13 @@ open System.Runtime.InteropServices
 
 let tmp = Directory.CreateTempSubdirectory().FullName
 let lib = Environment.GetEnvironmentVariable "LIB"
-let proxy = Path.Combine(__SOURCE_DIRECTORY__, "fsautocomplete.ex.sh")
+let proxy = Path.Combine(__SOURCE_DIRECTORY__, "fsautocomplete.ex.fsx")
 let uri = "https://github.com/ionide/Ionide-vim"
 
 let bin =
     let ext =
         if RuntimeInformation.IsOSPlatform(OSPlatform.Windows) then
-            ".sh"
+            Path.GetExtension proxy
         else
             null
 

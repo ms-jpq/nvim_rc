@@ -283,9 +283,8 @@
     script:
       file: latexindent.dl.pl
 
-- bin: fantomas.sh
+- bin: fantomas.fsx
   args:
-    - --
     - ${tmpname}
   type: fs
   filetypes:

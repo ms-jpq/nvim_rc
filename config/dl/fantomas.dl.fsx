@@ -1,4 +1,4 @@
-#!/usr/bin/env -S -- dotnet fsi --gui-
+#!/usr/bin/env -S -- dotnet fsi --
 
 open System
 open System.Diagnostics
@@ -6,7 +6,7 @@ open System.IO
 open System.Runtime.InteropServices
 
 let tmp = Directory.CreateTempSubdirectory().FullName
-let proxy = Path.Combine(__SOURCE_DIRECTORY__, "fantomas.ex.sh")
+let proxy = Path.Combine(__SOURCE_DIRECTORY__, "fantomas.ex.fsx")
 let lib = Environment.GetEnvironmentVariable "LIB"
 let bin = Environment.GetEnvironmentVariable "BIN"
 
