@@ -15,7 +15,7 @@ public class javafmt {
 
     try {
       final var p1 =
-          new ProcessBuilder(libexec.resolve("gh-latest.sh").toString(), ".", repo)
+          new ProcessBuilder("env", "--", "gh-latest.sh", ".", repo)
               .redirectError(Redirect.INHERIT)
               .start();
       assert p1.waitFor() == 0;
@@ -28,7 +28,8 @@ public class javafmt {
               + version.replaceFirst("^v", "")
               + "-all-deps.jar";
 
-      final var p2 = new ProcessBuilder("get.sh", uri).redirectError(Redirect.INHERIT).start();
+      final var p2 =
+          new ProcessBuilder("env", "--", "get.sh", uri).redirectError(Redirect.INHERIT).start();
       assert p2.waitFor() == 0;
       final var jar = new String(p2.getInputStream().readAllBytes());
 

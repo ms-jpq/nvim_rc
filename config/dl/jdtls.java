@@ -29,9 +29,8 @@ public class jdtls {
       final var procs =
           ProcessBuilder.startPipeline(
               Arrays.asList(
-                  new ProcessBuilder(libexec.resolve("get.sh").toString(), uri)
-                      .redirectError(Redirect.INHERIT),
-                  new ProcessBuilder(libexec.resolve("unpack.sh").toString(), tmp.toString())
+                  new ProcessBuilder("env", "--", "get.sh", uri).redirectError(Redirect.INHERIT),
+                  new ProcessBuilder("env", "--", "unpack.sh", tmp.toString())
                       .redirectOutput(Redirect.INHERIT)
                       .redirectError(Redirect.INHERIT)));
       for (final var proc : procs) {
