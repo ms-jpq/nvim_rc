@@ -1,4 +1,4 @@
-// ; exec java -Dprogram.name="$0" "$0" "$@"
+// ; exec java -ea -Dprogram.name="$0" "$0" "$@"
 
 import java.io.File;
 import java.io.IOException;
@@ -33,10 +33,7 @@ public class jdtls {
                       .redirectOutput(Redirect.INHERIT)
                       .redirectError(Redirect.INHERIT)));
       for (final var proc : procs) {
-        final var code = proc.waitFor();
-        if (code != 0) {
-          System.exit(code);
-        }
+        assert proc.waitFor() == 0;
       }
 
       Consumer<Path> cp =

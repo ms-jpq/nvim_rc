@@ -1,4 +1,4 @@
-// ; exec java -Dprogram.name="$0" "$0" "$@"
+// ; exec java -ea -Dprogram.name="$0" "$0" "$@"
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -19,8 +19,7 @@ public class javafmt {
 
     try {
       final var proc = new ProcessBuilder(argv).inheritIO().start();
-      final var code = proc.waitFor();
-      System.exit(code);
+      assert proc.waitFor() == 0;
     } catch (Exception e) {
       e.printStackTrace();
       System.exit(1);

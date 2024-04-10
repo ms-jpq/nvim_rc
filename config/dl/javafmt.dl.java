@@ -1,4 +1,4 @@
-// ; exec java -Dprogram.name="$0" "$0" "$@"
+// ; exec java -ea -Dprogram.name="$0" "$0" "$@"
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -15,10 +15,7 @@ public class javafmt {
     try {
       final var p1 =
           new ProcessBuilder("gh-latest.sh", ".", repo).redirectError(Redirect.INHERIT).start();
-      final var c1 = p1.waitFor();
-      if (c1 != 0) {
-        System.exit(c1);
-      }
+      assert p1.waitFor() == 0;
 
       final var version = new String(p1.getInputStream().readAllBytes());
       final var uri =
@@ -29,11 +26,7 @@ public class javafmt {
               + "-all-deps.jar";
 
       final var p2 = new ProcessBuilder("get.sh", uri).redirectError(Redirect.INHERIT).start();
-      final var c2 = p2.waitFor();
-      if (c2 != 0) {
-        System.exit(c1);
-      }
-
+      assert p2.waitFor() == 0;
       final var jar = new String(p2.getInputStream().readAllBytes());
 
       Files.createDirectories(lib);
