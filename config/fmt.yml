@@ -316,7 +316,6 @@
     - java
   install:
     requires:
-      - TODO
       - java
       - jq
     script:

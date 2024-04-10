@@ -1,4 +1,4 @@
-// ; exec -- java -Dprogram.name="$0" "$0" "$@"
+// ; exec java -Dprogram.name="$0" "$0" "$@"
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -30,7 +30,7 @@ public class javafmt {
       final var jar = new String(p2.getInputStream().readAllBytes());
 
       Files.createDirectories(lib);
-      Files.move(Paths.get(jar), dst, StandardCopyOption.REPLACE_EXISTING);
+      Files.copy(Paths.get(jar), dst, StandardCopyOption.REPLACE_EXISTING);
       Files.copy(self.resolveSibling("javafmt.ex.sh"), bin, StandardCopyOption.REPLACE_EXISTING);
     } catch (Exception e) {
       e.printStackTrace();

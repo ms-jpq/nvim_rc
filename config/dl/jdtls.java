@@ -1,4 +1,4 @@
-// ; exec -- java -Dprogram.name="$0" "$0" "$@"
+// ; exec java -Dprogram.name="$0" "$0" "$@"
 
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
@@ -67,7 +67,7 @@ public class jdtls {
             });
       }
 
-      Files.move(tmp, lib, StandardCopyOption.REPLACE_EXISTING);
+      Files.copy(tmp, lib, StandardCopyOption.REPLACE_EXISTING);
       Files.createSymbolicLink(bin, src);
     } catch (Exception e) {
       e.printStackTrace();

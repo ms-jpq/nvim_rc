@@ -42,4 +42,5 @@ lib.createDirectory()
 file.copyTo(lib.resolve(file.getFileName()))
 
 bin.deleteIfExists()
+
 proxy.copyTo(bin, true)

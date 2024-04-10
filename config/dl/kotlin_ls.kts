@@ -32,25 +32,23 @@ val bin = suffix(Path(System.getenv("BIN")!!), ".bat")
 val procs =
     ProcessBuilder.startPipeline(
         listOf(
-            ProcessBuilder(Path(libexec, "get.sh").toString(), uri)
-                .redirectError(Redirect.INHERIT),
+            ProcessBuilder(Path(libexec, "get.sh").toString(), uri).redirectError(Redirect.INHERIT),
             ProcessBuilder(Path(libexec, "unpack.sh").toString(), tmp.toString())
                 .redirectOutput(Redirect.INHERIT)
                 .redirectError(Redirect.INHERIT)))
 
 for (proc in procs) {
   assert(proc.waitFor() == 0)
+  assert(!proc.isAlive())
 }
 
 @OptIn(kotlin.io.path.ExperimentalPathApi::class) lib.deleteRecursively()
 
-val p1 = rt.exec(arrayOf("mv", "-v", "-f", "--", tmp.resolve("server").toString(), lib.toString()))
+tmp.resolve("server").toFile().copyRecursively(lib.toFile())
 
-assert(p1.waitFor() == 0)
+@OptIn(kotlin.io.path.ExperimentalPathApi::class) tmp.deleteRecursively()
 
-val p2 = rt.exec(arrayOf("chmod", "-v", "+x", ll.toString()))
-
-assert(p2.waitFor() == 0)
+ll.toFile().setExecutable(true)
 
 bin.deleteIfExists()
 

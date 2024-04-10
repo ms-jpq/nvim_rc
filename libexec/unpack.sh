@@ -2,6 +2,8 @@
 
 set -o pipefail
 
+exec >&2
+
 DST="$1"
 SRC="${2:-"$(</dev/fd/0)"}"
 FMT="${FMT:-"$SRC"}"
