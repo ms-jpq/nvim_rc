@@ -36,7 +36,7 @@ case "$FMT" in
   ;;
 *.zip | *.vsix)
   if [[ "$OSTYPE" == linux* ]]; then
-    unzip -o -d "$DST" -- "$SRC"
+    unzip -o -d "$DST" -q -- "$SRC"
   else
     "${TAR[@]}"
   fi
