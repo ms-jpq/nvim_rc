@@ -7,7 +7,6 @@ from itertools import chain
 from os.path import normpath
 from pathlib import Path, PurePath
 from shlex import join
-from shutil import which
 from tempfile import NamedTemporaryFile
 from typing import Iterable, Iterator, Sequence, Tuple
 
@@ -19,6 +18,7 @@ from pynvim_pp.preview import set_preview
 from std2.asyncio.subprocess import call
 from std2.lex import ParseError, envsubst
 
+from ..config.install import which
 from ..config.linter import LinterAttrs, LinterType, linter_specs
 from ..consts import DATE_FMT
 from ..registry import LANG, NAMESPACE, keymap, rpc

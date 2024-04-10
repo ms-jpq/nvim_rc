@@ -1,7 +1,6 @@
 from fnmatch import fnmatch
 from os.path import normcase
 from pathlib import Path
-from shutil import which
 from typing import Any, Mapping, MutableMapping, Optional
 
 from pynvim_pp.handler import GLOBAL_NS
@@ -14,6 +13,7 @@ from std2.pickle.decoder import new_decoder
 from std2.pickle.encoder import new_encoder
 from std2.types import never
 
+from ..config.install import which
 from ..config.lsp import LspAttrs, RootPattern, RPFallback, lsp_specs
 from ..registry import LANG, NAMESPACE, atomic, keymap, rpc
 from ..text_objects.word import UNIFIYING_CHARS

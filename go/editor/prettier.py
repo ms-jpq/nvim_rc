@@ -4,7 +4,6 @@ from itertools import chain
 from os.path import normcase, normpath
 from pathlib import Path, PurePath
 from shlex import join
-from shutil import which
 from typing import AsyncIterator, Iterable, Iterator, Tuple
 
 from pynvim_pp.lib import decode, encode
@@ -17,6 +16,7 @@ from std2.asyncio.subprocess import call
 from std2.lex import ParseError
 
 from ..config.fmt import FmtAttrs, FmtType, fmt_specs
+from ..config.install import which
 from ..registry import LANG, NAMESPACE, keymap, rpc
 from .linter import BufContext, arg_subst, current_ctx, mktemp, set_preview_content
 from .whitespace import detect_tabs, trailing_ws

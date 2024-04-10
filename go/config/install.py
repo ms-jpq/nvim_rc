@@ -1,6 +1,11 @@
 from dataclasses import dataclass
+from functools import cache
 from pathlib import PurePath
+from shutil import which as _which
 from typing import AbstractSet, Optional, Protocol
+
+from std2.pathlib import AnyPath
+from std2.platform import OS, os
 
 
 @dataclass(frozen=True)
@@ -24,3 +29,17 @@ class _HasInstall(Protocol):
 @dataclass(frozen=True)
 class HasInstall(_HasInstall):
     bin: PurePath
+
+
+_DIE = {"/usr/bin/ruby", "/usr/bin/gem", "/usr/bin/java"}
+
+
+@cache
+def which(src: AnyPath) -> Optional[PurePath]:
+    if dst := _which(src):
+        if os is OS.macos and dst in _DIE:
+            return None
+        else:
+            return PurePath(dst)
+    else:
+        return None

@@ -1,5 +1,4 @@
-from shutil import which
-
+from ..config.install import which
 from ..registry import NAMESPACE, keymap, rpc
 from ..workspace.terminal import open_term
 

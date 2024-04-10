@@ -1,8 +1,7 @@
 from collections.abc import AsyncIterator, Mapping, Sequence
 from itertools import chain
 from os import environ
-from os.path import normcase
-from shutil import which
+from os.path import normcase, normpath
 from typing import TypedDict
 from uuid import uuid4
 
@@ -17,6 +16,7 @@ from std2.asyncio.subprocess import call
 from std2.pathlib import AnyPath
 from std2.platform import OS, os
 
+from ..config.install import which
 from ..registry import LANG, NAMESPACE, atomic, autocmd, keymap, rpc
 
 _BUF_VAR_NAME = uuid4()
@@ -92,7 +92,7 @@ else:
             _BUF_VAR_NAME, margin=0, relsize=0.95, buf=buf, border="rounded"
         )
         if not is_term_buf:
-            cmds = tuple(map(str, chain((which(prog),), args)))
+            cmds = tuple(map(str, chain((which(normpath(prog)),), args)))
             await Nvim.fn.termopen(NoneType, cmds, opts)
 
         await Nvim.api.command(NoneType, "startinsert")
@@ -102,7 +102,7 @@ else:
         argv = args or await _sh()
         prog, *_ = argv
 
-        if not which(prog):
+        if not which(normpath(prog)):
             await Nvim.write(LANG("invalid command: ", cmd=normcase(prog)), error=True)
         else:
             if float_wins := frozenset(

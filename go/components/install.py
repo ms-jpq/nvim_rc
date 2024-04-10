@@ -9,7 +9,6 @@ from os.path import normcase
 from pathlib import Path, PurePath
 from shlex import join
 from shutil import get_terminal_size
-from shutil import which as _which
 from subprocess import CompletedProcess
 from sys import executable, stderr, stdout
 from time import time
@@ -35,7 +34,7 @@ from std2.pathlib import AnyPath
 from std2.platform import OS, os
 
 from ..config.fmt import fmt_specs
-from ..config.install import ScriptSpec
+from ..config.install import ScriptSpec, which
 from ..config.linter import linter_specs
 from ..config.lsp import lsp_specs
 from ..config.pkgs import GitPkgSpec, pkg_specs
@@ -63,13 +62,6 @@ _SortOfMonoid = Sequence[Tuple[str, CompletedProcess[bytes]]]
 
 
 _GEMS = GEM_DIR / "gems"
-
-
-def which(src: AnyPath) -> Optional[PurePath]:
-    if dst := _which(src):
-        return PurePath(dst)
-    else:
-        return None
 
 
 def _pip_specs() -> Iterator[str]:
