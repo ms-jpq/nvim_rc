@@ -17,7 +17,8 @@
 
        WORKING-STORAGE SECTION.
        01 PTR POINTER.
-       01 ENV-NAME PIC XXX VALUE "BIN".
+       01 ENV-BIN PIC XXX VALUE "BIN".
+       01 ENV-TMP PIC XXX VALUE "TMP".
        01 ENV-LEN PIC 9(8) BINARY.
 
        01 BIN PIC X(99).
@@ -40,7 +41,7 @@
        01 ENV PIC X(9999).
 
        PROCEDURE DIVISION.
-           SET PTR TO ADDRESS OF ENV-NAME.
+           SET PTR TO ADDRESS OF ENV-BIN.
            CALL "getenv" USING BY VALUE PTR RETURNING PTR
            IF PTR = NULL THEN
              MOVE 1 TO RETURN-CODE
@@ -53,19 +54,19 @@
              MOVE ENV(1:ENV-LEN) TO BIN
            END-IF.
 
-           MOVE SPACES TO SH.
-           MOVE SPACES TO TMP.
-
-           STRING "mktemp -d | tr -d -- '\n'" " " SPIT
-           DELIMITED SIZE INTO SH.
-           CALL "SYSTEM" USING SH RETURNING RETVAL.
-           IF RETVAL NOT = 0
-             MOVE RETVAL TO RETURN-CODE
+           SET PTR TO ADDRESS OF ENV-TMP.
+           CALL "getenv" USING BY VALUE PTR RETURNING PTR
+           IF PTR = NULL THEN
+             MOVE 1 TO RETURN-CODE
              EXIT PROGRAM
+           ELSE
+             SET ADDRESS OF ENV TO PTR
+             MOVE 0 TO ENV-LEN
+             INSPECT ENV TALLYING ENV-LEN
+               FOR CHARACTERS BEFORE INITIAL X"00"
+             MOVE ENV(1:ENV-LEN) TO TMPD
            END-IF.
-           OPEN INPUT TMPF.
-           READ TMPF into TMPD.
-           CLOSE TMPF.
+
            STRING TMPD "/extension/server/native" DELIMITED BY " "
            INTO NAIVE.
 
@@ -132,7 +133,7 @@
            MOVE SPACES TO SH.
 
            STRING "get.sh " URI
-           " | FMT=zip unpack.sh "
+           " | unpack.sh "
            TMPD DELIMITED BY SIZE INTO SH.
            CALL "SYSTEM" USING SH RETURNING RETVAL.
            IF RETVAL NOT = 0
@@ -142,17 +143,7 @@
 
            MOVE SPACES TO SH.
 
-           STRING "install -v -b -- " NAIVE BIN
-           DELIMITED BY SIZE INTO SH.
-           CALL "SYSTEM" USING SH RETURNING RETVAL.
-           IF RETVAL NOT = 0
-             MOVE RETVAL TO RETURN-CODE
-             EXIT PROGRAM
-           END-IF.
-
-           MOVE SPACES TO SH.
-
-           STRING "rm -v -fr -- " TMPD
+           STRING "mv -v -f -- " NAIVE BIN
            DELIMITED BY SIZE INTO SH.
            CALL "SYSTEM" USING SH RETURNING RETVAL.
            IF RETVAL NOT = 0

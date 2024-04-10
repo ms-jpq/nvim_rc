@@ -46,5 +46,6 @@ if "${CURL[@]}" >&2; then
   printf -- '%s' "$DST"
 else
   rm -fr -- "$TTAG" "$TMP" >&2
+  set -x
   exit 1
 fi
