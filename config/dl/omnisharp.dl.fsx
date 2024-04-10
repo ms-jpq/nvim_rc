@@ -8,7 +8,7 @@ open System.Runtime.InteropServices
 
 let lib = Environment.GetEnvironmentVariable "LIB"
 let libexec = Environment.GetEnvironmentVariable "LIBEXEC"
-let proxy = Path.Combine(__SOURCE_DIRECTORY__, "omnisharp.ex.fsx")
+let proxy = Path.Combine(__SOURCE_DIRECTORY__, "omnisharp.ex.sh")
 let tmp = Directory.CreateTempSubdirectory().FullName
 
 let arch = Runtime.InteropServices.Architecture()
