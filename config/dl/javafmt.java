@@ -15,7 +15,8 @@ public class javafmt {
     try {
       final var p1 =
           new ProcessBuilder("gh-latest.sh", ".", repo).redirectError(Redirect.INHERIT).start();
-      assert p1.waitFor() == 0;
+      assert p1.waitFor() == 0 && !p1.isAlive();
+
       final var version = new String(p1.getInputStream().readAllBytes());
       final var uri =
           "https://github.com/"
@@ -23,8 +24,9 @@ public class javafmt {
               + "/releases/latest/download/google-java-format-"
               + version.replaceFirst("^v", "")
               + "-all-deps.jar";
+
       final var p2 = new ProcessBuilder("get.sh", uri).redirectError(Redirect.INHERIT).start();
-      assert p2.waitFor() == 0;
+      assert p2.waitFor() == 0 && !p2.isAlive();
       final var jar = new String(p2.getInputStream().readAllBytes());
 
       Files.createDirectories(lib);

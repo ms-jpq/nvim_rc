@@ -7,8 +7,9 @@ from multiprocessing import cpu_count
 from os import PathLike, environ, linesep, pathsep, sep
 from os.path import normcase
 from pathlib import Path, PurePath
-from shlex import join, split
-from shutil import get_terminal_size, which
+from shlex import join
+from shutil import get_terminal_size
+from shutil import which as _which
 from subprocess import CompletedProcess
 from sys import executable, stderr, stdout
 from time import time
@@ -27,7 +28,7 @@ from typing import (
 )
 from venv import EnvBuilder
 
-from pynvim_pp.lib import decode, encode
+from pynvim_pp.lib import encode
 from pynvim_pp.nvim import Nvim
 from std2.asyncio.subprocess import call
 from std2.pathlib import AnyPath
@@ -62,6 +63,13 @@ _SortOfMonoid = Sequence[Tuple[str, CompletedProcess[bytes]]]
 
 
 _GEMS = GEM_DIR / "gems"
+
+
+def which(src: AnyPath) -> Optional[PurePath]:
+    if dst := _which(src):
+        return PurePath(dst)
+    else:
+        return None
 
 
 def _pip_specs() -> Iterator[str]:
@@ -225,7 +233,6 @@ def _gem(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     name = "gem"
     if (
         (gem := which(name))
-        and (os != OS.macos or gem != "/usr/bin/gem")
         and (
             specs := {
                 *(
@@ -235,10 +242,7 @@ def _gem(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
                 )
             }
         )
-        and (
-            os != OS.macos
-            or not PurePath(gem).is_relative_to(PurePath(sep) / "usr" / "bin")
-        )
+        and (os != OS.macos or not gem.is_relative_to(PurePath(sep) / "usr" / "bin"))
     ):
 
         async def cont() -> _SortOfMonoid:

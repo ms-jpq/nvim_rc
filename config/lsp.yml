@@ -376,9 +376,10 @@
   bin: jdtls
   install:
     requires:
-      - jshell
+      # - TODO
+      - java
     script:
-      file: jdtls.sh
+      file: jdtls.java
 
 # - server: prolog_ls
 #   bin: prolog-ls

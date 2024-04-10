@@ -10,7 +10,7 @@ class ScriptSpec:
 
 @dataclass(frozen=True)
 class InstallSpec:
-    requires: AbstractSet[str] = frozenset()
+    requires: AbstractSet[PurePath] = frozenset()
     pip: AbstractSet[str] = frozenset()
     gem: AbstractSet[str] = frozenset()
     npm: AbstractSet[str] = frozenset()
