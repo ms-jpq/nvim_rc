@@ -29,8 +29,8 @@ public class jdtls {
             List.of(
                 new ProcessBuilder("env", "--", "get.sh", uri).redirectError(Redirect.INHERIT),
                 new ProcessBuilder("env", "--", "unpack.sh", tmp.toString())
+                    .redirectOutput(Redirect.INHERIT)
                     .redirectError(Redirect.INHERIT)));
-
     for (final var proc : procs) {
       assert proc.waitFor() == 0;
     }

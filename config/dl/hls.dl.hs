@@ -15,11 +15,14 @@ repo = "haskell/haskell-language-server"
 base = "https://github.com/haskell/haskell-language-server/releases/latest/download/haskell-language-server"
 
 uri "darwin"  = printf "%s-%s-aarch64-apple-darwin.tar.xz" base
-uri "linux"   = printf "%s-%s-x86_64-linux-ubuntu22.04.tar.xz" base
+uri "linux"   = printf "%s-%s-x86_64-linux-unknown.tar.xz" base
 uri "mingw32" = printf "%s-%s-x86_64-mingw64.zip" base
 
 suffix "mingw32" = flip addExtension ".sh"
 suffix _         = id
+
+contents "mingw32" _ tmp = tmp
+contents _ version tmp   = tmp </> printf "haskell-language-server-%s" version
 
 run os = do
   lib <- getEnv "LIB"
@@ -28,7 +31,7 @@ run os = do
   version <- readProcess "env" ["--", "gh-latest.sh", ".", repo] ""
 
   let tramp = cwd </> "config" </> "dl" </> "hls.ex.sh"
-  let srv = tmp </> printf "haskell-language-server-%s" version
+  let srv = contents os version tmp
   let link = uri os version
 
   _ <- readProcess "env" ["--", "get.sh", link] ""
