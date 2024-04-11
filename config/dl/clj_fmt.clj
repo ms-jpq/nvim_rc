@@ -1,7 +1,7 @@
 #!/usr/bin/env -S -- clojure.sh -M
 
 (import '[java.lang ProcessBuilder ProcessBuilder$Redirect]
-        '[java.nio.file Files Paths StandardCopyOption])
+        '[java.nio.file Files Path StandardCopyOption])
 (require
  '[clojure.string :refer [join]]
  '[clojure.java.shell :refer [sh]])
@@ -9,7 +9,7 @@
 (def arch (System/getProperty "os.arch"))
 (def tmp (-> "TMP"
              (System/getenv)
-             (Paths/get (into-array String []))))
+             (Path/of (into-array String []))))
 
 (def repo "weavejester/cljfmt")
 (def base (str "https://github.com/" repo "/releases/latest/download/cljfmt"))
@@ -30,7 +30,7 @@
                ext (case (System/getProperty "os.name")
                      "Windows" ".exe"
                      "")]
-           (Paths/get (str b ext) (into-array String []))))
+           (Path/of (str b ext) (into-array String []))))
 
 (doseq
  [proc (ProcessBuilder/startPipeline
