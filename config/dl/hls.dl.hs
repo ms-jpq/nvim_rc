@@ -25,18 +25,18 @@ run os = do
   lib <- getEnv "LIB"
   tmp <- getEnv "TMP"
   cwd <- getCurrentDirectory <&> (takeDirectory >>> takeDirectory)
-  version <- readProcess "gh-latest.sh" [".", repo] ""
+  version <- readProcess "env" ["--", "gh-latest.sh", ".", repo] ""
 
   let tramp = cwd </> "config" </> "dl" </> "hls.ex.sh"
   let srv = tmp </> printf "haskell-language-server-%s" version
   let link = uri os version
 
-  _ <- readProcess "get.sh" [link] ""
-    >>= readProcess "unpack.sh" [tmp]
+  _ <- readProcess "env" ["--", "get.sh", link] ""
+    >>= readProcess "env" ["--", "unpack.sh", tmp]
     >>= putStr
 
   _ <- removePathForcibly lib
-  _ <- readProcess "mv" ["-v", "-f", "--", srv, lib] ""
+  _ <- readProcess "mv" ["-v", "-f", "--", srv, lib] "" >>= putStr
   _ <- getEnv "BIN" <&> suffix os >>= copyFileWithMetadata tramp
   _ <- removePathForcibly tmp
   exitSuccess
