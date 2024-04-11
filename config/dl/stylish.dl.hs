@@ -1,12 +1,8 @@
 #!/usr/bin/env -S -- runhaskell
 
-import           Data.Char             (isSpace)
 import           Data.Function         ((&))
-import           Data.Functor          ((<&>))
-import           Data.List             (dropWhileEnd)
 import           System.Directory      (copyFileWithMetadata, getPermissions,
-                                        removePathForcibly, setOwnerExecutable,
-                                        setPermissions)
+                                        setOwnerExecutable, setPermissions)
 import           System.Environment    (getEnv, getExecutablePath)
 import           System.Exit           (exitSuccess)
 import           System.FilePath       ((</>))
@@ -27,7 +23,7 @@ nameof _       = id
 
 run "mingw32" = exitSuccess
 run os = do
-  tmp <- readProcess "mktemp" ["-d"] "" <&> dropWhileEnd isSpace
+  tmp <- getEnv "TMP"
   version <- readProcess "gh-latest.sh" [".", repo] ""
 
   let link = uri os version
@@ -40,7 +36,6 @@ run os = do
 
   _ <- getExecutablePath >>= getPermissions >>= setPermissions srv
   _ <- getEnv "BIN" >>= copyFileWithMetadata srv
-  _ <- removePathForcibly tmp
   exitSuccess
 
 main = run os

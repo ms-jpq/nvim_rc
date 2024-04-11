@@ -308,7 +308,7 @@ def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     for bin, pkg in _script_specs():
 
         async def cont(path: Path, bin: PurePath) -> _SortOfMonoid:
-            with TemporaryDirectory(dir=TMP_DIR) as tmp:
+            with TemporaryDirectory(dir=TMP_DIR, prefix=path.name) as tmp:
                 env = {
                     "PATH": pathsep.join((libexec, environ["PATH"])),
                     "BIN": normcase(BIN_DIR / bin),

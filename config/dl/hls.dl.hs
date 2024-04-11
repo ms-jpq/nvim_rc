@@ -1,14 +1,12 @@
 #!/usr/bin/env -S -- runhaskell
 
 import           Control.Arrow      ((>>>))
-import           Data.Char          (isSpace)
 import           Data.Functor       ((<&>))
-import           Data.List          (dropWhileEnd)
 import           System.Directory   (copyFileWithMetadata, getCurrentDirectory,
                                      removePathForcibly, renameDirectory)
 import           System.Environment (getEnv)
 import           System.Exit        (exitSuccess)
-import           System.FilePath    (takeDirectory, (</>))
+import           System.FilePath    (addExtension, takeDirectory, (</>))
 import           System.Info        (os)
 import           System.Process     (readProcess)
 import           Text.Printf        (printf)
@@ -20,14 +18,13 @@ uri "darwin"  = printf "%s-%s-aarch64-apple-darwin.tar.xz" base
 uri "linux"   = printf "%s-%s-x86_64-linux-ubuntu22.04.tar.xz" base
 uri "mingw32" = printf "%s-%s-x86_64-mingw64.zip" base
 
-suffix "mingw32" = ".exe"
-suffix _         = ""
+suffix "mingw32" = flip addExtension ".sh"
+suffix _         = id
 
-run "mingw32" = exitSuccess
 run os = do
   lib <- getEnv "LIB"
+  tmp <- getEnv "TMP"
   cwd <- getCurrentDirectory <&> (takeDirectory >>> takeDirectory)
-  tmp <- readProcess "mktemp" ["-d"] "" <&> dropWhileEnd isSpace
   version <- readProcess "gh-latest.sh" [".", repo] ""
 
   let tramp = cwd </> "config" </> "dl" </> "hls.ex.sh"
@@ -40,7 +37,7 @@ run os = do
 
   _ <- removePathForcibly lib
   _ <- readProcess "mv" ["-v", "-f", "--", srv, lib] ""
-  _ <- getEnv "BIN" >>= copyFileWithMetadata tramp
+  _ <- getEnv "BIN" <&> suffix os >>= copyFileWithMetadata tramp
   _ <- removePathForcibly tmp
   exitSuccess
 
