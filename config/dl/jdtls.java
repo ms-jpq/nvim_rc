@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
@@ -16,13 +15,13 @@ public class jdtls {
 
     final var uri =
         "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz";
-    final var lib = Paths.get(System.getenv("LIB"));
-    var bin = Paths.get(System.getenv("BIN"));
+    final var lib = Path.of(System.getenv("LIB"));
+    var bin = Path.of(System.getenv("BIN"));
     if (win) {
       bin.resolveSibling("jdtls.bat");
     }
     final var src = lib.resolve("bin").resolve(bin.getFileName().toString());
-    final var tmp = Paths.get(System.getenv("TMP"));
+    final var tmp = Path.of(System.getenv("TMP"));
 
     final var procs =
         ProcessBuilder.startPipeline(

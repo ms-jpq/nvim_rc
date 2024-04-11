@@ -1,14 +1,14 @@
 // ; exec java -ea -Dprogram.name="$0" "$0" "$@"
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 public class javafmt {
   public static void main(String args[]) throws Exception {
-    final var self = Paths.get(System.getProperty("program.name"));
-    final var lib = Paths.get(System.getenv("LIB"));
-    final var bin = Paths.get(System.getenv("BIN"));
+    final var self = Path.of(System.getProperty("program.name"));
+    final var lib = Path.of(System.getenv("LIB"));
+    final var bin = Path.of(System.getenv("BIN"));
     final var dst = lib.resolve("google-java-format.jar");
     final var repo = "google/google-java-format";
 
@@ -31,7 +31,7 @@ public class javafmt {
     final var jar = new String(p2.getInputStream().readAllBytes());
 
     Files.createDirectories(lib);
-    Files.move(Paths.get(jar), dst, StandardCopyOption.REPLACE_EXISTING);
+    Files.move(Path.of(jar), dst, StandardCopyOption.REPLACE_EXISTING);
     Files.copy(self.resolveSibling("javafmt.ex.java"), bin, StandardCopyOption.REPLACE_EXISTING);
   }
 }

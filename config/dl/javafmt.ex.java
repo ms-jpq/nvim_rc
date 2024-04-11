@@ -1,12 +1,12 @@
 // ; exec java -ea -Dprogram.name="$0" "$0" "$@"
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class javafmt {
   public static void main(String args[]) throws Exception {
-    final var self = Paths.get(System.getProperty("program.name"));
-    final var java = Paths.get(System.getProperty("java.home")).resolve("bin").resolve("java");
+    final var self = Path.of(System.getProperty("program.name"));
+    final var java = Path.of(System.getProperty("java.home")).resolve("bin").resolve("java");
     final var jar =
         self.getParent()
             .getParent()
