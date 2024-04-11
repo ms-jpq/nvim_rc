@@ -21,14 +21,14 @@ func main() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Env = append(os.Environ(), "GO111MODULE=on", "GOPATH="+lib)
+
 	if err := cmd.Run(); err != nil {
 		log.Fatal(err)
 	}
-
-	cmd = exec.Command("ln", "-v", "-sf", "--", dst, bin)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
+	if err := os.RemoveAll(bin); err != nil {
+		log.Fatal(err)
+	}
+	if err := os.Symlink(dst, bin); err != nil {
 		log.Fatal(err)
 	}
 }
