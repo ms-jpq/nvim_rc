@@ -70,8 +70,12 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
-          distribution: 'microsoft'
-          java-version: '21'
+          distribution: "microsoft"
+          java-version: "21"
+
+      - run: |-
+          Get-Command -All -- perl
+          Get-Command -All -- cpan
 
       - run: |-
           make patch -- JAVA_HOME="$Env:JAVA_HOME_21_X64" NO_R=1
