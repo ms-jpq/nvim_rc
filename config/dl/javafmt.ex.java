@@ -1,6 +1,5 @@
 // ; exec java -ea -Dprogram.name="$0" "$0" "$@"
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class javafmt {
@@ -14,7 +13,7 @@ public class javafmt {
             .resolve("javafmt.java")
             .resolve("google-java-format.jar");
     final var argv =
-        Stream.concat(Stream.of(java.toString(), "-jar", jar.toString()), Arrays.stream(args))
+        Stream.concat(Stream.of(java.toString(), "-jar", jar.toString()), Stream.of(args))
             .toArray(String[]::new);
 
     final var proc = new ProcessBuilder(argv).inheritIO().start();

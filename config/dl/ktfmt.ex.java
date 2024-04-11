@@ -1,6 +1,5 @@
 // ; exec java -ea -Dprogram.name="$0" "$0" "$@"
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class ktfmt {
@@ -10,7 +9,7 @@ public class ktfmt {
     final var jar =
         self.getParent().getParent().resolve("lib").resolve("ktfmt.java").resolve("ktfmt.jar");
     final var argv =
-        Stream.concat(Stream.of(java.toString(), "-jar", jar.toString()), Arrays.stream(args))
+        Stream.concat(Stream.of(java.toString(), "-jar", jar.toString()), Stream.of(args))
             .toArray(String[]::new);
 
     final var proc = new ProcessBuilder(argv).inheritIO().start();
