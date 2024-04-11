@@ -276,7 +276,6 @@
   type: stream
   install:
     requires:
-      - cpan
       - gcc
       - jq
       - perl

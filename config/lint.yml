@@ -37,7 +37,6 @@
     - perl
   install:
     requires:
-      - cpan
       - perl
     script:
       file: perlcritic.dl.pl
