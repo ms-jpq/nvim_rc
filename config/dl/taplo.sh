@@ -20,4 +20,6 @@ esac
 
 # shellcheck disable=SC2154
 get.sh "$URI" | unpack.sh "$TMP"
-mv -v -f -- "$TMP"/* "$BIN"
+F=("$TMP"/*)
+chmod +x "${F[@]}"
+mv -v -f -- "${F[@]}" "$BIN"
