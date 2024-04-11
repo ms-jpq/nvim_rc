@@ -12,6 +12,7 @@ use strict;
 use utf8;
 
 my $dir   = dirname(__FILE__);
+my $tmp   = $ENV{TMP};
 my $cpan  = catfile( dirname( $Config{perlpath} ), 'cpan' );
 my $bin   = dirname( $ENV{BIN} );
 my $lib   = $ENV{LIB};
@@ -26,7 +27,6 @@ if ( !-x $cpan ) {
 }
 
 if ( !-d $lib ) {
-  my $tmp = $ENV{TMP};
 
   $ENV{HOME}                = $tmp;
   $ENV{PERL_LOCAL_LIB_ROOT} = $tmp;
@@ -37,7 +37,7 @@ if ( !-d $lib ) {
   system( $cpan, '-T', '-I', '-i', 'Perl::Critic' )
     && croak $CHILD_ERROR;
 
-  system( "mv", "--", $tmp, $lib ) && croak $CHILD_ERROR;
+  move( $tmp, $lib );
 }
 
 foreach my $name (@names) {

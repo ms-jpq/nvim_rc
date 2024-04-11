@@ -13,7 +13,7 @@ exec(join(" ", array_map("escapeshellarg", ["get.sh", $uri])), $output, $code);
 assert($code === 0, join(PHP_EOL, $output));
 $file = join(PHP_EOL, $output);
 
-mkdir($lib, 0755, true);
+assert(mkdir($lib, 0755, true));
 
 $basename = basename($file);
 assert(copy($file, "$lib/$basename"));

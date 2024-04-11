@@ -12,6 +12,7 @@ use strict;
 use utf8;
 
 my $dir    = dirname(__FILE__);
+my $tmp    = $ENV{TMP};
 my $cpan   = catfile( dirname( $Config{perlpath} ), 'cpan' );
 my $bin    = $ENV{BIN};
 my $lib    = $ENV{LIB};
@@ -26,7 +27,6 @@ if ( !-x $cpan ) {
 }
 
 if ( !-d $lib ) {
-  my $tmp       = $ENV{TMP};
   my $tmp_lib   = File::Temp->newdir();
   my $perl_libd = "$tmp_lib/perl";
   my $tar_libd  = "$tmp_lib/lib";
