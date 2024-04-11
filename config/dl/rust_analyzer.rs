@@ -14,9 +14,8 @@ use std::{
 
 #[cfg(target_family = "unix")]
 use std::{
-  ffi::OsString,
   fs::{set_permissions, Permissions},
-  os::unix::{ffi::OsStringExt, fs::PermissionsExt},
+  os::unix::fs::PermissionsExt,
 };
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -51,25 +50,24 @@ fn main() -> Result<(), Box<dyn Error>> {
     bin
   };
 
-  let output = Command::new("env")
+  let mut proc = Command::new("env")
     .arg("--")
     .arg("get.sh")
     .arg(uri)
     .stdout(Stdio::piped())
-    .output()?;
-  assert!(output.status.success());
-
-  #[cfg(target_family = "unix")]
-  let os_str = OsString::from_vec(output.stdout);
-  #[cfg(target_family = "windows")]
-  let os_str = String::from_utf8(output.stdout)?;
-
+    .spawn()?;
+  let stdin = proc
+    .stdout
+    .take()
+    .ok_or_else(|| format!("{}", Backtrace::capture()))?;
   let status = Command::new("env")
     .arg("--")
     .arg("unpack.sh")
     .arg(&tmp)
-    .arg(os_str)
+    .stdin(stdin)
     .status()?;
+
+  assert!(proc.wait()?.success());
   assert!(status.success());
 
   for entry in read_dir(&tmp)? {
