@@ -6,7 +6,7 @@ use File::Basename;
 use File::Copy;
 use File::Path;
 use File::Spec::Functions;
-use File::Temp;
+use File::Temp qw( tempdir );
 use autodie;
 use strict;
 use utf8;
@@ -27,10 +27,10 @@ if ( !-x $cpan ) {
 }
 
 if ( !-d $lib ) {
-  my $tmp_lib   = File::Temp->newdir();
-  my $perl_libd = "$tmp_lib/perl";
-  my $tar_libd  = "$tmp_lib/lib";
-  my @perl_libs = qw{YAML::Tiny File::HomeDir Unicode::GCString};
+  my $perl_libd = "$tmp/perl";
+  my $tar_libd  = "$tmp/lib";
+  my @perl_libs = qw( YAML::Tiny File::HomeDir Unicode::GCString );
+  my $tmp_lib   = tempdir( DIR => $tmp );
 
   $ENV{HOME}                = $perl_libd;
   $ENV{PERL_LOCAL_LIB_ROOT} = $perl_libd;
@@ -48,13 +48,12 @@ if ( !-d $lib ) {
 
   system( $cpan, '-T', '-I', '-i', @perl_libs )
     && croak $CHILD_ERROR;
-  system( 'unpack.sh', $tmp, $filename ) && croak $CHILD_ERROR;
+  system( 'unpack.sh', $tmp_lib, $filename ) && croak $CHILD_ERROR;
 
-  my @globbed = glob "\Q$tmp\E/*";
-  system( 'mv', '-f', "--", @globbed, $tar_libd ) && croak $CHILD_ERROR;
-  system( 'mv', '-f', "--", $tmp_lib, $lib )      && croak $CHILD_ERROR;
-
-  rmtree($tmp);
+  my @globbed = glob "\Q$tmp_lib\E/*";
+  move( $_, $tar_libd ) for (@globbed);
+  rmtree($tmp_lib);
+  move( $tmp, $lib );
 }
 
 copy( $script, $bin );

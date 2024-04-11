@@ -40,7 +40,7 @@ if ( !-d $lib ) {
   move( $tmp, $lib );
 }
 
-foreach my $name (@names) {
+for my $name (@names) {
   my $src = catfile( $dir, "$name.ex.pl" );
   my $dst = catfile( $bin, "$name.pl" );
 
