@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 public class javafmt {
   public static void main(String args[]) throws Exception {
     final var self = Paths.get(System.getProperty("program.name"));
+    final var java = Paths.get(System.getProperty("java.home")).resolve("bin").resolve("java");
     final var jar =
         self.getParent()
             .getParent()
@@ -13,8 +14,7 @@ public class javafmt {
             .resolve("javafmt.java")
             .resolve("google-java-format.jar");
     final var argv =
-        Stream.concat(
-                Arrays.stream(new String[] {"java", "-jar", jar.toString()}), Arrays.stream(args))
+        Stream.concat(Stream.of(java.toString(), "-jar", jar.toString()), Arrays.stream(args))
             .toArray(String[]::new);
 
     final var proc = new ProcessBuilder(argv).inheritIO().start();
