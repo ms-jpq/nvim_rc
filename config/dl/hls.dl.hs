@@ -1,6 +1,7 @@
 #!/usr/bin/env -S -- runhaskell
 
 import           Control.Arrow      ((>>>))
+import           Data.Function      ((&))
 import           Data.Functor       ((<&>))
 import           System.Directory   (copyFileWithMetadata, getCurrentDirectory,
                                      removePathForcibly, renameDirectory)
@@ -31,7 +32,6 @@ run os = do
   version <- readProcess "env" ["--", "gh-latest.sh", ".", repo] ""
 
   let tramp = cwd </> "config" </> "dl" </> "hls.ex.sh"
-  let srv = contents os version tmp
   let link = uri os version
 
   _ <- readProcess "env" ["--", "get.sh", link] ""
@@ -39,7 +39,7 @@ run os = do
     >>= putStr
 
   _ <- removePathForcibly lib
-  _ <- readProcess "mv" ["-v", "-f", "--", srv, lib] "" >>= putStr
+  _ <- contents os version tmp & flip renameDirectory lib
   _ <- getEnv "BIN" <&> suffix os >>= copyFileWithMetadata tramp
   exitSuccess
 
