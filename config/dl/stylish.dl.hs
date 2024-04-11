@@ -1,15 +1,14 @@
 #!/usr/bin/env -S -- runhaskell
 
-import           Data.Function         ((&))
-import           System.Directory      (copyFileWithMetadata, getPermissions,
-                                        setOwnerExecutable, setPermissions)
-import           System.Environment    (getEnv, getExecutablePath)
-import           System.Exit           (exitSuccess)
-import           System.FilePath       ((</>))
-import           System.FilePath.Posix (dropExtension, takeBaseName)
-import           System.Info           (os)
-import           System.Process        (readProcess)
-import           Text.Printf           (printf)
+import           Data.Function      ((&))
+import           System.Directory   (getPermissions, renameFile,
+                                     setOwnerExecutable, setPermissions)
+import           System.Environment (getEnv, getExecutablePath)
+import           System.Exit        (exitSuccess)
+import           System.FilePath    (dropExtension, takeBaseName, (</>))
+import           System.Info        (os)
+import           System.Process     (readProcess)
+import           Text.Printf        (printf)
 
 
 repo = "haskell/stylish-haskell"
@@ -35,7 +34,7 @@ run os = do
     >>= putStr
 
   _ <- getExecutablePath >>= getPermissions >>= setPermissions srv
-  _ <- getEnv "BIN" >>= copyFileWithMetadata srv
+  _ <- getEnv "BIN" >>= renameFile srv
   exitSuccess
 
 main = run os

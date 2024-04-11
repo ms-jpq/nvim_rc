@@ -38,7 +38,6 @@ run os = do
   _ <- removePathForcibly lib
   _ <- readProcess "mv" ["-v", "-f", "--", srv, lib] "" >>= putStr
   _ <- getEnv "BIN" <&> suffix os >>= copyFileWithMetadata tramp
-  _ <- removePathForcibly tmp
   exitSuccess
 
 main = run os

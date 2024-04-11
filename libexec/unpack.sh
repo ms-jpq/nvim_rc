@@ -5,7 +5,7 @@ set -o pipefail
 exec >&2
 
 DST="$1"
-SRC="${2:-"$(</dev/stdin)"}"
+SRC="${2:-"$(cat)"}"
 FMT="${FMT:-"$SRC"}"
 
 case "$OSTYPE" in
