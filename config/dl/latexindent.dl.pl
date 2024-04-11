@@ -19,7 +19,7 @@ my $lib    = $ENV{LIB};
 my $script = catfile( $dir, 'latexindent.ex.pl' );
 
 if ( $OSNAME eq 'MSWin32' ) {
-  $cpan = '$cpan.bat';
+  $cpan = "$cpan.bat";
 }
 
 if ( !-x $cpan ) {

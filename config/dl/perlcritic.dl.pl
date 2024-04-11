@@ -6,7 +6,6 @@ use File::Basename;
 use File::Copy;
 use File::Path;
 use File::Spec::Functions;
-use File::Temp;
 use autodie;
 use strict;
 use utf8;
@@ -19,7 +18,7 @@ my $lib   = $ENV{LIB};
 my @names = qw( perlcritic perltidy );
 
 if ( $OSNAME eq 'MSWin32' ) {
-  $cpan = '$cpan.bat';
+  $cpan = "$cpan.bat";
 }
 
 if ( !-x $cpan ) {
@@ -45,5 +44,5 @@ for my $name (@names) {
   my $dst = catfile( $bin, "$name.pl" );
 
   copy( $src, $dst );
-  chmod( 0755, $dst );
+  chmod 0755, $dst;
 }
