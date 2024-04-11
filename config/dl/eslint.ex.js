@@ -3,7 +3,8 @@
 import { ok } from "node:assert/strict"
 import { spawnSync } from "node:child_process"
 import { randomBytes } from "node:crypto"
-import { existsSync, rmSync, symlinkSync } from "node:fs"
+import { existsSync } from "node:fs"
+import { rm, symlink } from "node:fs/promises"
 import { basename, dirname, extname, join } from "node:path"
 import { argv, cwd, execPath } from "node:process"
 
@@ -18,7 +19,7 @@ const _parents = function* (path = cwd()) {
   }
 }
 
-const _tmp = function* (filename = "") {
+const _tmp = async function* (filename = "") {
   const ext = extname(filename)
   const base = basename(filename, ext)
 
@@ -30,7 +31,7 @@ const _tmp = function* (filename = "") {
         yield tmp
       } finally {
         try {
-          rmSync(tmp, { recursive: true, force: true })
+          await rm(tmp, { recursive: true, force: true })
         } finally {
           break
         }
@@ -62,8 +63,8 @@ ok(tempname)
 for (const path of _parents()) {
   const eslint = join(path, "node_modules", ".bin", "eslint")
   if (existsSync(eslint)) {
-    for (const tmp of _tmp(filename)) {
-      symlinkSync(tempname, tmp, "file")
+    for await (const tmp of _tmp(filename)) {
+      await symlink(tempname, tmp, "file")
       _eslint(eslint, tmp)
     }
     break
