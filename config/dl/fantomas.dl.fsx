@@ -18,11 +18,12 @@ let run arg0 (argv: 'a) =
 
 run "dotnet" [ "tool"; "install"; "--tool-path"; tmp; "fantomas" ]
 
+File.Delete bin
+
 try
     Directory.Delete(lib, true)
 with :? DirectoryNotFoundException ->
     ()
 
-File.Delete bin
 Directory.Move(tmp, lib)
 File.Copy(proxy, bin)

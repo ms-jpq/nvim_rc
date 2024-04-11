@@ -44,11 +44,12 @@ let dst =
 File.Delete(dst)
 File.CreateSymbolicLink(dst, src) |> ignore
 
+File.Delete bin
+
 try
     Directory.Delete(lib, true)
 with :? DirectoryNotFoundException ->
     ()
 
-File.Delete bin
 Directory.Move(tmp, lib)
 File.Copy(proxy, bin)
