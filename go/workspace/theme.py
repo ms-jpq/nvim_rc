@@ -15,7 +15,7 @@ settings["showtabline"] = 2
 
 
 # always show issues column
-settings["signcolumn"] = "number"
+settings["signcolumn"] = "yes"
 # show line count
 settings["number"] = True
 # dont show eob lines
