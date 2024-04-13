@@ -248,15 +248,12 @@
     script:
       file: goimports.go
 
-- bin: gofmt
-  args:
-    - -s
-    - -w
-    - --
-    - ${tmpname}
-  type: fs
-  filetypes:
-    - go
+# - bin: gofmt
+#   args:
+#     - -s
+#   type: stream
+#   filetypes:
+#     - go
 
 - bin: clang-format
   args:
