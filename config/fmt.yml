@@ -238,6 +238,16 @@
   filetypes:
     - rust
 
+- bin: goimports
+  type: stream
+  filetypes:
+    - go
+  install:
+    requires:
+      - go
+    script:
+      file: goimports.go
+
 - bin: gofmt
   args:
     - -s
