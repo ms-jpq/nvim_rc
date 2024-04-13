@@ -147,7 +147,7 @@
     requires:
       - go
     script:
-      file: jq_ls.sh
+      file: jq_ls.go
 
 # - server: awk_ls
 #   bin: awk-language-server
