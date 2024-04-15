@@ -10,10 +10,18 @@ import (
 )
 
 func main() {
-	lib, bin := os.Getenv("LIB"), os.Getenv("BIN")
+	lib, ok := os.LookupEnv("LIB")
+	if !ok {
+		log.Panic()
+	}
+	bin, ok := os.LookupEnv("BIN")
+	if !ok {
+		log.Panic()
+	}
 	if runtime.GOOS == "windows" {
 		bin += ".exe"
 	}
+
 	name := filepath.Base(bin)
 	dst := filepath.Join(lib, "bin", name)
 
