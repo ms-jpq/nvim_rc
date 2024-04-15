@@ -23,12 +23,12 @@ func main() {
 	cmd.Env = append(os.Environ(), "GO111MODULE=on", "GOPATH="+lib)
 
 	if err := cmd.Run(); err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	if err := os.RemoveAll(bin); err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	if err := os.Symlink(dst, bin); err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 }
