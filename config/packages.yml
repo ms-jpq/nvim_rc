@@ -162,8 +162,8 @@
         src: copilot
       - short_name: COD
         src: codeium
-      # - short_name: TAB
-      #   src: tabby
+      - short_name: TAB
+        src: tabby
 
       - src: repl
       # - short_name: MATH
@@ -287,18 +287,18 @@
     codeium_no_map_tab: True
     codeium_render: False
 
-# - git:
-#     uri: https://github.com/TabbyML/vim-tabby
-#   opt: true
-#   lub: |-
-#     vim.cmd [[
-#     augroup tabby
-#       autocmd!
-#     augroup END
-#     ]]
-#     if vim.env.SSH_TTY then
-#       vim.fn["tabby#OnVimEnter"]()
-#     end
+- git:
+    uri: https://github.com/TabbyML/vim-tabby
+  opt: null
+  lub: |-
+    vim.cmd [[
+    augroup tabby
+      autocmd!
+    augroup END
+    ]]
+    if vim.env.SSH_TTY then
+      vim.fn["tabby#OnVimEnter"]()
+    end
 
 # - git:
 #     uri: https://github.com/lervag/vimtex

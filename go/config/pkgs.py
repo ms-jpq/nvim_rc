@@ -26,7 +26,7 @@ class KeymapSpec:
 @dataclass(frozen=True)
 class PkgAttrs:
     git: GitPkgSpec
-    opt: bool = False
+    opt: Optional[bool] = False
     keys: Sequence[KeymapSpec] = ()
     vals: Mapping[str, Any] = field(default_factory=dict)
     lua: str = ""

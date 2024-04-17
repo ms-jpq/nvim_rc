@@ -3,6 +3,7 @@ from dataclasses import asdict
 from operator import attrgetter
 from pathlib import Path
 from string import Template
+from typing import Optional
 
 from pynvim_pp.atomic import Atomic
 from pynvim_pp.keymap import Keymap
@@ -32,8 +33,9 @@ end)(...)
 """
 
 
-def p_name(opt: bool, uri: str) -> Path:
-    return VIM_DIR / {True: "opt", False: "start"}[opt] / uri_path(uri).name
+def p_name(opt: Optional[bool], uri: str) -> Path:
+    dir = {True: "opt", False: "start", None: "opt"}[opt]
+    return VIM_DIR / dir / uri_path(uri).name
 
 
 def _inst(packages: Iterable[PkgAttrs], cmds: Iterable[str]) -> Atomic:
@@ -79,7 +81,7 @@ def _inst(packages: Iterable[PkgAttrs], cmds: Iterable[str]) -> Atomic:
 
 
 def inst() -> Atomic:
-    pkgs = (spec for spec in pkg_specs if not spec.opt)
+    pkgs = (spec for spec in pkg_specs if spec.opt is not None and not spec.opt)
     return _inst(pkgs, cmds=("packloadall",))
 
 

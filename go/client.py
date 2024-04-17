@@ -52,7 +52,7 @@ async def init(socket: ServerAddr, ppid: int) -> None:
     die: Future[None] = Future()
 
     async def cont() -> None:
-        async with conn(die, socket=socket, default=_default) as client:
+        async with _autodie(ppid), conn(die, socket=socket, default=_default) as client:
             atomic, handlers = drain()
             for handler in handlers.values():
                 client.register(handler)
