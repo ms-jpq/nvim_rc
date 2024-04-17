@@ -1,5 +1,6 @@
 #!/usr/bin/env -S -- perl -CASD -w
 
+use Carp;
 use Config;
 use English;
 use File::Basename;

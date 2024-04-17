@@ -10,6 +10,10 @@ import (
 )
 
 func main() {
+	version := runtime.Version()
+	if version < "go1.20" {
+		os.Exit(0)
+	}
 	lib, ok := os.LookupEnv("LIB")
 	if !ok {
 		log.Panic()
