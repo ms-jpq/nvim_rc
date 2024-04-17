@@ -24,7 +24,7 @@ jobs:
 
       - run: |-
           sudo -- apt-get update
-          sudo -- apt-get install --no-install-recommends --yes -- swi-prolog gnucobol
+          sudo -- apt-get install --no-install-recommends --yes -- swi-prolog gnucobol moreutils
 
       - run: |-
           /home/linuxbrew/.linuxbrew/bin/brew install -- clojure/tools/clojure
@@ -50,7 +50,7 @@ jobs:
       - uses: actions/setup-python@v3
 
       - run: |-
-          brew install -- bash make flock htmlq
+          brew install -- bash make flock htmlq moreutils
 
       - run: |-
           gmake lint

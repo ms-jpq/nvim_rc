@@ -47,7 +47,8 @@ if ( !-d $lib ) {
   my $filename = `get.sh '$uri'`;
   $CHILD_ERROR && croak $CHILD_ERROR;
 
-  system( $cpan, '-T', '-I', '-i', @perl_libs )
+  my @chronic = system( 'which', '--', 'chronic' ) ? () : qw( chronic -- );
+  system( @chronic, $cpan, '-T', '-I', '-i', @perl_libs )
     && croak $CHILD_ERROR;
   system( 'unpack.sh', $tmp_lib, $filename ) && croak $CHILD_ERROR;
 

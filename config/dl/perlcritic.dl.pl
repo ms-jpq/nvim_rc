@@ -34,7 +34,8 @@ if ( !-d $lib ) {
   $ENV{PERL_MM_OPT}         = "INSTALL_BASE=$tmp";
   $ENV{PERL5LIB}            = catfile( $tmp, 'lib', 'perl5' );
 
-  system( $cpan, '-T', '-I', '-i', 'Perl::Critic' )
+  my @chronic = system( 'which', '--', 'chronic' ) ? () : qw( chronic -- );
+  system( @chronic, $cpan, '-T', '-I', '-i', 'Perl::Critic' )
     && croak $CHILD_ERROR;
 
   move( $tmp, $lib );
