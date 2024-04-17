@@ -26,6 +26,10 @@ if ( !-x $cpan ) {
   exit;
 }
 
+if ( $ENV{CI} ) {
+  exit;
+}
+
 if ( !-d $lib ) {
 
   $ENV{HOME}                = $tmp;
