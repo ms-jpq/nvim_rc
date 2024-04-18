@@ -9,8 +9,11 @@ import (
 	"runtime"
 )
 
-func main() {
+func init() {
 	log.SetFlags(log.Lshortfile)
+}
+
+func main() {
 	version := runtime.Version()
 	if version < "go1.20" {
 		os.Exit(0)

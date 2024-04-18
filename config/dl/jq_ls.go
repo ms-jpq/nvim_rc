@@ -9,8 +9,11 @@ import (
 	"runtime"
 )
 
-func main() {
+func init() {
 	log.SetFlags(log.Lshortfile)
+}
+
+func main() {
 	lib, ok := os.LookupEnv("LIB")
 	if !ok {
 		log.Panicln()
