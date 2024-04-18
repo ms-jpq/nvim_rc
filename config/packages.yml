@@ -279,6 +279,8 @@
           printf -- %s '{}' >./package.json
     uri: https://github.com/github/copilot.vim
   opt: true
+  lub: |-
+    vim.cmd [[Copilot enable]]
 
 - git:
     uri: https://github.com/Exafunction/codeium.vim
