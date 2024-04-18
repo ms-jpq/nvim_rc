@@ -2,6 +2,10 @@
 
 set -o pipefail
 
+if ! command -v -- jq; then
+  exit
+fi
+
 REPO='SonarSource/sonar-scanner-cli'
 BASE='https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli'
 VERSION="$(gh-latest.sh . "$REPO")"

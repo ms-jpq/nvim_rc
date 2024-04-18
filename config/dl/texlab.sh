@@ -2,6 +2,7 @@
 
 set -o pipefail
 
+S_BIN="$(dirname -- "$0")/../../bin/tectonic"
 T_BIN="$(dirname -- "$BIN")/tectonic"
 
 BASE='https://github.com/latex-lsp/texlab/releases/latest/download/texlab'
@@ -23,6 +24,7 @@ linux*)
   URI="$BASE-$HOSTTYPE-windows.zip"
   T_URI="$T_BASE/$T_VERSION-$HOSTTYPE-pc-windows-msvc.zip"
   BIN="$BIN.exe"
+  S_BIN="$S_BIN.exe"
   T_BIN="$T_BIN.exe"
   ;;
 esac
@@ -32,3 +34,4 @@ get.sh "$URI" | unpack.sh "$TMP"
 get.sh "$T_URI" | unpack.sh "$TMP"
 mv -v -f -- "$TMP/texlab"* "$BIN"
 mv -v -f -- "$TMP/tectonic"* "$T_BIN"
+ln -v -sf -- "$T_BIN" "$S_BIN"
