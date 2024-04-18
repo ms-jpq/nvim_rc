@@ -188,11 +188,11 @@
 #     pip:
 #       - pylyzer
 
-- server: ruff_lsp
-  bin: ruff
-  install:
-    pip:
-      - ruff-lsp
+# - server: ruff_lsp
+#   bin: ruff
+#   install:
+#     pip:
+#       - ruff-lsp
 
 - server: hls
   bin: haskell-language-server-wrapper
