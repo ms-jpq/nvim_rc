@@ -76,4 +76,4 @@ async def _die_session() -> None:
 
 
 # Prevent goto tags
-_ = keymap.nv("<c-]>") << f"<cmd>lua {NAMESPACE}.{_die_session.method}()<cr>"
+_ = keymap.nv("<leader>D") << f"<cmd>lua {NAMESPACE}.{_die_session.method}()<cr>"
