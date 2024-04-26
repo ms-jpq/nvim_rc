@@ -1,1 +1,1 @@
-vim.bo.commentstring = [[// %s]]
+fsharp.lua
