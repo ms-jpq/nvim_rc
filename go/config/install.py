@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from functools import cache
+from os.path import normpath
 from pathlib import PurePath
 from shutil import which as _which
 from typing import AbstractSet, Optional, Protocol
@@ -36,7 +37,7 @@ _DIE = {"/usr/bin/ruby", "/usr/bin/gem", "/usr/bin/java"}
 
 @cache
 def which(src: AnyPath) -> Optional[PurePath]:
-    if dst := _which(src):
+    if dst := _which(normpath(src)):
         if os is OS.macos and dst in _DIE:
             return None
         else:

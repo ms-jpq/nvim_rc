@@ -40,7 +40,7 @@
       file: lemminx.sh
 
 - server: contextive
-  bin: Contextive.LanguageServer
+  bin: Contextive.LanguageServer_which
 
 - server: ast_grep
   bin: ast-grep
