@@ -39,6 +39,15 @@
     script:
       file: lemminx.sh
 
+- server: contextive
+  bin: Contextive.LanguageServer
+
+- server: ast_grep
+  bin: ast-grep
+  install:
+    npm:
+      - "@ast-grep/cli"
+
 - server: marksman
   bin: marksman
   install:
