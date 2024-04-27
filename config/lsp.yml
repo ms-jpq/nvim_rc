@@ -64,12 +64,6 @@
 #     npm:
 #       - vscode-langservers-extracted
 
-- server: docker_compose_language_service
-  bin: docker-compose-langserver
-  install:
-    npm:
-      - "@microsoft/compose-language-service"
-
 - server: ltex
   bin: ltex-ls
   install:
@@ -228,6 +222,14 @@
     script:
       file: gopls.go
 
+- server: golangcilsp
+  bin: golangci-lint-langserver
+  install:
+    requires:
+      - go
+    script:
+      file: golangci.go
+
 - server: sourcekit
   bin: sourcekit-lsp
 
@@ -276,6 +278,12 @@
       - typescript
       - typescript-language-server
 
+- server: prismals
+  bin: prisma-language-server
+  install:
+    npm:
+      - "@prisma/language-server"
+
 - server: eslint
   bin: vscode-eslint-language-server
   install:
@@ -302,6 +310,12 @@
 #   install:
 #     npm:
 #       - "@tailwindcss/language-server"
+
+- server: svelte
+  bin: svelteserver
+  install:
+    npm:
+      - svelte-language-server
 
 - server: graphql
   bin: graphql-lsp
@@ -401,10 +415,6 @@
 
 - server: sqlls
   bin: sql-language-server
-  args:
-    - up
-    - --method
-    - stdio
   install:
     npm:
       - sql-language-server
