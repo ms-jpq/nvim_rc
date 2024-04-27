@@ -222,7 +222,7 @@
     script:
       file: gopls.go
 
-- server: golangcilsp
+- server: golangci_lint_ls
   bin: golangci-lint-langserver
   install:
     requires:
