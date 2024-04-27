@@ -4,7 +4,7 @@
         '[java.nio.file Files Path StandardCopyOption]
         '[java.nio.file.attribute PosixFilePermissions])
 (require
- '[clojure.string :refer [join replace]]
+ '[clojure.string :refer [join] :as s]
  '[clojure.java.shell :refer [sh]])
 
 (def arch (System/getProperty "os.arch"))
@@ -18,7 +18,7 @@
   (let [{:keys [exit err out]} (sh "gh-latest.sh" "." repo)]
     (print err)
     (assert (zero? exit))
-    (replace out #"^v" "")))
+    (s/replace out #"^v" "")))
 
 (def uri
   (join "-" [base version
