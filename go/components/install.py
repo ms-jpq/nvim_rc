@@ -135,13 +135,14 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                 if location.is_dir():
                     p1 = await _run(
                         git,
+                        "-C",
+                        location,
                         "pull",
                         "--recurse-submodules",
                         "--no-tags",
                         jobs,
                         "--force",
                         *(("origin", spec.branch) if spec.branch else ()),
-                        cwd=location,
                     )
                 else:
                     p1 = await _run(
