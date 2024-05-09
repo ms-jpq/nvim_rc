@@ -254,15 +254,15 @@
 #     gem:
 #       - ruby-lsp
 
-# - server: solargraph
-#   bin: solargraph
-#   install:
-#     gem:
-#       - solargraph
-#     requires:
-#       - ruby
-#     script:
-#       file: solargraph.dl.rb
+- server: solargraph
+  bin: solargraph
+  install:
+    gem:
+      - solargraph
+    requires:
+      - ruby
+    script:
+      file: solargraph.dl.rb
 
 - server: mdx_analyzer
   bin: mdx-language-server

@@ -73,11 +73,10 @@ def _pip_specs() -> Iterator[str]:
 
 
 def _gem_specs() -> Iterator[str]:
-    if os is OS.linux:
-        for spec in chain(lsp_specs(), linter_specs(), fmt_specs()):
-            if all(map(which, spec.install.requires)):
-                yield from spec.install.gem
-        yield from tool_specs.gem
+    for spec in chain(lsp_specs(), linter_specs(), fmt_specs()):
+        if all(map(which, spec.install.requires)):
+            yield from spec.install.gem
+    yield from tool_specs.gem
 
 
 def _npm_specs() -> Iterator[str]:
