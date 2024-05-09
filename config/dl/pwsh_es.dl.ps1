@@ -12,6 +12,7 @@ $out = Split-Path -Leaf -Path $uri
 $bin = $Env:BIN
 $bin_d = Split-Path -Path $bin
 
+Write-Output -- $uri
 Invoke-WebRequest -Uri $uri -OutFile $out
 Expand-Archive -Force -DestinationPath $tmp -Path $out
 
