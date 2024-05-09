@@ -26,8 +26,15 @@ func main() {
 		bin += ".exe"
 	}
 
+	dir := filepath.Join(lib, "..", "..")
 	name := filepath.Base(bin)
 	dst := filepath.Join(lib, "bin", name)
+	sbin := filepath.Join(dir, "..", "bin", name)
+
+	links := map[string]string{
+		bin:  dst,
+		sbin: dst,
+	}
 
 	cmd := exec.Command("go", "install", "--", "golang.org/x/tools/cmd/goimports@latest")
 	cmd.Stdout = os.Stdout
@@ -37,10 +44,12 @@ func main() {
 	if err := cmd.Run(); err != nil {
 		log.Panicln(err)
 	}
-	if err := os.RemoveAll(bin); err != nil {
-		log.Panicln(err)
-	}
-	if err := os.Symlink(dst, bin); err != nil {
-		log.Panicln(err)
+	for next, prev := range links {
+		if err := os.RemoveAll(next); err != nil {
+			log.Panicln(err)
+		}
+		if err := os.Symlink(prev, next); err != nil {
+			log.Panicln(err)
+		}
 	}
 }
