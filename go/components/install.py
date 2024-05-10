@@ -236,6 +236,7 @@ def _gem(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
             }
         )
         and (os != OS.macos or not gem.is_relative_to(PurePath(sep) / "usr" / "bin"))
+        and os != OS.windows
     ):
 
         async def cont() -> _SortOfMonoid:
