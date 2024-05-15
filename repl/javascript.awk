@@ -3,6 +3,8 @@ BEGIN {
   DEDENT = -2
   PRINTED = 0
   SKIPPED = 0
+
+  printf("%s", "exec ")
 }
 
 {
