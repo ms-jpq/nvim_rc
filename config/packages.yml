@@ -43,7 +43,7 @@
         eval_snips: "<leader>b"
         repeat: "<leader>."
   lua: |-
-    if vim.env.SSH_TTY or vim.env.T9 then
+    if vim.env.SSH_TTY or #vim.api.nvim_get_runtime_file("owo.t9", {}) ~= 0 then
       local v = vim.g.coq_settings
       v["clients.tabnine.enabled"] = true
       vim.g.coq_settings = v
