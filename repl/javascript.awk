@@ -20,12 +20,12 @@ DEDENT == -2 && $0 {
 {
   if (!$0) { SKIPPED = 1 }
   else {
-    if (SKIPPED && PRINTED) { print "" }
+    if (SKIPPED && PRINTED) { printf("%s", ";") }
 
     SKIPPED = 0
     PRINTED = 1
 
-    print substr($0, DEDENT + 1)
+    printf("%s;", substr($0, DEDENT + 1))
   }
 }
 
