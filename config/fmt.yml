@@ -303,6 +303,8 @@
 
 - bin: ktfmt.java
   args:
+    - ${tabsize}
+    - --stdin-name=${filename}
     - --
     - "-"
   type: stream
