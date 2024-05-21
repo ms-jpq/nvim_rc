@@ -20,7 +20,7 @@
 
     local names =
       (function()
-      local clients = vim.lsp.buf_get_clients(buf)
+      local clients = vim.lsp.get_clients({bufnr = buf})
       local acc = {}
       for _, client in pairs(clients) do
         table.insert(acc, client.name)
