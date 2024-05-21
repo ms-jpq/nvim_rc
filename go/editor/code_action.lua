@@ -69,7 +69,8 @@
     local l = vim.str_utfindex(line, ed.character) - 1
     params.range["end"].character = math.max(0, math.min(l, ed.character))
 
-    local clients = vim.lsp.get_active_clients({bufnr = buf})
+    local method = vim.lsp.protocol.Methods.textDocument_codeAction
+    local clients = vim.lsp.get_clients({bufnr = buf, method = method})
     local row = unpack(vim.api.nvim_win_get_cursor(0))
     row = row - 1
 
@@ -79,8 +80,7 @@
     for _, client in pairs(clients) do
       local go, handle =
         client.request(
-        -- vim.lsp.protocol.Methods.textDocument_codeAction,
-        "textDocument/codeAction",
+        method,
         params,
         function(error, resp)
           callback(idx, row, error, resp)

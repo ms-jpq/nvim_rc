@@ -1,7 +1,8 @@
 (function(eol)
   vim.validate {eol = {eol, "string"}}
+  local method = vim.lsp.protocol.Methods.textDocument_didChange
   local buf = vim.api.nvim_get_current_buf()
-  local clients = vim.lsp.get_active_clients({bufnr = buf})
+  local clients = vim.lsp.get_clients({bufnr = buf, method = method})
   local uri = vim.uri_from_bufnr(buf)
 
   local error_codes = vim.lsp.protocol.ErrorCodes
@@ -23,7 +24,7 @@
   }
   for _, client in pairs(clients) do
     -- client.notify(
-    --   vim.lsp.protocol.Methods.textDocument_didChange,
+    --   method,
     --   params,
     --   function(error, resp)
     --     local err_code = (error or {}).code
