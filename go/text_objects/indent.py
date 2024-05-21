@@ -11,9 +11,12 @@ from ..registry import NAMESPACE, keymap, rpc
 def _p_inside(init_lv: int, tabsize: int, lines: Sequence[str]) -> int:
     n = 0
     for n, line in enumerate(lines, start=1):
-        lv = p_indent(line, tabsize=tabsize)
-        if line and lv < init_lv:
-            return n - 1
+        if not init_lv and not line:
+            return n
+        else:
+            lv = p_indent(line, tabsize=tabsize)
+            if line and lv < init_lv:
+                return n - 1
     else:
         return n
 

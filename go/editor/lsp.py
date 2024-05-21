@@ -27,8 +27,6 @@ _ = keymap.n("gp") << "<cmd>lua vim.lsp.buf.definition()<cr>"
 _ = keymap.n("gP") << "<cmd>lua vim.lsp.buf.references()<cr>"
 
 _ = keymap.n("H") << "<cmd>lua vim.diagnostic.open_float()<cr>"
-# TODO: remove @ nvim 0.10, already became default
-_ = keymap.n("K") << "<cmd>lua vim.lsp.buf.hover()<cr>"
 
 _ = keymap.n("gm") << "<cmd>lua vim.lsp.buf.document_symbol()<cr>"
 _ = keymap.n("gM") << "<cmd>lua vim.lsp.buf.workspace_symbol()<cr>"
