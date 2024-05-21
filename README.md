@@ -139,7 +139,7 @@ From a glance we can know that:
 
 - It has some fairly "intricate" regex beyond just "tell me where whitespaces are"
 
-Now something like this is not only very difficult to read, but also even harder to generalize onto all filetypes, and ensure there are no werid corner cases.
+Now something like this is not only very difficult to read, but also even harder to generalize onto all filetypes, and ensure there are no weird corner cases.
 
 #### Sane Style
 
