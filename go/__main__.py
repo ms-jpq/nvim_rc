@@ -3,7 +3,7 @@ from asyncio import run as arun
 from contextlib import nullcontext
 from os import environ
 from pathlib import Path, PurePath
-from subprocess import check_call
+from subprocess import check_call, run
 from sys import executable, exit, stderr
 from typing import Literal, Sequence, Tuple, Union
 from venv import EnvBuilder
@@ -73,7 +73,7 @@ def main() -> None:
 
         if not deps or "packages" in deps:
             if _EX != RT_PY:
-                code = check_call(
+                proc = run(
                     (
                         RT_PY,
                         "-m",
@@ -83,7 +83,7 @@ def main() -> None:
                     ),
                     cwd=TOP_LEVEL,
                 )
-                exit(code)
+                exit(proc.returncode)
             else:
                 from .components.install import install
 
