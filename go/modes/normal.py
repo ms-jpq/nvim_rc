@@ -9,6 +9,7 @@ _BUF_VAR_NAME = f"buf_cursor_col_{uuid4().hex}"
 
 _ = keymap.n("i", nowait=True) << "zzi"
 
+
 @rpc()
 async def _record_pos() -> None:
     win = await Window.get_current()

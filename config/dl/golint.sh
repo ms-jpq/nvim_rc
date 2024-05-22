@@ -32,5 +32,6 @@ esac
 # shellcheck disable=SC2154
 get.sh "$URI" | unpack.sh "$TMP"
 mv -v -f -- "$TMP/"*/golangci-lint "$BIN"
+# shellcheck disable=SC2154
 mkdir -v -p -- "$LIB"
 ln -v -sf -- "$BIN" "$LIB/../../../bin/golangci-lint"

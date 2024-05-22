@@ -41,6 +41,9 @@
 
 - bin: shfmt
   args:
+    - --simplify
+    - --binary-next-line
+    - --space-redirects
     - --indent=${tabsize}
   type: stream
   filetypes:
