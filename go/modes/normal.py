@@ -5,7 +5,7 @@ from pynvim_pp.window import Window
 from ..registry import NAMESPACE, autocmd, rpc
 
 # fix cursor pos moving 1 back
-_BUF_VAR_NAME = f"buf_cursor_pos_{uuid4().hex}"
+_BUF_VAR_NAME = f"buf_cursor_col_{uuid4().hex}"
 
 
 @rpc()

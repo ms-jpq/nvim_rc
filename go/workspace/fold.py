@@ -1,4 +1,4 @@
-from ..registry import keymap, settings
+from ..registry import autocmd, keymap, settings
 
 # use buffer text for folds
 settings["foldtext"] = ""
@@ -10,6 +10,9 @@ settings["foldlevel"] = 1
 settings["foldopen"] += ("insert", "jump")
 # settings["foldclose"] = "all"
 
-_ = keymap.n("<leader>F", nowait=True) << "<cmd>set foldenable!<cr>"
-
+# toggle folds
 _ = keymap.n("a", nowait=True) << "za"
+
+_ = autocmd("CursorMoved") << "silent! foldopen"
+_ = autocmd("InsertEnter") << "norm! zn"
+_ = autocmd("InsertLeave") << "norm! zN"

@@ -1,12 +1,10 @@
 from collections.abc import Iterator
 
-from ..registry import autocmd, keymap
+from ..registry import keymap
 
 # move w linewrap
 for key in ("<up>", "<down>", "j", "k"):
     _ = keymap.nv(key, expr=True) << f"(v:count ? \"m'\" . v:count : 'g') . '{key}'"
-
-_ = autocmd("CursorMoved") << "silent! foldopen"
 
 # {} scroll fixed lines
 _ = keymap.nv("{") << ("5g<up>zz")
