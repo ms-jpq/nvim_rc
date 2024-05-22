@@ -289,6 +289,7 @@
 - server: eslint
   bin: vscode-eslint-language-server
   settings:
+    run: onSave
     rulesCustomizations:
       - rule: "*"
         severity: downgrade
