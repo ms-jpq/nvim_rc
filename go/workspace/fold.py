@@ -25,15 +25,14 @@ _ = keymap.n("a", nowait=True) << "za"
 async def _open_fold() -> None:
     win = await Window.get_current()
     buf = await win.get_buf()
-    row, col = await win.get_cursor()
+    row, _ = await win.get_cursor()
     r = row + 1
     lo = await Nvim.fn.foldclosed(int, r)
     if lo == r:
         await Nvim.exec(f"silent! foldopen")
         if (prev := await buf.vars.get(int, _BUF_VAR_NAME)) and prev > row:
-            hi = await Nvim.fn.foldclosedend(int, r)
-            row = hi - 1
-            await win.set_cursor(row, col)
+            await Nvim.exec(f"norm! ]z")
+
     await buf.vars.set(_BUF_VAR_NAME, val=row)
 
 
