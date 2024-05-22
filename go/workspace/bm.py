@@ -14,7 +14,7 @@ async def _reset_buffer() -> None:
     buf = await win.get_buf()
     path = await buf.get_name()
     cursor = await win.get_cursor()
-    # lv = await win.opts.get(int, "foldlevel")
+    lv = await win.opts.get(int, "foldlevel")
 
     scratch = await Buffer.create(
         listed=False, scratch=True, wipe=True, nofile=True, noswap=True
@@ -26,7 +26,7 @@ async def _reset_buffer() -> None:
         escaped = await Nvim.fn.fnameescape(str, normpath(path))
         await Nvim.exec(f"edit! {escaped}")
         await win.set_cursor(*cursor)
-        # await win.opts.set("foldlevel", lv)
+        await win.opts.set("foldlevel", lv)
         await Nvim.exec("norm! zz")
 
 
