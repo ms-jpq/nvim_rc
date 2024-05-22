@@ -11,7 +11,7 @@ _BUF_VAR_NAME = f"buf_cursor_row_{uuid4().hex}"
 settings["foldtext"] = ""
 
 # close nested folds above this level
-settings["foldlevel"] = 1
+settings["foldlevel"] = 2
 
 # auto open / close folds
 settings["foldopen"] += ("insert", "jump")
