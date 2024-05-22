@@ -38,5 +38,5 @@ async def _open_fold() -> None:
 
 _ = autocmd("CursorMoved") << f"lua {NAMESPACE}.{_open_fold.method}()"
 
-# _ = autocmd("InsertEnter") << "norm! zn"
-# _ = autocmd("InsertLeave") << "norm! zN"
+_ = autocmd("InsertEnter") << "norm! zn"
+_ = autocmd("InsertLeave") << "norm! zN"
