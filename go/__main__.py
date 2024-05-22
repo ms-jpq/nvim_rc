@@ -3,7 +3,7 @@ from asyncio import run as arun
 from contextlib import nullcontext
 from os import environ
 from pathlib import Path, PurePath
-from subprocess import check_call, run
+from subprocess import run
 from sys import executable, exit, stderr
 from typing import Literal, Sequence, Tuple, Union
 from venv import EnvBuilder
@@ -55,7 +55,7 @@ def main() -> None:
                 clear=True,
             )
             builder.create(RT_DIR)
-            check_call(
+            proc = run(
                 (
                     RT_PY,
                     "-m",
@@ -68,6 +68,9 @@ def main() -> None:
                     REQUIREMENTS,
                 )
             )
+
+            if proc.returncode:
+                exit(proc.returncode)
 
             _LOCK_FILE.write_bytes(req)
 
