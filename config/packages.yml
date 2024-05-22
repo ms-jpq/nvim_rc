@@ -200,7 +200,7 @@
         "<leader>y": "<cmd>GFiles<cr>"
         "<leader>m": "<cmd>Jumps<cr>"
         "<leader>M": "<cmd>Marks<cr>"
-        "<leader>o": "<cmd>RG<cr>"
+        "<leader>o": "<cmd>BLines<cr>"
         "<leader>p": "<cmd>Buffers<cr>"
         "<leader>P": "<cmd>Files<cr>"
       modes: n

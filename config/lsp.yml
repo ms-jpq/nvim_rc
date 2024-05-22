@@ -297,6 +297,8 @@
         severity: info
       - rule: prettier/*
         severity: info
+      - rule: no-empty
+        severity: info
   install:
     npm:
       - vscode-langservers-extracted
