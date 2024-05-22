@@ -64,10 +64,9 @@
     local opts = vim.g.ts_opts
     opts.auto_install = vim.fn.has("win32") == 0
     require("nvim-treesitter.configs").setup(opts)
-    vim.cmd [[
-    set foldmethod=expr
-    set foldexpr=nvim_treesitter#foldexpr()
-    ]]
+    vim.o.foldmethod = "expr"
+    vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    vim.o.foldtext = ""
   vals:
     ts_opts:
       # ensure_installed: all
