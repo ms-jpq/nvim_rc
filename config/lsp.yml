@@ -26,6 +26,8 @@
 
 - server: typos_lsp
   bin: typos-lsp
+  init_options:
+    diagnosticSeverity: Information
   install:
     script:
       file: typos_ls.sh
