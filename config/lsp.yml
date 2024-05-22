@@ -286,6 +286,10 @@
 
 - server: eslint
   bin: vscode-eslint-language-server
+  settings:
+    rulesCustomizations:
+      - rule: "*"
+        severity: warn
   install:
     npm:
       - vscode-langservers-extracted
