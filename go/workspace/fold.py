@@ -1,7 +1,12 @@
 from ..registry import keymap, settings
 
-_ = settings["foldlevel"] = 3
-# auto close folds
+# use buffer text for folds
+_ = settings["foldtext"] = ""
+
+_ = settings["foldlevel"] = 6
+
+# auto open / close folds
+_ = settings["foldopen"] = "all"
 _ = settings["foldclose"] = "all"
 
 _ = keymap.n("<leader>F", nowait=True) << "<cmd>set foldenable!<cr>"
