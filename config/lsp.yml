@@ -290,6 +290,8 @@
     rulesCustomizations:
       - rule: "*"
         severity: warn
+      - rule: prettier/prettier
+        severity: info
   install:
     npm:
       - vscode-langservers-extracted
