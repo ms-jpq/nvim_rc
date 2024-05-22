@@ -2,11 +2,12 @@ from uuid import uuid4
 
 from pynvim_pp.window import Window
 
-from ..registry import NAMESPACE, autocmd, rpc
+from ..registry import NAMESPACE, autocmd, keymap, rpc
 
 # fix cursor pos moving 1 back
 _BUF_VAR_NAME = f"buf_cursor_col_{uuid4().hex}"
 
+_ = keymap.n("i", nowait=True) << "zzi"
 
 @rpc()
 async def _record_pos() -> None:
