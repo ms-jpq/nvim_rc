@@ -15,7 +15,7 @@ from std2.types import never
 
 from ..config.install import which
 from ..config.lsp import LspAttrs, RootPattern, RPFallback, lsp_specs
-from ..registry import LANG, NAMESPACE, atomic, keymap, rpc, settings
+from ..registry import LANG, NAMESPACE, atomic, autocmd, keymap, rpc, settings
 from ..text_objects.word import UNIFIYING_CHARS
 
 _LSP_INIT = Path(__file__).resolve(strict=True).with_name("lsp.lua").read_text("UTF-8")
@@ -45,6 +45,19 @@ _ = (
 
 
 _ = keymap.n("<leader>z") << "<cmd>LspRestart<cr>"
+
+_ = (
+    autocmd("BufEnter", "CursorHold", "InsertLeave", modifiers=("<buffer>"))
+    << "silent! lua vim.lsp.codelens.refresh()"
+)
+_ = (
+    autocmd("CursorHold", "CursorHoldI", modifiers=("<buffer>"))
+    << "silent! lua vim.lsp.buf.document_highlight()"
+)
+_ = (
+    autocmd("CursorMoved", modifiers=("<buffer>"))
+    << "silent! lua vim.lsp.buf.clear_references()"
+)
 
 
 @rpc()
