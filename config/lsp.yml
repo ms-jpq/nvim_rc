@@ -289,8 +289,10 @@
   settings:
     rulesCustomizations:
       - rule: "*"
-        severity: warn
-      - rule: prettier/prettier
+        severity: downgrade
+      - rule: unused-imports/*
+        severity: info
+      - rule: prettier/*
         severity: info
   install:
     npm:
