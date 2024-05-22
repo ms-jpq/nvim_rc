@@ -264,8 +264,8 @@
       # show_deleted: True
       # word_diff: True
     git_keys:
-      "g[": prev_hunk
-      "g]": next_hunk
+      "[s": prev_hunk
+      "]s": next_hunk
       <leader>A: diffthis
       <leader>S: undo_stage_hunk
       <leader>a: preview_hunk
