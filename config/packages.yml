@@ -194,7 +194,7 @@
   keys:
     - maps:
         "<leader>m": "<cmd>Marks<cr>"
-        "<leader>o": "<cmd>BLines<cr>"
+        "<leader>o": "<cmd>RG<cr>"
         "<leader>p": "<cmd>Buffers<cr>"
         "<leader>P": "<cmd>Files<cr>"
       modes: n
