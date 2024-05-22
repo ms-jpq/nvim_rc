@@ -193,6 +193,9 @@
     uri: https://github.com/junegunn/fzf.vim
   keys:
     - maps:
+        "<leader>h": "<cmd>History:<cr>"
+        "<leader>H": "<cmd>History/<cr>"
+        "<leader>y": "<cmd>GFiles<cr>"
         "<leader>m": "<cmd>Jumps<cr>"
         "<leader>M": "<cmd>Marks<cr>"
         "<leader>o": "<cmd>RG<cr>"

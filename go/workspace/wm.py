@@ -100,21 +100,21 @@ for i in range(1, 10):
 settings["previewheight"] = 11
 
 
-@rpc()
-async def _toggle_preview() -> None:
-    tab = await Tabpage.get_current()
-    if previews := await preview_windows(tab):
-        for win in previews:
-            await win.close()
-    else:
-        await Nvim.api.command(NoneType, "new")
-        win = await Window.get_current()
-        height = await Nvim.opts.get(int, "previewheight")
-        await win.opts.set("previewwindow", val=True)
-        await win.set_height(height)
+# @rpc()
+# async def _toggle_preview() -> None:
+#     tab = await Tabpage.get_current()
+#     if previews := await preview_windows(tab):
+#         for win in previews:
+#             await win.close()
+#     else:
+#         await Nvim.api.command(NoneType, "new")
+#         win = await Window.get_current()
+#         height = await Nvim.opts.get(int, "previewheight")
+#         await win.opts.set("previewwindow", val=True)
+#         await win.set_height(height)
 
 
-_ = keymap.n("<leader>h") << f"<cmd>lua {NAMESPACE}.{_toggle_preview.method}()<cr>"
+# _ = keymap.n("<leader>h") << f"<cmd>lua {NAMESPACE}.{_toggle_preview.method}()<cr>"
 
 
 # locallist
@@ -155,19 +155,3 @@ async def _clear_qf() -> None:
 
 _ = keymap.n("<leader>l") << f"<cmd>lua {NAMESPACE}.{_toggle_qf.method}()<cr>"
 _ = keymap.n("<leader>L") << f"<cmd>lua {NAMESPACE}.{_clear_qf.method}()<cr>"
-
-
-@rpc()
-async def _resize_secondary() -> None:
-    tab = await Tabpage.get_current()
-    wins = await tab.list_wins()
-    height = await Nvim.opts.get(int, "previewheight")
-
-    for win in wins:
-        if (await win.opts.get(bool, "previewwindow")) or (
-            (buf := await win.get_buf()) and (await buf.filetype()) == "qf"
-        ):
-            await win.set_height(height)
-
-
-_ = keymap.n("<leader>H") << f"<cmd>lua {NAMESPACE}.{_resize_secondary.method}()<cr>"
