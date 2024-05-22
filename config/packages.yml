@@ -64,6 +64,10 @@
     local opts = vim.g.ts_opts
     opts.auto_install = vim.fn.has("win32") == 0
     require("nvim-treesitter.configs").setup(opts)
+    vim.cmd [[
+    set foldmethod=expr
+    set foldexpr=nvim_treesitter#foldexpr()
+    ]]
   vals:
     ts_opts:
       # ensure_installed: all

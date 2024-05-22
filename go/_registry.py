@@ -8,6 +8,7 @@ from .version_control import git
 from .workspace import (
     bm,
     bookmarks,
+    fold,
     input,
     misc,
     navigation,
@@ -28,6 +29,7 @@ assert code_action
 assert command
 assert e_search
 assert entire
+assert fold
 assert git
 assert indent
 assert input
