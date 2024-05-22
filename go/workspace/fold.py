@@ -28,10 +28,10 @@ async def _open_fold() -> None:
     row, col = await win.get_cursor()
     r = row + 1
     lo = await Nvim.fn.foldclosed(int, r)
-    hi = await Nvim.fn.foldclosedend(int, r)
     if lo == r:
         await Nvim.exec(f"silent! foldopen")
         if (prev := await buf.vars.get(int, _BUF_VAR_NAME)) and prev > row:
+            hi = await Nvim.fn.foldclosedend(int, r)
             row = hi - 1
             await win.set_cursor(row, col)
     await buf.vars.set(_BUF_VAR_NAME, val=row)
