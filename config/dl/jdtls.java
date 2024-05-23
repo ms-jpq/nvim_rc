@@ -18,7 +18,7 @@ public class jdtls {
     final var lib = Path.of(System.getenv("LIB"));
     var bin = Path.of(System.getenv("BIN"));
     if (win) {
-      bin.resolveSibling("jdtls.bat");
+      bin = bin.resolveSibling("jdtls.bat");
     }
     final var src = lib.resolve("bin").resolve(bin.getFileName().toString());
     final var tmp = Path.of(System.getenv("TMP"));
