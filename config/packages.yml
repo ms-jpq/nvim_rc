@@ -198,6 +198,7 @@
         "<leader>h": "<cmd>History:<cr>"
         "<leader>H": "<cmd>History/<cr>"
         "<leader>y": "<cmd>GFiles<cr>"
+        "<leader>Y": "<cmd>GFiles?<cr>"
         "<leader>m": "<cmd>Jumps<cr>"
         "<leader>M": "<cmd>Marks<cr>"
         "<leader>o": "<cmd>BLines<cr>"
@@ -214,12 +215,14 @@
     local new_opts = fzf_opts .. " --no-border"
     vim.env.FZF_DEFAULT_OPTS = new_opts
   vals:
-    fzf_buffers_jump: True
     fzf_layout:
       window:
         height: 0.96
         width: 0.96
-    fzf_preview_window: right:wrap
+    fzf_vim:
+      buffers_jump: true
+      preview_window:
+        - right:wrap
 
 - git:
     mvp: *mvp
