@@ -197,8 +197,8 @@
     - maps:
         "<leader>h": "<cmd>History:<cr>"
         "<leader>H": "<cmd>History/<cr>"
-        "<leader>y": "<cmd>GFiles<cr>"
-        "<leader>Y": "<cmd>GFiles?<cr>"
+        "<leader>y": "<cmd>GFiles?<cr>"
+        "<leader>Y": "<cmd>GFiles<cr>"
         "<leader>m": "<cmd>Jumps<cr>"
         "<leader>M": "<cmd>Marks<cr>"
         "<leader>o": "<cmd>BLines<cr>"
