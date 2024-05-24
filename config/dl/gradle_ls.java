@@ -45,7 +45,8 @@ public class gradle_ls {
     final var cwd = tmp.resolve("vscode-gradle-" + version);
     final var built = cwd.resolve(name).resolve("build").resolve("install").resolve(name);
     final var p2 =
-        new ProcessBuilder(cwd.resolve("gradlew") + (win ? ".bat" : ""), "installDist")
+        new ProcessBuilder(
+                cwd.resolve("gradlew") + (win ? ".bat" : ""), "--no-daemon", "installDist")
             .directory(cwd.toFile())
             .inheritIO()
             .start();
@@ -75,5 +76,15 @@ public class gradle_ls {
     }
 
     Files.createSymbolicLink(bin, dst);
+
+    if (win) {
+      while (true) {
+        Thread.sleep(1000);
+        final var p3 = new ProcessBuilder("rm", "-fr", "--", tmp.toString()).inheritIO().start();
+        if (p3.waitFor() == 0) {
+          break;
+        }
+      }
+    }
   }
 }
