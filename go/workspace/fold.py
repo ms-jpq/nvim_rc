@@ -20,6 +20,10 @@ settings["foldopen"] += ("insert", "jump")
 # toggle folds
 _ = keymap.n("a", nowait=True) << "za"
 
+# re-center
+for key in ("o", "O", "c", "C", "a", "A", "v", "x", "X", "m", "M", "r", "R"):
+    _ = keymap.n(f"z{key}") << f"z{key}zz"
+
 
 @rpc()
 async def _open_fold() -> None:
