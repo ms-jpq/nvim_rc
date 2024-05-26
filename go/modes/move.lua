@@ -1,6 +1,7 @@
 (function()
   Go.move = function(key, shift)
-    local row, _ = unpack(vim.api.nvim_win_get_cursor(0))
+    local win = vim.api.nvim_get_current_win()
+    local row, _ = unpack(vim.api.nvim_win_get_cursor(win))
     local next = row + shift
 
     local thisf = vim.fn.foldlevel(row)
@@ -9,7 +10,10 @@
     if thisf < nextf then
       vim.cmd(next .. [[foldopen]])
     elseif thisf > nextf then
-      vim.cmd(row .. [[foldclose]])
+      local foldlvl = vim.wo[win].foldlevel
+      if thisf > foldlvl then
+        vim.cmd(row .. [[foldclose]])
+      end
     end
 
     return (function()
