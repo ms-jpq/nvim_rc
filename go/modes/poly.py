@@ -8,8 +8,8 @@ _move = Path(__file__).parent.joinpath("move.lua").read_text("UTF-8")
 atomic.exec_lua(_move, ())
 
 # move w linewrap
-for key in ("<up>", "<down>", "j", "k"):
-    _ = keymap.nv(key, expr=True) << f"v:lua.Go.move('{key}')"
+for key, dir in (("<up>", False), ("<down>", True), ("j", False), ("k", True)):
+    _ = keymap.nv(key, expr=True) << f"v:lua.Go.move('{key}', {int(dir or -1)})"
 
 # {} scroll fixed lines
 _ = keymap.nv("{") << ("5g<up>zz")
