@@ -1,10 +1,15 @@
 from collections.abc import Iterator
+from pathlib import Path
 
-from ..registry import keymap
+from ..registry import atomic, keymap
+
+_move = Path(__file__).parent.joinpath("move.lua").read_text("UTF-8")
+
+atomic.exec_lua(_move, ())
 
 # move w linewrap
 for key in ("<up>", "<down>", "j", "k"):
-    _ = keymap.nv(key, expr=True) << f"(v:count ? \"m'\" . v:count : 'g') . '{key}'"
+    _ = keymap.nv(key, expr=True) << f"v:lua.Go.move('{key}')"
 
 # {} scroll fixed lines
 _ = keymap.nv("{") << ("5g<up>zz")

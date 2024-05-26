@@ -9,7 +9,7 @@ _ql = "%q"
 _name = "%f"
 _modified = "%m"
 
-_lsp = "%{v:lua.LSP_status_line()}"
+_lsp = "%{v:lua.Go.LSP_status_line()}"
 _ft = "%y"
 _tabs = "%{&tabstop .. (&expandtab ? 'S' : 'T')}"
 _linefeed = "%{&fileformat}"

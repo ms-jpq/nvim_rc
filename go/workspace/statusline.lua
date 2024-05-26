@@ -46,5 +46,5 @@
     return s1 .. s2 .. s3
   end
 
-  LSP_status_line = cache(lsp)
+  Go.LSP_status_line = cache(lsp)
 end)()

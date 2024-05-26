@@ -53,9 +53,8 @@
     local params = (function()
       local mode = vim.api.nvim_get_mode().mode
       if mode == "v" or mode == "V" then
-        return vim.lsp.util.make_given_range_params(
-          unpack(range_from_selection())
-        )
+        local range_params = range_from_selection()
+        return vim.lsp.util.make_given_range_params(unpack(range_params))
       else
         return vim.lsp.util.make_range_params()
       end
