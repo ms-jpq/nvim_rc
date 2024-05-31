@@ -250,21 +250,21 @@
 # - server: typeprof
 #   bin: typeprof
 
-# - server: ruby_ls
-#   bin: ruby-lsp
-#   install:
-#     gem:
-#       - ruby-lsp
-
-- server: solargraph
-  bin: solargraph
+- server: ruby_lsp
+  bin: ruby-lsp
   install:
     gem:
-      - solargraph
-    requires:
-      - ruby
-    script:
-      file: solargraph.dl.rb
+      - ruby-lsp
+
+# - server: solargraph
+#   bin: solargraph
+#   install:
+#     gem:
+#       - solargraph
+#     requires:
+#       - ruby
+#     script:
+#       file: solargraph.dl.rb
 
 - server: mdx_analyzer
   bin: mdx-language-server
