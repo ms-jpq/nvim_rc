@@ -22,10 +22,6 @@ jobs:
 
       - uses: actions/setup-python@v5
 
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.3"
-
       - run: |-
           sudo -- apt-get update
           sudo -- apt-get install --no-install-recommends --yes -- swi-prolog gnucobol moreutils
@@ -71,10 +67,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.3"
 
       - uses: actions/setup-java@v4
         with:

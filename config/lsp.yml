@@ -252,9 +252,9 @@
 
 - server: ruby_lsp
   bin: ruby-lsp
-  install:
-    gem:
-      - ruby-lsp
+  # install:
+  #   gem:
+  #     - ruby-lsp
 
 # - server: solargraph
 #   bin: solargraph
