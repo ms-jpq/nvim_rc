@@ -318,11 +318,11 @@
     npm:
       - vscode-langservers-extracted
 
-# - server: tailwindcss
-#   bin: tailwindcss-language-server
-#   install:
-#     npm:
-#       - "@tailwindcss/language-server"
+- server: tailwindcss
+  bin: tailwindcss-language-server
+  install:
+    npm:
+      - "@tailwindcss/language-server"
 
 - server: svelte
   bin: svelteserver
