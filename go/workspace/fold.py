@@ -4,7 +4,7 @@ from ..registry import keymap, settings
 settings["foldtext"] = ""
 
 # close nested folds above this level
-settings["foldlevel"] = 2
+settings["foldlevel"] = 5
 
 # auto open / close folds
 settings["foldopen"] += ("insert", "jump")

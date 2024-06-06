@@ -275,6 +275,12 @@
       <leader>c: reset_hunk
       <leader>s: stage_hunk
 
+- git:
+    uri: https://github.com/norcalli/nvim-colorizer.lua
+  opt: true
+  lub: |-
+    require('colorizer').setup()
+
 # - git:
 #     uri: https://github.com/EdenEast/nightfox.nvim
 #   lua: |-
