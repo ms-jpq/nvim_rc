@@ -3,10 +3,9 @@ from functools import cache
 from typing import AbstractSet, Sequence
 
 from std2.pickle.decoder import new_decoder
-from yaml import safe_load
 
 from ..consts import CONF_TOOL
-from .install import ScriptSpec
+from .install import ScriptSpec, load
 
 
 @dataclass(frozen=True)
@@ -20,4 +19,5 @@ class ToolSpecs:
 @cache
 def tool_specs() -> ToolSpecs:
     p = new_decoder[ToolSpecs](ToolSpecs)
-    return p(safe_load(CONF_TOOL.open()))
+    conf = load(CONF_TOOL)
+    return p(conf)

@@ -89,7 +89,9 @@ local l3 = function()
     "--ppid",
     vim.fn.getpid(),
     "--socket",
-    server
+    server,
+    "--cwd",
+    vim.fn.getcwd()
   }
   local params = {
     cwd = cwd,

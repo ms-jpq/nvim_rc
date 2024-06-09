@@ -5,10 +5,9 @@ from functools import cache
 from typing import AbstractSet, Optional, Sequence
 
 from std2.pickle.decoder import new_decoder
-from yaml import safe_load
 
 from ..consts import CONF_LINT
-from .install import HasInstall, InstallSpec
+from .install import HasInstall, InstallSpec, load
 
 
 class LinterType(Enum):
@@ -32,4 +31,5 @@ LinterSpecs = Sequence[LinterAttrs]
 @cache
 def linter_specs() -> LinterSpecs:
     p = new_decoder[LinterSpecs](LinterSpecs)
-    return p(safe_load(CONF_LINT.open()))
+    conf = load(CONF_LINT)
+    return p(conf)

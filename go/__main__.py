@@ -1,7 +1,7 @@
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
 from contextlib import nullcontext
-from os import environ
+from os import chdir, environ
 from pathlib import Path, PurePath
 from subprocess import run
 from sys import executable, exit, stderr
@@ -31,6 +31,7 @@ def _parse_args() -> Namespace:
     with nullcontext(sub_parsers.add_parser("run")) as p:
         p.add_argument("--ppid", type=int)
         p.add_argument("--socket", required=True, type=_socket)
+        p.add_argument("--cwd", required=True, type=PurePath)
 
     with nullcontext(sub_parsers.add_parser("deps")) as p:
         p.add_argument("deps", nargs="*", default=())
@@ -111,6 +112,7 @@ def main() -> None:
             print(e, file=stderr)
             exit(1)
         else:
+            chdir(args.cwd)
             arun(init(args.socket, ppid=args.ppid))
 
     else:

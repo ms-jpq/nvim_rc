@@ -4,10 +4,9 @@ from functools import cache
 from typing import AbstractSet, Mapping, Optional, Sequence
 
 from std2.pickle.decoder import new_decoder
-from yaml import safe_load
 
 from ..consts import CONF_FMT
-from .install import HasInstall, InstallSpec
+from .install import HasInstall, InstallSpec, load
 
 
 class FmtType(Enum):
@@ -32,4 +31,5 @@ FmtSpecs = Sequence[FmtAttrs]
 @cache
 def fmt_specs() -> FmtSpecs:
     p = new_decoder[FmtSpecs](FmtSpecs)
-    return p(safe_load(CONF_FMT.open()))
+    conf = load(CONF_FMT)
+    return p(conf)

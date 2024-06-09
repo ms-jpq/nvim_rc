@@ -4,9 +4,9 @@ from typing import Any, Mapping, Optional, Sequence
 
 from pynvim_pp.keymap import KeymapOpts
 from std2.pickle.decoder import new_decoder
-from yaml import safe_load
 
 from ..consts import CONF_PKGS
+from .install import load
 
 
 @dataclass(frozen=True)
@@ -41,4 +41,5 @@ PkgSpecs = Sequence[PkgAttrs]
 @cache
 def pkg_specs() -> PkgSpecs:
     p = new_decoder[PkgSpecs](PkgSpecs)
-    return p(safe_load(CONF_PKGS.open()))
+    conf = load(CONF_PKGS)
+    return p(conf)

@@ -1,14 +1,18 @@
+from collections.abc import Iterator
+from contextlib import suppress
 from dataclasses import dataclass
 from functools import cache
+from os import getcwd
 from os.path import normpath
-from pathlib import PurePath
+from pathlib import Path, PurePath
 from shutil import which as _which
-from typing import AbstractSet, Optional, Protocol, Any
+from typing import AbstractSet, Any, Optional, Protocol
 
 from std2.configparser import hydrate
 from std2.graphlib import merge
 from std2.pathlib import AnyPath
 from std2.platform import OS, os
+from yaml import safe_load
 
 
 @dataclass(frozen=True)
@@ -48,5 +52,16 @@ def which(src: AnyPath) -> Optional[PurePath]:
         return None
 
 
-def load(path: PurePath) -> Any:
-    pass
+def load(path: Path) -> Any:
+    dir = Path(getcwd()) / ".nvim"
+    paths = (path, dir / path.name)
+
+    def cont() -> Iterator[Any]:
+        for path in paths:
+            with suppress(OSError):
+                with path.open() as fd:
+                    yml = safe_load(fd)
+
+                yield hydrate(yml)
+
+    return merge(*cont())

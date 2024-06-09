@@ -4,10 +4,9 @@ from functools import cache
 from typing import AbstractSet, Any, Mapping, Optional, Sequence
 
 from std2.pickle.decoder import new_decoder
-from yaml import safe_load
 
 from ..consts import CONF_LSP
-from .install import HasInstall, InstallSpec
+from .install import HasInstall, InstallSpec, load
 
 
 class RPFallback(Enum):
@@ -41,4 +40,5 @@ LspSpecs = Sequence[LspAttrs]
 @cache
 def lsp_specs() -> LspSpecs:
     p = new_decoder[LspSpecs](LspSpecs)
-    return p(safe_load(CONF_LSP.open()))
+    conf = load(CONF_LSP)
+    return p(conf)
