@@ -3,8 +3,10 @@ from functools import cache
 from os.path import normpath
 from pathlib import PurePath
 from shutil import which as _which
-from typing import AbstractSet, Optional, Protocol
+from typing import AbstractSet, Optional, Protocol, Any
 
+from std2.configparser import hydrate
+from std2.graphlib import merge
 from std2.pathlib import AnyPath
 from std2.platform import OS, os
 
@@ -44,3 +46,7 @@ def which(src: AnyPath) -> Optional[PurePath]:
             return PurePath(dst)
     else:
         return None
+
+
+def load(path: PurePath) -> Any:
+    pass

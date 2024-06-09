@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from functools import cache
 from typing import Any, Mapping, Optional, Sequence
 
 from pynvim_pp.keymap import KeymapOpts
@@ -35,4 +36,9 @@ class PkgAttrs:
 
 
 PkgSpecs = Sequence[PkgAttrs]
-pkg_specs = new_decoder[PkgSpecs](PkgSpecs)(safe_load(CONF_PKGS.open()))
+
+
+@cache
+def pkg_specs() -> PkgSpecs:
+    p = new_decoder[PkgSpecs](PkgSpecs)
+    return p(safe_load(CONF_PKGS.open()))

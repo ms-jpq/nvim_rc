@@ -81,11 +81,11 @@ def _inst(packages: Iterable[PkgAttrs], cmds: Iterable[str]) -> Atomic:
 
 
 def inst() -> Atomic:
-    pkgs = (spec for spec in pkg_specs if spec.opt is not None and not spec.opt)
+    pkgs = (spec for spec in pkg_specs() if spec.opt is not None and not spec.opt)
     return _inst(pkgs, cmds=("packloadall",))
 
 
 def inst_later() -> Atomic:
-    pkgs = tuple(spec for spec in pkg_specs if spec.opt)
+    pkgs = tuple(spec for spec in pkg_specs() if spec.opt)
     cmds = (f"packadd {uri_path(pkg.git.uri).name}" for pkg in pkgs)
     return _inst(pkgs, cmds=cmds)

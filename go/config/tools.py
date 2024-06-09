@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from functools import cache
 from typing import AbstractSet, Sequence
 
 from std2.pickle.decoder import new_decoder
@@ -16,4 +17,7 @@ class ToolSpecs:
     script: Sequence[ScriptSpec] = ()
 
 
-tool_specs = new_decoder[ToolSpecs](ToolSpecs)(safe_load(CONF_TOOL.open()))
+@cache
+def tool_specs() -> ToolSpecs:
+    p = new_decoder[ToolSpecs](ToolSpecs)
+    return p(safe_load(CONF_TOOL.open()))

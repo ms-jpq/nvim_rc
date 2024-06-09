@@ -69,28 +69,28 @@ def _pip_specs() -> Iterator[str]:
     for spec in chain(lsp_specs(), linter_specs(), fmt_specs()):
         if all(map(which, spec.install.requires)):
             yield from spec.install.pip
-    yield from tool_specs.pip
+    yield from tool_specs().pip
 
 
 def _gem_specs() -> Iterator[str]:
     for spec in chain(lsp_specs(), linter_specs(), fmt_specs()):
         if all(map(which, spec.install.requires)):
             yield from spec.install.gem
-    yield from tool_specs.gem
+    yield from tool_specs().gem
 
 
 def _npm_specs() -> Iterator[str]:
     for spec in chain(lsp_specs(), linter_specs(), fmt_specs()):
         if all(map(which, spec.install.requires)):
             yield from spec.install.npm
-    yield from tool_specs.npm
+    yield from tool_specs().npm
 
 
 def _script_specs() -> Iterator[Tuple[PurePath, ScriptSpec]]:
     for spec in chain(lsp_specs(), linter_specs(), fmt_specs()):
         if all(map(which, spec.install.requires)):
             yield spec.bin, spec.install.script
-    for t_spec in tool_specs.script:
+    for t_spec in tool_specs().script:
         if file := t_spec.file:
             yield PurePath(file.stem), t_spec
 
@@ -180,7 +180,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
 
             return [rt async for rt in cont()]
 
-        for spec in pkg_specs:
+        for spec in pkg_specs():
             if not mvp or spec.git.mvp:
                 location = p_name(spec.opt, uri=spec.git.uri)
                 if _match(match, name=location.name):
