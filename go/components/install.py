@@ -147,13 +147,13 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                         "--no-tags",
                         jobs,
                         "--force",
+                        "--quiet",
                         *(("origin", branch) if branch else ()),
                     )
                 else:
                     p1 = await _run(
                         git,
                         "clone",
-                        "--quiet",
                         "--config",
                         "core.symlinks=true",
                         "--recurse-submodules",
@@ -161,6 +161,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                         "--depth=1",
                         jobs,
                         *(("--branch", spec.branch) if spec.branch else ()),
+                        "--quiet",
                         "--",
                         uri,
                         location,
