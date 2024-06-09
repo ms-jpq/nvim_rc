@@ -32,7 +32,7 @@ DEFAULT_LANG = "c"
 
 
 CONF_DIR = TOP_LEVEL / "config"
-CONF_PKGS = CONF_DIR / "packages.yml"
+CONF_PKGS = CONF_DIR / "git.yml"
 CONF_LSP = CONF_DIR / "lsp.yml"
 CONF_LINT = CONF_DIR / "lint.yml"
 CONF_FMT = CONF_DIR / "fmt.yml"

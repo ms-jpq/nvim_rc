@@ -1,11 +1,11 @@
 ---
-- server: jsonls
+jsonls:
   bin: vscode-json-language-server
   install:
     npm:
       - vscode-langservers-extracted
 
-- server: yamlls
+yamlls:
   bin: yaml-language-server
   filetypes:
     - yaml
@@ -18,13 +18,13 @@
   #   yaml:
   #     keyOrdering: false
 
-- server: taplo
+taplo:
   bin: taplo
   install:
     script:
       file: taplo.sh
 
-- server: typos_lsp
+typos_lsp:
   bin: typos-lsp
   init_options:
     diagnosticSeverity: Information
@@ -32,7 +32,7 @@
     script:
       file: typos_ls.sh
 
-- server: lemminx
+lemminx:
   bin: lemminx
   args: []
   install:
@@ -41,16 +41,16 @@
     script:
       file: lemminx.sh
 
-- server: contextive
+contextive:
   bin: Contextive.LanguageServer_which
 
-- server: ast_grep
+ast_grep:
   bin: ast-grep
   install:
     npm:
       - "@ast-grep/cli"
 
-- server: marksman
+marksman:
   bin: marksman
   install:
     script:
@@ -66,13 +66,13 @@
 #     npm:
 #       - vscode-langservers-extracted
 
-- server: ltex
+ltex:
   bin: ltex-ls
   install:
     script:
       file: ltex.sh
 
-- server: texlab
+texlab:
   bin: texlab
   settings:
     texlab:
@@ -99,10 +99,10 @@
     script:
       file: texlab.sh
 
-- server: digestif
+digestif:
   bin: digestif
 
-- server: diagnosticls
+diagnosticls:
   bin: diagnostic-languageserver
   filetypes:
     - dockerfile
@@ -140,13 +140,13 @@
     npm:
       - diagnostic-languageserver
 
-- server: bashls
+bashls:
   bin: bash-language-server
   install:
     npm:
       - bash-language-server
 
-- server: jqls
+jqls:
   bin: jq-lsp
   install:
     requires:
@@ -160,7 +160,7 @@
 #     npm:
 #       - awk-language-server
 
-- server: powershell_es
+powershell_es:
   bin: pwsh_es.ps1
   args: []
   install:
@@ -169,19 +169,19 @@
     script:
       file: pwsh_es.dl.ps1
 
-- server: dockerls
+dockerls:
   bin: docker-langserver
   install:
     npm:
       - dockerfile-language-server-nodejs
 
-- server: docker_compose_language_service
+docker_compose_language_service:
   bin: docker-compose-langserver
   install:
     npm:
       - "@microsoft/compose-language-service"
 
-- server: pyright
+pyright:
   bin: pyright-langserver
   install:
     npm:
@@ -199,7 +199,7 @@
 #     pip:
 #       - ruff-lsp
 
-- server: hls
+hls:
   bin: haskell-language-server-wrapper
   install:
     requires:
@@ -208,7 +208,7 @@
     script:
       file: hls.dl.hs
 
-- server: rust_analyzer
+rust_analyzer:
   bin: rust-analyzer
   install:
     requires:
@@ -216,7 +216,7 @@
     script:
       file: rust_analyzer.rs
 
-- server: gopls
+gopls:
   bin: gopls
   install:
     requires:
@@ -224,7 +224,7 @@
     script:
       file: gopls.go
 
-- server: golangci_lint_ls
+golangci_lint_ls:
   bin: golangci-lint-langserver
   install:
     requires:
@@ -232,16 +232,16 @@
     script:
       file: golangci.go
 
-- server: sourcekit
+sourcekit:
   bin: sourcekit-lsp
 
-- server: clangd
+clangd:
   bin: clangd
 
-- server: ccls
+ccls:
   bin: ccls
 
-- server: fortls
+fortls:
   bin: fortls
   install:
     pip:
@@ -250,7 +250,7 @@
 # - server: typeprof
 #   bin: typeprof
 
-- server: ruby_lsp
+ruby_lsp:
   bin: ruby-lsp
   # install:
   #   gem:
@@ -266,13 +266,13 @@
 #     script:
 #       file: solargraph.dl.rb
 
-- server: mdx_analyzer
+mdx_analyzer:
   bin: mdx-language-server
   install:
     npm:
       - "@mdx-js/language-server"
 
-- server: tsserver
+tsserver:
   bin: typescript-language-server
   install:
     npm:
@@ -280,13 +280,13 @@
       - typescript
       - typescript-language-server
 
-- server: prismals
+prismals:
   bin: prisma-language-server
   install:
     npm:
       - "@prisma/language-server"
 
-- server: eslint
+eslint:
   bin: vscode-eslint-language-server
   settings:
     run: onSave
@@ -306,43 +306,43 @@
 # - server: denols
 #   bin: deno
 
-- server: html
+html:
   bin: vscode-html-language-server
   install:
     npm:
       - vscode-langservers-extracted
 
-- server: cssls
+cssls:
   bin: vscode-css-language-server
   install:
     npm:
       - vscode-langservers-extracted
 
-- server: tailwindcss
+tailwindcss:
   bin: tailwindcss-language-server
   install:
     npm:
       - "@tailwindcss/language-server"
 
-- server: svelte
+svelte:
   bin: svelteserver
   install:
     npm:
       - svelte-language-server
 
-- server: graphql
+graphql:
   bin: graphql-lsp
   install:
     npm:
       - graphql-language-service-cli
 
-- server: vimls
+vimls:
   bin: vim-language-server
   install:
     npm:
       - vim-language-server
 
-- server: r_language_server
+r_language_server:
   bin: lsr
   args: []
   install:
@@ -352,7 +352,7 @@
     script:
       file: lsr.dl.r
 
-- server: julials
+julials:
   bin: julia-lsp
   args: []
   install:
@@ -361,7 +361,7 @@
     script:
       file: julia_ls.dl.jl
 
-- server: phpactor
+phpactor:
   bin: phpactor
   install:
     requires:
@@ -369,13 +369,13 @@
     script:
       file: phpactor.dl.php
 
-- server: intelephense
+intelephense:
   bin: intelephense
   install:
     npm:
       - intelephense
 
-- server: fsautocomplete
+fsautocomplete:
   bin: fsautocomplete
   install:
     requires:
@@ -383,7 +383,7 @@
     script:
       file: fsautocomplete.dl.fsx
 
-- server: omnisharp
+omnisharp:
   bin: omnisharp
   args: []
   install:
@@ -392,7 +392,7 @@
     script:
       file: omnisharp.dl.fsx
 
-- server: clojure_lsp
+clojure_lsp:
   bin: clojure-lsp
   install:
     requires:
@@ -400,7 +400,7 @@
     script:
       file: clj_lsp.clj
 
-- server: gradle_ls
+gradle_ls:
   bin: gradle-language-server
   install:
     requires:
@@ -409,7 +409,7 @@
     script:
       file: gradle_ls.java
 
-- server: kotlin_language_server
+kotlin_language_server:
   bin: kotlin-language-server
   install:
     requires:
@@ -417,7 +417,7 @@
     script:
       file: kotlin_ls.kts
 
-- server: jdtls
+jdtls:
   bin: jdtls
   install:
     requires:
@@ -435,13 +435,13 @@
 #     script:
 #       file: prolog_ls.dl.pro
 
-- server: sqlls
+sqlls:
   bin: sql-language-server
   install:
     npm:
       - sql-language-server
 
-- server: lua_ls
+lua_ls:
   bin: lua-language-server
   settings:
     Lua:
@@ -453,13 +453,13 @@
     script:
       file: lua_ls.dl.sh
 
-- server: ansiblels
+ansiblels:
   bin: ansible-language-server
   install:
     npm:
       - ansible-language-server
 
-- server: glsl_analyzer
+glsl_analyzer:
   bin: glsl_analyzer
   install:
     script:
@@ -477,7 +477,7 @@
 #     npm:
 #       - "@olrtg/emmet-language-server"
 
-- server: terraformls
+terraformls:
   bin: terraform-ls
   install:
     requires:
@@ -485,13 +485,13 @@
     script:
       file: terraform_ls.sh
 
-- server: tflint
+tflint:
   bin: tflint
   install:
     script:
       file: tflint.sh
 
-- server: cobol_ls
+cobol_ls:
   bin: cobol-language-support
   args:
     - pipeEnabled

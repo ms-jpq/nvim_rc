@@ -2,7 +2,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import Enum, auto
 from functools import cache
-from typing import AbstractSet, Optional, Sequence
+from typing import AbstractSet, MutableMapping, Optional, Sequence
 
 from std2.pickle.decoder import new_decoder
 
@@ -32,4 +32,8 @@ LinterSpecs = Mapping[str, LinterAttrs]
 def linter_specs() -> LinterSpecs:
     p = new_decoder[LinterSpecs](LinterSpecs)
     conf = load(CONF_LINT)
+    if isinstance(conf, Mapping):
+        for k, v in conf.items():
+            if isinstance(v, MutableMapping):
+                v["bin"] = k
     return p(conf)

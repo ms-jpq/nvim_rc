@@ -1,5 +1,5 @@
 ---
-- bin: vint
+vint:
   args:
     - --enable-neovim
     - --style-problem
@@ -13,7 +13,7 @@
     pip:
       - vim-vint
 
-- bin: shellcheck
+shellcheck:
   args:
     - --enable=all
     - --
@@ -28,7 +28,7 @@
     script:
       file: shellcheck.sh
 
-- bin: perlcritic.pl
+perlcritic.pl:
   args:
     - --brutal
     - --
@@ -41,14 +41,14 @@
     script:
       file: perlcritic.dl.pl
 
-- bin: pwsh-lint.ps1
+pwsh-lint.ps1:
   args:
     - ${tmpname}
   type: fs
   filetypes:
     - ps1
 
-- bin: mypy
+mypy:
   args:
     - --
     - ${tmpname}
@@ -59,7 +59,7 @@
     pip:
       - mypy
 
-- bin: clj-kondo
+clj-kondo:
   args:
     - --filename
     - ${filename}
@@ -74,7 +74,7 @@
     script:
       file: clj_lint.clj
 
-- bin: hadolint
+hadolint:
   args:
     - --no-color
     - --
@@ -86,7 +86,7 @@
     script:
       file: hadolint.sh
 
-- bin: golint
+golint:
   args:
     - run
     - --enable-all
@@ -101,7 +101,7 @@
     script:
       file: golint.sh
 
-- bin: rubocop.rb
+rubocop.rb:
   args:
     - ${filename}
     - --no-color
@@ -118,7 +118,7 @@
     script:
       file: rubocop.dl.rb
 
-- bin: lintr.r
+lintr.r:
   args:
     - ${tmpname}
   type: fs
@@ -131,7 +131,7 @@
     script:
       file: lintr.dl.r
 
-- bin: htmlhint
+htmlhint:
   args:
     - --nocolor
     - --
@@ -143,7 +143,7 @@
     npm:
       - htmlhint
 
-- bin: phan.php
+phan.php:
   args:
     - ${tmpname}
   type: fs
@@ -155,7 +155,7 @@
     script:
       file: phan.dl.php
 
-- bin: lint-openapi
+lint-openapi:
   args:
     - --
     - ${tmpname}
