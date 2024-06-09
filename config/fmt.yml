@@ -1,5 +1,6 @@
 ---
-- bin: sortd
+cfg:
+  bin: sortd
   args:
     - cfg
   type: stream
@@ -11,7 +12,8 @@
     pip:
       - sortd
 
-- bin: sortd
+json:
+  bin: sortd
   args:
     - json
   type: stream
@@ -26,7 +28,8 @@
 #   filetypes:
 #     - gitconfig
 
-- bin: taplo
+toml:
+  bin: taplo
   args:
     - format
     - --option=align_entries=true
@@ -39,7 +42,8 @@
     - gitconfig
     - toml
 
-- bin: shfmt
+shell:
+  bin: shfmt
   args:
     - --simplify
     - --binary-next-line
@@ -56,19 +60,22 @@
     script:
       file: shfmt.sh
 
-- bin: pwsh-fmt.ps1
+pwsh:
+  bin: pwsh-fmt.ps1
   args: []
   type: stream
   filetypes:
     - ps1
 
-- bin: prolog-fmt.pro
+prolog:
+  bin: prolog-fmt.pro
   args: []
   type: stream
   filetypes:
     - prolog
 
-- bin: stylish-haskell
+haskell:
+  bin: stylish-haskell
   args: []
   type: stream
   filetypes:
@@ -80,20 +87,23 @@
     script:
       file: stylish.dl.hs
 
-- bin: systemd-fmt.sh
+systemd:
+  bin: systemd-fmt.sh
   args: []
   type: stream
   filetypes:
     - systemd
 
-- bin: perltidy.pl
+perl:
+  bin: perltidy.pl
   args:
     - --indent-columns=2
   type: stream
   filetypes:
     - perl
 
-- bin: dockerfile-utils
+docker:
+  bin: dockerfile-utils
   args:
     - format
     - --spaces
@@ -103,7 +113,8 @@
   filetypes:
     - dockerfile
 
-- bin: isort
+python1:
+  bin: isort
   args:
     - --profile=black
     - --filename=${filename}
@@ -116,7 +127,8 @@
     pip:
       - isort
 
-- bin: black
+python2:
+  bin: black
   args:
     - --stdin-filename=${filename}
     - --
@@ -128,7 +140,8 @@
     pip:
       - black
 
-- bin: cljfmt
+clojure:
+  bin: cljfmt
   args:
     - fix
     - --remove-multiple-non-indenting-spaces
@@ -156,7 +169,8 @@
 #     npm:
 #       - csscomb
 
-- bin: prettier.js
+prettier:
+  bin: prettier.js
   args:
     - ${filetype}
     - ${filename}
@@ -192,7 +206,8 @@
     script:
       file: prettier.dl.js
 
-- bin: stree
+ruby1:
+  bin: stree
   args:
     - format
     # plugin/single_quotes,
@@ -209,7 +224,8 @@
     gem:
       - syntax_tree
 
-- bin: rubocop.rb
+ruby2:
+  bin: rubocop.rb
   args:
     - ${filename}
     - --fail-level=fatal
@@ -222,7 +238,8 @@
   filetypes:
     - ruby
 
-- bin: luafmt
+lua:
+  bin: luafmt
   args:
     - --line-width=80
     - --indent-count=${tabsize}
@@ -234,14 +251,16 @@
     npm:
       - lua-fmt
 
-- bin: rustfmt
+rust:
+  bin: rustfmt
   args:
     - --edition=2021
   type: stream
   filetypes:
     - rust
 
-- bin: goimports
+go:
+  bin: goimports
   type: stream
   filetypes:
     - go
@@ -251,14 +270,8 @@
     script:
       file: goimports.go
 
-# - bin: gofmt
-#   args:
-#     - -s
-#   type: stream
-#   filetypes:
-#     - go
-
-- bin: clang-format
+c:
+  bin: clang-format
   args:
     - --Werror
     - --assume-filename=${filename}
@@ -269,7 +282,8 @@
     - cs
     - objc
 
-- bin: fprettify
+fortran:
+  bin: fprettify
   args: []
   type: stream
   filetypes:
@@ -278,7 +292,8 @@
     pip:
       - fprettify
 
-- bin: latexindent.pl
+latex:
+  bin: latexindent.pl
   args: []
   filetypes:
     - plaintex
@@ -292,7 +307,8 @@
     script:
       file: latexindent.dl.pl
 
-- bin: fantomas.fsx
+fsharp:
+  bin: fantomas.fsx
   args:
     - ${tmpname}
   type: fs
@@ -304,7 +320,8 @@
     script:
       file: fantomas.dl.fsx
 
-- bin: ktfmt.java
+kotlin:
+  bin: ktfmt.java
   args:
     - ${tabsize}
     - --stdin-name=${filename}
@@ -319,7 +336,8 @@
     script:
       file: ktfmt.dl.kts
 
-- bin: javafmt.java
+java:
+  bin: javafmt.java
   args:
     - "-"
   type: stream
@@ -331,8 +349,8 @@
       - jq
     script:
       file: javafmt.dl.java
-
-- bin: styler.r
+r:
+  bin: styler.r
   args:
     - ${tmpname}
   type: fs
@@ -345,7 +363,8 @@
     script:
       file: styler.dl.r
 
-- bin: sql-formatter
+sql:
+  bin: sql-formatter
   args:
     # - --uppercase
     # - --lines-between-queries=2
@@ -358,7 +377,8 @@
     npm:
       - sql-formatter
 
-- bin: eslint.js
+eslint:
+  bin: eslint.js
   args:
     - ${filename}
     - ${tmpname}
@@ -372,7 +392,8 @@
     script:
       file: eslint.dl.js
 
-- bin: terraform
+terraform:
+  bin: terraform
   args:
     - fmt
     - "-"
