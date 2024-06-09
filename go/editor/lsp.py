@@ -132,14 +132,14 @@ def _encode_spec(spec: LspAttrs) -> Mapping[str, Any]:
 
 _ENCODER = new_encoder[Optional[RootPattern]](Optional[RootPattern])
 
-for spec in lsp_specs():
+for server, spec in lsp_specs().items():
     if which(spec.bin):
         config = _encode_spec(spec)
         args = (
             GLOBAL_NS,
             str(_find_root.uuid),
             str(_on_attach.uuid),
-            normcase(spec.server),
+            normcase(server),
             config,
             _ENCODER(spec.root),
         )

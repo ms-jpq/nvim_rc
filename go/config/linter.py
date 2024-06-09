@@ -25,7 +25,7 @@ class LinterAttrs(HasInstall):
     install: InstallSpec = InstallSpec()
 
 
-LinterSpecs = Sequence[LinterAttrs]
+LinterSpecs = Mapping[str, LinterAttrs]
 
 
 @cache

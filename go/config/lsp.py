@@ -25,7 +25,6 @@ class RootPattern:
 
 @dataclass(frozen=True)
 class LspAttrs(HasInstall):
-    server: str
     args: Optional[Sequence[str]] = None
     filetypes: AbstractSet[str] = frozenset()
     root: Optional[RootPattern] = None
@@ -34,7 +33,7 @@ class LspAttrs(HasInstall):
     install: InstallSpec = InstallSpec()
 
 
-LspSpecs = Sequence[LspAttrs]
+LspSpecs = Mapping[str, LspAttrs]
 
 
 @cache

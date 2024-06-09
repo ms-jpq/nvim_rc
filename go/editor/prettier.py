@@ -115,7 +115,7 @@ async def _run(ctx: BufContext, attrs: Iterable[FmtAttrs], cwd: PurePath) -> Non
 
 
 def _fmts_for(filetype: str) -> Iterator[FmtAttrs]:
-    for attr in fmt_specs():
+    for attr in fmt_specs().values():
         for pat in attr.filetypes:
             if fnmatch(filetype, pat=pat):
                 yield attr

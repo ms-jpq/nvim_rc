@@ -25,7 +25,7 @@ class FmtAttrs(HasInstall):
     install: InstallSpec = InstallSpec()
 
 
-FmtSpecs = Sequence[FmtAttrs]
+FmtSpecs = Mapping[str, FmtAttrs]
 
 
 @cache
