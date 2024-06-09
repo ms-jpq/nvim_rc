@@ -56,7 +56,7 @@ marksman:
     script:
       file: marksman.sh
 
-# - server: markdown
+# markdown:
 #   bin: vscode-markdown-language-server
 #   args:
 #     - --stdio
@@ -154,11 +154,11 @@ jqls:
     script:
       file: jq_ls.go
 
-# - server: awk_ls
-#   bin: awk-language-server
-#   install:
-#     npm:
-#       - awk-language-server
+awk_ls:
+  bin: awk-language-server
+  install:
+    npm:
+      - awk-language-server
 
 powershell_es:
   bin: pwsh_es.ps1
@@ -187,13 +187,13 @@ pyright:
     npm:
       - pyright
 
-# - server: pylyzer
+# pylyzer:
 #   bin: pylyzer
 #   install:
 #     pip:
 #       - pylyzer
-
-# - server: ruff_lsp
+#
+# ruff_lsp:
 #   bin: ruff
 #   install:
 #     pip:
@@ -247,7 +247,7 @@ fortls:
     pip:
       - fortls
 
-# - server: typeprof
+# typeprof:
 #   bin: typeprof
 
 ruby_lsp:
@@ -256,7 +256,7 @@ ruby_lsp:
   #   gem:
   #     - ruby-lsp
 
-# - server: solargraph
+# solargraph:
 #   bin: solargraph
 #   install:
 #     gem:
@@ -303,7 +303,7 @@ eslint:
     npm:
       - vscode-langservers-extracted
 
-# - server: denols
+# denols:
 #   bin: deno
 
 html:
@@ -426,7 +426,7 @@ jdtls:
     script:
       file: jdtls.java
 
-# - server: prolog_ls
+# prolog_ls:
 #   bin: prolog-ls
 #   args: []
 #   install:
@@ -465,13 +465,13 @@ glsl_analyzer:
     script:
       file: glsl_analyzer.sh
 
-# - server: theme_check
+# theme_check:
 #   bin: theme-check-language-server
 #   install:
 #     gem:
 #       - theme-check
 
-# - server: emmet_language_server
+# emmet_language_server:
 #   bin: emmet-language-server
 #   install:
 #     npm:
@@ -504,7 +504,8 @@ cobol_ls:
       - cobc
     script:
       file: cobol_ls.cob
-# - server: volar
+
+# volar:
 #   bin: vue-language-server
 #   install:
 #     npm:

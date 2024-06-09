@@ -128,11 +128,10 @@ https://github.com/nvim-treesitter/nvim-treesitter:
 
 https://github.com/nvim-treesitter/nvim-treesitter-textobjects: {}
 
-# - git:
-#     uri: https://github.com/nvim-treesitter/nvim-treesitter-context
+# https://github.com/nvim-treesitter/nvim-treesitter-context: {}
 
 https://github.com/neovim/nvim-lspconfig:
-    mvp: *mvp
+  mvp: *mvp
 
 https://github.com/ms-jpq/coq.thirdparty:
   mvp: *mvp
@@ -173,13 +172,13 @@ https://github.com/ms-jpq/coq.thirdparty:
       #   short_name: vTEX
 
 https://github.com/ms-jpq/snips:
-    mvp: *mvp
+  mvp: *mvp
 
 https://github.com/ms-jpq/coq.artifacts:
-    mvp: *mvp
+  mvp: *mvp
 
 https://github.com/junegunn/fzf:
-    mvp: *mvp
+  mvp: *mvp
 
 https://github.com/junegunn/fzf.vim:
   mvp: *mvp
@@ -215,10 +214,10 @@ https://github.com/junegunn/fzf.vim:
         - right:wrap
 
 https://github.com/tpope/vim-repeat:
-    mvp: *mvp
+  mvp: *mvp
 
 https://github.com/tpope/vim-surround:
-    mvp: *mvp
+  mvp: *mvp
 
 https://github.com/junegunn/vim-easy-align:
   mvp: *mvp
@@ -230,12 +229,16 @@ https://github.com/junegunn/vim-easy-align:
         noremap: False
 
 https://github.com/tpope/vim-unimpaired:
-    mvp: *mvp
+  mvp: *mvp
 
 https://github.com/cocopon/iceberg.vim:
   mvp: *mvp
   lua: |-
     vim.cmd [[colorscheme iceberg]]
+
+# https://github.com/EdenEast/nightfox.nvim:
+#   lua: |-
+#     vim.cmd [[colorscheme dayfox]]
 
 https://github.com/lewis6991/gitsigns.nvim:
   opt: true
@@ -264,11 +267,6 @@ https://github.com/norcalli/nvim-colorizer.lua:
   lub: |-
     require('colorizer').setup()
 
-# - git:
-#     uri: https://github.com/EdenEast/nightfox.nvim
-#   lua: |-
-#     vim.cmd [[colorscheme dayfox]]
-
 https://github.com/github/copilot.vim:
   call:
     - - sh
@@ -286,7 +284,6 @@ https://github.com/Exafunction/codeium.vim:
     codeium_render: False
 
 # https://github.com/TabbyML/vim-tabby:
-#   git: {}
 #   opt: null
 #   lub: |-
 #     vim.cmd [[
@@ -298,8 +295,7 @@ https://github.com/Exafunction/codeium.vim:
 #       vim.fn["tabby#OnVimEnter"]()
 #     end
 
-# - git:
-#     uri: https://github.com/lervag/vimtex
+# https://github.com/lervag/vimtex:
 #   opt: true
 #   vals:
 #     vimtex_compiler_method: tectonic
