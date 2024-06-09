@@ -38,7 +38,7 @@ from ..config.fmt import fmt_specs
 from ..config.install import ScriptSpec, which
 from ..config.linter import linter_specs
 from ..config.lsp import lsp_specs
-from ..config.pkgs import pkg_specs
+from ..config.pkgs import PkgAttrs, pkg_specs
 from ..config.tools import tool_specs
 from ..consts import (
     BIN_DIR,
@@ -134,8 +134,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
         async def cont(
             location: Path,
             uri: str,
-            branch: Optional[str],
-            calls: Sequence[Sequence[str]],
+            spec: PkgAttrs,
         ) -> _SortOfMonoid:
             async def cont() -> AsyncIterator[Tuple[str, CompletedProcess[bytes]]]:
                 assert git
@@ -151,7 +150,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                         jobs,
                         "--force",
                         "--quiet",
-                        *(("origin", branch) if branch else ()),
+                        *(("origin", spec.branch) if spec.branch else ()),
                     )
                 else:
                     p1 = await _run(
@@ -163,7 +162,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                         "--shallow-submodules",
                         "--depth=1",
                         jobs,
-                        *(("--branch", branch) if branch else ()),
+                        *(("--branch", spec.branch) if spec.branch else ()),
                         "--quiet",
                         "--",
                         uri,
@@ -172,7 +171,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                 yield uri, p1
 
                 if not p1.returncode:
-                    for call in calls:
+                    for call in spec.call:
                         arg0, *argv = call
                         a00 = (
                             Path(executable).resolve(strict=True)
@@ -195,7 +194,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
             if not mvp or spec.mvp:
                 location = p_name(spec.opt, uri=uri)
                 if _match(match, name=location.name):
-                    yield cont(location, uri=uri, branch=spec.branch, calls=spec.call)
+                    yield cont(location, uri=uri, spec=spec)
 
 
 def _pip(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
