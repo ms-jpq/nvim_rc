@@ -1,4 +1,4 @@
-from collections.abc import Iterator
+from collections.abc import Iterator, MutableMapping
 from contextlib import suppress
 from dataclasses import dataclass
 from functools import cache
@@ -62,6 +62,10 @@ def load(path: Path) -> Any:
                 with path.open() as fd:
                     yml = safe_load(fd)
 
-                yield hydrate(yml)
+                if isinstance(yml, MutableMapping):
+                    for key, item in yml.items():
+                        print(key)
+                        yml[key] = hydrate(item)
+                yield yml
 
     return merge(*cont())
