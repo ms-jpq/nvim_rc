@@ -131,7 +131,9 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
 
     if git := which("git"):
 
-        async def cont(uri: str,branch: Optional[str], location: Path) -> _SortOfMonoid:
+        async def cont(
+            uri: str, branch: Optional[str], location: Path
+        ) -> _SortOfMonoid:
             async def cont() -> AsyncIterator[Tuple[str, CompletedProcess[bytes]]]:
                 assert git
                 jobs = f"--jobs={cpu_count()}"
@@ -151,6 +153,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                     p1 = await _run(
                         git,
                         "clone",
+                        "--quiet",
                         "--config",
                         "core.symlinks=true",
                         "--recurse-submodules",
@@ -184,7 +187,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
 
             return [rt async for rt in cont()]
 
-        for uri ,spec in pkg_specs().items():
+        for uri, spec in pkg_specs().items():
             if not mvp or spec.mvp:
                 location = p_name(spec.opt, uri=uri)
                 if _match(match, name=location.name):
