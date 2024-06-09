@@ -1,5 +1,6 @@
 ---
-- git:
+https://github.com/ms-jpq/chadtree:
+  git:
     mvp: &mvp True
     call:
       - - rm
@@ -11,7 +12,6 @@
         - chadtree
         - deps
         - --nvim
-    uri: https://github.com/ms-jpq/chadtree
   # vals:
   #   chadtree_settings:
   #     theme.icon_glyph_set: ascii
@@ -20,7 +20,8 @@
         "<leader>v": "<cmd>CHADopen<cr>"
       modes: n
 
-- git:
+https://github.com/ms-jpq/coq_nvim:
+  git:
     mvp: *mvp
     call:
       - - rm
@@ -31,7 +32,6 @@
         - -m
         - coq
         - deps
-    uri: https://github.com/ms-jpq/coq_nvim
   vals:
     coq_settings:
       auto_start: True
@@ -49,7 +49,8 @@
       vim.g.coq_settings = v
     end
 
-- git:
+https://github.com/nvim-treesitter/nvim-treesitter:
+  git:
     call:
       - - nvim
         - --headless
@@ -129,19 +130,20 @@
             <leader><right>: "@statement.outer"
             <leader><down>: "@block.outer"
 
-- git:
+https://github.com/nvim-treesitter/nvim-treesitter-textobjects:
+  git:
     uri: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 
 # - git:
 #     uri: https://github.com/nvim-treesitter/nvim-treesitter-context
 
-- git:
+https://github.com/neovim/nvim-lspconfig:
+  git:
     mvp: *mvp
-    uri: https://github.com/neovim/nvim-lspconfig
 
-- git:
+https://github.com/ms-jpq/coq.thirdparty:
+  git:
     mvp: *mvp
-    uri: https://github.com/ms-jpq/coq.thirdparty
   lua: |-
     require("coq_3p")(vim.g.COQ3p)
   vals:
@@ -178,21 +180,21 @@
       # - src: vimtex
       #   short_name: vTEX
 
-- git:
+https://github.com/ms-jpq/snips:
+  git:
     mvp: *mvp
-    uri: https://github.com/ms-jpq/snips
 
-- git:
+https://github.com/ms-jpq/coq.artifacts:
+  git:
     mvp: *mvp
-    uri: https://github.com/ms-jpq/coq.artifacts
 
-- git:
+https://github.com/junegunn/fzf:
+  git:
     mvp: *mvp
-    uri: https://github.com/junegunn/fzf
 
-- git:
+https://github.com/junegunn/fzf.vim:
+  git:
     mvp: *mvp
-    uri: https://github.com/junegunn/fzf.vim
   keys:
     - maps:
         "<leader>h": "<cmd>History:<cr>"
@@ -224,15 +226,17 @@
       preview_window:
         - right:wrap
 
-- git:
+https://github.com/tpope/vim-repeat:
+  git:
     mvp: *mvp
-    uri: https://github.com/tpope/vim-repeat
 
-- git:
+https://github.com/tpope/vim-surround:
+  git:
     mvp: *mvp
     uri: https://github.com/tpope/vim-surround
 
-- git:
+https://github.com/junegunn/vim-easy-align:
+  git:
     mvp: *mvp
     uri: https://github.com/junegunn/vim-easy-align
   keys:
@@ -242,17 +246,20 @@
       opts:
         noremap: False
 
-- git:
+https://github.com/tpope/vim-unimpaired:
+  git:
     mvp: *mvp
     uri: https://github.com/tpope/vim-unimpaired
 
-- git:
+https://github.com/cocopon/iceberg.vim:
+  git:
     mvp: *mvp
     uri: https://github.com/cocopon/iceberg.vim
   lua: |-
     vim.cmd [[colorscheme iceberg]]
 
-- git:
+https://github.com/lewis6991/gitsigns.nvim:
+  git:
     uri: https://github.com/lewis6991/gitsigns.nvim
   opt: true
   lub: |-
@@ -275,8 +282,8 @@
       <leader>c: reset_hunk
       <leader>s: stage_hunk
 
-- git:
-    uri: https://github.com/norcalli/nvim-colorizer.lua
+https://github.com/norcalli/nvim-colorizer.lua:
+  git: {}
   opt: true
   lub: |-
     require('colorizer').setup()
@@ -286,36 +293,36 @@
 #   lua: |-
 #     vim.cmd [[colorscheme dayfox]]
 
-- git:
+https://github.com/github/copilot.vim:
+  git:
     call:
       - - sh
         - -c
         - |-
           printf -- %s '{}' >./package.json
-    uri: https://github.com/github/copilot.vim
   opt: true
   lub: |-
     vim.cmd [[Copilot enable]]
 
-- git:
-    uri: https://github.com/Exafunction/codeium.vim
+https://github.com/Exafunction/codeium.vim:
+  git: {}
   opt: true
   vals:
     codeium_no_map_tab: True
     codeium_render: False
 
-- git:
-    uri: https://github.com/TabbyML/vim-tabby
-  opt: null
-  lub: |-
-    vim.cmd [[
-    augroup tabby
-      autocmd!
-    augroup END
-    ]]
-    if vim.env.SSH_TTY then
-      vim.fn["tabby#OnVimEnter"]()
-    end
+# https://github.com/TabbyML/vim-tabby:
+#   git: {}
+#   opt: null
+#   lub: |-
+#     vim.cmd [[
+#     augroup tabby
+#       autocmd!
+#     augroup END
+#     ]]
+#     if vim.env.SSH_TTY then
+#       vim.fn["tabby#OnVimEnter"]()
+#     end
 
 # - git:
 #     uri: https://github.com/lervag/vimtex

@@ -9,12 +9,6 @@ from ..consts import CONF_PKGS
 from .install import load
 
 
-@dataclass(frozen=True)
-class GitPkgSpec:
-    uri: str
-    branch: Optional[str] = None
-    call: Sequence[Sequence[str]] = ()
-    mvp: bool = False
 
 
 @dataclass(frozen=True)
@@ -26,16 +20,18 @@ class KeymapSpec:
 
 @dataclass(frozen=True)
 class PkgAttrs:
-    git: GitPkgSpec
-    opt: Optional[bool] = False
+    branch: Optional[str] = None
+    call: Sequence[Sequence[str]] = ()
     keys: Sequence[KeymapSpec] = ()
-    vals: Mapping[str, Any] = field(default_factory=dict)
     lua: str = ""
     lub: str = ""
+    mvp: bool = False
+    opt: Optional[bool] = False
+    vals: Mapping[str, Any] = field(default_factory=dict)
     viml: str = ""
 
 
-PkgSpecs = Sequence[PkgAttrs]
+PkgSpecs = Mapping[str,PkgAttrs]
 
 
 @cache
