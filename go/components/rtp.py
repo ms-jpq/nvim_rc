@@ -9,7 +9,7 @@ from pynvim_pp.atomic import Atomic
 from pynvim_pp.keymap import Keymap
 from std2.urllib import uri_path
 
-from ..config.pkgs import PkgAttrs, pkg_specs
+from ..config.pkgs import PkgSpecs, pkg_specs
 from ..consts import VIM_DIR
 
 _LUA = """
@@ -38,11 +38,11 @@ def p_name(opt: Optional[bool], uri: str) -> Path:
     return VIM_DIR / dir / uri_path(uri).name
 
 
-def _inst(packages: Iterable[PkgAttrs], cmds: Iterable[str]) -> Atomic:
+def _inst(packages: PkgSpecs, cmds: Iterable[str]) -> Atomic:
     pkgs = {
         path: spec
         for path, spec in (
-            (p_name(spec.opt, uri=spec.git.uri), spec) for spec in packages
+            (p_name(spec.opt, uri=uri), spec) for uri, spec in packages.items()
         )
         if path.exists()
     }
@@ -81,11 +81,11 @@ def _inst(packages: Iterable[PkgAttrs], cmds: Iterable[str]) -> Atomic:
 
 
 def inst() -> Atomic:
-    pkgs = (spec for spec in pkg_specs() if spec.opt is not None and not spec.opt)
+    pkgs = {uri: spec for uri, spec in pkg_specs().items() if spec.opt is not None and not spec.opt }
     return _inst(pkgs, cmds=("packloadall",))
 
 
 def inst_later() -> Atomic:
-    pkgs = tuple(spec for spec in pkg_specs() if spec.opt)
-    cmds = (f"packadd {uri_path(pkg.git.uri).name}" for pkg in pkgs)
+    pkgs = {uri:spec for uri, spec in pkg_specs().items() if spec.opt}
+    cmds = (f"packadd {uri_path(uri).name}" for uri in pkgs)
     return _inst(pkgs, cmds=cmds)

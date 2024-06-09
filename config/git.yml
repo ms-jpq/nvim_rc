@@ -1,17 +1,16 @@
 ---
 https://github.com/ms-jpq/chadtree:
-  git:
-    mvp: &mvp True
-    call:
-      - - rm
-        - -fr
-        - --
-        - .vars/runtime
-      - - python3
-        - -m
-        - chadtree
-        - deps
-        - --nvim
+  mvp: &mvp True
+  call:
+    - - rm
+      - -fr
+      - --
+      - .vars/runtime
+    - - python3
+      - -m
+      - chadtree
+      - deps
+      - --nvim
   # vals:
   #   chadtree_settings:
   #     theme.icon_glyph_set: ascii
@@ -21,17 +20,16 @@ https://github.com/ms-jpq/chadtree:
       modes: n
 
 https://github.com/ms-jpq/coq_nvim:
-  git:
-    mvp: *mvp
-    call:
-      - - rm
-        - -fr
-        - --
-        - .vars/runtime
-      - - python3
-        - -m
-        - coq
-        - deps
+  mvp: *mvp
+  call:
+    - - rm
+      - -fr
+      - --
+      - .vars/runtime
+    - - python3
+      - -m
+      - coq
+      - deps
   vals:
     coq_settings:
       auto_start: True
@@ -50,17 +48,15 @@ https://github.com/ms-jpq/coq_nvim:
     end
 
 https://github.com/nvim-treesitter/nvim-treesitter:
-  git:
-    call:
-      - - nvim
-        - --headless
-        - -u
-        - NONE
-        - +packadd nvim-treesitter
-        # - +TSInstallSync all
-        - +TSUpdateSync
-        - +quitall
-    uri: https://github.com/nvim-treesitter/nvim-treesitter
+  call:
+    - - nvim
+      - --headless
+      - -u
+      - NONE
+      - +packadd nvim-treesitter
+      # - +TSInstallSync all
+      - +TSUpdateSync
+      - +quitall
   lua: |-
     local opts = vim.g.ts_opts
     opts.auto_install = vim.fn.has("win32") == 0
@@ -130,20 +126,16 @@ https://github.com/nvim-treesitter/nvim-treesitter:
             <leader><right>: "@statement.outer"
             <leader><down>: "@block.outer"
 
-https://github.com/nvim-treesitter/nvim-treesitter-textobjects:
-  git:
-    uri: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+https://github.com/nvim-treesitter/nvim-treesitter-textobjects: {}
 
 # - git:
 #     uri: https://github.com/nvim-treesitter/nvim-treesitter-context
 
 https://github.com/neovim/nvim-lspconfig:
-  git:
     mvp: *mvp
 
 https://github.com/ms-jpq/coq.thirdparty:
-  git:
-    mvp: *mvp
+  mvp: *mvp
   lua: |-
     require("coq_3p")(vim.g.COQ3p)
   vals:
@@ -181,20 +173,16 @@ https://github.com/ms-jpq/coq.thirdparty:
       #   short_name: vTEX
 
 https://github.com/ms-jpq/snips:
-  git:
     mvp: *mvp
 
 https://github.com/ms-jpq/coq.artifacts:
-  git:
     mvp: *mvp
 
 https://github.com/junegunn/fzf:
-  git:
     mvp: *mvp
 
 https://github.com/junegunn/fzf.vim:
-  git:
-    mvp: *mvp
+  mvp: *mvp
   keys:
     - maps:
         "<leader>h": "<cmd>History:<cr>"
@@ -227,18 +215,13 @@ https://github.com/junegunn/fzf.vim:
         - right:wrap
 
 https://github.com/tpope/vim-repeat:
-  git:
     mvp: *mvp
 
 https://github.com/tpope/vim-surround:
-  git:
     mvp: *mvp
-    uri: https://github.com/tpope/vim-surround
 
 https://github.com/junegunn/vim-easy-align:
-  git:
-    mvp: *mvp
-    uri: https://github.com/junegunn/vim-easy-align
+  mvp: *mvp
   keys:
     - maps:
         "ga": "<plug>(EasyAlign)"
@@ -247,20 +230,14 @@ https://github.com/junegunn/vim-easy-align:
         noremap: False
 
 https://github.com/tpope/vim-unimpaired:
-  git:
     mvp: *mvp
-    uri: https://github.com/tpope/vim-unimpaired
 
 https://github.com/cocopon/iceberg.vim:
-  git:
-    mvp: *mvp
-    uri: https://github.com/cocopon/iceberg.vim
+  mvp: *mvp
   lua: |-
     vim.cmd [[colorscheme iceberg]]
 
 https://github.com/lewis6991/gitsigns.nvim:
-  git:
-    uri: https://github.com/lewis6991/gitsigns.nvim
   opt: true
   lub: |-
     require('gitsigns').setup(vim.g.git_opts)
@@ -283,7 +260,6 @@ https://github.com/lewis6991/gitsigns.nvim:
       <leader>s: stage_hunk
 
 https://github.com/norcalli/nvim-colorizer.lua:
-  git: {}
   opt: true
   lub: |-
     require('colorizer').setup()
@@ -294,18 +270,16 @@ https://github.com/norcalli/nvim-colorizer.lua:
 #     vim.cmd [[colorscheme dayfox]]
 
 https://github.com/github/copilot.vim:
-  git:
-    call:
-      - - sh
-        - -c
-        - |-
-          printf -- %s '{}' >./package.json
+  call:
+    - - sh
+      - -c
+      - |-
+        printf -- %s '{}' >./package.json
   opt: true
   lub: |-
     vim.cmd [[Copilot enable]]
 
 https://github.com/Exafunction/codeium.vim:
-  git: {}
   opt: true
   vals:
     codeium_no_map_tab: True
