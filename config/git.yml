@@ -128,7 +128,7 @@ https://github.com/nvim-treesitter/nvim-treesitter:
 
 https://github.com/nvim-treesitter/nvim-treesitter-textobjects: {}
 
-# https://github.com/nvim-treesitter/nvim-treesitter-context: {}
+https://github.com/nvim-treesitter/nvim-treesitter-context: {}
 
 https://github.com/neovim/nvim-lspconfig:
   mvp: *mvp

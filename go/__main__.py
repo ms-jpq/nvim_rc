@@ -1,6 +1,7 @@
+import sys
 from argparse import ArgumentParser, Namespace
 from asyncio import run as arun
-from contextlib import nullcontext
+from contextlib import nullcontext, suppress
 from os import chdir, environ
 from pathlib import Path, PurePath
 from subprocess import run
@@ -45,6 +46,18 @@ def main() -> None:
     req = REQUIREMENTS.read_bytes()
 
     if command == "deps":
+        if sys.platform == "win32":
+            from subprocess import BELOW_NORMAL_PRIORITY_CLASS
+
+            nice = lambda _: None
+        else:
+            from os import nice
+
+            BELOW_NORMAL_PRIORITY_CLASS = 0
+
+        with suppress(PermissionError):
+            nice(19)
+
         deps: Sequence[str] = args.deps
 
         if not deps or "runtime" in deps:
@@ -67,7 +80,8 @@ def main() -> None:
                     "--force-reinstall",
                     "--requirement",
                     REQUIREMENTS,
-                )
+                ),
+                creationflags=BELOW_NORMAL_PRIORITY_CLASS,
             )
 
             if proc.returncode:
@@ -86,6 +100,7 @@ def main() -> None:
                         *({*deps, "packages"} - {"runtime"}),
                     ),
                     cwd=TOP_LEVEL,
+                    creationflags=BELOW_NORMAL_PRIORITY_CLASS,
                 )
                 exit(proc.returncode)
             else:
