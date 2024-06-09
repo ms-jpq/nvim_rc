@@ -37,6 +37,7 @@ CONF_LSP = CONF_DIR / "lsp.yml"
 CONF_LINT = CONF_DIR / "lint.yml"
 CONF_FMT = CONF_DIR / "fmt.yml"
 CONF_TOOL = CONF_DIR / "tools.yml"
+CONF_SAFE = TOP_LEVEL / ".nvim" / "safe.yml"
 
 
 LIBEXEC = TOP_LEVEL / "libexec"

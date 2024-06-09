@@ -6,13 +6,17 @@ from os import getcwd
 from os.path import normpath
 from pathlib import Path, PurePath
 from shutil import which as _which
+from sys import stderr
 from typing import AbstractSet, Any, Optional, Protocol
 
 from std2.configparser import hydrate
 from std2.graphlib import merge
 from std2.pathlib import AnyPath
+from std2.pickle.decoder import new_decoder
 from std2.platform import OS, os
 from yaml import safe_load
+
+from ..consts import CONF_SAFE
 
 
 @dataclass(frozen=True)
@@ -38,6 +42,8 @@ class HasInstall(_HasInstall):
     bin: PurePath
 
 
+_Safe = AbstractSet[PurePath]
+
 _DIE = {"/usr/bin/ruby", "/usr/bin/gem", "/usr/bin/java"}
 
 
@@ -54,18 +60,32 @@ def which(src: AnyPath) -> Optional[PurePath]:
 
 def load(path: Path) -> Any:
     dir = Path(getcwd()) / ".nvim"
-    paths = (path, dir / path.name)
+
+    def paths() -> Iterator[Path]:
+        if not CONF_SAFE.is_file():
+            CONF_SAFE.touch()
+        with CONF_SAFE.open() as fd:
+            safe = safe_load(fd)
+
+        p = new_decoder[_Safe](_Safe)
+        loadable = p(safe or ())
+
+        yield path
+        for ps in (dir / path.name,):
+            if ps.is_file():
+                if ps in loadable:
+                    yield ps
+                else:
+                    print("!", [ps], file=stderr)
 
     def cont() -> Iterator[Any]:
-        for path in paths:
-            with suppress(OSError):
-                with path.open() as fd:
-                    yml = safe_load(fd)
+        for path in paths():
+            with path.open() as fd:
+                yml = safe_load(fd)
 
-                if isinstance(yml, MutableMapping):
-                    for key, item in yml.items():
-                        print(key)
-                        yml[key] = hydrate(item)
-                yield yml
+            if isinstance(yml, MutableMapping):
+                for key, item in yml.items():
+                    yml[key] = hydrate(item)
+            yield yml
 
     return merge(*cont())
