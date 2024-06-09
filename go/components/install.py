@@ -132,7 +132,10 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
     if git := which("git"):
 
         async def cont(
-            uri: str, branch: Optional[str], location: Path
+            location: Path,
+            uri: str,
+            branch: Optional[str],
+            calls: Sequence[Sequence[str]],
         ) -> _SortOfMonoid:
             async def cont() -> AsyncIterator[Tuple[str, CompletedProcess[bytes]]]:
                 assert git
@@ -160,7 +163,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                         "--shallow-submodules",
                         "--depth=1",
                         jobs,
-                        *(("--branch", spec.branch) if spec.branch else ()),
+                        *(("--branch", branch) if branch else ()),
                         "--quiet",
                         "--",
                         uri,
@@ -169,7 +172,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
                 yield uri, p1
 
                 if not p1.returncode:
-                    for call in spec.call:
+                    for call in calls:
                         arg0, *argv = call
                         a00 = (
                             Path(executable).resolve(strict=True)
@@ -192,7 +195,7 @@ def _git(mvp: bool, match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid
             if not mvp or spec.mvp:
                 location = p_name(spec.opt, uri=uri)
                 if _match(match, name=location.name):
-                    yield cont(uri, branch=spec.branch, location=location)
+                    yield cont(location, uri=uri, branch=spec.branch, calls=spec.call)
 
 
 def _pip(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
@@ -219,6 +222,7 @@ def _pip(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
                 ex,
                 "-m",
                 name,
+                "--quiet",
                 "install",
                 "--require-virtualenv",
                 "--upgrade",

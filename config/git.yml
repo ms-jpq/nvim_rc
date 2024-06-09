@@ -10,7 +10,6 @@ https://github.com/ms-jpq/chadtree:
       - -m
       - chadtree
       - deps
-      - --nvim
   # vals:
   #   chadtree_settings:
   #     theme.icon_glyph_set: ascii
