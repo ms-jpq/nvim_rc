@@ -1,6 +1,7 @@
 from collections.abc import Iterator
 from dataclasses import dataclass
 from functools import cache
+from itertools import chain
 from os import getcwd
 from os.path import normpath
 from pathlib import Path, PurePath
@@ -57,7 +58,6 @@ def which(src: AnyPath) -> Optional[PurePath]:
 
 
 def load(path: Path) -> Any:
-    dir = Path(getcwd()) / ".nvim"
 
     def paths() -> Iterator[Path]:
         if not CONF_SAFE.is_file():
@@ -67,14 +67,16 @@ def load(path: Path) -> Any:
 
         p = new_decoder[_Safe](_Safe)
         loadable = p(safe or ())
+        dir = Path(getcwd())
 
         yield path
-        for ps in (dir / path.name,):
-            if ps.is_file():
-                if ps in loadable:
-                    yield ps
-                else:
-                    print("!", [ps], file=stderr)
+        for ancestor in chain((dir,), dir.parents):
+            for conf in (ancestor / ".nvim" / path.name,):
+                if conf.is_file():
+                    if conf in loadable:
+                        yield conf
+                    else:
+                        print("!", [conf], file=stderr)
 
     def cont() -> Iterator[Any]:
         for path in paths():
