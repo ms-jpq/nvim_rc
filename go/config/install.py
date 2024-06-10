@@ -1,5 +1,4 @@
-from collections.abc import Iterator, MutableMapping
-from contextlib import suppress
+from collections.abc import Iterator
 from dataclasses import dataclass
 from functools import cache
 from os import getcwd
@@ -9,7 +8,6 @@ from shutil import which as _which
 from sys import stderr
 from typing import AbstractSet, Any, Optional, Protocol
 
-from std2.configparser import hydrate
 from std2.graphlib import merge
 from std2.pathlib import AnyPath
 from std2.pickle.decoder import new_decoder
@@ -81,11 +79,6 @@ def load(path: Path) -> Any:
     def cont() -> Iterator[Any]:
         for path in paths():
             with path.open() as fd:
-                yml = safe_load(fd)
-
-            if isinstance(yml, MutableMapping):
-                for key, item in yml.items():
-                    yml[key] = hydrate(item)
-            yield yml
+                yield safe_load(fd)
 
     return merge(*cont())
