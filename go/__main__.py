@@ -121,13 +121,13 @@ def main() -> None:
 
         from std2.pickle.types import DecodeError
 
+        chdir(args.cwd)
         try:
             from .client import init
         except DecodeError as e:
             print(e, file=stderr)
             exit(1)
         else:
-            chdir(args.cwd)
             arun(init(args.socket, ppid=args.ppid))
 
     else:
