@@ -328,7 +328,6 @@ kotlin:
   args:
     - ${tabsize}
     - --stdin-name=${filename}
-    - --
     - "-"
   type: stream
   filetypes:
