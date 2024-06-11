@@ -71,12 +71,13 @@ def load(path: Path) -> Any:
 
         yield path
         for ancestor in chain((dir,), dir.parents):
-            for conf in (ancestor / ".nvim" / path.name,):
-                if conf.is_file():
-                    if conf in loadable:
-                        yield conf
-                    else:
-                        print("!", [conf], file=stderr)
+            overrides = ancestor / ".nvim"
+            conf = overrides / path.name
+            if overrides.is_dir() and conf.is_file():
+                if overrides in loadable:
+                    yield conf
+                else:
+                    print("!", [overrides], file=stderr)
 
     def cont() -> Iterator[Any]:
         for path in paths():
