@@ -2,10 +2,25 @@
 
 import { ok } from "node:assert/strict"
 import { spawnSync } from "node:child_process"
-import { existsSync } from "node:fs"
 import { dirname, join } from "node:path"
-import { argv, execPath } from "node:process"
+import { execPath } from "node:process"
 import { fileURLToPath } from "node:url"
+import { parseArgs } from "node:util"
+
+const {
+  values: { filename, filetype, sort, tabsize },
+  positionals,
+} = parseArgs({
+  options: {
+    filename: { type: "string" },
+    filetype: { type: "string" },
+    sort: { type: "boolean", default: true },
+    tabsize: { type: "string" },
+  },
+})
+ok(filename)
+ok(filetype)
+ok(tabsize)
 
 const node_modules = join(
   dirname(dirname(fileURLToPath(import.meta.url))),
@@ -13,9 +28,6 @@ const node_modules = join(
   "node_modules",
 )
 const bin = join(node_modules, ".bin", "prettier")
-
-const [, , filetype, filename, tabsize] = argv
-ok(filetype)
 
 const plugins = {
   [join("@prettier", "plugin-php", "src", "index.js")]: /^php$/,
@@ -26,12 +38,12 @@ const plugins = {
     /^(html|((java|type)scriptreact))$/,
 }
 
-if (!existsSync("owo.nosort")) {
+if (sort) {
   plugins[join("prettier-plugin-organize-imports", "index.js")] =
     /^(java|type)script/
 }
 
-const args = (function* () {
+const argv = (function* () {
   yield `--stdin-filepath=${filename}`
   yield `--tab-width=${tabsize}`
   for (const [plugin, re] of Object.entries(plugins)) {
@@ -39,12 +51,15 @@ const args = (function* () {
       yield `--plugin=${join(node_modules, plugin)}`
     }
   }
-  yield "--"
 })()
 
-const { error, status, signal } = spawnSync(execPath, [bin, ...args], {
-  stdio: "inherit",
-})
+const { error, status, signal } = spawnSync(
+  execPath,
+  [bin, ...argv, ...positionals],
+  {
+    stdio: "inherit",
+  },
+)
 
 if (error) {
   throw error

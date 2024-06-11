@@ -174,9 +174,9 @@ clojure:
 prettier:
   bin: prettier.js
   args:
-    - ${filetype}
-    - ${filename}
-    - ${tabsize}
+    - --filetype=${filetype}
+    - --filename=${filename}
+    - --tabsize=${tabsize}
   type: stream
   filetypes:
     - awk
