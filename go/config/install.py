@@ -84,4 +84,4 @@ def load(path: Path) -> Any:
             with path.open() as fd:
                 yield safe_load(fd)
 
-    return merge(*cont())
+    return merge(*cont(), replace=True)

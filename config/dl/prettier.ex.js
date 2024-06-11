@@ -14,7 +14,7 @@ const {
   options: {
     filename: { type: "string" },
     filetype: { type: "string" },
-    sort: { type: "boolean", default: true },
+    sort: { type: "boolean" },
     tabsize: { type: "string" },
   },
 })

@@ -177,6 +177,7 @@ prettier:
     - --filetype=${filetype}
     - --filename=${filename}
     - --tabsize=${tabsize}
+    - --sort
   type: stream
   filetypes:
     - awk
