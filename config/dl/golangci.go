@@ -32,7 +32,7 @@ func main() {
 	cmd := exec.Command("go", "install", "--", "github.com/nametake/golangci-lint-langserver@latest")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	cmd.Env = append(os.Environ(), "GO111MODULE=on", "GOPATH="+lib)
+	cmd.Env = append(os.Environ(), "GOPATH="+lib)
 
 	if err := cmd.Run(); err != nil {
 		log.Panicln(err)
