@@ -293,12 +293,8 @@ eslint:
     rulesCustomizations:
       - rule: "*"
         severity: downgrade
-      - rule: unused-imports/*
-        severity: info
       - rule: prettier/*
-        severity: info
-      - rule: no-empty
-        severity: info
+        severity: off
   install:
     npm:
       - vscode-langservers-extracted
@@ -504,7 +500,6 @@ cobol_ls:
       - cobc
     script:
       file: cobol_ls.cob
-
 # volar:
 #   bin: vue-language-server
 #   install:
