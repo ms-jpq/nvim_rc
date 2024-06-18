@@ -77,13 +77,13 @@ public class gradle_ls {
 
     Files.createSymbolicLink(bin, dst);
 
-    if (win) {
-      while (true) {
-        Thread.sleep(1000);
-        final var p3 = new ProcessBuilder("rm", "-fr", "--", tmp.toString()).inheritIO().start();
-        if (p3.waitFor() == 0) {
-          break;
-        }
+    while (true) {
+      try (final var st = Files.walk(tmp)) {
+        st.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+        break;
+      } catch (IOException e) {
+        System.err.println(e);
+        Thread.sleep(200);
       }
     }
   }
