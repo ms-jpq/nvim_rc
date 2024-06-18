@@ -68,7 +68,7 @@ _GEMS = GEM_DIR / "gems"
 def _pip_specs() -> Iterator[str]:
     values = chain(lsp_specs().values(), linter_specs().values(), fmt_specs().values())
     for spec in values:
-        if all(map(which, spec.install.requires)):
+        if spec and all(map(which, spec.install.requires)):
             yield from spec.install.pip
     yield from tool_specs().pip
 
@@ -76,7 +76,7 @@ def _pip_specs() -> Iterator[str]:
 def _gem_specs() -> Iterator[str]:
     values = chain(lsp_specs().values(), linter_specs().values(), fmt_specs().values())
     for spec in values:
-        if all(map(which, spec.install.requires)):
+        if spec and all(map(which, spec.install.requires)):
             yield from spec.install.gem
     yield from tool_specs().gem
 
@@ -84,7 +84,7 @@ def _gem_specs() -> Iterator[str]:
 def _npm_specs() -> Iterator[str]:
     values = chain(lsp_specs().values(), linter_specs().values(), fmt_specs().values())
     for spec in values:
-        if all(map(which, spec.install.requires)):
+        if spec and all(map(which, spec.install.requires)):
             yield from spec.install.npm
     yield from tool_specs().npm
 
@@ -92,7 +92,7 @@ def _npm_specs() -> Iterator[str]:
 def _script_specs() -> Iterator[Tuple[PurePath, ScriptSpec]]:
     values = chain(lsp_specs().values(), linter_specs().values(), fmt_specs().values())
     for spec in values:
-        if all(map(which, spec.install.requires)):
+        if spec and all(map(which, spec.install.requires)):
             yield spec.bin, spec.install.script
     for t_spec in tool_specs().script:
         if file := t_spec.file:

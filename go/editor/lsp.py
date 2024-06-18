@@ -133,7 +133,7 @@ def _encode_spec(spec: LspAttrs) -> Mapping[str, Any]:
 _ENCODER = new_encoder[Optional[RootPattern]](Optional[RootPattern])
 
 for server, spec in lsp_specs().items():
-    if which(spec.bin):
+    if spec and which(spec.bin):
         config = _encode_spec(spec)
         args = (
             GLOBAL_NS,

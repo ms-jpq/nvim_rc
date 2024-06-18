@@ -33,7 +33,7 @@ class LspAttrs(HasInstall):
     install: InstallSpec = InstallSpec()
 
 
-LspSpecs = Mapping[str, LspAttrs]
+LspSpecs = Mapping[str, Optional[LspAttrs]]
 
 
 @cache
