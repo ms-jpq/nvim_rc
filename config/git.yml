@@ -266,10 +266,10 @@ https://github.com/lewis6991/gitsigns.nvim:
       <leader>c: reset_hunk
       <leader>s: stage_hunk
 
-https://github.com/norcalli/nvim-colorizer.lua:
-  opt: true
-  lub: |-
-    require('colorizer').setup()
+# https://github.com/norcalli/nvim-colorizer.lua:
+#   opt: true
+#   lub: |-
+#     require('colorizer').setup()
 
 https://github.com/github/copilot.vim:
   call:
