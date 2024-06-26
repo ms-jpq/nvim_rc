@@ -1,1 +1,1 @@
-systemd.lua
+vim.bo.commentstring = [[# %s]]
