@@ -3,14 +3,14 @@
 set -o pipefail
 
 REAL="$(realpath -- "$0")"
-BIN="$(dirname "$REAL")/../var/lib/sonar-scanner/bin/sonar-scanner"
+BIN="$(dirname -- "$REAL")/../var/lib/sonar-scanner/bin/sonar-scanner"
 NAME="$(basename -- "$PWD")"
-KEY="$(jq --raw-input --raw-output '@uri' <<<"$NAME")"
+KEY="$(jq --raw-input --raw-output '@uri' <<< "$NAME")"
 
 export -- SONAR_USER_HOME="${XDG_CACHE_HOME:-"$HOME/.cache"}/sonar"
 VARS="$SONAR_USER_HOME/vars"
 
-if ! [[ -f "$VARS" ]]; then
+if ! [[ -f $VARS ]]; then
   # shellcheck disable=SC2154
   "$EDITOR" "$VARS"
 fi
