@@ -146,4 +146,4 @@ for server, spec in lsp_specs().items():
         atomic.exec_lua(_LSP_INIT, args)
 
 
-atomic.command("doautoall Filetype")
+atomic.command("silent! doautoall Filetype")
