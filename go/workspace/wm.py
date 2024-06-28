@@ -75,6 +75,9 @@ _ = keymap.n("<leader>k") << "<cmd>wincmd T<cr>"
 # close tab
 _ = keymap.n("<leader>q") << "<cmd>tabclose<cr>"
 
+# split window
+_ = keymap.n("<leader>t") << "<cmd>vsplit<cr>"
+
 
 # create new tab
 @rpc()
