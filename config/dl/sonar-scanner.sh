@@ -2,30 +2,30 @@
 
 set -o pipefail
 
-if ! command -v -- jq; then
-  exit
-fi
-
-REPO='SonarSource/sonar-scanner-cli'
-BASE='https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli'
-VERSION="$(gh-latest.sh . "$REPO")"
-
-case "$OSTYPE" in
-darwin*)
-  URI="${BASE}-${VERSION}-macosx.zip"
-  ;;
-linux*)
-  URI="${BASE}-${VERSION}-linux.zip"
-  ;;
-*)
-  URI="${BASE}-${VERSION}-windows.zip"
-  BIN="$BIN.exe"
-  ;;
-esac
-
-# shellcheck disable=SC2154
-get.sh "$URI" | unpack.sh "$TMP"
-# shellcheck disable=2154
-rm -rf -- "$LIB"
-chmod +x "$TMP"/*/{bin/*,jre/bin/*}
-mv -v -f -- "$TMP"/* "$LIB"
+# if ! command -v -- jq; then
+#   exit
+# fi
+#
+# REPO='SonarSource/sonar-scanner-cli'
+# BASE='https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli'
+# VERSION="$(gh-latest.sh . "$REPO")"
+#
+# case "$OSTYPE" in
+# darwin*)
+#   URI="${BASE}-${VERSION}-macosx.zip"
+#   ;;
+# linux*)
+#   URI="${BASE}-${VERSION}-linux.zip"
+#   ;;
+# *)
+#   URI="${BASE}-${VERSION}-windows.zip"
+#   BIN="$BIN.exe"
+#   ;;
+# esac
+#
+# # shellcheck disable=SC2154
+# get.sh "$URI" | unpack.sh "$TMP"
+# # shellcheck disable=2154
+# rm -rf -- "$LIB"
+# chmod +x "$TMP"/*/{bin/*,jre/bin/*}
+# mv -v -f -- "$TMP"/* "$LIB"
