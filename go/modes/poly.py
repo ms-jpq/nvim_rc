@@ -7,9 +7,12 @@ _move = Path(__file__).parent.joinpath("move.lua").read_text("UTF-8")
 
 atomic.exec_lua(_move, ())
 
+# for key, move in (("<up>", -1), ("<down>", +1), ("j", -1), ("k", +1)):
+#     _ = keymap.nv(key, expr=True) << f"v:lua.Go.move('{key}', {move})"
+
 # move w linewrap
-for key, move in (("<up>", -1), ("<down>", +1), ("j", -1), ("k", +1)):
-    _ = keymap.nv(key, expr=True) << f"v:lua.Go.move('{key}', {move})"
+for key in ("<up>", "<down>", "j", "k"):
+    _ = keymap.nv(key, expr=True) << f"(v:count ? \"m'\" . v:count : 'g') . '{key}'"
 
 # {} scroll fixed lines
 _ = keymap.nv("{") << ("5g<up>zz")
