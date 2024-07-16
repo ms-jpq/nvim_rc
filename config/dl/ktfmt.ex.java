@@ -13,7 +13,7 @@ public class ktfmt {
         Stream.of(
                 Stream.of(java.toString(), "-jar", jar.toString()),
                 Stream.of(args).skip(1),
-                tabsize == 4 ? Stream.of("--dropbox-style") : Stream.of())
+                tabsize == 4 ? Stream.of("--kotlinlang-style") : Stream.of())
             .flatMap(s -> s)
             .toArray(String[]::new);
 
