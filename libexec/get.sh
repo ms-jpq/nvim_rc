@@ -3,8 +3,7 @@
 set -o pipefail
 
 SRC="$1"
-BASE="$(basename -- "$SRC")"
-DST="${2:-"$BASE"}"
+DST="${2:-"$(basename -- "$SRC")"}"
 
 TTAG="$DST.ttag"
 ETAG="$DST.etag"
