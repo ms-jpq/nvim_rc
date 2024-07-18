@@ -24,22 +24,22 @@ CURL=(
   -- "$SRC"
 )
 
-tee >&2 <<-EOF
+tee >&2 <<- EOF
 $SRC
 >>>
 $DST
 EOF
 
-if ! [[ -f "$DST" ]]; then
+if ! [[ -f $DST ]]; then
   rm -fr -- "$ETAG" "$TTAG" >&2
 fi
 
 if "${CURL[@]}" >&2; then
   {
-    if [[ -f "$TMP" ]]; then
+    if [[ -f $TMP ]]; then
       mv -f -- "$TMP" "$DST"
     fi
-    if [[ -f "$TTAG" ]]; then
+    if [[ -f $TTAG ]]; then
       mv -f -- "$TTAG" "$ETAG"
     fi
   } >&2

@@ -26,7 +26,7 @@ msys)
 esac
 
 TAR=("$T" --extract --file "$SRC" --directory "$DST")
-if [[ "$OSTYPE" == linux* ]]; then
+if [[ $OSTYPE == linux* ]]; then
   TAR+=(--no-same-owner)
 fi
 
@@ -35,7 +35,7 @@ case "$FMT" in
   "${TAR[@]}"
   ;;
 *.zip | *.vsix)
-  if [[ "$OSTYPE" == linux* ]]; then
+  if [[ $OSTYPE == linux* ]]; then
     unzip -o -d "$DST" -q -- "$SRC"
   else
     "${TAR[@]}"
@@ -43,7 +43,7 @@ case "$FMT" in
   ;;
 *.gz | *.xz)
   NAME="$DST/$(basename -- "$SRC")"
-  gzip --decompress --keep --force --stdout -- "$SRC" >"$NAME"
+  gzip --decompress --keep --force --stdout -- "$SRC" > "$NAME"
   ;;
 *)
   set -x
@@ -51,7 +51,7 @@ case "$FMT" in
   ;;
 esac
 
-tee <<-EOF
+tee <<- EOF
 $SRC
 -> -> ->
 $DST

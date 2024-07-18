@@ -9,16 +9,16 @@ CACHE="$TMP/$NAME.cache"
 
 mkdir -v -p -- "$TMP" >&2
 
-if ! [[ -v LOCKED ]] && command -v -- flock >/dev/null; then
+if ! [[ -v LOCKED ]] && command -v -- flock > /dev/null; then
   LOCK="$TMP/$NAME.lock"
   LOCKED=1 exec -- flock "$LOCK" "$0" "$@"
 fi
 
-if [[ -f "$CACHE" ]]; then
+if [[ -f $CACHE ]]; then
   find "$CACHE" -type f -mmin '+60' -delete
 fi
 
-if ! [[ -f "$CACHE" ]]; then
+if ! [[ -f $CACHE ]]; then
   CURL=(
     curl
     --fail-with-body
@@ -39,8 +39,8 @@ if ! [[ -f "$CACHE" ]]; then
   )
 
   LINES="$("${CURL[@]}" | "${JQ[@]}")"
-  readarray -t -- TAGS <<<"$LINES"
-  printf -- '%s' "${TAGS[0]}" >"$CACHE"
+  readarray -t -- TAGS <<< "$LINES"
+  printf -- '%s' "${TAGS[0]}" > "$CACHE"
 fi
 
 exec -- cat -- "$CACHE"
