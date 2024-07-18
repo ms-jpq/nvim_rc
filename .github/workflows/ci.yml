@@ -15,7 +15,8 @@ jobs:
           make build
 
   ubuntu:
-    runs-on: ubuntu-latest
+    # TODO: use ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
