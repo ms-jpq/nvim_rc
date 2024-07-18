@@ -31,8 +31,8 @@ $DST
 EOF
 
 if ! [[ -f $DST ]]; then
-  rm -fr -- "$ETAG" "$TTAG" >&2
-fi
+  rm -fr -- "$ETAG" "$TTAG"
+fi >&2
 
 if "${CURL[@]}" >&2; then
   {
