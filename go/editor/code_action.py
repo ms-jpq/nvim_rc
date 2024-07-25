@@ -63,6 +63,7 @@ async def _on_code_action_notif(
             meta={
                 "sign_text": prefix(),
                 "hl_mode": "combine",
+                "virt_lines_leftcol": True,
                 "sign_hl_group": _HL,
                 "number_hl_group": _HL,
             },
@@ -76,6 +77,7 @@ async def _on_code_action_notif(
 
 
 atomic.exec_lua(_CODE_ACTION, (NAMESPACE, _on_code_action_notif.method))
+# slient
 
 
 @rpc()
