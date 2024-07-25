@@ -500,6 +500,13 @@ cobol_ls:
       - cobc
     script:
       file: cobol_ls.cob
+
+tabby_ml:
+  bin: tabby-agent
+  install:
+    npm:
+      - tabby-agent
+
 # volar:
 #   bin: vue-language-server
 #   install:
