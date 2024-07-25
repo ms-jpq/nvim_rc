@@ -33,4 +33,4 @@ services:
     ports:
       - 6060:8080
     volumes:
-      - /mnt/tabby:/data
+      - /mnt/shared/tabby:/data
