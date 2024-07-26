@@ -39,6 +39,10 @@ https://github.com/ms-jpq/coq_nvim:
       keymap:
         eval_snips: "<leader>b"
         repeat: "<leader>."
+  keys:
+    - modes: n
+      maps:
+        "<leader>z": "<cmd>CHADrestore<cr>"
   lua: |-
     if vim.env.SSH_TTY or #vim.api.nvim_get_runtime_file(".nvim/t9", {}) ~= 0 then
       local v = vim.g.coq_settings
@@ -286,7 +290,6 @@ https://github.com/Exafunction/codeium.vim:
   vals:
     codeium_no_map_tab: True
     codeium_render: False
-
 # https://github.com/TabbyML/vim-tabby:
 #   opt: null
 #   lub: |-

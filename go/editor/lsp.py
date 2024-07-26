@@ -44,7 +44,7 @@ _ = (
 )
 
 
-_ = keymap.n("<leader>z") << "<cmd>LspRestart<cr>"
+# _ = keymap.n("<leader>z") << "<cmd>LspRestart<cr>"
 
 _ = (
     autocmd("BufEnter", "CursorHold", "InsertLeave", modifiers=("<buffer>"))
