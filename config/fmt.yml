@@ -46,7 +46,9 @@ toml:
 dtsfmt:
   bin: dtsfmt
   args:
-    - --emit=stdout
+    - --stdin
+    - --
+    - "-"
   type: stream
   filetypes:
     - dts
