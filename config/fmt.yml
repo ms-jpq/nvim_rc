@@ -43,6 +43,19 @@ toml:
     - gitconfig
     - toml
 
+dtsfmt:
+  bin: dtsfmt
+  args:
+    - --emit=stdout
+  type: stream
+  filetypes:
+    - dts
+  install:
+    requires:
+      - jq
+    script:
+      file: dtsfmt.sh
+
 shell:
   bin: shfmt
   args:
