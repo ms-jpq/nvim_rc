@@ -10,8 +10,6 @@ settings["foldlevel"] = 5
 settings["foldopen"] += ("insert", "jump")
 # settings["foldclose"] = "all"
 
-# toggle folds
-_ = keymap.n("a", nowait=True) << "za"
 
 # re-center
 for key in ("o", "O", "c", "C", "a", "A", "v", "x", "X", "m", "M", "r", "R"):

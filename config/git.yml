@@ -74,9 +74,9 @@ https://github.com/nvim-treesitter/nvim-treesitter:
       incremental_selection:
         enable: True
         keymaps:
-          init_selection: w
+          init_selection: a
           node_decremental: q
-          node_incremental: w
+          node_incremental: a
       # indent:
       #   enable: True
       textobjects:
