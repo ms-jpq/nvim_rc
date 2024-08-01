@@ -303,18 +303,6 @@ https://github.com/Exafunction/codeium.vim:
   vals:
     codeium_no_map_tab: True
     codeium_render: False
-# https://github.com/TabbyML/vim-tabby:
-#   opt: null
-#   lub: |-
-#     vim.cmd [[
-#     augroup tabby
-#       autocmd!
-#     augroup END
-#     ]]
-#     if vim.env.SSH_TTY then
-#       vim.fn["tabby#OnVimEnter"]()
-#     end
-
 # https://github.com/lervag/vimtex:
 #   opt: true
 #   vals:
