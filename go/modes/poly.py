@@ -48,8 +48,8 @@ _ = keymap.c("<c-e>", silent=False) << "<End>"
 
 
 # delete dont copy
-_ = keymap.n("s") << '"_s'
-_ = keymap.n("S") << '"_S'
+# _ = keymap.n("s") << '"_s'
+# _ = keymap.n("S") << '"_S'
 _ = keymap.n("x") << '"_x'
 _ = keymap.n("X") << '"_X'
 

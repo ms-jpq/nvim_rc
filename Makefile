@@ -33,7 +33,7 @@ PY := /usr/bin/python3
 endif
 
 runtime: var/runtime/requirements.lock
-var/runtime/requirements.lock:
+var/runtime/requirements.lock: requirements.txt
 	$(ENVS) $(PY) -m go deps runtime
 
 pack/modules/start/chadtree:

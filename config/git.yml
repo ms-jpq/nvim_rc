@@ -37,7 +37,7 @@ https://github.com/ms-jpq/coq_nvim:
         snippets.user_path: |-
           ~/.config/nvim/pack/modules/start/snips
       keymap:
-        eval_snips: "<leader>b"
+        eval_snips: "<leader>B"
         repeat: "<leader>."
   keys:
     - modes: n
@@ -221,6 +221,19 @@ https://github.com/junegunn/fzf.vim:
       preview_window:
         - right:wrap
 
+https://github.com/folke/flash.nvim:
+  keys:
+    - modes: nxo
+      maps:
+        s: '<cmd>lua require("flash").jump()<cr>'
+        S: '<cmd>lua require("flash").treesitter()<cr>'
+    - modes: o
+      maps:
+        B: '<cmd>lua require("flash").remote()<cr>'
+    - modes: xo
+      maps:
+        F: '<cmd>lua require("flash").treesitter_search()<cr>'
+
 https://github.com/tpope/vim-repeat:
   mvp: *mvp
 
@@ -230,11 +243,11 @@ https://github.com/tpope/vim-surround:
 https://github.com/junegunn/vim-easy-align:
   mvp: *mvp
   keys:
-    - maps:
-        "ga": "<plug>(EasyAlign)"
-      modes: nv
+    - modes: nv
       opts:
         noremap: False
+      maps:
+        "ga": "<plug>(EasyAlign)"
 
 https://github.com/tpope/vim-unimpaired:
   mvp: *mvp
