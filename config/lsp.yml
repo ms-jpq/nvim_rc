@@ -396,14 +396,14 @@ clojure_lsp:
     script:
       file: clj_lsp.clj
 
-gradle_ls:
-  bin: gradle-language-server
-  install:
-    requires:
-      - gradle
-      - java
-    script:
-      file: gradle_ls.java
+# gradle_ls:
+#   bin: gradle-language-server
+#   install:
+#     requires:
+#       - gradle
+#       - java
+#     script:
+#       file: gradle_ls.java
 
 kotlin_language_server:
   bin: kotlin-language-server
