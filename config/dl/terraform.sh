@@ -2,8 +2,8 @@
 
 set -o pipefail
 
-BASE_URI='https://releases.hashicorp.com/terraform-ls'
-VERSION="$(gh-latest.sh . 'hashicorp/terraform-ls')"
+BASE_URI='https://releases.hashicorp.com/terraform'
+VERSION="$(gh-latest.sh . 'hashicorp/terraform')"
 VERSION="${VERSION#v}"
 
 case "$HOSTTYPE" in
@@ -28,7 +28,7 @@ linux*)
   ;;
 esac
 
-URI="$BASE_URI/$VERSION/terraform-ls_${VERSION}_$NAME.zip"
+URI="$BASE_URI/$VERSION/terraform_${VERSION}_$NAME.zip"
 
 # shellcheck disable=SC2154
 get.sh "$URI" | unpack.sh "$TMP"

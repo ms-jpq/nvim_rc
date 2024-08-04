@@ -2,8 +2,7 @@
 
 set -o pipefail
 
-# BASE='https://github.com/tamasfe/taplo/releases/latest/download/taplo-full'
-BASE='https://github.com/tamasfe/taplo/releases/download/0.8.0/taplo-full'
+BASE='https://github.com/tamasfe/taplo/releases/latest/download/taplo-full'
 
 case "$OSTYPE" in
 darwin*)

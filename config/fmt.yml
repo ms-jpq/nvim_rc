@@ -418,3 +418,8 @@ terraform:
   filetypes:
     - hcl
     - terraform
+  install:
+    requires:
+      - jq
+    script:
+      file: terraform.sh

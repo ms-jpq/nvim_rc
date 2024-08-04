@@ -477,7 +477,7 @@ terraformls:
   bin: terraform-ls
   install:
     requires:
-      - htmlq
+      - jq
     script:
       file: terraform_ls.sh
 
