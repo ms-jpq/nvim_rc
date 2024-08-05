@@ -19,7 +19,7 @@ _ = keymap.nv("{") << ("5g<up>zz")
 _ = keymap.nv("}") << ("5g<down>zz")
 
 # re-center
-for key in ("d", "n", "N", "[c", "]c"):
+for key in ("d", "n", "N", "[c", "]c", "<C-u>", "<C-d>"):
     _ = keymap.nv(key) << f"{key}zz"
 
 
