@@ -33,7 +33,7 @@ func main() {
 		sbin: dst,
 	}
 
-	cmd := exec.Command("go", "install", "--", "github.com/go-delve/delve/cmd/dlv@latest")
+	cmd := exec.Command("go", "install", "-modcacherw", "--", "github.com/go-delve/delve/cmd/dlv@latest")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Env = append(os.Environ(), "GOPATH="+lib)

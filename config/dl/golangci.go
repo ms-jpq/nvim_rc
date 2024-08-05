@@ -29,7 +29,7 @@ func main() {
 	name := filepath.Base(bin)
 	dst := filepath.Join(lib, "bin", name)
 
-	cmd := exec.Command("go", "install", "--", "github.com/nametake/golangci-lint-langserver@latest")
+	cmd := exec.Command("go", "install", "-modcacherw", "--", "github.com/nametake/golangci-lint-langserver@latest")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Env = append(os.Environ(), "GOPATH="+lib)

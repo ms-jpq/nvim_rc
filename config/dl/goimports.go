@@ -36,7 +36,7 @@ func main() {
 		sbin: dst,
 	}
 
-	cmd := exec.Command("go", "install", "--", "golang.org/x/tools/cmd/goimports@latest")
+	cmd := exec.Command("go", "install", "-modcacherw", "--", "golang.org/x/tools/cmd/goimports@latest")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Env = append(os.Environ(), "GOPATH="+lib)

@@ -29,7 +29,7 @@ func main() {
 	name := filepath.Base(bin)
 	dst := filepath.Join(lib, "bin", name)
 
-	cmd := exec.Command("go", "install", "--", "github.com/wader/jq-lsp@master")
+	cmd := exec.Command("go", "install", "-modcacherw", "--", "github.com/wader/jq-lsp@master")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Env = append(os.Environ(), "GOPATH="+lib)
