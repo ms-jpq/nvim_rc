@@ -23,7 +23,7 @@ settings["mousetime"] = 250
 # scroll activation margin
 settings["scrolloff"] = 0
 settings["sidescrolloff"] = 10
-
+settings["smoothscroll"] = True
 
 _vcol = ("onemore", "block")
 # normalize cursor pos
