@@ -19,8 +19,11 @@ _ = keymap.nv("{") << ("5g<up>zz")
 _ = keymap.nv("}") << ("5g<down>zz")
 
 # re-center
-for key in ("d", "n", "N", "[c", "]c", "<C-u>", "<C-d>"):
+for key in ("d", "n", "N", "[c", "]c", "<c-f>", "<c-b>"):
     _ = keymap.nv(key) << f"{key}zz"
+
+for key, remap in {"<c-u>": "<up>", "<c-d>": "<down>"}.items():
+    _ = keymap.nv(key, expr=True) << f"max([5, min([9, winheight(0) / 4])]) . 'g{remap}zz'"
 
 
 def _redraw(wrapped: str) -> Iterator[str]:
@@ -62,13 +65,6 @@ _ = keymap.nv("C") << '"_C'
 # leave cursor 1 behind instead of before
 _ = keymap.nv("p") << "gp"
 _ = keymap.nv("P") << "gP"
-
-
-# centre on up down
-_ = keymap.nv("<c-u>") << "<c-u>"
-_ = keymap.nv("<c-d>") << "<c-d>"
-_ = keymap.nv("<c-f>") << "<c-f>"
-_ = keymap.nv("<c-b>") << "<c-b>"
 
 
 # emacs arrow movements
