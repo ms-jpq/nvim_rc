@@ -126,8 +126,8 @@ _ = keymap.n("<c-n>") << "<cmd>lnext<cr>"
 
 
 # quickfix
-_ = keymap.n("<c-j>") << "<cmd>cprevious<cr>"
-_ = keymap.n("<c-k>") << "<cmd>cnext<cr>"
+_ = keymap.n("<c-k>") << "<cmd>cprevious<cr>"
+_ = keymap.n("<c-j>") << "<cmd>cnext<cr>"
 
 
 @rpc()
