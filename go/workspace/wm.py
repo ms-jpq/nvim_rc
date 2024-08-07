@@ -21,10 +21,14 @@ settings["splitright"] = True
 settings["splitbelow"] = True
 
 # move between windows
-_ = keymap.n("<c-left>") << "<cmd>wincmd h<cr>"
-_ = keymap.n("<c-up>") << "<cmd>wincmd k<cr>"
-_ = keymap.n("<c-right>") << "<cmd>wincmd l<cr>"
-_ = keymap.n("<c-down>") << "<cmd>wincmd j<cr>"
+for key in ("<c-down>", "<c-h>"):
+    _ = keymap.n(key) << "<cmd>wincmd h<cr>"
+for key in ("<c-down>", "<c-k>"):
+    _ = keymap.n(key) << "<cmd>wincmd k<cr>"
+for key in ("<c-down>", "<c-l>"):
+    _ = keymap.n(key) << "<cmd>wincmd l<cr>"
+for key in ("<c-down>", "<c-j>"):
+    _ = keymap.n(key) << "<cmd>wincmd j<cr>"
 
 # swap windows
 _ = keymap.n("<leader>'") << "<cmd>wincmd r<cr>"
@@ -121,13 +125,13 @@ settings["previewheight"] = 11
 
 
 # locallist
-_ = keymap.n("<c-p>") << "<cmd>lprevious<cr>"
-_ = keymap.n("<c-n>") << "<cmd>lnext<cr>"
+# _ = keymap.n("<c-p>") << "<cmd>lprevious<cr>"
+# _ = keymap.n("<c-n>") << "<cmd>lnext<cr>"
 
 
 # quickfix
-_ = keymap.n("<c-k>") << "<cmd>cprevious<cr>"
-_ = keymap.n("<c-j>") << "<cmd>cnext<cr>"
+_ = keymap.n("<c-p>") << "<cmd>cprevious<cr>"
+_ = keymap.n("<c-n>") << "<cmd>cnext<cr>"
 
 
 @rpc()
