@@ -40,7 +40,7 @@ https://github.com/ms-jpq/coq_nvim:
       keymap:
         eval_snips: "<leader>B"
         repeat: "<leader>."
-        jump_to_mark: <c-m>
+        jump_to_mark: <C-m>
   lua: |-
     if vim.env.SSH_TTY or #vim.api.nvim_get_runtime_file(".nvim/t9", {}) ~= 0 then
       local v = vim.g.coq_settings
