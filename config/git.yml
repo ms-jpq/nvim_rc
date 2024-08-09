@@ -189,7 +189,8 @@ https://github.com/junegunn/fzf:
 https://github.com/junegunn/fzf.vim:
   mvp: *mvp
   keys:
-    - maps:
+    - modes: n
+      maps:
         "<leader>h": "<cmd>History:<cr>"
         "<leader>H": "<cmd>History/<cr>"
         "<leader>y": "<cmd>GFiles?<cr>"
@@ -199,12 +200,11 @@ https://github.com/junegunn/fzf.vim:
         "<leader>o": "<cmd>BLines<cr>"
         "<leader>p": "<cmd>Buffers<cr>"
         "<leader>P": "<cmd>Files<cr>"
-      modes: n
-    - maps:
-        "<leader>O": ":Rg "
-      modes: n
+    - modes: n
       opts:
         silent: False
+      maps:
+        "<leader>O": ":Rg "
   lua: |-
     local fzf_opts = vim.env.FZF_DEFAULT_OPTS or ""
     local new_opts = fzf_opts .. " --no-border"
@@ -293,10 +293,25 @@ https://github.com/github/copilot.vim:
       - |-
         printf -- %s '{}' >./package.json
   opt: true
+  keys:
+    - modes: i
+      opts:
+        nowait: True
+        silent: True
+        expr: True
+      maps:
+        "<c-f>": v:lua.COQcopilot()
   lua: |-
     vim.g.copilot_no_maps = true
     vim.g.copilot_assume_mapped = true
   lub: |-
+    COQcopilot = function()
+      local esc_pum =
+        vim.fn.pumvisible() == 1 and
+        vim.api.nvim_replace_termcodes("<c-e>", true, true, true) or
+        ""
+      return esc_pum .. vim.fn["copilot#Accept"]()
+    end
     vim.cmd [[Copilot enable]]
 
 https://github.com/Exafunction/codeium.vim:
