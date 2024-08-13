@@ -250,21 +250,21 @@ fortls:
 # typeprof:
 #   bin: typeprof
 
-ruby_lsp:
-  bin: ruby-lsp
-  install:
-    gem:
-      - ruby-lsp
-
-# solargraph:
-#   bin: solargraph
+# ruby_lsp:
+#   bin: ruby-lsp
 #   install:
 #     gem:
-#       - solargraph
-#     requires:
-#       - ruby
-#     script:
-#       file: solargraph.dl.rb
+#       - ruby-lsp
+
+solargraph:
+  bin: solargraph
+  install:
+    gem:
+      - solargraph
+    requires:
+      - ruby
+    script:
+      file: solargraph.dl.rb
 
 # mdx_analyzer:
 #   bin: mdx-language-server
