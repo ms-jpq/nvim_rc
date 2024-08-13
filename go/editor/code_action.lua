@@ -59,8 +59,9 @@
         return vim.lsp.util.make_range_params()
       end
     end)()
-    params.context = {diagnostics = vim.lsp.diagnostic.get_line_diagnostics()}
     local buf = vim.api.nvim_get_current_buf()
+    local row = unpack(vim.api.nvim_win_get_cursor(0))
+    params.context = {diagnostics = vim.diagnostic.get(buf, {lnum = row})}
 
     local ed = params.range["end"]
     local line =
@@ -70,7 +71,6 @@
 
     local method = vim.lsp.protocol.Methods.textDocument_codeAction
     local clients = vim.lsp.get_clients({bufnr = buf, method = method})
-    local row = unpack(vim.api.nvim_win_get_cursor(0))
     row = row - 1
 
     cancel()

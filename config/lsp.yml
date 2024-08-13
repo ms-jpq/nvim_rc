@@ -252,9 +252,9 @@ fortls:
 
 ruby_lsp:
   bin: ruby-lsp
-  # install:
-  #   gem:
-  #     - ruby-lsp
+  install:
+    gem:
+      - ruby-lsp
 
 # solargraph:
 #   bin: solargraph
@@ -501,11 +501,11 @@ cobol_ls:
     script:
       file: cobol_ls.cob
 
-tabby_ml:
-  bin: tabby-agent
-  install:
-    npm:
-      - tabby-agent
+# tabby_ml:
+#   bin: tabby-agent
+#   install:
+#     npm:
+#       - tabby-agent
 
 # volar:
 #   bin: vue-language-server
