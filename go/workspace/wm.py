@@ -21,14 +21,14 @@ settings["splitright"] = True
 settings["splitbelow"] = True
 
 # move between windows
-for key in ("<c-down>", "<c-h>"):
-    _ = keymap.n(key) << "<cmd>wincmd h<cr>"
-for key in ("<c-down>", "<c-k>"):
+for key in ("<c-up>", "<c-k>"):
     _ = keymap.n(key) << "<cmd>wincmd k<cr>"
-for key in ("<c-down>", "<c-l>"):
-    _ = keymap.n(key) << "<cmd>wincmd l<cr>"
 for key in ("<c-down>", "<c-j>"):
     _ = keymap.n(key) << "<cmd>wincmd j<cr>"
+for key in ("<c-left>", "<c-h>"):
+    _ = keymap.n(key) << "<cmd>wincmd h<cr>"
+for key in ("<c-right>", "<c-l>"):
+    _ = keymap.n(key) << "<cmd>wincmd l<cr>"
 
 # swap windows
 _ = keymap.n("<leader>'") << "<cmd>wincmd r<cr>"
