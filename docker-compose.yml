@@ -29,7 +29,7 @@ services:
       - --device
       - cuda
       - --model
-      - TabbyML/StarCoder2-7B
+      - StarCoder-1B
     ports:
       - 6060:8080
     volumes:
