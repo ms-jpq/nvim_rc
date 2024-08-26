@@ -506,7 +506,11 @@ tabby_ml:
   install:
     npm:
       - tabby-agent
-
+codeium:
+  bin: codeium
+  install:
+    script:
+      file: codeium.sh
 # volar:
 #   bin: vue-language-server
 #   install:
