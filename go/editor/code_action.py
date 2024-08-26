@@ -63,7 +63,7 @@ async def _on_code_action_notif(
             meta={
                 "virt_text": ((prefix(), _HL),),
                 "hl_mode": "combine",
-                "virt_text_pos": "overlay",
+                "virt_text_pos": "right_align",
             },
         )
 
