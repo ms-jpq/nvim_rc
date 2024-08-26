@@ -306,11 +306,6 @@ https://github.com/github/copilot.vim:
     end
     vim.cmd [[Copilot enable]]
 
-https://github.com/Exafunction/codeium.vim:
-  opt: true
-  vals:
-    codeium_no_map_tab: True
-    codeium_render: False
 # https://github.com/lervag/vimtex:
 #   opt: true
 #   vals:
