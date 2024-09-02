@@ -37,7 +37,7 @@ lemminx:
   args: []
   install:
     requires:
-      - htmlq
+      - xmllint
     script:
       file: lemminx.sh
 

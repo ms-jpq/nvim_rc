@@ -53,7 +53,7 @@ jobs:
           ruby-version: "3.3"
 
       - run: |-
-          brew install -- bash make flock htmlq moreutils
+          brew install -- bash make flock moreutils
 
       - run: |-
           gmake lint

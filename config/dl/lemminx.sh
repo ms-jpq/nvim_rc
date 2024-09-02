@@ -17,8 +17,10 @@ linux*)
   ;;
 esac
 
-VERSION="$(curl --fail-with-body --location --no-progress-meter --max-time 600 -- "$BASE_URI" | htmlq --attribute href -- 'body > table > tbody > tr:nth-last-child(2) > td > a')"
-URI="$BASE_URI/$VERSION/$BASENAME"
+CURL=(curl --fail-with-body --location --no-progress-meter --max-time 600 -- "$BASE_URI")
+XPATH=(xmllint --html --xpath '(//html/body/table/tr/td/a/text())[last()]' -)
+VERSION="$("${CURL[@]}" | "${XPATH[@]}")"
+URI="$BASE_URI/$VERSION$BASENAME"
 # shellcheck disable=SC2154
 get.sh "$URI" | unpack.sh "$TMP"
 mv -v -f -- "$TMP/lemminx"* "$BIN"
