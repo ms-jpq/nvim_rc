@@ -422,14 +422,14 @@ jdtls:
     script:
       file: jdtls.java
 
-# prolog_ls:
-#   bin: prolog-ls
-#   args: []
-#   install:
-#     requires:
-#       - swipl
-#     script:
-#       file: prolog_ls.dl.pro
+prolog_ls:
+  bin: prolog-ls
+  args: []
+  install:
+    requires:
+      - swipl
+    script:
+      file: prolog_ls.dl.pro
 
 sqlls:
   bin: sql-language-server
