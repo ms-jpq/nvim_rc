@@ -237,6 +237,7 @@ def _gem(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
     name = "gem"
     if (
         (gem := which(name))
+        and (ruby := which("ruby"))
         and (
             specs := {
                 *(
@@ -264,8 +265,8 @@ def _gem(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
                 yield ("", p1)
                 if not p1.returncode:
                     p2 = await _run(
-                        executable,
-                        LIBEXEC / "binstub.py",
+                        ruby,
+                        LIBEXEC / "binstub.rb",
                         "--src",
                         _GEMS,
                         "--dst",

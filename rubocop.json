@@ -1,1 +1,5 @@
-{}
+{
+  "Style/NumberedParameters": {
+    "Enabled": false
+  }
+}

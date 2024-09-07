@@ -1,8 +1,8 @@
 #!/usr/bin/env -S -- ruby
 # frozen_string_literal: true
 
-Kernel.require("English")
-Kernel.require("pathname")
+require("English")
+require("pathname")
 
 $ARGV => [filename, *argv]
 
