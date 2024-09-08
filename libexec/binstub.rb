@@ -47,7 +47,7 @@ bins.each_child(false) do |path|
     Pathname(f).rename(bin)
   end
 
-  next unless /mswin|mingw|cygwin/ =~ RUBY_PLATFORM
+  next unless /mswin|cygwin|mingw|bccwin/ =~ RUBY_PLATFORM
 
   bin
     .sub_ext(".sh")
