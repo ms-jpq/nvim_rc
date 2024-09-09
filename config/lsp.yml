@@ -272,7 +272,7 @@ solargraph:
 #     npm:
 #       - "@mdx-js/language-server"
 
-tsserver:
+ts_ls:
   bin: typescript-language-server
   install:
     npm:
