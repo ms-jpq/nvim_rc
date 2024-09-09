@@ -224,23 +224,23 @@ prettier:
     script:
       file: prettier.dl.js
 
-ruby1:
-  bin: stree
-  args:
-    - format
-    # plugin/single_quotes,
-    - --plugins=plugin/trailing_comma
-    - --
-    - ${tmpname}
-  type: stream
-  env:
-    NO_COLOR: "1"
-  filetypes:
-    - rbs
-    - ruby
-  install:
-    gem:
-      - syntax_tree
+# ruby1:
+#   bin: stree
+#   args:
+#     - format
+#     # plugin/single_quotes,
+#     - --plugins=plugin/trailing_comma
+#     - --
+#     - ${tmpname}
+#   type: stream
+#   env:
+#     NO_COLOR: "1"
+#   filetypes:
+#     - rbs
+#     - ruby
+#   install:
+#     gem:
+#       - syntax_tree
 
 ruby2:
   bin: rubocop.rb
