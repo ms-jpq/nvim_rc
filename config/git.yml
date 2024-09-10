@@ -247,6 +247,9 @@ https://github.com/cocopon/iceberg.vim:
   lua: |-
     vim.cmd [[colorscheme iceberg]]
 
+https://github.com/RRethy/vim-illuminate:
+  opt: true
+
 # https://github.com/EdenEast/nightfox.nvim:
 #   lua: |-
 #     vim.cmd [[colorscheme dayfox]]
