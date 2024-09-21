@@ -38,7 +38,7 @@ bins.each_child(false) do |path|
   #!/bin/sh
 
   export -- MSYSTEM='MSYS' GEM_PATH=#{gem_path}
-  exec #{Shellwords.shellescape((bins / path).to_s)} "$@"
+    exec #{(bins / path).to_s.shellescape} "$@"
   BASH
 
   Tempfile.create("", tmp) do |f|
