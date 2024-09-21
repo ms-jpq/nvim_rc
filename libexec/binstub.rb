@@ -24,6 +24,7 @@ options, =
   end
 
 options => { src:, dst: }
+tmp = Pathname(__dir__).parent / "var" / "tmp"
 bins = Pathname(src) / "bin"
 dst = Pathname(dst)
 gem_path = Shellwords.shellescape(src)
@@ -40,7 +41,7 @@ bins.each_child(false) do |path|
   exec #{Shellwords.shellescape((bins / path).to_s)} "$@"
   BASH
 
-  Tempfile.create do |f|
+  Tempfile.create("", tmp) do |f|
     f => File
     f.chmod(0o755)
     f.write(stubbed)
