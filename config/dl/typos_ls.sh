@@ -6,6 +6,9 @@ REPO='tekumara/typos-vscode'
 BASE="https://github.com/$REPO/releases/latest/download/typos-lsp"
 VERSION="$(gh-latest.sh . "$REPO")"
 
+VERSION='v0.1.23'
+BASE="https://github.com/$REPO/releases/download/$VERSION/typos-lsp"
+
 case "$OSTYPE" in
 darwin*)
   URI="$BASE-$VERSION-$HOSTTYPE-apple-darwin.tar.gz"
