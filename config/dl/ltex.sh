@@ -2,8 +2,9 @@
 
 set -o pipefail
 
-BASE='https://github.com/valentjn/ltex-ls/releases/latest/download/ltex-ls'
-VERSION='16.0.0'
+REPO='valentjn/ltex-ls'
+BASE="https://github.com/$REPO/releases/latest/download/ltex-ls"
+VERSION="$(gh-latest.sh . "$REPO")"
 
 case "$OSTYPE" in
 darwin*)
