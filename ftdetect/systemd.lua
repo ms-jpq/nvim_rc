@@ -16,6 +16,7 @@ vim.filetype.add(
       [".*/.*%.network.d/.*%.conf"] = systemd,
       [".*/.*%.service.d/.*%.conf"] = systemd,
       [".*/repart.d/.*%.conf"] = systemd,
+      [".*/resolved.conf.d/.*%.conf"] = systemd,
       [".*/systemd/.*%.conf"] = systemd
     }
   }
