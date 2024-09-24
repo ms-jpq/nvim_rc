@@ -9,7 +9,15 @@ darwin*)
   URI="$BASE/$HOSTTYPE-macos.tar.gz"
   ;;
 linux*)
-  URI="$BASE/$HOSTTYPE-linus-musl.tar.gz"
+  case "$HOSTTYPE" in
+  x86_64)
+    LIBC='-musl'
+    ;;
+  *)
+    LIBC=''
+    ;;
+  esac
+  URI="$BASE/$HOSTTYPE-linux$LIBC.tar.gz"
   ;;
 *)
   URI="$BASE/$HOSTTYPE-windows.zip"
