@@ -50,21 +50,21 @@ ast_grep:
     npm:
       - "@ast-grep/cli"
 
-marksman:
-  bin: marksman
-  install:
-    script:
-      file: marksman.sh
-
-# markdown:
-#   bin: vscode-markdown-language-server
-#   args:
-#     - --stdio
-#   filetypes:
-#     - markdown
+# marksman:
+#   bin: marksman
 #   install:
-#     npm:
-#       - vscode-langservers-extracted
+#     script:
+#       file: marksman.sh
+
+markdown:
+  bin: vscode-markdown-language-server
+  args:
+    - --stdio
+  filetypes:
+    - markdown
+  install:
+    npm:
+      - vscode-markdown-languageservice
 
 ltex:
   bin: ltex-ls
