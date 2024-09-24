@@ -250,11 +250,11 @@ fortls:
 # typeprof:
 #   bin: typeprof
 
-# ruby_lsp:
-#   bin: ruby-lsp
-#   install:
-#     gem:
-#       - ruby-lsp
+ruby_lsp:
+  bin: ruby-lsp
+  install:
+    gem:
+      - ruby-lsp
 
 solargraph:
   bin: solargraph
