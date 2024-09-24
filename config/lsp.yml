@@ -302,11 +302,13 @@ eslint:
 # denols:
 #   bin: deno
 
-html:
-  bin: vscode-html-language-server
+superhtml:
+  bin: superhtml
   install:
-    npm:
-      - vscode-langservers-extracted
+    requires:
+      - jq
+    script:
+      file: superhtml.sh
 
 cssls:
   bin: vscode-css-language-server
