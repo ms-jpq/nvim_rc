@@ -154,11 +154,11 @@ jqls:
     script:
       file: jq_ls.go
 
-# awk_ls:
-#   bin: awk-language-server
-#   install:
-#     npm:
-#       - awk-language-server
+awk_ls:
+  bin: awk-language-server
+  install:
+    npm:
+      - awk-language-server
 
 powershell_es:
   bin: pwsh_es.ps1
