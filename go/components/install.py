@@ -376,19 +376,16 @@ async def install(mvp: bool, match: AbstractSet[str]) -> int:
             args = join(map(str, proc.args))
             if proc.returncode == 0:
                 msg = LANG("proc succeeded", args=args)
-                lines = chain.from_iterable(
-                    zip((encode(msg), encode(debug), proc.stderr, proc.stdout, sep), ls)
-                )
-                stdout.buffer.writelines(lines)
-                stdout.buffer.flush()
+                io = stdout
             else:
                 errors.append(b"!!! -- " + encode(args))
                 msg = LANG("proc failed", code=proc.returncode, args=args)
-                lines = chain.from_iterable(
-                    zip((encode(msg), encode(debug), proc.stderr, proc.stdout, sep), ls)
-                )
-                stderr.buffer.writelines(lines)
-                stderr.buffer.flush()
+                io = stderr
+            lines = chain.from_iterable(
+                zip((encode(msg), encode(debug), proc.stderr, proc.stdout, sep), ls)
+            )
+            io.buffer.writelines(lines)
+            io.buffer.flush()
 
     if errors:
         stderr.buffer.writelines(chain.from_iterable(zip(errors, ls)))
