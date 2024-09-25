@@ -5,9 +5,8 @@ set -o pipefail
 SRC="$1"
 DST="${2:-"$(basename -- "$SRC")"}"
 
-INVOCATION_ID="${INVOCATION_ID:-"*"}"
-TTAG="$DST.$INVOCATION_ID.ttag"
-ETAG="$DST.$INVOCATION_ID.etag"
+TTAG="$DST.ttag"
+ETAG="$DST.etag"
 
 CURL=(
   curl

@@ -25,7 +25,8 @@ linux*)
   ;;
 esac
 
+ARCHIVE="superhtml-${URI##*/}"
 # shellcheck disable=SC2154
-get.sh "$URI" | unpack.sh "$TMP"
+get.sh "$URI" "$ARCHIVE" | unpack.sh "$TMP"
 find "$TMP" -name '*.pdb' -delete
 mv -v -f -- "$TMP"/*/* "$BIN"
