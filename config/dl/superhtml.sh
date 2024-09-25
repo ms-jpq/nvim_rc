@@ -27,4 +27,5 @@ esac
 
 # shellcheck disable=SC2154
 get.sh "$URI" | unpack.sh "$TMP"
+find "$TMP" -name '*.pdb' -delete
 mv -v -f -- "$TMP"/*/* "$BIN"

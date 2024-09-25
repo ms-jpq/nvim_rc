@@ -261,6 +261,7 @@ def _gem(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
                     _GEMS,
                     "--no-document",
                     *specs,
+                    env={"AROPTS": "-r"},
                 )
                 yield ("", p1)
                 if not p1.returncode:
