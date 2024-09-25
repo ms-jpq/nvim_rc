@@ -26,6 +26,7 @@ from typing import (
     Tuple,
     Union,
 )
+from uuid import NAMESPACE_OID, uuid5
 from venv import EnvBuilder
 
 from pynvim_pp.lib import encode
@@ -108,9 +109,10 @@ async def _run(
     env: Optional[Mapping[str, str]] = None,
     cwd: Optional[PurePath] = None,
 ) -> CompletedProcess[bytes]:
+    invocation = uuid5(NAMESPACE_OID, name=join(map(str, argv)))
     p = call(
         *argv,
-        env=env,
+        env={**(env or {}), "INVOCATION_ID": invocation.hex},
         cwd=cwd,
         check_returncode=set(),
     )
