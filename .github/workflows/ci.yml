@@ -51,7 +51,9 @@ jobs:
           ruby-version: "3.3"
 
       - run: |-
-          brew install -- bash make flock moreutils python-setuptools
+          brew install -- bash make flock moreutils
+          # TODO: remove this when tree-sitter-awk no longer uses it
+          brew install -- python-setuptools
 
       - run: |-
           gmake lint

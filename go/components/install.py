@@ -256,6 +256,7 @@ def _gem(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
                     _GEMS,
                     "--no-document",
                     *specs,
+                    # TODO: https://github.com/ruby/prism/pull/2711
                     env={"ARFLAGS": "-r"},
                 )
                 yield ("", p1)
