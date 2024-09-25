@@ -266,11 +266,11 @@ solargraph:
     script:
       file: solargraph.dl.rb
 
-# mdx_analyzer:
-#   bin: mdx-language-server
-#   install:
-#     npm:
-#       - "@mdx-js/language-server"
+mdx_analyzer:
+  bin: mdx-language-server
+  install:
+    npm:
+      - "@mdx-js/language-server"
 
 ts_ls:
   bin: typescript-language-server
