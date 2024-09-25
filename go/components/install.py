@@ -391,7 +391,7 @@ async def install(mvp: bool, match: AbstractSet[str]) -> int:
                 stderr.buffer.flush()
 
     if errors:
-        stderr.buffer.write(l.join(errors))
+        stderr.buffer.writelines(chain.from_iterable(zip(errors, ls)))
     else:
         UPDATE_LOG.parent.mkdir(parents=True, exist_ok=True)
         UPDATE_LOG.write_text(str(time()))
