@@ -19,7 +19,7 @@ options, =
           _1.on("--src SRC", String)
           _1.on("--dst DST", String)
         end
-        .parse(ARGV, into:)
+        .parse(ARGV, into: into)
     [into, parsed]
   end
 
