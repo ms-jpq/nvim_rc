@@ -212,10 +212,10 @@ prettier:
     - yaml*
   install:
     npm:
+      # - prettier-plugin-awk
       - "@prettier/plugin-php"
       - "@prettier/plugin-xml"
       - prettier
-      - prettier-plugin-awk
       - prettier-plugin-nginx
       - prettier-plugin-organize-imports
       - prettier-plugin-tailwindcss
