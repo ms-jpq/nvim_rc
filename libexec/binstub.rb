@@ -1,10 +1,10 @@
 #!/usr/bin/env -S -- ruby
 # frozen_string_literal: true
 
-require("optparse")
-require("pathname")
-require("shellwords")
-require("tempfile")
+require('optparse')
+require('pathname')
+require('shellwords')
+require('tempfile')
 
 Thread.tap do
   _1.abort_on_exception = true
@@ -15,33 +15,33 @@ options, =
   {}.then do |into|
     parsed =
       OptionParser
-        .new do
-          _1.on("--src SRC", String)
-          _1.on("--dst DST", String)
-        end
-        .parse(ARGV, into: into)
+      .new do
+        _1.on('--src SRC', String)
+        _1.on('--dst DST', String)
+      end
+        .parse(ARGV, into:)
     [into, parsed]
   end
 
 options => { src:, dst: }
-tmp = Pathname(__dir__).parent / "var" / "tmp"
-bins = Pathname(src) / "bin"
+tmp = Pathname(__dir__).parent / 'var' / 'tmp'
+bins = Pathname(src) / 'bin'
 dst = Pathname(dst)
 gem_path = Shellwords.shellescape(src)
 
 [bins, dst].each(&:mkpath)
 bins.each_child(false) do |path|
   bin = dst / path
-  next if bin.extname == ".lock"
+  next if bin.extname == '.lock'
 
   stubbed = <<~BASH
-  #!/bin/sh
+    #!/bin/sh
 
-  export -- MSYSTEM='MSYS' GEM_PATH=#{gem_path}
+    export -- MSYSTEM='MSYS' GEM_PATH=#{gem_path}
     exec #{(bins / path).to_s.shellescape} "$@"
   BASH
 
-  Tempfile.create("", tmp) do |f|
+  Tempfile.create('', tmp) do |f|
     f => File
     f.chmod(0o755)
     f.write(stubbed)
@@ -51,7 +51,7 @@ bins.each_child(false) do |path|
   next unless /mswin|cygwin|mingw|bccwin/ =~ RUBY_PLATFORM
 
   bin
-    .sub_ext(".sh")
+    .sub_ext('.sh')
     .tap do
       _1.rmtree
       _1.make_symlink(bin)

@@ -1,22 +1,21 @@
 #!/usr/bin/env -S -- ruby
 # frozen_string_literal: true
 
-require("English")
-require("pathname")
+require('English')
+require('pathname')
 
 $ARGV => [filename, *argv]
 
-Kernel
-  .Pathname(filename)
+Pathname(filename)
   .parent
   .ascend
   .each do
-    gem = _1 / "Gemfile"
-    if gem.exist?
-      Dir.chdir(_1)
-      Kernel.exec(*%w[bundle exec -- rubocop], *argv)
-    end
+  gem = _1 / 'Gemfile'
+  if gem.exist?
+    Dir.chdir(_1)
+    exec(*%w[bundle exec -- rubocop], *argv)
   end
+end
 
 cop = File.join(__dir__, *%w[.. modules rb_modules bin rubocop])
-Kernel.exec(cop, *argv)
+exec(cop, *argv)

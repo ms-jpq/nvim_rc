@@ -1,7 +1,4 @@
 ---
-inherit_gem:
-  syntax_tree: config/rubocop.yml
-
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.3

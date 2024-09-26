@@ -1,5 +1,8 @@
 {
   "Style/NumberedParameters": {
     "Enabled": false
+  },
+  "Style/ParallelAssignment": {
+    "Enabled": false
   }
 }
