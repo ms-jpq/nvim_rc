@@ -33,4 +33,4 @@ get.sh "$URI" | unpack.sh "$TMP"
 # shellcheck disable=2154
 rm -rf -- "$LIB"
 mv -v -f -- "$TMP" "$LIB"
-ln -v -sf -- "$(dirname -- "$0")/lua_ls.ex.sh" "$BIN"
+ln -v -snf -- "$(dirname -- "$0")/lua_ls.ex.sh" "$BIN"
