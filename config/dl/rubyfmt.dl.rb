@@ -26,9 +26,10 @@ os, arch =
   end
 
 uri = "https://github.com/#{repo}/releases/latest/download/rubyfmt-#{version.chomp}-#{os}-#{arch}.tar.gz"
+src = File.join(tmp, 'tmp', 'releases', "#{version}-#{os}", 'rubyfmt')
 stats = Open3.pipeline(['get.sh', uri], ['unpack.sh', tmp])
 
 raise unless stats.all?(&:success?)
 
-src = File.join(tmp, 'releases', "#{version}-#{os}", 'rubyfmt')
-FileUtils.mv(src, dst, force: true, verbose: true)
+FileUtils.rm(dst, force: true, verbose: true)
+FileUtils.mv(src, dst, verbose: true)
