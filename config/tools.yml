@@ -1,6 +1,8 @@
 ---
 npm:
+  - diff2html-cli
   - tree-sitter-cli
 
 script:
   - file: delve.sh
+  - file: diff2html.sh
