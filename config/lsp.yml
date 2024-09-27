@@ -408,7 +408,6 @@ clojure_lsp:
 #   bin: gradle-language-server
 #   install:
 #     requires:
-#       - gradle
 #       - java
 #     script:
 #       file: gradle_ls.java
