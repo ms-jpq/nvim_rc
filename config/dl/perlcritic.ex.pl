@@ -1,4 +1,4 @@
-#!/usr/bin/env -S -- PERL_UNICODE=CASD perl -w
+#!/usr/bin/env -S -- PERL_UNICODE=ASD perl -w
 
 use Carp;
 use English;
