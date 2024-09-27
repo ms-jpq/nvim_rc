@@ -1,4 +1,4 @@
-#!/usr/bin/env -S -- perl -CASD -w
+#!/usr/bin/env -S -- PERL_UNICODE=CASD perl -w
 
 use Carp;
 use Config;

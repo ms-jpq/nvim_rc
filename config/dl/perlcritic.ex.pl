@@ -1,4 +1,4 @@
-#!/usr/bin/env -S -- perl -CASD
+#!/usr/bin/env -S -- PERL_UNICODE=CASD perl -w
 
 use Carp;
 use English;
@@ -12,5 +12,5 @@ my $dir = dirname(__FILE__);
 my $lib = catfile( $dir, '..', 'lib', 'perlcritic.pl' );
 
 $ENV{PERL5LIB} = catfile( $lib, 'lib', 'perl5' );
-exec 'perl', '-CASD', catfile( $lib, 'bin', 'perlcritic' ), @ARGV;
+exec 'perl', catfile( $lib, 'bin', 'perlcritic' ), @ARGV;
 croak $ERRNO;
