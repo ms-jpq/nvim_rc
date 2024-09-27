@@ -275,6 +275,15 @@ rust:
   filetypes:
     - rust
 
+swift:
+  bin: swift-format
+  args:
+    - format
+    - --
+  type: stream
+  filetypes:
+    - swift
+
 go:
   bin: goimports
   type: stream
