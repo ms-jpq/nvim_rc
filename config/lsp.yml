@@ -160,6 +160,12 @@ jqls:
 #     npm:
 #       - awk-language-server
 
+perlnavigator:
+  bin: perlnavigator
+  install:
+    npm:
+      - perlnavigator-server
+
 powershell_es:
   bin: pwsh_es.ps1
   args: []
