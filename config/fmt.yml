@@ -279,6 +279,7 @@ swift:
   bin: swift-format
   args:
     - format
+    - --assume-filename=${filename}
     - --
   type: stream
   filetypes:
