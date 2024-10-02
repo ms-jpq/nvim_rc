@@ -3,5 +3,14 @@
 set -o pipefail
 
 DIR="$(dirname -- "$0")"
+case "$OSTYPE" in
+msys)
+  SUFFIX='.js'
+  exit
+  ;;
+*)
+  SUFFIX=''
+  ;;
+esac
 
-ln -v -snf -- '../var/modules/node_modules/.bin/diff2html' "$DIR/../../bin/diff2html"
+ln -v -snf -- "../var/modules/node_modules/.bin/diff2html$SUFFIX" "$DIR/../../bin/diff2html$SUFFIX"
