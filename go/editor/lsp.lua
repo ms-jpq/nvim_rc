@@ -7,7 +7,7 @@
       local util = require("lspconfig/util")
 
       local has_server =
-        pcall(require, "lspconfig/server_configurations/" .. server)
+        pcall(require, "lspconfig/configs/" .. server)
 
       cfg.on_attach = function(client, bufnr)
         _G[ns][attach_fn](server)
