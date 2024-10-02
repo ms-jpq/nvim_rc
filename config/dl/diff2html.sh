@@ -2,4 +2,6 @@
 
 set -o pipefail
 
-ln -v -snf -- '../var/modules/node_modules/.bin/diff2html' "${0%/*}/../../bin/diff2html"
+DIR="$(dirname -- "$0")"
+
+ln -v -snf -- '../var/modules/node_modules/.bin/diff2html' "$DIR/../../bin/diff2html"

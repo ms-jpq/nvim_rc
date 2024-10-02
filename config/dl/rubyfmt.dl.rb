@@ -6,7 +6,7 @@ require('open3')
 
 repo = 'fables-tales/rubyfmt'
 tmp, dst = ENV.fetch('TMP'), ENV.fetch('BIN')
-version, stat = Open3.capture2(*%w[gh-latest.sh .], repo)
+version, stat = Open3.capture2(*%w[env -- gh-latest.sh .], repo)
 raise unless stat.success?
 
 os, arch =
@@ -27,7 +27,7 @@ os, arch =
 
 uri = "https://github.com/#{repo}/releases/latest/download/rubyfmt-#{version.chomp}-#{os}-#{arch}.tar.gz"
 src = File.join(tmp, 'tmp', 'releases', "#{version}-#{os}", 'rubyfmt')
-stats = Open3.pipeline(['get.sh', uri], ['unpack.sh', tmp])
+stats = Open3.pipeline(['env', '--', 'get.sh', uri], ['env', '--', 'unpack.sh', tmp])
 
 raise unless stats.all?(&:success?)
 
