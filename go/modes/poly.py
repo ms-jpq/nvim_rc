@@ -1,9 +1,10 @@
 from collections.abc import Iterator
+from importlib.resources import files
 from pathlib import Path
 
 from ..registry import atomic, keymap
 
-_move = Path(__file__).parent.joinpath("move.lua").read_text("UTF-8")
+_move = files(__package__).joinpath("move.lua").read_text("UTF-8")
 
 atomic.exec_lua(_move, ())
 
@@ -23,7 +24,10 @@ for key in ("d", "n", "N", "[c", "]c", "<c-f>", "<c-b>"):
     _ = keymap.nv(key) << f"{key}zz"
 
 for key, remap in {"<c-u>": "<up>", "<c-d>": "<down>"}.items():
-    _ = keymap.nv(key, expr=True) << f"max([5, min([9, winheight(0) / 4])]) . 'g{remap}zz'"
+    _ = (
+        keymap.nv(key, expr=True)
+        << f"max([5, min([9, winheight(0) / 4])]) . 'g{remap}zz'"
+    )
 
 
 def _redraw(wrapped: str) -> Iterator[str]:

@@ -1,8 +1,9 @@
+from importlib.resources import files
 from pathlib import Path
 
 from ..registry import atomic
 
-_status = Path(__file__).with_suffix(".lua").read_text("UTF-8")
+_status = files(__package__).joinpath("statusline.lua").read_text("UTF-8")
 
 _preview = "%w"
 _ql = "%q"

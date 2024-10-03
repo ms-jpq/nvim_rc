@@ -45,13 +45,13 @@ from ..consts import (
     DEADLINE,
     DLEXEC,
     GEM_DIR,
-    INSTALL_SCRIPT,
     LIB_DIR,
     LIBEXEC,
     NPM_DIR,
     PIP_DIR,
     RT_SCRIPTS,
     TMP_DIR,
+    TOP_LEVEL,
     UPDATE_LOG,
     VIM_DIR,
 )
@@ -410,4 +410,4 @@ async def maybe_install() -> None:
             UPDATE_LOG.write_text(str(time()))
 
         if ans == 1:
-            await open_term(INSTALL_SCRIPT, "packages")
+            await open_term("make", "--directory", TOP_LEVEL, "patch")

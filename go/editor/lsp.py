@@ -1,4 +1,5 @@
 from fnmatch import fnmatch
+from importlib.resources import files
 from os.path import normcase
 from pathlib import Path
 from typing import Any, Mapping, MutableMapping, Optional
@@ -18,7 +19,7 @@ from ..config.lsp import LspAttrs, RootPattern, RPFallback, lsp_specs
 from ..registry import LANG, NAMESPACE, atomic, autocmd, keymap, rpc, settings
 from ..text_objects.word import UNIFIYING_CHARS
 
-_LSP_INIT = Path(__file__).resolve(strict=True).with_name("lsp.lua").read_text("UTF-8")
+_LSP_INIT = files(__package__).joinpath("lsp.lua").read_text("UTF-8")
 
 settings["tagfunc"] = "v:lua.vim.lsp.tagfunc"
 settings["formatexpr"] = "v:lua.vim.lsp.formatexpr()"

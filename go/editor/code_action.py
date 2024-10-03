@@ -1,9 +1,9 @@
 from contextlib import suppress
 from dataclasses import dataclass
 from functools import cache
+from importlib.resources import files
 from itertools import count
 from operator import attrgetter
-from pathlib import Path
 from typing import Any, Optional
 from uuid import uuid4
 
@@ -19,9 +19,7 @@ from ..registry import LANG, NAMESPACE, atomic, autocmd, keymap, rpc
 _NS = uuid4()
 _HL = "LspDiagnosticsDefaultInformation"
 
-_CODE_ACTION = (
-    Path(__file__).resolve(strict=True).with_name("code_action.lua").read_text("UTF-8")
-)
+_CODE_ACTION = files(__package__).joinpath("code_action.lua").read_text("UTF-8")
 
 
 @dataclass(frozen=True)

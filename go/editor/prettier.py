@@ -1,5 +1,6 @@
 from contextlib import suppress
 from fnmatch import fnmatch
+from importlib.resources import files
 from itertools import chain
 from os.path import normcase, normpath
 from pathlib import Path, PurePath
@@ -21,9 +22,7 @@ from ..registry import LANG, NAMESPACE, keymap, rpc
 from .linter import BufContext, arg_subst, current_ctx, mktemp, set_preview_content
 from .whitespace import detect_tabs, trailing_ws
 
-_LSP_NOTIFY = (
-    Path(__file__).resolve(strict=True).with_name("lsp_notify.lua").read_text("UTF-8")
-)
+_LSP_NOTIFY = files(__package__).joinpath("lsp_notify.lua").read_text("UTF-8")
 
 
 async def _fmt_output(

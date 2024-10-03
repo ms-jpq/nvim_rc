@@ -25,7 +25,6 @@ RT_PY = _RT_BIN / PurePath(executable).name
 DEADLINE = 3600
 
 REQUIREMENTS = TOP_LEVEL / "requirements.txt"
-INSTALL_SCRIPT = TOP_LEVEL / "install.sh"
 
 LANG_ROOT = TOP_LEVEL / "locale"
 DEFAULT_LANG = "c"
