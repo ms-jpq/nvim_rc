@@ -31,5 +31,5 @@ async def _line(is_inside: bool) -> None:
 
 _ = keymap.o("il") << f"<cmd>lua {NAMESPACE}.{_line.method}(true)<cr>"
 _ = keymap.o("al") << f"<cmd>lua {NAMESPACE}.{_line.method}(false)<cr>"
-_ = keymap.v("il") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_line.method}(true)<cr>"
-_ = keymap.v("al") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_line.method}(false)<cr>"
+_ = keymap.v("il") << fr"<c-\><c-n><cmd>lua {NAMESPACE}.{_line.method}(true)<cr>"
+_ = keymap.v("al") << fr"<c-\><c-n><cmd>lua {NAMESPACE}.{_line.method}(false)<cr>"
