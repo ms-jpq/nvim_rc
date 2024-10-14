@@ -3,8 +3,6 @@ from pynvim_pp.nvim import Nvim
 
 from ..registry import NAMESPACE, autocmd, keymap, rpc, settings
 
-# auto load changes
-settings["autoread"] = True
 # auto save file
 settings["autowrite"] = True
 settings["autowriteall"] = True
@@ -14,16 +12,17 @@ settings["autowriteall"] = True
 settings["backupskip"] = ""
 
 
-_ = autocmd("FocusGained", "VimResume", "WinEnter") << "checktime"
+_ = autocmd("FocusGained", "VimResume", "WinEnter") << "silent! checktime"
 
 
 @rpc()
 async def _auto_save(local: bool) -> None:
     if local:
         buf = await Buffer.get_current()
-        await Nvim.exec(f"checktime {buf.number}")
+        if await buf.get_name():
+            await Nvim.exec(f"checktime {buf.number}")
     else:
-        await Nvim.exec("checktime")
+        await Nvim.exec("silent! checktime")
     await Nvim.exec("silent! wall!")
 
 

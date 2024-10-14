@@ -1,7 +1,7 @@
 from ..registry import keymap
 
 # dont go into ex mode
-_ = keymap.c("<c-f>") << ""
+# _ = keymap.c("<c-f>") << ""
 
 # quit
 _ = keymap.c("<c-q>") << "<esc>"
