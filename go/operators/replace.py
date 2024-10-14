@@ -63,4 +63,4 @@ async def _go_replace_line() -> None:
         await buf.set_lines(lo=row, hi=row + 1, lines=new_lines)
 
 
-_ = keymap.n("grr") << f"<cmd>lua {NAMESPACE}.{_go_replace_line.method}()<cr>"
+_ = keymap.n("gbb") << f"<cmd>lua {NAMESPACE}.{_go_replace_line.method}()<cr>"
