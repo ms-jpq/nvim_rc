@@ -262,6 +262,12 @@ ruby_lsp:
     gem:
       - ruby-lsp
 
+sorbet:
+  bin: srb
+  install:
+    gem:
+      - sorbet
+
 solargraph:
   bin: solargraph
   install:
