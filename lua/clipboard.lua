@@ -76,7 +76,7 @@ local paste = function()
         "powershell.exe",
         "-NoProfile",
         "-Command",
-        "Get-Clipboard"
+        "Get-Clipboard -Raw"
       }
       return recv(true, unpack(pwsh))
     end
