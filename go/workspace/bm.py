@@ -13,6 +13,9 @@ async def _reset_buffer() -> None:
 
     buf = await win.get_buf()
     path = await buf.get_name()
+    if (filetype := await buf.filetype()) and filetype == "CHADTree":
+        return
+
     cursor = await win.get_cursor()
     lv = await win.opts.get(int, "foldlevel")
 
