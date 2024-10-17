@@ -1,8 +1,6 @@
-from os import environ
-
 from pynvim_pp.window import Window
 
-from ..registry import NAMESPACE, atomic, autocmd, keymap, rpc, settings
+from ..registry import NAMESPACE, autocmd, keymap, rpc, settings
 
 # waiting time within a key sequence
 settings["timeoutlen"] = 500
@@ -64,9 +62,3 @@ async def _vedit() -> None:
 _ = autocmd("InsertEnter") << f"lua {NAMESPACE}.{_ins_cursor.method}()"
 _ = autocmd("InsertLeave") << f"lua {NAMESPACE}.{_norm_cursor.method}()"
 _ = keymap.n("<leader>f") << f"<cmd>lua {NAMESPACE}.{_vedit.method}()<cr>"
-
-
-# use system clipboard
-# settings["clipboard"] = "unnamedplus"
-# fake DISPLAY for xclip
-# atomic.call_function("setenv", ("DISPLAY", environ.get("DISPLAY", "VIM_FAKE_DISPLAY")))

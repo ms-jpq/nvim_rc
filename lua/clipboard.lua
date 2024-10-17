@@ -9,6 +9,7 @@ local osc52 = function(clipboard, str)
   if tmux then
     table.insert(acc, esc .. "Ptmux;")
   end
+
   -- TMUX escape `esc`
   if tmux then
     table.insert(acc, esc)
@@ -54,6 +55,7 @@ local paste = function(reg)
   end
 end
 
+vim.o.clipboard = "unnamedplus"
 vim.g.clipboard = {
   name = "OSC 52",
   cache_enabled = true,
