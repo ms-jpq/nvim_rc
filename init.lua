@@ -110,6 +110,7 @@ end
 local l4 = function()
   vim.g.no_plugin_maps = 1
 
+  require("clipboard")
   local man = unpack(vim.api.nvim_get_runtime_file("plugin/man.*", true))
   vim.cmd("source " .. man)
 
