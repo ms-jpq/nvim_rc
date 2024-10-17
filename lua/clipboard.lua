@@ -1,5 +1,6 @@
 local esc = "\027"
 local tmux = vim.env.TMUX
+local ssh = vim.env.SSH_TTY
 
 local osc52 = function(data)
   local acc = {}
@@ -45,11 +46,32 @@ local copy = function(lines)
   end
 end
 
-local paste = function(reg)
-  return function()
-    vim.api.nvim_chan_send(2, osc52("?"))
-    return vim.split("", "\n", {plain = true})
+local run = function(text, ...)
+  local proc = vim.system({...}, {text = text}):wait()
+  return vim.split(proc.stdout, "\n")
+end
+
+local paste = function()
+  -- vim.api.nvim_chan_send(2, osc52("?"))
+  if not ssh then
+    if vim.fn.has("mac") then
+      return run(false, "pbpaste", "-Prefer", "txt")
+    elseif vim.fn.has("unix") then
+      return run(false, "wl-paste")
+    elseif vim.fn.has("win32") then
+      return run(
+        true,
+        "powershell.exe",
+        "-NoProfile",
+        "-Command",
+        "Get-Clipboard"
+      )
+    end
   end
+  if tmux then
+    return run(false, "tmux", "save-buffer", "-")
+  end
+  return {}
 end
 
 vim.o.clipboard = "unnamedplus"
@@ -61,8 +83,8 @@ vim.g.clipboard = {
     ["*"] = copy
   },
   paste = {
-    ["+"] = paste("+"),
-    ["*"] = paste("*")
+    ["+"] = paste,
+    ["*"] = paste
   }
 }
 
