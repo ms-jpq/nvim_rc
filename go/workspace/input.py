@@ -67,6 +67,6 @@ _ = keymap.n("<leader>f") << f"<cmd>lua {NAMESPACE}.{_vedit.method}()<cr>"
 
 
 # use system clipboard
-settings["clipboard"] = "unnamedplus"
+# settings["clipboard"] = "unnamedplus"
 # fake DISPLAY for xclip
-atomic.call_function("setenv", ("DISPLAY", environ.get("DISPLAY", "VIM_FAKE_DISPLAY")))
+# atomic.call_function("setenv", ("DISPLAY", environ.get("DISPLAY", "VIM_FAKE_DISPLAY")))
