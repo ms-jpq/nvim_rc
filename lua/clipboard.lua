@@ -48,10 +48,9 @@ local copy = function(reg)
 end
 
 local paste = function(reg)
-  local clipboard = reg == "+" and "c" or "p"
-  return function(lines)
-    local s = table.concat(lines, "\n")
+  return function()
     -- vim.api.nvim_chan_send(2, osc52(clipboard, s))
+    return vim.split("", "\n", {plain = true})
   end
 end
 
@@ -68,3 +67,15 @@ vim.g.clipboard = {
     ["*"] = paste("*")
   }
 }
+
+vim.paste = (function(paste)
+  return function(lines, phase)
+    local acc = {}
+    for _, line in ipairs(lines) do
+      for _, l in ipairs(vim.split(line, "\027%[27;5;106~")) do
+        table.insert(acc, l)
+      end
+    end
+    return paste(acc, phase)
+  end
+end)(vim.paste)
