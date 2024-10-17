@@ -44,6 +44,9 @@ local copy = function(reg)
   return function(lines)
     local s = table.concat(lines, "\n")
     vim.api.nvim_chan_send(2, osc52("c", s))
+    if tmux then
+      vim.system({"tmux", "load-buffer", "--", "-"}, {stdin = lines})
+    end
   end
 end
 
