@@ -1,4 +1,5 @@
 local esc = "\027"
+local sep = "\n"
 local tmux = vim.env.TMUX
 local ssh = vim.env.SSH_TTY
 
@@ -37,39 +38,51 @@ local osc52 = function(data)
   return table.concat(acc, "")
 end
 
-local copy = function(lines)
-  local s = table.concat(lines, "\n")
-  local b = vim.base64.encode(s)
-  vim.api.nvim_chan_send(2, osc52(b))
-  if tmux then
-    vim.system({"tmux", "load-buffer", "--", "-"}, {stdin = lines})
-  end
+local send = function(stdin, ...)
+  vim.system({...}, {stdin = stdin})
 end
 
-local run = function(text, ...)
+local recv = function(text, ...)
   local proc = vim.system({...}, {text = text}):wait()
-  return vim.split(proc.stdout, "\n")
+  return vim.split(proc.stdout, sep)
+end
+
+local copy = function(lines)
+  local s = table.concat(lines, sep)
+
+  if tmux then
+    send(s, "tmux", "load-buffer", "--", "-")
+  end
+
+  if ssh then
+    local b = vim.base64.encode(s)
+    vim.api.nvim_chan_send(2, osc52(b))
+  elseif vim.fn.has("mac") then
+    send(s, "pbcopy")
+  elseif vim.fn.has("unix") then
+    send(s, "wl-copy")
+  end
 end
 
 local paste = function()
   -- vim.api.nvim_chan_send(2, osc52("?"))
   if not ssh then
     if vim.fn.has("mac") then
-      return run(false, "pbpaste", "-Prefer", "txt")
+      return recv(false, "pbpaste")
     elseif vim.fn.has("unix") then
-      return run(false, "wl-paste")
+      return recv(false, "wl-paste")
     elseif vim.fn.has("win32") then
-      return run(
-        true,
+      local pwsh = {
         "powershell.exe",
         "-NoProfile",
         "-Command",
         "Get-Clipboard"
-      )
+      }
+      return recv(true, unpack(pwsh))
     end
   end
   if tmux then
-    return run(false, "tmux", "save-buffer", "-")
+    return recv(false, "tmux", "save-buffer", "-")
   end
   return {}
 end
