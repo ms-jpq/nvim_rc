@@ -494,6 +494,12 @@ terraformls:
     script:
       file: terraform_ls.sh
 
+helm_ls:
+  bin: helm_ls
+  install:
+    script:
+      file: helm_ls.sh
+
 tflint:
   bin: tflint
   install:
