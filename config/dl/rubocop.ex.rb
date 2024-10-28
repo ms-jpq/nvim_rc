@@ -6,10 +6,13 @@ require('pathname')
 
 $ARGV => [filename, *argv]
 
-Pathname(filename)
-  .parent
-  .ascend
-  .each do
+parents = Pathname(filename).parent.ascend.to_a
+
+yml = '.rubocop.yml'
+conf = parents.map { _1 / yml }.find(-> { File.join(__dir__, *%w[.. ..], yml) }, &:exist?)
+argv += ['--config', conf]
+
+parents.each do
   gem = _1 / 'Gemfile'
   if gem.exist?
     Dir.chdir(_1)
