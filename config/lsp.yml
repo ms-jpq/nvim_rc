@@ -154,8 +154,8 @@ jqls:
     script:
       file: jq_ls.go
 
-# awk_ls:
-#   bin: awk-language-server
+awk_ls:
+  bin: awk-language-server
 #   install:
 #     npm:
 #       - awk-language-server
