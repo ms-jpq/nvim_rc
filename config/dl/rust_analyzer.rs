@@ -31,7 +31,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
     #[cfg(target_os = "windows")]
     {
-      format!("{base}-{ARCH}-pc-windows-msvc.gz")
+      format!("{base}-{ARCH}-pc-windows-msvc.zip")
     }
   };
 
