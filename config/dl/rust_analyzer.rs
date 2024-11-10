@@ -70,13 +70,19 @@ fn main() -> Result<(), Box<dyn Error>> {
   assert!(proc.wait()?.success());
   assert!(status.success());
 
+  #[cfg(target_family = "unix")]
+  let prefix = "rust-analyzer-";
+
+  #[cfg(target_family = "windows")]
+  let prefix = "rust-analyzer.exe";
+
   for entry in read_dir(&tmp)? {
     let entry = entry?;
     if entry
       .file_name()
       .into_string()
       .map_err(|p| format!("{p:?}"))?
-      .starts_with("rust-analyzer-")
+      .starts_with(prefix)
     {
       let path = entry.path();
       #[cfg(target_family = "unix")]
