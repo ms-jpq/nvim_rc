@@ -8,7 +8,7 @@
 
 (def arch (System/getProperty "os.arch"))
 (def tmp (-> "TMP"
-             (System/getenv)
+             System/getenv
              (Path/of (into-array String []))))
 
 (def repo "weavejester/cljfmt")

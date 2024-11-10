@@ -7,7 +7,7 @@
 (def arch (System/getProperty "os.arch"))
 (def os (System/getProperty "os.name"))
 (def tmp (-> "TMP"
-             (System/getenv)
+             System/getenv
              (Path/of (into-array String []))))
 
 (def base "https://github.com/clojure-lsp/clojure-lsp/releases/latest/download/clojure-lsp-native")
