@@ -539,3 +539,9 @@ codeium:
 #   install:
 #     npm:
 #       - "@volar/vue-language-server"
+
+tsp_server:
+  bin: tsp-server
+  install:
+    npm:
+      - "@typespec/compiler"
