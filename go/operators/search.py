@@ -47,12 +47,6 @@ async def _op_search(visual: VisualTypes) -> None:
 
 
 @rpc(schedule=True)
-async def _op_fzf(visual: VisualTypes) -> None:
-    text = await _hl_selected(visual)
-    await Nvim.exec(f"BLines {text}")
-
-
-@rpc(schedule=True)
 async def _op_rg(visual: VisualTypes) -> None:
     text = await _hl_selected(visual)
     escaped = escape(text).replace(r"\ ", " ")
@@ -65,11 +59,9 @@ _ = (
     << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_search.method}(vim.NIL)<cr>"
 )
 
-_ = keymap.n("gf") << f"<cmd>set opfunc={_op_fzf.method}<cr>g@"
-_ = keymap.v("gf") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_fzf.method}(vim.NIL)<cr>"
 
-_ = keymap.n("gF") << f"<cmd>set opfunc={_op_rg.method}<cr>g@"
-_ = keymap.v("gF") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_rg.method}(vim.NIL)<cr>"
+_ = keymap.n("gf") << f"<cmd>set opfunc={_op_rg.method}<cr>g@"
+_ = keymap.v("gf") << rf"<c-\><c-n><cmd>lua {NAMESPACE}.{_op_rg.method}(vim.NIL)<cr>"
 
 
 # replace selection
