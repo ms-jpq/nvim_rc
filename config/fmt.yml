@@ -208,6 +208,7 @@ prettier:
     - php
     - scss
     - typescript*
+    - typespec
     - xml
     - yaml*
   install:
@@ -215,6 +216,7 @@ prettier:
       # - prettier-plugin-awk
       - "@prettier/plugin-php"
       - "@prettier/plugin-xml"
+      - "@typespec/prettier-plugin-typespec"
       - prettier
       - prettier-plugin-nginx
       - prettier-plugin-organize-imports

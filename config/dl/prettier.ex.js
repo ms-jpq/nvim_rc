@@ -32,6 +32,8 @@ const bin = join(node_modules, ".bin", "prettier")
 const plugins = {
   [join("@prettier", "plugin-php", "standalone.js")]: /^php$/,
   [join("@prettier", "plugin-xml", "src", "plugin.js")]: /^xml$/,
+  [join("@typespec", "prettier-plugin-typespec", "dist", "index.js")]:
+    /^typespec$/,
   [join("prettier-plugin-awk", "out", "index.js")]: /^awk$/,
   [join("prettier-plugin-nginx", "dist", "index.js")]: /^nginx$/,
   [join("prettier-plugin-tailwindcss", "dist", "index.mjs")]:
