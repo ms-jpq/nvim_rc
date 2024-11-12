@@ -211,19 +211,6 @@ https://github.com/junegunn/fzf.vim:
       preview_window:
         - right:wrap
 
-https://github.com/folke/flash.nvim:
-  keys:
-    - modes: nxo
-      maps:
-        s: '<cmd>lua require("flash").jump()<cr>'
-        S: '<cmd>lua require("flash").treesitter()<cr>'
-    - modes: o
-      maps:
-        B: '<cmd>lua require("flash").remote()<cr>'
-    - modes: xo
-      maps:
-        F: '<cmd>lua require("flash").treesitter_search()<cr>'
-
 https://github.com/tpope/vim-repeat:
   mvp: *mvp
 
