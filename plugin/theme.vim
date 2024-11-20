@@ -14,3 +14,4 @@ function s:colours()
 endfunction
 
 autocmd ColorScheme * call s:colours()
+call s:colours()

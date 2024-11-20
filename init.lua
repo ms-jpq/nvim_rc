@@ -116,6 +116,12 @@ local l4 = function()
   -- dont show eob lines
   vim.opt.fillchars = [[eob: ]]
   vim.cmd("source " .. cwd .. "/plugin/theme.vim")
+
+  for _, buf in pairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_get_name(buf) == "" then
+      vim.bo[buf].buftype = "nofile"
+    end
+  end
 end
 
 local l5 = function()

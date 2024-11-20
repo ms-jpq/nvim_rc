@@ -1,8 +1,6 @@
 from os import environ
 
-from pynvim_pp.buffer import Buffer
-
-from ..registry import NAMESPACE, atomic, keymap, rpc, settings
+from ..registry import keymap, settings
 
 # Prevent macro recording
 _ = keymap.n("q") << "<nop>"
@@ -27,15 +25,3 @@ settings["wrap"] = True
 
 # no hex or binary parsing
 settings["nrformats"] = ""
-
-
-# open with scratch buffer, like emacs
-@rpc()
-async def _scratch_buffer() -> None:
-    bufs = await Buffer.list(listed=False)
-    for buf in bufs:
-        if not await buf.get_name():
-            await buf.opts.set("buftype", val="nofile")
-
-
-atomic.exec_lua(f"{NAMESPACE}.{_scratch_buffer.method}()", ())
