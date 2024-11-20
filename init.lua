@@ -7,7 +7,6 @@ local l1 = function()
   vim.opt.loadplugins = false
   vim.opt.modeline = false
   vim.opt.secure = true
-  vim.opt.termguicolors = true
   vim.g.python3_host_prog = py
 end
 
@@ -108,13 +107,23 @@ local l3 = function()
 end
 
 local l4 = function()
+  -- always show tabline
+  vim.opt.showtabline = 2
+  -- always show issues column
+  vim.opt.signcolumn = "yes"
+  -- show line count
+  vim.opt.number = true
+  -- dont show eob lines
+  vim.opt.fillchars = [[eob: ]]
+  vim.cmd("source " .. cwd .. "/plugin/theme.vim")
+end
+
+local l5 = function()
   vim.g.no_plugin_maps = 1
 
   require("clipboard")
   local man = unpack(vim.api.nvim_get_runtime_file("plugin/man.*", true))
   vim.cmd("source " .. man)
-
-  vim.cmd("source " .. cwd .. "/plugin/theme.vim")
 
   local parens =
     unpack(vim.api.nvim_get_runtime_file("plugin/matchparen.vim", true))
@@ -125,5 +134,6 @@ l1()
 l2()
 l3()
 l4()
+l5()
 
 Go = {}

@@ -10,16 +10,6 @@ settings["termguicolors"] = True
 settings["shortmess"] += "I"
 # always show status line
 settings["laststatus"] = 3
-# always show tabline
-settings["showtabline"] = 2
-
-
-# always show issues column
-settings["signcolumn"] = "yes"
-# show line count
-settings["number"] = True
-# dont show eob lines
-settings["fillchars"] = r"eob:\ "
 
 
 # keep wrapped text indent
