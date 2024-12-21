@@ -51,7 +51,7 @@ async def _fmt_output(
                     check_returncode=set(),
                 )
             except OSError as e:
-                heading = LANG("proc failed", code=-e.errno, args=arg_info)
+                heading = LANG("proc failed", code=-(e.errno or -1), args=arg_info)
                 print_out = ctx.linefeed.join((heading, str(e)))
                 return print_out
             else:
