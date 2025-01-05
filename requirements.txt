@@ -1,3 +1,3 @@
-std2@https://github.com/ms-jpq/std2/archive/d8ac12686cdf0d640aed7cee6a981b1835d1724e.tar.gz
+std2@https://github.com/ms-jpq/std2/archive/78eb4f5ef83dd0d635ed802758b6608e744ee463.tar.gz
 pynvim_pp@https://github.com/ms-jpq/pynvim_pp/archive/6d3c298b7eb9543bce7ab515b0a39f256c1d37ca.tar.gz
 PyYAML
