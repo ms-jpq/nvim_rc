@@ -270,6 +270,8 @@ ruby_lsp:
   install:
     gem:
       - ruby-lsp
+    pip:
+      - watchman
 
 sorbet:
   bin: srb
