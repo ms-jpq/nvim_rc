@@ -253,11 +253,20 @@ fortls:
     pip:
       - fortls
 
-# typeprof:
-#   bin: typeprof
+typeprof:
+  bin: typeprof
+
+steep:
+  bin: steep
+  install:
+    gem:
+      - steep
 
 ruby_lsp:
   bin: ruby-lsp
+  filetypes:
+    - rbs
+    - ruby
   install:
     gem:
       - ruby-lsp
@@ -270,6 +279,9 @@ sorbet:
 
 solargraph:
   bin: solargraph
+  filetypes:
+    - rbs
+    - ruby
   install:
     gem:
       - solargraph
@@ -298,18 +310,18 @@ prismals:
     npm:
       - "@prisma/language-server"
 
-eslint:
-  bin: vscode-eslint-language-server
-  settings:
-    run: onSave
-    rulesCustomizations:
-      - rule: "*"
-        severity: downgrade
-      - rule: prettier/*
-        severity: off
-  install:
-    npm:
-      - vscode-langservers-extracted
+# eslint:
+#   bin: vscode-eslint-language-server
+#   settings:
+#     run: onSave
+#     rulesCustomizations:
+#       - rule: "*"
+#         severity: downgrade
+#       - rule: prettier/*
+#         severity: off
+#   install:
+#     npm:
+#       - vscode-langservers-extracted
 
 # denols:
 #   bin: deno
