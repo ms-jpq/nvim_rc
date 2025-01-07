@@ -264,9 +264,6 @@ steep:
 
 ruby_lsp:
   bin: ruby-lsp
-  filetypes:
-    - rbs
-    - ruby
   install:
     gem:
       - ruby-lsp
@@ -278,12 +275,11 @@ sorbet:
   install:
     gem:
       - sorbet
+    # pip:
+    #   - watchman
 
 solargraph:
   bin: solargraph
-  filetypes:
-    - rbs
-    - ruby
   install:
     gem:
       - solargraph
