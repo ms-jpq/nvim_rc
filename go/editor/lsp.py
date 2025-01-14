@@ -24,6 +24,8 @@ _LSP_INIT = files(__package__).joinpath("lsp.lua").read_text("UTF-8")
 settings["tagfunc"] = "v:lua.vim.lsp.tagfunc"
 settings["formatexpr"] = "v:lua.vim.lsp.formatexpr()"
 
+_ = keymap.nv("gw") << "<cmd>lua vim.lsp.buf.code_action()<cr>"
+
 _ = keymap.n("gp") << "<cmd>lua vim.lsp.buf.definition()<cr>"
 _ = keymap.n("gP") << "<cmd>lua vim.lsp.buf.references()<cr>"
 
