@@ -1,7 +1,7 @@
-from .editor import auto_comp, auto_save, code_action, linter, lsp, prettier
+from .editor import auto_comp, auto_save, linter, lsp, prettier
 from .editor import search as e_search
 from .editor import whitespace
-from .modes import command, normal, poly, terminal, visual, insert
+from .modes import command, insert, normal, poly, terminal, visual
 from .operators import case, casing, move, replace, search, sort
 from .text_objects import entire, indent, line, word
 from .version_control import git
@@ -25,7 +25,6 @@ assert bm
 assert bookmarks
 assert case
 assert casing
-assert code_action
 assert command
 assert e_search
 assert entire
