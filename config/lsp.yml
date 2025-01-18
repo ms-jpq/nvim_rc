@@ -535,6 +535,7 @@ tabby_ml:
   install:
     npm:
       - tabby-agent
+
 codeium:
   bin: codeium
   args:
