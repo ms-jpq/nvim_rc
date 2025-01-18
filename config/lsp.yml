@@ -308,18 +308,18 @@ prismals:
     npm:
       - "@prisma/language-server"
 
-# eslint:
-#   bin: vscode-eslint-language-server
-#   settings:
-#     run: onSave
-#     rulesCustomizations:
-#       - rule: "*"
-#         severity: downgrade
-#       - rule: prettier/*
-#         severity: off
-#   install:
-#     npm:
-#       - vscode-langservers-extracted
+eslint:
+  bin: vscode-eslint-language-server
+  settings:
+    run: onSave
+    rulesCustomizations:
+      - rule: "*"
+        severity: downgrade
+      - rule: prettier/*
+        severity: off
+  install:
+    npm:
+      - vscode-langservers-extracted
 
 # denols:
 #   bin: deno
