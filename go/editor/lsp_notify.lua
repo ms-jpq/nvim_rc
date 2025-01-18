@@ -1,5 +1,5 @@
 (function(eol)
-  vim.validate {eol = {eol, "string"}}
+  vim.validate("eol", eol, "string")
   local method = vim.lsp.protocol.Methods.textDocument_didChange
   local buf = vim.api.nvim_get_current_buf()
   local clients = vim.lsp.get_clients({bufnr = buf, method = method})
