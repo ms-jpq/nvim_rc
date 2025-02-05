@@ -1,6 +1,6 @@
 ---
 https://github.com/ms-jpq/chadtree:
-  mvp: &mvp True
+  mvp: &mvp true
   call:
     - - rm
       - -fr
@@ -70,24 +70,27 @@ https://github.com/nvim-treesitter/nvim-treesitter:
     ts_opts:
       # ensure_installed: all
       highlight:
-        enable: True
+        enable: true
+        disable:
+          - json
+          - yaml
       incremental_selection:
-        enable: True
+        enable: true
         keymaps:
           init_selection: "+"
           node_decremental: "q"
           node_incremental: "+"
       # indent:
-      #   enable: True
+      #   enable: true
       textobjects:
         lsp_interop:
-          enable: True
+          enable: true
           peek_definition_code:
             L: "@function.outer"
             M: "@class.outer"
         select:
-          enable: True
-          lookahead: True
+          enable: true
+          lookahead: true
           keymaps:
             aa: "@parameter.outer"
             ab: "@block.outer"
@@ -106,8 +109,8 @@ https://github.com/nvim-treesitter/nvim-treesitter:
             iL: "@loop.inner"
             is: "@statement.outer"
         move:
-          enable: True
-          set_jumps: True
+          enable: true
+          set_jumps: true
           goto_next_start:
             "][": "@statement.outer"
             "]m": "@block.outer"
@@ -121,7 +124,7 @@ https://github.com/nvim-treesitter/nvim-treesitter:
             "[]": "@statement.outer"
             "[M": "@block.outer"
         swap:
-          enable: True
+          enable: true
           swap_previous:
             <leader><left>: "@statement.outer"
             <leader><up>: "@block.outer"
@@ -196,7 +199,7 @@ https://github.com/junegunn/fzf.vim:
         "<leader>P": "<cmd>Files<cr>"
     - modes: n
       opts:
-        silent: False
+        silent: false
       maps:
         "<leader>O": ":Rg "
   lua: |-
@@ -224,7 +227,7 @@ https://github.com/junegunn/vim-easy-align:
   keys:
     - modes: nv
       opts:
-        noremap: False
+        noremap: false
       maps:
         "ga": "<plug>(EasyAlign)"
 
@@ -236,8 +239,13 @@ https://github.com/cocopon/iceberg.vim:
   lua: |-
     vim.cmd [[colorscheme iceberg]]
 
-https://github.com/RRethy/vim-illuminate:
-  opt: true
+# https://github.com/RRethy/vim-illuminate:
+#   opt: true
+#   lub: |-
+#     require('illuminate').configure(vim.g.illum_opts)
+#   vals:
+#     illum_opts:
+#       filetypes_denylist: *slow
 
 # https://github.com/EdenEast/nightfox.nvim:
 #   lua: |-
@@ -253,9 +261,9 @@ https://github.com/lewis6991/gitsigns.nvim:
     end
   vals:
     git_opts:
-      current_line_blame: True
-      # show_deleted: True
-      # word_diff: True
+      current_line_blame: true
+      # show_deleted: true
+      # word_diff: true
     git_keys:
       "[s": prev_hunk
       "]s": next_hunk
@@ -280,9 +288,9 @@ https://github.com/github/copilot.vim:
   keys:
     - modes: i
       opts:
-        nowait: True
-        silent: True
-        expr: True
+        nowait: true
+        silent: true
+        expr: true
       maps:
         "<c-f>": v:lua.COQcopilot()
   lua: |-
