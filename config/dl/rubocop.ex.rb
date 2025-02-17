@@ -14,7 +14,7 @@ argv += ['--config', conf.to_s]
 
 parents.each do
   gem = _1 / 'Gemfile'
-  if gem.exist?
+  if gem.exist? && gem.read.match?(/rubocop/)
     Dir.chdir(_1)
     exec(*%w[bundle exec -- rubocop], *argv)
   end

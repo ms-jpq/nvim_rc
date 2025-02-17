@@ -226,35 +226,19 @@ prettier:
     script:
       file: prettier.dl.js
 
-ruby:
-  bin: rubyfmt
+rubocop:
+  bin: rubocop.rb
   args:
-    - -i
-    - --
-    - ${tmpname}
-  type: fs
+    - ${filename}
+    - --fail-level=fatal
+    - --stderr
+    - --stdin
+    - --format=quiet
+    - --no-color
+    - --autocorrect
+  type: stream
   filetypes:
-    - rbs
     - ruby
-  install:
-    requires:
-      - ruby
-    script:
-      file: rubyfmt.dl.rb
-
-# ruby2:
-#   bin: rubocop.rb
-#   args:
-#     - ${filename}
-#     - --fail-level=fatal
-#     - --stderr
-#     - --stdin
-#     - --format=quiet
-#     - --no-color
-#     - --autocorrect
-#   type: stream
-#   filetypes:
-#     - ruby
 
 lua:
   bin: luafmt
