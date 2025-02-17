@@ -10,18 +10,12 @@ version, stat = Open3.capture2(*%w[env -- gh-latest.sh .], repo)
 raise unless stat.success?
 
 os, arch =
-  case RUBY_PLATFORM
-  in /linux/
-    [
-      'Linux',
-      case RUBY_PLATFORM
-      in /x86_64/
-        'x86_64'
-      else
-        'aarch64'
-      end
-    ]
-  in /darwin/
+  case [RUBY_PLATFORM, RUBY_PLATFORM]
+  in [/linux/, /x86_64/]
+    %w[Linux x86_64]
+  in [/linux/, /arm64/]
+    %w[Linux aarch64]
+  in [/darwin/, _]
     %w[Darwin arm64]
   else
     exit
