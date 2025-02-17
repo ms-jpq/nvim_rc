@@ -12,13 +12,15 @@ raise unless stat.success?
 os, arch =
   case RUBY_PLATFORM
   in /linux/
-    arch = case RUBY_PLATFORM
-           in /x86_64/
-             'x86_64'
-           else
-             'aarch64'
-           end
-    ['Linux', arch]
+    [
+      'Linux',
+      case RUBY_PLATFORM
+      in /x86_64/
+        'x86_64'
+      else
+        'aarch64'
+      end
+    ]
   in /darwin/
     %w[Darwin arm64]
   else
