@@ -35,6 +35,7 @@ https://github.com/ms-jpq/coq_nvim:
       auto_start: true
       display:
         statusline.helo: false
+        mark_applied_notify: false
       clients:
         registers.lines: ["z"]
         snippets.user_path: |-
