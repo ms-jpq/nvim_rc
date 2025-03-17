@@ -1,1 +1,1 @@
-vim.b.did_ftplugin = 1
+mail.lua
