@@ -267,16 +267,16 @@ ruby_lsp:
   install:
     gem:
       - ruby-lsp
-    pip:
-      - watchman
+    requires:
+      - ruby
+    script:
+      file: watchman.dl.rb
 
 sorbet:
   bin: srb
   install:
     gem:
       - sorbet
-    # pip:
-    #   - watchman
 
 solargraph:
   bin: solargraph

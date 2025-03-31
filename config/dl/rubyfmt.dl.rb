@@ -1,5 +1,6 @@
 #!/usr/bin/env -S -- ruby
 # frozen_string_literal: true
+# typed: strong
 
 require('fileutils')
 require('open3')
