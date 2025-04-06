@@ -6,6 +6,11 @@ from pynvim_pp.operators import VisualTypes, operator_marks
 from ..registry import NAMESPACE, keymap, rpc
 
 
+def _strxfrm_l(key: str) -> tuple[str, str]:
+    x = strxfrm(key)
+    return (x.casefold(), x)
+
+
 @rpc()
 async def _sort_lines(visual: VisualTypes) -> None:
     buf = await Buffer.get_current()
@@ -14,7 +19,7 @@ async def _sort_lines(visual: VisualTypes) -> None:
     else:
         (row1, _), (row2, _) = await operator_marks(buf, visual_type=visual)
         lines = await buf.get_lines(lo=row1, hi=row2 + 1)
-        new_lines = sorted(lines, key=strxfrm)
+        new_lines = sorted(lines, key=_strxfrm_l)
         await buf.set_lines(lo=row1, hi=row2 + 1, lines=new_lines)
 
 
