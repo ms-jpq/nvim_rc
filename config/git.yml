@@ -38,6 +38,8 @@ https://github.com/ms-jpq/coq_nvim:
         mark_applied_notify: false
       clients:
         registers.lines: ["z"]
+        lsp.ignored_servers:
+          - tabby_ml
         snippets.user_path: |-
           ~/.config/nvim/pack/modules/start/snips
       keymap:

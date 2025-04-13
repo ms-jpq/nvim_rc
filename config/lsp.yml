@@ -253,8 +253,11 @@ fortls:
     pip:
       - fortls
 
-# typeprof:
-#   bin: typeprof
+typeprof:
+  bin: typeprof
+  install:
+    gem:
+      - typeprof
 
 # steep:
 #   bin: steep

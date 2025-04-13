@@ -11,7 +11,7 @@ bin = Pathname(dst).parent
 
 case [RUBY_PLATFORM, RUBY_PLATFORM]
 in [/linux/, /x86_64/]
-  argv = %w[sudo -- apt install --no-install-recommends -- yes -- watchman]
+  argv = %w[sudo -- apt install --no-install-recommends --yes -- watchman]
   system(*argv, exception: true)
 in [/darwin/, _]
   exit
