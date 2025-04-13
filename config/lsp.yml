@@ -256,11 +256,11 @@ fortls:
 # typeprof:
 #   bin: typeprof
 
-steep:
-  bin: steep
-  install:
-    gem:
-      - steep
+# steep:
+#   bin: steep
+#   install:
+#     gem:
+#       - steep
 
 ruby_lsp:
   bin: ruby-lsp
