@@ -16,6 +16,8 @@ in [/linux/, /x86_64/]
 in [/darwin/, _]
   exit
 else
+  exit
+
   uri = 'https://github.com/facebook/watchman/releases/download/v2025.02.24.00/watchman-v2025.02.24.00-windows.zip'
   stats = Open3.pipeline(['env', '--', 'get.sh', uri], ['env', '--', 'unpack.sh', tmp])
 

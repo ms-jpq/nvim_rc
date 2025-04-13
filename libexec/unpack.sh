@@ -51,7 +51,7 @@ case "$FMT" in
   ;;
 esac
 
-tee <<- EOF
+tee >&2 <<- EOF
 $SRC
 -> -> ->
 $DST
