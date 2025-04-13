@@ -21,7 +21,7 @@ else
 
   raise unless stats.all?(&:success?)
 
-  Pathname.glob("#{tmp}/*/bin/*").each do
+  Pathname.glob("#{tmp}/bin/*").each do
     FileUtils.mv(_1, bin / _1.basename, verbose: true)
   end
 end
