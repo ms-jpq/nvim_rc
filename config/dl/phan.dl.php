@@ -1,6 +1,8 @@
 #!/usr/bin/env -S -- php
 
 <?php
+declare(strict_types=1);
+
 $uri = "https://github.com/phan/phan/releases/latest/download/phan.phar";
 
 $lib = getenv("LIB");

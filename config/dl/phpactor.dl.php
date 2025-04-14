@@ -1,6 +1,8 @@
 #!/usr/bin/env -S -- php
 
 <?php
+declare(strict_types=1);
+
 $uri =
   "https://github.com/phpactor/phpactor/releases/latest/download/phpactor.phar";
 

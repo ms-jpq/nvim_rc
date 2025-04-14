@@ -1,6 +1,8 @@
 #!/usr/bin/env -S -- php
 
 <?php
+declare(strict_types=1);
+
 $dir = dirname(__FILE__);
 $prefix = [
   "php",
