@@ -1,5 +1,4 @@
 #!/usr/bin/env -S -- php
-
 <?php
 declare(strict_types=1);
 
@@ -15,7 +14,9 @@ exec(join(" ", array_map("escapeshellarg", ["get.sh", $uri])), $output, $code);
 assert($code === 0, join(PHP_EOL, $output));
 $file = join(PHP_EOL, $output);
 
-assert(mkdir($lib, 0755, true));
+if (!is_dir($lib)) {
+  assert(mkdir($lib, 0755, true));
+}
 
 $basename = basename($file);
 assert(copy($file, "$lib/$basename"));
