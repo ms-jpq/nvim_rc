@@ -204,11 +204,13 @@ https://github.com/junegunn/fzf.vim:
       opts:
         silent: false
       maps:
-        "<leader>O": ":Rg "
+        "<leader>O": ":RG "
   lua: |-
     local fzf_opts = vim.env.FZF_DEFAULT_OPTS or ""
     local new_opts = fzf_opts .. " --no-border"
     vim.env.FZF_DEFAULT_OPTS = new_opts
+  lub: |-
+    vim.cmd [[command! -bang -nargs=* RG call fzf#vim#grep2("rg --fixed-strings --column --line-number --no-heading --color=always --smart-case -- ", <q-args>, fzf#vim#with_preview(), <bang>0)]]
   vals:
     fzf_layout:
       window:
