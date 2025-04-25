@@ -204,7 +204,7 @@ https://github.com/junegunn/fzf.vim:
       opts:
         silent: false
       maps:
-        "<leader>O": ":RG "
+        "<leader>O": "<cmd>RG<cr>"
   lua: |-
     local fzf_opts = vim.env.FZF_DEFAULT_OPTS or ""
     local new_opts = fzf_opts .. " --no-border"
