@@ -406,8 +406,10 @@ async def maybe_install() -> None:
             answers=LANG("ask yes/no"),
             answer_key={1: 1, 2: 2},
         )
-        if ans:
-            UPDATE_LOG.write_text(str(time()))
+    else:
+        ans = 0
 
-        if ans == 1:
-            await open_term("make", "--directory", TOP_LEVEL, "patch")
+    UPDATE_LOG.write_text(str(time()))
+    if ans == 1:
+        await open_term("make", "--directory", TOP_LEVEL, "patch")
+
