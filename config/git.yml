@@ -218,6 +218,7 @@ https://github.com/junegunn/fzf.vim:
         width: 0.96
     fzf_vim:
       buffers_jump: true
+      grep_multi_line: 2
       preview_window:
         - right:wrap
 
