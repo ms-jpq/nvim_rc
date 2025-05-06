@@ -250,13 +250,15 @@ https://github.com/ggandor/leap.nvim:
   lub: |-
     require('leap').set_default_mappings()
 
-# https://github.com/RRethy/vim-illuminate:
-#   opt: true
-#   lub: |-
-#     require('illuminate').configure(vim.g.illum_opts)
-#   vals:
-#     illum_opts:
-#       filetypes_denylist: *slow
+https://github.com/RRethy/vim-illuminate:
+  opt: true
+  lub: |-
+    require('illuminate').configure(vim.g.illum_opts)
+  vals:
+    illum_opts:
+      filetypes_denylist:
+        - json
+        - yaml
 
 # https://github.com/EdenEast/nightfox.nvim:
 #   lua: |-
