@@ -245,6 +245,11 @@ https://github.com/cocopon/iceberg.vim:
   lua: |-
     vim.cmd [[colorscheme iceberg]]
 
+https://github.com/ggandor/leap.nvim:
+  mvp: *mvp
+  lub: |-
+    require('leap').set_default_mappings()
+
 # https://github.com/RRethy/vim-illuminate:
 #   opt: true
 #   lub: |-
