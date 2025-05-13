@@ -260,7 +260,7 @@ golangci_lint_ls:
     requires:
       - go
     script:
-      file: golangci.go
+      file: golangci_lsp.go
 
 sourcekit:
   bin: sourcekit-lsp

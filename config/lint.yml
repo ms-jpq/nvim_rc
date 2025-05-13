@@ -86,7 +86,7 @@ hadolint:
     script:
       file: hadolint.sh
 
-golint:
+golangci-lint:
   args:
     - run
     - --enable-all
@@ -99,7 +99,7 @@ golint:
     requires:
       - jq
     script:
-      file: golint.go
+      file: golangci-lint.go
 
 rubocop.rb:
   args:
