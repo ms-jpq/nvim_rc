@@ -160,6 +160,12 @@ awk_ls:
 #     npm:
 #       - awk-language-server
 
+systemd_ls:
+  bin: systemd-language-server
+  install:
+    pip:
+      - systemd-language-server
+
 perlnavigator:
   bin: perlnavigator
   install:
@@ -319,7 +325,7 @@ eslint:
       - rule: "*"
         severity: downgrade
       - rule: prettier/*
-        severity: off
+        severity: info
   install:
     npm:
       - vscode-langservers-extracted
