@@ -99,7 +99,7 @@ golint:
     requires:
       - jq
     script:
-      file: golint.sh
+      file: golint.go
 
 rubocop.rb:
   args:
