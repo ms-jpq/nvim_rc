@@ -145,6 +145,8 @@ htmlhint:
 
 phan:
   args:
+    - --allow-polyfill-parser
+    - --
     - ${tmpname}
   type: fs
   filetypes:
