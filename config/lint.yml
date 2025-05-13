@@ -143,10 +143,27 @@ htmlhint:
     npm:
       - htmlhint
 
+phpstan:
+  args:
+    - analyse
+    - --no-progress
+    - --
+    - ${tmpname}
+  type: fs
+  filetypes:
+    - php
+  install:
+    requires:
+      - php
+    script:
+      file: phpstan.dl.php
+
 phan:
   args:
     - --allow-polyfill-parser
-    - --
+    - --no-progress-bar
+    - --strict-type-checking
+    - --analyze-twice
     - ${tmpname}
   type: fs
   filetypes:
