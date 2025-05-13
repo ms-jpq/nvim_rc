@@ -21,6 +21,7 @@
       end
 
       vim.lsp.config(server, cfg)
+      vim.lsp.enable(server)
     end
   )
   if err then
