@@ -97,9 +97,9 @@ golangci-lint:
     - go
   install:
     requires:
-      - jq
+      - go
     script:
-      file: golangci-lint.go
+      file: golangci_lint.go
 
 rubocop.rb:
   args:
