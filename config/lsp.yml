@@ -32,6 +32,12 @@ typos_lsp:
     script:
       file: typos_ls.sh
 
+harper_ls:
+  bin: harper-ls
+  install:
+    script:
+      file: harper_ls.sh
+
 lemminx:
   bin: lemminx
   args: []

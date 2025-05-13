@@ -6,12 +6,12 @@
         _G[ns][attach_fn](server)
       end
 
-      if root_cfg ~= vim.NIL then
-        cfg.root_dir = function(filename, bufnr)
-          local root = _G[ns][root_fn](root_cfg, filename, bufnr)
-          return root ~= vim.NIL and root or nil
-        end
-      end
+      -- if root_cfg ~= vim.NIL then
+      --   cfg.root_dir = function(filename, bufnr)
+      --     local root = _G[ns][root_fn](root_cfg, filename, bufnr)
+      --     return root ~= vim.NIL and root or nil
+      --   end
+      -- end
 
       if coq ~= nil then
         cfg = coq.lsp_ensure_capabilities(cfg)
