@@ -400,6 +400,7 @@ phan:
   bin: phan
   install:
     requires:
+      - composer
       - php
     script:
       file: phan.dl.php

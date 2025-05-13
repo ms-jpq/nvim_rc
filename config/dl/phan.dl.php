@@ -2,19 +2,38 @@
 <?php
 declare(strict_types=1);
 
-$uri = "https://github.com/phan/phan/releases/latest/download/phan.phar";
-
 $bin = getenv("BIN");
-assert($bin);
+$lib = getenv("LIB");
+assert($bin && $lib);
+
+mkdir($lib, 0755, true);
 
 $output = [];
 $code = -1;
-exec(join(" ", array_map("escapeshellarg", ["get.sh", $uri])), $output, $code);
+exec(
+  join(
+    " ",
+    array_map("escapeshellarg", [
+      "composer",
+      "--no-interaction",
+      "--no-plugins",
+      "--working-dir",
+      $lib,
+      "require",
+      "--update-no-dev",
+      "--",
+      "phan/phan",
+    ])
+  ),
+  $output,
+  $code
+);
 assert($code === 0, join(PHP_EOL, $output));
-$file = join(PHP_EOL, $output);
 
-assert(copy($file, $bin));
-assert(chmod($bin, 0755));
+if (file_exists($bin)) {
+  unlink($bin);
+}
+assert(symlink(join("/", [$lib, "vendor", "bin", "phan"]), $bin));
 
 
 ?>
