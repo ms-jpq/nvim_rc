@@ -8,22 +8,30 @@ assert($bin && $lib);
 
 mkdir($lib, 0755, true);
 
+$composer = [
+  "composer",
+  "--no-interaction",
+  "--no-plugins",
+  "--working-dir",
+  $lib,
+];
+
 $output = [];
 $code = -1;
 exec(
   join(
     " ",
-    array_map("escapeshellarg", [
-      "composer",
-      "--no-interaction",
-      "--no-plugins",
-      "--working-dir",
-      $lib,
-      "require",
-      "--update-no-dev",
-      "--",
-      "phan/phan",
-    ])
+    array_map("escapeshellarg", [...$composer, "require", "--", "phan/phan"])
+  ),
+  $output,
+  $code
+);
+assert($code === 0, join(PHP_EOL, $output));
+
+exec(
+  join(
+    " ",
+    array_map("escapeshellarg", [...$composer, "update", "--", "phan/phan"])
   ),
   $output,
   $code
