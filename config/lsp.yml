@@ -1,4 +1,10 @@
 ---
+ds_pinyin_lsp:
+  bin: ds-pinyin-lsp
+  install:
+    script:
+      file: pinyin_lsp.sh
+
 jsonls:
   bin: vscode-json-language-server
   install:
@@ -77,6 +83,12 @@ ltex:
   install:
     script:
       file: ltex.sh
+
+ltex_plus:
+  bin: ltex-ls-plus
+  install:
+    script:
+      file: ltex_plus.sh
 
 texlab:
   bin: texlab
@@ -562,11 +574,29 @@ cobol_ls:
     script:
       file: cobol_ls.cob
 
+nginx_language_server:
+  bin: nginx-language-server
+  install:
+    pip:
+      - nginx-language-server
+
+lsp_ai:
+  bin: lsp-ai
+  install:
+    script:
+      file: lsp_ai.dl.sh
+
 tabby_ml:
   bin: tabby-agent
   install:
     npm:
       - tabby-agent
+
+gh_actions_ls:
+  bin: gh-actions-language-server
+  install:
+    npm:
+      - gh-actions-language-server
 
 codeium:
   bin: codeium
