@@ -12,7 +12,7 @@ linux*)
   URI="$BASE-$HOSTTYPE-unknown-linux-gnu.tar.gz"
   ;;
 *)
-  URI="$BASE-$HOSTTYPE-pc-windows-msvc.tar.zip"
+  URI="$BASE-$HOSTTYPE-pc-windows-msvc.zip"
   BIN="$BIN.exe"
   ;;
 esac
