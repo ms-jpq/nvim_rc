@@ -39,6 +39,7 @@ https://github.com/ms-jpq/coq_nvim:
       clients:
         registers.lines: ["z"]
         lsp.ignored_servers:
+          - copilot
           - tabby_ml
         snippets.user_path: |-
           ~/.config/nvim/pack/modules/start/snips
@@ -307,8 +308,9 @@ https://github.com/github/copilot.vim:
       maps:
         "<c-f>": v:lua.COQcopilot()
   lua: |-
-    vim.g.copilot_no_maps = true
     vim.g.copilot_assume_mapped = true
+    vim.g.copilot_hide_during_completion = false
+    vim.g.copilot_no_maps = true
   lub: |-
     COQcopilot = function()
       local esc_pum =
