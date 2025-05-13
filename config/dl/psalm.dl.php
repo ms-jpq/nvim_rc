@@ -16,4 +16,5 @@ $file = join(PHP_EOL, $output);
 assert(copy($file, $bin));
 assert(chmod($bin, 0755));
 
+
 ?>
