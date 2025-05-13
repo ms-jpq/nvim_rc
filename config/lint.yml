@@ -143,17 +143,12 @@ htmlhint:
     npm:
       - htmlhint
 
-phan.php:
+phan:
   args:
     - ${tmpname}
   type: fs
   filetypes:
     - php
-  install:
-    requires:
-      - php
-    script:
-      file: phan.dl.php
 
 lint-openapi:
   args:

@@ -396,6 +396,22 @@ julials:
     script:
       file: julia_ls.dl.jl
 
+phan:
+  bin: phan
+  install:
+    requires:
+      - php
+    script:
+      file: phan.dl.php
+
+psalm:
+  bin: psalm
+  install:
+    requires:
+      - php
+    script:
+      file: psalm.dl.php
+
 phpactor:
   bin: phpactor
   install:
