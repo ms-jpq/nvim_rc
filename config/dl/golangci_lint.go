@@ -47,8 +47,8 @@ func main() {
 
 	uri := fmt.Sprintf("%s-%s-%s-%s.%s", base, version, runtime.GOOS, runtime.GOARCH, ext)
 
-	get := exec.Command("get.sh", uri)
-	unpack := exec.Command("unpack.sh", tmp)
+	get := exec.Command("env", "--", "get.sh", uri)
+	unpack := exec.Command("env", "--", "unpack.sh", tmp)
 	get.Stderr = os.Stderr
 	unpack.Stderr = os.Stderr
 	r, w := io.Pipe()
