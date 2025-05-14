@@ -5,19 +5,14 @@ from pathlib import Path
 from typing import Any, Mapping, MutableMapping, Optional
 
 from pynvim_pp.handler import GLOBAL_NS
-from pynvim_pp.lib import decode, encode
 from pynvim_pp.nvim import Nvim
-from pynvim_pp.text_object import gen_split
-from pynvim_pp.types import NoneType
-from pynvim_pp.window import Window
 from std2.pickle.decoder import new_decoder
 from std2.pickle.encoder import new_encoder
 from std2.types import never
 
 from ..config.install import which
 from ..config.lsp import LspAttrs, RootPattern, RPFallback, lsp_specs
-from ..registry import LANG, NAMESPACE, atomic, autocmd, keymap, rpc, settings
-from ..text_objects.word import UNIFIYING_CHARS
+from ..registry import atomic, autocmd, keymap, rpc, settings
 
 _LSP_INIT = files(__package__).joinpath("lsp.lua").read_text("UTF-8")
 
@@ -30,21 +25,12 @@ _ = keymap.n("gp") << "<cmd>lua vim.lsp.buf.definition()<cr>"
 _ = keymap.n("gP") << "<cmd>lua vim.lsp.buf.references()<cr>"
 
 _ = keymap.n("H") << "<cmd>lua vim.diagnostic.open_float()<cr>"
+_ = keymap.n("R") << "<cmd>lua vim.diagnostic.setqflist()<cr>"
 
-_ = keymap.n("gm") << "<cmd>lua vim.lsp.buf.document_symbol()<cr>"
-_ = keymap.n("gM") << "<cmd>lua vim.lsp.buf.workspace_symbol()<cr>"
+_ = keymap.n("gm") << "<cmd>lua vim.lsp.buf.workspace_symbol()<cr>"
 
 _ = keymap.n("<leader>j") << "<cmd>lua vim.diagnostic.setloclist()<cr>"
 _ = keymap.n("<leader>J") << "<cmd>lua vim.diagnostic.setqflist()<cr>"
-
-_ = (
-    keymap.n("<c-p>")
-    << "<cmd>lua vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR }<cr>"
-)
-_ = (
-    keymap.n("<c-n>")
-    << "<cmd>lua vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR }<cr>"
-)
 
 
 # _ = keymap.n("<leader>z") << "<cmd>LspRestart<cr>"
@@ -61,24 +47,6 @@ _ = (
     autocmd("CursorMoved", modifiers=("<buffer>"))
     << "silent! lua vim.lsp.buf.clear_references()"
 )
-
-
-@rpc()
-async def _rename() -> None:
-    win = await Window.get_current()
-    buf = await win.get_buf()
-    row, col = await win.get_cursor()
-    line, *_ = await buf.get_lines(lo=row, hi=row + 1)
-
-    b_line = encode(line)
-    lhs, rhs = decode(b_line[:col]), decode(b_line[col:])
-    split = gen_split(lhs=lhs, rhs=rhs, unifying_chars=UNIFIYING_CHARS)
-    word = split.word_lhs + split.word_rhs
-    if ans := await Nvim.input(question=LANG("rename: "), default=word):
-        await Nvim.lua.vim.lsp.buf.rename(NoneType, ans)
-
-
-_ = keymap.n("R") << f"<cmd>lua {NAMESPACE}.{_rename.method}()<cr>"
 
 
 _DECODER = new_decoder[Optional[RootPattern]](Optional[RootPattern])
