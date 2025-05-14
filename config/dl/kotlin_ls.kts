@@ -36,7 +36,11 @@ val procs =
                 .redirectError(Redirect.INHERIT)))
 
 for (proc in procs) {
-  assert(proc.waitFor() == 0)
+  val code = proc.waitFor()
+  if (code != 0) {
+      System.exit(code)
+  }
+
   assert(!proc.isAlive())
 }
 

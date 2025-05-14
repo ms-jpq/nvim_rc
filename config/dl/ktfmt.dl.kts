@@ -26,8 +26,11 @@ val version =
 
 val jar = root.resolve("$version/ktfmt-$version-jar-with-dependencies.jar").toString()
 val proc = ProcessBuilder("env", "--", "get.sh", jar).redirectError(Redirect.INHERIT).start()
+val code = proc.waitFor()
 
-assert(proc.waitFor() == 0)
+if (code != 0) {
+    System.exit(code)
+}
 
 val file = Path(String(proc.getInputStream().readAllBytes()))
 
