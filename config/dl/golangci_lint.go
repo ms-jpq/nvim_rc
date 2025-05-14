@@ -37,7 +37,7 @@ func main() {
 		log.Panicln()
 	}
 
-	cmd := exec.Command("gh-latest.sh", ".", repo)
+	cmd := exec.Command("env", "--", "gh-latest.sh", ".", repo)
 	cmd.Stderr = os.Stderr
 	output, err := cmd.Output()
 	if err != nil {
