@@ -303,7 +303,7 @@ sorbet:
   bin: srb
   install:
     gem:
-      - sorbet
+      - sorbet-static
 
 solargraph:
   bin: solargraph
