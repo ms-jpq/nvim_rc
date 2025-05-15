@@ -78,11 +78,11 @@ markdown:
     npm:
       - vscode-markdown-languageservice
 
-ltex:
-  bin: ltex-ls
-  install:
-    script:
-      file: ltex.sh
+# ltex:
+#   bin: ltex-ls
+#   install:
+#     script:
+#       file: ltex.sh
 
 ltex_plus:
   bin: ltex-ls-plus
