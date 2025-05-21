@@ -617,11 +617,11 @@ tabby_ml:
     npm:
       - tabby-agent
 
-gh_actions_ls:
-  bin: gh-actions-language-server
-  install:
-    npm:
-      - gh-actions-language-server
+# gh_actions_ls:
+#   bin: gh-actions-language-server
+#   install:
+#     npm:
+#       - gh-actions-language-server
 
 # volar:
 #   bin: vue-language-server
