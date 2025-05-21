@@ -52,7 +52,7 @@ local l3 = function()
   end
 
   local on_stdout = function(_, msg)
-    vim.api.nvim_out_write(table.concat(msg, linesep))
+    vim.api.nvim_echo({{table.concat(msg, linesep)}}, true, {})
   end
 
   local on_stderr = function(_, msg)
