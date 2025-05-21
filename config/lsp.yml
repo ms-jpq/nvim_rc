@@ -623,15 +623,6 @@ gh_actions_ls:
     npm:
       - gh-actions-language-server
 
-codeium:
-  bin: codeium
-  args:
-    - --api_server_url=https://server.codeium.com:443
-  filetypes:
-    - markdown
-  # install:
-  #   script:
-  #     file: codeium.sh
 # volar:
 #   bin: vue-language-server
 #   install:
