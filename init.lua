@@ -47,7 +47,7 @@ local l3 = function()
 
   local on_exit = function(_, code)
     if code ~= 143 then
-      vim.api.nvim_err_writeln("EXITED - " .. code)
+      vim.api.nvim_echo({{"EXITED - " .. code, "ErrorMsg"}}, true, {})
     end
   end
 
