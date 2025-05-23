@@ -472,6 +472,14 @@ clojure_lsp:
 #     script:
 #       file: gradle_ls.java
 
+kotlin_lsp:
+  bin: kotlin-lsp
+  install:
+    requires:
+      - kotlinc
+    script:
+      file: kotlin_lsp.kts
+
 kotlin_language_server:
   bin: kotlin-language-server
   install:
