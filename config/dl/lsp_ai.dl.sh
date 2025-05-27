@@ -15,6 +15,7 @@ linux*)
   ;;
 *)
   URI="$BASE-$HOSTTYPE-pc-windows-msvc.zip"
+  DST="$DST.exe"
   BIN="$BIN.exe"
   ;;
 esac
@@ -24,7 +25,17 @@ get.sh "$URI" | unpack.sh "$TMP"
 
 rm -rf -- "$LIB"
 mkdir -p -- "$LIB"
-mv -v -f -- "$TMP"/* "$DST"
+
+case "$OSTYPE" in
+darwin* | linux*)
+  SRC=("$TMP"/*)
+  ;;
+*)
+  SRC=("$TMP/lsp-ai.exe")
+  ;;
+esac
+
+mv -v -f -- "${SRC[@]}" "$DST"
 chmod +x "$DST"
 
-ln -v -snf -- "$(dirname -- "$0")/lsp-ai" "$BIN"
+ln -v -snf -- "$(dirname -- "$0")/lsp_ai.ex.sh" "$BIN"
