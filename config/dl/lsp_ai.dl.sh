@@ -2,6 +2,8 @@
 
 set -o pipefail
 
+# shellcheck disable=SC2154
+DST="$LIB/lsp-ai"
 BASE='https://github.com/SilasMarvin/lsp-ai/releases/latest/download/lsp-ai'
 
 case "$OSTYPE" in
@@ -19,6 +21,10 @@ esac
 
 # shellcheck disable=SC2154
 get.sh "$URI" | unpack.sh "$TMP"
-# shellcheck disable=2154
 
-install -v -b -- "$TMP/lsp-ai"* "$BIN"
+rm -rf -- "$LIB"
+mkdir -p -- "$LIB"
+mv -v -f -- "$TMP"/* "$DST"
+chmod +x "$DST"
+
+ln -v -snf -- "$(dirname -- "$0")/lsp-ai" "$BIN"
