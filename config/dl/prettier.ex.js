@@ -30,7 +30,6 @@ const node_modules = join(
 const bin = join(node_modules, ".bin", "prettier")
 
 const plugins = {
-  [join("@prettier", "plugin-php", "standalone.js")]: /^php$/,
   [join("@prettier", "plugin-xml", "src", "plugin.js")]: /^xml$/,
   [join("@typespec", "prettier-plugin-typespec", "dist", "index.js")]:
     /^typespec$/,

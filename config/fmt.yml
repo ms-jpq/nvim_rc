@@ -205,7 +205,6 @@ prettier:
     - liquid
     - markdown
     - nginx
-    - php
     - scss
     - typescript*
     - typespec
@@ -214,7 +213,6 @@ prettier:
   install:
     npm:
       # - prettier-plugin-awk
-      - "@prettier/plugin-php"
       - "@prettier/plugin-xml"
       - "@typespec/prettier-plugin-typespec"
       - prettier
@@ -239,6 +237,22 @@ rubocop:
   type: stream
   filetypes:
     - ruby
+
+php_cs_fixer:
+  bin: php-cs-fixer
+  args:
+    - --no-interaction
+    - fix
+    - --
+    - ${tmpname}
+  type: fs
+  filetypes:
+    - php
+  install:
+    requires:
+      - php
+    script:
+      file: php_cs_fixer.php
 
 lua:
   bin: luafmt
