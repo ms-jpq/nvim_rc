@@ -1,5 +1,6 @@
 #!/usr/bin/env -S -- php
 <?php
+
 declare(strict_types=1);
 
 $uri = "https://github.com/vimeo/psalm/releases/latest/download/psalm.phar";
@@ -15,6 +16,3 @@ $file = join(PHP_EOL, $output);
 
 assert(copy($file, $bin));
 assert(chmod($bin, 0755));
-
-
-?>

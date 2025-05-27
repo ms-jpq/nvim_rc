@@ -1,5 +1,6 @@
 #!/usr/bin/env -S -- php
 <?php
+
 declare(strict_types=1);
 
 $uri =
@@ -16,6 +17,3 @@ $file = join(PHP_EOL, $output);
 
 assert(copy($file, $bin));
 assert(chmod($bin, 0755));
-
-
-?>
