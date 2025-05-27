@@ -7,8 +7,10 @@ import kotlin.io.path.deleteIfExists
 val lib = Path(System.getenv("LIB")!!)
 val sh = lib.resolve("kotlin-lsp.sh")
 val bin = Path(System.getenv("BIN")!!)
-
 val uri = "https://download-cdn.jetbrains.com/kotlin-lsp/0.252.16998/kotlin-0.252.16998.zip"
+
+lib.toFile().mkdirs()
+
 val procs =
     ProcessBuilder.startPipeline(
         listOf(
