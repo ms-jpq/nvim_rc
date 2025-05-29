@@ -11,7 +11,7 @@ async def _word(is_inside: bool) -> None:
     win = await Window.get_current()
     buf = await win.get_buf()
     kw = await buf.opts.get(str, "iskeyword")
-    keywords = keywordset(kw)
+    keywords = keywordset(kw) | {"-"}
 
     row, col = await win.get_cursor()
     line, *_ = await buf.get_lines(lo=row, hi=row + 1)
