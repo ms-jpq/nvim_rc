@@ -2,9 +2,9 @@
 
 set -o pipefail
 
-set +a
+set -a
 # shellcheck disable=SC1091
 source -- "$HOME/.local/opt/ai/.env"
-set -a
+set +a
 
-exec -- "$(dirname -- "$0")/../lib/lsp_ai/lsp_ai" "$@"
+exec -- "$(dirname -- "$0")/../lib/lsp-ai/lsp-ai" "$@"
