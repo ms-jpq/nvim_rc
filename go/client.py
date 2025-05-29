@@ -1,4 +1,4 @@
-from asyncio import gather, wrap_future
+from asyncio import create_task, gather, wrap_future
 from concurrent.futures import Future
 from contextlib import AbstractAsyncContextManager
 from operator import attrgetter
@@ -18,7 +18,7 @@ from std2.sys import autodie
 from ._registry import ____
 from .components.install import maybe_install
 from .components.rtp import inst_later
-from .registry import NAMESPACE, autocmd, drain, rpc
+from .registry import NAMESPACE, autocmd, background, drain, rpc
 from .workspace.session import restore
 
 assert ____ or 1
@@ -65,6 +65,8 @@ async def init(socket: ServerAddr, ppid: int) -> None:
                 t1 = int(environ["_VIM_START_TIME"])
                 t2 = time()
                 span = si_prefixed_smol(t2 - t1)
-                log.warn("%s", f"{span}s")
+                log.warning("%s", f"{span}s")
+
+            await gather(*background())
 
     await gather(wrap_future(die), cont())

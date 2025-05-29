@@ -66,7 +66,7 @@ async def _save_session() -> None:
     _CELL.val = create_task(cont())
 
 
-_ = autocmd("CursorHold") << f"lua {NAMESPACE}.{_save_session.method}()"
+_ = autocmd("CursorHold", "FocusLost") << f"lua {NAMESPACE}.{_save_session.method}()"
 
 
 @rpc()

@@ -1,4 +1,4 @@
-from collections.abc import Mapping
+from collections.abc import Awaitable, Iterator, Mapping, MutableSequence
 
 from pynvim_pp.atomic import Atomic
 from pynvim_pp.autocmd import AutoCMD
@@ -19,6 +19,7 @@ autocmd = AutoCMD()
 keymap = Keymap()
 rpc = RPC(NAMESPACE)
 settings = Settings()
+tasks: MutableSequence[Awaitable[None]] = []
 
 
 def drain() -> tuple[Atomic, Mapping[Method, RPCallable[None]]]:
@@ -33,3 +34,8 @@ def drain() -> tuple[Atomic, Mapping[Method, RPCallable[None]]]:
     a3 = keymap.drain(buf=None)
     a4 = autocmd.drain()
     return _atomic + a0 + a1 + a2 + a3 + a4 + atomic, s0
+
+
+def background() -> Iterator[Awaitable[None]]:
+    yield from tasks
+    tasks.clear()

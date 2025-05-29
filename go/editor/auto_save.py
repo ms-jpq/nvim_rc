@@ -1,7 +1,13 @@
-from pynvim_pp.buffer import Buffer
-from pynvim_pp.nvim import Nvim
+from asyncio import sleep
+from collections.abc import Mapping
+from typing import cast
 
-from ..registry import NAMESPACE, autocmd, keymap, rpc, settings
+from pynvim_pp.buffer import Buffer
+from pynvim_pp.logging import suppress_and_log
+from pynvim_pp.nvim import Nvim
+from pynvim_pp.types import NoneType
+
+from ..registry import NAMESPACE, autocmd, keymap, rpc, settings, tasks
 
 # auto save file
 settings["autowrite"] = True
@@ -16,7 +22,7 @@ _ = autocmd("FocusGained", "VimResume", "WinEnter") << "silent! checktime"
 
 
 @rpc()
-async def _auto_save(local: bool) -> None:
+async def _check_time(local: bool) -> None:
     if local:
         buf = await Buffer.get_current()
         if await buf.get_name():
@@ -28,10 +34,27 @@ async def _auto_save(local: bool) -> None:
 
 _ = (
     autocmd("BufLeave", "FocusLost", "VimLeavePre")
-    << f"lua {NAMESPACE}.{_auto_save.method}(false)"
+    << f"lua {NAMESPACE}.{_check_time.method}(false)"
 )
 
-_ = autocmd("CursorHold", "CursorHoldI") << f"lua {NAMESPACE}.{_auto_save.method}(true)"
+_ = (
+    autocmd("CursorHold", "CursorHoldI")
+    << f"lua {NAMESPACE}.{_check_time.method}(true)"
+)
+
+
+async def _check_times() -> None:
+    while True:
+        await sleep(1.0)
+        with suppress_and_log():
+            info = cast(Mapping[str, str], await Nvim.api.get_mode(NoneType))
+            mode = info["mode"]
+
+            if not mode.startswith("i"):
+                await _check_time(local=True)
+
+
+tasks.append(_check_times())
 
 # persistent undo
 settings["undofile"] = True

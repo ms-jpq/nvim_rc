@@ -14,7 +14,7 @@ from ..registry import NAMESPACE, autocmd, rpc, settings
 settings["nojoinspaces"] = True
 
 
-# how big are tabs ?
+# how big are tabs?
 # spaces remove on deletion
 # manual indentation width
 _TAB_OPTIONS = ("tabstop", "softtabstop", "shiftwidth")

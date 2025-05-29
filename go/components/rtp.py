@@ -81,11 +81,15 @@ def _inst(packages: PkgSpecs, cmds: Iterable[str]) -> Atomic:
 
 
 def inst() -> Atomic:
-    pkgs = {uri: spec for uri, spec in pkg_specs().items() if spec.opt is not None and not spec.opt }
+    pkgs = {
+        uri: spec
+        for uri, spec in pkg_specs().items()
+        if spec.opt is not None and not spec.opt
+    }
     return _inst(pkgs, cmds=("packloadall",))
 
 
 def inst_later() -> Atomic:
-    pkgs = {uri:spec for uri, spec in pkg_specs().items() if spec.opt}
+    pkgs = {uri: spec for uri, spec in pkg_specs().items() if spec.opt}
     cmds = (f"packadd {uri_path(uri).name}" for uri in pkgs)
     return _inst(pkgs, cmds=cmds)
