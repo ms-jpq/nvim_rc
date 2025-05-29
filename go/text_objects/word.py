@@ -1,24 +1,24 @@
-from pynvim_pp.lib import decode, encode
+from pynvim_pp.lib import decode, encode, keywordset
 from pynvim_pp.operators import set_visual_selection
 from pynvim_pp.text_object import gen_split
 from pynvim_pp.window import Window
 
 from ..registry import NAMESPACE, keymap, rpc
 
-UNIFIYING_CHARS = frozenset(("_", "-"))
-
 
 @rpc()
 async def _word(is_inside: bool) -> None:
     win = await Window.get_current()
     buf = await win.get_buf()
+    kw = await buf.opts.get(str, "iskeyword")
+    keywords = keywordset(kw)
 
     row, col = await win.get_cursor()
     line, *_ = await buf.get_lines(lo=row, hi=row + 1)
 
     bline = encode(line)
     lhs, rhs = decode(bline[:col]), decode(bline[col:])
-    ctx = gen_split(UNIFIYING_CHARS, lhs=lhs, rhs=rhs)
+    ctx = gen_split(keywords, lhs=lhs, rhs=rhs)
 
     if not (ctx.word_lhs + ctx.word_rhs):
         words_lhs, words_rhs = ctx.syms_lhs, ctx.syms_rhs
