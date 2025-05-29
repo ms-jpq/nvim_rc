@@ -45,7 +45,7 @@ _ = (
 
 async def _check_times() -> None:
     while True:
-        await sleep(0.5)
+        await sleep(0.6)
         with suppress_and_log():
             info = cast(Mapping[str, str], await Nvim.api.get_mode(NoneType))
             mode = info["mode"]
