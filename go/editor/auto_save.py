@@ -1,10 +1,12 @@
 from asyncio import sleep
 from collections.abc import Mapping
+from contextlib import suppress
 from typing import cast
 
 from pynvim_pp.buffer import Buffer
 from pynvim_pp.logging import suppress_and_log
 from pynvim_pp.nvim import Nvim
+from pynvim_pp.rpc_types import NvimError
 from pynvim_pp.types import NoneType
 
 from ..registry import NAMESPACE, autocmd, keymap, rpc, settings, tasks
@@ -51,7 +53,8 @@ async def _check_times() -> None:
             mode = info["mode"]
 
             if not mode.startswith("i"):
-                await _check_time(local=True)
+                with suppress(NvimError):
+                    await _check_time(local=True)
 
 
 tasks.append(_check_times())
