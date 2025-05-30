@@ -1,12 +1,12 @@
 ---
 vint:
+  type: fs
   args:
     - --enable-neovim
     - --style-problem
     - --
     - ${tmpname}
   # https://github.com/Vimjas/vint/issues/369
-  type: fs
   filetypes:
     - vim
   install:
@@ -14,11 +14,11 @@ vint:
       - vim-vint
 
 shellcheck:
+  type: fs
   args:
     - --enable=all
     - --
     - ${tmpname}
-  type: fs
   filetypes:
     - sh
     - zsh
@@ -29,10 +29,10 @@ shellcheck:
       file: shellcheck.sh
 
 perlcritic.pl:
+  type: stream
   args:
     - --brutal
     - --
-  type: stream
   filetypes:
     - perl
   install:
@@ -42,17 +42,17 @@ perlcritic.pl:
       file: perlcritic.dl.pl
 
 pwsh-lint.ps1:
+  type: fs
   args:
     - ${tmpname}
-  type: fs
   filetypes:
     - ps1
 
 mypy:
+  type: fs
   args:
     - --
     - ${tmpname}
-  type: fs
   filetypes:
     - python
   install:
@@ -60,12 +60,12 @@ mypy:
       - mypy
 
 clj-kondo:
+  type: stream
   args:
     - --filename
     - ${filename}
     - --lint
     - "-"
-  type: stream
   filetypes:
     - clojure
   install:
@@ -75,11 +75,11 @@ clj-kondo:
       file: clj_lint.clj
 
 hadolint:
+  type: fs
   args:
     - --no-color
     - --
     - ${tmpname}
-  type: fs
   filetypes:
     - dockerfile
   install:
@@ -87,12 +87,12 @@ hadolint:
       file: hadolint.sh
 
 golangci-lint:
+  type: fs
   args:
     - run
     - --enable-all
     - --
     - ${tmpname}
-  type: fs
   filetypes:
     - go
   install:
@@ -102,12 +102,12 @@ golangci-lint:
       file: golangci_lint.go
 
 rubocop.rb:
+  type: stream
   args:
     - ${filename}
     - --no-color
     - --stdin
     - --stderr
-  type: stream
   filetypes:
     - ruby
   install:
@@ -119,9 +119,9 @@ rubocop.rb:
       file: rubocop.dl.rb
 
 lintr.r:
+  type: fs
   args:
     - ${tmpname}
-  type: fs
   filetypes:
     - r
   install:
@@ -132,11 +132,11 @@ lintr.r:
       file: lintr.dl.r
 
 htmlhint:
+  type: fs
   args:
     - --nocolor
     - --
     - ${tmpname}
-  type: fs
   filetypes:
     - html
   install:
@@ -144,12 +144,12 @@ htmlhint:
       - htmlhint
 
 phpstan:
+  type: fs
   args:
     - analyse
     - --no-progress
     - --
     - ${tmpname}
-  type: fs
   filetypes:
     - php
   install:
@@ -159,21 +159,21 @@ phpstan:
       file: phpstan.dl.php
 
 phan:
+  type: fs
   args:
     - --allow-polyfill-parser
     - --no-progress-bar
     - --strict-type-checking
     - --analyze-twice
     - ${tmpname}
-  type: fs
   filetypes:
     - php
 
 lint-openapi:
+  type: fs
   args:
     - --
     - ${tmpname}
-  type: fs
   filetypes:
     - openapi.json
     - openapi.yaml
