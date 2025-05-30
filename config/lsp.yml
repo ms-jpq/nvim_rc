@@ -604,6 +604,16 @@ lsp_ai:
 
 tabby_ml:
   bin: tabby-agent
+  filetypes:
+    - bash
+    - java
+    - javascript
+    - kotlin
+    - markdown
+    - php
+    - python
+    - ruby
+    - typescript
   install:
     npm:
       - tabby-agent
