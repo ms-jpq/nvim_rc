@@ -7,7 +7,19 @@ import kotlin.io.path.deleteIfExists
 val lib = Path(System.getenv("LIB")!!)
 val sh = lib.resolve("kotlin-lsp.sh")
 val bin = Path(System.getenv("BIN")!!)
-val uri = "https://download-cdn.jetbrains.com/kotlin-lsp/0.252.16998/kotlin-0.252.16998.zip"
+val repo = "Kotlin/kotlin-lsp"
+
+val p1 =
+    ProcessBuilder("env", "--", "gh-latest.sh", ".", repo).redirectError(Redirect.INHERIT).start()
+
+val code = p1.waitFor()
+
+if (code != 0) {
+    System.exit(code)
+}
+
+val version = String(p1.getInputStream().readAllBytes()).replaceFirst("kotlin-lsp/v", "")
+val uri = "https://download-cdn.jetbrains.com/kotlin-lsp/$version/kotlin-$version.zip"
 
 lib.toFile().mkdirs()
 
