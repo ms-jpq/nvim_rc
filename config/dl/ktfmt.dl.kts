@@ -24,7 +24,7 @@ val version =
                 .newDocumentBuilder()
                 .parse(root.resolve("maven-metadata.xml").toString()))
 
-val jar = root.resolve("$version/ktfmt-$version-jar-with-dependencies.jar").toString()
+val jar = root.resolve("$version/ktfmt-$version-with-dependencies.jar").toString()
 val proc = ProcessBuilder("env", "--", "get.sh", jar).redirectError(Redirect.INHERIT).start()
 val code = proc.waitFor()
 
