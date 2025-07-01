@@ -417,13 +417,13 @@ phan:
     script:
       file: phan.dl.php
 
-psalm:
-  bin: psalm
-  install:
-    requires:
-      - php
-    script:
-      file: psalm.dl.php
+# psalm:
+#   bin: psalm
+#   install:
+#     requires:
+#       - php
+#     script:
+#       file: psalm.dl.php
 
 phpactor:
   bin: phpactor
@@ -435,6 +435,8 @@ phpactor:
 
 intelephense:
   bin: intelephense
+  init_options:
+    globalStoragePath: /var/tmp/intelephense
   install:
     npm:
       - intelephense
