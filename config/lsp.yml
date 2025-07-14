@@ -604,21 +604,21 @@ lsp_ai:
     script:
       file: lsp_ai.dl.sh
 
-# tabby_ml:
-#   bin: tabby-agent
-#   filetypes:
-#     - bash
-#     - java
-#     - javascript
-#     - kotlin
-#     - markdown
-#     - php
-#     - python
-#     - ruby
-#     - typescript
-#   install:
-#     npm:
-#       - tabby-agent
+tabby_ml:
+  bin: tabby-agent
+  filetypes:
+    - bash
+    - java
+    - javascript
+    - kotlin
+    - markdown
+    - php
+    - python
+    - ruby
+    - typescript
+  install:
+    npm:
+      - tabby-agent
 
 # gh_actions_ls:
 #   bin: gh-actions-language-server
