@@ -289,15 +289,15 @@ fortls:
 #     gem:
 #       - steep
 
-ruby_lsp:
-  bin: ruby-lsp
-  install:
-    gem:
-      - ruby-lsp
-    requires:
-      - ruby
-    script:
-      file: watchman.dl.rb
+# ruby_lsp:
+#   bin: ruby-lsp
+#   install:
+#     gem:
+#       - ruby-lsp
+#     requires:
+#       - ruby
+#     script:
+#       file: watchman.dl.rb
 
 sorbet:
   bin: srb
@@ -433,14 +433,14 @@ phpactor:
     script:
       file: phpactor.dl.php
 
-intelephense:
-  bin: intelephense
-  init_options:
-    globalStoragePath: /var/tmp/intelephense
-  install:
-    npm:
-      - intelephense
-
+# intelephense:
+#   bin: intelephense
+#   init_options:
+#     globalStoragePath: /var/tmp/intelephense
+#   install:
+#     npm:
+#       - intelephense
+#
 fsautocomplete:
   bin: fsautocomplete
   install:
