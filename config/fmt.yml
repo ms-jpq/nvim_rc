@@ -238,6 +238,21 @@ rubocop:
   filetypes:
     - ruby
 
+syntax_tree:
+  type: stream
+  bin: stree
+  args:
+    - write
+    - --plugin=rbs
+    - --
+    - ${filename}
+  filetypes:
+    - rbs
+  install:
+    gem:
+      - syntax_tree
+      - syntax_tree-rbs
+
 php:
   type: fs
   bin: php
