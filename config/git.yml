@@ -313,7 +313,6 @@ https://github.com/github/copilot.vim:
         ""
       return esc_pum .. vim.fn["copilot#Accept"]()
     end
-    vim.cmd [[Copilot enable]]
 
 # https://github.com/lervag/vimtex:
 #   opt: true
