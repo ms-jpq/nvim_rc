@@ -433,14 +433,14 @@ phpactor:
     script:
       file: phpactor.dl.php
 
-# intelephense:
-#   bin: intelephense
-#   init_options:
-#     globalStoragePath: /var/tmp/intelephense
-#   install:
-#     npm:
-#       - intelephense
-#
+intelephense:
+  bin: intelephense
+  init_options:
+    globalStoragePath: /var/tmp/intelephense
+  install:
+    npm:
+      - intelephense
+
 fsautocomplete:
   bin: fsautocomplete
   install:
