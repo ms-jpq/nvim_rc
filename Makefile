@@ -17,7 +17,7 @@ clean:
 	rm -v -rf -- .clj-kondo/ .lsp/ .venv/ var/tmp
 
 clobber: clean
-	sudo -- rm -v -rf -- pack/ var/
+	rm -v -rf -- pack/ var/
 
 ifeq ($(origin USERPROFILE), command line)
 ENVS := env -- 'HOME=$(USERPROFILE)' 'USERPROFILE=$(USERPROFILE)'
