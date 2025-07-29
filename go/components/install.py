@@ -323,7 +323,6 @@ def _script(match: AbstractSet[str]) -> Iterator[Awaitable[_SortOfMonoid]]:
                     "PATH": pathsep.join((libexec, environ["PATH"])),
                     "BIN": normcase(BIN_DIR / bin),
                     "LIB": normcase(LIB_DIR / bin),
-                    "LIBEXEC": libexec,
                     "TMP": tmp,
                 }
 
