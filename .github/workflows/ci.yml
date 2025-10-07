@@ -1,8 +1,9 @@
 ---
 on:
-  push:
-  schedule:
-    - cron: "0 0 * * *" # daily
+  workflow_dispatch:
+  # push:
+  # schedule:
+  #   - cron: "0 0 * * *" # daily
 
 jobs:
   docker:

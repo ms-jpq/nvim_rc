@@ -7,7 +7,6 @@ from pynvim_pp.types import NoneType
 
 from ..registry import NAMESPACE, keymap, rpc
 
-
 # search and highlight
 def _magic_escape(text: str) -> str:
     rules = str.maketrans(
